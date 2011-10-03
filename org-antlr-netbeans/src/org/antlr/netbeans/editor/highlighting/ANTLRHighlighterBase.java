@@ -429,7 +429,7 @@ public abstract class ANTLRHighlighterBase<TState extends LineStateInfo<TState>>
                 int lineNumberFromPosition = NbDocument.findLineNumber(document, newOffset);
                 int num2 = NbDocument.findLineNumber(document, newOffset + newLength);
                 if (lineCountDelta < 0) {
-                    lineStates.subList(lineNumberFromPosition, lineNumberFromPosition + Math.abs(lineCountDelta));
+                    lineStates.subList(lineNumberFromPosition, lineNumberFromPosition + Math.abs(lineCountDelta)).clear();
                 } else if (lineCountDelta > 0) {
                     TState endLineState = lineStates.get(lineNumberFromPosition);
                     List<TState> insertedElements = new ArrayList<TState>();
