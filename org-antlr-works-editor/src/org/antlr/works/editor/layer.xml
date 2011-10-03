@@ -54,6 +54,7 @@
                 <file name="org-antlr-works-editor-st4-parser-TemplateParserFactory.instance"/>
                 <file name="org-antlr-works-editor-st4-parser-SyntaxErrorsHighlightingTaskFactory.instance"/>
                 <file name="org-antlr-works-editor-st4-navigation-TemplateScanningTaskFactory.instance"/>
+                <file name="org-antlr-works-editor-st4-fold-TemplateFoldManagerTaskFactory.instance"/>
                 <file name="org-antlr-works-editor-st4-StringTemplateEditorKit.instance"/>
 
                 <folder name="FontsColors">
@@ -68,7 +69,7 @@
 
                 <folder name="FoldManager">
                     <!--<file name="org-netbeans-editor-CustomFoldManager$Factory.instance"/>-->
-                    <file name="org-antlr-works-editor-grammar-fold-GrammarFoldManagerFactory.instance"/>
+                    <file name="org-antlr-works-editor-st4-fold-TemplateFoldManagerFactory.instance"/>
                 </folder>
 
                 <folder name="SideBar">

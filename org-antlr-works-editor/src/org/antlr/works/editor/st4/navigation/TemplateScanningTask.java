@@ -63,6 +63,7 @@ import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.Lookups;
 import org.stringtemplate.v4.compiler.CompiledST;
+import org.stringtemplate.v4.misc.Interval;
 import org.stringtemplate.v4.misc.Misc;
 
 public class TemplateScanningTask extends ParserResultTask<TemplateParserResult> {
@@ -92,6 +93,7 @@ public class TemplateScanningTask extends ParserResultTask<TemplateParserResult>
             if (result != null) {
                 for (TemplateInformation templateInfo : parseResult.getGroup().getTemplateInformation()) {
                     CompiledST template = templateInfo.getTemplate();
+                    Interval sourceInterval = templateInfo.getGroupInterval();
 
                     if (template.isAnonSubtemplate) {
                         continue;
@@ -103,6 +105,8 @@ public class TemplateScanningTask extends ParserResultTask<TemplateParserResult>
                         String sig = String.format("%s.%s()", templateInfo.getEnclosingTemplateName(), templateInfo.getNameToken().getText());
 
                         Description description = new Description(ui, sig);
+                        description.fileObject = rootDescription.fileObject;
+                        description.pos = sourceInterval.a;
                         description.htmlHeader = String.format("%s.%s<font color='808080'>()</font>", templateInfo.getEnclosingTemplateName(), templateInfo.getNameToken().getText());
                         rootDescription.children.add(description);
 
@@ -123,6 +127,8 @@ public class TemplateScanningTask extends ParserResultTask<TemplateParserResult>
                         String sig = String.format("%s(%s)", name, Misc.join(argumentNames.iterator(), ", "));
 
                         Description description = new Description(ui, sig);
+                        description.fileObject = rootDescription.fileObject;
+                        description.pos = sourceInterval.a;
                         description.htmlHeader = String.format("%s<font color='808080'>(%s)</font>", name, Misc.join(argumentNames.iterator(), ", "));
                         rootDescription.children.add(description);
 
@@ -153,61 +159,6 @@ public class TemplateScanningTask extends ParserResultTask<TemplateParserResult>
                 //    navigationTargets.Add(new EditorNavigationTarget(sig, navigationType, span, seek, glyph, style));
                 //}
             }
-
-            /*grammar__return parseResult = result.getResult();
-            Tree tree = (Tree)parseResult.getTree();
-            ANTLRErrorProvidingParser.grammar_Adaptor adaptor = new ANTLRErrorProvidingParser.grammar_Adaptor(result.getParser());
-            int childCount = adaptor.getChildCount(tree);
-            for (int i = 0; i < childCount; i++) {
-                Object childObject = adaptor.getChild(tree, i);
-                if (!(childObject instanceof CommonTree)) {
-                    continue;
-                }
-
-                CommonTree child = (CommonTree) childObject;
-                if (child.getChildCount() > 0 && "rule".equals(child.getText())) {
-                    String ruleName = child.getChild(0).getText();
-                    if ("Tokens".equals(ruleName)) {
-                        continue;
-                    }
-
-                    Description ruleDescription = new Description(ui, ruleName);
-                    if (Character.isLowerCase(ruleName.charAt(0))) {
-                        parserRulesRootDescription.children.add(ruleDescription);
-                    } else {
-                        lexerRulesRootDescription.children.add(ruleDescription);
-                    }
-                } else if (child.getText() != null && child.getText().startsWith("tokens")) {
-                    for (int j = 0; j < child.getChildCount(); j++) {
-                        Tree tokenChild = child.getChild(j);
-                        if ("=".equals(tokenChild.getText()) && tokenChild.getChildCount() == 2) {
-                            String ruleName = tokenChild.getChild(0).getText();
-                            if (ruleName == null || ruleName.length() == 0) {
-                                continue;
-                            }
-
-                            Description ruleDescription = new Description(ui, ruleName);
-                            if (Character.isLowerCase(ruleName.charAt(0))) {
-                                parserRulesRootDescription.children.add(ruleDescription);
-                            } else {
-                                lexerRulesRootDescription.children.add(ruleDescription);
-                            }
-                        } else if (tokenChild.getChildCount() == 0) {
-                            String ruleName = tokenChild.getText();
-                            if (ruleName == null || ruleName.length() == 0) {
-                                continue;
-                            }
-
-                            Description ruleDescription = new Description(ui, ruleName);
-                            if (Character.isLowerCase(ruleName.charAt(0))) {
-                                parserRulesRootDescription.children.add(ruleDescription);
-                            } else {
-                                lexerRulesRootDescription.children.add(ruleDescription);
-                            }
-                        }
-                    }
-                }
-            }*/
 
             ui.refresh(rootDescription);
         } catch (RuntimeException ex) {

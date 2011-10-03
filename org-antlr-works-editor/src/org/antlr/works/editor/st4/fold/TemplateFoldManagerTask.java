@@ -88,7 +88,7 @@ public class TemplateFoldManagerTask extends ParserResultTask<TemplateParserResu
             }
 
             Interval sourceInterval = templateInfo.getGroupInterval();
-            DocumentSpan span = new DocumentSpan(document, sourceInterval.a, sourceInterval.b - sourceInterval.a + 1);
+            DocumentSpan span = new DocumentSpan(document, sourceInterval.a, sourceInterval.b + 1);
             try {
                 if (span.getStart().getContainingLine().getLineNumber() == span.getEnd().getContainingLine().getLineNumber()) {
                     continue;

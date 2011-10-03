@@ -52,6 +52,7 @@ import java.util.logging.Logger;
 import javax.swing.JComponent;
 import org.antlr.grammar.v3.ANTLRParser.grammar__return;
 import org.antlr.netbeans.editor.navigation.CurrentDocumentStateScheduler;
+import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 import org.antlr.works.editor.grammar.navigation.GrammarNode.Description;
@@ -115,6 +116,8 @@ public class RuleScanningTask extends ParserResultTask<GrammarParser.GrammarPars
                     }
 
                     Description ruleDescription = new Description(ui, ruleName);
+                    ruleDescription.fileObject = rootDescription.fileObject;
+                    ruleDescription.pos = ((CommonToken)((CommonTree)child.getChild(0)).getToken()).getStartIndex();
                     if (Character.isLowerCase(ruleName.charAt(0))) {
                         parserRulesRootDescription.children.add(ruleDescription);
                     } else {
@@ -130,6 +133,8 @@ public class RuleScanningTask extends ParserResultTask<GrammarParser.GrammarPars
                             }
 
                             Description ruleDescription = new Description(ui, ruleName);
+                            ruleDescription.fileObject = rootDescription.fileObject;
+                            ruleDescription.pos = ((CommonToken)((CommonTree)tokenChild.getChild(0)).getToken()).getStartIndex();
                             if (Character.isLowerCase(ruleName.charAt(0))) {
                                 parserRulesRootDescription.children.add(ruleDescription);
                             } else {
@@ -142,6 +147,8 @@ public class RuleScanningTask extends ParserResultTask<GrammarParser.GrammarPars
                             }
 
                             Description ruleDescription = new Description(ui, ruleName);
+                            ruleDescription.fileObject = rootDescription.fileObject;
+                            ruleDescription.pos = ((CommonToken)((CommonTree)tokenChild).getToken()).getStartIndex();
                             if (Character.isLowerCase(ruleName.charAt(0))) {
                                 parserRulesRootDescription.children.add(ruleDescription);
                             } else {

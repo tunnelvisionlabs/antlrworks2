@@ -53,6 +53,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import javax.swing.Action;
+import org.antlr.works.editor.grammar.navigation.actions.OpenAction;
 import org.openide.filesystems.FileObject;
 import org.openide.loaders.DataObject;
 import org.openide.loaders.DataObjectNotFoundException;
@@ -71,6 +72,7 @@ public class GrammarNode extends AbstractNode {
 
     private static Node WAIT_NODE;
     private Description description;
+    private OpenAction openAction;
 
     public GrammarNode(Description description) {
         super(description.children == null ? Children.LEAF : new ElementChildren(description.children, description.ui.getFilters()), prepareLookup(description));
@@ -119,8 +121,7 @@ public class GrammarNode extends AbstractNode {
 
     @Override
     public Action[] getActions(boolean context) {
-        return description.ui.getActions();
-        /*if (context || description.name == null) {
+        if (context || description.name == null || description.getFileObject() == null || (description.children != null && !description.children.isEmpty())) {
             return description.ui.getActions();
         } else {
             Action[] panelActions = description.ui.getActions();
@@ -135,13 +136,12 @@ public class GrammarNode extends AbstractNode {
             }
 
             return actions;
-        }*/
+        }
     }
 
     @Override
     public Action getPreferredAction() {
-        //return getOpenAction();
-        return super.getPreferredAction();
+        return getOpenAction();
     }
 
     @Override
@@ -242,14 +242,13 @@ public class GrammarNode extends AbstractNode {
         }*/
     }
 
-    /*private synchronized Action getOpenAction() {
+    private synchronized Action getOpenAction() {
         if (openAction == null) {
-            FileObject fileObject = description.getFileObject();
             openAction = new OpenAction(description);
         }
 
         return openAction;
-    }*/
+    }
 
     private static Lookup prepareLookup(Description d) {
         InstanceContent instanceContent = new InstanceContent();
@@ -382,7 +381,7 @@ public class GrammarNode extends AbstractNode {
         Collection<Description> children;
         String htmlHeader;
         boolean inherited;
-        long pos;
+        public int pos;
 
         public Description(GrammarRulesPanelUI ui) {
             this.ui = ui;
