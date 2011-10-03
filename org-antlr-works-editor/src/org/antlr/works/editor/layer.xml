@@ -8,7 +8,10 @@
                 <file name="org-antlr-works-editor-grammar-highlighter-ANTLRHighlighterLayerFactory.instance"/>
                 <file name="org-antlr-works-editor-grammar-parser-GrammarParserFactory.instance"/>
                 <file name="org-antlr-works-editor-grammar-parser-SyntaxErrorsHighlightingTaskFactory.instance"/>
-                <file name="org-netbeans-modules-editor-NbEditorKit.instance"/>
+                <file name="org-antlr-works-editor-grammar-navigation-RuleScanningTaskFactory.instance"/>
+                <file name="org-antlr-works-editor-grammar-fold-GrammarFoldManagerTaskFactory.instance"/>
+                <file name="org-antlr-works-editor-grammar-GrammarEditorKit.instance"/>
+
                 <folder name="FontsColors">
                     <folder name="NetBeans">
                         <folder name="Defaults">
@@ -18,13 +21,41 @@
                         </folder>
                     </folder>
                 </folder>
+
+                <folder name="FoldManager">
+                    <!--<file name="org-netbeans-editor-CustomFoldManager$Factory.instance"/>-->
+                    <file name="org-antlr-works-editor-grammar-fold-GrammarFoldManagerFactory.instance"/>
+                </folder>
+
+                <folder name="SideBar">
+                    <file name="org-antlr-netbeans-editor-fold-CodeFoldingSideBarFactory.instance">
+                        <attr name="position" intvalue="1500"/>
+                    </file>
+                </folder>
+
+                <folder name="Toolbars">
+                    <folder name="Default">
+                        <file name="Separator-before-comment.instance">
+                            <attr name="instanceClass" stringvalue="javax.swing.JSeparator"/>
+                            <attr name="position" intvalue="19100"/>
+                        </file>
+                        <file name="comment">
+                            <attr name="position" intvalue="19200"/>
+                        </file>
+                        <file name="uncomment">
+                            <attr name="position" intvalue="19300"/>
+                        </file>
+                    </folder>
+                </folder>
             </folder>
             <folder name="x-stringtemplate4">
                 <attr name="SystemFileSystem.localizingBundle" stringvalue="org.antlr.works.editor.Bundle"/>
                 <file name="org-antlr-works-editor-st4-highlighter-TemplateHighlighterLayerFactory.instance"/>
-                <!--<file name="org-antlr-works-editor-st4-parser-TemplateParserFactory.instance"/>
-                <file name="org-antlr-works-editor-st4-parser-TemplateSyntaxErrorsHighlightingTaskFactory.instance"/>-->
-                <file name="org-netbeans-modules-editor-NbEditorKit.instance"/>
+                <file name="org-antlr-works-editor-st4-parser-TemplateParserFactory.instance"/>
+                <file name="org-antlr-works-editor-st4-parser-SyntaxErrorsHighlightingTaskFactory.instance"/>
+                <file name="org-antlr-works-editor-st4-navigation-TemplateScanningTaskFactory.instance"/>
+                <file name="org-antlr-works-editor-st4-StringTemplateEditorKit.instance"/>
+
                 <folder name="FontsColors">
                     <folder name="NetBeans">
                         <folder name="Defaults">
@@ -33,6 +64,48 @@
                             </file>
                         </folder>
                     </folder>
+                </folder>
+
+                <folder name="FoldManager">
+                    <!--<file name="org-netbeans-editor-CustomFoldManager$Factory.instance"/>-->
+                    <file name="org-antlr-works-editor-grammar-fold-GrammarFoldManagerFactory.instance"/>
+                </folder>
+
+                <folder name="SideBar">
+                    <file name="org-antlr-netbeans-editor-fold-CodeFoldingSideBarFactory.instance">
+                        <attr name="position" intvalue="1500"/>
+                    </file>
+                </folder>
+
+                <folder name="Toolbars">
+                    <folder name="Default">
+                        <file name="Separator-before-comment.instance">
+                            <attr name="instanceClass" stringvalue="javax.swing.JSeparator"/>
+                            <attr name="position" intvalue="19100"/>
+                        </file>
+                        <file name="comment">
+                            <attr name="position" intvalue="19200"/>
+                        </file>
+                        <file name="uncomment">
+                            <attr name="position" intvalue="19300"/>
+                        </file>
+                    </folder>
+                </folder>
+            </folder>
+        </folder>
+    </folder>
+    <folder name="Navigator">
+        <folder name="Panels">
+            <folder name="text">
+                <folder name="x-antlr3">
+                    <file name="org-antlr-works-editor-grammar-navigation-GrammarRulesPanel.instance">
+                        <attr name="position" intvalue="100"/>
+                    </file>
+                </folder>
+                <folder name="x-stringtemplate4">
+                    <file name="org-antlr-works-editor-st4-navigation-TemplatesPanel.instance">
+                        <attr name="position" intvalue="100" />
+                    </file>
                 </folder>
             </folder>
         </folder>
@@ -191,6 +264,7 @@
             </file>
             <file name="StringTemplateFileTypeResolver.xml" url="st4/StringTemplateFileTypeResolver.xml">
                 <attr name="displayName" bundlevalue="org.antlr.works.editor.Bundle#Services/MIMEResolver/StringTemplateFileTypeResolver.xml"/>
+                <attr name="position" intvalue="100"/>
             </file>
         </folder>
     </folder>
@@ -204,6 +278,13 @@
                 <attr name="displayName" bundlevalue="org.antlr.works.editor.Bundle#Templates/Other/StringTemplateFileTypeTemplate.stg"/>
                 <attr name="template" boolvalue="true"/>
             </file>
+        </folder>
+    </folder>
+    <folder name="Windows2">
+        <folder name="Modes">
+            <folder name="navigator">
+                <file name="navigatorTC.wstcref" url="navigatorTCWstcref.xml"/>
+            </folder>
         </folder>
     </folder>
 </filesystem>

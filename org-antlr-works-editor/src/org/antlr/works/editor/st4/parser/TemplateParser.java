@@ -25,43 +25,67 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.antlr.works.editor.grammar.parser;
+package org.antlr.works.editor.st4.parser;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import org.antlr.grammar.v3.ANTLRParser.grammar__return;
 import org.antlr.runtime.ANTLRStringStream;
-import org.antlr.runtime.CommonToken;
-import org.antlr.tool.ErrorManager;
-import org.antlr.tool.Grammar;
+import org.antlr.runtime.CommonTokenStream;
+import org.antlr.runtime.RecognitionException;
+import org.antlr.runtime.RuleReturnScope;
+import org.antlr.runtime.tree.CommonTree;
+import org.antlr.runtime.tree.CommonTreeAdaptor;
+import org.antlr.runtime.tree.TreeAdaptor;
 import org.netbeans.lib.editor.util.ListenerList;
 import org.netbeans.modules.parsing.api.Snapshot;
 import org.netbeans.modules.parsing.api.Task;
 import org.netbeans.modules.parsing.spi.ParseException;
 import org.netbeans.modules.parsing.spi.Parser;
 import org.netbeans.modules.parsing.spi.SourceModificationEvent;
+import org.openide.util.Exceptions;
+import org.stringtemplate.v4.compiler.CompiledST;
+import org.stringtemplate.v4.compiler.GroupLexer;
 
-public class GrammarParser extends Parser {
+public class TemplateParser extends Parser {
     // Working around weird behavior in the Parsing API
     private static final boolean SINGLE_RESULT = true;
 
     private final ListenerList<ChangeListener> listeners = new ListenerList<ChangeListener>();
 
-    private final Map<Task, GrammarParserResult> results = new HashMap<Task, GrammarParserResult>();
+    private final Map<Task, TemplateParserResult> results = new HashMap<Task, TemplateParserResult>();
 
-    private ANTLRErrorProvidingParser lastParser;
+    private GroupParserWrapper lastParser;
     private Snapshot lastSnapshot;
-    private grammar__return lastResult;
-    private CommonToken[] lastTokens;
+    private TemplateGroupRuleReturnScope lastResult;
 
     @Override
-    @SuppressWarnings("unchecked")
     public void parse(Snapshot snapshot, Task task, SourceModificationEvent sme) throws ParseException {
         ANTLRStringStream input = new ANTLRStringStream(snapshot.getText().toString());
-        ANTLRErrorProvidingLexer lexer = new ANTLRErrorProvidingLexer(input);
+
+        GroupLexer lexer = new GroupLexer(input);
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+        GroupParserWrapper parser = new GroupParserWrapper(tokens);
+        TemplateGroupWrapper group = new TemplateGroupWrapper('<', '>');
+        try {
+            parser.group(group, "/");
+            TemplateGroupRuleReturnScope returnScope = BuildAstForGroupTemplates(group);
+            synchronized (this) {
+                if (SINGLE_RESULT) {
+                    lastParser = parser;
+                    lastSnapshot = snapshot;
+                    lastResult = returnScope;
+                } else {
+                    results.put(task, new TemplateParserResult(parser, returnScope, snapshot, task));
+                }
+            }
+        } catch (RecognitionException ex) {
+            Exceptions.printStackTrace(ex);
+        }
+
+        /*ANTLRErrorProvidingLexer lexer = new ANTLRErrorProvidingLexer(input);
         ANTLRParserTokenStream tokenStream = new ANTLRParserTokenStream(lexer);
         ANTLRErrorProvidingParser parser = new ANTLRErrorProvidingParser(tokenStream);
 
@@ -74,31 +98,25 @@ public class GrammarParser extends Parser {
             Grammar g = new Grammar();
             g.setFileName(""); // work around a bug in Grammar.setName that results in a NPE
             grammar__return result = parser.grammar_(g);
-
-            List tokenList = tokenStream.getTokens();
-            CommonToken[] tokens = new CommonToken[tokenList.size()];
-            tokens = (CommonToken[])tokenList.toArray(tokens);
-
             synchronized (this) {
                 if (SINGLE_RESULT) {
                     lastParser = parser;
                     lastSnapshot = snapshot;
                     lastResult = result;
-                    lastTokens = tokens;
                 } else {
-                    results.put(task, new GrammarParserResult(parser, snapshot, task, result, tokens));
+                    results.put(task, new GrammarParserResult(parser, result, snapshot, task));
                 }
             }
         } catch (Exception ex) {
             throw new ParseException("An unexpected error occurred.", ex);
-        }
+        }*/
     }
 
     @Override
     public Result getResult(Task task) throws ParseException {
         synchronized (this) {
             if (SINGLE_RESULT) {
-                return new GrammarParserResult(lastParser, lastSnapshot, task, lastResult, lastTokens);
+                return new TemplateParserResult(lastParser, lastResult, lastSnapshot, task);
             } else {
                 return results.get(task);
             }
@@ -137,35 +155,68 @@ public class GrammarParser extends Parser {
         }
     }
 
-    public class GrammarParserResult extends Result {
-
-        private final ANTLRErrorProvidingParser parser;
-        private final Task task;
-        private final grammar__return result;
-        private final CommonToken[] tokens;
-
-        public GrammarParserResult(ANTLRErrorProvidingParser parser, Snapshot snapshot, Task task, grammar__return result, CommonToken[] tokens) {
-            super(snapshot);
-            this.parser = parser;
-            this.task = task;
-            this.result = result;
-            this.tokens = tokens;
+    private TemplateGroupRuleReturnScope BuildAstForGroupTemplates(TemplateGroupWrapper group) {
+        TreeAdaptor adaptor = new CommonTreeAdaptor();
+        Object tree = adaptor.nil();
+        for (CompiledST template : group.getCompiledTemplates()) {
+            adaptor.addChild(tree, template.ast);
         }
 
-        public ANTLRErrorProvidingParser getParser() {
+        return new TemplateGroupRuleReturnScope(group, (CommonTree)tree);
+    }
+
+    public class TemplateGroupRuleReturnScope extends RuleReturnScope {
+        private final TemplateGroupWrapper group;
+        private final CommonTree tree;
+
+        public TemplateGroupRuleReturnScope(TemplateGroupWrapper group, CommonTree tree) {
+            this.group = group;
+            this.tree = tree;
+        }
+
+        public TemplateGroupWrapper getGroup() {
+            return group;
+        }
+
+        @Override
+        public CommonTree getTree() {
+            return tree;
+        }
+
+        @Override
+        public Object getStart() {
+            return null;
+        }
+
+        @Override
+        public Object getStop() {
+            return null;
+        }
+    }
+
+    public class TemplateParserResult extends Result {
+
+        private final GroupParserWrapper parser;
+        private final TemplateGroupRuleReturnScope result;
+        private final Task task;
+
+        public TemplateParserResult(GroupParserWrapper parser, TemplateGroupRuleReturnScope result, Snapshot snapshot, Task task) {
+            super(snapshot);
+            this.parser = parser;
+            this.result = result;
+            this.task = task;
+        }
+
+        public GroupParserWrapper getParser() {
             return parser;
+        }
+        
+        public TemplateGroupRuleReturnScope getResult() {
+            return result;
         }
 
         public Task getTask() {
             return task;
-        }
-        
-        public grammar__return getResult() {
-            return result;
-        }
-
-        public CommonToken[] getTokens() {
-            return tokens;
         }
 
         @Override

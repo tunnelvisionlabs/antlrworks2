@@ -25,7 +25,7 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.antlr.works.editor.grammar.parser;
+package org.antlr.works.editor.st4.parser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,8 +34,8 @@ import javax.swing.text.Document;
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.netbeans.editor.navigation.CurrentDocumentStateScheduler;
-import org.antlr.works.editor.grammar.parser.ANTLRErrorProvidingParser.SyntaxError;
-import org.antlr.works.editor.grammar.parser.GrammarParser.GrammarParserResult;
+import org.antlr.works.editor.st4.parser.GroupParserWrapper.SyntaxError;
+import org.antlr.works.editor.st4.parser.TemplateParser.TemplateParserResult;
 import org.netbeans.modules.parsing.spi.ParserResultTask;
 import org.netbeans.modules.parsing.spi.Scheduler;
 import org.netbeans.modules.parsing.spi.SchedulerEvent;
@@ -45,13 +45,13 @@ import org.netbeans.spi.editor.hints.HintsController;
 import org.netbeans.spi.editor.hints.Severity;
 import org.openide.util.Exceptions;
 
-public class SyntaxErrorsHighlightingTask extends ParserResultTask<GrammarParserResult> {
+public class SyntaxErrorsHighlightingTask extends ParserResultTask<TemplateParserResult> {
 
     public SyntaxErrorsHighlightingTask() {
     }
 
     @Override
-    public void run(GrammarParserResult result, SchedulerEvent event) {
+    public void run(TemplateParserResult result, SchedulerEvent event) {
         try {
             List<SyntaxError> syntaxErrors = result.getParser().getSyntaxErrors();
             Document document = result.getSnapshot().getSource().getDocument(false);
