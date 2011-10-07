@@ -173,6 +173,10 @@ public class TemplatesPanelUI extends javax.swing.JPanel implements ExplorerMana
         });
     }
 
+    public boolean isShowingWaitNode() {
+        return explorerManager.getRootContext() == TemplateNode.getWaitNode();
+    }
+
     public void sort() {
         TemplateNode node = getRootNode();
         if (node != null) {

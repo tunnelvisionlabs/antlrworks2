@@ -44,12 +44,15 @@
 
 package org.antlr.works.editor.st4.navigation;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Logger;
 import javax.swing.JComponent;
+import javax.swing.SwingUtilities;
+import javax.swing.text.Position;
 import org.antlr.netbeans.editor.navigation.CurrentDocumentStateScheduler;
 import org.antlr.works.editor.st4.navigation.TemplateNode.Description;
 import org.antlr.works.editor.st4.parser.TemplateGroupWrapper.TemplateInformation;
@@ -79,8 +82,13 @@ public class TemplateScanningTask extends ParserResultTask<TemplateParserResult>
     @Override
     public void run(TemplateParserResult result, SchedulerEvent event) {
         try {
-            TemplatesPanelUI ui = findGrammarRulesPanelUI();
+            TemplatesPanelUI ui = findTemplateRulesPanelUI();
             if (ui == null) {
+                return;
+            }
+
+            // don't update if there were errors and a result is already displayed
+            if (!result.getParser().getSyntaxErrors().isEmpty() && !ui.isShowingWaitNode()) {
                 return;
             }
 
@@ -106,7 +114,7 @@ public class TemplateScanningTask extends ParserResultTask<TemplateParserResult>
 
                         Description description = new Description(ui, sig);
                         description.fileObject = rootDescription.fileObject;
-                        description.pos = sourceInterval.a;
+                        description.setOffset(result.getSnapshot(), sourceInterval.a);
                         description.htmlHeader = String.format("%s.%s<font color='808080'>()</font>", templateInfo.getEnclosingTemplateName(), templateInfo.getNameToken().getText());
                         rootDescription.children.add(description);
 
@@ -128,7 +136,7 @@ public class TemplateScanningTask extends ParserResultTask<TemplateParserResult>
 
                         Description description = new Description(ui, sig);
                         description.fileObject = rootDescription.fileObject;
-                        description.pos = sourceInterval.a;
+                        description.setOffset(result.getSnapshot(), sourceInterval.a);
                         description.htmlHeader = String.format("%s<font color='808080'>(%s)</font>", name, Misc.join(argumentNames.iterator(), ", "));
                         rootDescription.children.add(description);
 
@@ -186,28 +194,54 @@ public class TemplateScanningTask extends ParserResultTask<TemplateParserResult>
     private static final String CONTENT_TYPE = "text/x-stringtemplate4";
     private static final Lookup.Template<NavigatorPanel> NAV_PANEL_TEMPLATE = new Lookup.Template<NavigatorPanel>(NavigatorPanel.class);
 
-    private TemplatesPanelUI findGrammarRulesPanelUI() {
+    private TemplatesPanelUI findTemplateRulesPanelUI() {
+        final TemplatesPanelUI[] result = new TemplatesPanelUI[1];
+        if (SwingUtilities.isEventDispatchThread()) {
+            findTemplateRulesPanelUI(result);
+        } else {
+            try {
+                SwingUtilities.invokeAndWait(new Runnable() {
+                    @Override
+                    public void run() {
+                        findTemplateRulesPanelUI(result);
+                    }
+                });
+            } catch (InterruptedException ex) {
+                Exceptions.printStackTrace(ex);
+                return null;
+            } catch (InvocationTargetException ex) {
+                Exceptions.printStackTrace(ex);
+                return null;
+            }
+        }
+
+        return result[0];
+    }
+
+    private void findTemplateRulesPanelUI(final TemplatesPanelUI[] result) {
+        result[0] = null;
+
         String path = PANELS_FOLDER + CONTENT_TYPE;
-        Lookup.Result<NavigatorPanel> result = Lookups.forPath(path).lookup(NAV_PANEL_TEMPLATE);
-        Collection<? extends NavigatorPanel> panels = result.allInstances();
+        Lookup.Result<NavigatorPanel> lookupResult = Lookups.forPath(path).lookup(NAV_PANEL_TEMPLATE);
+        Collection<? extends NavigatorPanel> panels = lookupResult.allInstances();
         assert panels.size() <= 1;
         if (panels.isEmpty()) {
-            return null;
+            return;
         }
 
         NavigatorPanel panel = panels.iterator().next();
         assert panel instanceof TemplatesPanel;
         if (!(panel instanceof TemplatesPanel)) {
-            return null;
+            return;
         }
 
         TemplatesPanel grammarRulesPanel = (TemplatesPanel)panel;
         JComponent component = grammarRulesPanel.getComponent();
         assert component == null || component instanceof TemplatesPanelUI;
         if (!(component instanceof TemplatesPanelUI)) {
-            return null;
+            return;
         }
 
-        return (TemplatesPanelUI)component;
+        result[0] = (TemplatesPanelUI)component;
     }
 }

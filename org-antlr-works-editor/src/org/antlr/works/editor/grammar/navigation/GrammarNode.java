@@ -53,13 +53,18 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import javax.swing.Action;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import javax.swing.text.Position;
 import org.antlr.works.editor.grammar.navigation.actions.OpenAction;
+import org.netbeans.modules.parsing.api.Snapshot;
 import org.openide.filesystems.FileObject;
 import org.openide.loaders.DataObject;
 import org.openide.loaders.DataObjectNotFoundException;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Children;
 import org.openide.nodes.Node;
+import org.openide.util.Exceptions;
 import org.openide.util.ImageUtilities;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
@@ -381,7 +386,8 @@ public class GrammarNode extends AbstractNode {
         Collection<Description> children;
         String htmlHeader;
         boolean inherited;
-        public int pos;
+        private int offset;
+        private Position position;
 
         public Description(GrammarRulesPanelUI ui) {
             this.ui = ui;
@@ -390,6 +396,29 @@ public class GrammarNode extends AbstractNode {
         public Description(GrammarRulesPanelUI ui, String name) {
             this.ui = ui;
             this.name = name;
+        }
+
+        public int getOffset() {
+            if (position != null) {
+                return position.getOffset();
+            }
+
+            return offset;
+        }
+
+        public void setOffset(Snapshot snapshot, int snapshotOffset) {
+            offset = snapshot.getOriginalOffset(snapshotOffset);
+            position = null;
+            if (offset >= 0) {
+                Document document = snapshot.getSource().getDocument(false);
+                if (document != null) {
+                    try {
+                        position = document.createPosition(offset);
+                    } catch (BadLocationException ex) {
+                        Exceptions.printStackTrace(ex);
+                    }
+                }
+            }
         }
 
         public FileObject getFileObject() {
@@ -439,7 +468,8 @@ public class GrammarNode extends AbstractNode {
                     if (d1.inherited && d2.inherited) {
                         return alphaCompare(d1, d2);
                     }
-                    return d1.pos == d2.pos ? 0 : d1.pos < d2.pos ? -1 : 1;
+
+                    return d1.getOffset() - d2.getOffset();
                 }
             }
 

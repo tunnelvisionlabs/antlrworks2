@@ -173,6 +173,10 @@ public class GrammarRulesPanelUI extends javax.swing.JPanel implements ExplorerM
         });
     }
 
+    public boolean isShowingWaitNode() {
+        return explorerManager.getRootContext() == GrammarNode.getWaitNode();
+    }
+
     public void sort() {
         GrammarNode node = getRootNode();
         if (node != null) {

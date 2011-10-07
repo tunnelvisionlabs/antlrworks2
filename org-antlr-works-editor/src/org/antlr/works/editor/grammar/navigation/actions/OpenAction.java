@@ -88,7 +88,7 @@ public final class OpenAction extends AbstractAction {
             EditorCookie ec = od.getLookup().lookup(EditorCookie.class);
             LineCookie lc = od.getLookup().lookup(LineCookie.class);
 
-            if (ec != null && lc != null && description.pos != -1) {
+            if (ec != null && lc != null && description.getOffset() != -1) {
                 StyledDocument doc = null;
                 try {
                     doc = ec.openDocument();
@@ -105,9 +105,9 @@ public final class OpenAction extends AbstractAction {
                     doc = ec.openDocument();
                 }
                 if (doc != null) {
-                    int line = NbDocument.findLineNumber(doc, description.pos);
+                    int line = NbDocument.findLineNumber(doc, description.getOffset());
                     int lineOffset = NbDocument.findLineOffset(doc, line);
-                    int column = description.pos - lineOffset;
+                    int column = description.getOffset() - lineOffset;
 
                     if (line != -1) {
                         Line l = lc.getLineSet().getCurrent(line);

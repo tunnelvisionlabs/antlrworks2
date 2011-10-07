@@ -44,12 +44,15 @@
 
 package org.antlr.works.editor.grammar.navigation;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Logger;
 import javax.swing.JComponent;
+import javax.swing.SwingUtilities;
+import javax.swing.text.Position;
 import org.antlr.grammar.v3.ANTLRParser.grammar__return;
 import org.antlr.netbeans.editor.navigation.CurrentDocumentStateScheduler;
 import org.antlr.runtime.CommonToken;
@@ -86,6 +89,11 @@ public class RuleScanningTask extends ParserResultTask<GrammarParser.GrammarPars
                 return;
             }
 
+            // don't update if there were errors and a result is already displayed
+            if (!result.getParser().getSyntaxErrors().isEmpty() && !ui.isShowingWaitNode()) {
+                return;
+            }
+
             Description rootDescription = new Description(ui);
             rootDescription.fileObject = result.getSnapshot().getSource().getFileObject();
             rootDescription.children = new ArrayList<Description>();
@@ -117,7 +125,8 @@ public class RuleScanningTask extends ParserResultTask<GrammarParser.GrammarPars
 
                     Description ruleDescription = new Description(ui, ruleName);
                     ruleDescription.fileObject = rootDescription.fileObject;
-                    ruleDescription.pos = ((CommonToken)((CommonTree)child.getChild(0)).getToken()).getStartIndex();
+                    ruleDescription.setOffset(result.getSnapshot(), ((CommonToken)((CommonTree)child.getChild(0)).getToken()).getStartIndex());
+
                     if (Character.isLowerCase(ruleName.charAt(0))) {
                         parserRulesRootDescription.children.add(ruleDescription);
                     } else {
@@ -134,7 +143,8 @@ public class RuleScanningTask extends ParserResultTask<GrammarParser.GrammarPars
 
                             Description ruleDescription = new Description(ui, ruleName);
                             ruleDescription.fileObject = rootDescription.fileObject;
-                            ruleDescription.pos = ((CommonToken)((CommonTree)tokenChild.getChild(0)).getToken()).getStartIndex();
+                            ruleDescription.setOffset(result.getSnapshot(), ((CommonToken)((CommonTree)tokenChild.getChild(0)).getToken()).getStartIndex());
+
                             if (Character.isLowerCase(ruleName.charAt(0))) {
                                 parserRulesRootDescription.children.add(ruleDescription);
                             } else {
@@ -148,7 +158,7 @@ public class RuleScanningTask extends ParserResultTask<GrammarParser.GrammarPars
 
                             Description ruleDescription = new Description(ui, ruleName);
                             ruleDescription.fileObject = rootDescription.fileObject;
-                            ruleDescription.pos = ((CommonToken)((CommonTree)tokenChild).getToken()).getStartIndex();
+                            ruleDescription.setOffset(result.getSnapshot(), ((CommonToken)((CommonTree)tokenChild).getToken()).getStartIndex());
                             if (Character.isLowerCase(ruleName.charAt(0))) {
                                 parserRulesRootDescription.children.add(ruleDescription);
                             } else {
@@ -194,27 +204,53 @@ public class RuleScanningTask extends ParserResultTask<GrammarParser.GrammarPars
     private static final Lookup.Template<NavigatorPanel> NAV_PANEL_TEMPLATE = new Lookup.Template<NavigatorPanel>(NavigatorPanel.class);
 
     private GrammarRulesPanelUI findGrammarRulesPanelUI() {
+        final GrammarRulesPanelUI[] result = new GrammarRulesPanelUI[1];
+        if (SwingUtilities.isEventDispatchThread()) {
+            findGrammarRulesPanelUI(result);
+        } else {
+            try {
+                SwingUtilities.invokeAndWait(new Runnable() {
+                    @Override
+                    public void run() {
+                        findGrammarRulesPanelUI(result);
+                    }
+                });
+            } catch (InterruptedException ex) {
+                Exceptions.printStackTrace(ex);
+                return null;
+            } catch (InvocationTargetException ex) {
+                Exceptions.printStackTrace(ex);
+                return null;
+            }
+        }
+
+        return result[0];
+    }
+
+    private void findGrammarRulesPanelUI(final GrammarRulesPanelUI[] result) {
+        result[0] = null;
+
         String path = PANELS_FOLDER + CONTENT_TYPE;
-        Lookup.Result<NavigatorPanel> result = Lookups.forPath(path).lookup(NAV_PANEL_TEMPLATE);
-        Collection<? extends NavigatorPanel> panels = result.allInstances();
+        Lookup.Result<NavigatorPanel> lookupResult = Lookups.forPath(path).lookup(NAV_PANEL_TEMPLATE);
+        Collection<? extends NavigatorPanel> panels = lookupResult.allInstances();
         assert panels.size() <= 1;
         if (panels.isEmpty()) {
-            return null;
+            return;
         }
 
         NavigatorPanel panel = panels.iterator().next();
         assert panel instanceof GrammarRulesPanel;
         if (!(panel instanceof GrammarRulesPanel)) {
-            return null;
+            return;
         }
 
         GrammarRulesPanel grammarRulesPanel = (GrammarRulesPanel)panel;
         JComponent component = grammarRulesPanel.getComponent();
         assert component == null || component instanceof GrammarRulesPanelUI;
         if (!(component instanceof GrammarRulesPanelUI)) {
-            return null;
+            return;
         }
 
-        return (GrammarRulesPanelUI)component;
+        result[0] = (GrammarRulesPanelUI)component;
     }
 }
