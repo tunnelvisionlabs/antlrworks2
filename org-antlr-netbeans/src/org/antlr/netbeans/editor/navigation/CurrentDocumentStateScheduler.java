@@ -205,7 +205,11 @@ public final class CurrentDocumentStateScheduler extends Scheduler {
                     CharSequence.class,
                     Integer.TYPE
                     );
-                Object tokenHierarchyEventInfo = tokenHierarchyEventInfoCtor.newInstance(operation, TokenHierarchyEventType.MODIFICATION, 0, 0, "", 0);
+                int modificationOffset = e.getOffset();
+                int removedLength = 0;
+                String removedText = "";
+                int insertedLength = 0;
+                Object tokenHierarchyEventInfo = tokenHierarchyEventInfoCtor.newInstance(operation, TokenHierarchyEventType.MODIFICATION, modificationOffset, removedLength, "", insertedLength);
                 fireTokenHierarchyChanged.invoke(operation, tokenHierarchyEventInfo);
             } catch (IllegalAccessException ex) {
                 Exceptions.printStackTrace(ex);
