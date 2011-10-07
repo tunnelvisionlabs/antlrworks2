@@ -136,6 +136,7 @@ public class TemplateHighlighterLexer implements TokenSourceWithState<TemplateHi
         return token;
     }
 
+    @SuppressWarnings("fallthrough")
     private Token nextTokenCore() {
         // when true, the outermost template's closing token is '>>'. otherwise, '"' is the closing token
         boolean insideBigString = getOutermost().equals(OutermostTemplate.BigString);
