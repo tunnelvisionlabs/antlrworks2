@@ -27,13 +27,11 @@
  */
 package org.antlr.netbeans.editor.commenting;
 
+import org.antlr.netbeans.editor.SelectionHelper;
 import java.awt.event.ActionEvent;
-import java.util.ArrayList;
 import java.util.List;
 import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
-import javax.swing.text.StyledDocument;
 import org.antlr.netbeans.editor.DocumentSpan;
 import org.netbeans.editor.ext.ExtKit.CommentAction;
 import org.openide.util.Exceptions;
@@ -57,19 +55,15 @@ public class ExtendedCommentAction extends CommentAction {
     @Override
     public void actionPerformed(ActionEvent evt, JTextComponent target) {
         try {
-            List<DocumentSpan> spans = new ArrayList<DocumentSpan>();
-            Document document = target.getDocument();
-            if (!(document instanceof StyledDocument)) {
+            List<DocumentSpan> spans = SelectionHelper.getSelection(target);
+            if (spans == null) {
                 return;
             }
-
-            DocumentSpan selection = new DocumentSpan((StyledDocument)document, target.getSelectionStart(), target.getSelectionEnd());
-            spans.add(selection);
 
             List<DocumentSpan> updatedSelection = commenter.commentSpans(spans);
 
             if (!updatedSelection.isEmpty()) {
-                target.select(updatedSelection.get(0).getStart().getOffset(), updatedSelection.get(0).getEnd().getOffset());
+                SelectionHelper.setSelection(target, updatedSelection);
             }
         } catch (BadLocationException ex) {
             Exceptions.printStackTrace(ex);
