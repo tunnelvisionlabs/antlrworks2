@@ -136,7 +136,24 @@ public class GrammarFoldManagerTask extends ParserResultTask<GrammarParserResult
                 switch (token.getType()) {
                 case ANTLRParser.DOC_COMMENT:
                 case ANTLRParser.ML_COMMENT:
-                    String blockHint = token.getType() == ANTLRParser.DOC_COMMENT ? "/** ... */" : "/* ... */";
+                case ANTLRParser.ACTION:
+                    int startLine = NbDocument.findLineNumber(document, token.getStartIndex());
+                    int stopLine = NbDocument.findLineNumber(document, token.getStopIndex() + 1);
+                    if (startLine >= stopLine) {
+                        continue;
+                    }
+
+                    String blockHint = null;
+                    if (token.getType() == ANTLRParser.DOC_COMMENT) {
+                        blockHint = "/** ... */";
+                    } else if (token.getType() == ANTLRParser.ML_COMMENT) {
+                        blockHint = "/* ... */";
+                    } else if (token.getType() == ANTLRParser.ACTION) {
+                        blockHint = "{}";
+                    } else {
+                        throw new IllegalStateException();
+                    }
+
                     FoldInfo info = new FoldInfo(document, token.getStartIndex(), token.getStopIndex() + 1, blockHint);
                     folds.add(info);
                     /*Span commentSpan = Span.FromBounds(token.StartIndex, token.StopIndex + 1);
