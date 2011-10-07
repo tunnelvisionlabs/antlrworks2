@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+OpenIDE-Module: org.antlr.works.branding
+OpenIDE-Module-Layer: org/antlr/works/branding/layer.xml
+OpenIDE-Module-Localizing-Bundle: org/antlr/works/branding/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0
+
