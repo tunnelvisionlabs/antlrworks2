@@ -183,35 +183,29 @@ public class ANTLRHighlighterLexer implements TokenSourceWithState<ANTLRHighligh
 
     private Token nextTokenCore() {
         Token token;
-        
+
         if (getMode().equals(ANTLRHighlighterMode.ACTION)
                 && !(getActionLevel() == 1 && (getInOptions() || getInTokens()) && input.LA(1) != '}')) {
-            
-            switch (input.LA(1)) {
-                case '{':
-                    token = grammarLexer.nextToken();
-                    setActionLevel(getActionLevel() + 1);
-                    token.setType(GrammarHighlighterLexer.ACTION);
-                    break;
 
-                case '}':
-                    token = grammarLexer.nextToken();
-                    setActionLevel(getActionLevel() - 1);
-                    token.setType(GrammarHighlighterLexer.ACTION);
-                    if (getActionLevel() == 0) {
-                        setMode(ANTLRHighlighterMode.GRAMMAR);
-                        if (getInOptions() || getInTokens()) {
-                            token.setType(GrammarHighlighterLexer.RCURLY);
-                            setInOptions(false);
-                            setInTokens(false);
-                        }
+            int nextChar = input.LA(1);
+            if (nextChar == '{' && !getInComment()) {
+                token = grammarLexer.nextToken();
+                setActionLevel(getActionLevel() + 1);
+                token.setType(GrammarHighlighterLexer.ACTION);
+            } else if (nextChar == '}' && !getInComment()) {
+                token = grammarLexer.nextToken();
+                setActionLevel(getActionLevel() - 1);
+                token.setType(GrammarHighlighterLexer.ACTION);
+                if (getActionLevel() == 0) {
+                    setMode(ANTLRHighlighterMode.GRAMMAR);
+                    if (getInOptions() || getInTokens()) {
+                        token.setType(GrammarHighlighterLexer.RCURLY);
+                        setInOptions(false);
+                        setInTokens(false);
                     }
-
-                    break;
-                    
-                default:
-                    token = actionLexer.nextToken();
-                    break;
+                }
+            } else {
+                token = actionLexer.nextToken();
             }
             
         } else if (getMode().equals(ANTLRHighlighterMode.ACTION_CHAR_LITERAL)
