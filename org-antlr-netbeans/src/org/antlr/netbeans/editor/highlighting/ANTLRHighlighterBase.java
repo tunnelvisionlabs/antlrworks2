@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.AttributeSet;
@@ -45,7 +46,7 @@ import org.openide.text.NbDocument;
 import org.openide.util.Exceptions;
 
 public abstract class ANTLRHighlighterBase<TState extends LineStateInfo<TState>> extends AbstractHighlightsContainer {
-    private static final boolean FIX_HIGHLIGHTER_UPDATE_BUG = true;
+    private static final boolean FIX_HIGHLIGHTER_UPDATE_BUG = false;
 
     private static boolean timeoutReported;
     
@@ -190,6 +191,7 @@ public abstract class ANTLRHighlighterBase<TState extends LineStateInfo<TState>>
                         || !lineStates.get(line).equals(stateAtEndOfLine);
 
                     // even if the state didn't change, we call SetLineState to make sure the _first/_lastChangedLine values get updated.
+                    // have to check bounds for this one or the editor might not get an update (if the token ends a line)
                     if (inBounds)
                         setLineState(line, stateAtEndOfLine);
 
@@ -367,7 +369,7 @@ public abstract class ANTLRHighlighterBase<TState extends LineStateInfo<TState>>
 
     public void forceRehighlightLines(int startLine, int endLineInclusive) {
         firstDirtyLine = firstDirtyLine != null ? Math.min(firstDirtyLine, startLine) : startLine;
-        lastDirtyLine = lastDirtyLine != null ? Math.min(lastDirtyLine, endLineInclusive) : endLineInclusive;
+        lastDirtyLine = lastDirtyLine != null ? Math.max(lastDirtyLine, endLineInclusive) : endLineInclusive;
 
         int start = NbDocument.findLineOffset(document, startLine);
         int end = (endLineInclusive == lineStates.size() - 1) ? document.getLength() : NbDocument.findLineOffset(document, endLineInclusive + 1);
@@ -453,7 +455,7 @@ public abstract class ANTLRHighlighterBase<TState extends LineStateInfo<TState>>
                 }
 
                 firstChangedLine = firstChangedLine != null ? Math.min(firstChangedLine, lineNumberFromPosition) : lineNumberFromPosition;
-                lastChangedLine = lastChangedLine != null ? Math.max(lastChangedLine, lineNumberFromPosition) : lineNumberFromPosition;
+                lastChangedLine = lastChangedLine != null ? Math.max(lastChangedLine, num2) : num2;
             }
         }
 
