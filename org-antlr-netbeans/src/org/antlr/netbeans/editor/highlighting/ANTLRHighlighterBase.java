@@ -31,7 +31,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.AttributeSet;
@@ -125,6 +124,7 @@ public abstract class ANTLRHighlighterBase<TState extends LineStateInfo<TState>>
 
             while (true)
             {
+                // TODO: perform this under a read lock
                 CommonToken token = (CommonToken)lexer.nextToken();
 
                 boolean inBounds = token.getStartIndex() < span.getEndExclusive();
