@@ -121,7 +121,7 @@ public class GrammarNode extends AbstractNode {
 
     @Override
     public String getHtmlDisplayName() {
-        return description.htmlHeader;
+        return description.getHtmlHeader();
     }
 
     @Override
@@ -236,9 +236,9 @@ public class GrammarNode extends AbstractNode {
 
         Description oldDescription = description; // Remember old description
         description = newDescription; // set new descrioption to the new node
-        if (oldDescription.htmlHeader != null && !oldDescription.htmlHeader.equals(description.htmlHeader)) {
+        if (oldDescription.getHtmlHeader() != null && !oldDescription.getHtmlHeader().equals(description.getHtmlHeader())) {
             // Different headers => we need to fire displayname change
-            fireDisplayNameChange(oldDescription.htmlHeader, description.htmlHeader);
+            fireDisplayNameChange(oldDescription.getHtmlHeader(), description.getHtmlHeader());
         }
 
         /*if (oldDescription.modifiers != null && !oldDescription.modifiers.equals(newDescription.modifiers)) {
@@ -381,11 +381,10 @@ public class GrammarNode extends AbstractNode {
             new DescriptionComparator(false);
 
         final GrammarRulesPanelUI ui;
-        FileObject fileObject;
-        String name;
+        private FileObject fileObject;
+        private boolean inherited;
+        private String name;
         Collection<Description> children;
-        String htmlHeader;
-        boolean inherited;
         private int offset;
         private Position position;
 
@@ -406,16 +405,35 @@ public class GrammarNode extends AbstractNode {
             return offset;
         }
 
-        public void setOffset(Snapshot snapshot, int snapshotOffset) {
-            offset = snapshot.getOriginalOffset(snapshotOffset);
-            position = null;
-            if (offset >= 0) {
-                Document document = snapshot.getSource().getDocument(false);
-                if (document != null) {
-                    try {
-                        position = document.createPosition(offset);
-                    } catch (BadLocationException ex) {
-                        Exceptions.printStackTrace(ex);
+        public String getName() {
+            return name;
+        }
+
+        public String getHtmlHeader() {
+            if (isInherited()) {
+                return String.format("<font color='#7D694A'>%s</font>", getName());
+            }
+
+            return null;
+        }
+
+        public void setOffset(Snapshot snapshot, FileObject fileObject, int snapshotOffset) {
+            if (snapshot == null) {
+                this.fileObject = fileObject;
+                offset = snapshotOffset;
+                position = null;
+            } else {
+                this.fileObject = snapshot.getSource().getFileObject();
+                offset = snapshot.getOriginalOffset(snapshotOffset);
+                position = null;
+                if (offset >= 0) {
+                    Document document = snapshot.getSource().getDocument(false);
+                    if (document != null) {
+                        try {
+                            position = document.createPosition(offset);
+                        } catch (BadLocationException ex) {
+                            Exceptions.printStackTrace(ex);
+                        }
                     }
                 }
             }
@@ -423,6 +441,18 @@ public class GrammarNode extends AbstractNode {
 
         public FileObject getFileObject() {
             return fileObject;
+        }
+
+        public void setFileObject(FileObject fileObject) {
+            this.fileObject = fileObject;
+        }
+
+        public boolean isInherited() {
+            return inherited;
+        }
+
+        public void setInherited(boolean value) {
+            inherited = value;
         }
 
         @Override
@@ -459,13 +489,13 @@ public class GrammarNode extends AbstractNode {
                 if (alpha) {
                     return alphaCompare(d1, d2);
                 } else {
-                    if (d1.inherited && !d2.inherited) {
+                    if (d1.isInherited() && !d2.isInherited()) {
                         return 1;
                     }
-                    if (!d1.inherited && d2.inherited) {
+                    if (!d1.isInherited() && d2.isInherited()) {
                         return -1;
                     }
-                    if (d1.inherited && d2.inherited) {
+                    if (d1.isInherited() && d2.isInherited()) {
                         return alphaCompare(d1, d2);
                     }
 

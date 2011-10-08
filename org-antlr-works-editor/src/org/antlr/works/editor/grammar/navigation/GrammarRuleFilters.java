@@ -113,7 +113,7 @@ public final class GrammarRuleFilters {
 
         ArrayList<Description> result = new ArrayList<Description>(original.size());
         for (Description description : original) {
-            if (!inherited && description.inherited) {
+            if (!inherited && description.isInherited()) {
                 continue;
             }
 

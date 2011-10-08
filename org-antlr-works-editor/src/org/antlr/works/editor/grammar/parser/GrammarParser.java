@@ -27,22 +27,25 @@
  */
 package org.antlr.works.editor.grammar.parser;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import org.antlr.Tool;
 import org.antlr.grammar.v3.ANTLRParser.grammar__return;
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CommonToken;
 import org.antlr.tool.ErrorManager;
-import org.antlr.tool.Grammar;
 import org.netbeans.lib.editor.util.ListenerList;
 import org.netbeans.modules.parsing.api.Snapshot;
 import org.netbeans.modules.parsing.api.Task;
 import org.netbeans.modules.parsing.spi.ParseException;
 import org.netbeans.modules.parsing.spi.Parser;
 import org.netbeans.modules.parsing.spi.SourceModificationEvent;
+import org.openide.filesystems.FileObject;
+import org.openide.util.Parameters;
 
 public class GrammarParser extends Parser {
     // Working around weird behavior in the Parsing API
@@ -54,8 +57,7 @@ public class GrammarParser extends Parser {
 
     private ANTLRErrorProvidingParser lastParser;
     private Snapshot lastSnapshot;
-    private grammar__return lastResult;
-    private CommonToken[] lastTokens;
+    private GrammarFileResult lastResult;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -71,7 +73,9 @@ public class GrammarParser extends Parser {
 
         try {
             ErrorManager.setErrorListener(new ANTLRErrorProvidingParser.ErrorListener());
-            Grammar g = new Grammar();
+            Tool tool = new Tool();
+            tool.setLibDirectory(new File(snapshot.getSource().getFileObject().getPath()).getParent());
+            GrammarWrapper g = new GrammarWrapper(tool);
             g.setFileName(""); // work around a bug in Grammar.setName that results in a NPE
             grammar__return result = parser.grammar_(g);
 
@@ -79,14 +83,15 @@ public class GrammarParser extends Parser {
             CommonToken[] tokens = new CommonToken[tokenList.size()];
             tokens = (CommonToken[])tokenList.toArray(tokens);
 
+            GrammarFileResult currentResult = new GrammarFileResult(snapshot.getSource().getFileObject(), g, result, tokens);
+
             synchronized (this) {
                 if (SINGLE_RESULT) {
                     lastParser = parser;
                     lastSnapshot = snapshot;
-                    lastResult = result;
-                    lastTokens = tokens;
+                    lastResult = currentResult;
                 } else {
-                    results.put(task, new GrammarParserResult(parser, snapshot, task, result, tokens));
+                    results.put(task, new GrammarParserResult(parser, snapshot, task, currentResult));
                 }
             }
         } catch (Exception ex) {
@@ -98,13 +103,13 @@ public class GrammarParser extends Parser {
     public Result getResult(Task task) throws ParseException {
         synchronized (this) {
             if (SINGLE_RESULT) {
-                return new GrammarParserResult(lastParser, lastSnapshot, task, lastResult, lastTokens);
+                return new GrammarParserResult(lastParser, lastSnapshot, task, lastResult);
             } else {
                 return results.get(task);
             }
         }
     }
-    
+
     @Override
     public void cancel(CancelReason reason, SourceModificationEvent event) {
     }
@@ -137,19 +142,49 @@ public class GrammarParser extends Parser {
         }
     }
 
+    public static class GrammarFileResult {
+        private final FileObject fileObject;
+        private final GrammarWrapper grammar;
+        private final grammar__return result;
+        private final CommonToken[] tokens;
+
+        public GrammarFileResult(FileObject fileObject, GrammarWrapper grammar, grammar__return result, CommonToken[] tokens) {
+            this.fileObject = fileObject;
+            this.grammar = grammar;
+            this.result = result;
+            this.tokens = tokens;
+        }
+
+        public FileObject getFileObject() {
+            return fileObject;
+        }
+
+        public GrammarWrapper getGrammar() {
+            return grammar;
+        }
+
+        public grammar__return getResult() {
+            return result;
+        }
+
+        public CommonToken[] getTokens() {
+            return tokens;
+        }
+    }
+
     public class GrammarParserResult extends Result {
 
         private final ANTLRErrorProvidingParser parser;
         private final Task task;
-        private final grammar__return result;
-        private final CommonToken[] tokens;
+        private final GrammarFileResult result;
 
-        public GrammarParserResult(ANTLRErrorProvidingParser parser, Snapshot snapshot, Task task, grammar__return result, CommonToken[] tokens) {
+        public GrammarParserResult(ANTLRErrorProvidingParser parser, Snapshot snapshot, Task task, GrammarFileResult result) {
             super(snapshot);
+            Parameters.notNull("result", result);
+
             this.parser = parser;
             this.task = task;
             this.result = result;
-            this.tokens = tokens;
         }
 
         public ANTLRErrorProvidingParser getParser() {
@@ -159,13 +194,17 @@ public class GrammarParser extends Parser {
         public Task getTask() {
             return task;
         }
-        
-        public grammar__return getResult() {
+
+        public GrammarWrapper getRootGrammar() {
+            return result.grammar;
+        }
+
+        public GrammarFileResult getResult() {
             return result;
         }
 
-        public CommonToken[] getTokens() {
-            return tokens;
+        public List<GrammarFileResult> getImportedGrammarResults() {
+            return getRootGrammar().getImportedGrammarResults();
         }
 
         @Override

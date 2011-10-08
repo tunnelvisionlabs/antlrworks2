@@ -52,20 +52,21 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Logger;
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
-import javax.swing.text.Position;
 import org.antlr.grammar.v3.ANTLRParser.grammar__return;
 import org.antlr.netbeans.editor.navigation.CurrentDocumentStateScheduler;
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 import org.antlr.works.editor.grammar.navigation.GrammarNode.Description;
-import org.antlr.works.editor.grammar.parser.ANTLRErrorProvidingParser;
 import org.antlr.works.editor.grammar.parser.GrammarParser;
+import org.antlr.works.editor.grammar.parser.GrammarParser.GrammarFileResult;
 import org.antlr.works.editor.grammar.parser.GrammarParser.GrammarParserResult;
+import org.netbeans.modules.parsing.api.Snapshot;
 import org.netbeans.modules.parsing.spi.ParserResultTask;
 import org.netbeans.modules.parsing.spi.Scheduler;
 import org.netbeans.modules.parsing.spi.SchedulerEvent;
 import org.netbeans.spi.navigator.NavigatorPanel;
+import org.openide.filesystems.FileObject;
 import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
@@ -95,79 +96,20 @@ public class RuleScanningTask extends ParserResultTask<GrammarParser.GrammarPars
             }
 
             Description rootDescription = new Description(ui);
-            rootDescription.fileObject = result.getSnapshot().getSource().getFileObject();
             rootDescription.children = new ArrayList<Description>();
+            rootDescription.setFileObject(result.getSnapshot().getSource().getFileObject());
 
             Description parserRulesRootDescription = new Description(ui, NbBundle.getMessage(RuleScanningTask.class, "LBL_ParserRules"));
-            parserRulesRootDescription.fileObject = rootDescription.fileObject;
             parserRulesRootDescription.children = new HashSet<Description>();
 
             Description lexerRulesRootDescription = new Description(ui, NbBundle.getMessage(RuleScanningTask.class, "LBL_LexerRules"));
-            lexerRulesRootDescription.fileObject = rootDescription.fileObject;
             lexerRulesRootDescription.children = new HashSet<Description>();
 
-            grammar__return parseResult = result.getResult();
-            Tree tree = (Tree)parseResult.getTree();
-            ANTLRErrorProvidingParser.grammar_Adaptor adaptor = new ANTLRErrorProvidingParser.grammar_Adaptor(result.getParser());
-            int childCount = adaptor.getChildCount(tree);
-            for (int i = 0; i < childCount; i++) {
-                Object childObject = adaptor.getChild(tree, i);
-                if (!(childObject instanceof CommonTree)) {
-                    continue;
-                }
-
-                CommonTree child = (CommonTree) childObject;
-                if (child.getChildCount() > 0 && "rule".equals(child.getText())) {
-                    String ruleName = child.getChild(0).getText();
-                    if ("Tokens".equals(ruleName)) {
-                        continue;
-                    }
-
-                    Description ruleDescription = new Description(ui, ruleName);
-                    ruleDescription.fileObject = rootDescription.fileObject;
-                    ruleDescription.setOffset(result.getSnapshot(), ((CommonToken)((CommonTree)child.getChild(0)).getToken()).getStartIndex());
-
-                    if (Character.isLowerCase(ruleName.charAt(0))) {
-                        parserRulesRootDescription.children.add(ruleDescription);
-                    } else {
-                        lexerRulesRootDescription.children.add(ruleDescription);
-                    }
-                } else if (child.getText() != null && child.getText().startsWith("tokens")) {
-                    for (int j = 0; j < child.getChildCount(); j++) {
-                        Tree tokenChild = child.getChild(j);
-                        if ("=".equals(tokenChild.getText()) && tokenChild.getChildCount() == 2) {
-                            String ruleName = tokenChild.getChild(0).getText();
-                            if (ruleName == null || ruleName.length() == 0) {
-                                continue;
-                            }
-
-                            Description ruleDescription = new Description(ui, ruleName);
-                            ruleDescription.fileObject = rootDescription.fileObject;
-                            ruleDescription.setOffset(result.getSnapshot(), ((CommonToken)((CommonTree)tokenChild.getChild(0)).getToken()).getStartIndex());
-
-                            if (Character.isLowerCase(ruleName.charAt(0))) {
-                                parserRulesRootDescription.children.add(ruleDescription);
-                            } else {
-                                lexerRulesRootDescription.children.add(ruleDescription);
-                            }
-                        } else if (tokenChild.getChildCount() == 0) {
-                            String ruleName = tokenChild.getText();
-                            if (ruleName == null || ruleName.length() == 0) {
-                                continue;
-                            }
-
-                            Description ruleDescription = new Description(ui, ruleName);
-                            ruleDescription.fileObject = rootDescription.fileObject;
-                            ruleDescription.setOffset(result.getSnapshot(), ((CommonToken)((CommonTree)tokenChild).getToken()).getStartIndex());
-                            if (Character.isLowerCase(ruleName.charAt(0))) {
-                                parserRulesRootDescription.children.add(ruleDescription);
-                            } else {
-                                lexerRulesRootDescription.children.add(ruleDescription);
-                            }
-                        }
-                    }
-                }
+            for (GrammarFileResult importedParseResult : result.getImportedGrammarResults()) {
+                processParseResult(null, importedParseResult, ui, rootDescription, parserRulesRootDescription, lexerRulesRootDescription);
             }
+
+            processParseResult(result.getSnapshot(), result.getResult(), ui, rootDescription, parserRulesRootDescription, lexerRulesRootDescription);
 
             if (parserRulesRootDescription.children.size() > 0) {
                 rootDescription.children.add(parserRulesRootDescription);
@@ -180,6 +122,73 @@ public class RuleScanningTask extends ParserResultTask<GrammarParser.GrammarPars
             ui.refresh(rootDescription);
         } catch (RuntimeException ex) {
             Exceptions.printStackTrace(ex);
+        }
+    }
+
+    private void processParseResult(Snapshot snapshot, GrammarFileResult result, GrammarRulesPanelUI ui, Description rootDescription, Description parserRulesRootDescription, Description lexerRulesRootDescription) {
+
+        grammar__return parseResult = result.getResult();
+        FileObject fileObject = result.getFileObject();
+        Tree tree = (Tree)parseResult.getTree();
+        int childCount = tree.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            Object childObject = tree.getChild(i);
+            if (!(childObject instanceof CommonTree)) {
+                continue;
+            }
+
+            CommonTree child = (CommonTree) childObject;
+            if (child.getChildCount() > 0 && "rule".equals(child.getText())) {
+                String ruleName = child.getChild(0).getText();
+                if ("Tokens".equals(ruleName)) {
+                    continue;
+                }
+
+                Description ruleDescription = new Description(ui, ruleName);
+                ruleDescription.setOffset(snapshot, fileObject, ((CommonToken)((CommonTree)child.getChild(0)).getToken()).getStartIndex());
+                ruleDescription.setInherited(snapshot == null); // for now, go on the fact that snapshots aren't available for imported files
+
+                if (Character.isLowerCase(ruleName.charAt(0))) {
+                    parserRulesRootDescription.children.add(ruleDescription);
+                } else {
+                    lexerRulesRootDescription.children.add(ruleDescription);
+                }
+            } else if (child.getText() != null && child.getText().startsWith("tokens")) {
+                for (int j = 0; j < child.getChildCount(); j++) {
+                    Tree tokenChild = child.getChild(j);
+                    if ("=".equals(tokenChild.getText()) && tokenChild.getChildCount() == 2) {
+                        String ruleName = tokenChild.getChild(0).getText();
+                        if (ruleName == null || ruleName.length() == 0) {
+                            continue;
+                        }
+
+                        Description ruleDescription = new Description(ui, ruleName);
+                        ruleDescription.setOffset(snapshot, fileObject, ((CommonToken)((CommonTree)tokenChild.getChild(0)).getToken()).getStartIndex());
+                        ruleDescription.setInherited(snapshot == null); // for now, go on the fact that snapshots aren't available for imported files
+
+                        if (Character.isLowerCase(ruleName.charAt(0))) {
+                            parserRulesRootDescription.children.add(ruleDescription);
+                        } else {
+                            lexerRulesRootDescription.children.add(ruleDescription);
+                        }
+                    } else if (tokenChild.getChildCount() == 0) {
+                        String ruleName = tokenChild.getText();
+                        if (ruleName == null || ruleName.length() == 0) {
+                            continue;
+                        }
+
+                        Description ruleDescription = new Description(ui, ruleName);
+                        ruleDescription.setOffset(snapshot, fileObject, ((CommonToken)((CommonTree)tokenChild).getToken()).getStartIndex());
+                        ruleDescription.setInherited(snapshot == null); // for now, go on the fact that snapshots aren't available for imported files
+
+                        if (Character.isLowerCase(ruleName.charAt(0))) {
+                            parserRulesRootDescription.children.add(ruleDescription);
+                        } else {
+                            lexerRulesRootDescription.children.add(ruleDescription);
+                        }
+                    }
+                }
+            }
         }
     }
 

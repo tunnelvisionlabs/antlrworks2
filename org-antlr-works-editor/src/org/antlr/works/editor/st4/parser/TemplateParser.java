@@ -64,6 +64,7 @@ public class TemplateParser extends Parser {
     @Override
     public void parse(Snapshot snapshot, Task task, SourceModificationEvent sme) throws ParseException {
         ANTLRStringStream input = new ANTLRStringStream(snapshot.getText().toString());
+        input.name = snapshot.getSource().getFileObject().getNameExt();
 
         GroupLexer lexer = new GroupLexer(input);
         CommonTokenStream tokens = new CommonTokenStream(lexer);

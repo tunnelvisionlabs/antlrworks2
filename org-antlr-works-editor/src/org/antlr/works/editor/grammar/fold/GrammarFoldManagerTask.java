@@ -40,7 +40,6 @@ import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.works.editor.grammar.parser.GrammarParser.GrammarParserResult;
 import org.netbeans.api.editor.fold.Fold;
-import org.netbeans.api.editor.fold.FoldHierarchy;
 import org.netbeans.api.editor.fold.FoldType;
 import org.netbeans.modules.parsing.spi.ParserResultTask;
 import org.netbeans.modules.parsing.spi.Scheduler;
@@ -50,7 +49,6 @@ import org.netbeans.spi.editor.fold.FoldOperation;
 import org.openide.filesystems.FileObject;
 import org.openide.text.NbDocument;
 import org.openide.util.Exceptions;
-import org.openide.util.Lookup;
 
 /**
  *
@@ -74,7 +72,7 @@ public class GrammarFoldManagerTask extends ParserResultTask<GrammarParserResult
 
         // calculate the folds
         final List<FoldInfo> folds = new ArrayList<FoldInfo>();
-        grammar__return parseResult = result.getResult();
+        grammar__return parseResult = result.getResult().getResult();
         CommonTree tree = (CommonTree)parseResult.getTree();
         if (tree != null) {
             for (Object childObject : tree.getChildren()) {
@@ -101,12 +99,12 @@ public class GrammarFoldManagerTask extends ParserResultTask<GrammarParserResult
                         blockHint = "options {...}";
                     }
 
-                    CommonToken startToken = result.getTokens()[child.getTokenStartIndex()];
-                    CommonToken stopToken = result.getTokens()[child.getTokenStopIndex()];
+                    CommonToken startToken = result.getResult().getTokens()[child.getTokenStartIndex()];
+                    CommonToken stopToken = result.getResult().getTokens()[child.getTokenStopIndex()];
 
                     if (startToken.getType() == ANTLRParser.DOC_COMMENT) {
                         for (int index = child.getTokenStartIndex(); index <= child.getTokenStopIndex(); index++) {
-                            startToken = result.getTokens()[index];
+                            startToken = result.getResult().getTokens()[index];
                             if (startToken.getType() != ANTLRParser.DOC_COMMENT && startToken.getChannel() != Token.HIDDEN_CHANNEL) {
                                 break;
                             }
@@ -132,7 +130,7 @@ public class GrammarFoldManagerTask extends ParserResultTask<GrammarParserResult
                 }
             }
 
-            for (CommonToken token : result.getTokens()) {
+            for (CommonToken token : result.getResult().getTokens()) {
                 switch (token.getType()) {
                 case ANTLRParser.DOC_COMMENT:
                 case ANTLRParser.ML_COMMENT:

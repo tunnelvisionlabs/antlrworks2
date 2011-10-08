@@ -199,7 +199,7 @@ public class GrammarRulesPanelUI extends javax.swing.JPanel implements ExplorerM
     public FileObject getFileObject() {
         GrammarNode node = getRootNode();
         if (node != null) {
-            return node.getDescription().fileObject;
+            return node.getDescription().getFileObject();
         } else {
             return null;
         }
@@ -267,7 +267,7 @@ public class GrammarRulesPanelUI extends javax.swing.JPanel implements ExplorerM
 
     public void refresh(final Description description) {
         final GrammarNode rootNode = getRootNode();
-        if (rootNode != null && rootNode.getDescription().fileObject.equals(description.fileObject)) {
+        if (rootNode != null && rootNode.getDescription().getFileObject().equals(description.getFileObject())) {
             RP.post(new Runnable() {
                     @Override
                     public void run() {
