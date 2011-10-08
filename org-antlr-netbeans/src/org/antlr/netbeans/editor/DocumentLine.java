@@ -39,9 +39,9 @@ import org.openide.util.Parameters;
 public final class DocumentLine {
     private final StyledDocument document;
     private final int lineNumber;
-    private final int startOffset;
+    private final DocumentSpan extent;
+    private final DocumentSpan extentIncludingLineBreak;
     private final int lineBreakLength;
-    private final int endOffsetIncludingLineBreak;
 
     public DocumentLine(StyledDocument document, int lineNumber) throws BadLocationException {
         Parameters.notNull("document", document);
@@ -50,18 +50,23 @@ public final class DocumentLine {
         }
         this.document = document;
         this.lineNumber = lineNumber;
-        this.startOffset = NbDocument.findLineOffset(document, lineNumber);
+        DocumentPoint start = new DocumentPoint(document, NbDocument.findLineOffset(document, lineNumber));
         if (lineNumber < NbDocument.findLineRootElement(document).getElementCount() - 1) {
-            this.endOffsetIncludingLineBreak = NbDocument.findLineOffset(document, lineNumber + 1);
-            String text = document.getText(startOffset, endOffsetIncludingLineBreak - startOffset);
+            DocumentPoint endIncludingLineBreak = new DocumentPoint(document, NbDocument.findLineOffset(document, lineNumber + 1));
+            extentIncludingLineBreak = new DocumentSpan(start, endIncludingLineBreak);
+            String text = extentIncludingLineBreak.getText();
             if (text.endsWith("\r\n")) {
                 this.lineBreakLength = 2;
             } else {
                 this.lineBreakLength = 1;
             }
+
+            this.extent = new DocumentSpan(start, extentIncludingLineBreak.getEnd().subtract(lineBreakLength));
         } else {
             this.lineBreakLength = 0;
-            this.endOffsetIncludingLineBreak = document.getLength();
+            DocumentPoint endIncludingLineBreak = new DocumentPoint(document, document.getLength());
+            this.extentIncludingLineBreak = new DocumentSpan(start, endIncludingLineBreak);
+            this.extent = this.extentIncludingLineBreak;
         }
     }
 
@@ -70,31 +75,39 @@ public final class DocumentLine {
     }
 
     public DocumentPoint getStart() {
-        return new DocumentPoint(document, startOffset);
+        return extent.getStart();
     }
 
     public DocumentPoint getEnd() {
-        return new DocumentPoint(document, endOffsetIncludingLineBreak - lineBreakLength);
+        return extent.getEnd();
     }
 
     public DocumentPoint getEndIncludingLineBreak() {
-        return new DocumentPoint(document, endOffsetIncludingLineBreak);
+        return extentIncludingLineBreak.getEnd();
+    }
+
+    public DocumentSpan getExtent() {
+        return extent;
+    }
+
+    public DocumentSpan getExtentIncludingLineBreak() {
+        return extentIncludingLineBreak;
     }
 
     public int getLength() {
-        return endOffsetIncludingLineBreak - startOffset - lineBreakLength;
+        return extent.getLength();
     }
 
     public int getLengthIncludingLineBreak() {
-        return endOffsetIncludingLineBreak - startOffset;
+        return extentIncludingLineBreak.getLength();
     }
 
     public String getText() throws BadLocationException {
-        return document.getText(startOffset, getLength());
+        return extent.getText();
     }
 
     public String getTextIncludingLineBreak() throws BadLocationException {
-        return document.getText(startOffset, getLengthIncludingLineBreak());
+        return extentIncludingLineBreak.getText();
     }
 
 }

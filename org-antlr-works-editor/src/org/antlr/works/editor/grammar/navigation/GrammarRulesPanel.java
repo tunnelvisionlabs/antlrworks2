@@ -44,11 +44,16 @@
 
 package org.antlr.works.editor.grammar.navigation;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.Collection;
 import javax.swing.JComponent;
+import javax.swing.SwingUtilities;
 import org.netbeans.spi.navigator.NavigatorPanel;
+import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
 import org.openide.util.RequestProcessor;
+import org.openide.util.lookup.Lookups;
 
 public class GrammarRulesPanel implements NavigatorPanel {
     private static final RequestProcessor RequestProcessor = new RequestProcessor(GrammarRulesPanel.class.getName(), 1);
@@ -103,5 +108,60 @@ public class GrammarRulesPanel implements NavigatorPanel {
         }
 
         return this.component;
+    }
+
+    private static final String PANELS_FOLDER = "/Navigator/Panels/";
+    private static final String CONTENT_TYPE = "text/x-antlr3";
+    private static final Lookup.Template<NavigatorPanel> NAV_PANEL_TEMPLATE = new Lookup.Template<NavigatorPanel>(NavigatorPanel.class);
+
+    public static GrammarRulesPanelUI findGrammarRulesPanelUI() {
+        final GrammarRulesPanelUI[] result = new GrammarRulesPanelUI[1];
+        if (SwingUtilities.isEventDispatchThread()) {
+            findGrammarRulesPanelUI(result);
+        } else {
+            try {
+                SwingUtilities.invokeAndWait(new Runnable() {
+                    @Override
+                    public void run() {
+                        findGrammarRulesPanelUI(result);
+                    }
+                });
+            } catch (InterruptedException ex) {
+                Exceptions.printStackTrace(ex);
+                return null;
+            } catch (InvocationTargetException ex) {
+                Exceptions.printStackTrace(ex);
+                return null;
+            }
+        }
+
+        return result[0];
+    }
+
+    private static void findGrammarRulesPanelUI(final GrammarRulesPanelUI[] result) {
+        result[0] = null;
+
+        String path = PANELS_FOLDER + CONTENT_TYPE;
+        Lookup.Result<NavigatorPanel> lookupResult = Lookups.forPath(path).lookup(NAV_PANEL_TEMPLATE);
+        Collection<? extends NavigatorPanel> panels = lookupResult.allInstances();
+        assert panels.size() <= 1;
+        if (panels.isEmpty()) {
+            return;
+        }
+
+        NavigatorPanel panel = panels.iterator().next();
+        assert panel instanceof GrammarRulesPanel;
+        if (!(panel instanceof GrammarRulesPanel)) {
+            return;
+        }
+
+        GrammarRulesPanel grammarRulesPanel = (GrammarRulesPanel)panel;
+        JComponent component = grammarRulesPanel.getComponent();
+        assert component == null || component instanceof GrammarRulesPanelUI;
+        if (!(component instanceof GrammarRulesPanelUI)) {
+            return;
+        }
+
+        result[0] = (GrammarRulesPanelUI)component;
     }
 }

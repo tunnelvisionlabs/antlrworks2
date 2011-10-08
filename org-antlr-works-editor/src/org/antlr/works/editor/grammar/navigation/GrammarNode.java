@@ -397,6 +397,10 @@ public class GrammarNode extends AbstractNode {
             this.name = name;
         }
 
+        public Collection<Description> getChildren() {
+            return children;
+        }
+
         public int getOffset() {
             if (position != null) {
                 return position.getOffset();

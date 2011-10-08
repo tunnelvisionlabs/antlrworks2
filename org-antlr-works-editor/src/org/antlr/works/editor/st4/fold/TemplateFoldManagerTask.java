@@ -88,13 +88,15 @@ public class TemplateFoldManagerTask extends ParserResultTask<TemplateParserResu
             }
 
             Interval sourceInterval = templateInfo.getGroupInterval();
-            DocumentSpan span = new DocumentSpan(document, sourceInterval.a, sourceInterval.b + 1);
+            DocumentSpan span;
             try {
-                if (span.getStart().getContainingLine().getLineNumber() == span.getEnd().getContainingLine().getLineNumber()) {
-                    continue;
-                }
+                span = new DocumentSpan(document, sourceInterval.a, sourceInterval.b + 1);
             } catch (BadLocationException ex) {
                 Exceptions.printStackTrace(ex);
+                continue;
+            }
+
+            if (span.getStart().getContainingLine().getLineNumber() == span.getEnd().getContainingLine().getLineNumber()) {
                 continue;
             }
 

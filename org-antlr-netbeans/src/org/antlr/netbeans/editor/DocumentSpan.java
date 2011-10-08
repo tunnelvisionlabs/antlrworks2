@@ -28,7 +28,9 @@
 package org.antlr.netbeans.editor;
 
 import javax.swing.text.BadLocationException;
+import javax.swing.text.Position;
 import javax.swing.text.StyledDocument;
+import org.openide.util.Exceptions;
 import org.openide.util.Parameters;
 
 /**
@@ -37,10 +39,10 @@ import org.openide.util.Parameters;
  */
 public final class DocumentSpan {
     private final StyledDocument document;
-    private final int startOffset;
-    private final int endOffset;
+    private final DocumentPoint start;
+    private final DocumentPoint end;
 
-    public DocumentSpan(StyledDocument document, int startOffset, int endOffset) {
+    public DocumentSpan(StyledDocument document, int startOffset, int endOffset) throws BadLocationException {
         Parameters.notNull("document", document);
         if (startOffset < 0) {
             throw new IllegalArgumentException("startOffset must be greater than 0.");
@@ -48,9 +50,10 @@ public final class DocumentSpan {
         if (endOffset < startOffset) {
             throw new IllegalArgumentException("endOffset must be greater than or equal to startOffset.");
         }
+
         this.document = document;
-        this.startOffset = startOffset;
-        this.endOffset = endOffset;
+        this.start = new DocumentPoint(document, startOffset);
+        this.end = new DocumentPoint(document, endOffset);
     }
 
     public DocumentSpan(DocumentPoint start, DocumentPoint end) {
@@ -59,9 +62,24 @@ public final class DocumentSpan {
         if (!start.getDocument().equals(end.getDocument())) {
             throw new IllegalArgumentException("The start and end points must lie within the same document.");
         }
-        document = start.getDocument();
-        startOffset = start.getOffset();
-        endOffset = end.getOffset();
+
+        this.document = start.getDocument();
+        this.start = start;
+        this.end = end;
+    }
+
+    public DocumentSpan(StyledDocument document, Position start, Position end) {
+        Parameters.notNull("document", document);
+        Parameters.notNull("start", start);
+        Parameters.notNull("end", end);
+
+        if (end.getOffset() < start.getOffset()) {
+            throw new IllegalArgumentException("endOffset must be greater than or equal to startOffset.");
+        }
+
+        this.document = document;
+        this.start = new DocumentPoint(document, start);
+        this.end = new DocumentPoint(document, end);
     }
 
     public StyledDocument getDocument() {
@@ -69,23 +87,49 @@ public final class DocumentSpan {
     }
 
     public boolean isEmpty() {
-        return endOffset == startOffset;
+        return getEnd().subtract(getStart()) == 0;
     }
 
     public DocumentPoint getStart() {
-        return new DocumentPoint(document, startOffset);
+        return start;
     }
 
     public DocumentPoint getEnd() {
-        return new DocumentPoint(document, endOffset);
+        return end;
     }
 
     public int getLength() {
-        return endOffset - startOffset;
+        return end.subtract(start);
     }
 
-    public String getText() throws BadLocationException {
-        return document.getText(startOffset, endOffset - startOffset);
+    public boolean contains(int offset) {
+        return (offset >= getStart().getOffset()) && (offset < getEnd().getOffset());
+    }
+
+    public boolean contains(DocumentPoint point) {
+        Parameters.notNull("point", point);
+        if (!getDocument().equals(point.getDocument())) {
+            throw new IllegalArgumentException("The point must lie within the same document.");
+        }
+
+        return (point.compareTo(getStart()) >= 0) && (point.compareTo(getEnd()) < 0);
+    }
+
+    public boolean contains(DocumentSpan span) {
+        Parameters.notNull("span", span);
+        if (!getDocument().equals(span.getDocument())) {
+            throw new IllegalArgumentException("The span must lie within the same document.");
+        }
+
+        return (span.getStart().compareTo(getStart()) >= 0) && (span.getEnd().compareTo(getEnd()) <= 0);
+    }
+
+    public String getText() {
+        try {
+            return document.getText(this.getStart().getOffset(), getLength());
+        } catch (BadLocationException ex) {
+            throw new IllegalStateException("Should not be reachable because the positions should be valid.", ex);
+        }
     }
 
     @Override
@@ -93,16 +137,19 @@ public final class DocumentSpan {
         if (!(obj instanceof DocumentSpan)) {
             return false;
         }
+
         DocumentSpan other = (DocumentSpan)obj;
-        return this.startOffset == other.startOffset && this.endOffset == other.endOffset && this.document.equals(other.document);
+        return (this.start.equals(other.start))
+            && (this.end.equals(other.end))
+            && this.document.equals(other.document);
     }
 
     @Override
     public int hashCode() {
         int hash = 5;
         hash = 13 * hash + (this.document != null ? this.document.hashCode() : 0);
-        hash = 13 * hash + this.startOffset;
-        hash = 13 * hash + this.endOffset;
+        hash = 13 * hash + this.start.hashCode();
+        hash = 13 * hash + this.end.hashCode();
         return hash;
     }
 

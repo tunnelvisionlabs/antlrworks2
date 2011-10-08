@@ -58,12 +58,16 @@ public final class SelectionHelper {
             for (int i = 0; i < positions.size(); i += 2) {
                 Position start = positions.get(i);
                 Position end = positions.get(i + 1);
-                DocumentSpan selection = new DocumentSpan((StyledDocument)document, start.getOffset(), end.getOffset());
+                DocumentSpan selection = new DocumentSpan((StyledDocument)document, start, end);
                 spans.add(selection);
             }
         } else {
-            DocumentSpan selection = new DocumentSpan((StyledDocument)document, target.getSelectionStart(), target.getSelectionEnd());
-            spans.add(selection);
+            try {
+                DocumentSpan selection = new DocumentSpan((StyledDocument)document, target.getSelectionStart(), target.getSelectionEnd());
+                spans.add(selection);
+            } catch (BadLocationException ex) {
+                throw new IllegalStateException("Shouldn't be reachable: the selection should be within valid bounds.", ex);
+            }
         }
 
         return spans;

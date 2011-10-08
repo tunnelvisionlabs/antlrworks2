@@ -84,14 +84,31 @@ public abstract class ANTLRHighlighterBase<TState extends LineStateInfo<TState>>
 
     @Override
     public HighlightsSequence getHighlights(int startOffset, int endOffset) {
+        List<Highlight> highlights = new ArrayList<Highlight>();
+        getHighlights(startOffset, endOffset, highlights, null, true);
+        return new HighlightsList(highlights);
+    }
+
+    public void getHighlights(int startOffset, int endOffset, List<Highlight> highlights, List<Token> tokens, boolean updateOffsets) {
+        if (highlights == null && tokens == null) {
+            return;
+        }
+
         if (endOffset == Integer.MAX_VALUE)
             endOffset = document.getLength();
         
+        if (highlights != null) {
+            highlights.clear();
+        }
+
+        if (tokens != null) {
+            tokens.clear();
+        }
+
         Span span = Span.fromBounds(startOffset, endOffset);
-        
-        List<Highlight> highlights = new ArrayList<Highlight>();
+
         if (failedTimeout)
-            return new HighlightsList(highlights);
+            return;
         
         boolean spanExtended = false;
         
@@ -109,7 +126,7 @@ public abstract class ANTLRHighlighterBase<TState extends LineStateInfo<TState>>
             try {
                 input = createInputStream(span);
             } catch (BadLocationException ex) {
-                return HighlightsSequence.EMPTY;
+                return;
             }
             
             TokenSourceWithState<TState> lexer = createLexer(input, startState);
@@ -129,34 +146,36 @@ public abstract class ANTLRHighlighterBase<TState extends LineStateInfo<TState>>
 
                 boolean inBounds = token.getStartIndex() < span.getEndExclusive();
 
-                int startLineCurrent;
-                if (token.getType() == Token.EOF)
-                    startLineCurrent = NbDocument.findLineRootElement(document).getElementCount();
-                else
-                    startLineCurrent = token.getLine();
-
-                if (previousToken == null || previousToken.getLine() < startLineCurrent - 1)
-                {
-                    // endLinePrevious is the line number the previous token ended on
-                    int endLinePrevious;
-                    if (previousToken != null)
-                        endLinePrevious = NbDocument.findLineNumber(document, previousToken.getStopIndex() + 1);
+                if (updateOffsets) {
+                    int startLineCurrent;
+                    if (token.getType() == Token.EOF)
+                        startLineCurrent = NbDocument.findLineRootElement(document).getElementCount();
                     else
-                        endLinePrevious = NbDocument.findLineNumber(document, span.getStart()) - 1;
+                        startLineCurrent = token.getLine();
 
-                    if (startLineCurrent > endLinePrevious + 1)
+                    if (previousToken == null || previousToken.getLine() < startLineCurrent - 1)
                     {
-                        int firstMultilineLine = endLinePrevious;
-                        if (previousToken == null || previousTokenEndsLine)
-                            firstMultilineLine++;
+                        // endLinePrevious is the line number the previous token ended on
+                        int endLinePrevious;
+                        if (previousToken != null)
+                            endLinePrevious = NbDocument.findLineNumber(document, previousToken.getStopIndex() + 1);
+                        else
+                            endLinePrevious = NbDocument.findLineNumber(document, span.getStart()) - 1;
 
-                        for (int i = firstMultilineLine; i < startLineCurrent; i++)
+                        if (startLineCurrent > endLinePrevious + 1)
                         {
-                            if (!lineStates.get(i).getIsMultiLineToken() || lineStateChanged)
-                                extendMultiLineSpanToLine = i + 1;
+                            int firstMultilineLine = endLinePrevious;
+                            if (previousToken == null || previousTokenEndsLine)
+                                firstMultilineLine++;
 
-                            if (inBounds)
-                                setLineState(i, lineStates.get(i).createMultiLineState());
+                            for (int i = firstMultilineLine; i < startLineCurrent; i++)
+                            {
+                                if (!lineStates.get(i).getIsMultiLineToken() || lineStateChanged)
+                                    extendMultiLineSpanToLine = i + 1;
+
+                                if (inBounds)
+                                    setLineState(i, lineStates.get(i).createMultiLineState());
+                            }
                         }
                     }
                 }
@@ -167,7 +186,7 @@ public abstract class ANTLRHighlighterBase<TState extends LineStateInfo<TState>>
                 previousToken = token;
                 previousTokenEndsLine = tokenEndsAtEndOfLine(lexer, token);
 
-                if (isMultiLineToken(lexer, token))
+                if (updateOffsets && isMultiLineToken(lexer, token))
                 {
                     int startLine = NbDocument.findLineNumber(document, token.getStartIndex());
                     int stopLine = NbDocument.findLineNumber(document, token.getStopIndex() + 1);
@@ -182,7 +201,7 @@ public abstract class ANTLRHighlighterBase<TState extends LineStateInfo<TState>>
                 }
 
                 boolean tokenEndsLine = previousTokenEndsLine;
-                if (tokenEndsLine)
+                if (updateOffsets && tokenEndsLine)
                 {
                     TState stateAtEndOfLine = lexer.getState();
                     int line = NbDocument.findLineNumber(document, token.getStopIndex() + 1);
@@ -192,7 +211,7 @@ public abstract class ANTLRHighlighterBase<TState extends LineStateInfo<TState>>
 
                     // even if the state didn't change, we call SetLineState to make sure the _first/_lastChangedLine values get updated.
                     // have to check bounds for this one or the editor might not get an update (if the token ends a line)
-                    if (inBounds)
+                    if (updateOffsets && inBounds)
                         setLineState(line, stateAtEndOfLine);
 
                     if (lineStateChanged)
@@ -218,9 +237,15 @@ public abstract class ANTLRHighlighterBase<TState extends LineStateInfo<TState>>
                 if (token.getStopIndex() < requestedSpan.getStart())
                     continue;
 
-                Collection<Highlight> tokenClassificationSpans = getHighlightsForToken(token);
-                if (tokenClassificationSpans != null) {
-                    highlights.addAll(tokenClassificationSpans);
+                if (tokens != null) {
+                    tokens.add(token);
+                }
+
+                if (highlights != null) {
+                    Collection<Highlight> tokenClassificationSpans = getHighlightsForToken(token);
+                    if (tokenClassificationSpans != null) {
+                        highlights.addAll(tokenClassificationSpans);
+                    }
                 }
                 
                 if (!inBounds)
@@ -228,7 +253,7 @@ public abstract class ANTLRHighlighterBase<TState extends LineStateInfo<TState>>
             }
         }
         
-        if (extendMultiLineSpanToLine > 0) {
+        if (updateOffsets && extendMultiLineSpanToLine > 0) {
             int endPosition = extendMultiLineSpanToLine < NbDocument.findLineRootElement(document).getElementCount() - 1 ? NbDocument.findLineOffset(document, extendMultiLineSpanToLine + 1) : document.getLength();
             if (endPosition > extendedSpan.getEndExclusive()) {
                 spanExtended = true;
@@ -236,7 +261,7 @@ public abstract class ANTLRHighlighterBase<TState extends LineStateInfo<TState>>
             }
         }
         
-        if (spanExtended) {
+        if (updateOffsets && spanExtended) {
             /* Subtract 1 from each of these because the spans include the line break on their last
              * line, forcing it to appear as the first position on the following line.
              */
@@ -244,8 +269,6 @@ public abstract class ANTLRHighlighterBase<TState extends LineStateInfo<TState>>
             int lastLine = NbDocument.findLineNumber(document, extendedSpan.getEndExclusive()) - 1;
             forceRehighlightLines(firstLine, lastLine);
         }
-        
-        return new HighlightsList(highlights);
     }
 
     protected void setLineState(int line, TState state) {

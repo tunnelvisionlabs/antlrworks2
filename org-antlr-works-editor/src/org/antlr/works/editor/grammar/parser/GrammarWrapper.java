@@ -91,6 +91,10 @@ public class GrammarWrapper extends Grammar {
 
             String text = fileObject.asText();
 
+            // the IDE always renders newlines as \n, so we have to convert line endings
+            // before parsing if we want the seek operation to be accurate
+            text = text.replace("\r\n", "\n");
+
             ANTLRStringStream input = new ANTLRStringStream(text);
             ANTLRErrorProvidingLexer lexer = new ANTLRErrorProvidingLexer(input);
             ANTLRParserTokenStream tokenStream = new ANTLRParserTokenStream(lexer);

@@ -47,6 +47,29 @@
                         </file>
                     </folder>
                 </folder>
+
+                <!--<folder name="CompletionProviders">
+                    <file name="org-netbeans-modules-editor-java-JavaCompletionProvider.instance"/>
+                    <file name="org-netbeans-modules-java-editor-javadoc-JavadocCompletionProvider.instance"/>
+                </folder>-->
+
+                <folder name="HyperlinkProviders">
+                    <file name="GrammarHyperlinkProvider.instance">
+                        <attr name="instanceClass" stringvalue="org.antlr.works.editor.grammar.hyperlink.GrammarHyperlinkProvider"/>
+                        <attr name="instanceOf" stringvalue="org.netbeans.lib.editor.hyperlink.spi.HyperlinkProviderExt"/>
+                    </file>
+                </folder>
+
+                <!--<folder name="UpToDateStatusProvider">
+                    <file name="org-netbeans-modules-java-editor-semantic-OccurrencesMarkProviderCreator.instance">
+                    </file>
+                </folder>-->
+
+                <!--<folder name="GlyphGutterActions">
+                    <file name="org-netbeans-modules-java-editor-overridden-IsOverriddenAnnotationAction.instance">
+                        <attr name="position" intvalue="100"/>
+                    </file>
+                </folder>-->
             </folder>
             <folder name="x-stringtemplate4">
                 <attr name="SystemFileSystem.localizingBundle" stringvalue="org.antlr.works.editor.Bundle"/>

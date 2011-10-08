@@ -28,6 +28,7 @@
 package org.antlr.netbeans.editor;
 
 import javax.swing.text.BadLocationException;
+import javax.swing.text.Position;
 import javax.swing.text.StyledDocument;
 import org.openide.text.NbDocument;
 import org.openide.util.Parameters;
@@ -38,11 +39,16 @@ import org.openide.util.Parameters;
  */
 public final class DocumentPoint implements Comparable<DocumentPoint> {
     private final StyledDocument document;
-    private final int offset;
+    private final Position position;
 
-    public DocumentPoint(StyledDocument document, int offset) {
+    public DocumentPoint(StyledDocument document, int offset) throws BadLocationException {
         this.document = document;
-        this.offset = offset;
+        this.position = document.createPosition(offset);
+    }
+
+    public DocumentPoint(StyledDocument document, Position position) {
+        this.document = document;
+        this.position = position;
     }
 
     public StyledDocument getDocument() {
@@ -50,19 +56,23 @@ public final class DocumentPoint implements Comparable<DocumentPoint> {
     }
 
     public int getOffset() {
-        return offset;
+        return position.getOffset();
     }
 
-    public DocumentLine getContainingLine() throws BadLocationException {
-        return new DocumentLine(document, NbDocument.findLineNumber(document, offset));
+    public DocumentLine getContainingLine() {
+        try {
+            return new DocumentLine(getDocument(), NbDocument.findLineNumber(getDocument(), getOffset()));
+        } catch (BadLocationException ex) {
+            throw new IllegalStateException("Not reachable if the position was originally from this document.", ex);
+        }
     }
 
-    public DocumentPoint add(int offset) {
-        return new DocumentPoint(document, this.offset + offset);
+    public DocumentPoint add(int offset) throws BadLocationException {
+        return new DocumentPoint(getDocument(), this.getOffset() + offset);
     }
 
-    public DocumentPoint subtract(int offset) {
-        return new DocumentPoint(document, this.offset - offset);
+    public DocumentPoint subtract(int offset) throws BadLocationException {
+        return new DocumentPoint(getDocument(), this.getOffset() - offset);
     }
 
     public int subtract(DocumentPoint point) {
@@ -70,7 +80,7 @@ public final class DocumentPoint implements Comparable<DocumentPoint> {
         if (!getDocument().equals(point.getDocument())) {
             throw new IllegalArgumentException("The points must lie within the same document.");
         }
-        return this.offset - point.offset;
+        return this.getOffset() - point.getOffset();
     }
 
     @Override
@@ -79,7 +89,7 @@ public final class DocumentPoint implements Comparable<DocumentPoint> {
         if (!getDocument().equals(other.getDocument())) {
             throw new IllegalArgumentException("The points must lie within the same document.");
         }
-        return offset - other.offset;
+        return getOffset() - other.getOffset();
     }
 
     @Override
@@ -87,15 +97,17 @@ public final class DocumentPoint implements Comparable<DocumentPoint> {
         if (!(obj instanceof DocumentPoint)) {
             return false;
         }
+
         DocumentPoint other = (DocumentPoint)obj;
-        return this.offset == other.offset && this.document.equals(other.document);
+        return (this.position == other.position || this.getOffset() == other.getOffset())
+            && this.document.equals(other.document);
     }
 
     @Override
     public int hashCode() {
         int hash = 3;
         hash = 89 * hash + (this.document != null ? this.document.hashCode() : 0);
-        hash = 89 * hash + this.offset;
+        hash = 89 * hash + this.position.hashCode();
         return hash;
     }
 

@@ -40,6 +40,8 @@ import org.netbeans.api.editor.settings.FontColorSettings;
 import org.openide.util.Lookup;
 
 public class ANTLRHighlighter extends ANTLRHighlighterBase<ANTLRHighlighterState> {
+    public static final String DOCUMENT_PROPERTY = "grammar-highlighter";
+
     private static final HashSet<String> keywords =
         new HashSet<String>()
         {{
@@ -81,6 +83,8 @@ public class ANTLRHighlighter extends ANTLRHighlighterBase<ANTLRHighlighterState
 
     public ANTLRHighlighter(StyledDocument document) {
         super(document);
+
+        document.putProperty(DOCUMENT_PROPERTY, this);
 
         Lookup lookup = MimeLookup.getLookup(MimePath.parse("text/x-antlr3"));
         FontColorSettings settings = lookup.lookup(FontColorSettings.class);
