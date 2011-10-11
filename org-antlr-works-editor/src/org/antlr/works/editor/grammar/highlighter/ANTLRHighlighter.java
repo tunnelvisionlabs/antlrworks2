@@ -27,7 +27,9 @@
  */
 package org.antlr.works.editor.grammar.highlighter;
 
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.Set;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.StyledDocument;
 import org.antlr.netbeans.editor.highlighting.ANTLRHighlighterBase;
@@ -42,7 +44,7 @@ import org.openide.util.Lookup;
 public class ANTLRHighlighter extends ANTLRHighlighterBase<ANTLRHighlighterState> {
     public static final String DOCUMENT_PROPERTY = "grammar-highlighter";
 
-    private static final HashSet<String> keywords =
+    private static final HashSet<String> KEYWORDS =
         new HashSet<String>()
         {{
             add("lexer");
@@ -107,6 +109,10 @@ public class ANTLRHighlighter extends ANTLRHighlighterBase<ANTLRHighlighterState
         actionSymbolReferenceAttributes = getFontAndColors(settings, "actionreference");
     }
 
+    public static Set<String> getKeywords() {
+        return Collections.unmodifiableSet(KEYWORDS);
+    }
+
     private static AttributeSet getFontAndColors(FontColorSettings settings, String category) {
         AttributeSet attributes = settings.getTokenFontColors(category);
         return attributes;
@@ -127,7 +133,7 @@ public class ANTLRHighlighter extends ANTLRHighlighterBase<ANTLRHighlighterState
         switch (token.getType()) {
         case GrammarHighlighterLexer.IDENTIFIER:
             String text = token.getText();
-            if (keywords.contains(text)) {
+            if (KEYWORDS.contains(text)) {
                 return keywordAttributes;
             }
             

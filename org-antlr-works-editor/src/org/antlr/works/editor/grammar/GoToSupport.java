@@ -180,6 +180,10 @@ public class GoToSupport {
             case GrammarHighlighterLexer.IDENTIFIER:
             case GrammarHighlighterLexer.REFERENCE:
             case ActionHighlighterLexer.ACTION_REFERENCE:
+                if (ANTLRHighlighter.getKeywords().contains(token.getText())) {
+                    return null;
+                }
+
                 return span;
 
             default:
