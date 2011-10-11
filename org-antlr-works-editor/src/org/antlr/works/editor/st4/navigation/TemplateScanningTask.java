@@ -44,27 +44,20 @@
 
 package org.antlr.works.editor.st4.navigation;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Logger;
-import javax.swing.JComponent;
-import javax.swing.SwingUtilities;
-import javax.swing.text.Position;
 import org.antlr.netbeans.editor.navigation.CurrentDocumentStateScheduler;
-import org.antlr.works.editor.st4.navigation.TemplateNode.Description;
+import org.antlr.netbeans.editor.navigation.Description;
+import org.antlr.works.editor.st4.navigation.TemplateNode.TemplateDescription;
 import org.antlr.works.editor.st4.parser.TemplateGroupWrapper.TemplateInformation;
 import org.antlr.works.editor.st4.parser.TemplateParser.TemplateGroupRuleReturnScope;
 import org.antlr.works.editor.st4.parser.TemplateParser.TemplateParserResult;
 import org.netbeans.modules.parsing.spi.ParserResultTask;
 import org.netbeans.modules.parsing.spi.Scheduler;
 import org.netbeans.modules.parsing.spi.SchedulerEvent;
-import org.netbeans.spi.navigator.NavigatorPanel;
 import org.openide.util.Exceptions;
-import org.openide.util.Lookup;
-import org.openide.util.lookup.Lookups;
 import org.stringtemplate.v4.compiler.CompiledST;
 import org.stringtemplate.v4.misc.Interval;
 import org.stringtemplate.v4.misc.Misc;
@@ -72,8 +65,7 @@ import org.stringtemplate.v4.misc.Misc;
 public class TemplateScanningTask extends ParserResultTask<TemplateParserResult> {
 
     private static final Logger LOG = Logger.getLogger(TemplateScanningTask.class.getName());
-    private static final String TYPE_COLOR = "#707070";
-    private static final String INHERITED_COLOR = "#7D694A";
+    private static final String ARGS_COLOR = "#707070";
     private final AtomicBoolean cancel = new AtomicBoolean();
 
     public TemplateScanningTask() {
@@ -82,7 +74,7 @@ public class TemplateScanningTask extends ParserResultTask<TemplateParserResult>
     @Override
     public void run(TemplateParserResult result, SchedulerEvent event) {
         try {
-            TemplatesPanelUI ui = findTemplateRulesPanelUI();
+            TemplatesPanelUI ui = TemplatesPanel.findTemplatesPanelUI();
             if (ui == null) {
                 return;
             }
@@ -92,9 +84,9 @@ public class TemplateScanningTask extends ParserResultTask<TemplateParserResult>
                 return;
             }
 
-            Description rootDescription = new Description(ui);
-            rootDescription.fileObject = result.getSnapshot().getSource().getFileObject();
-            rootDescription.children = new ArrayList<Description>();
+            TemplateDescription rootDescription = new TemplateDescription(ui);
+            rootDescription.setChildren(new ArrayList<Description>());
+            rootDescription.setFileObject(result.getSnapshot().getSource().getFileObject());
 
             TemplateGroupRuleReturnScope parseResult = result.getResult();
 
@@ -112,11 +104,10 @@ public class TemplateScanningTask extends ParserResultTask<TemplateParserResult>
                     {
                         String sig = String.format("%s.%s()", templateInfo.getEnclosingTemplateName(), templateInfo.getNameToken().getText());
 
-                        Description description = new Description(ui, sig);
-                        description.fileObject = rootDescription.fileObject;
-                        description.setOffset(result.getSnapshot(), sourceInterval.a);
-                        description.htmlHeader = String.format("%s.%s<font color='808080'>()</font>", templateInfo.getEnclosingTemplateName(), templateInfo.getNameToken().getText());
-                        rootDescription.children.add(description);
+                        TemplateDescription description = new TemplateDescription(ui, sig);
+                        description.setOffset(result.getSnapshot(), rootDescription.getFileObject(), sourceInterval.a);
+                        description.setHtmlHeader(String.format("%s.%s<font color='808080'>()</font>", templateInfo.getEnclosingTemplateName(), templateInfo.getNameToken().getText()));
+                        rootDescription.getChildren().add(description);
 
                         //string sig = string.Format("{0}({1})", name, string.Join(", ", args));
                         /*EditorNavigationType navigationType = EditorNavigationTypeRegistryService.GetEditorNavigationType(StringTemplateEditorNavigationTypes.Templates);
@@ -134,11 +125,10 @@ public class TemplateScanningTask extends ParserResultTask<TemplateParserResult>
                         Iterable<String> argumentNames = template.formalArguments != null ? template.formalArguments.keySet() : Collections.<String>emptyList();
                         String sig = String.format("%s(%s)", name, Misc.join(argumentNames.iterator(), ", "));
 
-                        Description description = new Description(ui, sig);
-                        description.fileObject = rootDescription.fileObject;
-                        description.setOffset(result.getSnapshot(), sourceInterval.a);
-                        description.htmlHeader = String.format("%s<font color='808080'>(%s)</font>", name, Misc.join(argumentNames.iterator(), ", "));
-                        rootDescription.children.add(description);
+                        TemplateDescription description = new TemplateDescription(ui, sig);
+                        description.setOffset(result.getSnapshot(), rootDescription.getFileObject(), sourceInterval.a);
+                        description.setHtmlHeader(String.format("%s<font color='808080'>(%s)</font>", name, Misc.join(argumentNames.iterator(), ", ")));
+                        rootDescription.getChildren().add(description);
 
                         /*string name = templateInfo.NameToken.Text;
                         IEnumerable<string> args = template.FormalArguments != null ? template.FormalArguments.Select(i => i.Name) : Enumerable.Empty<string>();
@@ -188,60 +178,5 @@ public class TemplateScanningTask extends ParserResultTask<TemplateParserResult>
     @Override
     public void cancel() {
         cancel.set(true);
-    }
-
-    private static final String PANELS_FOLDER = "/Navigator/Panels/";
-    private static final String CONTENT_TYPE = "text/x-stringtemplate4";
-    private static final Lookup.Template<NavigatorPanel> NAV_PANEL_TEMPLATE = new Lookup.Template<NavigatorPanel>(NavigatorPanel.class);
-
-    private TemplatesPanelUI findTemplateRulesPanelUI() {
-        final TemplatesPanelUI[] result = new TemplatesPanelUI[1];
-        if (SwingUtilities.isEventDispatchThread()) {
-            findTemplateRulesPanelUI(result);
-        } else {
-            try {
-                SwingUtilities.invokeAndWait(new Runnable() {
-                    @Override
-                    public void run() {
-                        findTemplateRulesPanelUI(result);
-                    }
-                });
-            } catch (InterruptedException ex) {
-                Exceptions.printStackTrace(ex);
-                return null;
-            } catch (InvocationTargetException ex) {
-                Exceptions.printStackTrace(ex);
-                return null;
-            }
-        }
-
-        return result[0];
-    }
-
-    private void findTemplateRulesPanelUI(final TemplatesPanelUI[] result) {
-        result[0] = null;
-
-        String path = PANELS_FOLDER + CONTENT_TYPE;
-        Lookup.Result<NavigatorPanel> lookupResult = Lookups.forPath(path).lookup(NAV_PANEL_TEMPLATE);
-        Collection<? extends NavigatorPanel> panels = lookupResult.allInstances();
-        assert panels.size() <= 1;
-        if (panels.isEmpty()) {
-            return;
-        }
-
-        NavigatorPanel panel = panels.iterator().next();
-        assert panel instanceof TemplatesPanel;
-        if (!(panel instanceof TemplatesPanel)) {
-            return;
-        }
-
-        TemplatesPanel grammarRulesPanel = (TemplatesPanel)panel;
-        JComponent component = grammarRulesPanel.getComponent();
-        assert component == null || component instanceof TemplatesPanelUI;
-        if (!(component instanceof TemplatesPanelUI)) {
-            return;
-        }
-
-        result[0] = (TemplatesPanelUI)component;
     }
 }

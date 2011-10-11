@@ -42,52 +42,57 @@
  * made subject to such option by the copyright holder.
  */
 
-package org.antlr.works.editor.grammar.navigation.actions;
+package org.antlr.netbeans.editor.navigation.actions;
 
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
-import javax.swing.Action;
+import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JMenu;
 import javax.swing.JMenuItem;
-import javax.swing.JRadioButtonMenuItem;
-import org.antlr.works.editor.grammar.navigation.GrammarRuleFilters;
-import org.openide.util.ImageUtilities;
+import org.antlr.netbeans.editor.navigation.FiltersDescription;
+import org.antlr.netbeans.editor.navigation.FiltersManager;
 import org.openide.util.NbBundle;
 import org.openide.util.actions.Presenter;
 
-public class SortBySourceAction extends AbstractAction implements Presenter.Popup {
-    private JRadioButtonMenuItem menuItem;
-    protected GrammarRuleFilters filters;
+public class FilterSubmenuAction extends AbstractAction implements Presenter.Popup {
+    private static final String PROP_FILTER_NAME = "nbFilterName";
 
-    public SortBySourceAction(GrammarRuleFilters filters) {
+    private FiltersManager filters;
+
+    /** Creates a new instance of FilterSubmenuAction */
+    public FilterSubmenuAction(FiltersManager filters) {
         this.filters = filters;
-        putValue(Action.NAME, NbBundle.getMessage(SortByNameAction.class, "LBL_SortBySource"));
-        putValue(Action.SMALL_ICON, ImageUtilities.loadImageIcon("org/antlr/works/editor/grammar/navigation/resources/sortPosition.png", false));
     }
 
     @Override
-    public JMenuItem getPopupPresenter() {
-        JMenuItem result = obtainMenuItem();
-        updateMenuItem();
-        return result;
+    public void actionPerformed(ActionEvent ev) {
+        Object source = ev.getSource();
+        // react just on submenu items, not on submenu click itself
+        if (source instanceof JCheckBoxMenuItem) {
+            JCheckBoxMenuItem menuItem = (JCheckBoxMenuItem)source;
+            String filterName = (String)(menuItem.getClientProperty(PROP_FILTER_NAME));
+            filters.setSelected(filterName, menuItem.isSelected());
+        }
     }
 
-    protected final JRadioButtonMenuItem obtainMenuItem() {
-        if (menuItem == null) {
-            menuItem = new JRadioButtonMenuItem((String)getValue(Action.NAME));
-            menuItem.setAction(this);
+    @Override
+    public final JMenuItem getPopupPresenter() {
+        return createSubmenu();
+    }
+    
+    private JMenuItem createSubmenu () {
+        FiltersDescription filtersDesc = filters.getDescription();
+        JMenuItem menu = new JMenu(NbBundle.getMessage(FilterSubmenuAction.class, "LBL_FilterSubmenu")); //NOI18N
+        JMenuItem menuItem = null;
+        String filterName = null;
+        for (int i = 0; i < filtersDesc.getFilterCount(); i++) {
+            filterName = filtersDesc.getName(i);
+            menuItem = new JCheckBoxMenuItem(filtersDesc.getDisplayName(i), filters.isSelected(filterName));
+            menuItem.addActionListener(this);
+            menuItem.putClientProperty(PROP_FILTER_NAME, filterName);
+            menu.add(menuItem);
         }
 
-        return menuItem;
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        filters.setNaturalSort(true);
-        updateMenuItem();
-    }
-
-    protected void updateMenuItem() {
-        JRadioButtonMenuItem mi = obtainMenuItem();
-        mi.setSelected(filters.isNaturalSort());
+        return menu;
     }
 }

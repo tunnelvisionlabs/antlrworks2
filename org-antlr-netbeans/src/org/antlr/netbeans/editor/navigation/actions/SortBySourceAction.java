@@ -42,57 +42,52 @@
  * made subject to such option by the copyright holder.
  */
 
-package org.antlr.works.editor.grammar.navigation.actions;
+package org.antlr.netbeans.editor.navigation.actions;
 
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
-import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JMenu;
+import javax.swing.Action;
 import javax.swing.JMenuItem;
-import org.antlr.netbeans.editor.navigation.FiltersDescription;
-import org.antlr.netbeans.editor.navigation.FiltersManager;
+import javax.swing.JRadioButtonMenuItem;
+import org.antlr.netbeans.editor.navigation.Filters;
+import org.openide.util.ImageUtilities;
 import org.openide.util.NbBundle;
 import org.openide.util.actions.Presenter;
 
-public class FilterSubmenuAction extends AbstractAction implements Presenter.Popup {
-    private static final String PROP_FILTER_NAME = "nbFilterName";
+public class SortBySourceAction extends AbstractAction implements Presenter.Popup {
+    private JRadioButtonMenuItem menuItem;
+    protected Filters filters;
 
-    private FiltersManager filters;
-
-    /** Creates a new instance of FilterSubmenuAction */
-    public FilterSubmenuAction(FiltersManager filters) {
+    public SortBySourceAction(Filters filters) {
         this.filters = filters;
+        putValue(Action.NAME, NbBundle.getMessage(SortByNameAction.class, "LBL_SortBySource"));
+        putValue(Action.SMALL_ICON, ImageUtilities.loadImageIcon("org/antlr/netbeans/editor/navigation/resources/sortPosition.png", false));
     }
 
     @Override
-    public void actionPerformed(ActionEvent ev) {
-        Object source = ev.getSource();
-        // react just on submenu items, not on submenu click itself
-        if (source instanceof JCheckBoxMenuItem) {
-            JCheckBoxMenuItem menuItem = (JCheckBoxMenuItem)source;
-            String filterName = (String)(menuItem.getClientProperty(PROP_FILTER_NAME));
-            filters.setSelected(filterName, menuItem.isSelected());
+    public JMenuItem getPopupPresenter() {
+        JMenuItem result = obtainMenuItem();
+        updateMenuItem();
+        return result;
+    }
+
+    protected final JRadioButtonMenuItem obtainMenuItem() {
+        if (menuItem == null) {
+            menuItem = new JRadioButtonMenuItem((String)getValue(Action.NAME));
+            menuItem.setAction(this);
         }
+
+        return menuItem;
     }
 
     @Override
-    public final JMenuItem getPopupPresenter() {
-        return createSubmenu();
+    public void actionPerformed(ActionEvent e) {
+        filters.setNaturalSort(true);
+        updateMenuItem();
     }
-    
-    private JMenuItem createSubmenu () {
-        FiltersDescription filtersDesc = filters.getDescription();
-        JMenuItem menu = new JMenu(NbBundle.getMessage(FilterSubmenuAction.class, "LBL_FilterSubmenu")); //NOI18N
-        JMenuItem menuItem = null;
-        String filterName = null;
-        for (int i = 0; i < filtersDesc.getFilterCount(); i++) {
-            filterName = filtersDesc.getName(i);
-            menuItem = new JCheckBoxMenuItem(filtersDesc.getDisplayName(i), filters.isSelected(filterName));
-            menuItem.addActionListener(this);
-            menuItem.putClientProperty(PROP_FILTER_NAME, filterName);
-            menu.add(menuItem);
-        }
 
-        return menu;
+    protected void updateMenuItem() {
+        JRadioButtonMenuItem mi = obtainMenuItem();
+        mi.setSelected(filters.isNaturalSort());
     }
 }

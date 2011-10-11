@@ -42,7 +42,7 @@
  * made subject to such option by the copyright holder.
  */
 
-package org.antlr.works.editor.st4.navigation.actions;
+package org.antlr.netbeans.editor.navigation.actions;
 
 import java.awt.event.ActionEvent;
 import java.io.IOException;
@@ -50,7 +50,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.SwingUtilities;
 import javax.swing.text.StyledDocument;
-import org.antlr.works.editor.st4.navigation.TemplateNode.Description;
+import org.antlr.netbeans.editor.navigation.Description;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
 import org.openide.cookies.EditorCookie;

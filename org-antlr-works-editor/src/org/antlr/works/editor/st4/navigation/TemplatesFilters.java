@@ -44,116 +44,12 @@
 
 package org.antlr.works.editor.st4.navigation;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import javax.swing.JComponent;
-import javax.swing.JToggleButton;
-import org.antlr.netbeans.editor.navigation.FiltersDescription;
-import org.antlr.netbeans.editor.navigation.FiltersManager;
-import org.antlr.works.editor.st4.navigation.TemplateNode.Description;
-import org.antlr.works.editor.st4.navigation.actions.SortByNameAction;
-import org.antlr.works.editor.st4.navigation.actions.SortBySourceAction;
-import org.openide.util.ImageUtilities;
-import org.openide.util.NbBundle;
-import org.openide.util.NbPreferences;
+import org.antlr.netbeans.editor.navigation.Filters;
 
-public final class TemplatesFilters {
-
-    private static final String SHOW_INHERITED = "show_inherited";
-    private static final String SORT_ALPHA = "sort_alpha";
-    private static final String SORT_POSITION = "sort_position";
-
-    private final TemplatesPanelUI ui;
-
-    private FiltersManager filtersManager;
-    private boolean naturalSort;
-
-    private JToggleButton sortByNameButton;
-    private JToggleButton sortByPositionButton;
+public final class TemplatesFilters extends Filters {
 
     public TemplatesFilters(TemplatesPanelUI ui) {
-        this.ui = ui;
-        naturalSort = NbPreferences.forModule(TemplatesFilters.class).getBoolean("naturalSort", false);
+        super(ui);
     }
 
-    public FiltersManager getInstance() {
-        if (filtersManager == null) {
-            filtersManager = createFilters();
-        }
-
-        return filtersManager;
-    }
-
-    public JComponent getComponent() {
-        FiltersManager filters = getInstance();
-        return filters.getComponent(createSortButtons());
-    }
-
-    public boolean isNaturalSort() {
-        return naturalSort;
-    }
-
-    public void setNaturalSort(boolean value) {
-        this.naturalSort = value;
-        NbPreferences.forModule(TemplatesFilters.class).putBoolean("naturalSort", value);
-        if (sortByNameButton != null) {
-            sortByNameButton.setSelected(!value);
-        }
-
-        if (sortByPositionButton != null) {
-            sortByPositionButton.setSelected(value);
-        }
-
-        ui.sort();
-    }
-
-    public Collection<Description> filter(Collection<Description> original) {
-        boolean inherited = filtersManager.isSelected(SHOW_INHERITED);
-
-        ArrayList<Description> result = new ArrayList<Description>(original.size());
-        for (Description description : original) {
-            if (!inherited && description.inherited) {
-                continue;
-            }
-
-            result.add(description);
-        }
-
-        Collections.sort(result, isNaturalSort() ? Description.POSITION_COMPARATOR : Description.ALPHA_COMPARATOR);
-        return result;
-    }
-    
-    private static FiltersManager createFilters() {
-        FiltersDescription desc = new FiltersDescription();
-        
-        desc.addFilter(SHOW_INHERITED,
-                NbBundle.getMessage(TemplatesFilters.class, "LBL_ShowInherited"),     //NOI18N
-                NbBundle.getMessage(TemplatesFilters.class, "LBL_ShowInheritedTip"),     //NOI18N
-                false, ImageUtilities.loadImageIcon("org/antlr/works/editor/st4/navigation/resources/filterHideInherited.png", false), //NOI18N
-                null
-        );
-        
-        return FiltersDescription.createManager(desc);
-    }
-
-    private JToggleButton[] createSortButtons() {
-        if (sortByNameButton == null) {
-            sortByNameButton = new JToggleButton(new SortByNameAction(this));
-            sortByNameButton.setToolTipText(sortByNameButton.getText());
-            sortByNameButton.setText(null);
-            sortByNameButton.setSelected(!naturalSort);
-            sortByNameButton.setFocusable(false);
-        }
-
-        if (sortByPositionButton == null) {
-            sortByPositionButton = new JToggleButton(new SortBySourceAction(this));
-            sortByPositionButton.setToolTipText(sortByPositionButton.getText());
-            sortByPositionButton.setText(null);
-            sortByPositionButton.setSelected(naturalSort);
-            sortByPositionButton.setFocusable(false);
-        }
-
-        return new JToggleButton[]{sortByNameButton, sortByPositionButton};
-    }
 }

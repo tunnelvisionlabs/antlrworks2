@@ -28,6 +28,8 @@
 package org.antlr.works.editor.grammar.fold;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import javax.swing.SwingUtilities;
 import javax.swing.text.BadLocationException;
@@ -65,7 +67,11 @@ public class GrammarFoldManagerTask extends ParserResultTask<GrammarParserResult
             return;
         }
 
-        StyledDocument document = (StyledDocument)result.getSnapshot().getSource().getDocument(false);
+        if (!result.getParser().getSyntaxErrors().isEmpty() && !foldManager.currentFolds.isEmpty()) {
+            return;
+        }
+
+        final StyledDocument document = (StyledDocument)result.getSnapshot().getSource().getDocument(false);
         if (document == null) {
             return;
         }
@@ -177,13 +183,46 @@ public class GrammarFoldManagerTask extends ParserResultTask<GrammarParserResult
                     try{
                         FoldHierarchyTransaction transaction = operation.openTransaction();
                         synchronized (foldManager.currentFolds) {
-                            for (Fold fold : foldManager.currentFolds) {
+                            Collections.sort(foldManager.currentFolds, FoldComparator.INSTANCE);
+                            Collections.sort(folds, FoldInfoComparator.INSTANCE);
+
+                            List<Fold> foldsToKeep = new ArrayList<Fold>();
+                            List<Fold> foldsToRemove = new ArrayList<Fold>();
+                            List<FoldInfo> foldsToAdd = new ArrayList<FoldInfo>();
+
+                            int i = 0;
+                            int j = 0;
+                            while (i < foldManager.currentFolds.size() && j < folds.size()) {
+                                Fold existingFold = foldManager.currentFolds.get(i);
+                                FoldInfo existing = new FoldInfo(document, existingFold.getStartOffset(), existingFold.getEndOffset(), existingFold.getDescription());
+                                FoldInfo next = folds.get(j);
+                                int compared = FoldInfoComparator.INSTANCE.compare(existing, next);
+                                if (compared == 0) {
+                                    foldsToKeep.add(foldManager.currentFolds.get(i));
+                                    i++;
+                                    j++;
+                                } else if (compared < 0) {
+                                    // existing doesn't have a match
+                                    foldsToRemove.add(foldManager.currentFolds.get(i));
+                                    i++;
+                                } else {
+                                    // next doesn't have a match
+                                    foldsToAdd.add(next);
+                                    j++;
+                                }
+                            }
+                            
+                            foldsToRemove.addAll(foldManager.currentFolds.subList(i, foldManager.currentFolds.size()));
+                            foldsToAdd.addAll(folds.subList(j, folds.size()));
+
+                            for (Fold fold : foldsToRemove) {
                                 operation.removeFromHierarchy(fold, transaction);
                             }
 
                             foldManager.currentFolds.clear();
+                            foldManager.currentFolds.addAll(foldsToKeep);
 
-                            for (FoldInfo foldInfo : folds) {
+                            for (FoldInfo foldInfo : foldsToAdd) {
                                 FoldType foldType = new FoldType("code-block");
                                 String description = foldInfo.blockHint;
                                 boolean collapsed = false;
@@ -206,6 +245,40 @@ public class GrammarFoldManagerTask extends ParserResultTask<GrammarParserResult
                 }
             });
         }
+    }
+
+    private static class FoldComparator implements Comparator<Fold> {
+
+        public static final FoldComparator INSTANCE = new FoldComparator();
+
+        @Override
+        public int compare(Fold o1, Fold o2) {
+            if (o1.getStartOffset() != o2.getStartOffset()) {
+                return o1.getStartOffset() - o2.getStartOffset();
+            } else if (o1.getEndOffset() != o2.getEndOffset()) {
+                return o1.getEndOffset() - o2.getEndOffset();
+            } else {
+                return o1.getDescription().compareTo(o2.getDescription());
+            }
+        }
+
+    }
+
+    private static class FoldInfoComparator implements Comparator<FoldInfo> {
+
+        public static final FoldInfoComparator INSTANCE = new FoldInfoComparator();
+
+        @Override
+        public int compare(FoldInfo o1, FoldInfo o2) {
+            if (o1.startIndex != o2.startIndex) {
+                return o1.startIndex - o2.startIndex;
+            } else if (o1.stopIndex != o2.stopIndex) {
+                return o1.stopIndex - o2.stopIndex;
+            } else {
+                return o1.blockHint.compareTo(o2.blockHint);
+            }
+        }
+
     }
 
     @Override

@@ -44,11 +44,16 @@
 
 package org.antlr.works.editor.st4.navigation;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.Collection;
 import javax.swing.JComponent;
+import javax.swing.SwingUtilities;
 import org.netbeans.spi.navigator.NavigatorPanel;
+import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
 import org.openide.util.RequestProcessor;
+import org.openide.util.lookup.Lookups;
 
 public class TemplatesPanel implements NavigatorPanel {
     private static final RequestProcessor RequestProcessor = new RequestProcessor(TemplatesPanel.class.getName(), 1);
@@ -57,12 +62,12 @@ public class TemplatesPanel implements NavigatorPanel {
 
     @Override
     public String getDisplayName() {
-        return NbBundle.getMessage(TemplatesPanel.class, "LBL_rules");
+        return NbBundle.getMessage(TemplatesPanel.class, "LBL_templates");
     }
 
     @Override
     public String getDisplayHint() {
-        return NbBundle.getMessage(TemplatesPanel.class, "HINT_rules");
+        return NbBundle.getMessage(TemplatesPanel.class, "HINT_templates");
     }
 
     @Override
@@ -103,5 +108,60 @@ public class TemplatesPanel implements NavigatorPanel {
         }
 
         return this.component;
+    }
+
+    private static final String PANELS_FOLDER = "/Navigator/Panels/";
+    private static final String CONTENT_TYPE = "text/x-stringtemplate4";
+    private static final Lookup.Template<NavigatorPanel> NAV_PANEL_TEMPLATE = new Lookup.Template<NavigatorPanel>(NavigatorPanel.class);
+
+    public static TemplatesPanelUI findTemplatesPanelUI() {
+        final TemplatesPanelUI[] result = new TemplatesPanelUI[1];
+        if (SwingUtilities.isEventDispatchThread()) {
+            findTemplatesPanelUI(result);
+        } else {
+            try {
+                SwingUtilities.invokeAndWait(new Runnable() {
+                    @Override
+                    public void run() {
+                        findTemplatesPanelUI(result);
+                    }
+                });
+            } catch (InterruptedException ex) {
+                Exceptions.printStackTrace(ex);
+                return null;
+            } catch (InvocationTargetException ex) {
+                Exceptions.printStackTrace(ex);
+                return null;
+            }
+        }
+
+        return result[0];
+    }
+
+    private static void findTemplatesPanelUI(final TemplatesPanelUI[] result) {
+        result[0] = null;
+
+        String path = PANELS_FOLDER + CONTENT_TYPE;
+        Lookup.Result<NavigatorPanel> lookupResult = Lookups.forPath(path).lookup(NAV_PANEL_TEMPLATE);
+        Collection<? extends NavigatorPanel> panels = lookupResult.allInstances();
+        assert panels.size() <= 1;
+        if (panels.isEmpty()) {
+            return;
+        }
+
+        NavigatorPanel panel = panels.iterator().next();
+        assert panel instanceof TemplatesPanel;
+        if (!(panel instanceof TemplatesPanel)) {
+            return;
+        }
+
+        TemplatesPanel grammarRulesPanel = (TemplatesPanel)panel;
+        JComponent component = grammarRulesPanel.getComponent();
+        assert component == null || component instanceof TemplatesPanelUI;
+        if (!(component instanceof TemplatesPanelUI)) {
+            return;
+        }
+
+        result[0] = (TemplatesPanelUI)component;
     }
 }

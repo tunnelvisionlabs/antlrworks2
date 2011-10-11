@@ -45,51 +45,22 @@
 package org.antlr.works.editor.grammar.navigation;
 
 import java.awt.Image;
-import java.awt.datatransfer.Transferable;
-import java.io.IOException;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import javax.swing.Action;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
-import javax.swing.text.Position;
-import org.antlr.works.editor.grammar.navigation.actions.OpenAction;
-import org.netbeans.modules.parsing.api.Snapshot;
-import org.openide.filesystems.FileObject;
-import org.openide.loaders.DataObject;
-import org.openide.loaders.DataObjectNotFoundException;
-import org.openide.nodes.AbstractNode;
-import org.openide.nodes.Children;
-import org.openide.nodes.Node;
-import org.openide.util.Exceptions;
+import org.antlr.netbeans.editor.navigation.Description;
+import org.antlr.netbeans.editor.navigation.NavigatorNode;
+import org.antlr.netbeans.editor.navigation.NavigatorPanelUI;
 import org.openide.util.ImageUtilities;
-import org.openide.util.Lookup;
-import org.openide.util.NbBundle;
-import org.openide.util.datatransfer.PasteType;
-import org.openide.util.lookup.AbstractLookup;
-import org.openide.util.lookup.InstanceContent;
-import org.openide.util.lookup.InstanceContent.Convertor;
 
-public class GrammarNode extends AbstractNode {
-
-    private static Node WAIT_NODE;
-    private Description description;
-    private OpenAction openAction;
+public class GrammarNode extends NavigatorNode {
 
     public GrammarNode(Description description) {
-        super(description.children == null ? Children.LEAF : new ElementChildren(description.children, description.ui.getFilters()), prepareLookup(description));
-        this.description = description;
-        setDisplayName(description.name);
+        super(description, new GrammarNodeFactory());
     }
 
     @Override
     public Image getIcon(int type) {
-        String name = description.name;
-        if (description.children != null && !description.children.isEmpty()) {
-            name = description.children.iterator().next().name;
+        String name = getDescription().getName();
+        if (getDescription().getChildren() != null && !getDescription().getChildren().isEmpty()) {
+            name = getDescription().getChildren().iterator().next().getName();
         }
 
         if (name == null) {
@@ -101,437 +72,38 @@ public class GrammarNode extends AbstractNode {
         }
     }
 
-    @Override
-    public Image getOpenedIcon(int type) {
-        return getIcon(type);
-    }
+    public static class GrammarNodeDescription extends Description {
 
-    @Override
-    public String getDisplayName() {
-        if (description.name != null) {
-            return description.name;
+        public GrammarNodeDescription(NavigatorPanelUI ui) {
+            super(ui);
         }
 
-        if (description.fileObject != null) {
-            return description.fileObject.getNameExt();
-        }
-
-        return null;
-    }
-
-    @Override
-    public String getHtmlDisplayName() {
-        return description.getHtmlHeader();
-    }
-
-    @Override
-    public Action[] getActions(boolean context) {
-        if (context || description.name == null || description.getFileObject() == null || (description.children != null && !description.children.isEmpty())) {
-            return description.ui.getActions();
-        } else {
-            Action[] panelActions = description.ui.getActions();
-
-            int extraActionCount = 2;
-            Action[] actions = new Action[extraActionCount + panelActions.length];
-            actions[0] = getOpenAction();
-            actions[1] = null;
-
-            for (int i = 0; i < panelActions.length; i++) {
-                actions[extraActionCount + i] = panelActions[i];
-            }
-
-            return actions;
-        }
-    }
-
-    @Override
-    public Action getPreferredAction() {
-        return getOpenAction();
-    }
-
-    @Override
-    public boolean canCopy() {
-        return false;
-    }
-
-    @Override
-    public boolean canCut() {
-        return false;
-    }
-
-    @Override
-    public boolean canDestroy() {
-        return false;
-    }
-
-    @Override
-    public boolean canRename() {
-        return false;
-    }
-
-    @Override
-    public PasteType getDropType(Transferable t, int action, int index) {
-        return null;
-    }
-
-    @Override
-    public Transferable drag() throws IOException {
-        return null;
-    }
-
-    public Description getDescription() {
-        return description;
-    }
-
-    @Override
-    protected void createPasteTypes(Transferable t, List<PasteType> s) {
-        // do nothing
-    }
-
-    public void refreshRecursively() {
-        Children ch = getChildren();
-        if (ch instanceof ElementChildren) {
-            boolean scrollOnExpand = description.ui.getScrollOnExpand();
-            description.ui.setScrollOnExpand(false);
-            ((ElementChildren)ch).resetKeys(description.children, description.ui.getFilters());
-            for (Node sub : ch.getNodes()) {
-                description.ui.expandNode(sub);
-                ((GrammarNode)sub).refreshRecursively();
-            }
-
-            description.ui.setScrollOnExpand(scrollOnExpand);
-        }
-    }
-
-    public void updateRecursively(Description newDescription) {
-        Children children = getChildren();
-        if (children instanceof ElementChildren) {
-            HashSet<Description> oldChildren = new HashSet<Description>(description.children);
-
-            // Create a hashtable which maps Description to node.
-            // We will then identify the nodes by the description. The trick is
-            // that the new and old description are equal and have the same hashcode
-            Node[] nodes = children.getNodes(true);
-            HashMap<Description, GrammarNode> oldD2node = new HashMap<Description, GrammarNode>();
-            for (Node node : nodes) {
-                oldD2node.put(((GrammarNode)node).description, (GrammarNode)node);
-            }
-
-            // Now refresh keys
-            ((ElementChildren)children).resetKeys(newDescription.children, newDescription.ui.getFilters());
-
-            // Reread nodes
-            nodes = children.getNodes(true);
-
-            for (Description newSub : newDescription.children) {
-                GrammarNode node = oldD2node.get(newSub);
-                if (node != null) { // filtered out
-                    if (!oldChildren.contains(newSub) && node.getChildren() != Children.LEAF) {
-                        description.ui.expandNode(node); // Make sure new nodes get expanded
-                    }
-                    node.updateRecursively(newSub); // update the node recursively
-                }
-            }
-        }
-
-        Description oldDescription = description; // Remember old description
-        description = newDescription; // set new descrioption to the new node
-        if (oldDescription.getHtmlHeader() != null && !oldDescription.getHtmlHeader().equals(description.getHtmlHeader())) {
-            // Different headers => we need to fire displayname change
-            fireDisplayNameChange(oldDescription.getHtmlHeader(), description.getHtmlHeader());
-        }
-
-        /*if (oldDescription.modifiers != null && !oldDescription.modifiers.equals(newDescription.modifiers)) {
-        fireIconChange();
-        fireOpenedIconChange();
-        }*/
-    }
-
-    private synchronized Action getOpenAction() {
-        if (openAction == null) {
-            openAction = new OpenAction(description);
-        }
-
-        return openAction;
-    }
-
-    private static Lookup prepareLookup(Description d) {
-        InstanceContent instanceContent = new InstanceContent();
-
-        instanceContent.add(d, ConvertDescriptionToFileObject);
-        instanceContent.add(d, ConvertDescriptionToDataObject);
-
-        return new AbstractLookup(instanceContent);
-    }
-
-    private static final Convertor<Description, FileObject> ConvertDescriptionToFileObject =
-        new Convertor<Description, FileObject>() {
-
-            @Override
-            public FileObject convert(Description obj) {
-                return obj.getFileObject();
-            }
-
-            @Override
-            public Class<? extends FileObject> type(Description obj) {
-                return FileObject.class;
-            }
-
-            @Override
-            public String id(Description obj) {
-                return "IL[" + obj.toString();
-            }
-
-            @Override
-            public String displayName(Description obj) {
-                return id(obj);
-            }
-
-        };
-    private static final Convertor<Description, DataObject> ConvertDescriptionToDataObject =
-        new Convertor<Description, DataObject>() {
-
-            @Override
-            public DataObject convert(Description obj) {
-                try {
-                    FileObject fileObject = obj.getFileObject();
-                    return fileObject != null ? DataObject.find(fileObject) : null;
-                } catch (DataObjectNotFoundException ex) {
-                    return null;
-                }
-            }
-
-            @Override
-            public Class<? extends DataObject> type(Description obj) {
-                return DataObject.class;
-            }
-
-            @Override
-            public String id(Description obj) {
-                return "IL[" + obj.toString();
-            }
-
-            @Override
-            public String displayName(Description obj) {
-                return id(obj);
-            }
-
-        };
-
-    public static synchronized Node getWaitNode() {
-        if (WAIT_NODE == null) {
-            WAIT_NODE = new WaitNode();
-        }
-
-        return WAIT_NODE;
-    }
-
-    private static class WaitNode extends AbstractNode {
-
-        private Image waitIcon = ImageUtilities.loadImage("org/antlr/works/editor/grammar/navigation/resources/wait.gif");
-
-        public WaitNode() {
-            super(Children.LEAF);
-        }
-
-        @Override
-        public Image getIcon(int type) {
-            return waitIcon;
-        }
-
-        @Override
-        public Image getOpenedIcon(int type) {
-            return getIcon(type);
-        }
-
-        @Override
-        public String getDisplayName() {
-            return NbBundle.getMessage(GrammarNode.class, "LBL_WaitNode");
-        }
-
-        @Override
-        public String getHtmlDisplayName() {
-            return getDisplayName();
-        }
-
-    }
-
-    public static final class ElementChildren extends Children.Keys<Description> {
-
-        public ElementChildren(Collection<Description> descriptions, GrammarRuleFilters filters) {
-            resetKeys(descriptions, filters);
-        }
-
-        @Override
-        protected Node[] createNodes(Description key) {
-            return new Node[]{new GrammarNode(key)};
-        }
-
-        private void resetKeys(Collection<Description> descriptions, GrammarRuleFilters filters) {
-            setKeys(filters.filter(descriptions));
-        }
-
-    }
-
-    public static class Description {
-
-        public static final Comparator<Description> ALPHA_COMPARATOR =
-            new DescriptionComparator(true);
-        public static final Comparator<Description> POSITION_COMPARATOR =
-            new DescriptionComparator(false);
-
-        final GrammarRulesPanelUI ui;
-        private FileObject fileObject;
-        private boolean inherited;
-        private String name;
-        Collection<Description> children;
-        private int offset;
-        private Position position;
-
-        public Description(GrammarRulesPanelUI ui) {
-            this.ui = ui;
-        }
-
-        public Description(GrammarRulesPanelUI ui, String name) {
-            this.ui = ui;
-            this.name = name;
-        }
-
-        public Collection<Description> getChildren() {
-            return children;
-        }
-
-        public int getOffset() {
-            if (position != null) {
-                return position.getOffset();
-            }
-
-            return offset;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public String getHtmlHeader() {
-            if (isInherited()) {
-                return String.format("<font color='#7D694A'>%s</font>", getName());
-            }
-
-            return null;
-        }
-
-        public void setOffset(Snapshot snapshot, FileObject fileObject, int snapshotOffset) {
-            if (snapshot == null) {
-                this.fileObject = fileObject;
-                offset = snapshotOffset;
-                position = null;
-            } else {
-                this.fileObject = snapshot.getSource().getFileObject();
-                offset = snapshot.getOriginalOffset(snapshotOffset);
-                position = null;
-                if (offset >= 0) {
-                    Document document = snapshot.getSource().getDocument(false);
-                    if (document != null) {
-                        try {
-                            position = document.createPosition(offset);
-                        } catch (BadLocationException ex) {
-                            Exceptions.printStackTrace(ex);
-                        }
-                    }
-                }
-            }
-        }
-
-        public FileObject getFileObject() {
-            return fileObject;
-        }
-
-        public void setFileObject(FileObject fileObject) {
-            this.fileObject = fileObject;
-        }
-
-        public boolean isInherited() {
-            return inherited;
-        }
-
-        public void setInherited(boolean value) {
-            inherited = value;
+        public GrammarNodeDescription(NavigatorPanelUI ui, String name) {
+            super(ui, name);
         }
 
         @Override
         public boolean equals(Object obj) {
-            if (!(obj instanceof Description)) {
+            if (!(obj instanceof GrammarNodeDescription)) {
                 return false;
             }
 
-            Description other = (Description)obj;
-            if (this.name != other.name && (this.name == null || !this.name.equals(other.name))) {
-                return false;
-            }
-
-            return true;
+            return super.equals(obj);
         }
 
         @Override
         public int hashCode() {
-            int hash = 7;
-            hash = 29 * hash + (this.name != null ? this.name.hashCode() : 0);
-            return hash;
-        }
-
-        private static class DescriptionComparator implements Comparator<Description> {
-            private final boolean alpha;
-
-            DescriptionComparator(boolean alpha) {
-                this.alpha = alpha;
-            }
-
-            @Override
-            public int compare(Description d1, Description d2) {
-
-                if (alpha) {
-                    return alphaCompare(d1, d2);
-                } else {
-                    if (d1.isInherited() && !d2.isInherited()) {
-                        return 1;
-                    }
-                    if (!d1.isInherited() && d2.isInherited()) {
-                        return -1;
-                    }
-                    if (d1.isInherited() && d2.isInherited()) {
-                        return alphaCompare(d1, d2);
-                    }
-
-                    return d1.getOffset() - d2.getOffset();
-                }
-            }
-
-            int alphaCompare(Description d1, Description d2) {
-                /*if ( k2i(d1.kind) != k2i(d2.kind) ) {
-                return k2i(d1.kind) - k2i(d2.kind);
-                }*/
-
-                return d1.name.compareTo(d2.name);
-            }
-
-            /*int k2i( ElementKind kind ) {
-            switch( kind ) {
-            case CONSTRUCTOR:
-            return 1;
-            case METHOD:
-            return 2;
-            case FIELD:
-            return 3;
-            case CLASS:
-            case INTERFACE:
-            case ENUM:
-            case ANNOTATION_TYPE:
-            return 4;
-            default:
-            return 100;
-            }
-            }*/
+            return super.hashCode();
         }
     }
+
+    static class GrammarNodeFactory implements Factory {
+
+        @Override
+        public NavigatorNode createNode(Description key) {
+            return new GrammarNode(key);
+        }
+
+    }
+
 }

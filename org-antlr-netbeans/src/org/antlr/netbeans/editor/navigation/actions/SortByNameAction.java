@@ -42,26 +42,26 @@
  * made subject to such option by the copyright holder.
  */
 
-package org.antlr.works.editor.st4.navigation.actions;
+package org.antlr.netbeans.editor.navigation.actions;
 
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
-import org.antlr.works.editor.st4.navigation.TemplatesFilters;
+import org.antlr.netbeans.editor.navigation.Filters;
 import org.openide.util.ImageUtilities;
 import org.openide.util.NbBundle;
 import org.openide.util.actions.Presenter;
 
 public class SortByNameAction extends AbstractAction implements Presenter.Popup {
     private JRadioButtonMenuItem menuItem;
-    protected TemplatesFilters filters;
+    protected Filters filters;
 
-    public SortByNameAction(TemplatesFilters filters) {
+    public SortByNameAction(Filters filters) {
         this.filters = filters;
         putValue(Action.NAME, NbBundle.getMessage(SortByNameAction.class, "LBL_SortByName"));
-        putValue(Action.SMALL_ICON, ImageUtilities.loadImageIcon("org/antlr/works/editor/st4/navigation/resources/sortAlpha.png", false));
+        putValue(Action.SMALL_ICON, ImageUtilities.loadImageIcon("org/antlr/netbeans/editor/navigation/resources/sortAlpha.png", false));
     }
 
     @Override

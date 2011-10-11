@@ -45,44 +45,14 @@
 package org.antlr.works.editor.st4.navigation;
 
 import java.awt.Image;
-import java.awt.datatransfer.Transferable;
-import java.io.IOException;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import javax.swing.Action;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
-import javax.swing.text.Position;
-import org.antlr.works.editor.st4.navigation.actions.OpenAction;
-import org.netbeans.modules.parsing.api.Snapshot;
-import org.openide.filesystems.FileObject;
-import org.openide.loaders.DataObject;
-import org.openide.loaders.DataObjectNotFoundException;
-import org.openide.nodes.AbstractNode;
-import org.openide.nodes.Children;
-import org.openide.nodes.Node;
-import org.openide.util.Exceptions;
+import org.antlr.netbeans.editor.navigation.Description;
+import org.antlr.netbeans.editor.navigation.NavigatorNode;
 import org.openide.util.ImageUtilities;
-import org.openide.util.Lookup;
-import org.openide.util.NbBundle;
-import org.openide.util.datatransfer.PasteType;
-import org.openide.util.lookup.AbstractLookup;
-import org.openide.util.lookup.InstanceContent;
-import org.openide.util.lookup.InstanceContent.Convertor;
 
-public class TemplateNode extends AbstractNode {
-
-    private static Node WAIT_NODE;
-    private Description description;
-    private OpenAction openAction;
+public class TemplateNode extends NavigatorNode {
 
     public TemplateNode(Description description) {
-        super(description.children == null ? Children.LEAF : new ElementChildren(description.children, description.ui.getFilters()), prepareLookup(description));
-        this.description = description;
-        setDisplayName(description.name);
+        super(description, new TemplateNodeFactory());
     }
 
     @Override
@@ -91,381 +61,37 @@ public class TemplateNode extends AbstractNode {
         return ImageUtilities.loadImage("org/antlr/works/editor/st4/navigation/resources/template_parameter_16.png");
     }
 
-    @Override
-    public Image getOpenedIcon(int type) {
-        return getIcon(type);
-    }
+    public static class TemplateDescription extends Description {
 
-    @Override
-    public String getDisplayName() {
-        if (description.name != null) {
-            return description.name;
+        public TemplateDescription(TemplatesPanelUI ui) {
+            super(ui);
         }
 
-        if (description.fileObject != null) {
-            return description.fileObject.getNameExt();
-        }
-
-        return null;
-    }
-
-    @Override
-    public String getHtmlDisplayName() {
-        return description.htmlHeader;
-    }
-
-    @Override
-    public Action[] getActions(boolean context) {
-        if (context || description.name == null || description.getFileObject() == null || (description.children != null && !description.children.isEmpty())) {
-            return description.ui.getActions();
-        } else {
-            Action[] panelActions = description.ui.getActions();
-
-            int extraActionCount = 2;
-            Action[] actions = new Action[extraActionCount + panelActions.length];
-            actions[0] = getOpenAction();
-            actions[1] = null;
-
-            for (int i = 0; i < panelActions.length; i++) {
-                actions[extraActionCount + i] = panelActions[i];
-            }
-
-            return actions;
-        }
-    }
-
-    @Override
-    public Action getPreferredAction() {
-        return getOpenAction();
-    }
-
-    @Override
-    public boolean canCopy() {
-        return false;
-    }
-
-    @Override
-    public boolean canCut() {
-        return false;
-    }
-
-    @Override
-    public boolean canDestroy() {
-        return false;
-    }
-
-    @Override
-    public boolean canRename() {
-        return false;
-    }
-
-    @Override
-    public PasteType getDropType(Transferable t, int action, int index) {
-        return null;
-    }
-
-    @Override
-    public Transferable drag() throws IOException {
-        return null;
-    }
-
-    public Description getDescription() {
-        return description;
-    }
-
-    @Override
-    protected void createPasteTypes(Transferable t, List<PasteType> s) {
-        // do nothing
-    }
-
-    public void refreshRecursively() {
-        Children ch = getChildren();
-        if (ch instanceof ElementChildren) {
-            boolean scrollOnExpand = description.ui.getScrollOnExpand();
-            description.ui.setScrollOnExpand(false);
-            ((ElementChildren)ch).resetKeys(description.children, description.ui.getFilters());
-            for (Node sub : ch.getNodes()) {
-                description.ui.expandNode(sub);
-                ((TemplateNode)sub).refreshRecursively();
-            }
-
-            description.ui.setScrollOnExpand(scrollOnExpand);
-        }
-    }
-
-    public void updateRecursively(Description newDescription) {
-        Children children = getChildren();
-        if (children instanceof ElementChildren) {
-            HashSet<Description> oldChildren = new HashSet<Description>(description.children);
-
-            // Create a hashtable which maps Description to node.
-            // We will then identify the nodes by the description. The trick is
-            // that the new and old description are equal and have the same hashcode
-            Node[] nodes = children.getNodes(true);
-            HashMap<Description, TemplateNode> oldD2node = new HashMap<Description, TemplateNode>();
-            for (Node node : nodes) {
-                oldD2node.put(((TemplateNode)node).description, (TemplateNode)node);
-            }
-
-            // Now refresh keys
-            ((ElementChildren)children).resetKeys(newDescription.children, newDescription.ui.getFilters());
-
-            // Reread nodes
-            nodes = children.getNodes(true);
-
-            for (Description newSub : newDescription.children) {
-                TemplateNode node = oldD2node.get(newSub);
-                if (node != null) { // filtered out
-                    if (!oldChildren.contains(newSub) && node.getChildren() != Children.LEAF) {
-                        description.ui.expandNode(node); // Make sure new nodes get expanded
-                    }
-                    node.updateRecursively(newSub); // update the node recursively
-                }
-            }
-        }
-
-        Description oldDescription = description; // Remember old description
-        description = newDescription; // set new descrioption to the new node
-        if (oldDescription.htmlHeader != null && !oldDescription.htmlHeader.equals(description.htmlHeader)) {
-            // Different headers => we need to fire displayname change
-            fireDisplayNameChange(oldDescription.htmlHeader, description.htmlHeader);
-        }
-
-        /*if (oldDescription.modifiers != null && !oldDescription.modifiers.equals(newDescription.modifiers)) {
-        fireIconChange();
-        fireOpenedIconChange();
-        }*/
-    }
-
-    private synchronized Action getOpenAction() {
-        if (openAction == null) {
-            openAction = new OpenAction(description);
-        }
-
-        return openAction;
-    }
-
-    private static Lookup prepareLookup(Description d) {
-        InstanceContent instanceContent = new InstanceContent();
-
-        instanceContent.add(d, ConvertDescriptionToFileObject);
-        instanceContent.add(d, ConvertDescriptionToDataObject);
-
-        return new AbstractLookup(instanceContent);
-    }
-
-    private static final Convertor<Description, FileObject> ConvertDescriptionToFileObject =
-        new Convertor<Description, FileObject>() {
-
-            @Override
-            public FileObject convert(Description obj) {
-                return obj.getFileObject();
-            }
-
-            @Override
-            public Class<? extends FileObject> type(Description obj) {
-                return FileObject.class;
-            }
-
-            @Override
-            public String id(Description obj) {
-                return "IL[" + obj.toString();
-            }
-
-            @Override
-            public String displayName(Description obj) {
-                return id(obj);
-            }
-
-        };
-    private static final Convertor<Description, DataObject> ConvertDescriptionToDataObject =
-        new Convertor<Description, DataObject>() {
-
-            @Override
-            public DataObject convert(Description obj) {
-                try {
-                    FileObject fileObject = obj.getFileObject();
-                    return fileObject != null ? DataObject.find(fileObject) : null;
-                } catch (DataObjectNotFoundException ex) {
-                    return null;
-                }
-            }
-
-            @Override
-            public Class<? extends DataObject> type(Description obj) {
-                return DataObject.class;
-            }
-
-            @Override
-            public String id(Description obj) {
-                return "IL[" + obj.toString();
-            }
-
-            @Override
-            public String displayName(Description obj) {
-                return id(obj);
-            }
-
-        };
-
-    public static synchronized Node getWaitNode() {
-        if (WAIT_NODE == null) {
-            WAIT_NODE = new WaitNode();
-        }
-
-        return WAIT_NODE;
-    }
-
-    private static class WaitNode extends AbstractNode {
-
-        private Image waitIcon = ImageUtilities.loadImage("org/antlr/works/editor/st4/navigation/resources/wait.gif");
-
-        public WaitNode() {
-            super(Children.LEAF);
-        }
-
-        @Override
-        public Image getIcon(int type) {
-            return waitIcon;
-        }
-
-        @Override
-        public Image getOpenedIcon(int type) {
-            return getIcon(type);
-        }
-
-        @Override
-        public String getDisplayName() {
-            return NbBundle.getMessage(TemplateNode.class, "LBL_WaitNode");
-        }
-
-        @Override
-        public String getHtmlDisplayName() {
-            return getDisplayName();
-        }
-
-    }
-
-    public static final class ElementChildren extends Children.Keys<Description> {
-
-        public ElementChildren(Collection<Description> descriptions, TemplatesFilters filters) {
-            resetKeys(descriptions, filters);
-        }
-
-        @Override
-        protected Node[] createNodes(Description key) {
-            return new Node[]{new TemplateNode(key)};
-        }
-
-        private void resetKeys(Collection<Description> descriptions, TemplatesFilters filters) {
-            setKeys(filters.filter(descriptions));
-        }
-
-    }
-
-    public static class Description {
-
-        public static final Comparator<Description> ALPHA_COMPARATOR =
-            new DescriptionComparator(true);
-        public static final Comparator<Description> POSITION_COMPARATOR =
-            new DescriptionComparator(false);
-
-        final TemplatesPanelUI ui;
-        FileObject fileObject;
-        String name;
-        Collection<Description> children;
-        String htmlHeader;
-        boolean inherited;
-        private int offset;
-        private Position position;
-
-        public Description(TemplatesPanelUI ui) {
-            this.ui = ui;
-        }
-
-        public Description(TemplatesPanelUI ui, String name) {
-            this.ui = ui;
-            this.name = name;
-        }
-
-        public int getOffset() {
-            if (position != null) {
-                return position.getOffset();
-            }
-
-            return offset;
-        }
-
-        public void setOffset(Snapshot snapshot, int snapshotOffset) {
-            offset = snapshot.getOriginalOffset(snapshotOffset);
-            position = null;
-            if (offset >= 0) {
-                Document document = snapshot.getSource().getDocument(false);
-                if (document != null) {
-                    try {
-                        position = document.createPosition(offset);
-                    } catch (BadLocationException ex) {
-                        Exceptions.printStackTrace(ex);
-                    }
-                }
-            }
-        }
-
-        public FileObject getFileObject() {
-            return fileObject;
+        public TemplateDescription(TemplatesPanelUI ui, String name) {
+            super(ui, name);
         }
 
         @Override
         public boolean equals(Object obj) {
-            if (!(obj instanceof Description)) {
+            if (!(obj instanceof TemplateDescription)) {
                 return false;
             }
 
-            Description other = (Description)obj;
-            if (this.name != other.name && (this.name == null || !this.name.equals(other.name))) {
-                return false;
-            }
-
-            return true;
+            return super.equals(obj);
         }
 
         @Override
         public int hashCode() {
-            int hash = 7;
-            hash = 29 * hash + (this.name != null ? this.name.hashCode() : 0);
-            return hash;
+            return super.hashCode();
+        }
+    }
+
+    static class TemplateNodeFactory implements Factory {
+
+        @Override
+        public NavigatorNode createNode(Description key) {
+            return new TemplateNode(key);
         }
 
-        private static class DescriptionComparator implements Comparator<Description> {
-            private final boolean alpha;
-
-            DescriptionComparator(boolean alpha) {
-                this.alpha = alpha;
-            }
-
-            @Override
-            public int compare(Description d1, Description d2) {
-
-                if (alpha) {
-                    return alphaCompare(d1, d2);
-                } else {
-                    if (d1.inherited && !d2.inherited) {
-                        return 1;
-                    }
-                    if (!d1.inherited && d2.inherited) {
-                        return -1;
-                    }
-                    if (d1.inherited && d2.inherited) {
-                        return alphaCompare(d1, d2);
-                    }
-
-                    return d1.getOffset() - d2.getOffset();
-                }
-            }
-
-            int alphaCompare(Description d1, Description d2) {
-                return d1.name.compareTo(d2.name);
-            }
-        }
     }
 }
