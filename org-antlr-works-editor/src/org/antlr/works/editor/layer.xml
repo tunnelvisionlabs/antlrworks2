@@ -5,12 +5,6 @@
         <folder name="text">
             <folder name="x-antlr3">
                 <attr name="SystemFileSystem.localizingBundle" stringvalue="org.antlr.works.editor.Bundle"/>
-                <file name="org-antlr-works-editor-grammar-highlighter-ANTLRHighlighterLayerFactory.instance"/>
-                <file name="org-antlr-works-editor-grammar-parser-GrammarParserFactory.instance"/>
-                <file name="org-antlr-works-editor-grammar-parser-SyntaxErrorsHighlightingTaskFactory.instance"/>
-                <file name="org-antlr-works-editor-grammar-navigation-RuleScanningTaskFactory.instance"/>
-                <file name="org-antlr-works-editor-grammar-fold-GrammarFoldManagerTaskFactory.instance"/>
-                <file name="org-antlr-works-editor-grammar-GrammarEditorKit.instance"/>
 
                 <folder name="FontsColors">
                     <folder name="NetBeans">
@@ -23,8 +17,7 @@
                 </folder>
 
                 <folder name="FoldManager">
-                    <!--<file name="org-netbeans-editor-CustomFoldManager$Factory.instance"/>-->
-                    <file name="org-antlr-works-editor-grammar-fold-GrammarFoldManagerFactory.instance"/>
+                    <file name="org-netbeans-editor-CustomFoldManager$Factory.instance"/>
                 </folder>
 
                 <folder name="SideBar">
@@ -48,17 +41,10 @@
                     </folder>
                 </folder>
 
-                <!--<folder name="CompletionProviders">
-                    <file name="org-netbeans-modules-editor-java-JavaCompletionProvider.instance"/>
+<!--                <folder name="CompletionProviders">
+                    <file name="org-antlr-works-editor-grammar-GrammarCompletionProvider.instance"/>
                     <file name="org-netbeans-modules-java-editor-javadoc-JavadocCompletionProvider.instance"/>
                 </folder>-->
-
-                <folder name="HyperlinkProviders">
-                    <file name="GrammarHyperlinkProvider.instance">
-                        <attr name="instanceClass" stringvalue="org.antlr.works.editor.grammar.hyperlink.GrammarHyperlinkProvider"/>
-                        <attr name="instanceOf" stringvalue="org.netbeans.lib.editor.hyperlink.spi.HyperlinkProviderExt"/>
-                    </file>
-                </folder>
 
                 <!--<folder name="UpToDateStatusProvider">
                     <file name="org-netbeans-modules-java-editor-semantic-OccurrencesMarkProviderCreator.instance">
@@ -73,12 +59,6 @@
             </folder>
             <folder name="x-stringtemplate4">
                 <attr name="SystemFileSystem.localizingBundle" stringvalue="org.antlr.works.editor.Bundle"/>
-                <file name="org-antlr-works-editor-st4-highlighter-TemplateHighlighterLayerFactory.instance"/>
-                <file name="org-antlr-works-editor-st4-parser-TemplateParserFactory.instance"/>
-                <file name="org-antlr-works-editor-st4-parser-SyntaxErrorsHighlightingTaskFactory.instance"/>
-                <file name="org-antlr-works-editor-st4-navigation-TemplateScanningTaskFactory.instance"/>
-                <file name="org-antlr-works-editor-st4-fold-TemplateFoldManagerTaskFactory.instance"/>
-                <file name="org-antlr-works-editor-st4-StringTemplateEditorKit.instance"/>
 
                 <folder name="FontsColors">
                     <folder name="NetBeans">
@@ -91,8 +71,7 @@
                 </folder>
 
                 <folder name="FoldManager">
-                    <!--<file name="org-netbeans-editor-CustomFoldManager$Factory.instance"/>-->
-                    <file name="org-antlr-works-editor-st4-fold-TemplateFoldManagerFactory.instance"/>
+                    <file name="org-netbeans-editor-CustomFoldManager$Factory.instance"/>
                 </folder>
 
                 <folder name="SideBar">

@@ -36,6 +36,7 @@ import org.antlr.netbeans.editor.DocumentSpan;
 import org.antlr.works.editor.grammar.GoToSupport;
 import org.antlr.works.editor.grammar.overridden.GoToImplementation;
 import org.netbeans.api.editor.EditorRegistry;
+import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.netbeans.lib.editor.hyperlink.spi.HyperlinkProviderExt;
 import org.netbeans.lib.editor.hyperlink.spi.HyperlinkType;
 
@@ -43,6 +44,7 @@ import org.netbeans.lib.editor.hyperlink.spi.HyperlinkType;
  *
  * @author sam
  */
+@MimeRegistration(mimeType="text/x-antlr3", service=HyperlinkProviderExt.class)
 public class GrammarHyperlinkProvider implements HyperlinkProviderExt {
 
     @Override

@@ -27,20 +27,22 @@
  */
 package org.antlr.works.editor.st4;
 
-import org.antlr.netbeans.editor.commenting.ExtendedUncommentAction;
-import org.antlr.netbeans.editor.commenting.LineCommentFormat;
-import org.antlr.netbeans.editor.commenting.BlockCommentFormat;
-import org.antlr.netbeans.editor.commenting.ExtendedCommentAction;
-import org.antlr.netbeans.editor.commenting.StandardCommenter;
 import javax.swing.Action;
 import javax.swing.text.TextAction;
+import org.antlr.netbeans.editor.commenting.BlockCommentFormat;
 import org.antlr.netbeans.editor.commenting.Commenter;
+import org.antlr.netbeans.editor.commenting.ExtendedCommentAction;
+import org.antlr.netbeans.editor.commenting.ExtendedUncommentAction;
+import org.antlr.netbeans.editor.commenting.LineCommentFormat;
+import org.antlr.netbeans.editor.commenting.StandardCommenter;
+import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.netbeans.modules.editor.NbEditorKit;
 
 /**
  *
  * @author sam
  */
+@MimeRegistration(mimeType="text/x-stringtemplate4", service=NbEditorKit.class)
 public class StringTemplateEditorKit extends NbEditorKit {
 
     public static final String GRAMMAR_MIME_TYPE = "text/x-stringtemplate4";

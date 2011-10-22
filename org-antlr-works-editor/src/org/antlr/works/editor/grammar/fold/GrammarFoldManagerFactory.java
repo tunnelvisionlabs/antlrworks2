@@ -27,6 +27,7 @@
  */
 package org.antlr.works.editor.grammar.fold;
 
+import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.netbeans.spi.editor.fold.FoldManager;
 import org.netbeans.spi.editor.fold.FoldManagerFactory;
 
@@ -34,6 +35,7 @@ import org.netbeans.spi.editor.fold.FoldManagerFactory;
  *
  * @author sam
  */
+@MimeRegistration(mimeType="text/x-antlr3", service=FoldManagerFactory.class)
 public class GrammarFoldManagerFactory implements FoldManagerFactory {
 
     @Override

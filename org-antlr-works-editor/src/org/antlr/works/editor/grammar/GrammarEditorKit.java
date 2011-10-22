@@ -27,19 +27,22 @@
  */
 package org.antlr.works.editor.grammar;
 
-import org.antlr.netbeans.editor.commenting.ExtendedUncommentAction;
-import org.antlr.netbeans.editor.commenting.LineCommentFormat;
+import javax.swing.Action;
+import javax.swing.text.EditorKit;
+import javax.swing.text.TextAction;
 import org.antlr.netbeans.editor.commenting.BlockCommentFormat;
 import org.antlr.netbeans.editor.commenting.ExtendedCommentAction;
+import org.antlr.netbeans.editor.commenting.ExtendedUncommentAction;
+import org.antlr.netbeans.editor.commenting.LineCommentFormat;
 import org.antlr.netbeans.editor.commenting.StandardCommenter;
-import javax.swing.Action;
-import javax.swing.text.TextAction;
+import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.netbeans.modules.editor.NbEditorKit;
 
 /**
  *
  * @author Sam Harwell
  */
+@MimeRegistration(mimeType="text/x-antlr3", service=EditorKit.class)
 public class GrammarEditorKit extends NbEditorKit {
 
     public static final String GRAMMAR_MIME_TYPE = "text/x-antlr3";
