@@ -46,6 +46,7 @@ import org.antlr.tool.GrammarAST;
 import org.antlr.tool.GrammarSyntaxMessage;
 import org.antlr.tool.Message;
 import org.antlr.tool.ToolMessage;
+import org.netbeans.spi.editor.hints.Severity;
 
 public class ANTLRErrorProvidingParser extends ANTLRParser {
     
@@ -67,27 +68,9 @@ public class ANTLRErrorProvidingParser extends ANTLRParser {
     public void displayRecognitionError(String[] tokenNames, RecognitionException e) {
         //String header = getErrorHeader(e);
         String message = getErrorMessage(e, tokenNames);
-        syntaxErrors.add(new SyntaxError(e, message));
+        syntaxErrors.add(new SyntaxError(e, message, Severity.ERROR));
 
         super.displayRecognitionError(tokenNames, e);
-    }
-
-    public static class SyntaxError {
-        private final RecognitionException exception;
-        private final String message;
-
-        public SyntaxError(RecognitionException exception, String message) {
-            this.exception = exception;
-            this.message = message;
-        }
-
-        public RecognitionException getException() {
-            return exception;
-        }
-
-        public String getMessage() {
-            return message;
-        }
     }
 
     public static final class ErrorListener implements ANTLRErrorListener {
@@ -112,7 +95,7 @@ public class ANTLRErrorProvidingParser extends ANTLRParser {
                 if (parser == null)
                     return;
 
-                parser.syntaxErrors.add(new SyntaxError(syntaxMessage.exception, msg.toString()));
+                parser.syntaxErrors.add(new SyntaxError(syntaxMessage.exception, msg.toString(), Severity.ERROR));
             }
         }
 

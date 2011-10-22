@@ -32,14 +32,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import org.antlr.Tool;
-import org.antlr.grammar.v3.ANTLRParser.grammar__return;
+import org.antlr.grammar.v3.ANTLRParser;
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CommonToken;
+import org.antlr.runtime.Token;
 import org.antlr.tool.CompositeGrammar;
 import org.antlr.tool.ErrorManager;
 import org.antlr.tool.Grammar;
 import org.antlr.tool.GrammarAST;
-import org.antlr.works.editor.grammar.parser.GrammarParser.GrammarFileResult;
 import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileUtil;
 import org.openide.util.Exceptions;
@@ -50,7 +50,7 @@ import org.openide.util.Exceptions;
  */
 public class GrammarWrapper extends Grammar {
     
-    private final List<GrammarFileResult> imported = new ArrayList<GrammarFileResult>();
+    private final List<GrammarParserV3.GrammarFileResultV3> imported = new ArrayList<GrammarParserV3.GrammarFileResultV3>();
 
     public GrammarWrapper() {
     }
@@ -63,7 +63,7 @@ public class GrammarWrapper extends Grammar {
         super(tool, fileName, composite);
     }
 
-    public List<GrammarFileResult> getImportedGrammarResults() {
+    public List<GrammarParserV3.GrammarFileResultV3> getImportedGrammarResults() {
         return imported;
     }
 
@@ -104,15 +104,15 @@ public class GrammarWrapper extends Grammar {
             tokenStream.setParser(parser);
             parser.setTreeAdaptor(new ANTLRErrorProvidingParser.grammar_Adaptor(parser));
 
-            List tokenList = tokenStream.getTokens();
+            List<Token> tokenList = tokenStream.getTokens();
             CommonToken[] tokens = new CommonToken[tokenList.size()];
-            tokens = (CommonToken[])tokenList.toArray(tokens);
+            tokens = tokenList.toArray(tokens);
 
             try {
                 GrammarWrapper g = new GrammarWrapper(this.tool, fullName, this.composite);
                 g.setFileName(fullName); // work around a bug in Grammar.setName that results in a NPE
-                grammar__return result = parser.grammar_(g);
-                imported.add(new GrammarFileResult(fileObject, g, result, tokens));
+                ANTLRParser.grammar__return result = parser.grammar_(g);
+                imported.add(new GrammarParserV3.GrammarFileResultV3(parser, g, result, fileObject, tokens));
             } catch (Exception ex) {
                 Exceptions.printStackTrace(ex);
             }

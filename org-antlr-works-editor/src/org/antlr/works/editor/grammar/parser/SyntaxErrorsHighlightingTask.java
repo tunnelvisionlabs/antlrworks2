@@ -33,27 +33,23 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.RecognitionException;
-import org.antlr.netbeans.editor.navigation.CurrentDocumentStateScheduler;
-import org.antlr.works.editor.grammar.parser.ANTLRErrorProvidingParser.SyntaxError;
-import org.antlr.works.editor.grammar.parser.GrammarParser.GrammarParserResult;
 import org.netbeans.modules.parsing.spi.ParserResultTask;
 import org.netbeans.modules.parsing.spi.Scheduler;
 import org.netbeans.modules.parsing.spi.SchedulerEvent;
 import org.netbeans.spi.editor.hints.ErrorDescription;
 import org.netbeans.spi.editor.hints.ErrorDescriptionFactory;
 import org.netbeans.spi.editor.hints.HintsController;
-import org.netbeans.spi.editor.hints.Severity;
 import org.openide.util.Exceptions;
 
-public class SyntaxErrorsHighlightingTask extends ParserResultTask<GrammarParserResult> {
+public class SyntaxErrorsHighlightingTask extends ParserResultTask<GrammarParser.GrammarParserResult> {
 
     public SyntaxErrorsHighlightingTask() {
     }
 
     @Override
-    public void run(GrammarParserResult result, SchedulerEvent event) {
+    public void run(GrammarParser.GrammarParserResult result, SchedulerEvent event) {
         try {
-            List<SyntaxError> syntaxErrors = result.getParser().getSyntaxErrors();
+            List<? extends SyntaxError> syntaxErrors = result.getResult().getSyntaxErrors();
             Document document = result.getSnapshot().getSource().getDocument(false);
             List<ErrorDescription> errors = new ArrayList<ErrorDescription>();
             for (SyntaxError syntaxError : syntaxErrors) {
@@ -74,10 +70,11 @@ public class SyntaxErrorsHighlightingTask extends ParserResultTask<GrammarParser
                     }
 
                     try {
-                        ErrorDescription errorDescription = ErrorDescriptionFactory.createErrorDescription(Severity.ERROR, message, document, document.createPosition(startOffset), document.createPosition(endOffsetInclusive + 1));
+                        ErrorDescription errorDescription = ErrorDescriptionFactory.createErrorDescription(syntaxError.getSeverity(), message, document, document.createPosition(startOffset), document.createPosition(endOffsetInclusive + 1));
                         errors.add(errorDescription);
                         continue;
                     } catch (BadLocationException ex) {
+                        Exceptions.printStackTrace(ex);
                     }
                 }
 
@@ -86,7 +83,7 @@ public class SyntaxErrorsHighlightingTask extends ParserResultTask<GrammarParser
                     continue;
                 }
 
-                ErrorDescription errorDescription = ErrorDescriptionFactory.createErrorDescription(Severity.ERROR, message, document, line);
+                ErrorDescription errorDescription = ErrorDescriptionFactory.createErrorDescription(syntaxError.getSeverity(), message, document, line);
                 errors.add(errorDescription);
             }
 
@@ -103,8 +100,7 @@ public class SyntaxErrorsHighlightingTask extends ParserResultTask<GrammarParser
 
     @Override
     public Class<? extends Scheduler> getSchedulerClass() {
-        //return Scheduler.EDITOR_SENSITIVE_TASK_SCHEDULER;
-        return CurrentDocumentStateScheduler.class;
+        return Scheduler.EDITOR_SENSITIVE_TASK_SCHEDULER;
     }
 
     @Override

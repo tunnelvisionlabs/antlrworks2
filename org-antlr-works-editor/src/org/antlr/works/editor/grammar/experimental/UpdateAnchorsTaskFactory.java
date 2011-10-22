@@ -25,25 +25,25 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.antlr.works.editor.grammar.parser;
+package org.antlr.works.editor.grammar.experimental;
 
 import java.util.Collection;
+import java.util.Collections;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.netbeans.modules.parsing.api.Snapshot;
-import org.netbeans.modules.parsing.spi.Parser;
-import org.netbeans.modules.parsing.spi.ParserFactory;
+import org.netbeans.modules.parsing.spi.SchedulerTask;
+import org.netbeans.modules.parsing.spi.TaskFactory;
 
-@MimeRegistration(mimeType="text/x-antlr3", service=ParserFactory.class)
-public class GrammarParserFactory extends ParserFactory {
-
-    public static final boolean USE_V4 = true;
+/**
+ *
+ * @author sam
+ */
+@MimeRegistration(mimeType="text/x-antlr3", service=TaskFactory.class)
+public class UpdateAnchorsTaskFactory extends TaskFactory {
 
     @Override
-    public Parser createParser(Collection<Snapshot> snapshots) {
-        if (USE_V4) {
-            return new GrammarParserV4();
-        } else {
-            return new GrammarParserV3();
-        }
+    public Collection<? extends SchedulerTask> create(Snapshot snapshot) {
+        return Collections.singleton(new UpdateAnchorsTask());
     }
+
 }

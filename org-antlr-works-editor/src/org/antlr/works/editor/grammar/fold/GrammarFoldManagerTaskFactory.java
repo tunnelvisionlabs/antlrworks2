@@ -31,6 +31,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.WeakHashMap;
+import org.antlr.works.editor.grammar.parser.GrammarParserFactory;
+import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.netbeans.modules.parsing.api.Snapshot;
 import org.netbeans.modules.parsing.spi.SchedulerTask;
 import org.netbeans.modules.parsing.spi.TaskFactory;
@@ -43,6 +45,7 @@ import org.openide.util.Exceptions;
  *
  * @author sam
  */
+@MimeRegistration(mimeType="text/x-antlr3", service=TaskFactory.class)
 public class GrammarFoldManagerTaskFactory extends TaskFactory {
     
     private static final Map<DataObject, GrammarFoldManagerTask> tasks =
@@ -63,7 +66,11 @@ public class GrammarFoldManagerTaskFactory extends TaskFactory {
 
     @Override
     public Collection<? extends SchedulerTask> create(Snapshot snapshot) {
-        GrammarFoldManagerTask task = new GrammarFoldManagerTask();
+
+        GrammarFoldManagerTask task =
+            GrammarParserFactory.USE_V4
+            ? new GrammarFoldManagerTaskV4()
+            : new GrammarFoldManagerTaskV3();
 
         try {
             DataObject dataObject = DataObject.find(snapshot.getSource().getFileObject());
@@ -75,7 +82,7 @@ public class GrammarFoldManagerTaskFactory extends TaskFactory {
         } catch (DataObjectNotFoundException ex) {
         }
 
-        return Collections.singleton(new GrammarFoldManagerTask());
+        return Collections.singleton(task);
     }
 
 }

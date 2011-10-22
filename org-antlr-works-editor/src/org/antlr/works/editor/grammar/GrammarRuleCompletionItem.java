@@ -25,25 +25,71 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.antlr.works.editor.grammar.parser;
+package org.antlr.works.editor.grammar;
 
-import java.util.Collection;
-import org.netbeans.api.editor.mimelookup.MimeRegistration;
-import org.netbeans.modules.parsing.api.Snapshot;
-import org.netbeans.modules.parsing.spi.Parser;
-import org.netbeans.modules.parsing.spi.ParserFactory;
+import javax.swing.ImageIcon;
+import org.antlr.netbeans.editor.navigation.Description;
+import org.antlr.works.editor.grammar.navigation.GrammarNode;
+import org.netbeans.spi.editor.completion.CompletionItem;
 
-@MimeRegistration(mimeType="text/x-antlr3", service=ParserFactory.class)
-public class GrammarParserFactory extends ParserFactory {
+/**
+ *
+ * @author sam
+ */
+public class GrammarRuleCompletionItem extends GrammarCompletionItem implements CompletionItem {
 
-    public static final boolean USE_V4 = true;
+    private final Description rule;
+
+    private String leftText;
+
+    public GrammarRuleCompletionItem(int substitutionOffset, Description rule) {
+        super(substitutionOffset);
+        this.rule = rule;
+    }
 
     @Override
-    public Parser createParser(Collection<Snapshot> snapshots) {
-        if (USE_V4) {
-            return new GrammarParserV4();
-        } else {
-            return new GrammarParserV3();
-        }
+    public int getSortPriority() {
+        return RULE_SORT_PRIORITY;
     }
+
+    @Override
+    public CharSequence getSortText() {
+        return rule.getName();
+    }
+
+    @Override
+    public CharSequence getInsertPrefix() {
+        return rule.getName();
+    }
+
+    @Override
+    protected ImageIcon getIcon() {
+        return new ImageIcon(new GrammarNode(rule).getIcon(0));
+    }
+
+    @Override
+    protected String getLeftHtmlText() {
+        if (leftText == null) {
+            StringBuilder builder = new StringBuilder();
+
+            builder.append(METHOD_COLOR);
+
+            if (!rule.isInherited()) {
+                builder.append(BOLD);
+            }
+
+            builder.append(rule.getName());
+
+            if (!rule.isInherited()) {
+                builder.append(BOLD_END);
+            }
+
+            builder.append(COLOR_END);
+            
+            leftText = builder.toString();
+        }
+
+        return leftText;
+    }
+
 }

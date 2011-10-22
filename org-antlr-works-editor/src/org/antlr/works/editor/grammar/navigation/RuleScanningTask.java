@@ -44,29 +44,18 @@
 
 package org.antlr.works.editor.grammar.navigation;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Logger;
-import org.antlr.grammar.v3.ANTLRParser.grammar__return;
-import org.antlr.netbeans.editor.navigation.CurrentDocumentStateScheduler;
-import org.antlr.netbeans.editor.navigation.Description;
-import org.antlr.runtime.CommonToken;
-import org.antlr.runtime.tree.CommonTree;
-import org.antlr.runtime.tree.Tree;
-import org.antlr.works.editor.grammar.navigation.GrammarNode.GrammarNodeDescription;
 import org.antlr.works.editor.grammar.parser.GrammarParser;
-import org.antlr.works.editor.grammar.parser.GrammarParser.GrammarFileResult;
-import org.antlr.works.editor.grammar.parser.GrammarParser.GrammarParserResult;
-import org.netbeans.modules.parsing.api.Snapshot;
 import org.netbeans.modules.parsing.spi.ParserResultTask;
 import org.netbeans.modules.parsing.spi.Scheduler;
-import org.netbeans.modules.parsing.spi.SchedulerEvent;
-import org.openide.filesystems.FileObject;
-import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 
-public class RuleScanningTask extends ParserResultTask<GrammarParser.GrammarParserResult> {
+@NbBundle.Messages({
+    "LBL_ParserRules=Parser Rules",
+    "LBL_LexerRules=Lexer Rules"
+})
+public abstract class RuleScanningTask extends ParserResultTask<GrammarParser.GrammarParserResult> {
 
     private static final Logger LOG = Logger.getLogger(RuleScanningTask.class.getName());
     private static final String TYPE_COLOR = "#707070";
@@ -77,124 +66,13 @@ public class RuleScanningTask extends ParserResultTask<GrammarParser.GrammarPars
     }
 
     @Override
-    public void run(GrammarParserResult result, SchedulerEvent event) {
-        try {
-            GrammarRulesPanelUI ui = GrammarRulesPanel.findGrammarRulesPanelUI();
-            if (ui == null) {
-                return;
-            }
-
-            // don't update if there were errors and a result is already displayed
-            if (!result.getParser().getSyntaxErrors().isEmpty() && !ui.isShowingWaitNode()) {
-                return;
-            }
-
-            GrammarNodeDescription rootDescription = new GrammarNodeDescription(ui);
-            rootDescription.setChildren(new ArrayList<Description>());
-            rootDescription.setFileObject(result.getSnapshot().getSource().getFileObject());
-
-            GrammarNodeDescription parserRulesRootDescription = new GrammarNodeDescription(ui, NbBundle.getMessage(RuleScanningTask.class, "LBL_ParserRules"));
-            parserRulesRootDescription.setChildren(new HashSet<Description>());
-
-            GrammarNodeDescription lexerRulesRootDescription = new GrammarNodeDescription(ui, NbBundle.getMessage(RuleScanningTask.class, "LBL_LexerRules"));
-            lexerRulesRootDescription.setChildren(new HashSet<Description>());
-
-            for (GrammarFileResult importedParseResult : result.getImportedGrammarResults()) {
-                processParseResult(null, importedParseResult, ui, rootDescription, parserRulesRootDescription, lexerRulesRootDescription);
-            }
-
-            processParseResult(result.getSnapshot(), result.getResult(), ui, rootDescription, parserRulesRootDescription, lexerRulesRootDescription);
-
-            if (!parserRulesRootDescription.getChildren().isEmpty()) {
-                rootDescription.getChildren().add(parserRulesRootDescription);
-            }
-
-            if (!lexerRulesRootDescription.getChildren().isEmpty()) {
-                rootDescription.getChildren().add(lexerRulesRootDescription);
-            }
-
-            ui.refresh(rootDescription);
-        } catch (RuntimeException ex) {
-            Exceptions.printStackTrace(ex);
-        }
-    }
-
-    private void processParseResult(Snapshot snapshot, GrammarFileResult result, GrammarRulesPanelUI ui, GrammarNodeDescription rootDescription, GrammarNodeDescription parserRulesRootDescription, GrammarNodeDescription lexerRulesRootDescription) {
-
-        grammar__return parseResult = result.getResult();
-        FileObject fileObject = result.getFileObject();
-        Tree tree = (Tree)parseResult.getTree();
-        int childCount = tree.getChildCount();
-        for (int i = 0; i < childCount; i++) {
-            Object childObject = tree.getChild(i);
-            if (!(childObject instanceof CommonTree)) {
-                continue;
-            }
-
-            CommonTree child = (CommonTree) childObject;
-            if (child.getChildCount() > 0 && "rule".equals(child.getText())) {
-                String ruleName = child.getChild(0).getText();
-                if ("Tokens".equals(ruleName)) {
-                    continue;
-                }
-
-                GrammarNodeDescription ruleDescription = new GrammarNodeDescription(ui, ruleName);
-                ruleDescription.setOffset(snapshot, fileObject, ((CommonToken)((CommonTree)child.getChild(0)).getToken()).getStartIndex());
-                ruleDescription.setInherited(snapshot == null); // for now, go on the fact that snapshots aren't available for imported files
-
-                if (Character.isLowerCase(ruleName.charAt(0))) {
-                    parserRulesRootDescription.getChildren().add(ruleDescription);
-                } else {
-                    lexerRulesRootDescription.getChildren().add(ruleDescription);
-                }
-            } else if (child.getText() != null && child.getText().startsWith("tokens")) {
-                for (int j = 0; j < child.getChildCount(); j++) {
-                    Tree tokenChild = child.getChild(j);
-                    if ("=".equals(tokenChild.getText()) && tokenChild.getChildCount() == 2) {
-                        String ruleName = tokenChild.getChild(0).getText();
-                        if (ruleName == null || ruleName.length() == 0) {
-                            continue;
-                        }
-
-                        GrammarNodeDescription ruleDescription = new GrammarNodeDescription(ui, ruleName);
-                        ruleDescription.setOffset(snapshot, fileObject, ((CommonToken)((CommonTree)tokenChild.getChild(0)).getToken()).getStartIndex());
-                        ruleDescription.setInherited(snapshot == null); // for now, go on the fact that snapshots aren't available for imported files
-
-                        if (Character.isLowerCase(ruleName.charAt(0))) {
-                            parserRulesRootDescription.getChildren().add(ruleDescription);
-                        } else {
-                            lexerRulesRootDescription.getChildren().add(ruleDescription);
-                        }
-                    } else if (tokenChild.getChildCount() == 0) {
-                        String ruleName = tokenChild.getText();
-                        if (ruleName == null || ruleName.length() == 0) {
-                            continue;
-                        }
-
-                        GrammarNodeDescription ruleDescription = new GrammarNodeDescription(ui, ruleName);
-                        ruleDescription.setOffset(snapshot, fileObject, ((CommonToken)((CommonTree)tokenChild).getToken()).getStartIndex());
-                        ruleDescription.setInherited(snapshot == null); // for now, go on the fact that snapshots aren't available for imported files
-
-                        if (Character.isLowerCase(ruleName.charAt(0))) {
-                            parserRulesRootDescription.getChildren().add(ruleDescription);
-                        } else {
-                            lexerRulesRootDescription.getChildren().add(ruleDescription);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    @Override
     public int getPriority() {
         return 100;
     }
 
     @Override
     public Class<? extends Scheduler> getSchedulerClass() {
-        //return Scheduler.EDITOR_SENSITIVE_TASK_SCHEDULER;
-        return CurrentDocumentStateScheduler.class;
+        return Scheduler.EDITOR_SENSITIVE_TASK_SCHEDULER;
     }
 
     @Override

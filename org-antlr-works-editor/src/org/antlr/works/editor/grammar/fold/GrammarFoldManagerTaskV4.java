@@ -25,25 +25,21 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.antlr.works.editor.grammar.parser;
+package org.antlr.works.editor.grammar.fold;
 
-import java.util.Collection;
-import org.netbeans.api.editor.mimelookup.MimeRegistration;
-import org.netbeans.modules.parsing.api.Snapshot;
-import org.netbeans.modules.parsing.spi.Parser;
-import org.netbeans.modules.parsing.spi.ParserFactory;
+import java.util.List;
+import javax.swing.text.StyledDocument;
+import org.antlr.works.editor.grammar.parser.GrammarParser.GrammarParserResult;
 
-@MimeRegistration(mimeType="text/x-antlr3", service=ParserFactory.class)
-public class GrammarParserFactory extends ParserFactory {
-
-    public static final boolean USE_V4 = true;
+/**
+ *
+ * @author sam
+ */
+public class GrammarFoldManagerTaskV4 extends GrammarFoldManagerTask {
 
     @Override
-    public Parser createParser(Collection<Snapshot> snapshots) {
-        if (USE_V4) {
-            return new GrammarParserV4();
-        } else {
-            return new GrammarParserV3();
-        }
+    protected List<FoldInfo> calculateFolds(StyledDocument document, GrammarParserResult result) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
+
 }

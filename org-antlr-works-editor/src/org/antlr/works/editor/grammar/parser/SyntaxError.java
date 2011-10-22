@@ -27,23 +27,33 @@
  */
 package org.antlr.works.editor.grammar.parser;
 
-import java.util.Collection;
-import org.netbeans.api.editor.mimelookup.MimeRegistration;
-import org.netbeans.modules.parsing.api.Snapshot;
-import org.netbeans.modules.parsing.spi.Parser;
-import org.netbeans.modules.parsing.spi.ParserFactory;
+import org.antlr.runtime.RecognitionException;
+import org.netbeans.spi.editor.hints.Severity;
 
-@MimeRegistration(mimeType="text/x-antlr3", service=ParserFactory.class)
-public class GrammarParserFactory extends ParserFactory {
+/**
+ *
+ * @author sam
+ */
+public class SyntaxError {
+    private final RecognitionException exception;
+    private final String message;
+    private final Severity severity;
 
-    public static final boolean USE_V4 = true;
+    public SyntaxError(RecognitionException exception, String message, Severity severity) {
+        this.exception = exception;
+        this.message = message;
+        this.severity = severity;
+    }
 
-    @Override
-    public Parser createParser(Collection<Snapshot> snapshots) {
-        if (USE_V4) {
-            return new GrammarParserV4();
-        } else {
-            return new GrammarParserV3();
-        }
+    public RecognitionException getException() {
+        return exception;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public Severity getSeverity() {
+        return severity;
     }
 }
