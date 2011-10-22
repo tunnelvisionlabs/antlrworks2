@@ -33,9 +33,6 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.RecognitionException;
-import org.antlr.netbeans.editor.navigation.CurrentDocumentStateScheduler;
-import org.antlr.works.editor.st4.parser.GroupParserWrapper.SyntaxError;
-import org.antlr.works.editor.st4.parser.TemplateParser.TemplateParserResult;
 import org.netbeans.modules.parsing.spi.ParserResultTask;
 import org.netbeans.modules.parsing.spi.Scheduler;
 import org.netbeans.modules.parsing.spi.SchedulerEvent;
@@ -45,18 +42,18 @@ import org.netbeans.spi.editor.hints.HintsController;
 import org.netbeans.spi.editor.hints.Severity;
 import org.openide.util.Exceptions;
 
-public class SyntaxErrorsHighlightingTask extends ParserResultTask<TemplateParserResult> {
+public class SyntaxErrorsHighlightingTask extends ParserResultTask<TemplateParser.TemplateParserResult> {
 
     public SyntaxErrorsHighlightingTask() {
     }
 
     @Override
-    public void run(TemplateParserResult result, SchedulerEvent event) {
+    public void run(TemplateParser.TemplateParserResult result, SchedulerEvent event) {
         try {
-            List<SyntaxError> syntaxErrors = result.getParser().getSyntaxErrors();
+            List<GroupParserWrapper.SyntaxError> syntaxErrors = result.getParser().getSyntaxErrors();
             Document document = result.getSnapshot().getSource().getDocument(false);
             List<ErrorDescription> errors = new ArrayList<ErrorDescription>();
-            for (SyntaxError syntaxError : syntaxErrors) {
+            for (GroupParserWrapper.SyntaxError syntaxError : syntaxErrors) {
                 if (!(syntaxError.getException() instanceof RecognitionException))
                     continue;
 
@@ -103,8 +100,7 @@ public class SyntaxErrorsHighlightingTask extends ParserResultTask<TemplateParse
 
     @Override
     public Class<? extends Scheduler> getSchedulerClass() {
-        //return Scheduler.EDITOR_SENSITIVE_TASK_SCHEDULER;
-        return CurrentDocumentStateScheduler.class;
+        return Scheduler.EDITOR_SENSITIVE_TASK_SCHEDULER;
     }
 
     @Override
