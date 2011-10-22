@@ -55,6 +55,13 @@ import org.openide.util.NbBundle;
 import org.openide.util.RequestProcessor;
 import org.openide.util.lookup.Lookups;
 
+import static org.antlr.works.editor.st4.navigation.Bundle.HINT_templates;
+import static org.antlr.works.editor.st4.navigation.Bundle.LBL_templates;
+
+@NbBundle.Messages({
+    "LBL_templates=Templates",
+    "HINT_templates=Templates"
+})
 public class TemplatesPanel implements NavigatorPanel {
     private static final RequestProcessor RequestProcessor = new RequestProcessor(TemplatesPanel.class.getName(), 1);
 
@@ -62,12 +69,12 @@ public class TemplatesPanel implements NavigatorPanel {
 
     @Override
     public String getDisplayName() {
-        return NbBundle.getMessage(TemplatesPanel.class, "LBL_templates");
+        return LBL_templates();
     }
 
     @Override
     public String getDisplayHint() {
-        return NbBundle.getMessage(TemplatesPanel.class, "HINT_templates");
+        return HINT_templates();
     }
 
     @Override

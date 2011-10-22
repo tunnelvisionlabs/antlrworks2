@@ -46,13 +46,12 @@ package org.antlr.works.editor.st4.navigation;
 
 import org.antlr.netbeans.editor.navigation.Filters;
 import org.antlr.netbeans.editor.navigation.NavigatorPanelUI;
-import org.antlr.works.editor.st4.navigation.TemplateNode.TemplateNodeFactory;
 
 public class TemplatesPanelUI extends NavigatorPanelUI {
 
     @SuppressWarnings("LeakingThisInConstructor")
     public TemplatesPanelUI() {
-        super(new TemplateNodeFactory());
+        super(new TemplateNode.TemplateNodeFactory());
     }
 
     @Override

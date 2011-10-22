@@ -48,7 +48,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Logger;
-import org.antlr.netbeans.editor.navigation.CurrentDocumentStateScheduler;
 import org.antlr.netbeans.editor.navigation.Description;
 import org.antlr.works.editor.st4.navigation.TemplateNode.TemplateDescription;
 import org.antlr.works.editor.st4.parser.TemplateGroupWrapper.TemplateInformation;
@@ -80,9 +79,9 @@ public class TemplateScanningTask extends ParserResultTask<TemplateParserResult>
             }
 
             // don't update if there were errors and a result is already displayed
-            if (!result.getParser().getSyntaxErrors().isEmpty() && !ui.isShowingWaitNode()) {
+            /*if (!result.getParser().getSyntaxErrors().isEmpty() && !ui.isShowingWaitNode()) {
                 return;
-            }
+            }*/
 
             TemplateDescription rootDescription = new TemplateDescription(ui);
             rootDescription.setChildren(new ArrayList<Description>());
@@ -108,15 +107,6 @@ public class TemplateScanningTask extends ParserResultTask<TemplateParserResult>
                         description.setOffset(result.getSnapshot(), rootDescription.getFileObject(), sourceInterval.a);
                         description.setHtmlHeader(String.format("%s.%s<font color='808080'>()</font>", templateInfo.getEnclosingTemplateName(), templateInfo.getNameToken().getText()));
                         rootDescription.getChildren().add(description);
-
-                        //string sig = string.Format("{0}({1})", name, string.Join(", ", args));
-                        /*EditorNavigationType navigationType = EditorNavigationTypeRegistryService.GetEditorNavigationType(StringTemplateEditorNavigationTypes.Templates);
-                        Interval sourceInterval = templateInfo.GroupInterval;
-                        SnapshotSpan span = new SnapshotSpan(e.Snapshot, new Span(sourceInterval.Start, sourceInterval.Length));
-                        SnapshotSpan seek = new SnapshotSpan(e.Snapshot, new Span(sourceInterval.Start, 0));
-                        ImageSource glyph = _provider.GlyphService.GetGlyph(StandardGlyphGroup.GlyphGroupNamespace, StandardGlyphItem.GlyphItemPublic);
-                        NavigationTargetStyle style = NavigationTargetStyle.None;
-                        navigationTargets.Add(new EditorNavigationTarget(sig, navigationType, span, seek, glyph, style));*/
                     }
                     else
                     {
@@ -129,33 +119,8 @@ public class TemplateScanningTask extends ParserResultTask<TemplateParserResult>
                         description.setOffset(result.getSnapshot(), rootDescription.getFileObject(), sourceInterval.a);
                         description.setHtmlHeader(String.format("%s<font color='808080'>(%s)</font>", name, Misc.join(argumentNames.iterator(), ", ")));
                         rootDescription.getChildren().add(description);
-
-                        /*string name = templateInfo.NameToken.Text;
-                        IEnumerable<string> args = template.FormalArguments != null ? template.FormalArguments.Select(i => i.Name) : Enumerable.Empty<string>();
-                        string sig = string.Format("{0}({1})", name, string.Join(", ", args));
-                        IEditorNavigationType navigationType = EditorNavigationTypeRegistryService.GetEditorNavigationType(StringTemplateEditorNavigationTypes.Templates);
-                        Interval sourceInterval = templateInfo.GroupInterval;
-                        SnapshotSpan span = new SnapshotSpan(e.Snapshot, new Span(sourceInterval.Start, sourceInterval.Length));
-                        SnapshotSpan seek = new SnapshotSpan(e.Snapshot, new Span(sourceInterval.Start, 0));
-                        bool isAlias = false;
-                        StandardGlyphGroup glyphGroup = isAlias ? StandardGlyphGroup.GlyphGroupTypedef : StandardGlyphGroup.GlyphGroupTemplate;
-                        ImageSource glyph = _provider.GlyphService.GetGlyph(StandardGlyphGroup.GlyphGroupTemplate, StandardGlyphItem.GlyphItemPublic);
-                        NavigationTargetStyle style = NavigationTargetStyle.None;
-                        navigationTargets.Add(new EditorNavigationTarget(sig, navigationType, span, seek, glyph, style));*/
                     }
                 }
-
-                //foreach (var dictionaryInfo in result.Group.GetDictionaryInformation())
-                //{
-                //    string name = dictionaryInfo.Name;
-                //    IEditorNavigationType navigationType = EditorNavigationTypeRegistryService.GetEditorNavigationType(PredefinedEditorNavigationTypes.Members);
-                //    Interval sourceInterval = dictionaryInfo.GroupInterval;
-                //    SnapshotSpan span = new SnapshotSpan(e.Snapshot, new Span(sourceInterval.Start, sourceInterval.Length));
-                //    SnapshotSpan seek = new SnapshotSpan(e.Snapshot, new Span(sourceInterval.Start, 0));
-                //    ImageSource glyph = _provider.GetGlyph(StandardGlyphGroup.GlyphGroupModule, StandardGlyphItem.GlyphItemPublic);
-                //    NavigationTargetStyle style = NavigationTargetStyle.None;
-                //    navigationTargets.Add(new EditorNavigationTarget(sig, navigationType, span, seek, glyph, style));
-                //}
             }
 
             ui.refresh(rootDescription);
@@ -171,8 +136,7 @@ public class TemplateScanningTask extends ParserResultTask<TemplateParserResult>
 
     @Override
     public Class<? extends Scheduler> getSchedulerClass() {
-        //return Scheduler.EDITOR_SENSITIVE_TASK_SCHEDULER;
-        return CurrentDocumentStateScheduler.class;
+        return Scheduler.EDITOR_SENSITIVE_TASK_SCHEDULER;
     }
 
     @Override
