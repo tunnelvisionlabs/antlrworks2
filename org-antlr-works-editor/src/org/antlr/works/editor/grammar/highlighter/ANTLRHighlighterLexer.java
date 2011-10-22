@@ -167,6 +167,7 @@ public class ANTLRHighlighterLexer implements TokenSourceWithState<ANTLRHighligh
         this.inTokens = state.InTokens;
     }
 
+    @Override
     public Token nextToken() {
         Token token = null;
         do {
