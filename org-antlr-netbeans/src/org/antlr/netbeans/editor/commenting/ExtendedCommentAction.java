@@ -27,13 +27,13 @@
  */
 package org.antlr.netbeans.editor.commenting;
 
-import org.antlr.netbeans.editor.SelectionHelper;
 import java.awt.event.ActionEvent;
 import java.util.List;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.JTextComponent;
 import org.antlr.netbeans.editor.DocumentSpan;
-import org.netbeans.editor.ext.ExtKit.CommentAction;
+import org.antlr.netbeans.editor.SelectionHelper;
+import org.netbeans.editor.ext.ExtKit;
 import org.openide.util.Exceptions;
 import org.openide.util.Parameters;
 
@@ -41,7 +41,7 @@ import org.openide.util.Parameters;
  *
  * @author sam
  */
-public class ExtendedCommentAction extends CommentAction {
+public class ExtendedCommentAction extends ExtKit.CommentAction {
 
     private final Commenter commenter;
 

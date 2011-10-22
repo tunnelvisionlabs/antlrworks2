@@ -27,12 +27,10 @@
  */
 package org.antlr.netbeans.editor.commenting;
 
-import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import javax.swing.text.BadLocationException;
-import javax.swing.text.JTextComponent;
 import javax.swing.text.Position;
 import javax.swing.text.Position.Bias;
 import javax.swing.text.StyledDocument;
@@ -41,7 +39,6 @@ import org.antlr.netbeans.editor.DocumentPoint;
 import org.antlr.netbeans.editor.DocumentSpan;
 import org.antlr.netbeans.editor.TextEdit;
 import org.netbeans.editor.BaseDocument;
-import org.netbeans.editor.ext.ExtKit.ToggleCommentAction;
 import org.openide.util.Parameters;
 
 /**

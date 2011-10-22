@@ -50,7 +50,6 @@ import org.antlr.works.editor.grammar.highlighter.ANTLRHighlighter;
 import org.antlr.works.editor.grammar.highlighter.ActionHighlighterLexer;
 import org.antlr.works.editor.grammar.highlighter.GrammarHighlighterLexer;
 import org.antlr.works.editor.grammar.navigation.GrammarNode;
-import org.antlr.works.editor.grammar.navigation.GrammarNode.GrammarNodeDescription;
 import org.antlr.works.editor.grammar.navigation.GrammarRulesPanel;
 import org.antlr.works.editor.grammar.navigation.GrammarRulesPanelUI;
 import org.netbeans.spi.editor.highlighting.HighlightsSequence;
@@ -65,6 +64,9 @@ import org.openide.util.Parameters;
  * @author sam
  */
 public class GoToSupport {
+
+    private GoToSupport() {
+    }
 
     private static FileObject getFileObject(Document document) {
         DataObject dataObject = (DataObject)document.getProperty(Document.StreamDescriptionProperty);
@@ -195,7 +197,7 @@ public class GoToSupport {
         return null;
     }
 
-    private static HighlightsSequence getHighlights(StyledDocument document, DocumentSpan span) {
+    public static HighlightsSequence getHighlights(StyledDocument document, DocumentSpan span) {
         Parameters.notNull("document", document);
         Parameters.notNull("span", span);
 
@@ -207,7 +209,7 @@ public class GoToSupport {
         return new HighlightsList(highlights);
     }
 
-    private static List<Token> getTokens(StyledDocument document, DocumentSpan span) {
+    public static List<Token> getTokens(StyledDocument document, DocumentSpan span) {
         Parameters.notNull("document", document);
         Parameters.notNull("span", span);
 
@@ -219,7 +221,7 @@ public class GoToSupport {
         return tokens;
     }
 
-    private static boolean getHighlights(StyledDocument document, DocumentSpan span, List<Highlight> highlights, List<Token> tokens) {
+    public static boolean getHighlights(StyledDocument document, DocumentSpan span, List<Highlight> highlights, List<Token> tokens) {
         Parameters.notNull("document", document);
         Parameters.notNull("span", span);
 
@@ -232,7 +234,7 @@ public class GoToSupport {
         return true;
     }
 
-    private static ANTLRHighlighterBase<?> getHighlighter(StyledDocument document) {
+    public static ANTLRHighlighterBase<?> getHighlighter(StyledDocument document) {
         Parameters.notNull("document", document);
 
         Object object = document.getProperty(ANTLRHighlighter.DOCUMENT_PROPERTY);

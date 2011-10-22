@@ -44,6 +44,7 @@ public class TemplateHighlighterLexer implements TokenSourceWithState<TemplateHi
     private char openDelimiter = '<';
     private char closeDelimiter = '>';
 
+    @SuppressWarnings("LeakingThisInConstructor")
     public TemplateHighlighterLexer(CharStream input, TemplateHighlighterLexerState state) {
         this.input = input;
         this.insideLexer = new InsideHighlighterLexer(input, this);

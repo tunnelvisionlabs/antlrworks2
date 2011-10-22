@@ -33,10 +33,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.StyledDocument;
 import org.antlr.netbeans.editor.DocumentSpan;
-import org.antlr.netbeans.editor.navigation.CurrentDocumentStateScheduler;
-import org.antlr.works.editor.st4.parser.TemplateGroupWrapper.TemplateInformation;
-import org.antlr.works.editor.st4.parser.TemplateParser.TemplateGroupRuleReturnScope;
-import org.antlr.works.editor.st4.parser.TemplateParser.TemplateParserResult;
+import org.antlr.works.editor.st4.parser.TemplateGroupWrapper;
+import org.antlr.works.editor.st4.parser.TemplateParser;
 import org.netbeans.api.editor.fold.Fold;
 import org.netbeans.api.editor.fold.FoldType;
 import org.netbeans.modules.parsing.spi.ParserResultTask;
@@ -54,11 +52,11 @@ import org.stringtemplate.v4.misc.Interval;
  *
  * @author sam
  */
-public class TemplateFoldManagerTask extends ParserResultTask<TemplateParserResult> {
+public class TemplateFoldManagerTask extends ParserResultTask<TemplateParser.TemplateParserResult> {
 
     @Override
     @SuppressWarnings("fallthrough")
-    public void run(TemplateParserResult result, SchedulerEvent event) {
+    public void run(TemplateParser.TemplateParserResult result, SchedulerEvent event) {
         FileObject fileObject = result.getSnapshot().getSource().getFileObject();
         final TemplateFoldManager foldManager = TemplateFoldManager.getFoldManager(fileObject);
         if (foldManager == null) {
@@ -72,12 +70,12 @@ public class TemplateFoldManagerTask extends ParserResultTask<TemplateParserResu
 
         // calculate the folds
         final List<FoldInfo> folds = new ArrayList<FoldInfo>();
-        TemplateGroupRuleReturnScope parseResult = result.getResult();
+        TemplateParser.TemplateGroupRuleReturnScope parseResult = result.getResult();
         if (parseResult == null) {
             return;
         }
 
-        for (TemplateInformation templateInfo : parseResult.getGroup().getTemplateInformation()) {
+        for (TemplateGroupWrapper.TemplateInformation templateInfo : parseResult.getGroup().getTemplateInformation()) {
             CompiledST template = templateInfo.getTemplate();
             if (template.isAnonSubtemplate) {
                 continue;
@@ -149,7 +147,7 @@ public class TemplateFoldManagerTask extends ParserResultTask<TemplateParserResu
 
     @Override
     public Class<? extends Scheduler> getSchedulerClass() {
-        return CurrentDocumentStateScheduler.class;
+        return Scheduler.EDITOR_SENSITIVE_TASK_SCHEDULER;
     }
 
     @Override
@@ -169,6 +167,7 @@ public class TemplateFoldManagerTask extends ParserResultTask<TemplateParserResu
             this.stopIndex = stopIndex;
             this.blockHint = blockHint;
 
+            @SuppressWarnings("LocalVariableHidesMemberVariable")
             String preview;
             try {
                 preview = document.getText(startIndex, stopIndex - startIndex);
