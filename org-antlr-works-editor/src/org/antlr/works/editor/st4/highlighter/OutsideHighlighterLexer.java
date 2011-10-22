@@ -98,6 +98,11 @@ public class OutsideHighlighterLexer extends OutsideHighlighterLexerBase {
 
     @Override
     public void mTokens() throws RecognitionException {
+        if (input.LA(1) == '\r' || input.LA(1) == '\n') {
+            super.mTokens();
+            return;
+        }
+
         if (getInComment()) {
             mCONTINUE_COMMENT();
         } else {

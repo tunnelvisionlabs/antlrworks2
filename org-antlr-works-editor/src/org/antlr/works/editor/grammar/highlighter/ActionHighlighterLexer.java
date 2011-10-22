@@ -84,6 +84,11 @@ public class ActionHighlighterLexer extends ActionHighlighterLexerBase {
     
     @Override
     public void mTokens() throws RecognitionException {
+        if (input.LA(1) == '\r' || input.LA(1) == '\n') {
+            super.mTokens();
+            return;
+        }
+
         if (lexer.getInCharLiteral()) {
             mCONTINUE_CHAR_LITERAL();
         } else if (lexer.getInStringLiteral()) {

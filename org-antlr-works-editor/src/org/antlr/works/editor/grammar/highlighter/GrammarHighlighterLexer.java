@@ -74,6 +74,11 @@ public class GrammarHighlighterLexer extends GrammarHighlighterLexerBase {
     
     @Override
     public void mTokens() throws RecognitionException {
+        if (input.LA(1) == '\r' || input.LA(1) == '\n') {
+            super.mTokens();
+            return;
+        }
+
         if (lexer.getInDoubleAngleStringLiteral()) {
             mCONTINUE_DOUBLE_ANGLE_STRING_LITERAL();
         } else if (lexer.getInComment()) {
