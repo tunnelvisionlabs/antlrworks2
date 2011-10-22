@@ -27,14 +27,23 @@
  */
 package org.antlr.netbeans.editor.navigation;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.*;
+import javax.swing.Action;
+import javax.swing.BorderFactory;
+import javax.swing.JComponent;
+import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.tree.TreePath;
 import org.antlr.netbeans.editor.navigation.actions.FilterSubmenuAction;
@@ -48,10 +57,15 @@ import org.openide.util.*;
 import org.openide.util.lookup.AbstractLookup;
 import org.openide.util.lookup.InstanceContent;
 
+import static org.antlr.netbeans.editor.navigation.Bundle.TIP_CollapsiblePanel;
+
 /**
  *
  * @author sam
  */
+@NbBundle.Messages({
+    "TIP_CollapsiblePanel=Click or press {0} to hide/show when the Navigator is active"
+})
 public abstract class NavigatorPanelUI extends javax.swing.JPanel implements ExplorerManager.Provider, FiltersManager.FilterChangeListener, PropertyChangeListener {
 
     private static final Rectangle ZERO = new Rectangle(0, 0, 1, 1);
@@ -87,7 +101,7 @@ public abstract class NavigatorPanelUI extends javax.swing.JPanel implements Exp
         // tooltip
         KeyStroke toggleKey = KeyStroke.getKeyStroke(KeyEvent.VK_T, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
         String keyText = Utilities.keyToString(toggleKey);
-        filtersPanel.setToolTipText(NbBundle.getMessage(NavigatorPanelUI.class, "TIP_CollapsiblePanel", keyText));
+        filtersPanel.setToolTipText(TIP_CollapsiblePanel(keyText));
 
         filters = createFilters();
         filters.getInstance().hookChangeListener(this);
@@ -262,11 +276,11 @@ public abstract class NavigatorPanelUI extends javax.swing.JPanel implements Exp
 
     protected static class NavigatorBeanTreeView extends BeanTreeView implements ToolTipManagerEx.ToolTipProvider {
 
-        private final NavigatorPanelUI ui;
+        private final NavigatorPanelUI navigatorPanelUI;
         private final ToolTipManagerEx toolTipManager;
 
         public NavigatorBeanTreeView(NavigatorPanelUI ui) {
-            this.ui = ui;
+            this.navigatorPanelUI = ui;
             this.toolTipManager = new ToolTipManagerEx( this );
             setUseSubstringInQuickSearch(true);
         }
@@ -304,7 +318,7 @@ public abstract class NavigatorPanelUI extends javax.swing.JPanel implements Exp
 
         @Override
         public Rectangle getToolTipSourceBounds(Point loc) {
-            NavigatorNode root = ui.getRootNode();
+            NavigatorNode root = navigatorPanelUI.getRootNode();
             if ( root == null ) {
                 return null;
             }

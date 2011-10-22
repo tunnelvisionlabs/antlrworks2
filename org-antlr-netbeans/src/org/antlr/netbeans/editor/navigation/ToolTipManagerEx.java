@@ -70,11 +70,16 @@ import org.openide.util.NbBundle;
 import org.openide.util.RequestProcessor;
 import org.openide.util.Utilities;
 
+import static org.antlr.netbeans.editor.navigation.Bundle.*;
+
 /**
  * Customized copy of javax.swing.ToolTipManager
  * 
  * @author S. Aubrecht
  */
+@NbBundle.Messages({
+    "LBL_PleaseWait=Please wait..."
+})
 public final class ToolTipManagerEx extends MouseAdapter implements MouseMotionListener  {
     
     private static final Logger LOG = Logger.getLogger(ToolTipManagerEx.class.getName());
@@ -102,7 +107,7 @@ public final class ToolTipManagerEx extends MouseAdapter implements MouseMotionL
 
     private ToolTipProvider provider;
     
-    private static final String WAITING_TEXT = NbBundle.getMessage( ToolTipManagerEx.class, "LBL_PleaseWait" ); //NOI18N
+    private static final String WAITING_TEXT = LBL_PleaseWait();
     
     private AWTEventListener awtListener;
     
@@ -213,7 +218,7 @@ public final class ToolTipManagerEx extends MouseAdapter implements MouseMotionL
         return exitTimer.getInitialDelay();
     }
 
-    protected void showTipWindow() {
+    private void showTipWindow() {
         if(insideComponent == null || !insideComponent.isShowing())
             return;
 	for (Container p = insideComponent.getParent(); p != null; p = p.getParent()) {
@@ -296,7 +301,7 @@ public final class ToolTipManagerEx extends MouseAdapter implements MouseMotionL
      * @param component  a <code>JComponent</code> object to add
      * @see JComponent#isFocusTraversable
      */
-    protected void registerComponent(JComponent component) {
+    private void registerComponent(JComponent component) {
         component.removeMouseListener(this);
         component.addMouseListener(this);
         component.removeMouseMotionListener(moveBeforeEnterListener);
@@ -321,7 +326,7 @@ public final class ToolTipManagerEx extends MouseAdapter implements MouseMotionL
      *
      * @param component  a <code>JComponent</code> object to remove
      */
-    protected void unregisterComponent(JComponent component) {
+    private void unregisterComponent(JComponent component) {
         component.removeMouseListener(this);
 	component.removeMouseMotionListener(moveBeforeEnterListener);
 
@@ -629,11 +634,11 @@ public final class ToolTipManagerEx extends MouseAdapter implements MouseMotionL
 	}
     }
 
-    protected ToolTipEx createToolTip() {
+    private ToolTipEx createToolTip() {
         return new ToolTipEx();
     }
     
-    protected AWTEventListener getAWTListener() {
+    private AWTEventListener getAWTListener() {
         if( null == awtListener ) {
             awtListener = new AWTEventListener() {
                 boolean armed = false;
@@ -644,13 +649,11 @@ public final class ToolTipManagerEx extends MouseAdapter implements MouseMotionL
                         if( ke.getKeyCode() == KeyEvent.VK_F1 && (ke.isControlDown() || ke.isMetaDown()) ) {
                             if( ke.getID() == KeyEvent.KEY_PRESSED ) {
                                 armed = true;
-                                return;
                             } else if( ke.getID() == KeyEvent.KEY_RELEASED && armed ) {
                                 ke.consume();
                                 armed = false;
                                 provider.invokeUserAction( mouseEvent );
                                 hideTipWindow();
-                                return;
                             }
                         } else if( !(ke.getKeyCode() == KeyEvent.VK_CONTROL || ke.getKeyCode() == KeyEvent.VK_META) ) {
                             armed = false;
@@ -755,7 +758,10 @@ public final class ToolTipManagerEx extends MouseAdapter implements MouseMotionL
             return new Dimension(arr[0], arr[1]);
         }
     }
-    
+
+    @NbBundle.Messages({
+        "HINT_EnlargeJavaDocToolip=Press {0} to enlarge"
+    })
     private class ToolTipEx extends JPanel {
         private HTMLDocView content;
         private JLabel shortcut;
@@ -775,8 +781,7 @@ public final class ToolTipManagerEx extends MouseAdapter implements MouseMotionL
             JScrollPane scroll = new JScrollPane( content );
             scroll.setHorizontalScrollBarPolicy( JScrollPane.HORIZONTAL_SCROLLBAR_NEVER );
             add( scroll, new GridBagConstraints(0,0,1,1,1.0,1.0,GridBagConstraints.CENTER,GridBagConstraints.BOTH,new Insets(0,0,0,0),0,0) );
-            shortcut = new JLabel( NbBundle.getMessage( ToolTipManagerEx.class, "HINT_EnlargeJavaDocToolip", //NOI18N
-                    Utilities.isMac() ? KeyEvent.getKeyText(KeyEvent.VK_META)+"+F1" : "Ctrl+F1" ) ); //NOI18N //NOI18N
+            shortcut = new JLabel( HINT_EnlargeJavaDocToolip( Utilities.isMac() ? KeyEvent.getKeyText(KeyEvent.VK_META)+"+F1" : "Ctrl+F1" ) );
             shortcut.setHorizontalAlignment( JLabel.CENTER );
             shortcut.setBorder( BorderFactory.createLineBorder(Color.black) );
             add( shortcut, new GridBagConstraints(0,1,1,1,0.0,0.0,GridBagConstraints.CENTER,GridBagConstraints.BOTH,new Insets(0,0,0,0),0,0) );

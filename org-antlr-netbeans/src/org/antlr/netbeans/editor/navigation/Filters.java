@@ -39,10 +39,16 @@ import org.openide.util.ImageUtilities;
 import org.openide.util.NbBundle;
 import org.openide.util.NbPreferences;
 
+import static org.antlr.netbeans.editor.navigation.Bundle.*;
+
 /**
  *
  * @author sam
  */
+@NbBundle.Messages({
+    "LBL_ShowInherited=Show Inherited",
+    "LBL_ShowInheritedTip=Show Inherited"
+})
 public abstract class Filters {
 
     protected static final String SHOW_INHERITED = "show_inherited";
@@ -129,8 +135,8 @@ public abstract class Filters {
     protected void describeFilters(FiltersDescription desc) {
         if (supportsInheritedMembers()) {
             desc.addFilter(SHOW_INHERITED,
-                    NbBundle.getMessage(Filters.class, "LBL_ShowInherited"),     //NOI18N
-                    NbBundle.getMessage(Filters.class, "LBL_ShowInheritedTip"),     //NOI18N
+                    LBL_ShowInherited(),
+                    LBL_ShowInheritedTip(),
                     false, ImageUtilities.loadImageIcon("org/antlr/netbeans/editor/navigation/resources/filterHideInherited.png", false), //NOI18N
                     null
                 );

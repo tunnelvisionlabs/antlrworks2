@@ -49,10 +49,15 @@ import org.openide.util.datatransfer.PasteType;
 import org.openide.util.lookup.AbstractLookup;
 import org.openide.util.lookup.InstanceContent;
 
+import static org.antlr.netbeans.editor.navigation.Bundle.LBL_WaitNode;
+
 /**
  *
  * @author sam
  */
+@NbBundle.Messages({
+    "LBL_WaitNode=Please wait..."
+})
 public abstract class NavigatorNode extends AbstractNode {
 
     private static Node WAIT_NODE;
@@ -307,7 +312,7 @@ public abstract class NavigatorNode extends AbstractNode {
 
         @Override
         public String getDisplayName() {
-            return NbBundle.getMessage(NavigatorNode.class, "LBL_WaitNode");
+            return LBL_WaitNode();
         }
 
         @Override
