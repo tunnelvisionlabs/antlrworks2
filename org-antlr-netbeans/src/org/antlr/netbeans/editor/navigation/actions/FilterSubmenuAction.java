@@ -54,6 +54,11 @@ import org.antlr.netbeans.editor.navigation.FiltersManager;
 import org.openide.util.NbBundle;
 import org.openide.util.actions.Presenter;
 
+import static org.antlr.netbeans.editor.navigation.actions.Bundle.LBL_FilterSubmenu;
+
+@NbBundle.Messages({
+    "LBL_FilterSubmenu=Filters"
+})
 public class FilterSubmenuAction extends AbstractAction implements Presenter.Popup {
     private static final String PROP_FILTER_NAME = "nbFilterName";
 
@@ -82,9 +87,9 @@ public class FilterSubmenuAction extends AbstractAction implements Presenter.Pop
     
     private JMenuItem createSubmenu () {
         FiltersDescription filtersDesc = filters.getDescription();
-        JMenuItem menu = new JMenu(NbBundle.getMessage(FilterSubmenuAction.class, "LBL_FilterSubmenu")); //NOI18N
-        JMenuItem menuItem = null;
-        String filterName = null;
+        JMenuItem menu = new JMenu(LBL_FilterSubmenu()); //NOI18N
+        JMenuItem menuItem;
+        String filterName;
         for (int i = 0; i < filtersDesc.getFilterCount(); i++) {
             filterName = filtersDesc.getName(i);
             menuItem = new JCheckBoxMenuItem(filtersDesc.getDisplayName(i), filters.isSelected(filterName));

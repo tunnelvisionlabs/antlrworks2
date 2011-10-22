@@ -66,10 +66,17 @@ import org.openide.util.NbBundle;
 import org.openide.util.Parameters;
 import org.openide.util.UserQuestionException;
 
+import static org.antlr.netbeans.editor.navigation.actions.Bundle.LBL_Goto;
+import static org.antlr.netbeans.editor.navigation.actions.Bundle.TXT_Question;
+
 /**
  *
  * @author sam
  */
+@NbBundle.Messages({
+    "LBL_Goto=Go to source",
+    "TXT_Question=Question"
+})
 public final class OpenAction extends AbstractAction {
 
     private final Description description;
@@ -78,7 +85,7 @@ public final class OpenAction extends AbstractAction {
         Parameters.notNull("description", description);
 
         this.description = description;
-        putValue(Action.NAME, NbBundle.getMessage(OpenAction.class, "LBL_Goto"));
+        putValue(Action.NAME, LBL_Goto());
     }
 
     @Override
@@ -95,7 +102,7 @@ public final class OpenAction extends AbstractAction {
                 } catch (UserQuestionException uqe) {
                     final Object value = DialogDisplayer.getDefault().notify(
                             new NotifyDescriptor.Confirmation(uqe.getLocalizedMessage(),
-                            NbBundle.getMessage(OpenAction.class, "TXT_Question"),
+                            TXT_Question(),
                             NotifyDescriptor.YES_NO_OPTION));
                     if (value != NotifyDescriptor.YES_OPTION) {
                         return;
