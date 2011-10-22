@@ -52,6 +52,7 @@ public class ANTLRHighlighter extends ANTLRHighlighterBase<ANTLRHighlighterState
             add("catch");
             add("finally");
             add("grammar");
+            add("mode");
             add("private");
             add("protected");
             add("public");
@@ -83,6 +84,7 @@ public class ANTLRHighlighter extends ANTLRHighlighterBase<ANTLRHighlighterState
     private final AttributeSet actionStringLiteralAttributes;
     private final AttributeSet actionSymbolReferenceAttributes;
 
+    @SuppressWarnings("LeakingThisInConstructor")
     public ANTLRHighlighter(StyledDocument document) {
         super(document);
 
