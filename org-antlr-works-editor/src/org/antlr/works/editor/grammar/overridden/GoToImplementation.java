@@ -37,6 +37,8 @@ import org.netbeans.api.progress.ProgressUtils;
 import org.netbeans.editor.BaseAction;
 import org.openide.util.NbBundle;
 
+import static org.antlr.works.editor.grammar.overridden.Bundle.CTL_GoToImplementation;
+
 /**
  *
  * @author sam
@@ -46,6 +48,10 @@ import org.openide.util.NbBundle;
         mimeType = GrammarEditorKit.GRAMMAR_MIME_TYPE,
         popupText = "#CTL_GoToImplementation"
 )
+@NbBundle.Messages({
+    "CTL_GoToImplementation=Go to Implementation",
+    "goto-implementation=Go to Implementation"
+})
 public class GoToImplementation extends BaseAction {
 
     public GoToImplementation() {
@@ -67,7 +73,7 @@ public class GoToImplementation extends BaseAction {
             public void run() {
                 goToImplementation(c, doc, caretPos, cancel);
             }
-        }, NbBundle.getMessage(GoToImplementation.class, "CTL_GoToImplementation"), cancel, false);
+        }, CTL_GoToImplementation(), cancel, false);
     }
 
     public static void goToImplementation(final JTextComponent c, final Document document, final int caretPosition, final AtomicBoolean cancel) {
