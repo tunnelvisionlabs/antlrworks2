@@ -408,7 +408,7 @@ rule
 	  // parser or lexer rules, the semantic verification phase will
 	  // reject any rules that make no sense, such as lexer rules in
 	  // a pure parser or tree parser.
-	  id
+	  name=id
 
 	  // Immediately following the rulename, there may be a specification
 	  // of input parameters for the rule. We do not do anything with the
