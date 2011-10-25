@@ -27,9 +27,18 @@
  */
 package org.antlr.works.editor.grammar.fold;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.text.StyledDocument;
+import org.antlr.runtime.CommonToken;
+import org.antlr.runtime.Token;
+import org.antlr.v4.parse.ANTLRParser;
+import org.antlr.v4.runtime.misc.IntervalSet;
+import org.antlr.v4.tool.ast.GrammarAST;
+import org.antlr.v4.tool.ast.GrammarRootAST;
 import org.antlr.works.editor.grammar.parser.GrammarParser.GrammarParserResult;
+import org.antlr.works.editor.grammar.parser.GrammarParserV4;
+import org.openide.text.NbDocument;
 
 /**
  *
@@ -39,7 +48,118 @@ public class GrammarFoldManagerTaskV4 extends GrammarFoldManagerTask {
 
     @Override
     protected List<FoldInfo> calculateFolds(StyledDocument document, GrammarParserResult result) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        GrammarParserV4.GrammarParserResultV4 result4 = (GrammarParserV4.GrammarParserResultV4)result;
+
+        final List<GrammarFoldManagerTask.FoldInfo> folds = new ArrayList<GrammarFoldManagerTask.FoldInfo>();
+
+        GrammarRootAST parseResult = result4.getResult().getResult();
+        if (parseResult != null) {
+            IntervalSet foldTypes = new IntervalSet();
+            foldTypes.add(ANTLRParser.MODE);
+            foldTypes.add(ANTLRParser.RULE);
+            foldTypes.add(ANTLRParser.TOKENS);
+            foldTypes.add(ANTLRParser.OPTIONS);
+//            foldTypes.add(ANTLRParser.AT);
+
+            List<GrammarAST> foldNodes = parseResult.getNodesWithType(foldTypes);
+            for (GrammarAST child : foldNodes) {
+                String blockHint = null;
+                switch (child.getType()) {
+                case ANTLRParser.MODE:
+                    blockHint = "mode " + child.getChild(0).getText();
+                    break;
+
+                case ANTLRParser.RULE:
+                    blockHint = child.getChild(0).getText() + "...";
+                    break;
+
+                case ANTLRParser.TOKENS:
+                    blockHint = "tokens {...}";
+                    break;
+
+                case ANTLRParser.OPTIONS:
+                    blockHint = "options {...}";
+                    break;
+
+//                case ANTLRParser.AT:
+//                    if (child.getChildCount() == 2) {
+//                        blockHint = "@" + child.getChild(0) + " {...}";
+//                    } else if (child.getChildCount() == 3) {
+//                        blockHint = "@" + child.getChild(0) + "::" + child.getChild(1).getText() + " {...}";
+//                    }
+//                    break;
+
+                default:
+                    continue;
+                }
+
+                if (blockHint == null || blockHint.isEmpty()) {
+                    continue;
+                }
+
+                GrammarFoldManagerTask.FoldInfo fold = createFold(child, blockHint, document, result.getResult().getTokens());
+                if (fold != null) {
+                    folds.add(fold);
+                }
+            }
+
+            for (CommonToken token : result4.getResult().getTokens()) {
+                switch (token.getType()) {
+                case ANTLRParser.DOC_COMMENT:
+                case ANTLRParser.COMMENT:
+                case ANTLRParser.ACTION:
+                    int startLine = NbDocument.findLineNumber(document, token.getStartIndex());
+                    int stopLine = NbDocument.findLineNumber(document, token.getStopIndex() + 1);
+                    if (startLine >= stopLine) {
+                        continue;
+                    }
+
+                    String blockHint = null;
+                    if (token.getType() == ANTLRParser.DOC_COMMENT) {
+                        blockHint = "/** ... */";
+                    } else if (token.getType() == ANTLRParser.COMMENT) {
+                        blockHint = "/* ... */";
+                    } else if (token.getType() == ANTLRParser.ACTION) {
+                        blockHint = "{}";
+                    } else {
+                        throw new IllegalStateException();
+                    }
+
+                    GrammarFoldManagerTask.FoldInfo info = new GrammarFoldManagerTask.FoldInfo(document, token.getStartIndex(), token.getStopIndex() + 1, blockHint);
+                    folds.add(info);
+
+                    break;
+
+                default:
+                    continue;
+                }
+            }
+        }
+
+        return folds;
+    }
+
+    private static FoldInfo createFold(GrammarAST child, String blockHint, StyledDocument document, CommonToken[] tokens) {
+        CommonToken startToken = tokens[child.getTokenStartIndex()];
+        CommonToken stopToken = tokens[child.getTokenStopIndex()];
+
+        if (startToken.getType() == ANTLRParser.DOC_COMMENT) {
+            for (int index = child.getTokenStartIndex(); index <= child.getTokenStopIndex(); index++) {
+                startToken = tokens[index];
+                if (startToken.getType() != ANTLRParser.DOC_COMMENT && startToken.getChannel() == Token.DEFAULT_CHANNEL) {
+                    break;
+                }
+            }
+        }
+
+        int startLine = NbDocument.findLineNumber(document, startToken.getStartIndex());
+        int stopLine = NbDocument.findLineNumber(document, stopToken.getStopIndex() + 1);
+        if (startLine >= stopLine) {
+            return null;
+        }
+
+        GrammarFoldManagerTask.FoldInfo fold = new GrammarFoldManagerTask.FoldInfo(document, startToken.getStartIndex(), stopToken.getStopIndex() + 1, blockHint);
+        return fold;
     }
 
 }
