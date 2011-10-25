@@ -32,6 +32,7 @@ import org.antlr.v4.runtime.ANTLRStringStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.works.editor.grammar.parser.GrammarParser.GrammarParserResult;
+import org.antlr.works.editor.grammar.parser.GrammarParserV3;
 import org.netbeans.modules.parsing.spi.ParserResultTask;
 import org.netbeans.modules.parsing.spi.Scheduler;
 import org.netbeans.modules.parsing.spi.SchedulerEvent;
@@ -51,6 +52,11 @@ public class UpdateAnchorsTask extends ParserResultTask<GrammarParserResult> {
         try {
             Document document = result.getSnapshot().getSource().getDocument(false);
             if (document == null) {
+                return;
+            }
+
+            if (result instanceof GrammarParserV3.GrammarParserResultV3) {
+                document.putProperty(UpdateAnchorsTask.class, null);
                 return;
             }
 
