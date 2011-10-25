@@ -28,6 +28,7 @@
 package org.antlr.works.editor.grammar.parser;
 
 import org.antlr.runtime.RecognitionException;
+import org.antlr.runtime.Token;
 import org.netbeans.spi.editor.hints.Severity;
 
 /**
@@ -35,14 +36,20 @@ import org.netbeans.spi.editor.hints.Severity;
  * @author sam
  */
 public class SyntaxError {
+    private final Token offendingToken;
     private final RecognitionException exception;
     private final String message;
     private final Severity severity;
 
-    public SyntaxError(RecognitionException exception, String message, Severity severity) {
+    public SyntaxError(Token offendingToken, RecognitionException exception, String message, Severity severity) {
+        this.offendingToken = offendingToken;
         this.exception = exception;
         this.message = message;
         this.severity = severity;
+    }
+
+    public Token getOffendingToken() {
+        return offendingToken;
     }
 
     public RecognitionException getException() {

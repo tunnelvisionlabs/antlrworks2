@@ -53,17 +53,18 @@ public class SyntaxErrorsHighlightingTask extends ParserResultTask<GrammarParser
             Document document = result.getSnapshot().getSource().getDocument(false);
             List<ErrorDescription> errors = new ArrayList<ErrorDescription>();
             for (SyntaxError syntaxError : syntaxErrors) {
-                if (!(syntaxError.getException() instanceof RecognitionException))
-                    continue;
-
+                CommonToken offendingToken = syntaxError.getOffendingToken() instanceof CommonToken ? (CommonToken)syntaxError.getOffendingToken() : null;
                 RecognitionException exception = syntaxError.getException();
                 String message = syntaxError.getMessage();
 
+                if (offendingToken == null && exception != null && exception.token instanceof CommonToken) {
+                    offendingToken = (CommonToken)exception.token;
+                }
+
                 // first try to get the specific location from a token
-                if (exception.token instanceof CommonToken) {
-                    CommonToken commonToken = (CommonToken)exception.token;
-                    int startOffset = result.getSnapshot().getOriginalOffset(commonToken.getStartIndex());
-                    int endOffsetInclusive = result.getSnapshot().getOriginalOffset(commonToken.getStopIndex());
+                if (offendingToken != null) {
+                    int startOffset = result.getSnapshot().getOriginalOffset(offendingToken.getStartIndex());
+                    int endOffsetInclusive = result.getSnapshot().getOriginalOffset(offendingToken.getStopIndex());
 
                     if (startOffset < 0 || endOffsetInclusive < 0) {
                         continue;
@@ -78,7 +79,7 @@ public class SyntaxErrorsHighlightingTask extends ParserResultTask<GrammarParser
                     }
                 }
 
-                int line = exception.line;
+                int line = exception != null ? exception.line : -1;
                 if (line <= 0) {
                     continue;
                 }

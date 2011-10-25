@@ -28,22 +28,46 @@
 package org.antlr.works.editor.grammar.parser;
 
 import java.util.Collection;
+import org.antlr.works.editor.grammar.GrammarEditorKit;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.netbeans.modules.parsing.api.Snapshot;
+import org.netbeans.modules.parsing.api.Task;
+import org.netbeans.modules.parsing.spi.ParseException;
 import org.netbeans.modules.parsing.spi.Parser;
 import org.netbeans.modules.parsing.spi.ParserFactory;
+import org.netbeans.modules.parsing.spi.SourceModificationEvent;
 
 @MimeRegistration(mimeType="text/x-antlr3", service=ParserFactory.class)
 public class GrammarParserFactory extends ParserFactory {
 
-    public static final boolean USE_V4 = true;
-
     @Override
     public Parser createParser(Collection<Snapshot> snapshots) {
-        if (USE_V4) {
-            return new GrammarParserV4();
-        } else {
-            return new GrammarParserV3();
+        return new ParserSelector();
+    }
+
+    private static class ParserSelector extends GrammarParser {
+
+        private final GrammarParserV3 v3 = new GrammarParserV3();
+        private final GrammarParserV4 v4 = new GrammarParserV4();
+        private boolean compatibility;
+
+        @Override
+        public void parse(Snapshot snapshot, Task task, SourceModificationEvent sme) throws ParseException {
+            compatibility = GrammarEditorKit.isLegacyMode(snapshot);
+            if (compatibility) {
+                v3.parse(snapshot, task, sme);
+            } else {
+                v4.parse(snapshot, task, sme);
+            }
+        }
+
+        @Override
+        public GrammarParserResult createResult(Task task) {
+            if (compatibility) {
+                return v3.createResult(task);
+            } else {
+                return v4.createResult(task);
+            }
         }
     }
 }

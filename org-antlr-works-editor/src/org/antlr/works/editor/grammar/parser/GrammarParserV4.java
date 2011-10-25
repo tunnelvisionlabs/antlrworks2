@@ -34,10 +34,13 @@ import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.Lexer;
 import org.antlr.runtime.RecognitionException;
+import org.antlr.runtime.Token;
 import org.antlr.v4.Tool;
 import org.antlr.v4.tool.ANTLRMessage;
 import org.antlr.v4.tool.ANTLRToolListener;
 import org.antlr.v4.tool.Grammar;
+import org.antlr.v4.tool.GrammarSemanticsMessage;
+import org.antlr.v4.tool.GrammarSyntaxMessage;
 import org.antlr.v4.tool.ast.GrammarRootAST;
 import org.netbeans.modules.parsing.api.Snapshot;
 import org.netbeans.modules.parsing.api.Task;
@@ -46,6 +49,7 @@ import org.netbeans.modules.parsing.spi.SourceModificationEvent;
 import org.netbeans.spi.editor.hints.Severity;
 import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileUtil;
+import org.stringtemplate.v4.ST;
 
 /**
  *
@@ -60,7 +64,7 @@ public class GrammarParserV4 extends GrammarParser {
     public void parse(Snapshot snapshot, Task task, SourceModificationEvent sme) throws ParseException {
         try {
             final List<SyntaxError> syntaxErrors = new ArrayList<SyntaxError>();
-            Tool tool = new Tool();
+            final Tool tool = new Tool();
             tool.addListener(new ANTLRToolListener() {
 
                 @Override
@@ -69,22 +73,43 @@ public class GrammarParserV4 extends GrammarParser {
 
                 @Override
                 public void error(ANTLRMessage antlrm) {
+                    Token offendingToken = null;
                     RecognitionException e = null;
                     if (antlrm.e instanceof RecognitionException) {
                         e = (RecognitionException)antlrm.e;
+                        offendingToken = e.token;
                     }
 
-                    syntaxErrors.add(new SyntaxError(e, antlrm.toString(), Severity.ERROR));
+                    if (antlrm instanceof GrammarSyntaxMessage) {
+                        e = ((GrammarSyntaxMessage)antlrm).antlrException;
+                        offendingToken = ((GrammarSyntaxMessage)antlrm).offendingToken;
+                    } else if (antlrm instanceof GrammarSemanticsMessage) {
+                        offendingToken = ((GrammarSemanticsMessage)antlrm).offendingToken;
+                    }
+
+                    ST messageTemplate = tool.errMgr.getMessageTemplate(antlrm);
+                    String outputMessage = messageTemplate.render();
+                    syntaxErrors.add(new SyntaxError(offendingToken, e, outputMessage, Severity.ERROR));
                 }
 
                 @Override
                 public void warning(ANTLRMessage antlrm) {
+                    Token offendingToken = null;
                     RecognitionException e = null;
                     if (antlrm.e instanceof RecognitionException) {
                         e = (RecognitionException)antlrm.e;
+                        offendingToken = e.token;
                     }
 
-                    syntaxErrors.add(new SyntaxError(e, antlrm.toString(), Severity.WARNING));
+                    if (antlrm instanceof GrammarSyntaxMessage) {
+                        offendingToken = ((GrammarSyntaxMessage)antlrm).offendingToken;
+                    } else if (antlrm instanceof GrammarSemanticsMessage) {
+                        offendingToken = ((GrammarSemanticsMessage)antlrm).offendingToken;
+                    }
+
+                    ST messageTemplate = tool.errMgr.getMessageTemplate(antlrm);
+                    String outputMessage = messageTemplate.render();
+                    syntaxErrors.add(new SyntaxError(offendingToken, e, outputMessage, Severity.WARNING));
                 }
             });
 

@@ -32,6 +32,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
+import java.util.Set;
 import javax.swing.Action;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
@@ -183,7 +184,8 @@ public class GoToSupport {
             case GrammarHighlighterLexer.IDENTIFIER:
             case GrammarHighlighterLexer.REFERENCE:
             case ActionHighlighterLexer.ACTION_REFERENCE:
-                if (ANTLRHighlighter.getKeywords().contains(token.getText())) {
+                Set<String> keywords = GrammarEditorKit.isLegacyMode(document) ? ANTLRHighlighter.getLegacyKeywords() : ANTLRHighlighter.getKeywords();
+                if (keywords.contains(token.getText())) {
                     return null;
                 }
 

@@ -29,17 +29,15 @@ package org.antlr.works.editor.grammar.fold;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Map;
-import java.util.WeakHashMap;
-import org.antlr.works.editor.grammar.parser.GrammarParserFactory;
+import org.antlr.works.editor.grammar.parser.GrammarParser;
+import org.antlr.works.editor.grammar.parser.GrammarParserV4;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.netbeans.modules.parsing.api.Snapshot;
+import org.netbeans.modules.parsing.spi.ParserResultTask;
+import org.netbeans.modules.parsing.spi.Scheduler;
+import org.netbeans.modules.parsing.spi.SchedulerEvent;
 import org.netbeans.modules.parsing.spi.SchedulerTask;
 import org.netbeans.modules.parsing.spi.TaskFactory;
-import org.openide.filesystems.FileObject;
-import org.openide.loaders.DataObject;
-import org.openide.loaders.DataObjectNotFoundException;
-import org.openide.util.Exceptions;
 
 /**
  *
@@ -47,42 +45,41 @@ import org.openide.util.Exceptions;
  */
 @MimeRegistration(mimeType="text/x-antlr3", service=TaskFactory.class)
 public class GrammarFoldManagerTaskFactory extends TaskFactory {
-    
-    private static final Map<DataObject, GrammarFoldManagerTask> tasks =
-        new WeakHashMap<DataObject, GrammarFoldManagerTask>();
-
-    public static GrammarFoldManagerTask getTask(FileObject file) {
-        try {
-            DataObject dataObject = DataObject.find(file);
-            synchronized (tasks) {
-                GrammarFoldManagerTask task = tasks.get(dataObject);
-                return task;
-            }
-        } catch (DataObjectNotFoundException ex) {
-            Exceptions.printStackTrace(ex);
-            return null;
-        }
-    }
 
     @Override
     public Collection<? extends SchedulerTask> create(Snapshot snapshot) {
+        return Collections.singleton(new TaskSelector());
+    }
 
-        GrammarFoldManagerTask task =
-            GrammarParserFactory.USE_V4
-            ? new GrammarFoldManagerTaskV4()
-            : new GrammarFoldManagerTaskV3();
+    private static final class TaskSelector extends ParserResultTask<GrammarParser.GrammarParserResult> {
 
-        try {
-            DataObject dataObject = DataObject.find(snapshot.getSource().getFileObject());
-            if (dataObject != null) {
-                synchronized (tasks) {
-                    tasks.put(dataObject, task);
-                }
+        private final GrammarFoldManagerTaskV3 v3 = new GrammarFoldManagerTaskV3();
+        private final GrammarFoldManagerTaskV4 v4 = new GrammarFoldManagerTaskV4();
+
+        @Override
+        public void run(GrammarParser.GrammarParserResult result, SchedulerEvent event) {
+            if (result instanceof GrammarParserV4.GrammarParserResultV4) {
+                v4.run(result, event);
+            } else {
+                v3.run(result, event);
             }
-        } catch (DataObjectNotFoundException ex) {
         }
 
-        return Collections.singleton(task);
+        @Override
+        public int getPriority() {
+            return v4.getPriority();
+        }
+
+        @Override
+        public Class<? extends Scheduler> getSchedulerClass() {
+            return v4.getSchedulerClass();
+        }
+
+        @Override
+        public void cancel() {
+            v3.cancel();
+            v4.cancel();
+        }
     }
 
 }

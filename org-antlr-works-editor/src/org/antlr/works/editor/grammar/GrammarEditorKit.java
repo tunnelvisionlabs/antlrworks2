@@ -27,16 +27,46 @@
  */
 package org.antlr.works.editor.grammar;
 
+import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.prefs.Preferences;
 import javax.swing.Action;
+import javax.swing.ButtonModel;
+import javax.swing.Icon;
+import javax.swing.JComponent;
+import javax.swing.JEditorPane;
+import javax.swing.JToggleButton;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.text.Document;
 import javax.swing.text.EditorKit;
+import javax.swing.text.JTextComponent;
 import javax.swing.text.TextAction;
 import org.antlr.netbeans.editor.commenting.BlockCommentFormat;
 import org.antlr.netbeans.editor.commenting.ExtendedCommentAction;
 import org.antlr.netbeans.editor.commenting.ExtendedUncommentAction;
 import org.antlr.netbeans.editor.commenting.LineCommentFormat;
 import org.antlr.netbeans.editor.commenting.StandardCommenter;
+import org.netbeans.api.editor.mimelookup.MimeLookup;
+import org.netbeans.api.editor.mimelookup.MimePath;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
+import org.netbeans.api.editor.settings.SimpleValueNames;
+import org.netbeans.editor.BaseAction;
+import org.netbeans.editor.BaseDocument;
+import org.netbeans.lib.editor.util.swing.DocumentUtilities;
 import org.netbeans.modules.editor.NbEditorKit;
+import org.netbeans.modules.parsing.api.ParserManager;
+import org.netbeans.modules.parsing.api.Snapshot;
+import org.netbeans.modules.parsing.api.Source;
+import org.netbeans.modules.parsing.impl.Utilities;
+import org.openide.util.ContextAwareAction;
+import org.openide.util.ImageUtilities;
+import org.openide.util.Lookup;
+import org.openide.util.NbBundle;
+import org.openide.util.WeakListeners;
+import org.openide.util.actions.Presenter;
 
 /**
  *
@@ -45,10 +75,22 @@ import org.netbeans.modules.editor.NbEditorKit;
 @MimeRegistration(mimeType="text/x-antlr3", service=EditorKit.class)
 public class GrammarEditorKit extends NbEditorKit {
 
+    public static final String PROP_LEGACY_MODE = "legacy-mode";
+
     public static final String GRAMMAR_MIME_TYPE = "text/x-antlr3";
 
     private static final LineCommentFormat LINE_COMMENT_FORMAT = new LineCommentFormat("//");
     private static final BlockCommentFormat BLOCK_COMMENT_FORMAT = new BlockCommentFormat("/*", "*/");
+
+    @Override
+    protected void initDocument(BaseDocument doc) {
+        super.initDocument(doc);
+
+        Preferences preferences = MimeLookup.getLookup(GRAMMAR_MIME_TYPE).lookup(Preferences.class);
+        if (preferences != null) {
+            preferences.putInt(SimpleValueNames.COMPLETION_AUTO_POPUP_DELAY, 0);
+        }
+    }
 
     @Override
     public String getContentType() {
@@ -66,6 +108,7 @@ public class GrammarEditorKit extends NbEditorKit {
         ExtendedUncommentAction uncommentAction = new ExtendedUncommentAction(commenter);
 
         Action[] actions = {
+            new ToggleLegacyModeAction()
         };
 
         actions = TextAction.augmentList(superActions, actions);
@@ -78,6 +121,114 @@ public class GrammarEditorKit extends NbEditorKit {
         }
 
         return actions;
+    }
+
+    public static boolean isLegacyMode(Snapshot snapshot) {
+        Document document = snapshot.getSource().getDocument(false);
+        if (document == null) {
+            return false;
+        }
+
+        return isLegacyMode(document);
+    }
+
+    public static boolean isLegacyMode(Document document) {
+        Boolean mode = (Boolean)document.getProperty(PROP_LEGACY_MODE);
+        if (mode == null) {
+            return false;
+        }
+
+        return mode;
+    }
+
+    @NbBundle.Messages({
+        "toggle-legacy-mode=Toggle Legacy Mode"
+    })
+    public static class ToggleLegacyModeAction extends BaseAction implements Presenter.Toolbar, ContextAwareAction, PropertyChangeListener {
+
+        /** Toggle legacy mode action */
+        public static final String toggleLegacyModeAction = "toggle-legacy-mode"; // NOI18N
+
+        private final Document document;
+
+        private JToggleButton button;
+
+        public ToggleLegacyModeAction() {
+            this(null);
+        }
+
+        @SuppressWarnings("LeakingThisInConstructor")
+        public ToggleLegacyModeAction(Document document) {
+            super(toggleLegacyModeAction);
+            putValue(Action.SMALL_ICON, ImageUtilities.loadImageIcon("org/antlr/works/editor/grammar/resources/legacy-mode.png", false)); // NOI18N
+            putValue("noIconInMenu", true); // NOI18N
+            this.document = document;
+            if (document != null) {
+                DocumentUtilities.addPropertyChangeListener(document, this);
+                updateState();
+            }
+        }
+
+        @Override
+        protected Class<?> getShortDescriptionBundleClass() {
+            return ToggleLegacyModeAction.class;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent evt, JTextComponent target) {
+            if (target != null) {
+                boolean current = isLegacyMode(target.getDocument());
+                target.getDocument().putProperty(PROP_LEGACY_MODE, !current);
+
+                Source source = Source.create(target.getDocument());
+                Utilities.revalidate(source);
+            }
+        }
+
+        @Override
+        public Component getToolbarPresenter() {
+            if (button == null) {
+                button = new JToggleButton();
+                button.putClientProperty("hideActionText", true);
+                button.setIcon((Icon)getValue(SMALL_ICON));
+                button.setAction(this);
+            }
+
+            return button;
+        }
+
+        @Override
+        public Action createContextAwareInstance(Lookup actionContext) {
+            JEditorPane pane = actionContext.lookup(JEditorPane.class);
+            @SuppressWarnings("LocalVariableHidesMemberVariable")
+            Document document = pane != null ? pane.getDocument() : null;
+            if (document != null) {
+                ToggleLegacyModeAction action = new ToggleLegacyModeAction(document);
+                return action;
+            }
+
+            return this;
+        }
+
+        @Override
+        public void propertyChange(PropertyChangeEvent evt) {
+            if (document == evt.getSource()) {
+                if (PROP_LEGACY_MODE.equals(evt.getPropertyName())) {
+                    updateState();
+                }
+            }
+        }
+
+        private void updateState() {
+            if (document != null) {
+                boolean legacyMode = isLegacyMode(document);
+                if (button != null) {
+                    button.setSelected(legacyMode);
+                    button.setContentAreaFilled(legacyMode);
+                    button.setBorderPainted(legacyMode);
+                }
+            }
+        }
     }
 
 }

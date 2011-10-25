@@ -38,6 +38,13 @@
                         <file name="uncomment">
                             <attr name="position" intvalue="19300"/>
                         </file>
+                        <file name="separator-before-compatibility-mode.instance">
+                            <attr name="instanceClass" stringvalue="javax.swing.JSeparator"/>
+                            <attr name="position" intvalue="20100"/>
+                        </file>
+                        <file name="toggle-legacy-mode">
+                            <attr name="position" intvalue="20200"/>
+                        </file>
                     </folder>
                 </folder>
 

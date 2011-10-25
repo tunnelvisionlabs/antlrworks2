@@ -68,7 +68,7 @@ public class ANTLRErrorProvidingParser extends ANTLRParser {
     public void displayRecognitionError(String[] tokenNames, RecognitionException e) {
         //String header = getErrorHeader(e);
         String message = getErrorMessage(e, tokenNames);
-        syntaxErrors.add(new SyntaxError(e, message, Severity.ERROR));
+        syntaxErrors.add(new SyntaxError(e != null ? e.token : null, e, message, Severity.ERROR));
 
         super.displayRecognitionError(tokenNames, e);
     }
@@ -95,7 +95,7 @@ public class ANTLRErrorProvidingParser extends ANTLRParser {
                 if (parser == null)
                     return;
 
-                parser.syntaxErrors.add(new SyntaxError(syntaxMessage.exception, msg.toString(), Severity.ERROR));
+                parser.syntaxErrors.add(new SyntaxError(syntaxMessage.offendingToken, syntaxMessage.exception, msg.toString(), Severity.ERROR));
             }
         }
 

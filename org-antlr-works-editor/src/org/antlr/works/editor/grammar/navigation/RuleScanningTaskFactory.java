@@ -46,9 +46,14 @@ package org.antlr.works.editor.grammar.navigation;
 
 import java.util.Collection;
 import java.util.Collections;
-import org.antlr.works.editor.grammar.parser.GrammarParserFactory;
+import org.antlr.works.editor.grammar.parser.GrammarParser;
+import org.antlr.works.editor.grammar.parser.GrammarParser.GrammarParserResult;
+import org.antlr.works.editor.grammar.parser.GrammarParserV4;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.netbeans.modules.parsing.api.Snapshot;
+import org.netbeans.modules.parsing.spi.ParserResultTask;
+import org.netbeans.modules.parsing.spi.Scheduler;
+import org.netbeans.modules.parsing.spi.SchedulerEvent;
 import org.netbeans.modules.parsing.spi.SchedulerTask;
 import org.netbeans.modules.parsing.spi.TaskFactory;
 
@@ -57,12 +62,37 @@ public class RuleScanningTaskFactory extends TaskFactory {
 
     @Override
     public Collection<? extends SchedulerTask> create(Snapshot snapshot) {
-        RuleScanningTask task =
-            GrammarParserFactory.USE_V4
-            ? new RuleScanningTaskV4()
-            : new RuleScanningTaskV3();
-
-        return Collections.singleton(task);
+        return Collections.singleton(new TaskSelector());
     }
 
+    private static final class TaskSelector extends ParserResultTask<GrammarParser.GrammarParserResult> {
+
+        private final RuleScanningTaskV3 v3 = new RuleScanningTaskV3();
+        private final RuleScanningTaskV4 v4 = new RuleScanningTaskV4();
+
+        @Override
+        public void run(GrammarParserResult result, SchedulerEvent event) {
+            if (result instanceof GrammarParserV4.GrammarParserResultV4) {
+                v4.run(result, event);
+            } else {
+                v3.run(result, event);
+            }
+        }
+
+        @Override
+        public int getPriority() {
+            return v4.getPriority();
+        }
+
+        @Override
+        public Class<? extends Scheduler> getSchedulerClass() {
+            return v4.getSchedulerClass();
+        }
+
+        @Override
+        public void cancel() {
+            v3.cancel();
+            v4.cancel();
+        }
+    }
 }

@@ -27,6 +27,8 @@
  */
 package org.antlr.works.editor.grammar.highlighter;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -36,15 +38,18 @@ import org.antlr.netbeans.editor.highlighting.ANTLRHighlighterBase;
 import org.antlr.netbeans.editor.highlighting.TokenSourceWithState;
 import org.antlr.runtime.CharStream;
 import org.antlr.runtime.CommonToken;
+import org.antlr.works.editor.grammar.GrammarEditorKit;
 import org.netbeans.api.editor.mimelookup.MimeLookup;
 import org.netbeans.api.editor.mimelookup.MimePath;
 import org.netbeans.api.editor.settings.FontColorSettings;
+import org.netbeans.lib.editor.util.swing.DocumentUtilities;
+import org.openide.text.NbDocument;
 import org.openide.util.Lookup;
 
 public class ANTLRHighlighter extends ANTLRHighlighterBase<ANTLRHighlighterState> {
     public static final String DOCUMENT_PROPERTY = "grammar-highlighter";
 
-    private static final HashSet<String> KEYWORDS =
+    private static final HashSet<String> LEGACY_KEYWORDS =
         new HashSet<String>()
         {{
             add("lexer");
@@ -52,7 +57,6 @@ public class ANTLRHighlighter extends ANTLRHighlighterBase<ANTLRHighlighterState
             add("catch");
             add("finally");
             add("grammar");
-            add("mode");
             add("private");
             add("protected");
             add("public");
@@ -64,6 +68,13 @@ public class ANTLRHighlighter extends ANTLRHighlighterBase<ANTLRHighlighterState
             add("fragment");
             add("tokens");
             add("options");
+        }};
+
+    private static final HashSet<String> KEYWORDS =
+        new HashSet<String>(LEGACY_KEYWORDS)
+        {{
+            add("mode");
+            add("locals");
         }};
 
     private final AttributeSet identifierAttributes;
@@ -84,10 +95,21 @@ public class ANTLRHighlighter extends ANTLRHighlighterBase<ANTLRHighlighterState
     private final AttributeSet actionStringLiteralAttributes;
     private final AttributeSet actionSymbolReferenceAttributes;
 
+    private boolean legacyMode;
+
     @SuppressWarnings("LeakingThisInConstructor")
-    public ANTLRHighlighter(StyledDocument document) {
+    public ANTLRHighlighter(final StyledDocument document) {
         super(document);
 
+        DocumentUtilities.addPropertyChangeListener(document, new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                if (evt == null || evt.getPropertyName() == null || GrammarEditorKit.PROP_LEGACY_MODE.equals(evt.getPropertyName())) {
+                    legacyMode = GrammarEditorKit.isLegacyMode(document);
+                    ANTLRHighlighter.this.forceRehighlightLines(0, NbDocument.findLineRootElement(document).getElementCount() - 1);
+                }
+            }
+        });
         document.putProperty(DOCUMENT_PROPERTY, this);
 
         Lookup lookup = MimeLookup.getLookup(MimePath.parse("text/x-antlr3"));
@@ -109,6 +131,12 @@ public class ANTLRHighlighter extends ANTLRHighlighterBase<ANTLRHighlighterState
         actionCommentAttributes = getFontAndColors(settings, "actioncomment");
         actionStringLiteralAttributes = getFontAndColors(settings, "actionstringliteral");
         actionSymbolReferenceAttributes = getFontAndColors(settings, "actionreference");
+
+        legacyMode = GrammarEditorKit.isLegacyMode(document);
+    }
+
+    public static HashSet<String> getLegacyKeywords() {
+        return LEGACY_KEYWORDS;
     }
 
     public static Set<String> getKeywords() {
@@ -135,7 +163,8 @@ public class ANTLRHighlighter extends ANTLRHighlighterBase<ANTLRHighlighterState
         switch (token.getType()) {
         case GrammarHighlighterLexer.IDENTIFIER:
             String text = token.getText();
-            if (KEYWORDS.contains(text)) {
+            Set<String> keywords = legacyMode ? LEGACY_KEYWORDS : KEYWORDS;
+            if (keywords.contains(text)) {
                 return keywordAttributes;
             }
             
