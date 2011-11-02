@@ -20,7 +20,7 @@
                     <compile-dependency/>
                     <run-dependency>
                         <release-version>3</release-version>
-                        <specification-version>3.9.1.13.10</specification-version>
+                        <specification-version>3.14.0.16.24</specification-version>
                     </run-dependency>
                 </dependency>
                 <dependency>
@@ -48,6 +48,15 @@
                     <run-dependency>
                         <release-version>1</release-version>
                         <specification-version>1.36.1</specification-version>
+                    </run-dependency>
+                </dependency>
+                <dependency>
+                    <code-name-base>org.netbeans.modules.editor.util</code-name-base>
+                    <build-prerequisite/>
+                    <compile-dependency/>
+                    <run-dependency>
+                        <release-version>1</release-version>
+                        <specification-version>1.45</specification-version>
                     </run-dependency>
                 </dependency>
                 <dependency>
@@ -141,7 +150,15 @@
                     </run-dependency>
                 </dependency>
             </module-dependencies>
-            <public-packages/>
+            <public-packages>
+                <package>org.antlr.netbeans.editor</package>
+                <package>org.antlr.netbeans.editor.commenting</package>
+                <package>org.antlr.netbeans.editor.fold</package>
+                <package>org.antlr.netbeans.editor.highlighting</package>
+                <package>org.antlr.netbeans.editor.navigation</package>
+                <package>org.antlr.netbeans.editor.navigation.actions</package>
+                <package>org.antlr.netbeans.editor.text</package>
+            </public-packages>
         </data>
     </configuration>
 </project>
