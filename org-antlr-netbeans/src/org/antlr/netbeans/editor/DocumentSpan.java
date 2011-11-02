@@ -30,7 +30,6 @@ package org.antlr.netbeans.editor;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Position;
 import javax.swing.text.StyledDocument;
-import org.openide.util.Exceptions;
 import org.openide.util.Parameters;
 
 /**
