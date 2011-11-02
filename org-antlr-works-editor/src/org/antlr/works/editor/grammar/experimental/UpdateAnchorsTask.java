@@ -28,7 +28,9 @@
 package org.antlr.works.editor.grammar.experimental;
 
 import javax.swing.text.Document;
-import org.antlr.v4.runtime.ANTLRStringStream;
+import org.antlr.netbeans.editor.text.TextBuffer;
+import org.antlr.netbeans.editor.text.TextBufferUtilities;
+import org.antlr.netbeans.editor.text.TextSnapshot;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.works.editor.grammar.parser.GrammarParser.GrammarParserResult;
@@ -60,16 +62,18 @@ public class UpdateAnchorsTask extends ParserResultTask<GrammarParserResult> {
                 return;
             }
 
-            String text = result.getSnapshot().getText().toString();
-            ANTLRStringStream input = new ANTLRStringStream(text);
-            input.name = result.getSnapshot().getSource().getFileObject().getNameExt();
+            TextBuffer textBuffer = TextBufferUtilities.getTextBufferForDocument(document);
+            TextSnapshot snapshot = textBuffer.getCurrentSnapshot();
+
+            TextSnapshotCharStream input = new TextSnapshotCharStream(snapshot);
+            input.setSourceName(result.getSnapshot().getSource().getFileObject().getNameExt());
             GrammarLexer lexer = new GrammarLexer(input);
             CommonTokenStream tokenStream = new CommonTokenStream(lexer);
             GrammarParser parser = new GrammarParser(tokenStream);
             parser.setBuildParseTree(true);
             GrammarParser.grammarSpecContext parseResult = parser.grammarSpec();
 
-            GrammarParserAnchorListener listener = new GrammarParserAnchorListener(document);
+            GrammarParserAnchorListener listener = new GrammarParserAnchorListener(snapshot);
             ParseTreeWalker walker = new ParseTreeWalker();
             walker.walk(listener, parseResult);
             document.putProperty(UpdateAnchorsTask.class, listener.getAnchors());

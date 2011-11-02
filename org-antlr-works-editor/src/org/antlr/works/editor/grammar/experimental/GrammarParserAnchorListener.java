@@ -30,11 +30,12 @@ package org.antlr.works.editor.grammar.experimental;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
-import javax.swing.text.Position;
+import org.antlr.netbeans.editor.text.SpanTrackingMode;
+import org.antlr.netbeans.editor.text.TextSnapshot;
+import org.antlr.netbeans.editor.text.TrackingSpan;
 import org.antlr.v4.runtime.ParserRuleContext;
-import org.openide.util.Exceptions;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.grammarTypeContext;
+import org.openide.util.Parameters;
 
 /**
  *
@@ -42,16 +43,27 @@ import org.openide.util.Exceptions;
  */
 public class GrammarParserAnchorListener extends BlankGrammarParserListener {
 
-    private final Stack<Position> anchorPositions = new Stack<Position>();
+    private final Stack<Integer> anchorPositions = new Stack<Integer>();
     private final List<Anchor> anchors = new ArrayList<Anchor>();
-    private final Document document;
+    private final TextSnapshot snapshot;
 
-    public GrammarParserAnchorListener(Document document) {
-        this.document = document;
+    public GrammarParserAnchorListener(TextSnapshot snapshot) {
+        Parameters.notNull("snapshot", snapshot);
+        this.snapshot = snapshot;
     }
 
     public List<Anchor> getAnchors() {
         return anchors;
+    }
+
+    @Override
+    public void enterRule(GrammarParser.grammarTypeContext ctx) {
+        enterAnchor(ctx);
+    }
+
+    @Override
+    public void exitRule(GrammarParser.grammarTypeContext ctx) {
+        exitAnchor(ctx, GrammarParser.RULE_grammarType);
     }
 
     @Override
@@ -75,66 +87,70 @@ public class GrammarParserAnchorListener extends BlankGrammarParserListener {
     }
 
     private void enterAnchor(ParserRuleContext ctx) {
-        anchorPositions.push(createPosition(ctx.getStart().getStartIndex()));
+        anchorPositions.push(ctx.getStart().getStartIndex());
     }
 
     private void exitAnchor(ParserRuleContext ctx, int anchorId) {
-        Position startPosition = anchorPositions.pop();
-        Position stopPosition = ctx.getStop() != null ? createPosition(ctx.getStop().getStopIndex() + 1) : null;
-        if (startPosition != null && stopPosition != null) {
-            anchors.add(createAnchor(startPosition, stopPosition, anchorId));
-        }
+        int start = anchorPositions.pop();
+        int stop = ctx.getStop() != null ? ctx.getStop().getStopIndex() + 1 : snapshot.length();
+        SpanTrackingMode trackingMode = ctx.getStop() != null ? SpanTrackingMode.EdgeExclusive : SpanTrackingMode.EdgePositive;
+        anchors.add(createAnchor(ctx, start, stop, trackingMode, anchorId));
     }
 
-    private Position createPosition(int offset) {
-        try {
-            return document.createPosition(offset);
-        } catch (BadLocationException ex) {
-            Exceptions.printStackTrace(ex);
-            return null;
+    private Anchor createAnchor(ParserRuleContext ctx, int start, int stop, SpanTrackingMode trackingMode, int rule) {
+        TrackingSpan trackingSpan = snapshot.createTrackingSpan(start, stop - start, trackingMode);
+        if (rule == GrammarParser.RULE_grammarType) {
+            return new GrammarTypeAnchor((GrammarParser.grammarTypeContext)ctx, trackingSpan);
+        } else {
+            return new AnchorImpl(trackingSpan, rule);
         }
-    }
-
-    private static Anchor createAnchor(Position startPosition, Position endPosition, int rule) {
-        return new AnchorImpl(startPosition, endPosition, rule);
     }
 
     public interface Anchor {
 
-        public Position getStartPosition();
-
-        public Position getEndPosition();
+        public TrackingSpan getSpan();
 
         public int getRule();
 
     }
 
     public static class AnchorImpl implements Anchor {
-        private final Position startPosition;
-        private final Position endPosition;
+        private final TrackingSpan span;
         private final int rule;
 
-        private AnchorImpl(Position startPosition, Position endPosition, int rule) {
-            this.startPosition = startPosition;
-            this.endPosition = endPosition;
+        private AnchorImpl(TrackingSpan span, int rule) {
+            Parameters.notNull("span", span);
+            this.span = span;
             this.rule = rule;
         }
 
         @Override
-        public Position getStartPosition() {
-            return startPosition;
-        }
-
-        @Override
-        public Position getEndPosition() {
-            return endPosition;
+        public TrackingSpan getSpan() {
+            return span;
         }
 
         @Override
         public int getRule() {
             return rule;
         }
+    }
 
+    public static class GrammarTypeAnchor extends AnchorImpl {
+
+        private final int grammarType;
+
+        private GrammarTypeAnchor(grammarTypeContext ctx, TrackingSpan span) {
+            super(span, GrammarParser.RULE_grammarType);
+            if (ctx.t == null) {
+                grammarType = GrammarParser.COMBINED;
+            } else {
+                grammarType = ctx.t.getType();
+            }
+        }
+
+        public int getGrammarType() {
+            return grammarType;
+        }
     }
 
 }
