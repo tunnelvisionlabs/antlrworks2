@@ -333,6 +333,14 @@ argActionBlock
     :   BEGIN_ARG_ACTION
             (   ARG_ACTION_ELEMENT
             |   ARG_ACTION_TEXT
+            |   ARG_ACTION_LT
+            |   ARG_ACTION_GT
+            |   ARG_ACTION_LPAREN
+            |   ARG_ACTION_RPAREN
+            |   ARG_ACTION_EQUALS
+            |   ARG_ACTION_COMMA
+            |   ARG_ACTION_ESCAPE
+            |   ARG_ACTION_WORD
             )*
         END_ARG_ACTION
     ;

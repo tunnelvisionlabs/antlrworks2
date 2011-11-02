@@ -577,13 +577,33 @@ ERRCHAR
 
 mode ArgAction;
 
+ARG_ACTION_LT       : '<' ;
+ARG_ACTION_GT       : '>' ;
+ARG_ACTION_LPAREN   : '(' ;
+ARG_ACTION_RPAREN   : ')' ;
+ARG_ACTION_EQUALS   : '=' ;
+ARG_ACTION_COMMA    : ',' ;
+
+ARG_ACTION_ESCAPE
+    :   '\\' .
+    ;
+
+ARG_ACTION_WORD
+    :   ('a'..'z' | 'A'..'Z' | '0'..'9' | '_')+
+    ;
+
 ARG_ACTION_ELEMENT
     :   ACTION_STRING_LITERAL
     |   ACTION_CHAR_LITERAL
     ;
 
 ARG_ACTION_TEXT
-    :   ('\\' . | ~('\''|'"'|']'|'\\'))+
+    :   ~(  '\'' | '"'
+        |   ']'
+        |   '\\'
+        |   '=' | ',' | '<' | '>' | '(' | ')'
+        |   'a'..'z' | 'A'..'Z' | '0'..'9' | '_'
+        )+
     ;
 
 END_ARG_ACTION
