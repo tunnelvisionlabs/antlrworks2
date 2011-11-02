@@ -45,7 +45,7 @@ import org.netbeans.modules.editor.NbEditorKit;
 @MimeRegistration(mimeType="text/x-stringtemplate4", service=NbEditorKit.class)
 public class StringTemplateEditorKit extends NbEditorKit {
 
-    public static final String GRAMMAR_MIME_TYPE = "text/x-stringtemplate4";
+    public static final String TEMPLATE_MIME_TYPE = "text/x-stringtemplate4";
 
     private static final LineCommentFormat LINE_COMMENT_FORMAT = new LineCommentFormat("//");
     private static final BlockCommentFormat OUTER_BLOCK_COMMENT_FORMAT = new BlockCommentFormat("/*", "*/");
@@ -53,7 +53,7 @@ public class StringTemplateEditorKit extends NbEditorKit {
 
     @Override
     public String getContentType() {
-        return GRAMMAR_MIME_TYPE;
+        return TEMPLATE_MIME_TYPE;
     }
 
     @Override
@@ -66,10 +66,10 @@ public class StringTemplateEditorKit extends NbEditorKit {
         @SuppressWarnings("LocalVariableHidesMemberVariable")
         ExtendedUncommentAction uncommentAction = new ExtendedUncommentAction(commenter);
 
-        Action[] actions = {
+        Action[] extraActions = {
         };
 
-        actions = TextAction.augmentList(superActions, actions);
+        Action[] actions = TextAction.augmentList(superActions, extraActions);
         for (int i = 0; i < actions.length; i++) {
             if (actions[i] instanceof CommentAction) {
                 actions[i] = commentAction;
