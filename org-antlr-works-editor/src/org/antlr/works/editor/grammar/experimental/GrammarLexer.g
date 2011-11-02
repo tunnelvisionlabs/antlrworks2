@@ -494,12 +494,12 @@ ESC_SEQ
     	      //
     	      UNICODE_ESC
 
-    	    | // An illegal escape seqeunce
-    	      //
-    	      //{
-    	      //	// TODO: Issue error message
-    	      //	//
-    	      //}
+    	    //| // An illegal escape seqeunce
+    	    //  //
+    	    //  {
+    	    //  	// TODO: Issue error message
+    	    //  	//
+    	    //  }
         )
     ;
 
