@@ -27,44 +27,38 @@
  */
 package org.antlr.works.editor.grammar;
 
-import javax.swing.ImageIcon;
-import org.antlr.netbeans.editor.navigation.Description;
-import org.antlr.works.editor.grammar.navigation.GrammarNode;
-import org.netbeans.spi.editor.completion.CompletionItem;
+import org.antlr.v4.runtime.Token;
 
 /**
  *
  * @author sam
  */
-public class GrammarRuleCompletionItem extends GrammarCompletionItem implements CompletionItem {
+public class ElementReferenceCompletionItem extends GrammarCompletionItem {
 
-    private final Description rule;
+    private final Token label;
+    private final boolean explicit;
 
     private String leftText;
 
-    public GrammarRuleCompletionItem(int substitutionOffset, Description rule) {
+    public ElementReferenceCompletionItem(int substitutionOffset, Token label, boolean explicit) {
         super(substitutionOffset);
-        this.rule = rule;
+        this.label = label;
+        this.explicit = explicit;
     }
 
     @Override
     public int getSortPriority() {
-        return RULE_SORT_PRIORITY;
+        return ELEMENT_REFERENCE_SORT_PRIORITY;
     }
 
     @Override
     public String getSortTextImpl() {
-        return rule.getName();
+        return "$" + label.getText();
     }
 
     @Override
     public CharSequence getInsertPrefix() {
-        return rule.getName();
-    }
-
-    @Override
-    protected ImageIcon getIcon() {
-        return new ImageIcon(new GrammarNode(rule).getIcon(0));
+        return "$" + label.getText();
     }
 
     @Override
@@ -72,24 +66,26 @@ public class GrammarRuleCompletionItem extends GrammarCompletionItem implements 
         if (leftText == null) {
             StringBuilder builder = new StringBuilder();
 
-            builder.append(METHOD_COLOR);
+            builder.append(REFERENCE_COLOR);
+            builder.append(BOLD);
 
-            if (!rule.isInherited()) {
-                builder.append(BOLD);
-            }
+            builder.append("$").append(label.getText());
 
-            builder.append(rule.getName());
-
-            if (!rule.isInherited()) {
-                builder.append(BOLD_END);
-            }
-
+            builder.append(BOLD_END);
             builder.append(COLOR_END);
-            
+
             leftText = builder.toString();
         }
 
         return leftText;
     }
 
+    @Override
+    protected String getRightHtmlText() {
+        if (explicit) {
+            return "Label";
+        } else {
+            return "Element";
+        }
+    }
 }

@@ -33,6 +33,7 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Locale;
 import javax.swing.ImageIcon;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.JTextComponent;
@@ -50,11 +51,14 @@ public abstract class GrammarCompletionItem implements CompletionItem {
 
     public static final int KEYWORD_SORT_PRIORITY = 100;
     public static final int RULE_SORT_PRIORITY = 100;
+    public static final int ELEMENT_REFERENCE_SORT_PRIORITY = 100;
+    public static final int PROPERTY_SORT_PRIORITY = 100;
 
     public static final String KEYWORD_COLOR = "<font color=#000099>"; //NOI18N
     public static final String FIELD_COLOR = "<font color=#008618>"; //NOI18N
     public static final String METHOD_COLOR = "<font color=#000000>"; //NOI18N
     public static final String PARAMETER_NAME_COLOR = "<font color=#a06001>"; //NOI18N
+    public static final String REFERENCE_COLOR = "<font color=#a06001>"; //NOI18N
 
     public static final String COLOR_END = "</font>"; //NOI18N
     public static final String STRIKE = "<s>"; //NOI18N
@@ -168,6 +172,13 @@ public abstract class GrammarCompletionItem implements CompletionItem {
 //        throw new UnsupportedOperationException("Not supported yet.");
 //    }
 
+    @Override
+    public final CharSequence getSortText() {
+        return getSortTextImpl().toLowerCase(Locale.getDefault());
+    }
+
+    protected abstract String getSortTextImpl();
+
     protected ImageIcon getIcon() {
         return null;
     }
@@ -207,7 +218,7 @@ public abstract class GrammarCompletionItem implements CompletionItem {
         }
 
         @Override
-        public CharSequence getSortText() {
+        public String getSortTextImpl() {
             return keyword;
         }
 
@@ -232,5 +243,4 @@ public abstract class GrammarCompletionItem implements CompletionItem {
         }
 
     }
-
 }

@@ -27,69 +27,22 @@
  */
 package org.antlr.works.editor.grammar;
 
-import javax.swing.ImageIcon;
-import org.antlr.netbeans.editor.navigation.Description;
-import org.antlr.works.editor.grammar.navigation.GrammarNode;
-import org.netbeans.spi.editor.completion.CompletionItem;
+import org.antlr.v4.runtime.Token;
 
 /**
  *
  * @author sam
  */
-public class GrammarRuleCompletionItem extends GrammarCompletionItem implements CompletionItem {
+public class EnclosingRuleCompletionItem extends ElementReferenceCompletionItem {
 
-    private final Description rule;
+    private String rightText;
 
-    private String leftText;
-
-    public GrammarRuleCompletionItem(int substitutionOffset, Description rule) {
-        super(substitutionOffset);
-        this.rule = rule;
+    public EnclosingRuleCompletionItem(int substitutionOffset, Token enclosingRuleName) {
+        super(substitutionOffset, enclosingRuleName, false);
     }
 
     @Override
-    public int getSortPriority() {
-        return RULE_SORT_PRIORITY;
+    protected String getRightHtmlText() {
+        return "Enclosing rule";
     }
-
-    @Override
-    public String getSortTextImpl() {
-        return rule.getName();
-    }
-
-    @Override
-    public CharSequence getInsertPrefix() {
-        return rule.getName();
-    }
-
-    @Override
-    protected ImageIcon getIcon() {
-        return new ImageIcon(new GrammarNode(rule).getIcon(0));
-    }
-
-    @Override
-    protected String getLeftHtmlText() {
-        if (leftText == null) {
-            StringBuilder builder = new StringBuilder();
-
-            builder.append(METHOD_COLOR);
-
-            if (!rule.isInherited()) {
-                builder.append(BOLD);
-            }
-
-            builder.append(rule.getName());
-
-            if (!rule.isInherited()) {
-                builder.append(BOLD_END);
-            }
-
-            builder.append(COLOR_END);
-            
-            leftText = builder.toString();
-        }
-
-        return leftText;
-    }
-
 }
