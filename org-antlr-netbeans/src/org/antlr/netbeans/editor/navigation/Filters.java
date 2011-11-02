@@ -39,7 +39,8 @@ import org.openide.util.ImageUtilities;
 import org.openide.util.NbBundle;
 import org.openide.util.NbPreferences;
 
-import static org.antlr.netbeans.editor.navigation.Bundle.*;
+import static org.antlr.netbeans.editor.navigation.Bundle.LBL_ShowInherited;
+import static org.antlr.netbeans.editor.navigation.Bundle.LBL_ShowInheritedTip;
 
 /**
  *
