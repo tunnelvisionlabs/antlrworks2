@@ -75,13 +75,13 @@ public class GrammarParserV4 extends GrammarParser {
                 public void error(ANTLRMessage antlrm) {
                     Token offendingToken = null;
                     RecognitionException e = null;
-                    if (antlrm.e instanceof RecognitionException) {
-                        e = (RecognitionException)antlrm.e;
+                    if (antlrm.getCause() instanceof RecognitionException) {
+                        e = (RecognitionException)antlrm.getCause();
                         offendingToken = e.token;
                     }
 
                     if (antlrm instanceof GrammarSyntaxMessage) {
-                        e = ((GrammarSyntaxMessage)antlrm).antlrException;
+                        e = ((GrammarSyntaxMessage)antlrm).getCause();
                         offendingToken = ((GrammarSyntaxMessage)antlrm).offendingToken;
                     } else if (antlrm instanceof GrammarSemanticsMessage) {
                         offendingToken = ((GrammarSemanticsMessage)antlrm).offendingToken;
@@ -96,8 +96,8 @@ public class GrammarParserV4 extends GrammarParser {
                 public void warning(ANTLRMessage antlrm) {
                     Token offendingToken = null;
                     RecognitionException e = null;
-                    if (antlrm.e instanceof RecognitionException) {
-                        e = (RecognitionException)antlrm.e;
+                    if (antlrm.getCause() instanceof RecognitionException) {
+                        e = (RecognitionException)antlrm.getCause();
                         offendingToken = e.token;
                     }
 
