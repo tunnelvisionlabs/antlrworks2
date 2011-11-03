@@ -71,10 +71,12 @@ public class RuleScanningTaskV4 extends RuleScanningTask {
             rootDescription.setChildren(new ArrayList<Description>());
             rootDescription.setFileObject(result.getSnapshot().getSource().getFileObject());
 
-            GrammarNode.GrammarNodeDescription parserRulesRootDescription = new GrammarNode.GrammarNodeDescription(ui, LBL_ParserRules());
+            GrammarNode.GrammarNodeDescription parserRulesRootDescription = new GrammarNode.GrammarNodeDescription(ui, "1" + LBL_ParserRules());
+            parserRulesRootDescription.setHtmlHeader(LBL_ParserRules());
             parserRulesRootDescription.setChildren(new HashSet<Description>());
 
-            GrammarNode.GrammarNodeDescription lexerRulesRootDescription = new GrammarNode.GrammarNodeDescription(ui, LBL_LexerRules());
+            GrammarNode.GrammarNodeDescription lexerRulesRootDescription = new GrammarNode.GrammarNodeDescription(ui, "2" + LBL_LexerRules());
+            lexerRulesRootDescription.setHtmlHeader(LBL_LexerRules());
             lexerRulesRootDescription.setChildren(new HashSet<Description>());
 
             for (GrammarParserV4.GrammarFileResultV4 importedParseResult : result4.getImportedGrammarResults()) {
