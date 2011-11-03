@@ -345,6 +345,10 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
 
         @Override
         public void enterRule(ebnfSuffixContext ctx) {
+            if (inRewrite) {
+                return;
+            }
+
             Block block;
 
             switch (ctx.start.getType()) {
