@@ -75,9 +75,9 @@ import static org.antlr.works.editor.grammar.syndiag.Bundle.HINT_SyntaxDiagramTo
 @TopComponent.OpenActionRegistration(displayName = "#CTL_SyntaxDiagramAction",
                                      preferredID = "SyntaxDiagramTopComponent")
 @NbBundle.Messages({
-    "CTL_SyntaxDiagramAction=SyntaxDiagram",
-    "CTL_SyntaxDiagramTopComponent=SyntaxDiagram Window",
-    "HINT_SyntaxDiagramTopComponent=This is a SyntaxDiagram window"
+    "CTL_SyntaxDiagramAction=Syntax Diagram",
+    "CTL_SyntaxDiagramTopComponent=Syntax Diagram",
+    "HINT_SyntaxDiagramTopComponent=Grammar Rule Syntax Diagram"
 })
 public final class SyntaxDiagramTopComponent extends TopComponent {
 
