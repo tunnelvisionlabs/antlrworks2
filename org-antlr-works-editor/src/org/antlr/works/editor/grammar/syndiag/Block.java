@@ -73,11 +73,11 @@ public class Block extends JPanel implements Element {
 
     public int getLeftJoinLineX() {
         int leftx = getLeftGutterWidth() + Alt.ELEMENT_SEP / 2;
-        return getX() + leftx / 2;
+        return leftx / 2;
     }
 
     public int getRightJoinLineX() {
-        int rightx = getX() + getWidth() - getRightGutterWidth() - Alt.ELEMENT_SEP / 2;
+        int rightx = getWidth() - getRightGutterWidth() - Alt.ELEMENT_SEP / 2;
         int brwidth = getRightGutterWidth() + Alt.ELEMENT_SEP / 2;
         return rightx + brwidth / 2;
     }
