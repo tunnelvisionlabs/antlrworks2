@@ -110,7 +110,12 @@ public class NbTextSnapshot implements TextSnapshot {
             throw new IndexOutOfBoundsException();
         }
 
-        throw new UnsupportedOperationException("Not implemented yet.");
+        LineTextCache lineData = getVersion().getLineData();
+        int block = lineData.getBlockFromPosition(index);
+        int line = lineData.getLineNumberFromPosition(index);
+        int lineStart = lineData.getLineStart(block, line);
+        String lineText = lineData.getLineText(block, line);
+        return lineText.charAt(index - lineStart);
     }
 
     @Override
