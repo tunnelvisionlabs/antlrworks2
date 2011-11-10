@@ -3,6 +3,8 @@
  */
 package org.antlr.netbeans.editor.text;
 
+import org.netbeans.api.annotations.common.CheckForNull;
+import org.netbeans.api.annotations.common.NonNull;
 import org.openide.util.Parameters;
 
 /**
@@ -18,7 +20,7 @@ public enum SpanTrackingMode {
     Custom,
     ;
 
-    public static SpanTrackingMode fromPointTrackingMode(PointTrackingMode startMode, PointTrackingMode endMode) {
+    public static @NonNull SpanTrackingMode fromPointTrackingMode(@NonNull PointTrackingMode startMode, @NonNull PointTrackingMode endMode) {
         Parameters.notNull("startMode", startMode);
         Parameters.notNull("endMode", endMode);
 
@@ -29,7 +31,7 @@ public enum SpanTrackingMode {
         }
     }
 
-    public PointTrackingMode getStartMode() {
+    public @CheckForNull PointTrackingMode getStartMode() {
         switch (this) {
         case EdgeExclusive:
         case EdgePositive:
@@ -45,7 +47,7 @@ public enum SpanTrackingMode {
         }
     }
 
-    public PointTrackingMode getEndMode() {
+    public @CheckForNull PointTrackingMode getEndMode() {
         switch (this) {
         case EdgeInclusive:
         case EdgePositive:

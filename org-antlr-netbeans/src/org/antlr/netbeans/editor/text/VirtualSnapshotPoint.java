@@ -3,6 +3,7 @@
  */
 package org.antlr.netbeans.editor.text;
 
+import org.netbeans.api.annotations.common.NonNull;
 import org.openide.util.Parameters;
 
 /**
@@ -11,25 +12,26 @@ import org.openide.util.Parameters;
  */
 public final class VirtualSnapshotPoint implements Comparable<VirtualSnapshotPoint> {
 
+    @NonNull
     private final SnapshotPoint position;
     private final int virtualSpaces;
 
-    public VirtualSnapshotPoint(SnapshotPoint position) {
+    public VirtualSnapshotPoint(@NonNull SnapshotPoint position) {
         this(position, 0);
     }
 
-    public VirtualSnapshotPoint(TextSnapshot snapshot, int position) {
+    public VirtualSnapshotPoint(@NonNull TextSnapshot snapshot, int position) {
         this(new SnapshotPoint(snapshot, position));
     }
 
-    public VirtualSnapshotPoint(TextSnapshotLine line, int offset) {
+    public VirtualSnapshotPoint(@NonNull TextSnapshotLine line, int offset) {
         Parameters.notNull("line", line);
 
         this.position = line.getEnd();
         this.virtualSpaces = Math.max(0, offset - line.getLength());
     }
 
-    public VirtualSnapshotPoint(SnapshotPoint position, int virtualSpaces) {
+    public VirtualSnapshotPoint(@NonNull SnapshotPoint position, int virtualSpaces) {
         Parameters.notNull("position", position);
         if (virtualSpaces < 0) {
             throw new IllegalArgumentException("virtualSpaces cannot be negative");
@@ -43,11 +45,11 @@ public final class VirtualSnapshotPoint implements Comparable<VirtualSnapshotPoi
         this.virtualSpaces = virtualSpaces;
     }
 
-    public TextSnapshot getSnapshot() {
+    public @NonNull TextSnapshot getSnapshot() {
         return position.getSnapshot();
     }
 
-    public SnapshotPoint getPosition() {
+    public @NonNull SnapshotPoint getPosition() {
         return position;
     }
 

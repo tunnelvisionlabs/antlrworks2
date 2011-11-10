@@ -5,6 +5,7 @@ package org.antlr.netbeans.editor.text;
 
 import javax.swing.text.Document;
 import org.antlr.netbeans.editor.text.impl.NbTextBuffer;
+import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.editor.BaseDocument;
 import org.openide.util.Parameters;
 
@@ -19,7 +20,7 @@ public final class TextBufferUtilities {
     private TextBufferUtilities() {
     }
 
-    public static TextBuffer getTextBufferForDocument(Document document) {
+    public static @NonNull TextBuffer getTextBufferForDocument(@NonNull Document document) {
         Parameters.notNull("document", document);
 
         if (!(document instanceof BaseDocument)) {

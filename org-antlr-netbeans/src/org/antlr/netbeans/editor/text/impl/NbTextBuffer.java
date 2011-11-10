@@ -9,6 +9,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 import org.antlr.netbeans.editor.text.TextBuffer;
 import org.antlr.netbeans.editor.text.TextSnapshot;
+import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.editor.BaseDocument;
 import org.netbeans.lib.editor.util.swing.DocumentUtilities;
 import org.openide.util.Exceptions;
@@ -22,13 +23,15 @@ public class NbTextBuffer implements TextBuffer {
 
     private static final WeakReference<NbTextVersion> NullVersion = new WeakReference<NbTextVersion>(null);
 
+    @NonNull
     private final BaseDocument document;
 
+    @NonNull
     private NbNormalizedTextChangeCollection pendingChanges = new NbNormalizedTextChangeCollection();
     private WeakReference<NbTextVersion> latestVersion = NullVersion;
     private int latestVersionNumber = 0;
 
-    public NbTextBuffer(BaseDocument document) {
+    public NbTextBuffer(@NonNull BaseDocument document) {
         Parameters.notNull("document", document);
 
         this.document = document;
@@ -45,7 +48,7 @@ public class NbTextBuffer implements TextBuffer {
         return applyChanges().getSnapshot();
     }
     
-    private NbTextVersion applyChanges() {
+    private @NonNull NbTextVersion applyChanges() {
         document.readLock();
         try {
             NbTextVersion version = latestVersion.get();
@@ -73,7 +76,7 @@ public class NbTextBuffer implements TextBuffer {
         }
     }
 
-    private void addPendingChange(NbTextChange change) {
+    private void addPendingChange(@NonNull NbTextChange change) {
         Parameters.notNull("change", change);
         pendingChanges.add(change);
     }

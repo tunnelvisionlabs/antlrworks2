@@ -8,6 +8,7 @@ import org.antlr.netbeans.editor.text.PointTrackingMode;
 import org.antlr.netbeans.editor.text.TextChange;
 import org.antlr.netbeans.editor.text.TextVersion;
 import org.antlr.netbeans.editor.text.TrackingFidelityMode;
+import org.netbeans.api.annotations.common.NonNull;
 import org.openide.util.Parameters;
 
 /**
@@ -16,7 +17,7 @@ import org.openide.util.Parameters;
  */
 public class NbForwardTrackingPoint extends NbTrackingPoint {
 
-    public NbForwardTrackingPoint(NbTextVersion textVersion, int position, PointTrackingMode trackingMode) {
+    public NbForwardTrackingPoint(@NonNull NbTextVersion textVersion, int position, @NonNull PointTrackingMode trackingMode) {
         super(textVersion, position, trackingMode);
     }
 

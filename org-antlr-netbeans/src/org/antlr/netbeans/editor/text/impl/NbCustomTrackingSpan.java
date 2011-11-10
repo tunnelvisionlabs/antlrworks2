@@ -13,6 +13,7 @@ import org.antlr.netbeans.editor.text.TextSnapshot;
 import org.antlr.netbeans.editor.text.TextVersion;
 import org.antlr.netbeans.editor.text.TrackingFidelityMode;
 import org.antlr.netbeans.editor.text.TrackingSpan;
+import org.netbeans.api.annotations.common.NonNull;
 import org.openide.util.Parameters;
 
 /**
@@ -20,12 +21,16 @@ import org.openide.util.Parameters;
  * @author sam
  */
 public class NbCustomTrackingSpan implements TrackingSpan {
+    @NonNull
     private final NbTextVersion textVersion;
+    @NonNull
     private final Span span;
+    @NonNull
     private final TrackingFidelityMode trackingFidelity;
+    @NonNull
     private final CustomTrackToBehavior behavior;
 
-    public NbCustomTrackingSpan(NbTextVersion textVersion, Span span, TrackingFidelityMode trackingFidelity, CustomTrackToBehavior behavior) {
+    public NbCustomTrackingSpan(@NonNull NbTextVersion textVersion, @NonNull Span span, @NonNull TrackingFidelityMode trackingFidelity, @NonNull CustomTrackToBehavior behavior) {
         Parameters.notNull("textVersion", textVersion);
         Parameters.notNull("span", span);
         Parameters.notNull("trackingFidelity", trackingFidelity);

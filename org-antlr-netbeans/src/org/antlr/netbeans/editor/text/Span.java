@@ -3,6 +3,8 @@
  */
 package org.antlr.netbeans.editor.text;
 
+import org.netbeans.api.annotations.common.CheckForNull;
+import org.netbeans.api.annotations.common.NonNull;
 import org.openide.util.Parameters;
 
 /**
@@ -26,7 +28,7 @@ public final class Span {
         this.length = length;
     }
 
-    public static Span fromBounds(int start, int end) {
+    public static @NonNull Span fromBounds(int start, int end) {
         return new Span(start, end - start);
     }
 
@@ -50,12 +52,12 @@ public final class Span {
         return position >= start && position < getEnd();
     }
 
-    public boolean contains(Span span) {
+    public boolean contains(@NonNull Span span) {
         Parameters.notNull("span", span);
         return span.getStart() >= start && span.getEnd() <= getEnd();
     }
 
-    public Span intersection(Span span) {
+    public @CheckForNull Span intersection(@NonNull Span span) {
         Parameters.notNull("span", span);
         int commonStart = Math.max(this.start, span.start);
         int commonEnd = Math.min(getEnd(), span.getEnd());
@@ -66,14 +68,14 @@ public final class Span {
         return fromBounds(commonStart, commonEnd);
     }
 
-    public boolean intersectsWith(Span span) {
+    public boolean intersectsWith(@NonNull Span span) {
         Parameters.notNull("span", span);
         int commonStart = Math.max(this.start, span.start);
         int commonEnd = Math.min(getEnd(), span.getEnd());
         return commonEnd >= commonStart;
     }
 
-    public Span overlap(Span span) {
+    public @CheckForNull Span overlap(@NonNull Span span) {
         Parameters.notNull("span", span);
         if (isEmpty() || span.isEmpty()) {
             return null;
@@ -87,7 +89,7 @@ public final class Span {
         return intersection;
     }
 
-    public boolean overlapsWith(Span span) {
+    public boolean overlapsWith(@NonNull Span span) {
         Parameters.notNull("span", span);
         int commonStart = Math.max(this.start, span.start);
         int commonEnd = Math.min(getEnd(), span.getEnd());

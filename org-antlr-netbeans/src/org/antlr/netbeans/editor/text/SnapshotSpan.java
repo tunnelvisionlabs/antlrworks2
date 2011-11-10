@@ -3,6 +3,8 @@
  */
 package org.antlr.netbeans.editor.text;
 
+import org.netbeans.api.annotations.common.CheckForNull;
+import org.netbeans.api.annotations.common.NonNull;
 import org.openide.util.Parameters;
 
 /**
@@ -11,14 +13,16 @@ import org.openide.util.Parameters;
  */
 public final class SnapshotSpan {
 
+    @NonNull
     private final TextSnapshot snapshot;
+    @NonNull
     private final Span span;
 
-    public SnapshotSpan(TextSnapshot snapshot, int start, int length) {
+    public SnapshotSpan(@NonNull TextSnapshot snapshot, int start, int length) {
         this(snapshot, new Span(start, length));
     }
 
-    public SnapshotSpan(TextSnapshot snapshot, Span span) {
+    public SnapshotSpan(@NonNull TextSnapshot snapshot, @NonNull Span span) {
         Parameters.notNull("snapshot", snapshot);
         Parameters.notNull("span", span);
         if (span.getEnd() > snapshot.length()) {
@@ -29,19 +33,19 @@ public final class SnapshotSpan {
         this.span = span;
     }
 
-    public SnapshotSpan(SnapshotPoint start, int length) {
+    public SnapshotSpan(@NonNull SnapshotPoint start, int length) {
         this(start.getSnapshot(), start.getPosition(), length);
     }
 
-    public SnapshotSpan(SnapshotPoint start, SnapshotPoint end) {
+    public SnapshotSpan(@NonNull SnapshotPoint start, @NonNull SnapshotPoint end) {
         this(start, start.difference(end));
     }
 
-    public SnapshotPoint getStart() {
+    public @NonNull SnapshotPoint getStart() {
         return new SnapshotPoint(snapshot, span.getStart());
     }
 
-    public SnapshotPoint getEnd() {
+    public @NonNull SnapshotPoint getEnd() {
         return new SnapshotPoint(snapshot, span.getEnd());
     }
 
@@ -49,11 +53,11 @@ public final class SnapshotSpan {
         return span.getLength();
     }
 
-    public TextSnapshot getSnapshot() {
+    public @NonNull TextSnapshot getSnapshot() {
         return snapshot;
     }
 
-    public Span getSpan() {
+    public @NonNull Span getSpan() {
         return span;
     }
 
@@ -61,7 +65,7 @@ public final class SnapshotSpan {
         return span.contains(position);
     }
 
-    public boolean contains(SnapshotPoint point) {
+    public boolean contains(@NonNull SnapshotPoint point) {
         Parameters.notNull("point", point);
         if (!point.getSnapshot().equals(snapshot)) {
             throw new IllegalArgumentException();
@@ -70,7 +74,7 @@ public final class SnapshotSpan {
         return contains(point.getPosition());
     }
 
-    public boolean contains(SnapshotSpan span) {
+    public boolean contains(@NonNull SnapshotSpan span) {
         Parameters.notNull("span", span);
         if (!span.getSnapshot().equals(snapshot)) {
             throw new IllegalArgumentException();
@@ -79,17 +83,17 @@ public final class SnapshotSpan {
         return contains(span.getSpan());
     }
 
-    public boolean contains(Span span) {
+    public boolean contains(@NonNull Span span) {
         Parameters.notNull("span", span);
         return span.getStart() >= this.span.getStart()
             && span.getEnd() <= this.span.getEnd();
     }
 
-    public String getText() {
+    public @NonNull String getText() {
         return snapshot.subSequence(span.getStart(), span.getEnd()).toString();
     }
 
-    public SnapshotSpan intersection(SnapshotSpan other) {
+    public @CheckForNull SnapshotSpan intersection(@NonNull SnapshotSpan other) {
         Parameters.notNull("other", other);
         if (!other.getSnapshot().equals(snapshot)) {
             throw new IllegalArgumentException();
@@ -98,7 +102,7 @@ public final class SnapshotSpan {
         return intersection(other.getSpan());
     }
 
-    public SnapshotSpan intersection(Span other) {
+    public @CheckForNull SnapshotSpan intersection(@NonNull Span other) {
         Parameters.notNull("other", other);
         int newStart = Math.max(this.span.getStart(), other.getStart());
         int newEnd = Math.min(this.span.getEnd(), other.getEnd());
@@ -109,7 +113,7 @@ public final class SnapshotSpan {
         return new SnapshotSpan(snapshot, Span.fromBounds(newStart, newEnd));
     }
 
-    public boolean intersectsWith(SnapshotSpan other) {
+    public boolean intersectsWith(@NonNull SnapshotSpan other) {
         Parameters.notNull("other", other);
         if (!other.getSnapshot().equals(snapshot)) {
             throw new IllegalArgumentException();
@@ -118,14 +122,14 @@ public final class SnapshotSpan {
         return intersectsWith(other.getSpan());
     }
 
-    public boolean intersectsWith(Span other) {
+    public boolean intersectsWith(@NonNull Span other) {
         Parameters.notNull("other", other);
         int newStart = Math.max(this.span.getStart(), other.getStart());
         int newEnd = Math.min(this.span.getEnd(), other.getEnd());
         return newEnd >= newStart;
     }
 
-    public SnapshotSpan overlap(SnapshotSpan other) {
+    public @CheckForNull SnapshotSpan overlap(@NonNull SnapshotSpan other) {
         Parameters.notNull("other", other);
         if (!other.getSnapshot().equals(snapshot)) {
             throw new IllegalArgumentException();
@@ -134,7 +138,7 @@ public final class SnapshotSpan {
         return overlap(other.getSpan());
     }
 
-    public SnapshotSpan overlap(Span other) {
+    public @CheckForNull SnapshotSpan overlap(@NonNull Span other) {
         Parameters.notNull("other", other);
         int newStart = Math.max(this.span.getStart(), other.getStart());
         int newEnd = Math.min(this.span.getEnd(), other.getEnd());
@@ -145,7 +149,7 @@ public final class SnapshotSpan {
         return new SnapshotSpan(snapshot, Span.fromBounds(newStart, newEnd));
     }
 
-    public boolean overlapsWith(SnapshotSpan other) {
+    public boolean overlapsWith(@NonNull SnapshotSpan other) {
         Parameters.notNull("other", other);
         if (!other.getSnapshot().equals(snapshot)) {
             throw new IllegalArgumentException();
@@ -154,14 +158,14 @@ public final class SnapshotSpan {
         return overlapsWith(other.getSpan());
     }
 
-    public boolean overlapsWith(Span other) {
+    public boolean overlapsWith(@NonNull Span other) {
         Parameters.notNull("other", other);
         int newStart = Math.max(this.span.getStart(), other.getStart());
         int newEnd = Math.min(this.span.getEnd(), other.getEnd());
         return newEnd > newStart;
     }
 
-    public SnapshotSpan translateTo(TextSnapshot targetSnapshot, SpanTrackingMode trackingMode) {
+    public @NonNull SnapshotSpan translateTo(@NonNull TextSnapshot targetSnapshot, @NonNull SpanTrackingMode trackingMode) {
         Parameters.notNull("targetSnapshot", targetSnapshot);
         Parameters.notNull("trackingMode", trackingMode);
 

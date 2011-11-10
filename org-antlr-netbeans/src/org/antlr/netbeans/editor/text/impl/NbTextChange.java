@@ -5,6 +5,7 @@ package org.antlr.netbeans.editor.text.impl;
 
 import org.antlr.netbeans.editor.text.Span;
 import org.antlr.netbeans.editor.text.TextChange;
+import org.netbeans.api.annotations.common.NonNull;
 import org.openide.util.Parameters;
 
 /**
@@ -14,16 +15,18 @@ import org.openide.util.Parameters;
 public class NbTextChange implements TextChange {
 
     private final int oldPosition;
+    @NonNull
     private final String oldText;
     private final int newPosition;
+    @NonNull
     private final String newText;
     private final int lineCountDelta;
 
-    public NbTextChange(int oldPosition, String oldText, int newPosition, String newText) {
+    public NbTextChange(int oldPosition, @NonNull String oldText, int newPosition, @NonNull String newText) {
         this(oldPosition, oldText, newPosition, newText, getLineCount(newText) - getLineCount(oldText));
     }
 
-    public NbTextChange(int oldPosition, String oldText, int newPosition, String newText, int lineCountDelta) {
+    public NbTextChange(int oldPosition, @NonNull String oldText, int newPosition, @NonNull String newText, int lineCountDelta) {
         this.oldPosition = oldPosition;
         this.oldText = oldText;
         this.newPosition = newPosition;
@@ -91,7 +94,7 @@ public class NbTextChange implements TextChange {
         return newText;
     }
 
-    private static int getLineCount(String text) {
+    private static int getLineCount(@NonNull String text) {
         Parameters.notNull("text", text);
 
         int lines = 1;

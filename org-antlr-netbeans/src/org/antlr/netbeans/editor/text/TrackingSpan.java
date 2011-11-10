@@ -3,26 +3,28 @@
  */
 package org.antlr.netbeans.editor.text;
 
+import org.netbeans.api.annotations.common.NonNull;
+
 /**
  *
  * @author sam
  */
 public interface TrackingSpan {
 
-    public TextBuffer getTextBuffer();
+    public @NonNull TextBuffer getTextBuffer();
 
-    public TrackingFidelityMode getTrackingFidelity();
+    public @NonNull TrackingFidelityMode getTrackingFidelity();
 
-    public SpanTrackingMode getTrackingMode();
+    public @NonNull SpanTrackingMode getTrackingMode();
 
-    public SnapshotPoint getStartPoint(TextSnapshot snapshot);
+    public @NonNull SnapshotPoint getStartPoint(@NonNull TextSnapshot snapshot);
 
-    public SnapshotPoint getEndPoint(TextSnapshot snapshot);
+    public @NonNull SnapshotPoint getEndPoint(@NonNull TextSnapshot snapshot);
 
-    public SnapshotSpan getSpan(TextSnapshot snapshot);
+    public @NonNull SnapshotSpan getSpan(@NonNull TextSnapshot snapshot);
 
-    public SnapshotSpan getSpan(TextVersion version);
+    public @NonNull SnapshotSpan getSpan(@NonNull TextVersion version);
 
-    public String getText(TextSnapshot snapshot);
+    public @NonNull String getText(@NonNull TextSnapshot snapshot);
 
 }

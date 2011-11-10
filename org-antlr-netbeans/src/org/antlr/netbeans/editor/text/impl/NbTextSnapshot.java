@@ -15,6 +15,7 @@ import org.antlr.netbeans.editor.text.TextSnapshotLine;
 import org.antlr.netbeans.editor.text.TrackingFidelityMode;
 import org.antlr.netbeans.editor.text.TrackingPoint;
 import org.antlr.netbeans.editor.text.TrackingSpan;
+import org.netbeans.api.annotations.common.NonNull;
 import org.openide.util.Parameters;
 
 /**
@@ -23,9 +24,10 @@ import org.openide.util.Parameters;
  */
 public class NbTextSnapshot implements TextSnapshot {
 
+    @NonNull
     private final NbTextVersion textVersion;
 
-    public NbTextSnapshot(NbTextVersion textVersion) {
+    public NbTextSnapshot(@NonNull NbTextVersion textVersion) {
         Parameters.notNull("textVersion", textVersion);
         this.textVersion = textVersion;
     }
@@ -130,9 +132,10 @@ public class NbTextSnapshot implements TextSnapshot {
 
     private static final class LineIterable implements Iterable<TextSnapshotLine> {
 
+        @NonNull
         private final NbTextSnapshot snapshot;
 
-        public LineIterable(NbTextSnapshot snapshot) {
+        public LineIterable(@NonNull NbTextSnapshot snapshot) {
             Parameters.notNull("snapshot", snapshot);
             this.snapshot = snapshot;
         }
@@ -145,11 +148,12 @@ public class NbTextSnapshot implements TextSnapshot {
 
     private static class LineIterator implements Iterator<TextSnapshotLine> {
 
+        @NonNull
         private final NbTextSnapshot snapshot;
 
         private int currentLine = -1;
 
-        public LineIterator(NbTextSnapshot snapshot) {
+        public LineIterator(@NonNull NbTextSnapshot snapshot) {
             Parameters.notNull("snapshot", snapshot);
             this.snapshot = snapshot;
         }
@@ -177,11 +181,12 @@ public class NbTextSnapshot implements TextSnapshot {
 
     private static final class SubSequence implements CharSequence {
 
+        @NonNull
         private final NbTextSnapshot snapshot;
         private final int start;
         private final int end;
 
-        public SubSequence(NbTextSnapshot snapshot, int start, int end) {
+        public SubSequence(@NonNull NbTextSnapshot snapshot, int start, int end) {
             Parameters.notNull("snapshot", snapshot);
             if (start < 0 || end > snapshot.length()) {
                 throw new IndexOutOfBoundsException();

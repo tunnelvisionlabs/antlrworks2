@@ -3,6 +3,8 @@
  */
 package org.antlr.netbeans.editor.text;
 
+import org.netbeans.api.annotations.common.NonNull;
+
 /**
  *
  * @author sam
@@ -13,33 +15,33 @@ public interface TextSnapshot {
 
     public char charAt(int index);
 
-    public CharSequence subSequence(int start, int end);
+    public @NonNull CharSequence subSequence(int start, int end);
 
-    public String getText();
+    public @NonNull String getText();
 
     public int getLineCount();
 
-    public Iterable<TextSnapshotLine> getLines();
+    public @NonNull Iterable<TextSnapshotLine> getLines();
 
-    public TextBuffer getTextBuffer();
+    public @NonNull TextBuffer getTextBuffer();
 
-    public TextVersion getVersion();
+    public @NonNull TextVersion getVersion();
 
-    public TrackingPoint createTrackingPoint(int position, PointTrackingMode trackingMode);
+    public @NonNull TrackingPoint createTrackingPoint(int position, @NonNull PointTrackingMode trackingMode);
 
-    public TrackingPoint createTrackingPoint(int position, PointTrackingMode trackingMode, TrackingFidelityMode trackingFidelity);
+    public @NonNull TrackingPoint createTrackingPoint(int position, @NonNull PointTrackingMode trackingMode, @NonNull TrackingFidelityMode trackingFidelity);
 
-    public TrackingSpan createTrackingSpan(Span span, SpanTrackingMode trackingMode);
+    public @NonNull TrackingSpan createTrackingSpan(@NonNull Span span, @NonNull SpanTrackingMode trackingMode);
 
-    public TrackingSpan createTrackingSpan(int start, int length, SpanTrackingMode trackingMode);
+    public @NonNull TrackingSpan createTrackingSpan(int start, int length, @NonNull SpanTrackingMode trackingMode);
 
-    public TrackingSpan createTrackingSpan(Span span, SpanTrackingMode trackingMode, TrackingFidelityMode trackingFidelity);
+    public @NonNull TrackingSpan createTrackingSpan(@NonNull Span span, @NonNull SpanTrackingMode trackingMode, @NonNull TrackingFidelityMode trackingFidelity);
 
-    public TrackingSpan createTrackingSpan(int start, int length, SpanTrackingMode trackingMode, TrackingFidelityMode trackingFidelity);
+    public @NonNull TrackingSpan createTrackingSpan(int start, int length, @NonNull SpanTrackingMode trackingMode, @NonNull TrackingFidelityMode trackingFidelity);
 
-    public TextSnapshotLine getLineFromLineNumber(int lineNumber);
+    public @NonNull TextSnapshotLine getLineFromLineNumber(int lineNumber);
 
-    public TextSnapshotLine getLineFromPosition(int position);
+    public @NonNull TextSnapshotLine getLineFromPosition(int position);
 
     public int getLineNumberFromPosition(int position);
 }

@@ -10,6 +10,7 @@ import org.antlr.netbeans.editor.text.TextSnapshot;
 import org.antlr.netbeans.editor.text.TextVersion;
 import org.antlr.netbeans.editor.text.TrackingFidelityMode;
 import org.antlr.netbeans.editor.text.TrackingPoint;
+import org.netbeans.api.annotations.common.NonNull;
 import org.openide.util.Parameters;
 
 /**
@@ -17,16 +18,19 @@ import org.openide.util.Parameters;
  * @author sam
  */
 public abstract class NbTrackingPoint implements TrackingPoint {
+    @NonNull
     private final NbTextVersion textVersion;
     private final int position;
+    @NonNull
     private final PointTrackingMode trackingMode;
 
     private final Object lock = new Object();
 
+    @NonNull
     private TextVersion cachedVersion;
     private int cachedPosition;
 
-    public NbTrackingPoint(NbTextVersion textVersion, int position, PointTrackingMode trackingMode) {
+    public NbTrackingPoint(@NonNull NbTextVersion textVersion, int position, @NonNull PointTrackingMode trackingMode) {
         Parameters.notNull("textVersion", textVersion);
         Parameters.notNull("trackingMode", trackingMode);
         if (position < 0 || position > textVersion.getLength()) {
@@ -41,7 +45,7 @@ public abstract class NbTrackingPoint implements TrackingPoint {
         this.cachedPosition = position;
     }
 
-    public final NbTextVersion getTextVersion() {
+    public final @NonNull NbTextVersion getTextVersion() {
         return textVersion;
     }
 
@@ -62,7 +66,7 @@ public abstract class NbTrackingPoint implements TrackingPoint {
     @Override
     public abstract TrackingFidelityMode getTrackingFidelity();
 
-    protected abstract int getPosition(TextVersion version, TextVersion cachedVersion, int cachedPosition);
+    protected abstract int getPosition(@NonNull TextVersion version, @NonNull TextVersion cachedVersion, int cachedPosition);
 
     @Override
     public int getPosition(TextVersion version) {

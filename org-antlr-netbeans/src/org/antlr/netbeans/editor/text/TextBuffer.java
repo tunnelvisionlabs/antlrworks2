@@ -4,6 +4,7 @@
 package org.antlr.netbeans.editor.text;
 
 import javax.swing.text.Document;
+import org.netbeans.api.annotations.common.NonNull;
 
 /**
  *
@@ -11,8 +12,8 @@ import javax.swing.text.Document;
  */
 public interface TextBuffer {
 
-    public TextSnapshot getCurrentSnapshot();
+    public @NonNull TextSnapshot getCurrentSnapshot();
 
-    public Document getDocument();
+    public @NonNull Document getDocument();
 
 }

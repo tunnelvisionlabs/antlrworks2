@@ -9,6 +9,7 @@ import java.util.List;
 import org.antlr.netbeans.editor.text.NormalizedTextChangeCollection;
 import org.antlr.netbeans.editor.text.Span;
 import org.antlr.netbeans.editor.text.TextChange;
+import org.netbeans.api.annotations.common.NonNull;
 import org.openide.util.Parameters;
 
 /**
@@ -49,7 +50,7 @@ final class NbNormalizedTextChangeCollection extends AbstractList<TextChange> im
         add(index, (NbTextChange)element);
     }
 
-    public void add(int index, NbTextChange element) {
+    public void add(int index, @NonNull NbTextChange element) {
         Parameters.notNull("element", element);
 
         if (isReadOnly()) {
@@ -103,7 +104,7 @@ final class NbNormalizedTextChangeCollection extends AbstractList<TextChange> im
         return internal.size();
     }
 
-    private NbTextChange mergeChanges(NbTextChange update, List<NbTextChange> existing) {
+    private @NonNull NbTextChange mergeChanges(@NonNull NbTextChange update, @NonNull List<NbTextChange> existing) {
         Parameters.notNull("update", update);
         Parameters.notNull("existing", existing);
 
@@ -319,7 +320,7 @@ final class NbNormalizedTextChangeCollection extends AbstractList<TextChange> im
 //        return new NbTextChange(oldPosition, oldText, newPosition, newText);
 //    }
 
-    private NbTextChange adjustOldState(NbTextChange element, Iterable<NbTextChange> changes) {
+    private @NonNull NbTextChange adjustOldState(@NonNull NbTextChange element, @NonNull Iterable<NbTextChange> changes) {
         Parameters.notNull("element", element);
         Parameters.notNull("changes", changes);
 
@@ -338,7 +339,7 @@ final class NbNormalizedTextChangeCollection extends AbstractList<TextChange> im
         return new NbTextChange(element.getOldPosition() - delta, element.getOldText(), element.getNewPosition(), element.getNewText(), element.getLineCountDelta());
     }
 
-    private NbTextChange adjustNewState(NbTextChange element, NbTextChange change) {
+    private @NonNull NbTextChange adjustNewState(@NonNull NbTextChange element, @NonNull NbTextChange change) {
         Parameters.notNull("element", element);
         Parameters.notNull("change", change);
         assert !element.getNewSpan().intersectsWith(change.getOldSpan()) : "The changes should not intersect.";

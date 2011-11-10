@@ -3,6 +3,7 @@
  */
 package org.antlr.netbeans.editor.text;
 
+import org.netbeans.api.annotations.common.NonNull;
 import org.openide.util.Parameters;
 
 /**
@@ -11,10 +12,11 @@ import org.openide.util.Parameters;
  */
 public final class SnapshotPoint implements Comparable<SnapshotPoint> {
 
+    @NonNull
     private final TextSnapshot snapshot;
     private final int position;
 
-    public SnapshotPoint(TextSnapshot snapshot, int position) {
+    public SnapshotPoint(@NonNull TextSnapshot snapshot, int position) {
         Parameters.notNull("snapshot", snapshot);
         if (position < 0) {
             throw new IllegalArgumentException("position cannot be negative");
@@ -27,7 +29,7 @@ public final class SnapshotPoint implements Comparable<SnapshotPoint> {
         this.position = position;
     }
 
-    public TextSnapshot getSnapshot() {
+    public @NonNull TextSnapshot getSnapshot() {
         return snapshot;
     }
 
@@ -35,7 +37,7 @@ public final class SnapshotPoint implements Comparable<SnapshotPoint> {
         return position;
     }
 
-    public TextSnapshotLine getContainingLine() {
+    public @NonNull TextSnapshotLine getContainingLine() {
         return snapshot.getLineFromPosition(position);
     }
 
@@ -44,11 +46,11 @@ public final class SnapshotPoint implements Comparable<SnapshotPoint> {
     }
 
     @Override
-    public int compareTo(SnapshotPoint other) {
+    public int compareTo(@NonNull SnapshotPoint other) {
         return difference(other);
     }
 
-    public SnapshotPoint add(int offset) {
+    public @NonNull SnapshotPoint add(int offset) {
         if (offset == 0) {
             return this;
         }
@@ -56,11 +58,11 @@ public final class SnapshotPoint implements Comparable<SnapshotPoint> {
         return new SnapshotPoint(snapshot, position + offset);
     }
 
-    public SnapshotPoint subtract(int offset) {
+    public @NonNull SnapshotPoint subtract(int offset) {
         return add(-offset);
     }
 
-    public int difference(SnapshotPoint other) {
+    public int difference(@NonNull SnapshotPoint other) {
         Parameters.notNull("other", other);
         if (!other.getSnapshot().equals(this.getSnapshot())) {
             throw new IllegalArgumentException();
@@ -69,7 +71,7 @@ public final class SnapshotPoint implements Comparable<SnapshotPoint> {
         return other.getPosition() - this.getPosition();
     }
 
-    public SnapshotPoint translateTo(TextSnapshot targetSnapshot, PointTrackingMode trackingMode) {
+    public @NonNull SnapshotPoint translateTo(@NonNull TextSnapshot targetSnapshot, @NonNull PointTrackingMode trackingMode) {
         Parameters.notNull("targetSnapshot", targetSnapshot);
         Parameters.notNull("trackingMode", trackingMode);
         return snapshot.createTrackingPoint(getPosition(), trackingMode).getPoint(targetSnapshot);

@@ -3,6 +3,7 @@
  */
 package org.antlr.netbeans.editor.text;
 
+import org.netbeans.api.annotations.common.NonNull;
 import org.openide.util.Parameters;
 
 /**
@@ -11,14 +12,16 @@ import org.openide.util.Parameters;
  */
 public final class VirtualSnapshotSpan {
 
+    @NonNull
     private final VirtualSnapshotPoint start;
+    @NonNull
     private final VirtualSnapshotPoint end;
 
-    public VirtualSnapshotSpan(SnapshotSpan span) {
+    public VirtualSnapshotSpan(@NonNull SnapshotSpan span) {
         this(new VirtualSnapshotPoint(span.getStart()), new VirtualSnapshotPoint(span.getEnd()));
     }
 
-    public VirtualSnapshotSpan(VirtualSnapshotPoint start, VirtualSnapshotPoint end) {
+    public VirtualSnapshotSpan(@NonNull VirtualSnapshotPoint start, @NonNull VirtualSnapshotPoint end) {
         Parameters.notNull("start", start);
         Parameters.notNull("end", end);
         if (start.compareTo(end) > 0) {
@@ -29,11 +32,11 @@ public final class VirtualSnapshotSpan {
         this.end = end;
     }
 
-    public VirtualSnapshotPoint getStart() {
+    public @NonNull VirtualSnapshotPoint getStart() {
         return start;
     }
 
-    public VirtualSnapshotPoint getEnd() {
+    public @NonNull VirtualSnapshotPoint getEnd() {
         return end;
     }
 
@@ -51,11 +54,11 @@ public final class VirtualSnapshotSpan {
         return virtualLength;
     }
 
-    public TextSnapshot getSnapshot() {
+    public @NonNull TextSnapshot getSnapshot() {
         return start.getSnapshot();
     }
 
-    public SnapshotSpan getSnapshotSpan() {
+    public @NonNull SnapshotSpan getSnapshotSpan() {
         return new SnapshotSpan(start.getPosition(), end.getPosition());
     }
 }

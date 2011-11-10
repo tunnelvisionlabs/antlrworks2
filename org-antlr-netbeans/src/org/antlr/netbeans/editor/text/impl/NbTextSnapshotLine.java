@@ -7,6 +7,7 @@ import org.antlr.netbeans.editor.text.SnapshotPoint;
 import org.antlr.netbeans.editor.text.SnapshotSpan;
 import org.antlr.netbeans.editor.text.TextSnapshot;
 import org.antlr.netbeans.editor.text.TextSnapshotLine;
+import org.netbeans.api.annotations.common.NonNull;
 import org.openide.util.Parameters;
 
 /**
@@ -14,14 +15,17 @@ import org.openide.util.Parameters;
  * @author sam
  */
 class NbTextSnapshotLine implements TextSnapshotLine {
+    @NonNull
     private final NbTextSnapshot snapshot;
     private final int lineNumber;
 
+    @NonNull
     private final SnapshotPoint start;
+    @NonNull
     private final String textIncludingLineBreak;
     private final int lineBreakLength;
 
-    public NbTextSnapshotLine(NbTextSnapshot snapshot, int lineNumber) {
+    public NbTextSnapshotLine(@NonNull NbTextSnapshot snapshot, int lineNumber) {
         Parameters.notNull("snapshot", snapshot);
         if (lineNumber < 0 || lineNumber >= snapshot.getLineCount()) {
             throw new IndexOutOfBoundsException();

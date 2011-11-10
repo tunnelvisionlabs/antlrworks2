@@ -3,13 +3,16 @@
  */
 package org.antlr.netbeans.editor.text;
 
+import org.netbeans.api.annotations.common.CheckForNull;
+import org.netbeans.api.annotations.common.NonNull;
+
 /**
  *
  * @author sam
  */
 public interface TextVersion {
 
-    public TextBuffer getTextBuffer();
+    public @NonNull TextBuffer getTextBuffer();
 
     public int getLength();
 
@@ -17,21 +20,21 @@ public interface TextVersion {
 
     //public int getReiteratedVersionNumber();
 
-    public NormalizedTextChangeCollection getChanges();
+    public @CheckForNull NormalizedTextChangeCollection getChanges();
 
-    public TextVersion getNext();
+    public @CheckForNull TextVersion getNext();
 
-    public TrackingSpan createCustomTrackingSpan(Span span, TrackingFidelityMode trackingFidelity, CustomTrackToBehavior behavior);
+    public @NonNull TrackingSpan createCustomTrackingSpan(@NonNull Span span, @NonNull TrackingFidelityMode trackingFidelity, @NonNull CustomTrackToBehavior behavior);
 
-    public TrackingPoint createTrackingPoint(int position, PointTrackingMode trackingMode);
+    public @NonNull TrackingPoint createTrackingPoint(int position, @NonNull PointTrackingMode trackingMode);
 
-    public TrackingPoint createTrackingPoint(int position, PointTrackingMode trackingMode, TrackingFidelityMode trackingFidelity);
+    public @NonNull TrackingPoint createTrackingPoint(int position, @NonNull PointTrackingMode trackingMode, @NonNull TrackingFidelityMode trackingFidelity);
 
-    public TrackingSpan createTrackingSpan(Span span, SpanTrackingMode trackingMode);
+    public @NonNull TrackingSpan createTrackingSpan(@NonNull Span span, @NonNull SpanTrackingMode trackingMode);
 
-    public TrackingSpan createTrackingSpan(int start, int length, SpanTrackingMode trackingMode);
+    public @NonNull TrackingSpan createTrackingSpan(int start, int length, @NonNull SpanTrackingMode trackingMode);
 
-    public TrackingSpan createTrackingSpan(Span span, SpanTrackingMode trackingMode, TrackingFidelityMode trackingFidelity);
+    public @NonNull TrackingSpan createTrackingSpan(@NonNull Span span, @NonNull SpanTrackingMode trackingMode, @NonNull TrackingFidelityMode trackingFidelity);
 
-    public TrackingSpan createTrackingSpan(int start, int length, SpanTrackingMode trackingMode, TrackingFidelityMode trackingFidelity);
+    public @NonNull TrackingSpan createTrackingSpan(int start, int length, @NonNull SpanTrackingMode trackingMode, @NonNull TrackingFidelityMode trackingFidelity);
 }

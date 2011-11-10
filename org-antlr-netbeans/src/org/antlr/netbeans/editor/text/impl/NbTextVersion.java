@@ -12,6 +12,7 @@ import org.antlr.netbeans.editor.text.TextBuffer;
 import org.antlr.netbeans.editor.text.TextVersion;
 import org.antlr.netbeans.editor.text.TrackingFidelityMode;
 import org.antlr.netbeans.editor.text.TrackingSpan;
+import org.netbeans.api.annotations.common.NonNull;
 import org.openide.util.Parameters;
 
 /**
@@ -20,8 +21,10 @@ import org.openide.util.Parameters;
  */
 public class NbTextVersion implements TextVersion {
 
+    @NonNull
     private final NbTextBuffer textBuffer;
     private final int versionNumber;
+    @NonNull
     private final LineTextCache lineData;
 
     private NbTextSnapshot snapshot;
@@ -30,7 +33,7 @@ public class NbTextVersion implements TextVersion {
     private NormalizedTextChangeCollection changes;
     private NbTextVersion next;
 
-    public NbTextVersion(NbTextBuffer textBuffer, int versionNumber, LineTextCache lineData) {
+    public NbTextVersion(@NonNull NbTextBuffer textBuffer, int versionNumber, @NonNull LineTextCache lineData) {
         Parameters.notNull("textBuffer", textBuffer);
         Parameters.notNull("lineData", lineData);
 
@@ -68,11 +71,11 @@ public class NbTextVersion implements TextVersion {
         }
     }
 
-    LineTextCache getLineData() {
+    @NonNull LineTextCache getLineData() {
         return lineData;
     }
 
-    NbTextSnapshot getSnapshot() {
+    @NonNull NbTextSnapshot getSnapshot() {
         synchronized (this) {
             if (snapshot == null) {
                 snapshot = new NbTextSnapshot(this);
@@ -142,7 +145,7 @@ public class NbTextVersion implements TextVersion {
         return new NbTrackingSpan(trackingStart, trackingEnd);
     }
 
-    NbTextVersion translate(NormalizedTextChangeCollection changes) {
+    @NonNull NbTextVersion translate(@NonNull NormalizedTextChangeCollection changes) {
         Parameters.notNull("changes", changes);
 
         synchronized (lock) {

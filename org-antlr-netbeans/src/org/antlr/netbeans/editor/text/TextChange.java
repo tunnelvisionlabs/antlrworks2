@@ -3,6 +3,8 @@
  */
 package org.antlr.netbeans.editor.text;
 
+import org.netbeans.api.annotations.common.NonNull;
+
 /**
  *
  * @author sam
@@ -19,9 +21,9 @@ public interface TextChange {
 
     public int getOldEnd();
 
-    public Span getOldSpan();
+    public @NonNull Span getOldSpan();
 
-    public String getOldText();
+    public @NonNull String getOldText();
 
     public int getNewPosition();
 
@@ -29,7 +31,7 @@ public interface TextChange {
 
     public int getNewEnd();
 
-    public Span getNewSpan();
+    public @NonNull Span getNewSpan();
 
-    public String getNewText();
+    public @NonNull String getNewText();
 }

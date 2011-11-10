@@ -12,6 +12,7 @@ import org.antlr.netbeans.editor.text.TextSnapshot;
 import org.antlr.netbeans.editor.text.TextVersion;
 import org.antlr.netbeans.editor.text.TrackingFidelityMode;
 import org.antlr.netbeans.editor.text.TrackingSpan;
+import org.netbeans.api.annotations.common.NonNull;
 import org.openide.util.Parameters;
 
 /**
@@ -19,10 +20,12 @@ import org.openide.util.Parameters;
  * @author sam
  */
 public class NbTrackingSpan implements TrackingSpan {
+    @NonNull
     private final NbTrackingPoint trackingStart;
+    @NonNull
     private final NbTrackingPoint trackingEnd;
 
-    public NbTrackingSpan(NbTrackingPoint trackingStart, NbTrackingPoint trackingEnd) {
+    public NbTrackingSpan(@NonNull NbTrackingPoint trackingStart, @NonNull NbTrackingPoint trackingEnd) {
         Parameters.notNull("trackingStart", trackingStart);
         Parameters.notNull("trackingEnd", trackingEnd);
         if (!trackingStart.getTrackingFidelity().equals(trackingEnd.getTrackingFidelity())) {

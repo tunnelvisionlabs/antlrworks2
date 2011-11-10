@@ -3,35 +3,37 @@
  */
 package org.antlr.netbeans.editor.text;
 
+import org.netbeans.api.annotations.common.NonNull;
+
 /**
  *
  * @author sam
  */
 public interface TextSnapshotLine {
 
-    public TextSnapshot getSnapshot();
+    public @NonNull TextSnapshot getSnapshot();
 
     public int getLineNumber();
 
-    public SnapshotPoint getStart();
+    public @NonNull SnapshotPoint getStart();
 
     public int getLength();
 
     public int getLengthIncludingLineBreak();
 
-    public SnapshotPoint getEnd();
+    public @NonNull SnapshotPoint getEnd();
 
-    public SnapshotPoint getEndIncludingLineBreak();
+    public @NonNull SnapshotPoint getEndIncludingLineBreak();
 
-    public SnapshotSpan getExtent();
+    public @NonNull SnapshotSpan getExtent();
 
-    public SnapshotSpan getExtentIncludingLineBreak();
+    public @NonNull SnapshotSpan getExtentIncludingLineBreak();
 
     public int getLineBreakLength();
 
-    public String getText();
+    public @NonNull String getText();
 
-    public String getTextIncludingLineBreak();
+    public @NonNull String getTextIncludingLineBreak();
 
-    public String getLineBreakText();
+    public @NonNull String getLineBreakText();
 }

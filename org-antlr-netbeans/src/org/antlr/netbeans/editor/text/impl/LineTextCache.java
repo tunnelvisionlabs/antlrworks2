@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.List;
 import org.antlr.netbeans.editor.text.NormalizedTextChangeCollection;
 import org.antlr.netbeans.editor.text.TextChange;
+import org.netbeans.api.annotations.common.NonNull;
 import org.openide.util.Parameters;
 
 /**
@@ -26,7 +27,7 @@ public class LineTextCache {
     private final List<Integer> blockLineOffsets = new ArrayList<Integer>();
     private final List<List<Integer>> lineOffsets = new ArrayList<List<Integer>>();
 
-    public LineTextCache(String data) {
+    public LineTextCache(@NonNull String data) {
         Parameters.notNull("data", data);
 
         length = data.length();
@@ -74,19 +75,19 @@ public class LineTextCache {
         return lineCount;
     }
 
-    public List<List<String>> getLineData() {
+    public @NonNull List<List<String>> getLineData() {
         return lineData;
     }
 
-    public List<Integer> getBlockOffsets() {
+    public @NonNull List<Integer> getBlockOffsets() {
         return blockOffsets;
     }
 
-    public List<Integer> getBlockLineOffsets() {
+    public @NonNull List<Integer> getBlockLineOffsets() {
         return blockLineOffsets;
     }
 
-    public List<List<Integer>> getLineOffsets() {
+    public @NonNull List<List<Integer>> getLineOffsets() {
         return lineOffsets;
     }
 
@@ -123,7 +124,7 @@ public class LineTextCache {
         return blockLine + blockLineOffsets.get(block);
     }
 
-    public LineTextCache applyChanges(NormalizedTextChangeCollection changes) {
+    public @NonNull LineTextCache applyChanges(@NonNull NormalizedTextChangeCollection changes) {
         int delta = 0;
         int lineDelta = 0;
         for (TextChange change : changes) {
@@ -381,7 +382,7 @@ public class LineTextCache {
         return blockOffsets.get(block) + lineOffsets.get(block).get(blockLine + 1);
     }
 
-    public String getLineText(int block, int line) {
+    public @NonNull String getLineText(int block, int line) {
         int blockLine = line - blockLineOffsets.get(block);
         return lineData.get(block).get(blockLine);
     }
