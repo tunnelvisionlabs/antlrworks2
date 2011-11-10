@@ -65,7 +65,7 @@ public class UpdateAnchorsTask extends ParserResultTask<GrammarParserResult> {
             VersionedDocument textBuffer = VersionedDocumentUtilities.getVersionedDocument(document);
             DocumentSnapshot snapshot = textBuffer.getCurrentSnapshot();
 
-            TextSnapshotCharStream input = new TextSnapshotCharStream(snapshot);
+            DocumentSnapshotCharStream input = new DocumentSnapshotCharStream(snapshot);
             input.setSourceName(result.getSnapshot().getSource().getFileObject().getNameExt());
             GrammarLexer lexer = new GrammarLexer(input);
             CommonTokenStream tokenStream = new CommonTokenStream(lexer);

@@ -42,7 +42,7 @@ import org.antlr.v4.runtime.TokenSource;
 import org.antlr.works.editor.grammar.experimental.GrammarLexer;
 import org.antlr.works.editor.grammar.experimental.GrammarParser;
 import org.antlr.works.editor.grammar.experimental.GrammarParserAnchorListener;
-import org.antlr.works.editor.grammar.experimental.TextSnapshotCharStream;
+import org.antlr.works.editor.grammar.experimental.DocumentSnapshotCharStream;
 import org.antlr.works.editor.grammar.experimental.UpdateAnchorsTask;
 import org.antlr.works.editor.grammar.parser.GrammarParser.GrammarParserResult;
 import org.netbeans.api.editor.EditorRegistry;
@@ -97,7 +97,7 @@ public class UpdateSyntaxDiagramTaskV4 extends UpdateSyntaxDiagramTask {
             }
 
             if (enclosing != null) {
-                CharStream input = new TextSnapshotCharStream(snapshot);
+                CharStream input = new DocumentSnapshotCharStream(snapshot);
                 input.seek(enclosing.getSpan().getStartPosition(snapshot).getOffset());
                 GrammarLexer lexer = new GrammarLexer(input);
                 CommonTokenStream tokens = new TaskTokenStream(lexer);

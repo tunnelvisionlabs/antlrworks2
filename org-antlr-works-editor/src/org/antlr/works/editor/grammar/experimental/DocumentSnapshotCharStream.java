@@ -38,7 +38,7 @@ import org.openide.util.Parameters;
  *
  * @author sam
  */
-public class TextSnapshotCharStream implements CharStream {
+public class DocumentSnapshotCharStream implements CharStream {
 
     // input info
     private final DocumentSnapshot snapshot;
@@ -55,7 +55,7 @@ public class TextSnapshotCharStream implements CharStream {
     private int currentSnapshotLineStartIndex;
     private String currentSnapshotLine;
 
-    public TextSnapshotCharStream(DocumentSnapshot snapshot) {
+    public DocumentSnapshotCharStream(DocumentSnapshot snapshot) {
         Parameters.notNull("snapshot", snapshot);
 
         this.snapshot = snapshot;
@@ -64,11 +64,11 @@ public class TextSnapshotCharStream implements CharStream {
         updateCachedLine();
     }
 
-    public TextSnapshotCharStream(DocumentSnapshot snapshot, OffsetRegion cachedSpan) {
+    public DocumentSnapshotCharStream(DocumentSnapshot snapshot, OffsetRegion cachedSpan) {
         this(new SnapshotPositionRegion(snapshot, cachedSpan));
     }
 
-    public TextSnapshotCharStream(SnapshotPositionRegion cachedSpan) {
+    public DocumentSnapshotCharStream(SnapshotPositionRegion cachedSpan) {
         this.snapshot = cachedSpan.getSnapshot();
         this.count = getSnapshot().length();
         this.explicitCache = true;

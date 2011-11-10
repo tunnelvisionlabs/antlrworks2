@@ -96,7 +96,7 @@ import org.antlr.works.editor.grammar.experimental.GrammarParser.ruleContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.rulerefContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.terminalContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParserAnchorListener;
-import org.antlr.works.editor.grammar.experimental.TextSnapshotCharStream;
+import org.antlr.works.editor.grammar.experimental.DocumentSnapshotCharStream;
 import org.antlr.works.editor.grammar.experimental.UpdateAnchorsTask;
 import org.antlr.works.editor.grammar.navigation.GrammarNode;
 import org.antlr.works.editor.grammar.navigation.GrammarRulesPanel;
@@ -556,7 +556,7 @@ public class GrammarCompletionProvider implements CompletionProvider {
                     }
 
                     if (enclosing != null) {
-                        CharStream input = new TextSnapshotCharStream(snapshot);
+                        CharStream input = new DocumentSnapshotCharStream(snapshot);
                         input.seek(enclosing.getSpan().getStartPosition(snapshot).getOffset());
                         GrammarLexer lexer = new GrammarLexer(input);
                         TokenSource tokenSource = new CodeCompletionTokenSource(caretOffset, lexer);
