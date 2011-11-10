@@ -28,10 +28,10 @@
  */
 package org.antlr.works.editor.grammar.syndiag;
 
-import org.antlr.netbeans.editor.text.SnapshotSpan;
+import org.antlr.netbeans.editor.text.SnapshotPositionRegion;
 
 public class NonTerminal extends Node {
-	public NonTerminal(String label, SnapshotSpan sourceSpan) {
+	public NonTerminal(String label, SnapshotPositionRegion sourceSpan) {
 		super(label, sourceSpan, 12, 3, 30, Diagram.lookupAttributes(getCategory(label)));
 	}
 }

@@ -30,11 +30,11 @@ package org.antlr.works.editor.grammar.experimental;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
-import org.antlr.netbeans.editor.text.SpanTrackingMode;
-import org.antlr.netbeans.editor.text.TextSnapshot;
-import org.antlr.netbeans.editor.text.TrackingSpan;
+import org.antlr.netbeans.editor.text.DocumentSnapshot;
+import org.antlr.netbeans.editor.text.TrackingPositionRegion;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.grammarTypeContext;
+import org.netbeans.api.annotations.common.NonNull;
 import org.openide.util.Parameters;
 
 /**
@@ -45,9 +45,9 @@ public class GrammarParserAnchorListener extends BlankGrammarParserListener {
 
     private final Stack<Integer> anchorPositions = new Stack<Integer>();
     private final List<Anchor> anchors = new ArrayList<Anchor>();
-    private final TextSnapshot snapshot;
+    private final DocumentSnapshot snapshot;
 
-    public GrammarParserAnchorListener(TextSnapshot snapshot) {
+    public GrammarParserAnchorListener(DocumentSnapshot snapshot) {
         Parameters.notNull("snapshot", snapshot);
         this.snapshot = snapshot;
     }
@@ -93,12 +93,12 @@ public class GrammarParserAnchorListener extends BlankGrammarParserListener {
     private void exitAnchor(ParserRuleContext ctx, int anchorId) {
         int start = anchorPositions.pop();
         int stop = ctx.getStop() != null ? ctx.getStop().getStopIndex() + 1 : snapshot.length();
-        SpanTrackingMode trackingMode = ctx.getStop() != null ? SpanTrackingMode.EdgeExclusive : SpanTrackingMode.EdgePositive;
+        TrackingPositionRegion.Bias trackingMode = ctx.getStop() != null ? TrackingPositionRegion.Bias.Exclusive : TrackingPositionRegion.Bias.Forward;
         anchors.add(createAnchor(ctx, start, stop, trackingMode, anchorId));
     }
 
-    private Anchor createAnchor(ParserRuleContext ctx, int start, int stop, SpanTrackingMode trackingMode, int rule) {
-        TrackingSpan trackingSpan = snapshot.createTrackingSpan(start, stop - start, trackingMode);
+    private Anchor createAnchor(ParserRuleContext ctx, int start, int stop, TrackingPositionRegion.Bias trackingMode, int rule) {
+        TrackingPositionRegion trackingSpan = snapshot.createTrackingRegion(start, stop - start, trackingMode);
         if (rule == GrammarParser.RULE_grammarType) {
             return new GrammarTypeAnchor((GrammarParser.grammarTypeContext)ctx, trackingSpan);
         } else {
@@ -108,24 +108,24 @@ public class GrammarParserAnchorListener extends BlankGrammarParserListener {
 
     public interface Anchor {
 
-        public TrackingSpan getSpan();
+        public TrackingPositionRegion getSpan();
 
         public int getRule();
 
     }
 
     public static class AnchorImpl implements Anchor {
-        private final TrackingSpan span;
+        private final TrackingPositionRegion span;
         private final int rule;
 
-        private AnchorImpl(TrackingSpan span, int rule) {
+        private AnchorImpl(@NonNull TrackingPositionRegion span, int rule) {
             Parameters.notNull("span", span);
             this.span = span;
             this.rule = rule;
         }
 
         @Override
-        public TrackingSpan getSpan() {
+        public TrackingPositionRegion getSpan() {
             return span;
         }
 
@@ -133,13 +133,25 @@ public class GrammarParserAnchorListener extends BlankGrammarParserListener {
         public int getRule() {
             return rule;
         }
+
+        @Override
+        public String toString() {
+            String ruleName;
+            if (rule >= 0 && rule <= GrammarParser.ruleNames.length) {
+                ruleName = GrammarParser.ruleNames[rule];
+            } else {
+                ruleName = "?";
+            }
+
+            return ruleName + ": " + span.toString();
+        }
     }
 
     public static class GrammarTypeAnchor extends AnchorImpl {
 
         private final int grammarType;
 
-        private GrammarTypeAnchor(grammarTypeContext ctx, TrackingSpan span) {
+        private GrammarTypeAnchor(grammarTypeContext ctx, TrackingPositionRegion span) {
             super(span, GrammarParser.RULE_grammarType);
             if (ctx.t == null) {
                 grammarType = GrammarParser.COMBINED;

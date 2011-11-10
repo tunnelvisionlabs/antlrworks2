@@ -27,10 +27,10 @@
  */
 package org.antlr.works.editor.grammar.experimental;
 
-import org.antlr.netbeans.editor.text.SnapshotSpan;
-import org.antlr.netbeans.editor.text.Span;
-import org.antlr.netbeans.editor.text.TextSnapshot;
-import org.antlr.netbeans.editor.text.TextSnapshotLine;
+import org.antlr.netbeans.editor.text.DocumentSnapshot;
+import org.antlr.netbeans.editor.text.DocumentSnapshotLine;
+import org.antlr.netbeans.editor.text.OffsetRegion;
+import org.antlr.netbeans.editor.text.SnapshotPositionRegion;
 import org.antlr.v4.runtime.CharStream;
 import org.openide.util.Parameters;
 
@@ -41,7 +41,7 @@ import org.openide.util.Parameters;
 public class TextSnapshotCharStream implements CharStream {
 
     // input info
-    private final TextSnapshot snapshot;
+    private final DocumentSnapshot snapshot;
     private final int count;
     private String sourceName = "Snapshot";
 
@@ -55,7 +55,7 @@ public class TextSnapshotCharStream implements CharStream {
     private int currentSnapshotLineStartIndex;
     private String currentSnapshotLine;
 
-    public TextSnapshotCharStream(TextSnapshot snapshot) {
+    public TextSnapshotCharStream(DocumentSnapshot snapshot) {
         Parameters.notNull("snapshot", snapshot);
 
         this.snapshot = snapshot;
@@ -64,19 +64,19 @@ public class TextSnapshotCharStream implements CharStream {
         updateCachedLine();
     }
 
-    public TextSnapshotCharStream(TextSnapshot snapshot, Span cachedSpan) {
-        this(new SnapshotSpan(snapshot, cachedSpan));
+    public TextSnapshotCharStream(DocumentSnapshot snapshot, OffsetRegion cachedSpan) {
+        this(new SnapshotPositionRegion(snapshot, cachedSpan));
     }
 
-    public TextSnapshotCharStream(SnapshotSpan cachedSpan) {
+    public TextSnapshotCharStream(SnapshotPositionRegion cachedSpan) {
         this.snapshot = cachedSpan.getSnapshot();
         this.count = getSnapshot().length();
         this.explicitCache = true;
-        this.currentSnapshotLineStartIndex = cachedSpan.getStart().getPosition();
+        this.currentSnapshotLineStartIndex = cachedSpan.getStart().getOffset();
         this.currentSnapshotLine = cachedSpan.getText();
     }
 
-    public final TextSnapshot getSnapshot() {
+    public final DocumentSnapshot getSnapshot() {
         return snapshot;
     }
 
@@ -200,9 +200,9 @@ public class TextSnapshotCharStream implements CharStream {
         }
 
         setIndex(index);
-        TextSnapshotLine currentLine = getSnapshot().getLineFromPosition(index());
+        DocumentSnapshotLine currentLine = getSnapshot().findLineFromOffset(index());
         setLine(currentLine.getLineNumber());
-        setCharPositionInLine(index() - currentLine.getStart().getPosition());
+        setCharPositionInLine(index() - currentLine.getStart().getOffset());
         updateCachedLine();
     }
 
@@ -215,8 +215,8 @@ public class TextSnapshotCharStream implements CharStream {
             || index() < currentSnapshotLineStartIndex
             || index() >= currentSnapshotLineStartIndex + currentSnapshotLine.length()) {
             if (index() >= 0 && index() < size()) {
-                TextSnapshotLine currentLine = getSnapshot().getLineFromPosition(index());
-                currentSnapshotLineStartIndex = currentLine.getStart().getPosition();
+                DocumentSnapshotLine currentLine = getSnapshot().findLineFromOffset(index());
+                currentSnapshotLineStartIndex = currentLine.getStart().getOffset();
                 currentSnapshotLine = currentLine.getTextIncludingLineBreak();
             } else {
                 currentSnapshotLine = null;

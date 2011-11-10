@@ -34,9 +34,9 @@ import java.util.Deque;
 import java.util.Properties;
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
-import org.antlr.netbeans.editor.text.SnapshotSpan;
-import org.antlr.netbeans.editor.text.Span;
-import org.antlr.netbeans.editor.text.TextSnapshot;
+import org.antlr.netbeans.editor.text.DocumentSnapshot;
+import org.antlr.netbeans.editor.text.OffsetRegion;
+import org.antlr.netbeans.editor.text.SnapshotPositionRegion;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.works.editor.grammar.experimental.BlankGrammarParserListener;
@@ -81,7 +81,7 @@ import static org.antlr.works.editor.grammar.syndiag.Bundle.HINT_SyntaxDiagramTo
 })
 public final class SyntaxDiagramTopComponent extends TopComponent {
 
-    private TextSnapshot snapshot;
+    private DocumentSnapshot snapshot;
     private GrammarParser.ruleContext context;
     private Diagram diagram;
 
@@ -95,7 +95,7 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
         return (SyntaxDiagramTopComponent)WindowManager.getDefault().findTopComponent("SyntaxDiagramTopComponent");
     }
 
-    public void setRuleContext(TextSnapshot snapshot, int grammarType, GrammarParser.ruleContext context) {
+    public void setRuleContext(DocumentSnapshot snapshot, int grammarType, GrammarParser.ruleContext context) {
         if (!SwingUtilities.isEventDispatchThread()) {
             throw new UnsupportedOperationException();
         }
@@ -121,7 +121,7 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
         }
     }
 
-    private static boolean isSameSnapshot(TextSnapshot a, TextSnapshot b) {
+    private static boolean isSameSnapshot(DocumentSnapshot a, DocumentSnapshot b) {
         if (a == b) {
             return true;
         }
@@ -203,14 +203,14 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
     private static class SyntaxBuilderListener extends BlankGrammarParserListener {
 
         private final int grammarType;
-        private final TextSnapshot snapshot;
+        private final DocumentSnapshot snapshot;
         private final Deque<JComponent> nodes = new ArrayDeque<JComponent>();
 
         private Rule rule;
         private boolean inRewrite;
         private atomContext outermostAtom;
 
-        public SyntaxBuilderListener(int grammarType, TextSnapshot snapshot) {
+        public SyntaxBuilderListener(int grammarType, DocumentSnapshot snapshot) {
             Parameters.notNull("snapshot", snapshot);
             this.grammarType = grammarType;
             this.snapshot = snapshot;
@@ -304,11 +304,11 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
             }
 
             outermostAtom = ctx;
-            SnapshotSpan sourceSpan = null;
+            SnapshotPositionRegion sourceSpan = null;
             if (ctx.stop != null) {
-                sourceSpan = new SnapshotSpan(snapshot, Span.fromBounds(ctx.start.getStartIndex(), ctx.stop.getStopIndex() + 1));
+                sourceSpan = new SnapshotPositionRegion(snapshot, OffsetRegion.fromBounds(ctx.start.getStartIndex(), ctx.stop.getStopIndex() + 1));
             } else if (ctx.start != null) {
-                sourceSpan = new SnapshotSpan(snapshot, Span.fromBounds(ctx.start.getStartIndex(), ctx.start.getStopIndex() + 1));
+                sourceSpan = new SnapshotPositionRegion(snapshot, OffsetRegion.fromBounds(ctx.start.getStartIndex(), ctx.start.getStopIndex() + 1));
             }
 
             boolean wildcard = ctx.start.getType() == GrammarParser.DOT;

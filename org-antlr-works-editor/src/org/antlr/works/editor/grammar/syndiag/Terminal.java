@@ -28,10 +28,10 @@
  */
 package org.antlr.works.editor.grammar.syndiag;
 
-import org.antlr.netbeans.editor.text.SnapshotSpan;
+import org.antlr.netbeans.editor.text.SnapshotPositionRegion;
 
 public class Terminal extends Node {
-	public Terminal(String label, SnapshotSpan sourceSpan) {
+	public Terminal(String label, SnapshotPositionRegion sourceSpan) {
 		super(label, sourceSpan, 5, 3, 0, Diagram.lookupAttributes(getCategory(label)));
 	}
 }

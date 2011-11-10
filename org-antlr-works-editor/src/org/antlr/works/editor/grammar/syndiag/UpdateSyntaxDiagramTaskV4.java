@@ -33,9 +33,9 @@ import java.util.concurrent.CancellationException;
 import javax.swing.SwingUtilities;
 import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
-import org.antlr.netbeans.editor.text.TextBuffer;
-import org.antlr.netbeans.editor.text.TextBufferUtilities;
-import org.antlr.netbeans.editor.text.TextSnapshot;
+import org.antlr.netbeans.editor.text.DocumentSnapshot;
+import org.antlr.netbeans.editor.text.VersionedDocument;
+import org.antlr.netbeans.editor.text.VersionedDocumentUtilities;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.TokenSource;
@@ -70,8 +70,8 @@ public class UpdateSyntaxDiagramTaskV4 extends UpdateSyntaxDiagramTask {
         }
 
         int caretOffset = component.getCaretPosition();
-        TextBuffer textBuffer = TextBufferUtilities.getTextBufferForDocument((BaseDocument)document);
-        final TextSnapshot snapshot = textBuffer.getCurrentSnapshot();
+        VersionedDocument textBuffer = VersionedDocumentUtilities.getVersionedDocument((BaseDocument)document);
+        final DocumentSnapshot snapshot = textBuffer.getCurrentSnapshot();
 
         Object anchorsObject = document.getProperty(UpdateAnchorsTask.class);
         @SuppressWarnings("unchecked")
@@ -89,16 +89,16 @@ public class UpdateSyntaxDiagramTaskV4 extends UpdateSyntaxDiagramTask {
                     continue;
                 }
 
-                if (anchor.getSpan().getStartPoint(snapshot).getPosition() <= caretOffset && anchor.getSpan().getEndPoint(snapshot).getPosition() > caretOffset) {
+                if (anchor.getSpan().getStartPosition(snapshot).getOffset() <= caretOffset && anchor.getSpan().getEndPosition(snapshot).getOffset() > caretOffset) {
                     enclosing = anchor;
-                } else if (anchor.getSpan().getStartPoint(snapshot).getPosition() > caretOffset) {
+                } else if (anchor.getSpan().getStartPosition(snapshot).getOffset() > caretOffset) {
                     break;
                 }
             }
 
             if (enclosing != null) {
                 CharStream input = new TextSnapshotCharStream(snapshot);
-                input.seek(enclosing.getSpan().getStartPoint(snapshot).getPosition());
+                input.seek(enclosing.getSpan().getStartPosition(snapshot).getOffset());
                 GrammarLexer lexer = new GrammarLexer(input);
                 CommonTokenStream tokens = new TaskTokenStream(lexer);
                 GrammarParser parser = new GrammarParser(tokens);
@@ -122,6 +122,7 @@ public class UpdateSyntaxDiagramTaskV4 extends UpdateSyntaxDiagramTask {
     @Override
     public void cancel() {
         super.cancel();
+        cancelled = true;
     }
 
     private class TaskTokenStream extends CommonTokenStream {

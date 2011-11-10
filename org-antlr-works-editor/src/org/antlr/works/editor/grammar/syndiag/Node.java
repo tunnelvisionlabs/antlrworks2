@@ -42,12 +42,11 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.Document;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
-import org.antlr.netbeans.editor.text.PointTrackingMode;
-import org.antlr.netbeans.editor.text.SnapshotPoint;
-import org.antlr.netbeans.editor.text.SnapshotSpan;
-import org.antlr.netbeans.editor.text.TextBuffer;
-import org.antlr.netbeans.editor.text.TextSnapshot;
-import org.antlr.netbeans.editor.text.TrackingPoint;
+import org.antlr.netbeans.editor.text.DocumentSnapshot;
+import org.antlr.netbeans.editor.text.SnapshotPosition;
+import org.antlr.netbeans.editor.text.SnapshotPositionRegion;
+import org.antlr.netbeans.editor.text.TrackingPosition;
+import org.antlr.netbeans.editor.text.VersionedDocument;
 import org.netbeans.modules.editor.NbEditorUtilities;
 import org.openide.text.Line;
 import org.openide.util.Parameters;
@@ -55,12 +54,12 @@ import org.openide.util.Parameters;
 public class Node extends JComponent implements Element {
 
     private final String label;
-    private final SnapshotSpan sourceSpan;
+    private final SnapshotPositionRegion sourceSpan;
     private final int labelPaddingX;
     private final int labelPaddingY;
     private final int arcSize;
 
-    public Node(String label, SnapshotSpan sourceSpan, int labelPaddingX, int labelPaddingY, int arcSize, AttributeSet attributes) {
+    public Node(String label, SnapshotPositionRegion sourceSpan, int labelPaddingX, int labelPaddingY, int arcSize, AttributeSet attributes) {
         Parameters.notNull("label", label);
         this.label = label;
         this.sourceSpan = sourceSpan;
@@ -136,13 +135,13 @@ public class Node extends JComponent implements Element {
 
         if (!e.isConsumed() && e.getClickCount() == 2) {
             if (sourceSpan != null) {
-                TextBuffer textBuffer = sourceSpan.getSnapshot().getTextBuffer();
+                VersionedDocument textBuffer = sourceSpan.getSnapshot().getVersionedDocument();
                 Document document = textBuffer.getDocument();
-                TextSnapshot currentSnapshot = textBuffer.getCurrentSnapshot();
-                TrackingPoint trackingTarget = sourceSpan.getSnapshot().createTrackingPoint(sourceSpan.getStart().getPosition(), PointTrackingMode.Positive);
-                SnapshotPoint targetPoint = trackingTarget.getPoint(currentSnapshot);
+                DocumentSnapshot currentSnapshot = textBuffer.getCurrentSnapshot();
+                TrackingPosition trackingTarget = sourceSpan.getSnapshot().createTrackingPosition(sourceSpan.getStart().getOffset(), TrackingPosition.Bias.Forward);
+                SnapshotPosition targetPoint = trackingTarget.getPosition(currentSnapshot);
                 int column = targetPoint.getContainingLine().getStart().difference(targetPoint);
-                NbEditorUtilities.getLine(document, targetPoint.getPosition(), true).show(Line.ShowOpenType.OPEN, Line.ShowVisibilityType.FOCUS, column);
+                NbEditorUtilities.getLine(document, targetPoint.getOffset(), true).show(Line.ShowOpenType.OPEN, Line.ShowVisibilityType.FOCUS, column);
             }
 
             e.consume();

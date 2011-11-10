@@ -28,9 +28,9 @@
 package org.antlr.works.editor.grammar.experimental;
 
 import javax.swing.text.Document;
-import org.antlr.netbeans.editor.text.TextBuffer;
-import org.antlr.netbeans.editor.text.TextBufferUtilities;
-import org.antlr.netbeans.editor.text.TextSnapshot;
+import org.antlr.netbeans.editor.text.DocumentSnapshot;
+import org.antlr.netbeans.editor.text.VersionedDocument;
+import org.antlr.netbeans.editor.text.VersionedDocumentUtilities;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.works.editor.grammar.parser.GrammarParser.GrammarParserResult;
@@ -62,8 +62,8 @@ public class UpdateAnchorsTask extends ParserResultTask<GrammarParserResult> {
                 return;
             }
 
-            TextBuffer textBuffer = TextBufferUtilities.getTextBufferForDocument(document);
-            TextSnapshot snapshot = textBuffer.getCurrentSnapshot();
+            VersionedDocument textBuffer = VersionedDocumentUtilities.getVersionedDocument(document);
+            DocumentSnapshot snapshot = textBuffer.getCurrentSnapshot();
 
             TextSnapshotCharStream input = new TextSnapshotCharStream(snapshot);
             input.setSourceName(result.getSnapshot().getSource().getFileObject().getNameExt());
