@@ -66,9 +66,13 @@ public class NbForwardTrackingPoint extends NbTrackingPoint {
             }
             
             if (relevantChange != null) {
-                sourcePosition = relevantChange.getNewPosition();
-                if (positive) {
-                    sourcePosition += relevantChange.getNewLength();
+                if (sourcePosition >= relevantChange.getOldPosition() && sourcePosition <= relevantChange.getOldEnd()) {
+                    sourcePosition = relevantChange.getNewPosition();
+                    if (positive) {
+                        sourcePosition += relevantChange.getNewLength();
+                    }
+                } else {
+                    sourcePosition += relevantChange.getDelta();
                 }
             }
         }
