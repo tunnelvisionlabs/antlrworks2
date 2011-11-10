@@ -11,5 +11,19 @@ public enum PointTrackingMode {
 
     Positive,
     Negative,
+    ;
 
+    @Override
+    public String toString() {
+        switch (this) {
+        case Positive:
+            return "→";
+
+        case Negative:
+            return "←";
+
+        default:
+            return "???";
+        }
+    }
 }

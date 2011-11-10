@@ -61,4 +61,26 @@ public enum SpanTrackingMode {
         }
     }
 
+    @Override
+    public String toString() {
+        switch (this) {
+        case EdgeExclusive:
+            return "→←";
+
+        case EdgeInclusive:
+            return "←→";
+
+        case EdgeNegative:
+            return "←←";
+
+        case EdgePositive:
+            return "→→";
+
+        case Custom:
+            return "custom";
+
+        default:
+            return "???";
+        }
+    }
 }

@@ -5,6 +5,7 @@ package org.antlr.netbeans.editor.text.impl;
 
 import org.antlr.netbeans.editor.text.SnapshotPoint;
 import org.antlr.netbeans.editor.text.SnapshotSpan;
+import org.antlr.netbeans.editor.text.Span;
 import org.antlr.netbeans.editor.text.SpanTrackingMode;
 import org.antlr.netbeans.editor.text.TextBuffer;
 import org.antlr.netbeans.editor.text.TextSnapshot;
@@ -78,4 +79,9 @@ public class NbTrackingSpan implements TrackingSpan {
         return getSpan(snapshot).getText();
     }
 
+    @Override
+    public String toString() {
+        Span span = Span.fromBounds(trackingStart.getPosition(), trackingEnd.getPosition());
+        return String.format("V%d %s@%s", trackingStart.getTextVersion().getVersionNumber(), getTrackingMode().toString(), span.toString());
+    }
 }

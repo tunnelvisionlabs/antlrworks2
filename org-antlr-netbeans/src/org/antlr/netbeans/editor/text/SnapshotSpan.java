@@ -226,4 +226,12 @@ public final class SnapshotSpan {
         return hash;
     }
 
+    @Override
+    public String toString() {
+        int version = getSnapshot().getVersion().getVersionNumber();
+        String spanString = getSpan().toString();
+        int textLength = Math.min(this.getLength(), 40);
+        String text = getSnapshot().subSequence(getStart().getPosition(), getStart().getPosition() + textLength).toString();
+        return String.format("v%d_%s_'%s'", version, spanString, text);
+    }
 }

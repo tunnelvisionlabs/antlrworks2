@@ -126,6 +126,6 @@ public final class Span {
 
     @Override
     public String toString() {
-        return String.format("[%d, %d)", start, getEnd());
+        return String.format("[%d..%d)", start, getEnd());
     }
 }

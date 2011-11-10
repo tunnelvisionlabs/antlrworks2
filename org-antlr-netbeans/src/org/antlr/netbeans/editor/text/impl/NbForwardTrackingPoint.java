@@ -80,4 +80,8 @@ public class NbForwardTrackingPoint extends NbTrackingPoint {
         return sourcePosition;
     }
 
+    @Override
+    public String toString() {
+        return String.format("V%d %s@%s", getTextVersion().getVersionNumber(), getTrackingMode().toString(), getPosition());
+    }
 }
