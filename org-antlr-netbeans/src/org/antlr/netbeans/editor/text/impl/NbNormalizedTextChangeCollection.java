@@ -155,8 +155,8 @@ final class NbNormalizedTextChangeCollection extends AbstractList<TextChange> im
                 if (previousChange == null) {
                     oldText.replace(0, start, update.getOldText().substring(0, start));
                 } else {
-                    int a = previousChange.getNewPosition() + previousChange.getNewLength();
-                    int b = a + (end - start);
+                    int a = previousChange.getNewPosition() + previousChange.getNewLength() - update.getOldPosition();
+                    int b = a + (start - fillPoint);
                     oldText.replace(fillPoint, start, update.getOldText().substring(a, b));
                 }
             }

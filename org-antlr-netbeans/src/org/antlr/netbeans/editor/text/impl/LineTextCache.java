@@ -147,7 +147,13 @@ public class LineTextCache {
              */
 
             // 1. finish off the current line if necessary
-            if (oldColumn > 0 && (currentChange == null || getLineEnd(oldBlock, oldLine) <= currentChange.getOldPosition())) {
+            boolean previousLineEnded = oldColumn == 0;
+            if (previousLineEnded && modifiedBlock != null && !modifiedBlock.isEmpty()) {
+                String lastLine = modifiedBlock.get(modifiedBlock.size() - 1);
+                previousLineEnded = lastLine.charAt(lastLine.length() - 1) == '\n';
+            }
+
+            if (!previousLineEnded && (currentChange == null || getLineEnd(oldBlock, oldLine) <= currentChange.getOldPosition())) {
                 if (modifiedBlock == null) {
                     modifiedBlock = new ArrayList<String>();
                 }
