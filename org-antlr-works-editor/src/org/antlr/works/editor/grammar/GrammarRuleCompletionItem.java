@@ -30,20 +30,18 @@ package org.antlr.works.editor.grammar;
 import javax.swing.ImageIcon;
 import org.antlr.netbeans.editor.navigation.Description;
 import org.antlr.works.editor.grammar.navigation.GrammarNode;
-import org.netbeans.spi.editor.completion.CompletionItem;
 
 /**
  *
  * @author sam
  */
-public class GrammarRuleCompletionItem extends GrammarCompletionItem implements CompletionItem {
+public class GrammarRuleCompletionItem extends GrammarCompletionItem {
 
     private final Description rule;
 
     private String leftText;
 
-    public GrammarRuleCompletionItem(int substitutionOffset, Description rule) {
-        super(substitutionOffset);
+    public GrammarRuleCompletionItem(Description rule) {
         this.rule = rule;
     }
 

@@ -322,11 +322,43 @@ tokenSpec
 actionBlock
     :   BEGIN_ACTION
             (   actionBlock
+            |   actionExpression
+            |   actionScopeExpression
+            |   actionIgnored
             |   ACTION_COMMENT
-            |   ACTION_ELEMENT
+            |   ACTION_LITERAL
             |   ACTION_TEXT
+            |   ACTION_LT
+            |   ACTION_GT
+            |   ACTION_LPAREN
+            |   ACTION_RPAREN
+            |   ACTION_LBRACK
+            |   ACTION_RBRACK
+            |   ACTION_EQUALS
+            |   ACTION_COMMA
+            |   ACTION_ESCAPE
+            |   ACTION_WORD
+            |   ACTION_REFERENCE
+            |   ACTION_COLON
+            |   ACTION_COLON2
+            |   ACTION_MINUS
+            |   ACTION_DOT
             )*
         END_ACTION
+    ;
+
+actionExpression
+    :   ACTION_REFERENCE actionIgnored* ACTION_DOT actionIgnored* ACTION_WORD
+    ;
+
+actionScopeExpression
+    :   ACTION_REFERENCE actionIgnored* (ACTION_LBRACK actionIgnored* (ACTION_MINUS actionIgnored*)? ACTION_WORD actionIgnored* ACTION_RBRACK actionIgnored*)? ACTION_COLON2 actionIgnored* ACTION_WORD
+    ;
+
+actionIgnored
+    :   ACTION_WS
+    |   ACTION_NEWLINE
+    |   ACTION_COMMENT
     ;
 
 argActionBlock
@@ -921,8 +953,8 @@ rewriteTreeAlt
     ;
 
 rewriteTreeElement
-	:	rewriteTreeAtom
-	|	rewriteTreeAtom ebnfSuffix //-> ^( ebnfSuffix ^(REWRITE_BLOCK ^(REWRITE_SEQ rewriteTreeAtom)) )
+	:	rewriteTreeAtom ebnfSuffix?
+	//|	rewriteTreeAtom ebnfSuffix //-> ^( ebnfSuffix ^(REWRITE_BLOCK ^(REWRITE_SEQ rewriteTreeAtom)) )
 	|   rewriteTree
 		(	ebnfSuffix
 			//-> ^(ebnfSuffix ^(REWRITE_BLOCK ^(REWRITE_SEQ rewriteTree)) )

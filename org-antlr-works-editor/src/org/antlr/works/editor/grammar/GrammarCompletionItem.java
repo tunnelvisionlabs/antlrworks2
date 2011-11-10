@@ -36,9 +36,17 @@ import java.util.Collection;
 import java.util.Locale;
 import javax.swing.ImageIcon;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
+import org.antlr.netbeans.editor.text.DocumentSnapshot;
+import org.antlr.netbeans.editor.text.SnapshotPositionRegion;
+import org.antlr.netbeans.editor.text.TrackingPositionRegion;
+import org.antlr.netbeans.editor.text.VersionedDocument;
+import org.antlr.netbeans.editor.text.VersionedDocumentUtilities;
+import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.editor.completion.Completion;
 import org.netbeans.editor.BaseDocument;
+import org.netbeans.spi.editor.completion.CompletionController;
 import org.netbeans.spi.editor.completion.CompletionItem;
 import org.netbeans.spi.editor.completion.CompletionTask;
 import org.netbeans.spi.editor.completion.support.CompletionUtilities;
@@ -53,6 +61,7 @@ public abstract class GrammarCompletionItem implements CompletionItem {
     public static final int RULE_SORT_PRIORITY = 100;
     public static final int ELEMENT_REFERENCE_SORT_PRIORITY = 100;
     public static final int PROPERTY_SORT_PRIORITY = 100;
+    public static final int DECLARATION_SORT_PRIORITY = -100;
 
     public static final String KEYWORD_COLOR = "<font color=#000099>"; //NOI18N
     public static final String FIELD_COLOR = "<font color=#008618>"; //NOI18N
@@ -68,46 +77,81 @@ public abstract class GrammarCompletionItem implements CompletionItem {
 
     public static final Collection<KeywordItem> KEYWORD_ITEMS =
         new ArrayList<KeywordItem>() {{
-            add(new KeywordItem(0, "lexer"));
-            add(new KeywordItem(0, "parser"));
-            add(new KeywordItem(0, "catch"));
-            add(new KeywordItem(0, "finally"));
-            add(new KeywordItem(0, "grammar"));
-            add(new KeywordItem(0, "mode"));
-            add(new KeywordItem(0, "private"));
-            add(new KeywordItem(0, "protected"));
-            add(new KeywordItem(0, "public"));
-            add(new KeywordItem(0, "returns"));
-            add(new KeywordItem(0, "throws"));
-            add(new KeywordItem(0, "tree"));
-            add(new KeywordItem(0, "scope"));
-            add(new KeywordItem(0, "import"));
-            add(new KeywordItem(0, "fragment"));
-            add(new KeywordItem(0, "tokens"));
-            add(new KeywordItem(0, "options"));
+            add(new KeywordItem("lexer"));
+            add(new KeywordItem("parser"));
+            add(new KeywordItem("catch"));
+            add(new KeywordItem("finally"));
+            add(new KeywordItem("grammar"));
+            add(new KeywordItem("locals"));
+            add(new KeywordItem("mode"));
+            add(new KeywordItem("private"));
+            add(new KeywordItem("protected"));
+            add(new KeywordItem("public"));
+            add(new KeywordItem("returns"));
+            add(new KeywordItem("throws"));
+            add(new KeywordItem("tree"));
+            add(new KeywordItem("scope"));
+            add(new KeywordItem("import"));
+            add(new KeywordItem("fragment"));
+            add(new KeywordItem("tokens"));
+            add(new KeywordItem("options"));
         }};
 
-    private int substitutionOffset;
+    protected GrammarCompletionItem() {
+    }
 
-    protected GrammarCompletionItem(int substitutionOffset) {
-        this.substitutionOffset = substitutionOffset;
+    public boolean allowInitialSelection() {
+        return true;
     }
 
     @Override
-    public void defaultAction(JTextComponent component) {
-        if (component != null) {
-            Completion.get().hideDocumentation();
-            Completion.get().hideCompletion();
-            int caretOffset = component.getSelectionEnd();
-            substituteText(component, substitutionOffset, caretOffset - substitutionOffset, null, false);
+    public final void defaultAction(JTextComponent component) {
+        throw new UnsupportedOperationException("This functionality is handled by GrammarCompletionController."); //NOI18N
+    }
+
+    public void defaultAction(@NonNull JTextComponent component, @NonNull GrammarCompletionController controller, boolean isSelected) {
+        Completion.get().hideDocumentation();
+        Completion.get().hideCompletion();
+        if (!isSelected) {
+            return;
         }
+
+        GrammarCompletionProvider.GrammarCompletionQuery query = controller.getQuery();
+
+        TrackingPositionRegion applicableTo = query.getApplicableTo();
+        if (applicableTo == null) {
+            return;
+        }
+
+        Document document = component.getDocument();
+        if (document == null) {
+            return;
+        }
+
+        VersionedDocument textBuffer = VersionedDocumentUtilities.getVersionedDocument(document);
+        if (textBuffer == null) {
+            return;
+        }
+
+        DocumentSnapshot snapshot = textBuffer.getCurrentSnapshot();
+        if (snapshot == null) {
+            return;
+        }
+
+        SnapshotPositionRegion replacementSpan = query.getApplicableTo().getRegion(snapshot);
+        substituteText(component, replacementSpan.getStart().getOffset(), replacementSpan.getLength(), getInsertPrefix().toString());
+        GrammarCompletionController.addRecentCompletion(getInsertPrefix().toString());
     }
 
     @Override
-    public void processKeyEvent(KeyEvent evt) {
+    public final void processKeyEvent(KeyEvent evt) {
+        throw new UnsupportedOperationException("This functionality is handled by GrammarCompletionController."); //NOI18N
+    }
+
+    public void processKeyEvent(KeyEvent evt, GrammarCompletionController controller, boolean isSelected) {
         if (evt.getID() == KeyEvent.KEY_TYPED) {
             if (!GrammarCompletionProvider.autoPopupOnGrammarIdentifierPart()
-                && !evt.isAltDown() && !evt.isControlDown() && !evt.isMetaDown() && !evt.isAltGraphDown()
+                && evt.getModifiers() == 0
                 && GrammarCompletionProvider.getGrammarCompletionSelectors().indexOf(evt.getKeyChar()) >= 0) {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
@@ -124,8 +168,12 @@ public abstract class GrammarCompletionItem implements CompletionItem {
     }
 
     @Override
-    public void render(Graphics g, Font defaultFont, Color defaultColor, Color backgroundColor, int width, int height, boolean selected) {
-        CompletionUtilities.renderHtml(getIcon(), getLeftHtmlText(), getRightHtmlText(), g, defaultFont, defaultColor, width, height, selected);
+    public final void render(Graphics g, Font defaultFont, Color defaultColor, Color backgroundColor, int width, int height, boolean selected) {
+        throw new UnsupportedOperationException("This functionality is handled by GrammarCompletionController."); //NOI18N
+    }
+
+    public void render(CompletionController controller, Graphics g, Font defaultFont, Color foregroundColor, Color backgroundColor, Color selectedForegroundColor, Color selectedBackgroundColor, int width, int height, boolean isBestMatch, boolean isSelected) {
+        CompletionUtilities.renderHtml(getIcon(), getLeftHtmlText(), getRightHtmlText(), g, defaultFont, foregroundColor, selectedBackgroundColor, width, height, isBestMatch, isSelected);
     }
 
     @Override
@@ -139,21 +187,16 @@ public abstract class GrammarCompletionItem implements CompletionItem {
     }
 
     @Override
-    public boolean instantSubstitution(JTextComponent component) {
-        if (component != null) {
-            try {
-                int caretOffset = component.getSelectionEnd();
-                if (caretOffset > substitutionOffset) {
-                    String text = component.getDocument().getText(substitutionOffset, caretOffset - substitutionOffset);
-                    if (!getInsertPrefix().toString().startsWith(text)) {
-                        return false;
-                    }
-                }
-            } catch (BadLocationException ex) {
-            }
+    public final boolean instantSubstitution(JTextComponent component) {
+        throw new UnsupportedOperationException("This functionality is handled by GrammarCompletionController.");
+    }
+
+    public boolean instantSubstitution(@NonNull JTextComponent component, @NonNull GrammarCompletionController controller) {
+        if (controller.getQuery().getApplicableTo() == null) {
+            return false;
         }
 
-        defaultAction(component);
+        defaultAction(component, controller, true);
         return true;
     }
 
@@ -191,14 +234,26 @@ public abstract class GrammarCompletionItem implements CompletionItem {
         return null;
     }
 
-    protected void substituteText(JTextComponent component, int offset, int length, String replacement, boolean assign) {
-        BaseDocument document = (BaseDocument)component.getDocument();
-        CharSequence prefix = getInsertPrefix();
-        if (prefix == null) {
-            return;
-        }
+    protected void substituteText(final JTextComponent component, final int offset, final int length, final String replacement) {
+        final BaseDocument document = (BaseDocument)component.getDocument();
 
-        StringBuilder text = new StringBuilder(prefix);
+        document.runAtomic (new Runnable () {
+            @Override
+            public void run () {
+                try {
+                    if (document.getText(offset, length).equals(replacement)) {
+                        component.setCaretPosition(offset + replacement.length());
+                        return;
+                    }
+
+                    document.remove(offset, length);
+                    document.insertString(offset, replacement, null);
+//                    component.setCaretPosition(offset + replacement.length());
+                } catch (BadLocationException e) {
+                    // Can't update
+                }
+            }
+        });
     }
 
     public static class KeywordItem extends GrammarCompletionItem {
@@ -207,8 +262,7 @@ public abstract class GrammarCompletionItem implements CompletionItem {
 
         private String leftText;
 
-        public KeywordItem(int substitutionOffset, String keyword) {
-            super(substitutionOffset);
+        public KeywordItem(String keyword) {
             this.keyword = keyword;
         }
 

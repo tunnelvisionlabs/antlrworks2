@@ -37,8 +37,8 @@ public class EnclosingRuleCompletionItem extends ElementReferenceCompletionItem 
 
     private String rightText;
 
-    public EnclosingRuleCompletionItem(int substitutionOffset, Token enclosingRuleName) {
-        super(substitutionOffset, enclosingRuleName, false);
+    public EnclosingRuleCompletionItem(Token enclosingRuleName) {
+        super(enclosingRuleName, false);
     }
 
     @Override

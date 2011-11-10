@@ -69,6 +69,15 @@ public class BlankGrammarParserListener implements GrammarParserListener {
 	@Override public void enterRule(GrammarParser.actionBlockContext ctx) { }
 	@Override public void exitRule(GrammarParser.actionBlockContext ctx) { }
 
+	@Override public void enterRule(GrammarParser.actionExpressionContext ctx) { }
+	@Override public void exitRule(GrammarParser.actionExpressionContext ctx) { }
+
+	@Override public void enterRule(GrammarParser.actionScopeExpressionContext ctx) { }
+	@Override public void exitRule(GrammarParser.actionScopeExpressionContext ctx) { }
+
+	@Override public void enterRule(GrammarParser.actionIgnoredContext ctx) { }
+	@Override public void exitRule(GrammarParser.actionIgnoredContext ctx) { }
+
 	@Override public void enterRule(GrammarParser.argActionBlockContext ctx) { }
 	@Override public void exitRule(GrammarParser.argActionBlockContext ctx) { }
 

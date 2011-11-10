@@ -40,8 +40,7 @@ public class ElementReferenceCompletionItem extends GrammarCompletionItem {
 
     private String leftText;
 
-    public ElementReferenceCompletionItem(int substitutionOffset, Token label, boolean explicit) {
-        super(substitutionOffset);
+    public ElementReferenceCompletionItem(Token label, boolean explicit) {
         this.label = label;
         this.explicit = explicit;
     }
