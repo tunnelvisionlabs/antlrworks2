@@ -40,7 +40,7 @@ public class ANTLRGrammarFileDialogFilter extends OpenFileDialogFilter {
 
     @Override
     public String[] getSuffixes() {
-        return new String[] { ".g" };
+        return new String[] { ".g", ".g3", ".g4" };
     }
     
 }
