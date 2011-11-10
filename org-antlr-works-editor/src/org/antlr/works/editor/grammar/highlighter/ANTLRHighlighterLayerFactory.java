@@ -28,12 +28,13 @@
 package org.antlr.works.editor.grammar.highlighter;
 
 import javax.swing.text.StyledDocument;
+import org.antlr.works.editor.grammar.GrammarEditorKit;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.netbeans.spi.editor.highlighting.HighlightsLayer;
 import org.netbeans.spi.editor.highlighting.HighlightsLayerFactory;
 import org.netbeans.spi.editor.highlighting.ZOrder;
 
-@MimeRegistration(mimeType="text/x-antlr3", service=HighlightsLayerFactory.class)
+@MimeRegistration(mimeType=GrammarEditorKit.GRAMMAR_MIME_TYPE, service=HighlightsLayerFactory.class)
 public class ANTLRHighlighterLayerFactory implements HighlightsLayerFactory {
     @Override
     public HighlightsLayer[] createLayers(Context context) {

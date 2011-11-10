@@ -48,6 +48,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
+import org.antlr.works.editor.grammar.GrammarEditorKit;
 import org.netbeans.spi.navigator.NavigatorPanel;
 import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
@@ -118,7 +119,7 @@ public class GrammarRulesPanel implements NavigatorPanel {
     }
 
     private static final String PANELS_FOLDER = "/Navigator/Panels/";
-    private static final String CONTENT_TYPE = "text/x-antlr3";
+    private static final String CONTENT_TYPE = GrammarEditorKit.GRAMMAR_MIME_TYPE;
     private static final Lookup.Template<NavigatorPanel> NAV_PANEL_TEMPLATE = new Lookup.Template<NavigatorPanel>(NavigatorPanel.class);
 
     public static GrammarRulesPanelUI findGrammarRulesPanelUI() {

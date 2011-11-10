@@ -46,6 +46,7 @@ package org.antlr.works.editor.grammar.navigation;
 
 import java.util.Collection;
 import java.util.Collections;
+import org.antlr.works.editor.grammar.GrammarEditorKit;
 import org.antlr.works.editor.grammar.parser.GrammarParser;
 import org.antlr.works.editor.grammar.parser.GrammarParser.GrammarParserResult;
 import org.antlr.works.editor.grammar.parser.GrammarParserV4;
@@ -57,7 +58,7 @@ import org.netbeans.modules.parsing.spi.SchedulerEvent;
 import org.netbeans.modules.parsing.spi.SchedulerTask;
 import org.netbeans.modules.parsing.spi.TaskFactory;
 
-@MimeRegistration(mimeType="text/x-antlr3", service=TaskFactory.class)
+@MimeRegistration(mimeType=GrammarEditorKit.GRAMMAR_MIME_TYPE, service=TaskFactory.class)
 public class RuleScanningTaskFactory extends TaskFactory {
 
     @Override

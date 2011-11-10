@@ -37,7 +37,7 @@ import org.netbeans.modules.parsing.spi.Parser;
 import org.netbeans.modules.parsing.spi.ParserFactory;
 import org.netbeans.modules.parsing.spi.SourceModificationEvent;
 
-@MimeRegistration(mimeType="text/x-antlr3", service=ParserFactory.class)
+@MimeRegistration(mimeType=GrammarEditorKit.GRAMMAR_MIME_TYPE, service=ParserFactory.class)
 public class GrammarParserFactory extends ParserFactory {
 
     @Override

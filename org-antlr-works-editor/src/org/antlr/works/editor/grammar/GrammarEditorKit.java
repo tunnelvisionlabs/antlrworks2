@@ -65,7 +65,7 @@ import org.openide.util.actions.Presenter;
  *
  * @author Sam Harwell
  */
-@MimeRegistration(mimeType="text/x-antlr3", service=EditorKit.class)
+@MimeRegistration(mimeType=GrammarEditorKit.GRAMMAR_MIME_TYPE, service=EditorKit.class)
 public class GrammarEditorKit extends NbEditorKit {
 
     public static final String PROP_LEGACY_MODE = "legacy-mode";

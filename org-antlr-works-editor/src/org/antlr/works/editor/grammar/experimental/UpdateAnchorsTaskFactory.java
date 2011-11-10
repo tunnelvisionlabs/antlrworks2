@@ -29,6 +29,7 @@ package org.antlr.works.editor.grammar.experimental;
 
 import java.util.Collection;
 import java.util.Collections;
+import org.antlr.works.editor.grammar.GrammarEditorKit;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.netbeans.modules.parsing.api.Snapshot;
 import org.netbeans.modules.parsing.spi.SchedulerTask;
@@ -38,7 +39,7 @@ import org.netbeans.modules.parsing.spi.TaskFactory;
  *
  * @author sam
  */
-@MimeRegistration(mimeType="text/x-antlr3", service=TaskFactory.class)
+@MimeRegistration(mimeType=GrammarEditorKit.GRAMMAR_MIME_TYPE, service=TaskFactory.class)
 public class UpdateAnchorsTaskFactory extends TaskFactory {
 
     @Override

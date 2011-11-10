@@ -112,7 +112,7 @@ public class ANTLRHighlighter extends ANTLRHighlighterBase<ANTLRHighlighterState
         });
         document.putProperty(DOCUMENT_PROPERTY, this);
 
-        Lookup lookup = MimeLookup.getLookup(MimePath.parse("text/x-antlr3"));
+        Lookup lookup = MimeLookup.getLookup(MimePath.parse(GrammarEditorKit.GRAMMAR_MIME_TYPE));
         FontColorSettings settings = lookup.lookup(FontColorSettings.class);
         identifierAttributes = getFontAndColors(settings, "identifier");
         keywordAttributes = getFontAndColors(settings, "keyword");

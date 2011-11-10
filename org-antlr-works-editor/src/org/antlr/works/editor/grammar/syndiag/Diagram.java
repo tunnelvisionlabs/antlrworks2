@@ -35,6 +35,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Path2D;
 import javax.swing.JPanel;
 import javax.swing.text.AttributeSet;
+import org.antlr.works.editor.grammar.GrammarEditorKit;
 import org.netbeans.api.editor.mimelookup.MimeLookup;
 import org.netbeans.api.editor.mimelookup.MimePath;
 import org.netbeans.api.editor.settings.FontColorSettings;
@@ -81,7 +82,7 @@ public class Diagram extends JPanel {
 
     protected static AttributeSet lookupAttributes(String category) {
         Parameters.notNull("category", category);
-        Lookup lookup = MimeLookup.getLookup(MimePath.parse("text/x-antlr3"));
+        Lookup lookup = MimeLookup.getLookup(MimePath.parse(GrammarEditorKit.GRAMMAR_MIME_TYPE));
         FontColorSettings settings = lookup.lookup(FontColorSettings.class);
         return settings.getTokenFontColors(category);
     }

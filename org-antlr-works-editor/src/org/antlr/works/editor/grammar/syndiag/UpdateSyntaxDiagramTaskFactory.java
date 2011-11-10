@@ -30,6 +30,7 @@ package org.antlr.works.editor.grammar.syndiag;
 
 import java.util.Collection;
 import java.util.Collections;
+import org.antlr.works.editor.grammar.GrammarEditorKit;
 import org.antlr.works.editor.grammar.parser.GrammarParser;
 import org.antlr.works.editor.grammar.parser.GrammarParserV4;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
@@ -44,7 +45,7 @@ import org.netbeans.modules.parsing.spi.TaskFactory;
  *
  * @author sam
  */
-@MimeRegistration(mimeType="text/x-antlr3", service=TaskFactory.class)
+@MimeRegistration(mimeType=GrammarEditorKit.GRAMMAR_MIME_TYPE, service=TaskFactory.class)
 public class UpdateSyntaxDiagramTaskFactory extends TaskFactory {
 
     @Override
