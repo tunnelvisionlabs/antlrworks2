@@ -5,4 +5,12 @@
         <ext name="g"/>
         <resolver mime="text/x-antlr3"/>
     </file>
+    <file>
+        <ext name="g3"/>
+        <resolver mime="text/x-antlr3"/>
+    </file>
+    <file>
+        <ext name="g4"/>
+        <resolver mime="text/x-antlr3"/>
+    </file>
 </MIME-resolver>
