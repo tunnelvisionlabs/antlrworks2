@@ -5,4 +5,8 @@
         <ext name="stg"/>
         <resolver mime="text/x-stringtemplate4"/>
     </file>
+    <file>
+        <ext name="st"/>
+        <resolver mime="text/x-stringtemplate4"/>
+    </file>
 </MIME-resolver>
