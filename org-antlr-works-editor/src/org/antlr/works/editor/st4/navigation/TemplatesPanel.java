@@ -48,6 +48,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
+import org.antlr.works.editor.st4.StringTemplateEditorKit;
 import org.netbeans.spi.navigator.NavigatorPanel;
 import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
@@ -118,7 +119,7 @@ public class TemplatesPanel implements NavigatorPanel {
     }
 
     private static final String PANELS_FOLDER = "/Navigator/Panels/";
-    private static final String CONTENT_TYPE = "text/x-stringtemplate4";
+    private static final String CONTENT_TYPE = StringTemplateEditorKit.TEMPLATE_MIME_TYPE;
     private static final Lookup.Template<NavigatorPanel> NAV_PANEL_TEMPLATE = new Lookup.Template<NavigatorPanel>(NavigatorPanel.class);
 
     public static TemplatesPanelUI findTemplatesPanelUI() {

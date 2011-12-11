@@ -28,12 +28,13 @@
 package org.antlr.works.editor.st4.parser;
 
 import java.util.Collection;
+import org.antlr.works.editor.st4.StringTemplateEditorKit;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.netbeans.modules.parsing.api.Snapshot;
 import org.netbeans.modules.parsing.spi.Parser;
 import org.netbeans.modules.parsing.spi.ParserFactory;
 
-@MimeRegistration(mimeType="text/x-stringtemplate4", service=ParserFactory.class)
+@MimeRegistration(mimeType=StringTemplateEditorKit.TEMPLATE_MIME_TYPE, service=ParserFactory.class)
 public class TemplateParserFactory extends ParserFactory {
     @Override
     public Parser createParser(Collection<Snapshot> snapshots) {

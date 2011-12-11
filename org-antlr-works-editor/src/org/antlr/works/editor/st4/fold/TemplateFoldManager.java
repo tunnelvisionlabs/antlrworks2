@@ -33,6 +33,7 @@ import java.util.WeakHashMap;
 import java.util.prefs.Preferences;
 import javax.swing.event.DocumentEvent;
 import javax.swing.text.Document;
+import org.antlr.works.editor.st4.StringTemplateEditorKit;
 import org.netbeans.api.editor.fold.Fold;
 import org.netbeans.api.editor.mimelookup.MimeLookup;
 import org.netbeans.spi.editor.fold.FoldHierarchyTransaction;
@@ -83,7 +84,7 @@ public class TemplateFoldManager implements FoldManager {
             }
         }
 
-        Preferences preferences = MimeLookup.getLookup("text/x-antlr3").lookup(Preferences.class);
+        Preferences preferences = MimeLookup.getLookup(StringTemplateEditorKit.TEMPLATE_MIME_TYPE).lookup(Preferences.class);
         //foldImportsPreset = prefs.getBoolean(SimpleValueNames.CODE_FOLDING_COLLAPSE_IMPORT, foldImportsPreset);
     }
 

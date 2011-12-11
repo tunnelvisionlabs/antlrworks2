@@ -27,6 +27,7 @@
  */
 package org.antlr.works.editor.st4.fold;
 
+import org.antlr.works.editor.st4.StringTemplateEditorKit;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.netbeans.spi.editor.fold.FoldManager;
 import org.netbeans.spi.editor.fold.FoldManagerFactory;
@@ -35,7 +36,7 @@ import org.netbeans.spi.editor.fold.FoldManagerFactory;
  *
  * @author sam
  */
-@MimeRegistration(mimeType="text/x-stringtemplate4", service=FoldManagerFactory.class)
+@MimeRegistration(mimeType=StringTemplateEditorKit.TEMPLATE_MIME_TYPE, service=FoldManagerFactory.class)
 public class TemplateFoldManagerFactory implements FoldManagerFactory {
 
     @Override

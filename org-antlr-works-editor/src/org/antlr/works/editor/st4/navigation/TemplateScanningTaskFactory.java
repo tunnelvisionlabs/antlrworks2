@@ -46,12 +46,13 @@ package org.antlr.works.editor.st4.navigation;
 
 import java.util.Collection;
 import java.util.Collections;
+import org.antlr.works.editor.st4.StringTemplateEditorKit;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.netbeans.modules.parsing.api.Snapshot;
 import org.netbeans.modules.parsing.spi.SchedulerTask;
 import org.netbeans.modules.parsing.spi.TaskFactory;
 
-@MimeRegistration(mimeType="text/x-stringtemplate4", service=TaskFactory.class)
+@MimeRegistration(mimeType=StringTemplateEditorKit.TEMPLATE_MIME_TYPE, service=TaskFactory.class)
 public class TemplateScanningTaskFactory extends TaskFactory {
 
     @Override

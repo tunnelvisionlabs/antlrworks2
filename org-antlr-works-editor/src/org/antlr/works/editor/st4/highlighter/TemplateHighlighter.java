@@ -39,6 +39,7 @@ import org.antlr.netbeans.editor.highlighting.Span;
 import org.antlr.netbeans.editor.highlighting.TokenSourceWithState;
 import org.antlr.runtime.CharStream;
 import org.antlr.runtime.CommonToken;
+import org.antlr.works.editor.st4.StringTemplateEditorKit;
 import org.netbeans.api.editor.mimelookup.MimeLookup;
 import org.netbeans.api.editor.mimelookup.MimePath;
 import org.netbeans.api.editor.settings.FontColorSettings;
@@ -81,7 +82,7 @@ public class TemplateHighlighter extends ANTLRHighlighterBase<TemplateHighlighte
     public TemplateHighlighter(StyledDocument document) {
         super(document);
 
-        Lookup lookup = MimeLookup.getLookup(MimePath.parse("text/x-stringtemplate4"));
+        Lookup lookup = MimeLookup.getLookup(MimePath.parse(StringTemplateEditorKit.TEMPLATE_MIME_TYPE));
         FontColorSettings settings = lookup.lookup(FontColorSettings.class);
         identifierAttributes = getFontAndColors(settings, "identifier");
         keywordAttributes = getFontAndColors(settings, "keyword");
