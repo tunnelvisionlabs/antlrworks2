@@ -28,6 +28,7 @@
 package org.antlr.works.editor.st4;
 
 import javax.swing.Action;
+import javax.swing.text.EditorKit;
 import javax.swing.text.TextAction;
 import org.antlr.netbeans.editor.commenting.BlockCommentFormat;
 import org.antlr.netbeans.editor.commenting.Commenter;
@@ -42,7 +43,7 @@ import org.netbeans.modules.editor.NbEditorKit;
  *
  * @author sam
  */
-@MimeRegistration(mimeType="text/x-stringtemplate4", service=NbEditorKit.class)
+@MimeRegistration(mimeType=StringTemplateEditorKit.TEMPLATE_MIME_TYPE, service=EditorKit.class)
 public class StringTemplateEditorKit extends NbEditorKit {
 
     public static final String TEMPLATE_MIME_TYPE = "text/x-stringtemplate4";
