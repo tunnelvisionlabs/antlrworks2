@@ -36,6 +36,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.StyledDocument;
+import org.antlr.netbeans.editor.text.OffsetRegion;
 import org.antlr.runtime.CharStream;
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.Token;
@@ -66,7 +67,7 @@ public abstract class ANTLRHighlighterBase<TState extends LineStateInfo<TState>>
         this.documentListener = new DocumentListenerImpl();
     }
 
-    protected StyledDocument getDocument() {
+    protected final StyledDocument getDocument() {
         return document;
     }
 
@@ -105,7 +106,7 @@ public abstract class ANTLRHighlighterBase<TState extends LineStateInfo<TState>>
             tokens.clear();
         }
 
-        Span span = Span.fromBounds(startOffset, endOffset);
+        OffsetRegion span = OffsetRegion.fromBounds(startOffset, endOffset);
 
         if (failedTimeout)
             return;
@@ -113,14 +114,14 @@ public abstract class ANTLRHighlighterBase<TState extends LineStateInfo<TState>>
         boolean spanExtended = false;
         
         int extendMultiLineSpanToLine = 0;
-        Span extendedSpan = span;
+        OffsetRegion extendedSpan = span;
         
         synchronized (lock) {
-            Span requestedSpan = span;
+            OffsetRegion requestedSpan = span;
             
             ParseRequest<TState> request = adjustParseSpan(span);
             TState startState = request.getState();
-            span = request.getSpan();
+            span = request.getRegion();
             
             CharStream input;
             try {
@@ -144,7 +145,7 @@ public abstract class ANTLRHighlighterBase<TState extends LineStateInfo<TState>>
                 // TODO: perform this under a read lock
                 CommonToken token = (CommonToken)lexer.nextToken();
 
-                boolean inBounds = token.getStartIndex() < span.getEndExclusive();
+                boolean inBounds = token.getStartIndex() < span.getEnd();
 
                 if (updateOffsets) {
                     int startLineCurrent;
@@ -222,16 +223,16 @@ public abstract class ANTLRHighlighterBase<TState extends LineStateInfo<TState>>
                              * in the editor
                              */
                             int endPosition = line < NbDocument.findLineRootElement(document).getElementCount() - 2 ? NbDocument.findLineOffset(document, line + 2) : document.getLength();
-                            if (endPosition > extendedSpan.getEndExclusive())
+                            if (endPosition > extendedSpan.getEnd())
                             {
                                 spanExtended = true;
-                                extendedSpan = Span.fromBounds(extendedSpan.getStart(), endPosition);
+                                extendedSpan = OffsetRegion.fromBounds(extendedSpan.getStart(), endPosition);
                             }
                         }
                     }
                 }
 
-                if (token.getStartIndex() >= span.getEndExclusive())
+                if (token.getStartIndex() >= span.getEnd())
                     break;
 
                 if (token.getStopIndex() < requestedSpan.getStart())
@@ -255,9 +256,9 @@ public abstract class ANTLRHighlighterBase<TState extends LineStateInfo<TState>>
         
         if (updateOffsets && extendMultiLineSpanToLine > 0) {
             int endPosition = extendMultiLineSpanToLine < NbDocument.findLineRootElement(document).getElementCount() - 1 ? NbDocument.findLineOffset(document, extendMultiLineSpanToLine + 1) : document.getLength();
-            if (endPosition > extendedSpan.getEndExclusive()) {
+            if (endPosition > extendedSpan.getEnd()) {
                 spanExtended = true;
-                extendedSpan = Span.fromBounds(extendedSpan.getStart(), endPosition);
+                extendedSpan = OffsetRegion.fromBounds(extendedSpan.getStart(), endPosition);
             }
         }
         
@@ -265,8 +266,8 @@ public abstract class ANTLRHighlighterBase<TState extends LineStateInfo<TState>>
             /* Subtract 1 from each of these because the spans include the line break on their last
              * line, forcing it to appear as the first position on the following line.
              */
-            int firstLine = NbDocument.findLineNumber(document, span.getEndExclusive());
-            int lastLine = NbDocument.findLineNumber(document, extendedSpan.getEndExclusive()) - 1;
+            int firstLine = NbDocument.findLineNumber(document, span.getEnd());
+            int lastLine = NbDocument.findLineNumber(document, extendedSpan.getEnd()) - 1;
             forceRehighlightLines(firstLine, lastLine);
         }
     }
@@ -287,9 +288,9 @@ public abstract class ANTLRHighlighterBase<TState extends LineStateInfo<TState>>
 
     protected abstract TState getStartState();
 
-    protected ParseRequest<TState> adjustParseSpan(Span span) {
+    protected ParseRequest<TState> adjustParseSpan(OffsetRegion span) {
         int start = span.getStart();
-        int end = span.getEndExclusive();
+        int end = span.getEnd();
 
         if (firstDirtyLine != null) {
             int firstDirtyLineOffset = NbDocument.findLineOffset(document, firstDirtyLine);
@@ -314,7 +315,7 @@ public abstract class ANTLRHighlighterBase<TState extends LineStateInfo<TState>>
 
         start = NbDocument.findLineOffset(document, startLine);
         int length = end - start;
-        ParseRequest<TState> request = new ParseRequest<TState>(new Span(start, length), state);
+        ParseRequest<TState> request = new ParseRequest<TState>(new OffsetRegion(start, length), state);
         return request;
     }
 
@@ -363,7 +364,7 @@ public abstract class ANTLRHighlighterBase<TState extends LineStateInfo<TState>>
         return lineEnd <= token.getStopIndex() + 1 && nextLineStart >= token.getStopIndex() + 1;
     }
 
-    protected CharStream createInputStream(Span span) throws BadLocationException {
+    protected CharStream createInputStream(OffsetRegion span) throws BadLocationException {
         CharStream input;
         if (span.getLength() > 1000) {
             input = new DocumentCharStream(this.document, span);

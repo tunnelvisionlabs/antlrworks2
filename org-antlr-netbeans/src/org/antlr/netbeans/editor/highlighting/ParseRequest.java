@@ -27,16 +27,18 @@
  */
 package org.antlr.netbeans.editor.highlighting;
 
+import org.antlr.netbeans.editor.text.OffsetRegion;
+
 public final class ParseRequest<TState> {
-    private final Span span;
+    private final OffsetRegion span;
     private final TState state;
 
-    public ParseRequest(Span span, TState state) {
+    public ParseRequest(OffsetRegion span, TState state) {
         this.span = span;
         this.state = state;
     }
     
-    public Span getSpan() {
+    public OffsetRegion getRegion() {
         return span;
     }
     

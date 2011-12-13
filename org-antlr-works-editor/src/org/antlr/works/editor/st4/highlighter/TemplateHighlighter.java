@@ -35,8 +35,8 @@ import javax.swing.text.StyledDocument;
 import org.antlr.netbeans.editor.highlighting.ANTLRHighlighterBase;
 import org.antlr.netbeans.editor.highlighting.DocumentCharStream;
 import org.antlr.netbeans.editor.highlighting.Highlight;
-import org.antlr.netbeans.editor.highlighting.Span;
 import org.antlr.netbeans.editor.highlighting.TokenSourceWithState;
+import org.antlr.netbeans.editor.text.OffsetRegion;
 import org.antlr.runtime.CharStream;
 import org.antlr.runtime.CommonToken;
 import org.antlr.works.editor.st4.StringTemplateEditorKit;
@@ -103,7 +103,7 @@ public class TemplateHighlighter extends ANTLRHighlighterBase<TemplateHighlighte
     }
 
     @Override
-    protected CharStream createInputStream(Span span) {
+    protected CharStream createInputStream(OffsetRegion span) {
         CharStream input = new TemplateEscapedCharStream(getDocument());
         input.seek(span.getStart());
         return input;

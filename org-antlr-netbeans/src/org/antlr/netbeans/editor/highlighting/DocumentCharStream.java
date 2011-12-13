@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.StyledDocument;
+import org.antlr.netbeans.editor.text.OffsetRegion;
 import org.antlr.runtime.CharStream;
 import org.antlr.runtime.Token;
 import org.openide.text.NbDocument;
@@ -42,13 +43,13 @@ public class DocumentCharStream implements CharStream {
     
     private String currentSnapshotLine;
     
+    private final StyledDocument document;
+    
     private int markDepth;
     
     private List<CharStreamState> markers;
     
     private int lastMarker;
-    
-    private final StyledDocument document;
     
     private int line;
     
@@ -61,7 +62,7 @@ public class DocumentCharStream implements CharStream {
         //updateCachedLine();
     }
 
-    public DocumentCharStream(StyledDocument document, Span cachedSpan) throws BadLocationException {
+    public DocumentCharStream(StyledDocument document, OffsetRegion cachedSpan) throws BadLocationException {
         this.document = document;
         this.explicitCache = true;
         this.currentSnapshotLineStartIndex = cachedSpan.getStart();
