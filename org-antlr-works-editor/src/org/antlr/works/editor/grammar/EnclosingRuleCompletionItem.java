@@ -28,21 +28,25 @@
 package org.antlr.works.editor.grammar;
 
 import org.antlr.v4.runtime.Token;
+import org.netbeans.api.annotations.common.NonNull;
 
 /**
  *
- * @author sam
+ * @author Sam Harwell
  */
-public class EnclosingRuleCompletionItem extends ElementReferenceCompletionItem {
+public class EnclosingRuleCompletionItem extends RewriteReferenceCompletionItem {
 
-    private String rightText;
-
-    public EnclosingRuleCompletionItem(Token enclosingRuleName) {
+    public EnclosingRuleCompletionItem(@NonNull Token enclosingRuleName) {
         super(enclosingRuleName, false);
     }
 
     @Override
     protected String getRightHtmlText() {
         return "Enclosing rule";
+    }
+
+    @Override
+    protected String getPrefix() {
+        return "$";
     }
 }

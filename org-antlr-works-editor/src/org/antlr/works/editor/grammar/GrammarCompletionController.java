@@ -1,6 +1,29 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * [The "BSD license"]
+ *  Copyright (c) 2011 Sam Harwell
+ *  All rights reserved.
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions
+ *  are met:
+ *  1. Redistributions of source code must retain the above copyright
+ *      notice, this list of conditions and the following disclaimer.
+ *  2. Redistributions in binary form must reproduce the above copyright
+ *      notice, this list of conditions and the following disclaimer in the
+ *      documentation and/or other materials provided with the distribution.
+ *  3. The name of the author may not be used to endorse or promote products
+ *      derived from this software without specific prior written permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+ *  IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ *  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ *  IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+ *  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+ *  NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ *  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ *  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package org.antlr.works.editor.grammar;
 
@@ -14,6 +37,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
@@ -21,7 +46,9 @@ import org.antlr.netbeans.editor.text.TrackingPositionRegion;
 import org.antlr.netbeans.editor.text.VersionedDocument;
 import org.antlr.netbeans.editor.text.VersionedDocumentUtilities;
 import org.antlr.works.editor.grammar.GrammarCompletionProvider.GrammarCompletionQuery;
+import org.netbeans.api.annotations.common.CheckForNull;
 import org.netbeans.api.annotations.common.NonNull;
+import org.netbeans.api.annotations.common.NullAllowed;
 import org.netbeans.editor.BaseDocument;
 import org.netbeans.editor.Utilities;
 import org.netbeans.spi.editor.completion.CompletionController;
@@ -30,12 +57,22 @@ import org.netbeans.spi.editor.completion.CompletionItemComparator;
 import org.netbeans.spi.editor.completion.CompletionResultSet;
 import org.netbeans.spi.editor.completion.CompletionTask;
 import org.netbeans.spi.editor.completion.support.AsyncCompletionTask;
+import org.openide.util.Parameters;
 
 /**
  *
  * @author Sam Harwell
  */
 public class GrammarCompletionController implements CompletionController {
+
+    /** ^([A-Z][a-z]*){2,}$ */
+    private static final Pattern WORD_BOUNDARY_PREFIX =
+        Pattern.compile("^([A-Z][a-z]*){2,}$");
+
+    /** [A-Z][a-z]* */
+    private static final Pattern WORD_PATTERN =
+        Pattern.compile("[A-Z][a-z]*");
+
     private static final List<String> recentCompletions = new ArrayList<String>();
     private static final Collator recentCompletionsCollator;
 
@@ -93,21 +130,24 @@ public class GrammarCompletionController implements CompletionController {
 
     @Override
     public Selection getSelection(List<? extends CompletionItem> items) {
+        Comparator<CompletionItem> comparator = getComparator(CompletionResultSet.TEXT_SORT_TYPE);
+
         String completionPrefix = getCompletionPrefix();
         String evaluatedText = completionPrefix;
         while (true) {
             CompletionItem bestMatch = null;
             int bestMatchValue = 0;
             int prefixMatch = 0;
+            MatchEvaluator evaluator = new MatchEvaluator(evaluatedText);
             for (CompletionItem item : items) {
-                int matchValue = getMatchStrength(evaluatedText, item);
+                int matchValue = evaluator.getMatchStrength(item);
                 if (matchValue > 0) {
-                    if ((matchValue & (PREFIX_CASE_SENSITIVE | PREFIX)) != 0) {
+                    if ((matchValue & (MatchEvaluator.PREFIX_CASE_SENSITIVE | MatchEvaluator.PREFIX)) != 0) {
                         prefixMatch++;
                     }
 
                     boolean improved = matchValue > bestMatchValue
-                        || (matchValue == bestMatchValue && item.getInsertPrefix().toString().compareTo(bestMatch.getInsertPrefix().toString()) < 0);
+                        || (matchValue == bestMatchValue && comparator.compare(item, bestMatch) < 0);
 
                     if (improved) {
                         bestMatch = item;
@@ -188,7 +228,7 @@ public class GrammarCompletionController implements CompletionController {
         }
     }
 
-    protected String getCompletionPrefix() {
+    protected @NonNull String getCompletionPrefix() {
         TrackingPositionRegion span = query.getApplicableTo();
         if (span != null) {
             VersionedDocument textBuffer = VersionedDocumentUtilities.getVersionedDocument(getDocument());
@@ -213,7 +253,7 @@ public class GrammarCompletionController implements CompletionController {
         return "";
     }
 
-    protected Comparator<CompletionItem> getComparator(int sortType) {
+    protected @NonNull Comparator<CompletionItem> getComparator(int sortType) {
         if (sortType == CompletionResultSet.PRIORITY_SORT_TYPE) {
             return ItemComparator.PRIORITY_COMPARATOR;
         }
@@ -225,136 +265,54 @@ public class GrammarCompletionController implements CompletionController {
         throw new IllegalArgumentException("Invalid sort type.");
     }
 
-    protected static final int EXACT_CASE_SENSITIVE = 0x0800;
-    protected static final int EXACT = 0x0400;
-    protected static final int PREFIX_CASE_SENSITIVE = 0x0200;
-    protected static final int PREFIX = 0x0100;
-    protected static final int SUBSTRING = 0x0080;
-    protected static final int WORD = 0x0040;
-    protected static final int VALID = 0x0020;
-    protected static final int RECENTLY_USED_MASK = 0x001E;
-    protected static final int CASE_SENSITIVE = 0x0001;
+    public static @CheckForNull Pattern getPrefixBoundaryPattern(@NonNull String prefix, boolean caseSensitive) {
+        Parameters.notNull("prefix", prefix);
 
-
-    protected int getMatchStrength(String evaluatedText, CompletionItem completionItem) {
-        MatchResult exact = isExactMatch(evaluatedText, completionItem);
-        MatchResult prefix = isPrefixMatch(evaluatedText, completionItem);
-        MatchResult substring = isSubstringMatch(evaluatedText, completionItem);
-        MatchResult word = isWordBoundaryMatch(evaluatedText, completionItem);
-        MatchResult valid = isValidMatch(evaluatedText, completionItem);
-        int recent = getRecentlyUsed(evaluatedText, completionItem);
-
-        boolean caseSensitive;
-        if (exact != MatchResult.None) {
-            caseSensitive = exact == MatchResult.MatchCaseSensitive;
-        } else if (prefix != MatchResult.None) {
-            caseSensitive = prefix == MatchResult.MatchCaseSensitive;
-        } else if (substring != MatchResult.None) {
-            caseSensitive = substring == MatchResult.MatchCaseSensitive;
-        } else if (word != MatchResult.None) {
-            caseSensitive = word == MatchResult.MatchCaseSensitive;
-        } else if (valid != MatchResult.None) {
-            caseSensitive = valid == MatchResult.MatchCaseSensitive;
-        } else {
-            caseSensitive = false;
+        if (prefix.isEmpty()) {
+            return null;
         }
 
-        int strength = 0;
+        Matcher matcher = WORD_BOUNDARY_PREFIX.matcher(prefix);
+        if (matcher.matches()) {
+            StringBuilder pattern = new StringBuilder("^");
+            for (Matcher wordMatcher = WORD_PATTERN.matcher(prefix); wordMatcher.find(); ) {
+                String group = wordMatcher.group();
+                if (caseSensitive) {
+                    if (Character.isUpperCase(group.charAt(0))) {
+                        pattern.append("(?:\\w*[a-z0-9_])?").append(group.charAt(0));
+                    } else if (Character.isLowerCase(group.charAt(0))) {
+                        pattern.append("(?:\\w*[0-9_])?").append(group.charAt(0));
+                    } else {
+                        pattern.append("\\w*").append(Pattern.quote(group.substring(0, 1)));
+                    }
 
-        if (exact == MatchResult.MatchCaseSensitive) {
-            strength |= EXACT_CASE_SENSITIVE;
+                    pattern.append(Pattern.quote(group.substring(1)));
+                } else {
+                    pattern.append("(?:(?:\\w*[a-z0-9_])?")
+                        .append(Character.toUpperCase(group.charAt(0)))
+                        .append("|(?:\\w*[0-9_])?")
+                        .append(Character.toLowerCase(group.charAt(0)))
+                        .append(")");
+
+                    for (int j = 1; j < group.length(); j++) {
+                        char ch = group.charAt(j);
+                        if (Character.isLetter(ch)) {
+                            pattern.append("[")
+                                .append(Character.toUpperCase(ch))
+                                .append(Character.toLowerCase(ch))
+                                .append("]");
+                        } else {
+                            pattern.append(ch);
+                        }
+                    }
+                }
+            }
+
+            pattern.append("\\w*$");
+            return Pattern.compile(pattern.toString());
         }
 
-        if (prefix == MatchResult.MatchCaseSensitive) {
-            strength |= PREFIX_CASE_SENSITIVE;
-        }
-
-        if (exact == MatchResult.Match) {
-            strength |= EXACT;
-        }
-
-        if (prefix == MatchResult.Match) {
-            strength |= PREFIX;
-        }
-
-        if (substring != MatchResult.None) {
-            strength |= SUBSTRING;
-        }
-
-        if (word != MatchResult.None) {
-            strength |= WORD;
-        }
-
-        if (valid != MatchResult.None) {
-            strength |= VALID;
-        }
-
-        recent = Math.max(0, recent);
-        recent = Math.min(255, recent);
-        strength |= (recent << 1);
-
-        if (caseSensitive) {
-            strength |= CASE_SENSITIVE;
-        }
-
-        return strength;
-    }
-
-    protected MatchResult isExactMatch(String evaluatedText, CompletionItem completionItem) {
-        String insertText = completionItem.getInsertPrefix().toString();
-        if (evaluatedText.equals(insertText)) {
-            return MatchResult.MatchCaseSensitive;
-        }
-
-        insertText = insertText.toLowerCase(Locale.getDefault());
-        evaluatedText = evaluatedText.toLowerCase(Locale.getDefault());
-        if (evaluatedText.equals(insertText)) {
-            return MatchResult.Match;
-        }
-
-        return MatchResult.None;
-    }
-
-    protected MatchResult isPrefixMatch(String evaluatedText, CompletionItem completionItem) {
-        String insertText = completionItem.getInsertPrefix().toString();
-        if (insertText.startsWith(evaluatedText)) {
-            return MatchResult.MatchCaseSensitive;
-        }
-
-        insertText = insertText.toLowerCase(Locale.getDefault());
-        evaluatedText = evaluatedText.toLowerCase(Locale.getDefault());
-        if (insertText.startsWith(evaluatedText)) {
-            return MatchResult.Match;
-        }
-
-        return MatchResult.None;
-    }
-
-    public MatchResult isSubstringMatch(String evaluatedText, CompletionItem completionItem) {
-        String insertText = completionItem.getInsertPrefix().toString();
-        if (insertText.contains(evaluatedText)) {
-            return MatchResult.MatchCaseSensitive;
-        }
-
-        insertText = insertText.toLowerCase(Locale.getDefault());
-        evaluatedText = evaluatedText.toLowerCase(Locale.getDefault());
-        if (insertText.contains(evaluatedText)) {
-            return MatchResult.Match;
-        }
-
-        return MatchResult.None;
-    }
-
-    public MatchResult isWordBoundaryMatch(String evaluatedText, CompletionItem completionItem) {
-        return MatchResult.None;
-    }
-
-    public MatchResult isValidMatch(String evaluatedText, CompletionItem completionItem) {
-        return completionItem.getSortPriority() < 0 ? MatchResult.Match : MatchResult.None;
-    }
-
-    public int getRecentlyUsed(String evaluatedText, CompletionItem completionItem) {
-        return getRecentCompletionWeight(completionItem.getInsertPrefix().toString(), recentCompletionsCollator);
+        return null;
     }
 
     public enum MatchResult {
@@ -363,9 +321,185 @@ public class GrammarCompletionController implements CompletionController {
         MatchCaseSensitive,
     }
 
+    protected static class MatchEvaluator {
+
+        protected static final int EXACT_CASE_SENSITIVE = 0x0800;
+        protected static final int EXACT = 0x0400;
+        protected static final int PREFIX_CASE_SENSITIVE = 0x0200;
+        protected static final int PREFIX = 0x0100;
+        protected static final int SUBSTRING = 0x0080;
+        protected static final int WORD = 0x0040;
+        protected static final int VALID = 0x0020;
+        protected static final int RECENTLY_USED_MASK = 0x001E;
+        protected static final int CASE_SENSITIVE = 0x0001;
+
+        @NonNull
+        private final String evaluatedText;
+        @NonNull
+        private final String lowerCaseEvaluatedText;
+        @NullAllowed
+        private final Pattern caseSensitiveWordMatch;
+        @NullAllowed
+        private final Pattern caseInsensitiveWordMatch;
+
+        public MatchEvaluator(@NonNull String evaluatedText) {
+            Parameters.notNull("evaluatedText", evaluatedText);
+            this.evaluatedText = evaluatedText;
+            this.lowerCaseEvaluatedText = evaluatedText.toLowerCase(Locale.getDefault());
+            this.caseSensitiveWordMatch = getPrefixBoundaryPattern(evaluatedText, true);
+            this.caseInsensitiveWordMatch = getPrefixBoundaryPattern(evaluatedText, false);
+        }
+
+        public int getMatchStrength(@NonNull CompletionItem completionItem) {
+            MatchResult exact = isExactMatch(completionItem);
+            MatchResult prefix = isPrefixMatch(completionItem);
+            MatchResult substring = isSubstringMatch(completionItem);
+            MatchResult word = isWordBoundaryMatch(completionItem);
+            MatchResult valid = isValidMatch(completionItem);
+            int recent = getRecentlyUsed(completionItem);
+
+            boolean caseSensitive;
+            if (exact != MatchResult.None) {
+                caseSensitive = exact == MatchResult.MatchCaseSensitive;
+            } else if (prefix != MatchResult.None) {
+                caseSensitive = prefix == MatchResult.MatchCaseSensitive;
+            } else if (substring != MatchResult.None) {
+                caseSensitive = substring == MatchResult.MatchCaseSensitive;
+            } else if (word != MatchResult.None) {
+                caseSensitive = word == MatchResult.MatchCaseSensitive;
+            } else if (valid != MatchResult.None) {
+                caseSensitive = valid == MatchResult.MatchCaseSensitive;
+            } else {
+                caseSensitive = false;
+            }
+
+            int strength = 0;
+
+            if (exact == MatchResult.MatchCaseSensitive) {
+                strength |= EXACT_CASE_SENSITIVE;
+            }
+
+            if (prefix == MatchResult.MatchCaseSensitive) {
+                strength |= PREFIX_CASE_SENSITIVE;
+            }
+
+            if (exact == MatchResult.Match) {
+                strength |= EXACT;
+            }
+
+            if (prefix == MatchResult.Match) {
+                strength |= PREFIX;
+            }
+
+            if (substring != MatchResult.None) {
+                strength |= SUBSTRING;
+            }
+
+            if (word != MatchResult.None) {
+                strength |= WORD;
+            }
+
+            if (valid != MatchResult.None) {
+                strength |= VALID;
+            }
+
+            recent = Math.max(0, recent);
+            recent = Math.min(255, recent);
+            strength |= (recent << 1);
+
+            if (caseSensitive) {
+                strength |= CASE_SENSITIVE;
+            }
+
+            return strength;
+        }
+
+        protected @NonNull MatchResult isExactMatch(@NonNull CompletionItem completionItem) {
+            if (evaluatedText.isEmpty()) {
+                return MatchResult.None;
+            }
+
+            String insertText = completionItem.getInsertPrefix().toString();
+            if (evaluatedText.equals(insertText)) {
+                return MatchResult.MatchCaseSensitive;
+            }
+
+            insertText = insertText.toLowerCase(Locale.getDefault());
+            if (lowerCaseEvaluatedText.equals(insertText)) {
+                return MatchResult.Match;
+            }
+
+            return MatchResult.None;
+        }
+
+        protected @NonNull MatchResult isPrefixMatch(@NonNull CompletionItem completionItem) {
+            if (evaluatedText.isEmpty()) {
+                return MatchResult.MatchCaseSensitive;
+            }
+
+            String insertText = completionItem.getInsertPrefix().toString();
+            if (insertText.startsWith(evaluatedText)) {
+                return MatchResult.MatchCaseSensitive;
+            }
+
+            insertText = insertText.toLowerCase(Locale.getDefault());
+            if (insertText.startsWith(lowerCaseEvaluatedText)) {
+                return MatchResult.Match;
+            }
+
+            return MatchResult.None;
+        }
+
+        public @NonNull MatchResult isSubstringMatch(@NonNull CompletionItem completionItem) {
+            if (evaluatedText.isEmpty()) {
+                return MatchResult.MatchCaseSensitive;
+            }
+
+            String insertText = completionItem.getInsertPrefix().toString();
+            if (insertText.contains(evaluatedText)) {
+                return MatchResult.MatchCaseSensitive;
+            }
+
+            insertText = insertText.toLowerCase(Locale.getDefault());
+            if (insertText.contains(lowerCaseEvaluatedText)) {
+                return MatchResult.Match;
+            }
+
+            return MatchResult.None;
+        }
+
+        public @NonNull MatchResult isWordBoundaryMatch(@NonNull CompletionItem completionItem) {
+            if (evaluatedText.isEmpty() || caseSensitiveWordMatch == null || caseInsensitiveWordMatch == null) {
+                return MatchResult.None;
+            }
+
+            String insertText = completionItem.getInsertPrefix().toString();
+            if (caseInsensitiveWordMatch.matcher(insertText).matches()) {
+                if (caseSensitiveWordMatch.matcher(insertText).matches()) {
+                    return MatchResult.MatchCaseSensitive;
+                }
+
+                return MatchResult.Match;
+            }
+
+            return MatchResult.None;
+        }
+
+        public @NonNull MatchResult isValidMatch(@NonNull CompletionItem completionItem) {
+            return completionItem.getSortPriority() < 0 ? MatchResult.Match : MatchResult.None;
+        }
+
+        public int getRecentlyUsed(@NonNull CompletionItem completionItem) {
+            return getRecentCompletionWeight(completionItem.getInsertPrefix().toString(), recentCompletionsCollator);
+        }
+    }
+
     protected static class ItemComparator extends CompletionItemComparator {
+        @NonNull
         protected static final Comparator<CompletionItem> PRIORITY_COMPARATOR =
             new ItemComparator(new PriorityComparator(), new ItemTextComparator());
+
+        @NonNull
         protected static final Comparator<CompletionItem> TEXT_COMPARATOR =
             new ItemComparator(new ItemTextComparator(), new PriorityComparator());
 
@@ -375,12 +509,17 @@ public class GrammarCompletionController implements CompletionController {
         }
 
         protected static class ItemTextComparator extends TextComparator {
-            private final Collator collator;
+            private final Collator secondaryCollator;
+            private final Collator identicalCollator;
 
             public ItemTextComparator() {
-                collator = Collator.getInstance(Locale.getDefault());
-                collator.setDecomposition(Collator.FULL_DECOMPOSITION);
-                collator.setStrength(Collator.SECONDARY);
+                secondaryCollator = Collator.getInstance(Locale.getDefault());
+                secondaryCollator.setDecomposition(Collator.FULL_DECOMPOSITION);
+                secondaryCollator.setStrength(Collator.SECONDARY);
+
+                identicalCollator = Collator.getInstance(Locale.getDefault());
+                identicalCollator.setDecomposition(Collator.FULL_DECOMPOSITION);
+                identicalCollator.setStrength(Collator.IDENTICAL);
             }
 
             @Override
@@ -393,7 +532,12 @@ public class GrammarCompletionController implements CompletionController {
                     text2 = ""; //NOI18N
                 }
 
-                return collator.compare(text1.toString(), text2.toString());
+                int caseInsensitive = secondaryCollator.compare(text1.toString(), text2.toString());
+                if (caseInsensitive != 0) {
+                    return caseInsensitive;
+                }
+
+                return identicalCollator.compare(text1.toString(), text2.toString());
             }
         }
     }

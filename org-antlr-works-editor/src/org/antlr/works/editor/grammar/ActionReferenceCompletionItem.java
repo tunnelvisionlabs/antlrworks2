@@ -27,22 +27,21 @@
  */
 package org.antlr.works.editor.grammar;
 
-import javax.swing.text.JTextComponent;
-import org.netbeans.api.editor.mimelookup.MimeRegistration;
-import org.netbeans.spi.editor.completion.CompletionController;
-import org.netbeans.spi.editor.completion.CompletionControllerProvider;
-import org.netbeans.spi.editor.completion.CompletionTask;
+import org.antlr.v4.runtime.Token;
+import org.netbeans.api.annotations.common.NonNull;
 
 /**
  *
  * @author Sam Harwell
  */
-@MimeRegistration(mimeType=GrammarEditorKit.GRAMMAR_MIME_TYPE, service=CompletionControllerProvider.class)
-public class GrammarCompletionControllerProvider implements CompletionControllerProvider {
+public class ActionReferenceCompletionItem extends ElementReferenceCompletionItem {
 
-    @Override
-    public CompletionController createController(JTextComponent component, CompletionTask task, int queryType) {
-        return new GrammarCompletionController(component, task, queryType);
+    public ActionReferenceCompletionItem(@NonNull Token label, boolean explicit) {
+        super(label, explicit);
     }
 
+    @Override
+    protected String getPrefix() {
+        return "$";
+    }
 }

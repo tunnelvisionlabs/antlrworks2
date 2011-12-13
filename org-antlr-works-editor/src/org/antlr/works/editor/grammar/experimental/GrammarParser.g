@@ -35,7 +35,7 @@ options {
 	// Target language is Java, which is the default but being specific
 	// here as this grammar is also meant as a good example grammar for
 	// for users.
-	language      = Java;
+	//language      = Java;
 
 	// The output of this grammar is going to be an AST upon which
 	// we run a semantic checking phase, then the rest of the analysis

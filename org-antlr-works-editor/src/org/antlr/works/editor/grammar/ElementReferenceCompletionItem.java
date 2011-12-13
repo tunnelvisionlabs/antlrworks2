@@ -31,9 +31,9 @@ import org.antlr.v4.runtime.Token;
 
 /**
  *
- * @author sam
+ * @author Sam Harwell
  */
-public class ElementReferenceCompletionItem extends GrammarCompletionItem {
+public abstract class ElementReferenceCompletionItem extends GrammarCompletionItem {
 
     private final Token label;
     private final boolean explicit;
@@ -52,13 +52,19 @@ public class ElementReferenceCompletionItem extends GrammarCompletionItem {
 
     @Override
     public String getSortTextImpl() {
-        return "$" + label.getText();
+        return getPrefix() + label.getText();
     }
 
     @Override
     public CharSequence getInsertPrefix() {
-        return "$" + label.getText();
+        return getPrefix() + label.getText();
     }
+
+    public boolean isExplicit() {
+        return explicit;
+    }
+
+    protected abstract String getPrefix();
 
     @Override
     protected String getLeftHtmlText() {
@@ -68,7 +74,7 @@ public class ElementReferenceCompletionItem extends GrammarCompletionItem {
             builder.append(REFERENCE_COLOR);
             builder.append(BOLD);
 
-            builder.append("$").append(label.getText());
+            builder.append(getPrefix()).append(label.getText());
 
             builder.append(BOLD_END);
             builder.append(COLOR_END);

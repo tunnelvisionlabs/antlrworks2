@@ -31,56 +31,74 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Deque;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
-import java.util.regex.Matcher;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
+import org.antlr.netbeans.editor.classification.TokenTag;
 import org.antlr.netbeans.editor.navigation.Description;
+import org.antlr.netbeans.editor.tagging.TaggedPositionRegion;
+import org.antlr.netbeans.editor.tagging.Tagger;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
+import org.antlr.netbeans.editor.text.DocumentTextUtilities;
+import org.antlr.netbeans.editor.text.NormalizedSnapshotPositionRegionCollection;
 import org.antlr.netbeans.editor.text.OffsetRegion;
+import org.antlr.netbeans.editor.text.SnapshotPosition;
 import org.antlr.netbeans.editor.text.SnapshotPositionRegion;
 import org.antlr.netbeans.editor.text.TrackingPositionRegion;
 import org.antlr.netbeans.editor.text.VersionedDocument;
 import org.antlr.netbeans.editor.text.VersionedDocumentUtilities;
-import org.antlr.v4.runtime.ANTLRStringStream;
+import org.antlr.netbeans.parsing.spi.ParserData;
+import org.antlr.netbeans.parsing.spi.ParserDataOptions;
+import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.v4.runtime.BaseRecognizer;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonToken;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.DefaultANTLRErrorStrategy;
-import org.antlr.v4.runtime.ObjectStream;
+import org.antlr.v4.runtime.DefaultErrorStrategy;
+import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.RuleContext;
+import org.antlr.v4.runtime.SymbolStream;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenSource;
 import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.WritableToken;
 import org.antlr.v4.runtime.atn.ATN;
 import org.antlr.v4.runtime.atn.ATNConfig;
+import org.antlr.v4.runtime.atn.ATNConfigSet;
 import org.antlr.v4.runtime.atn.ATNState;
 import org.antlr.v4.runtime.atn.AtomTransition;
 import org.antlr.v4.runtime.atn.DecisionState;
 import org.antlr.v4.runtime.atn.NotSetTransition;
 import org.antlr.v4.runtime.atn.ParserATNSimulator;
+import org.antlr.v4.runtime.atn.PredictionContext;
 import org.antlr.v4.runtime.atn.RangeTransition;
+import org.antlr.v4.runtime.atn.SemanticContext;
 import org.antlr.v4.runtime.atn.SetTransition;
 import org.antlr.v4.runtime.atn.Transition;
 import org.antlr.v4.runtime.atn.WildcardTransition;
 import org.antlr.v4.runtime.dfa.DFA;
+import org.antlr.v4.runtime.dfa.DFAState;
 import org.antlr.v4.runtime.misc.IntervalSet;
-import org.antlr.v4.runtime.misc.OrderedHashSet;
+import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.works.editor.grammar.experimental.BlankGrammarParserListener;
@@ -96,7 +114,7 @@ import org.antlr.works.editor.grammar.experimental.GrammarParser.ruleContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.rulerefContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.terminalContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParserAnchorListener;
-import org.antlr.works.editor.grammar.experimental.DocumentSnapshotCharStream;
+import org.antlr.works.editor.grammar.experimental.TaggerTokenSource;
 import org.antlr.works.editor.grammar.experimental.UpdateAnchorsTask;
 import org.antlr.works.editor.grammar.navigation.GrammarNode;
 import org.antlr.works.editor.grammar.navigation.GrammarRulesPanel;
@@ -105,11 +123,6 @@ import org.netbeans.api.editor.completion.Completion;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.netbeans.editor.BaseDocument;
 import org.netbeans.editor.Utilities;
-import org.netbeans.modules.parsing.api.ParserManager;
-import org.netbeans.modules.parsing.api.ResultIterator;
-import org.netbeans.modules.parsing.api.Source;
-import org.netbeans.modules.parsing.api.UserTask;
-import org.netbeans.modules.parsing.spi.Parser.Result;
 import org.netbeans.spi.editor.completion.CompletionDocumentation;
 import org.netbeans.spi.editor.completion.CompletionItem;
 import org.netbeans.spi.editor.completion.CompletionProvider;
@@ -120,10 +133,8 @@ import org.netbeans.spi.editor.completion.support.AsyncCompletionTask;
 import org.openide.explorer.ExplorerManager;
 import org.openide.nodes.Node;
 import org.openide.util.Exceptions;
+import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
-
-import static org.antlr.works.editor.grammar.Bundle.GCP_imported_items;
-import static org.antlr.works.editor.grammar.Bundle.GCP_instance_members;
 
 /**
  *
@@ -135,6 +146,7 @@ import static org.antlr.works.editor.grammar.Bundle.GCP_instance_members;
     "GCP-instance-members="
 })
 public class GrammarCompletionProvider implements CompletionProvider {
+    private static final Logger LOGGER = Logger.getLogger(GrammarCompletionProvider.class.getName());
 
     public static final int AUTO_QUERY_TYPE = 0x0100;
 
@@ -161,7 +173,7 @@ public class GrammarCompletionProvider implements CompletionProvider {
             boolean extend = false;
             try {
                 int[] identifier = Utilities.getIdentifierBlock(component, caretOffset);
-                extend = identifier != null && caretOffset > identifier[0];
+                extend = identifier != null && caretOffset > identifier[0] && caretOffset <= identifier[1];
             } catch (BadLocationException ex) {
                 Exceptions.printStackTrace(ex);
             }
@@ -190,14 +202,42 @@ public class GrammarCompletionProvider implements CompletionProvider {
             ((AbstractDocument)document).readLock();
         }
         try {
-            try {
+//            try {
+                ParserTaskManager taskManager = Lookup.getDefault().lookup(ParserTaskManager.class);
+                DocumentSnapshot snapshot = VersionedDocumentUtilities.getVersionedDocument(document).getCurrentSnapshot();
+                Future<ParserData<Tagger<TokenTag>>> futureTokensData = taskManager.getData(snapshot, GrammarParserDataDefinitions.LEXER_TOKENS, EnumSet.of(ParserDataOptions.SYNCHRONOUS));
+                Tagger<TokenTag> tagger;
+                try {
+                    tagger = futureTokensData.get().getData();
+                } catch (InterruptedException ex) {
+                    Exceptions.printStackTrace(ex);
+                    return false;
+                } catch (ExecutionException ex) {
+                    Exceptions.printStackTrace(ex);
+                    return false;
+                }
+
+                // get the token(s) at the cursor position, with affinity both directions
+                OffsetRegion region = OffsetRegion.fromBounds(Math.max(0, offset - 1), Math.min(snapshot.length(), offset + 1));
+                Iterable<TaggedPositionRegion<TokenTag>> tags = tagger.getTags(new NormalizedSnapshotPositionRegionCollection(new SnapshotPositionRegion(snapshot, region)));
+
                 // TODO: cache tokens
-                ANTLRStringStream input = new ANTLRStringStream(document.getText(0, document.getLength()));
-                GrammarLexer lexer = new GrammarLexer(input);
-                CommonTokenStream tokenStream = new CommonTokenStream(lexer);
-                Token token;
-                for (token = tokenStream.LT(1); token != null && token.getType() != Token.EOF; token = tokenStream.LT(1)) {
-                    tokenStream.consume();
+//                ANTLRStringStream input = new ANTLRStringStream(document.getText(0, document.getLength()));
+//                GrammarLexer lexer = new GrammarLexer(input);
+//                CommonTokenStream tokenStream = new CommonTokenStream(lexer);
+                Token token = null;
+//                for (token = tokenStream.LT(1); token != null && token.getType() != Token.EOF; token = tokenStream.LT(1)) {
+//                    tokenStream.consume();
+//                    if (token.getStartIndex() <= offset && token.getStopIndex() >= offset) {
+//                        break;
+//                    }
+//                }
+                for (TaggedPositionRegion<TokenTag> taggedRegion : tags) {
+                    if (taggedRegion.getTag().getToken().getChannel() != Lexer.DEFAULT_TOKEN_CHANNEL) {
+                        continue;
+                    }
+
+                    token = taggedRegion.getTag().getToken();
                     if (token.getStartIndex() <= offset && token.getStopIndex() >= offset) {
                         break;
                     }
@@ -221,10 +261,10 @@ public class GrammarCompletionProvider implements CompletionProvider {
                 }
 
                 //List<Token> tokens;
-            } catch (BadLocationException ex) {
-                Exceptions.printStackTrace(ex);
-                return false;
-            }
+//            } catch (BadLocationException ex) {
+//                Exceptions.printStackTrace(ex);
+//                return false;
+//            }
         } finally {
             if (document instanceof AbstractDocument) {
                 ((AbstractDocument)document).readUnlock();
@@ -237,6 +277,7 @@ public class GrammarCompletionProvider implements CompletionProvider {
         private static final int ADDITIONAL_IMPORTED_ITEMS = 1;
         private static final int ADDITIONAL_MEMBER_ITEMS = 2;
 
+        /** ^[\\$A-Za-z_][A-Za-z0-9_]*$ */
         private static final Pattern WORD_PATTERN = Pattern.compile("^[\\$A-Za-z_][A-Za-z0-9_]*$");
 
         private static final String EMPTY = "";
@@ -302,7 +343,14 @@ public class GrammarCompletionProvider implements CompletionProvider {
             }
         }
 
+        private ParserTaskManager getParserTaskManager() {
+            return Lookup.getDefault().lookup(ParserTaskManager.class);
+        }
+
         @Override
+        @NbBundle.Messages({
+            "scanning_in_progress=Scanning in progress..."
+        })
         protected void query(CompletionResultSet resultSet, Document doc, int caretOffset) {
             try {
                 this.caretOffset = caretOffset;
@@ -314,20 +362,24 @@ public class GrammarCompletionProvider implements CompletionProvider {
                     }
 
                     applicableTo = null;
-                    Source source = null;
                     if (queryType == DOCUMENTATION_QUERY_TYPE) {
                         throw new UnsupportedOperationException("Not implemented yet.");
                     }
 
-                    if (source == null) {
-                        source = Source.create(doc);
-                    }
+//                    VersionedDocument buffer = VersionedDocumentUtilities.getVersionedDocument(doc);
+//                    if (buffer != null) {
+//                        final DocumentSnapshot snapshot = buffer.getCurrentSnapshot();
+//                        final ParserDataDefinition<?> definition = null;
+//                        final EnumSet<ParserDataOptions> options = EnumSet.noneOf(ParserDataOptions.class);
+//                        Callable<Void> task = getTask();
+//                        Future<Void> data = getParserTaskManager().scheduleHighPriority(task);
+//                    }
 
-                    if (source != null) {
-                        Future<Void> value = ParserManager.parseWhenScanFinished(Collections.singletonList(source), getTask());
+                    Future<Void> value = getParserTaskManager().scheduleHighPriority(getTask((BaseDocument)doc));
+                    if (value != null) {
                         if (!value.isDone()) {
                             component.putClientProperty("completion-active", Boolean.FALSE);
-                            resultSet.setWaitText(NbBundle.getMessage(GrammarCompletionProvider.class, "scanning-in-progress"));
+                            resultSet.setWaitText(Bundle.scanning_in_progress());
                             value.get();
                         }
 
@@ -338,9 +390,9 @@ public class GrammarCompletionProvider implements CompletionProvider {
 
                             resultSet.setHasAdditionalItems(hasAdditionalItems != NO_ADDITIONAL_ITEMS);
                             if (hasAdditionalItems == ADDITIONAL_IMPORTED_ITEMS) {
-                                resultSet.setHasAdditionalItemsText(GCP_imported_items());
+                                resultSet.setHasAdditionalItemsText(Bundle.GCP_imported_items());
                             } else if (hasAdditionalItems == ADDITIONAL_MEMBER_ITEMS) {
-                                resultSet.setHasAdditionalItemsText(GCP_instance_members());
+                                resultSet.setHasAdditionalItemsText(Bundle.GCP_instance_members());
                             }
                         } else if (queryType == TOOLTIP_QUERY_TYPE) {
                             if (toolTip != null && toolTip.hasData()) {
@@ -440,8 +492,8 @@ public class GrammarCompletionProvider implements CompletionProvider {
             resultSet.finish();
         }
 
-        private UserTask getTask() {
-            return new Task();
+        private Task getTask(BaseDocument document) {
+            return new Task(document);
         }
 
         private static boolean isGrammarIdentifierPart(String typedText) {
@@ -454,46 +506,12 @@ public class GrammarCompletionProvider implements CompletionProvider {
             return true;
         }
 
-        private static final Pattern WORD_BOUNDARY_PREFIX =
-            Pattern.compile("^([A-Z][a-z]*){2,}$");
-
-        private static final Pattern WORD_PATTERN2 =
-            Pattern.compile("[A-Z][a-z]*");
-
         private Collection<? extends CompletionItem> getFilteredData(List<CompletionItem> data, String prefix) {
             if (prefix.length() == 0) {
                 return data;
             }
 
-            Pattern prefixBoundaryPattern = null;
-            Matcher matcher = WORD_BOUNDARY_PREFIX.matcher(prefix);
-            if (matcher.matches()) {
-                StringBuilder pattern = new StringBuilder("^");
-                for (Matcher wordMatcher = WORD_PATTERN2.matcher(prefix); wordMatcher.find(); ) {
-                    String group = wordMatcher.group();
-                    pattern.append("(?:(?:\\w*[a-z0-9_])?")
-                        .append(Character.toUpperCase(group.charAt(0)))
-                        .append("|(?:\\w*[0-9_])?")
-                        .append(Character.toLowerCase(group.charAt(0)))
-                        .append(")");
-
-                    for (int j = 1; j < group.length(); j++) {
-                        char ch = group.charAt(j);
-                        if (Character.isLetter(ch)) {
-                            pattern.append("[")
-                                .append(Character.toUpperCase(ch))
-                                .append(Character.toLowerCase(ch))
-                                .append("]");
-                        } else {
-                            pattern.append(ch);
-                        }
-                    }
-                }
-
-                pattern.append("\\w*$");
-                prefixBoundaryPattern = Pattern.compile(pattern.toString());
-            }
-
+            Pattern prefixBoundaryPattern = GrammarCompletionController.getPrefixBoundaryPattern(prefix, false);
             String lowercasePrefix = prefix.toLowerCase(Locale.getDefault());
             List<CompletionItem> result = new ArrayList<CompletionItem>();
             for (CompletionItem item : data) {
@@ -508,19 +526,26 @@ public class GrammarCompletionProvider implements CompletionProvider {
             return result;
         }
 
-        private class Task extends UserTask {
+        private class Task implements Callable<Void> {
+            private final BaseDocument document;
+
+            public Task(BaseDocument document) {
+                this.document = document;
+            }
 
             @Override
-            public void run(ResultIterator resultIterator) throws Exception {
+            public Void call() {
+                runImpl(document);
+                return null;
+            }
+
+            private void runImpl(BaseDocument document) {
                 results = new ArrayList<CompletionItem>();
                 possibleDeclaration = true;
                 possibleReference = (queryType & AUTO_QUERY_TYPE) != 0;
                 possibleKeyword = true;
 
-                Result result = resultIterator.getParserResult(caretOffset);
-                
                 // Add context items (labels, etc). Use anchor points to optimize information gathering.
-                BaseDocument document = (BaseDocument)result.getSnapshot().getSource().getDocument(false);
                 if (document == null) {
                     return;
                 }
@@ -528,14 +553,33 @@ public class GrammarCompletionProvider implements CompletionProvider {
                 VersionedDocument textBuffer = VersionedDocumentUtilities.getVersionedDocument(document);
                 DocumentSnapshot snapshot = textBuffer.getCurrentSnapshot();
 
-                boolean inAction;
+                boolean possibleInAction;
+                boolean definiteInAction;
+                boolean possibleInRewrite;
+                boolean definiteInRewrite = false;
                 CaretToken caretToken = null;
                 Map<ATNConfig, List<Transition>> transitions = null;
                 int grammarType = -1;
 
-                Object anchorsObject = document.getProperty(UpdateAnchorsTask.class);
-                @SuppressWarnings("unchecked")
-                List<GrammarParserAnchorListener.Anchor> anchors = (List<GrammarParserAnchorListener.Anchor>)anchorsObject;
+                ParserTaskManager taskManager = getParserTaskManager();
+                List<GrammarParserAnchorListener.Anchor> anchors;
+                if (taskManager != null) {
+                    Future<ParserData<List<GrammarParserAnchorListener.Anchor>>> result =
+                        taskManager.getData(snapshot, GrammarParserDataDefinitions.DYNAMIC_ANCHOR_POINTS, EnumSet.of(ParserDataOptions.SYNCHRONOUS));
+                    try {
+                        anchors = result.get().getData();
+                    } catch (InterruptedException ex) {
+                        anchors = null;
+                    } catch (ExecutionException ex) {
+                        Exceptions.printStackTrace(ex);
+                        anchors = null;
+                    }
+                } else {
+                    @SuppressWarnings("unchecked")
+                    List<GrammarParserAnchorListener.Anchor> anchorsObject = (List<GrammarParserAnchorListener.Anchor>)document.getProperty(UpdateAnchorsTask.class);
+                    anchors = anchorsObject;
+                }
+
                 if (anchors != null) {
                     GrammarParserAnchorListener.Anchor enclosing = null;
 
@@ -556,15 +600,31 @@ public class GrammarCompletionProvider implements CompletionProvider {
                     }
 
                     if (enclosing != null) {
-                        CharStream input = new DocumentSnapshotCharStream(snapshot);
-                        input.seek(enclosing.getSpan().getStartPosition(snapshot).getOffset());
-                        GrammarLexer lexer = new GrammarLexer(input);
-                        TokenSource tokenSource = new CodeCompletionTokenSource(caretOffset, lexer);
+                        Future<ParserData<Tagger<TokenTag>>> futureTokensData = taskManager.getData(snapshot, GrammarParserDataDefinitions.LEXER_TOKENS, EnumSet.of(ParserDataOptions.SYNCHRONOUS));
+                        Tagger<TokenTag> tagger = null;
+                        try {
+                            tagger = futureTokensData.get().getData();
+                        } catch (InterruptedException ex) {
+                            Exceptions.printStackTrace(ex);
+                        } catch (ExecutionException ex) {
+                            Exceptions.printStackTrace(ex);
+                        }
+
+                        int regionEnd = Math.min(snapshot.length(), caretOffset + 1);
+                        OffsetRegion region = OffsetRegion.fromBounds(enclosing.getSpan().getStartPosition(snapshot).getOffset(), regionEnd);
+                        TaggerTokenSource taggerTokenSource = new TaggerTokenSource(tagger, new SnapshotPositionRegion(snapshot, region));
+
+//                        CharStream input = new DocumentSnapshotCharStream(snapshot);
+//                        input.seek(enclosing.getSpan().getStartPosition(snapshot).getOffset());
+//                        GrammarLexer lexer = new GrammarLexer(input);
+                        TokenSource tokenSource = new CodeCompletionTokenSource(caretOffset, taggerTokenSource);
                         CommonTokenStream tokens = new CommonTokenStream(tokenSource);
 
-                        GrammarParser parser = new GrammarParser(tokens) {{_interp = new CompletionParserATNSimulator(this, _ATN);}};
+                        GrammarParser parser = new GrammarParser(tokens) {{
+                            this._interp = new CompletionParserATNSimulator(_ATN);
+                        }};
                         parser.setBuildParseTree(true);
-                        parser.setErrHandler(new CodeCompletionErrorStrategy());
+                        parser.setErrorHandler(new CodeCompletionErrorStrategy());
 
                         ParseTree parseTree;
                         RuleContext finalContext = null;
@@ -590,10 +650,50 @@ public class GrammarCompletionProvider implements CompletionProvider {
                             break;
                         }
 
+                        boolean hasActionConfig = false;
+                        boolean hasNonActionConfig = false;
+                        boolean hasRewriteConfig = false;
+                        boolean hasNonRewriteConfig = false;
+
                         if (transitions != null) {
                             possibleDeclaration = false;
                             possibleReference = false;
+                            IdentityHashMap<PredictionContext, PredictionContext> visited = new IdentityHashMap<PredictionContext, PredictionContext>();
+                            Deque<PredictionContext> workList = new ArrayDeque<PredictionContext>();
+                            Deque<Integer> stateWorkList = new ArrayDeque<Integer>();
                             for (ATNConfig c : transitions.keySet()) {
+                                boolean currentActionConfig = false;
+                                boolean currentRewriteConfig = false;
+                                visited.clear();
+                                workList.clear();
+                                stateWorkList.clear();
+                                workList.add(c.context);
+                                stateWorkList.add(c.state.stateNumber);
+                                while (!workList.isEmpty()) {
+                                    PredictionContext context = workList.poll();
+                                    int state = stateWorkList.poll();
+                                    if (visited.put(context, context) != null) {
+                                        continue;
+                                    }
+
+                                    for (int i = 0; i < context.invokingStates.length; i++) {
+                                        workList.add(context.parents[i]);
+                                        stateWorkList.add(context.invokingStates[i]);
+                                    }
+
+                                    int ruleIndex = parser.getATN().states.get(state).ruleIndex;
+                                    if (ruleIndex == GrammarParser.RULE_actionBlock) {
+                                        currentActionConfig = true;
+                                    } else if (ruleIndex == GrammarParser.RULE_rewrite) {
+                                        currentRewriteConfig = true;
+                                    }
+                                }
+
+                                hasActionConfig |= currentActionConfig;
+                                hasNonActionConfig |= !currentActionConfig;
+                                hasRewriteConfig |= currentRewriteConfig;
+                                hasNonRewriteConfig |= !currentRewriteConfig;
+
                                 for (Transition t : transitions.get(c)) {
                                     int ruleIndex = t.target.ruleIndex;
                                     if (ruleIndex == GrammarParser.RULE_id) {
@@ -618,12 +718,15 @@ public class GrammarCompletionProvider implements CompletionProvider {
 
                         if (parseTree != null) {
                             LabelAnalyzer labelAnalyzer = new LabelAnalyzer(finalContext);
-                            new ParseTreeWalker().walk(labelAnalyzer, parseTree);
+                            ParseTreeWalker.DEFAULT.walk(labelAnalyzer, parseTree);
 
-                            inAction = labelAnalyzer.isInAction();
-                            possibleKeyword = !inAction;
-                            possibleDeclaration &= !inAction;
-                            possibleReference &= !inAction;
+                            possibleInAction = labelAnalyzer.isInAction() || hasActionConfig;
+                            definiteInAction = labelAnalyzer.isInAction() || (hasActionConfig && !hasNonActionConfig);
+                            possibleInRewrite = labelAnalyzer.isInRewrite() || hasRewriteConfig;
+                            definiteInRewrite = labelAnalyzer.isInRewrite() || (hasRewriteConfig && !hasNonRewriteConfig);
+                            possibleKeyword = !definiteInAction;
+                            possibleDeclaration &= !definiteInAction;
+                            possibleReference &= !definiteInAction;
 
                             if (grammarType == GrammarParser.COMBINED) {
                                 Token enclosingRule = labelAnalyzer.getEnclosingRuleName();
@@ -636,18 +739,24 @@ public class GrammarCompletionProvider implements CompletionProvider {
                                 }
                             }
 
-                            if (labelAnalyzer.isInAction() || labelAnalyzer.isInRewrite()) {
-                                if (!labelAnalyzer.isInAction() && labelAnalyzer.getEnclosingRuleName() != null) {
+                            if (possibleInAction || possibleInRewrite) {
+                                if (!definiteInAction && labelAnalyzer.getEnclosingRuleName() != null) {
                                     results.add(new EnclosingRuleCompletionItem(labelAnalyzer.getEnclosingRuleName()));
                                 }
 
                                 for (Token label : labelAnalyzer.getLabels()) {
-                                    results.add(new ElementReferenceCompletionItem(label, true));
+                                    results.add(new RewriteReferenceCompletionItem(label, true));
                                 }
 
-                                if (labelAnalyzer.isInAction()) {
+                                if (possibleInRewrite) {
                                     for (Token implicit : labelAnalyzer.getUnlabeledElements()) {
-                                        results.add(new ElementReferenceCompletionItem(implicit, false));
+                                        results.add(new ActionReferenceCompletionItem(implicit, false));
+                                    }
+                                }
+
+                                if (possibleInAction) {
+                                    for (Token implicit : labelAnalyzer.getUnlabeledElements()) {
+                                        results.add(new ActionReferenceCompletionItem(implicit, false));
                                     }
 
                                     switch (grammarType) {
@@ -705,7 +814,7 @@ public class GrammarCompletionProvider implements CompletionProvider {
                 }
 
                 if (possibleReference) {
-                    boolean tokenReferencesOnly = grammarType == GrammarParser.LEXER;
+                    boolean tokenReferencesOnly = grammarType == GrammarParser.LEXER || definiteInRewrite;
 
                     // Add rules from the grammar
                     GrammarRulesPanelUI ui = GrammarRulesPanel.findGrammarRulesPanelUI();
@@ -741,17 +850,28 @@ public class GrammarCompletionProvider implements CompletionProvider {
                 if (caretToken != null && caretToken.getOriginalToken() != null && caretToken.getOriginalToken().getChannel() == Token.DEFAULT_CHANNEL) {
                     applicableToSpan = OffsetRegion.fromBounds(caretToken.getStartIndex(), caretToken.getStopIndex() + 1);
                 } else {
-                    int[] identifier = Utilities.getIdentifierBlock(document, caretOffset);
+                    SnapshotPositionRegion identifier = DocumentTextUtilities.getIdentifierBlock(new SnapshotPosition(snapshot, caretOffset));
                     if (identifier != null) {
-                        applicableToSpan = OffsetRegion.fromBounds(identifier[0], identifier[1]);
+                        applicableToSpan = identifier.getRegion();
                     } else {
+                        applicableToSpan = OffsetRegion.fromBounds(caretOffset, caretOffset);
+                    }
+                }
+
+                if (!isExtend() && applicableToSpan.contains(caretOffset)) {
+                    applicableToSpan = OffsetRegion.fromBounds(applicableToSpan.getStart(), caretOffset);
+                }
+
+                if (!applicableToSpan.isEmpty()) {
+                    // make sure this is a word
+                    String applicableText = snapshot.subSequence(applicableToSpan.getStart(), applicableToSpan.getEnd()).toString();
+                    if (!WORD_PATTERN.matcher(applicableText).matches()) {
                         applicableToSpan = OffsetRegion.fromBounds(caretOffset, caretOffset);
                     }
                 }
 
                 applicableTo = snapshot.createTrackingRegion(applicableToSpan, TrackingPositionRegion.Bias.Inclusive);
             }
-
         }
         
         private static class CaretToken extends CommonToken {
@@ -858,13 +978,22 @@ public class GrammarCompletionProvider implements CompletionProvider {
 
         }
 
-        private static class CodeCompletionErrorStrategy extends DefaultANTLRErrorStrategy {
+        private static class CodeCompletionErrorStrategy extends DefaultErrorStrategy<Token> {
 
             public CodeCompletionErrorStrategy() {
             }
 
             @Override
-            public void sync(BaseRecognizer recognizer) {
+            public void reportError(BaseRecognizer<Token> recognizer, RecognitionException e) throws RecognitionException {
+                if (e != null && e.getOffendingToken() != null && e.getOffendingToken().getType() == CaretToken.CARET_TOKEN_TYPE) {
+                    return;
+                }
+
+                super.reportError(recognizer, e);
+            }
+
+            @Override
+            public void sync(BaseRecognizer<Token> recognizer) {
                 if (recognizer.getInputStream().LA(1) == CaretToken.CARET_TOKEN_TYPE) {
                     return;
                 }
@@ -874,7 +1003,7 @@ public class GrammarCompletionProvider implements CompletionProvider {
 
             /** Consume tokens until one matches the given token set */
             @Override
-            public void consumeUntil(BaseRecognizer recognizer, IntervalSet set) {
+            public void consumeUntil(BaseRecognizer<Token> recognizer, IntervalSet set) {
                 //System.out.println("consumeUntil("+set.toString(getTokenNames())+")");
                 int ttype = recognizer.getInputStream().LA(1);
                 while (ttype != Token.EOF && ttype != CaretToken.CARET_TOKEN_TYPE && !set.contains(ttype) ) {
@@ -886,7 +1015,7 @@ public class GrammarCompletionProvider implements CompletionProvider {
             }
 
             @Override
-            public void recover(BaseRecognizer recognizer, RecognitionException e) {
+            public void recover(BaseRecognizer<Token> recognizer, RecognitionException e) {
                 if (recognizer instanceof GrammarParser
                     && recognizer.getInputStream() instanceof TokenStream
                     && ((TokenStream)recognizer.getInputStream()).LT(1) instanceof CaretToken) {
@@ -910,7 +1039,7 @@ public class GrammarCompletionProvider implements CompletionProvider {
             }
 
             @Override
-            public Object recoverInline(BaseRecognizer recognizer) throws RecognitionException {
+            public Token recoverInline(BaseRecognizer<Token> recognizer) throws RecognitionException {
                 if (recognizer instanceof GrammarParser
                     && recognizer.getInputStream() instanceof TokenStream
                     && ((TokenStream)recognizer.getInputStream()).LT(1) instanceof CaretToken) {
@@ -922,22 +1051,22 @@ public class GrammarCompletionProvider implements CompletionProvider {
                     int stateNumber = recognizer.getContext().s;
                     ATNState state = interp.atn.states.get(stateNumber);
 
-                    OrderedHashSet<ATNConfig> closure = new OrderedHashSet<ATNConfig>();
+                    ATNConfigSet closure = new ATNConfigSet(true, true);
                     for (int i = 0; i < state.getNumberOfTransitions(); i++) {
                         Transition transition = state.transition(i);
                         if (transition.isEpsilon()) {
                             ATNState target = transition.target;
-                            ATNConfig config = new ATNConfig(target, i + 1, recognizer.getContext());
+                            ATNConfig config = new ATNConfig(target, i + 1, PredictionContext.fromRuleContext(recognizer.getContext()));
                             Set<ATNConfig> closureBusy = new HashSet<ATNConfig>();
-                            interp.closure(config, closure, null, closureBusy);
+                            interp.closure(config, closure, null, closureBusy, false, true, 0, 0);
                         }
                     }
 
                     if (!state.onlyHasEpsilonTransitions()) {
-                        closure.add(new ATNConfig(state, 1, recognizer.getContext()));
+                        closure.add(new ATNConfig(state, 1, PredictionContext.fromRuleContext(recognizer.getContext())));
                     }
 
-                    OrderedHashSet<ATNConfig> reach = new OrderedHashSet<ATNConfig>();
+                    ATNConfigSet reach = new ATNConfigSet(true, true);
                     LinkedHashMap<ATNConfig, List<Transition>> transitions = null;
                     
                     int ncl = closure.size();
@@ -963,7 +1092,7 @@ public class GrammarCompletionProvider implements CompletionProvider {
                                 configTransitions.add(trans);
 
                                 Set<ATNConfig> closureBusy = new HashSet<ATNConfig>();
-                                interp.closure(new ATNConfig(c, target), reach, null, closureBusy);
+                                interp.closure(new ATNConfig(c, target), reach, null, closureBusy, false, true, 0, 0);
                             }
                         }
                     }
@@ -975,184 +1104,285 @@ public class GrammarCompletionProvider implements CompletionProvider {
             }
         }
 
-        private static class CompletionParserATNSimulator extends ParserATNSimulator {
+        private static class CompletionParserATNSimulator extends ParserATNSimulator<Token> {
 
             private Map<ATNConfig, List<Transition>> caretTransitions;
 
-            public CompletionParserATNSimulator(BaseRecognizer parser, ATN atn) {
-                super(parser, atn);
+            public CompletionParserATNSimulator(ATN atn) {
+                super(atn);
             }
 
             @Override
-            public void closure(ATNConfig config, OrderedHashSet<ATNConfig> configs, DecisionState decState, Set<ATNConfig> closureBusy) {
-                super.closure(config, configs, decState, closureBusy);
+            public boolean closure(ATNConfig config, ATNConfigSet configs, DecisionState decState, Set<ATNConfig> closureBusy, boolean collectPredicates, boolean hasMoreContexts, int globalContextCount, int depth) {
+                return super.closure(config, configs, decState, closureBusy, collectPredicates, hasMoreContexts, globalContextCount, depth);
             }
 
             @Override
-            public int execATN(ObjectStream input, DFA dfa, int startIndex, OrderedHashSet<ATNConfig> s0, boolean useContext) {
-                if (debug) {
-                    System.out.println("execATN decision " + dfa.decision + " exec LA(1)==" + getLookaheadName(input));
-                }
+            public int execATN(SymbolStream<Token> input, DFA dfa, int startIndex, ATNConfigSet s0, ParserRuleContext<?> globalContext, boolean useContext, int consumedContextFrames) {
+                if ( debug ) System.out.println("execATN decision "+dfa.decision+" exec LA(1)=="+ getLookaheadName(input));
                 ATN_failover++;
-                OrderedHashSet<ATNConfig> closure = new OrderedHashSet<ATNConfig>();
+                ATNConfigSet closure = new ATNConfigSet(!dfa.isContextSensitive, mergeATNConfigs && !delayMergeATN);
 
                 closure.addAll(s0);
 
-                if (debug) {
-                    System.out.println("start state closure=" + closure);
-                }
+                if ( debug ) System.out.println("start state closure="+closure);
 
                 int t = input.LA(1);
-                if (t == Token.EOF && prevAccept != null) {
+                if ( t==Token.EOF && prevAccept!=null ) {
                     // computeStartState must have reached end of rule
                     return prevAccept.alt;
                 }
 
-                DecisionState decState = null;
-                if (atn.decisionToState.size() > 0) {
+                @NotNull DecisionState decState = null;
+                if ( atn.decisionToState.size()>0 ) {
                     decState = atn.decisionToState.get(dfa.decision);
-                }
-                if (debug) {
-                    System.out.println("decision state = " + decState);
+                    if ( debug ) System.out.println("decision state = "+decState);
                 }
 
                 prevAccept = null;
                 prevAcceptIndex = -1;
-                OrderedHashSet<ATNConfig> reach = new OrderedHashSet<ATNConfig>();
+                ATNConfigSet reach = new ATNConfigSet(!dfa.isContextSensitive, mergeATNConfigs && !delayMergeATN);
                 LinkedHashMap<ATNConfig, List<Transition>> transitions = null;
 
-                while (true) { // while more work
-                    if (debug) {
-                        System.out.println("in reach starting closure: " + closure);
-                    }
+                RuleContext remainingGlobalContext = getRemainingContext(globalContext, consumedContextFrames);
 
-                    int ncl = closure.size();
-                    for (int ci = 0; ci < ncl; ci++) { // TODO: foreach
-                        ATNConfig c = closure.get(ci);
-                        if (debug) {
-                            System.out.println("testing " + getTokenName(t) + " at " + c.toString());
-                        }
+                do { // while more work
+                    if ( debug ) System.out.println("in reach starting closure: " + closure);
 
-                        List<Transition> configTransitions = null;
+        //            if (useContext) {
+        //
+        //                for (ATNConfig c : closure) {
+        //                    IntervalSet following = c.state.atn.nextTokens(c.state);
+        //                    if (following.contains(Token.EPSILON)) {
+        //
+        //                    }
+        //                }
+        //            }
 
-                        int n = c.state.getNumberOfTransitions();
-                        for (int ti = 0; ti < n; ti++) {               // for each transition
-                            Transition trans = c.state.transition(ti);
-                            ATNState target = getReachableTarget(trans, t);
-                            if (target != null) {
-                                if (t == CaretToken.CARET_TOKEN_TYPE) {
-                                    if (transitions == null) {
-                                        transitions = new LinkedHashMap<ATNConfig, List<Transition>>();
+                    List<ATNConfig> closureConfigs = new ArrayList<ATNConfig>(closure);
+                    List<Integer> contextElements = null;
+                    boolean stepIntoGlobal;
+                    do {
+                        stepIntoGlobal = false;
+                        boolean hasMoreContext = !useContext || remainingGlobalContext != null;
+                        int ncl = closureConfigs.size();
+                        stateReachLoop:
+                        for (int ci=0; ci<ncl; ci++) { // TODO: foreach
+                            ATNConfig c = closureConfigs.get(ci);
+                            if ( debug ) System.out.println("testing "+getTokenName(t)+" at "+c.toString());
+
+                            List<Transition> configTransitions = null;
+
+                            int n = c.state.getNumberOfTransitions();
+                            for (int ti=0; ti<n; ti++) {               // for each transition
+                                Transition trans = c.state.transition(ti);
+                                ATNState target = getReachableTarget(trans, t);
+                                if ( target!=null ) {
+                                    if (t == CaretToken.CARET_TOKEN_TYPE) {
+                                        if (transitions == null) {
+                                            transitions = new LinkedHashMap<ATNConfig, List<Transition>>();
+                                        }
+
+                                        if (configTransitions == null) {
+                                            configTransitions = new ArrayList<Transition>();
+                                            transitions.put(c, configTransitions);
+                                        }
+
+                                        configTransitions.add(trans);
                                     }
 
-                                    if (configTransitions == null) {
-                                        configTransitions = new ArrayList<Transition>();
-                                        transitions.put(c, configTransitions);
-                                    }
-
-                                    configTransitions.add(trans);
+                                    Set<ATNConfig> closureBusy = new HashSet<ATNConfig>();
+                                    final boolean collectPredicates = false;
+                                    stepIntoGlobal |= closure(new ATNConfig(c, target), reach, decState, closureBusy, collectPredicates, hasMoreContext, consumedContextFrames, consumedContextFrames);
                                 }
-
-                                Set<ATNConfig> closureBusy = new HashSet<ATNConfig>();
-                                closure(new ATNConfig(c, target), reach, decState, closureBusy);
                             }
                         }
-                    }
+
+                        if (useContext && stepIntoGlobal) {
+                            reach.clear();
+
+                            int nextContextElement = remainingGlobalContext.isEmpty() ? PredictionContext.EMPTY_STATE_KEY : remainingGlobalContext.invokingState;
+                            if (contextElements == null) {
+                                contextElements = new ArrayList<Integer>();
+                            }
+
+                            if (remainingGlobalContext.isEmpty()) {
+                                remainingGlobalContext = null;
+                            } else {
+                                remainingGlobalContext = remainingGlobalContext.parent;
+                            }
+
+                            contextElements.add(nextContextElement);
+                            if (nextContextElement != PredictionContext.EMPTY_STATE_KEY) {
+                                for (int i = 0; i < closureConfigs.size(); i++) {
+                                    closureConfigs.set(i, closureConfigs.get(i).appendContext(nextContextElement));
+                                }
+                            }
+                        }
+                    } while (useContext && stepIntoGlobal);
 
                     // resolve ambig in DFAState for reach
                     Set<Integer> ambigAlts = getAmbiguousAlts(reach);
-                    if (ambigAlts != null) {
-                        if (debug) {
+                    if ( ambigAlts!=null ) {
+                        if ( debug ) {
                             int i = -1;
-                            if (outerContext != null && outerContext.s >= 0) {
+                            if ( outerContext!=null && outerContext.s>=0 ) {
                                 i = atn.states.get(outerContext.s).ruleIndex;
                             }
                             String rname = getRuleName(i);
-                            System.out.println("AMBIG dec " + dfa.decision + " in " + rname + " for alt " + ambigAlts + " upon "
-                                + getInputString(input, startIndex));
-                            System.out.println("REACH=" + reach);
-                        }
-                        dfa.conflict = true; // at least one DFA state is ambiguous
-                        if (!userWantsCtxSensitive) {
-                            reportConflict(startIndex, input.index(), ambigAlts, reach);
+                            System.out.println("AMBIG dec "+dfa.decision+" in "+rname+" for alt "+ambigAlts+" upon "+
+                                            getInputString(input, startIndex));
+                            System.out.println("REACH="+reach);
                         }
 
-                        //				ATNState loc = atn.states.get(outerContext.s);
-                        //				String rname = recog.getRuleNames()[loc.ruleIndex];
-                        //				System.out.println("AMBIG orig="+outerContext.toString((BaseRecognizer)recog)+" for alt "+ambigAlts+" upon "+
-                        //								   input.toString(startIndex, input.index()));
-                        if (!userWantsCtxSensitive || useContext) {
+                        // can we resolve with predicates?
+                        SemanticContext[] altToPred =
+                            getPredsForAmbigAlts(decState, ambigAlts, reach);
+                        if ( altToPred!=null ) {
+                            // We need at least n-1 predicates for n ambiguous alts
+                            if ( tooFewPredicates(altToPred) ) {
+                                reportInsufficientPredicates(startIndex, input.index(),
+                                                            ambigAlts, altToPred, reach);
+                            }
+                            List<DFAState.PredPrediction> predPredictions =
+                                getPredicatePredictions(altToPred);
+
+                            mergeStates(reach);
+
+                            if ( buildDFA ) {
+                                DFAState accept = addDFAEdge(dfa, closure, t, contextElements, reach);
+                                makeAcceptState(accept, predPredictions);
+                            }
+                            // rewind input so pred's LT(i) calls make sense
+                            input.seek(startIndex);
+                            int uniqueAlt = evalSemanticContext(predPredictions);
+                            if ( uniqueAlt==ATN.INVALID_ALT_NUMBER ) {
+                                // no true pred and/or no uncovered alt
+                                // to fall back on. must announce parsing error.
+                                throw noViableAlt(input, outerContext, closure, startIndex);
+                            }
+                            return uniqueAlt;
+                        }
+
+                        dfa.conflict = true; // at least one DFA state is ambiguous
+                        if ( !userWantsCtxSensitive ) reportConflict(startIndex, input.index(), ambigAlts, reach);
+
+                        if (userWantsCtxSensitive && !useContext && !stepIntoGlobal) {
+                            for (ATNConfig config : reach) {
+                                if (config.reachesIntoOuterContext > 0) {
+                                    stepIntoGlobal = true;
+                                    break;
+                                }
+                            }
+                        }
+
+                        if ( !userWantsCtxSensitive || useContext || !stepIntoGlobal ) {
                             // resolve ambiguity
-                            if (decState.isGreedy) {
+                            if ( decState!=null && decState.isGreedy ) {
                                 // if greedy, resolve in favor of alt coming first
                                 resolveToMinAlt(reach, ambigAlts);
-                            } else {
+                            }
+                            else {
                                 // if nongreedy loop, always pick exit branch to match
                                 // what follows instead of re-entering loop
                                 resolveNongreedyToExitBranch(reach, ambigAlts);
                             }
-                        } else {
-                            return retryWithContext(input, dfa, startIndex, outerContext,
-                                                    closure, t, reach, ambigAlts);
+                        }
+                        else {
+                            DFAState from = addDFAState(dfa, closure);
+                            if (from != null) {
+                                addDFAEdge(from, t, RETRY_WITH_CONTEXT);
+                            }
+
+                            input.seek(startIndex);
+                            dfa.isContextSensitive = true;
+                            return predictATN(dfa, input, outerContext, true);
                         }
                     }
 
                     // if reach predicts single alt, can stop
 
+                        mergeStates(reach);
+
                     int uniqueAlt = getUniqueAlt(reach);
-                    if (uniqueAlt != ATN.INVALID_ALT_NUMBER) {
-                        if (debug) {
-                            System.out.println("PREDICT alt " + uniqueAlt
-                                + " decision " + dfa.decision
-                                + " at index " + input.index());
+                    if ( uniqueAlt!=ATN.INVALID_ALT_NUMBER ) {
+                        if ( debug ) System.out.println("PREDICT alt "+uniqueAlt+
+                                                        " decision "+dfa.decision+
+                                                        " at index "+input.index());
+                        if ( !buildDFA ) return uniqueAlt;
+                        // edge from closure-t->reach now
+
+                        DFAState accept = addDFAEdge(dfa, closure, t, contextElements, reach);
+                        // now check to see if we have a validating predicate.
+                        // We know that it's validating because there is only
+                        // one predicted alternative
+                        Set<Integer> uniqueAltSet = new HashSet<Integer>();
+                        uniqueAltSet.add(uniqueAlt);
+                        SemanticContext[] altToPred =
+                            getPredsForAmbigAlts(decState, uniqueAltSet, reach);
+                        // altToPred[uniqueAlt] is now our validating predicate (if any)
+                        if ( altToPred!=null ) {
+                            // we have a validating predicate; test it
+                            // Update DFA so reach becomes accept state with predicate
+                            List<DFAState.PredPrediction> predPredictions =
+                                getPredicatePredictions(altToPred);
+                            makeAcceptState(accept, predPredictions);
+                            // rewind input so pred's LT(i) calls make sense
+                            input.seek(startIndex);
+                            boolean validated = altToPred[uniqueAlt].eval(parser, outerContext);
+                            if ( debug || dfa_debug ) {
+                                System.out.println("eval alt "+uniqueAlt+" pred "+
+                                                    altToPred[uniqueAlt]+"="+ validated);
+                            }
+                            if ( !validated ) {
+                                throw noViableAlt(input, outerContext, closure, startIndex);
+                            }
+                            return uniqueAlt;
                         }
-                        addDFAEdge(dfa, closure, t, reach);
-                        makeAcceptState(dfa, reach, uniqueAlt);
+                        makeAcceptState(accept, uniqueAlt);
                         return uniqueAlt;
-                    } else if (t == CaretToken.CARET_TOKEN_TYPE) {
+                    }
+                    else if (t == CaretToken.CARET_TOKEN_TYPE) {
+//                        LOGGER.warning("The current implementation does not support multiple ambiguous alternatives."); //NOI18N
                         caretTransitions = transitions;
                         break;
                     }
 
-                    if (decState != null && !decState.isGreedy) {
+                    if ( decState!=null && !decState.isGreedy ) {
                         // if we reached end of rule via exit branch, we matched
                         int exitAlt = 2;
                         ATNConfig cstop = configWithAltAtStopState(reach, exitAlt);
-                        if (cstop != null) {
-                            if (debug) {
-                                System.out.println("nongreedy at stop state for exit branch");
-                            }
+                        if ( cstop!=null ) {
+                            if ( debug ) System.out.println("nongreedy at stop state for exit branch");
                             prevAccept = cstop;
                             prevAcceptIndex = input.index();
                             break;
                         }
                     }
 
-                    if (reach.size() == 0) {
+                    if ( reach.isEmpty() ) {
                         break;
                     }
 
                     // If we matched t anywhere, need to consume and add closer-t->reach DFA edge
                     // else error if no previous accept
                     input.consume();
-                    addDFAEdge(dfa, closure, t, reach);
+                    if ( buildDFA ) addDFAEdge(dfa, closure, t, contextElements, reach);
                     t = input.LA(1);
 
                     // swap to avoid reallocating space
-                    OrderedHashSet<ATNConfig> tmp = reach;
+                    ATNConfigSet tmp = reach;
                     reach = closure;
                     closure = tmp;
                     reach.clear(); // TODO: THIS MIGHT BE SLOW! kills each element; realloc might be faster
+                } while ( true );
+
+                if ( prevAccept==null ) {
+        //			System.out.println("no viable token at input "+ getLookaheadName(input) +", index "+input.index());
+                    throw noViableAlt(input, outerContext, closure, startIndex);
                 }
 
-                if (prevAccept == null) {
-                    //			System.out.println("no viable token at input "+ getLookaheadName(input) +", index "+input.index());
-                    throwNoViableAlt(input, outerContext, closure, startIndex);
-                }
-
-                if (debug) {
-                    System.out.println("PREDICT " + prevAccept + " index " + prevAccept.alt);
-                }
+                if ( debug ) System.out.println("PREDICT " + prevAccept + " index " + prevAccept.alt);
                 return prevAccept.alt;
             }
 
@@ -1184,7 +1414,7 @@ public class GrammarCompletionProvider implements CompletionProvider {
                     // special
                     add(GrammarLexer.ARG_ACTION_WORD);
                     add(GrammarLexer.ACTION_REFERENCE);
-                    add(GrammarLexer.ACTION_WORD);
+//                    add(GrammarLexer.ACTION_WORD);
 
                     Collections.sort(this);
                 }};
@@ -1222,8 +1452,20 @@ public class GrammarCompletionProvider implements CompletionProvider {
                 return super.getReachableTarget(trans, ttype);
             }
 
+            public ParserRuleContext<Token> interpret(int ruleIndex) {
+                ParserRuleContext<Token> localctx = new GrammarParser.prequelConstructContext(parser.getContext(), 4);
+                parser.enterRule(localctx, ruleIndex);
+                try {
+                    ATNState atnstate = this.atn.ruleToStartState[ruleIndex];
+                    throw new UnsupportedOperationException("Not implemented yet.");
+                } finally {
+                    parser.exitRule(ruleIndex);
+                }
+                //return localctx;
+            }
+
             private String getRuleName(int index) {
-                if ( parser!=null && index>=0 ) return parser.getRuleNames()[index];
+                if ( parser!=null && index>=0 ) return parser.getRuleNames().get(index);
                 return "<rule "+index+">";
             }
         }
@@ -1298,7 +1540,7 @@ public class GrammarCompletionProvider implements CompletionProvider {
             }
 
             @Override
-            public void exitEveryRule(ParserRuleContext ctx) {
+            public void exitEveryRule(ParserRuleContext<Token> ctx) {
                 checkCaretReached(ctx);
             }
 
@@ -1442,7 +1684,7 @@ public class GrammarCompletionProvider implements CompletionProvider {
                 }
             }
 
-            private static boolean isLabeledContext(ParserRuleContext ctx) {
+            private static boolean isLabeledContext(ParserRuleContext<Token> ctx) {
                 for (RuleContext current = ctx; current != null; current = current.parent) {
                     if (current instanceof labeledElementContext) {
                         return true;

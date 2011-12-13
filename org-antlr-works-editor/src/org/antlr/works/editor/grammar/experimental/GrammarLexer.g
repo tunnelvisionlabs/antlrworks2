@@ -488,7 +488,7 @@ ESC_SEQ
               // The standard escaped character set such as tab, newline,
               // etc.
               //
-    		  'b'|'t'|'n'|'f'|'r'|'\"'|'\''|'\\'
+    		  ('b'|'t'|'n'|'f'|'r'|'\"'|'\''|'\\')
 
     	    | // A Java style Unicode escape sequence
     	      //
