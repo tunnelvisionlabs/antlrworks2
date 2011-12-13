@@ -98,6 +98,7 @@ public class NbDocumentVersion implements DocumentVersion {
         return lineData;
     }
 
+    @Override
     public @NonNull NbDocumentSnapshot getSnapshot() {
         synchronized (this) {
             if (snapshot == null) {
