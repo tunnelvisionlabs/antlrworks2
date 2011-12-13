@@ -56,9 +56,6 @@ import org.openide.util.Parameters;
 import org.openide.windows.TopComponent;
 import org.openide.windows.WindowManager;
 
-import static org.antlr.works.editor.grammar.syndiag.Bundle.CTL_SyntaxDiagramTopComponent;
-import static org.antlr.works.editor.grammar.syndiag.Bundle.HINT_SyntaxDiagramTopComponent;
-
 /**
  * Top component which displays something.
  */
@@ -87,8 +84,8 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
 
     public SyntaxDiagramTopComponent() {
         initComponents();
-        setName(CTL_SyntaxDiagramTopComponent());
-        setToolTipText(HINT_SyntaxDiagramTopComponent());
+        setName(Bundle.CTL_SyntaxDiagramTopComponent());
+        setToolTipText(Bundle.HINT_SyntaxDiagramTopComponent());
     }
 
     public static SyntaxDiagramTopComponent getInstance() {
