@@ -31,6 +31,7 @@ import javax.swing.text.Document;
 import org.antlr.netbeans.editor.text.impl.NbVersionedDocument;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.editor.BaseDocument;
+import org.openide.filesystems.FileObject;
 import org.openide.util.Parameters;
 
 /**
@@ -42,6 +43,10 @@ public class VersionedDocumentUtilities {
     private static final Object lock = new Object();
 
     private VersionedDocumentUtilities() {
+    }
+
+    public static @NonNull VersionedDocument getVersionedDocument(@NonNull FileObject fileObject) {
+        throw new UnsupportedOperationException("Not implemented yet.");
     }
 
     public static @NonNull VersionedDocument getVersionedDocument(@NonNull Document document) {
@@ -61,4 +66,5 @@ public class VersionedDocumentUtilities {
             return result;
         }
     }
+
 }
