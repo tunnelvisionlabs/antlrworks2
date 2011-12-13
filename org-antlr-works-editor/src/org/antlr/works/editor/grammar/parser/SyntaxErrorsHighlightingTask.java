@@ -28,12 +28,12 @@
 package org.antlr.works.editor.grammar.parser;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.RecognitionException;
-import org.netbeans.modules.parsing.spi.ParserResultTask;
 import org.netbeans.modules.parsing.spi.Scheduler;
 import org.netbeans.modules.parsing.spi.SchedulerEvent;
 import org.netbeans.spi.editor.hints.ErrorDescription;
@@ -41,7 +41,8 @@ import org.netbeans.spi.editor.hints.ErrorDescriptionFactory;
 import org.netbeans.spi.editor.hints.HintsController;
 import org.openide.util.Exceptions;
 
-public class SyntaxErrorsHighlightingTask extends ParserResultTask<GrammarParser.GrammarParserResult> {
+public class SyntaxErrorsHighlightingTask extends GrammarParserResultTask {
+    private static final EnumSet<Input> inputs = EnumSet.<Input>of(Input.SyntaxErrors);
 
     public SyntaxErrorsHighlightingTask() {
     }
@@ -92,6 +93,11 @@ public class SyntaxErrorsHighlightingTask extends ParserResultTask<GrammarParser
         } catch (RuntimeException ex) {
             Exceptions.printStackTrace(ex);
         }
+    }
+
+    @Override
+    public EnumSet<Input> getTaskInputs() {
+        return inputs;
     }
 
     @Override

@@ -1,6 +1,5 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Terence Parr
  *  Copyright (c) 2011 Sam Harwell
  *  All rights reserved.
  *
@@ -26,36 +25,31 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.antlr.works.editor.grammar.syndiag;
+package org.antlr.works.editor.grammar.parser;
 
 import java.util.EnumSet;
-import org.antlr.works.editor.grammar.parser.GrammarParserResultTask;
-import org.netbeans.modules.parsing.spi.Scheduler;
 
 /**
  *
  * @author Sam Harwell
  */
-public abstract class UpdateSyntaxDiagramTask extends GrammarParserResultTask {
-    private static final EnumSet<Input> INPUTS = EnumSet.<Input>of(Input.Anchors);
+public interface GrammarTaskInput {
 
-    @Override
-    public EnumSet<Input> getTaskInputs() {
-        return INPUTS;
-    }
+    EnumSet<Input> getTaskInputs();
 
-    @Override
-    public int getPriority() {
-        return 100;
-    }
+    boolean allowStaleInput();
 
-    @Override
-    public Class<? extends Scheduler> getSchedulerClass() {
-        return Scheduler.CURSOR_SENSITIVE_TASK_SCHEDULER;
-    }
-
-    @Override
-    public void cancel() {
+    public enum Input {
+        /** Parser syntax errors. */
+        SyntaxErrors,
+        /** Semantic errors (as if we were compiling). */
+        SemanticErrors,
+        /** AST result from parsing the grammar with the ANTLR Tool. */
+        ToolAST,
+        /** AST results from parsing imported grammars with the ANTLR Tool. */
+        ToolImportedAST,
+        /** Anchor points. */
+        Anchors,
     }
 
 }

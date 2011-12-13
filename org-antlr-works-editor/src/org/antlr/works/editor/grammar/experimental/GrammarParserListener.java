@@ -31,9 +31,10 @@ package org.antlr.works.editor.grammar.experimental;
 //import org.antlr.v4.tool.*;
 //import org.antlr.v4.tool.ast.*;
 
-import org.antlr.v4.runtime.tree.ParseTreeListener;
+import org.antlr.v4.runtime.tree.*;
+import org.antlr.v4.runtime.Token;
 
-public interface GrammarParserListener extends ParseTreeListener {
+public interface GrammarParserListener extends ParseTreeListener<Token> {
 	void enterRule(GrammarParser.grammarSpecContext ctx);
 	void exitRule(GrammarParser.grammarSpecContext ctx);
 

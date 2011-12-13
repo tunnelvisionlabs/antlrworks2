@@ -33,6 +33,9 @@ import java.util.Map;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import org.antlr.runtime.CommonToken;
+import org.netbeans.api.annotations.common.CheckForNull;
+import org.netbeans.api.annotations.common.NonNull;
+import org.netbeans.api.annotations.common.NullAllowed;
 import org.netbeans.lib.editor.util.ListenerList;
 import org.netbeans.modules.parsing.api.Snapshot;
 import org.netbeans.modules.parsing.api.Task;
@@ -43,29 +46,46 @@ import org.openide.filesystems.FileObject;
 import org.openide.util.Parameters;
 
 public abstract class GrammarParser extends Parser {
-    // Working around weird behavior in the Parsing API
-    protected static final boolean SINGLE_RESULT = true;
-
     private final ListenerList<ChangeListener> listeners = new ListenerList<ChangeListener>();
 
-    protected final Map<Task, GrammarParserResult> results = new HashMap<Task, GrammarParserResult>();
+    private final Map<Task, GrammarParserResult> results = new HashMap<Task, GrammarParserResult>();
+    private Snapshot previousSnapshot;
+    private SourceModificationEvent previousEvent;
 
     @Override
-    @SuppressWarnings("unchecked")
-    public abstract void parse(Snapshot snapshot, Task task, SourceModificationEvent sme) throws ParseException;
+    public final void parse(Snapshot snapshot, Task task, SourceModificationEvent sme) throws ParseException {
+        Parameters.notNull("snapshot", snapshot);
 
-    public abstract GrammarParserResult createResult(Task task);
-
-    @Override
-    public Result getResult(Task task) throws ParseException {
-        synchronized (this) {
-            if (SINGLE_RESULT) {
-                return createResult(task);
-            } else {
-                return results.get(task);
-            }
+        synchronized (results) {
+            previousSnapshot = snapshot;
+            previousEvent = sme;
         }
     }
+
+    @Override
+    public final Result getResult(Task task) throws ParseException {
+        Parameters.notNull("task", task);
+
+        Snapshot snapshot;
+        SourceModificationEvent event;
+        synchronized (results) {
+            snapshot = previousSnapshot;
+            event = previousEvent;
+        }
+
+        if (snapshot == null) {
+            throw new UnsupportedOperationException("No snapshot was specified.");
+        }
+
+        GrammarParserResult result = parseImpl(snapshot, task, event);
+        synchronized (results) {
+            results.put(task, result);
+        }
+
+        return result;
+    }
+
+    protected abstract GrammarParserResult parseImpl(@NonNull Snapshot snapshot, @NonNull Task task, @NullAllowed SourceModificationEvent event) throws ParseException;
 
     @Override
     public void cancel(CancelReason reason, SourceModificationEvent event) {
@@ -103,16 +123,18 @@ public abstract class GrammarParser extends Parser {
         private final FileObject fileObject;
         private final CommonToken[] tokens;
 
-        public GrammarFileResult(FileObject fileObject, CommonToken[] tokens) {
+        public GrammarFileResult(@NonNull FileObject fileObject, @NullAllowed CommonToken[] tokens) {
+            Parameters.notNull("fileObject", fileObject);
+
             this.fileObject = fileObject;
             this.tokens = tokens;
         }
 
-        public FileObject getFileObject() {
+        public @NonNull FileObject getFileObject() {
             return fileObject;
         }
 
-        public CommonToken[] getTokens() {
+        public @CheckForNull CommonToken[] getTokens() {
             return tokens;
         }
 
@@ -142,9 +164,7 @@ public abstract class GrammarParser extends Parser {
 
         @Override
         protected void invalidate() {
-            if (!SINGLE_RESULT) {
-                results.remove(task);
-            }
+            results.remove(task);
         }
 
     }

@@ -27,24 +27,32 @@
  */
 package org.antlr.works.editor.grammar.experimental;
 
+import java.util.EnumSet;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.text.Document;
+import org.antlr.netbeans.editor.classification.DocumentSnapshotCharStream;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.netbeans.editor.text.VersionedDocument;
 import org.antlr.netbeans.editor.text.VersionedDocumentUtilities;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.TokenSource;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.works.editor.grammar.parser.GrammarParser.GrammarParserResult;
+import org.antlr.works.editor.grammar.parser.GrammarParserResultTask;
 import org.antlr.works.editor.grammar.parser.GrammarParserV3;
-import org.netbeans.modules.parsing.spi.ParserResultTask;
 import org.netbeans.modules.parsing.spi.Scheduler;
 import org.netbeans.modules.parsing.spi.SchedulerEvent;
 import org.openide.util.Exceptions;
 
 /**
  *
- * @author sam
+ * @author Sam Harwell
  */
-public class UpdateAnchorsTask extends ParserResultTask<GrammarParserResult> {
+public class UpdateAnchorsTask extends GrammarParserResultTask {
+    private static final EnumSet<Input> INPUTS = EnumSet.<Input>of(Input.ToolAST, Input.SyntaxErrors);
+
+    private final AtomicBoolean cancel = new AtomicBoolean();
 
     public UpdateAnchorsTask() {
     }
@@ -68,18 +76,29 @@ public class UpdateAnchorsTask extends ParserResultTask<GrammarParserResult> {
             DocumentSnapshotCharStream input = new DocumentSnapshotCharStream(snapshot);
             input.setSourceName(result.getSnapshot().getSource().getFileObject().getNameExt());
             GrammarLexer lexer = new GrammarLexer(input);
-            CommonTokenStream tokenStream = new CommonTokenStream(lexer);
+            CancellableTokenStream tokenStream = new CancellableTokenStream(lexer, cancel);
             GrammarParser parser = new GrammarParser(tokenStream);
             parser.setBuildParseTree(true);
             GrammarParser.grammarSpecContext parseResult = parser.grammarSpec();
 
-            GrammarParserAnchorListener listener = new GrammarParserAnchorListener(snapshot);
+            GrammarParserAnchorListener listener = new GrammarParserAnchorListener(snapshot, cancel);
             ParseTreeWalker walker = new ParseTreeWalker();
             walker.walk(listener, parseResult);
             document.putProperty(UpdateAnchorsTask.class, listener.getAnchors());
+        } catch (CancellationException ex) {
         } catch (RuntimeException ex) {
             Exceptions.printStackTrace(ex);
         }
+    }
+
+    @Override
+    public EnumSet<Input> getTaskInputs() {
+        return INPUTS;
+    }
+
+    @Override
+    public boolean allowStaleInput() {
+        return false;
     }
 
     @Override
@@ -94,6 +113,24 @@ public class UpdateAnchorsTask extends ParserResultTask<GrammarParserResult> {
 
     @Override
     public void cancel() {
+        cancel.set(true);
     }
 
+    private static class CancellableTokenStream extends CommonTokenStream {
+        private final AtomicBoolean cancel;
+
+        public CancellableTokenStream(TokenSource tokenSource, AtomicBoolean cancel) {
+            super(tokenSource);
+            this.cancel = cancel;
+        }
+
+        @Override
+        public void consume() {
+            if (cancel.get()) {
+                throw new CancellationException();
+            }
+
+            super.consume();
+        }
+    }
 }

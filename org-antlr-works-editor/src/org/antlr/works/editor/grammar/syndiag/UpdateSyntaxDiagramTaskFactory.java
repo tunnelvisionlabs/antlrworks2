@@ -30,12 +30,13 @@ package org.antlr.works.editor.grammar.syndiag;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.EnumSet;
 import org.antlr.works.editor.grammar.GrammarEditorKit;
 import org.antlr.works.editor.grammar.parser.GrammarParser;
+import org.antlr.works.editor.grammar.parser.GrammarParserResultTask;
 import org.antlr.works.editor.grammar.parser.GrammarParserV4;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.netbeans.modules.parsing.api.Snapshot;
-import org.netbeans.modules.parsing.spi.ParserResultTask;
 import org.netbeans.modules.parsing.spi.Scheduler;
 import org.netbeans.modules.parsing.spi.SchedulerEvent;
 import org.netbeans.modules.parsing.spi.SchedulerTask;
@@ -43,7 +44,7 @@ import org.netbeans.modules.parsing.spi.TaskFactory;
 
 /**
  *
- * @author sam
+ * @author Sam Harwell
  */
 @MimeRegistration(mimeType=GrammarEditorKit.GRAMMAR_MIME_TYPE, service=TaskFactory.class)
 public class UpdateSyntaxDiagramTaskFactory extends TaskFactory {
@@ -53,7 +54,7 @@ public class UpdateSyntaxDiagramTaskFactory extends TaskFactory {
         return Collections.singleton(new TaskSelector());
     }
 
-    private static class TaskSelector extends ParserResultTask<GrammarParser.GrammarParserResult> {
+    private static class TaskSelector extends GrammarParserResultTask {
 
         private final UpdateSyntaxDiagramTaskV3 v3 = new UpdateSyntaxDiagramTaskV3();
         private final UpdateSyntaxDiagramTaskV4 v4 = new UpdateSyntaxDiagramTaskV4();
@@ -65,6 +66,11 @@ public class UpdateSyntaxDiagramTaskFactory extends TaskFactory {
             } else {
                 v3.run(result, event);
             }
+        }
+
+        @Override
+        public EnumSet<Input> getTaskInputs() {
+            return v4.getTaskInputs();
         }
 
         @Override

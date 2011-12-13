@@ -28,6 +28,7 @@
 package org.antlr.works.editor.grammar.parser;
 
 import java.io.File;
+import java.util.EnumSet;
 import java.util.List;
 import org.antlr.Tool;
 import org.antlr.grammar.v3.ANTLRParser;
@@ -36,23 +37,46 @@ import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.Token;
 import org.antlr.tool.ErrorManager;
+import org.antlr.works.editor.grammar.parser.GrammarTaskInput.Input;
 import org.netbeans.modules.parsing.api.Snapshot;
 import org.netbeans.modules.parsing.api.Task;
 import org.netbeans.modules.parsing.spi.ParseException;
 import org.netbeans.modules.parsing.spi.SourceModificationEvent;
 import org.openide.filesystems.FileObject;
+import org.openide.util.Parameters;
 
 /**
  *
- * @author sam
+ * @author Sam Harwell
  */
 public class GrammarParserV3 extends GrammarParser {
+    private static final EnumSet<Input> DEFAULT_INPUTS = EnumSet.<Input>of(Input.ToolAST, Input.ToolImportedAST, Input.SyntaxErrors);
 
-    protected Snapshot lastSnapshot;
-    protected GrammarFileResultV3 lastResult;
+    private final Object lock = new Object();
+    private Snapshot lastSnapshot;
+    private EnumSet<Input> lastInputs;
+    private GrammarFileResultV3 lastResult;
 
     @Override
-    public void parse(Snapshot snapshot, Task task, SourceModificationEvent sme) throws ParseException {
+    public GrammarParserResultV3 parseImpl(Snapshot snapshot, Task task, SourceModificationEvent sme) throws ParseException {
+        Parameters.notNull("snapshot", snapshot);
+        Parameters.notNull("task", task);
+
+        EnumSet<Input> inputs;
+        if (task instanceof GrammarParserResultTask) {
+            inputs = ((GrammarParserResultTask)task).getTaskInputs();
+        } else {
+            inputs = DEFAULT_INPUTS;
+        }
+
+        synchronized (lock) {
+            if (lastInputs != null && lastInputs.containsAll(inputs)) {
+                if (snapshot.equals(lastSnapshot)) {
+                    return new GrammarParserResultV3(snapshot, task, lastResult);
+                }
+            }
+        }
+
         ANTLRStringStream input = new ANTLRStringStream(snapshot.getText().toString());
         ANTLRErrorProvidingLexer lexer = new ANTLRErrorProvidingLexer(input);
         ANTLRParserTokenStream tokenStream = new ANTLRParserTokenStream(lexer);
@@ -77,22 +101,16 @@ public class GrammarParserV3 extends GrammarParser {
 
             GrammarFileResultV3 currentResult = new GrammarFileResultV3(parser, g, result, snapshot.getSource().getFileObject(), tokens);
 
-            synchronized (this) {
-                if (SINGLE_RESULT) {
-                    lastSnapshot = snapshot;
-                    lastResult = currentResult;
-                } else {
-                    results.put(task, new GrammarParserResultV3(snapshot, task, currentResult));
-                }
+            synchronized (lock) {
+                lastSnapshot = snapshot;
+                lastInputs = inputs;
+                lastResult = currentResult;
             }
+
+            return new GrammarParserResultV3(snapshot, task, currentResult);
         } catch (Exception ex) {
             throw new ParseException("An unexpected error occurred.", ex);
         }
-    }
-
-    @Override
-    public GrammarParserResultV3 createResult(Task task) {
-        return new GrammarParserResultV3(lastSnapshot, task, lastResult);
     }
 
     public static class GrammarFileResultV3 extends GrammarFileResult {

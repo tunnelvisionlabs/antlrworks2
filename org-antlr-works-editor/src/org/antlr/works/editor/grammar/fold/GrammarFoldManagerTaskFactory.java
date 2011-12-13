@@ -29,12 +29,13 @@ package org.antlr.works.editor.grammar.fold;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.EnumSet;
 import org.antlr.works.editor.grammar.GrammarEditorKit;
 import org.antlr.works.editor.grammar.parser.GrammarParser;
+import org.antlr.works.editor.grammar.parser.GrammarParserResultTask;
 import org.antlr.works.editor.grammar.parser.GrammarParserV4;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.netbeans.modules.parsing.api.Snapshot;
-import org.netbeans.modules.parsing.spi.ParserResultTask;
 import org.netbeans.modules.parsing.spi.Scheduler;
 import org.netbeans.modules.parsing.spi.SchedulerEvent;
 import org.netbeans.modules.parsing.spi.SchedulerTask;
@@ -42,7 +43,7 @@ import org.netbeans.modules.parsing.spi.TaskFactory;
 
 /**
  *
- * @author sam
+ * @author Sam Harwell
  */
 @MimeRegistration(mimeType=GrammarEditorKit.GRAMMAR_MIME_TYPE, service=TaskFactory.class)
 public class GrammarFoldManagerTaskFactory extends TaskFactory {
@@ -52,7 +53,7 @@ public class GrammarFoldManagerTaskFactory extends TaskFactory {
         return Collections.singleton(new TaskSelector());
     }
 
-    private static final class TaskSelector extends ParserResultTask<GrammarParser.GrammarParserResult> {
+    private static final class TaskSelector extends GrammarParserResultTask {
 
         private final GrammarFoldManagerTaskV3 v3 = new GrammarFoldManagerTaskV3();
         private final GrammarFoldManagerTaskV4 v4 = new GrammarFoldManagerTaskV4();
@@ -64,6 +65,11 @@ public class GrammarFoldManagerTaskFactory extends TaskFactory {
             } else {
                 v3.run(result, event);
             }
+        }
+
+        @Override
+        public EnumSet<Input> getTaskInputs() {
+            return v4.getTaskInputs();
         }
 
         @Override

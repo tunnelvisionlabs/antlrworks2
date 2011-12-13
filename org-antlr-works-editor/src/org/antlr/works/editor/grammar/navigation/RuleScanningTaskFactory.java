@@ -46,13 +46,13 @@ package org.antlr.works.editor.grammar.navigation;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.EnumSet;
 import org.antlr.works.editor.grammar.GrammarEditorKit;
-import org.antlr.works.editor.grammar.parser.GrammarParser;
 import org.antlr.works.editor.grammar.parser.GrammarParser.GrammarParserResult;
+import org.antlr.works.editor.grammar.parser.GrammarParserResultTask;
 import org.antlr.works.editor.grammar.parser.GrammarParserV4;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.netbeans.modules.parsing.api.Snapshot;
-import org.netbeans.modules.parsing.spi.ParserResultTask;
 import org.netbeans.modules.parsing.spi.Scheduler;
 import org.netbeans.modules.parsing.spi.SchedulerEvent;
 import org.netbeans.modules.parsing.spi.SchedulerTask;
@@ -66,7 +66,7 @@ public class RuleScanningTaskFactory extends TaskFactory {
         return Collections.singleton(new TaskSelector());
     }
 
-    private static final class TaskSelector extends ParserResultTask<GrammarParser.GrammarParserResult> {
+    private static final class TaskSelector extends GrammarParserResultTask {
 
         private final RuleScanningTaskV3 v3 = new RuleScanningTaskV3();
         private final RuleScanningTaskV4 v4 = new RuleScanningTaskV4();
@@ -78,6 +78,11 @@ public class RuleScanningTaskFactory extends TaskFactory {
             } else {
                 v3.run(result, event);
             }
+        }
+
+        @Override
+        public EnumSet<Input> getTaskInputs() {
+            return v4.getTaskInputs();
         }
 
         @Override

@@ -258,7 +258,7 @@ public class BlankGrammarParserListener implements GrammarParserListener {
 	@Override public void enterRule(GrammarParser.blockEntryContext ctx) { }
 	@Override public void exitRule(GrammarParser.blockEntryContext ctx) { }
 
-	@Override public void enterEveryRule(ParserRuleContext ctx) { }
-	@Override public void exitEveryRule(ParserRuleContext ctx) { }
+	@Override public void enterEveryRule(ParserRuleContext<Token> ctx) { }
+	@Override public void exitEveryRule(ParserRuleContext<Token> ctx) { }
 	@Override public void visitToken(Token token) { }
 }

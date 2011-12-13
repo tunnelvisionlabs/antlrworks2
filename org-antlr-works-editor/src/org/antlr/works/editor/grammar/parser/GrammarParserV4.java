@@ -29,7 +29,10 @@ package org.antlr.works.editor.grammar.parser;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.Lexer;
@@ -42,6 +45,7 @@ import org.antlr.v4.tool.Grammar;
 import org.antlr.v4.tool.GrammarSemanticsMessage;
 import org.antlr.v4.tool.GrammarSyntaxMessage;
 import org.antlr.v4.tool.ast.GrammarRootAST;
+import org.antlr.works.editor.grammar.parser.GrammarTaskInput.Input;
 import org.netbeans.modules.parsing.api.Snapshot;
 import org.netbeans.modules.parsing.api.Task;
 import org.netbeans.modules.parsing.spi.ParseException;
@@ -49,19 +53,60 @@ import org.netbeans.modules.parsing.spi.SourceModificationEvent;
 import org.netbeans.spi.editor.hints.Severity;
 import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileUtil;
+import org.openide.util.Parameters;
 import org.stringtemplate.v4.ST;
 
 /**
  *
- * @author sam
+ * @author Sam Harwell
  */
 public class GrammarParserV4 extends GrammarParser {
+    private static final Logger LOGGER = Logger.getLogger(GrammarParserV4.class.getName());
 
-    protected Snapshot lastSnapshot;
-    protected GrammarFileResultV4 lastResult;
+    private static final EnumSet<Input> DEFAULT_INPUTS = EnumSet.<Input>of(Input.ToolAST, Input.ToolImportedAST, Input.SyntaxErrors);
+
+    private final Object lock = new Object();
+    private Snapshot lastSnapshot;
+    private EnumSet<Input> lastInputs;
+    private GrammarFileResultV4 lastResult;
 
     @Override
-    public void parse(Snapshot snapshot, Task task, SourceModificationEvent sme) throws ParseException {
+    public GrammarParserResultV4 parseImpl(Snapshot snapshot, Task task, SourceModificationEvent sme) throws ParseException {
+        Parameters.notNull("snapshot", snapshot);
+        Parameters.notNull("task", task);
+
+        EnumSet<Input> inputs;
+        if (task instanceof GrammarTaskInput) {
+            inputs = ((GrammarTaskInput)task).getTaskInputs();
+        } else {
+            inputs = DEFAULT_INPUTS;
+        }
+
+        synchronized (lock) {
+            if (lastInputs != null && lastInputs.containsAll(inputs)) {
+                if (snapshot.equals(lastSnapshot)) {
+                    return new GrammarParserResultV4(snapshot, task, lastResult);
+                }
+            }
+        }
+
+        boolean requireParse = false;
+        for (Input input : DEFAULT_INPUTS) {
+            if (inputs.contains(input)) {
+                requireParse = true;
+                break;
+            }
+        }
+
+        if (!requireParse) {
+            // eventually anchor point processing will go here
+            return new GrammarParserResultV4(snapshot, task, new GrammarFileResultV4(snapshot.getSource().getFileObject()));
+        }
+
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.log(Level.FINE, "Reparsing snapshot {0} for task {1}", new Object[] { snapshot, task });
+        }
+
         try {
             final List<SyntaxError> syntaxErrors = new ArrayList<SyntaxError>();
             final Tool tool = new Tool();
@@ -126,22 +171,16 @@ public class GrammarParserV4 extends GrammarParser {
 
             GrammarFileResultV4 currentResult = new GrammarFileResultV4(grammar, root, syntaxErrors, snapshot.getSource().getFileObject(), tokens);
 
-            synchronized (this) {
-                if (SINGLE_RESULT) {
-                    lastSnapshot = snapshot;
-                    lastResult = currentResult;
-                } else {
-                    results.put(task, new GrammarParserResultV4(snapshot, task, currentResult));
-                }
+            synchronized (lock) {
+                lastSnapshot = snapshot;
+                lastInputs = inputs;
+                lastResult = currentResult;
             }
+
+            return new GrammarParserResultV4(snapshot, task, currentResult);
         } catch (Exception ex) {
             throw new ParseException("An unexpected error occurred.", ex);
         }
-    }
-
-    @Override
-    public GrammarParserResultV4 createResult(Task task) {
-        return new GrammarParserResultV4(lastSnapshot, task, lastResult);
     }
 
     public static class GrammarFileResultV4 extends GrammarFileResult {
@@ -150,6 +189,14 @@ public class GrammarParserV4 extends GrammarParser {
         private final GrammarRootAST result;
         private final List<? extends SyntaxError> syntaxErrors;
         private final List<GrammarFileResultV4> importedResults;
+
+        public GrammarFileResultV4(FileObject fileObject) {
+            super(fileObject, null);
+            this.grammar = null;
+            this.result = null;
+            this.syntaxErrors = null;
+            this.importedResults = null;
+        }
 
         public GrammarFileResultV4(Grammar grammar, GrammarRootAST result, List<? extends SyntaxError> syntaxErrors, FileObject fileObject, CommonToken[] tokens) {
             super(fileObject, tokens);

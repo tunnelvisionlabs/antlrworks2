@@ -44,10 +44,10 @@
 
 package org.antlr.works.editor.grammar.navigation;
 
+import java.util.EnumSet;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Logger;
-import org.antlr.works.editor.grammar.parser.GrammarParser;
-import org.netbeans.modules.parsing.spi.ParserResultTask;
+import org.antlr.works.editor.grammar.parser.GrammarParserResultTask;
 import org.netbeans.modules.parsing.spi.Scheduler;
 import org.openide.util.NbBundle;
 
@@ -55,14 +55,20 @@ import org.openide.util.NbBundle;
     "LBL_ParserRules=Parser Rules",
     "LBL_LexerRules=Lexer Rules"
 })
-public abstract class RuleScanningTask extends ParserResultTask<GrammarParser.GrammarParserResult> {
+public abstract class RuleScanningTask extends GrammarParserResultTask {
 
     private static final Logger LOG = Logger.getLogger(RuleScanningTask.class.getName());
     private static final String TYPE_COLOR = "#707070";
     private static final String INHERITED_COLOR = "#7D694A";
+    private static final EnumSet<Input> INPUTS = EnumSet.<Input>of(Input.ToolAST, Input.ToolImportedAST);
     private final AtomicBoolean cancel = new AtomicBoolean();
 
     public RuleScanningTask() {
+    }
+
+    @Override
+    public EnumSet<Input> getTaskInputs() {
+        return INPUTS;
     }
 
     @Override

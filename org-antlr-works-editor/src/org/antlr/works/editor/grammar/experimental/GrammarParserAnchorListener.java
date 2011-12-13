@@ -30,30 +30,66 @@ package org.antlr.works.editor.grammar.experimental;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.atomic.AtomicBoolean;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.netbeans.editor.text.TrackingPositionRegion;
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.Token;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.grammarTypeContext;
 import org.netbeans.api.annotations.common.NonNull;
 import org.openide.util.Parameters;
 
 /**
  *
- * @author sam
+ * @author Sam Harwell
  */
 public class GrammarParserAnchorListener extends BlankGrammarParserListener {
 
     private final Stack<Integer> anchorPositions = new Stack<Integer>();
     private final List<Anchor> anchors = new ArrayList<Anchor>();
     private final DocumentSnapshot snapshot;
+    private final AtomicBoolean cancel;
 
     public GrammarParserAnchorListener(DocumentSnapshot snapshot) {
         Parameters.notNull("snapshot", snapshot);
         this.snapshot = snapshot;
+        this.cancel = null;
+    }
+
+    public GrammarParserAnchorListener(DocumentSnapshot snapshot, AtomicBoolean cancel) {
+        Parameters.notNull("snapshot", snapshot);
+        this.snapshot = snapshot;
+        this.cancel = cancel;
     }
 
     public List<Anchor> getAnchors() {
         return anchors;
+    }
+
+    private void checkCancellation() {
+        boolean cancelled;
+        if (cancel != null) {
+            cancelled = cancel.get();
+        } else {
+            cancelled = Thread.interrupted();
+        }
+
+        if (cancelled) {
+            throw new CancellationException();
+        }
+    }
+
+    @Override
+    public void enterEveryRule(ParserRuleContext<Token> ctx) {
+        checkCancellation();
+        super.enterEveryRule(ctx);
+    }
+
+    @Override
+    public void exitEveryRule(ParserRuleContext<Token> ctx) {
+        checkCancellation();
+        super.exitEveryRule(ctx);
     }
 
     @Override
@@ -86,18 +122,18 @@ public class GrammarParserAnchorListener extends BlankGrammarParserListener {
         exitAnchor(ctx, GrammarParser.RULE_tokenSpec);
     }
 
-    private void enterAnchor(ParserRuleContext ctx) {
+    private void enterAnchor(ParserRuleContext<Token> ctx) {
         anchorPositions.push(ctx.getStart().getStartIndex());
     }
 
-    private void exitAnchor(ParserRuleContext ctx, int anchorId) {
+    private void exitAnchor(ParserRuleContext<Token> ctx, int anchorId) {
         int start = anchorPositions.pop();
         int stop = ctx.getStop() != null ? ctx.getStop().getStopIndex() + 1 : snapshot.length();
         TrackingPositionRegion.Bias trackingMode = ctx.getStop() != null ? TrackingPositionRegion.Bias.Exclusive : TrackingPositionRegion.Bias.Forward;
         anchors.add(createAnchor(ctx, start, stop, trackingMode, anchorId));
     }
 
-    private Anchor createAnchor(ParserRuleContext ctx, int start, int stop, TrackingPositionRegion.Bias trackingMode, int rule) {
+    private Anchor createAnchor(ParserRuleContext<Token> ctx, int start, int stop, TrackingPositionRegion.Bias trackingMode, int rule) {
         TrackingPositionRegion trackingSpan = snapshot.createTrackingRegion(start, stop - start, trackingMode);
         if (rule == GrammarParser.RULE_grammarType) {
             return new GrammarTypeAnchor((GrammarParser.grammarTypeContext)ctx, trackingSpan);

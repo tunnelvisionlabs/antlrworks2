@@ -1,6 +1,5 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Terence Parr
  *  Copyright (c) 2011 Sam Harwell
  *  All rights reserved.
  *
@@ -26,36 +25,19 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.antlr.works.editor.grammar.syndiag;
+package org.antlr.works.editor.grammar.parser;
 
-import java.util.EnumSet;
-import org.antlr.works.editor.grammar.parser.GrammarParserResultTask;
-import org.netbeans.modules.parsing.spi.Scheduler;
+import org.netbeans.modules.parsing.spi.ParserResultTask;
 
 /**
  *
  * @author Sam Harwell
  */
-public abstract class UpdateSyntaxDiagramTask extends GrammarParserResultTask {
-    private static final EnumSet<Input> INPUTS = EnumSet.<Input>of(Input.Anchors);
+public abstract class GrammarParserResultTask extends ParserResultTask<GrammarParser.GrammarParserResult> implements GrammarTaskInput {
 
     @Override
-    public EnumSet<Input> getTaskInputs() {
-        return INPUTS;
-    }
-
-    @Override
-    public int getPriority() {
-        return 100;
-    }
-
-    @Override
-    public Class<? extends Scheduler> getSchedulerClass() {
-        return Scheduler.CURSOR_SENSITIVE_TASK_SCHEDULER;
-    }
-
-    @Override
-    public void cancel() {
+    public boolean allowStaleInput() {
+        return false;
     }
 
 }

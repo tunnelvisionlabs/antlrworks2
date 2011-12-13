@@ -28,8 +28,12 @@
 package org.antlr.works.editor.grammar.parser;
 
 import java.util.Collection;
+import java.util.List;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import org.antlr.works.editor.grammar.GrammarEditorKit;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
+import org.netbeans.lib.editor.util.ListenerList;
 import org.netbeans.modules.parsing.api.Snapshot;
 import org.netbeans.modules.parsing.api.Task;
 import org.netbeans.modules.parsing.spi.ParseException;
@@ -45,11 +49,18 @@ public class GrammarParserFactory extends ParserFactory {
         return new ParserSelector();
     }
 
-    private static class ParserSelector extends GrammarParser {
+    private static class ParserSelector extends Parser {
 
+        private final ListenerList<ChangeListener> listeners = new ListenerList<ChangeListener>();
         private final GrammarParserV3 v3 = new GrammarParserV3();
         private final GrammarParserV4 v4 = new GrammarParserV4();
         private boolean compatibility;
+
+        public ParserSelector() {
+            Listener listener = new Listener();
+            v3.addChangeListener(listener);
+            v4.addChangeListener(listener);
+        }
 
         @Override
         public void parse(Snapshot snapshot, Task task, SourceModificationEvent sme) throws ParseException {
@@ -62,11 +73,50 @@ public class GrammarParserFactory extends ParserFactory {
         }
 
         @Override
-        public GrammarParserResult createResult(Task task) {
+        public Result getResult(Task task) throws ParseException {
             if (compatibility) {
-                return v3.createResult(task);
+                return v3.getResult(task);
             } else {
-                return v4.createResult(task);
+                return v4.getResult(task);
+            }
+        }
+
+        @Override
+        public void addChangeListener(ChangeListener changeListener) {
+            listeners.add(changeListener);
+        }
+
+        @Override
+        public void removeChangeListener(ChangeListener changeListener) {
+            listeners.remove(changeListener);
+        }
+
+        protected final void fireStateChanged() {
+            List<ChangeListener> targets;
+            synchronized (listeners) {
+                targets = listeners.getListeners();
+            }
+
+            if (targets.size() > 0) {
+                ChangeEvent event = new ChangeEvent(this);
+                for (ChangeListener listener : targets) {
+                    listener.stateChanged(event);
+                }
+            }
+        }
+
+        private class Listener implements ChangeListener {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                if (e.getSource() instanceof GrammarParserV3) {
+                    if (compatibility) {
+                        fireStateChanged();
+                    }
+                } else {
+                    if (!compatibility) {
+                        fireStateChanged();
+                    }
+                }
             }
         }
     }
