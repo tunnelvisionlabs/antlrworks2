@@ -82,7 +82,7 @@ public abstract class NavigatorPanelUI extends javax.swing.JPanel implements Exp
 
     private long lastShowWaitNodeTime = -1;
 
-    @SuppressWarnings("LeakingThisInConstructor")
+    @SuppressWarnings({"LeakingThisInConstructor", "OverridableMethodCallInConstructor"})
     public NavigatorPanelUI(NavigatorNode.Factory nodeFactory) {
         this.nodeFactory = nodeFactory;
 
@@ -280,7 +280,6 @@ public abstract class NavigatorPanelUI extends javax.swing.JPanel implements Exp
         public NavigatorBeanTreeView(NavigatorPanelUI ui) {
             this.navigatorPanelUI = ui;
             this.toolTipManager = new ToolTipManagerEx( this );
-            setUseSubstringInQuickSearch(true);
         }
 
         public boolean getScrollOnExpand() {
