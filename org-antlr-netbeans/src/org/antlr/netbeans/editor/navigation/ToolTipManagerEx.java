@@ -70,8 +70,6 @@ import org.openide.util.NbBundle;
 import org.openide.util.RequestProcessor;
 import org.openide.util.Utilities;
 
-import static org.antlr.netbeans.editor.navigation.Bundle.*;
-
 /**
  * Customized copy of javax.swing.ToolTipManager
  * 
@@ -107,7 +105,7 @@ public final class ToolTipManagerEx extends MouseAdapter implements MouseMotionL
 
     private ToolTipProvider provider;
     
-    private static final String WAITING_TEXT = LBL_PleaseWait();
+    private static final String WAITING_TEXT = Bundle.LBL_PleaseWait();
     
     private AWTEventListener awtListener;
     
@@ -781,7 +779,7 @@ public final class ToolTipManagerEx extends MouseAdapter implements MouseMotionL
             JScrollPane scroll = new JScrollPane( content );
             scroll.setHorizontalScrollBarPolicy( JScrollPane.HORIZONTAL_SCROLLBAR_NEVER );
             add( scroll, new GridBagConstraints(0,0,1,1,1.0,1.0,GridBagConstraints.CENTER,GridBagConstraints.BOTH,new Insets(0,0,0,0),0,0) );
-            shortcut = new JLabel( HINT_EnlargeJavaDocToolip( Utilities.isMac() ? KeyEvent.getKeyText(KeyEvent.VK_META)+"+F1" : "Ctrl+F1" ) );
+            shortcut = new JLabel( Bundle.HINT_EnlargeJavaDocToolip( Utilities.isMac() ? KeyEvent.getKeyText(KeyEvent.VK_META)+"+F1" : "Ctrl+F1" ) );
             shortcut.setHorizontalAlignment( JLabel.CENTER );
             shortcut.setBorder( BorderFactory.createLineBorder(Color.black) );
             add( shortcut, new GridBagConstraints(0,1,1,1,0.0,0.0,GridBagConstraints.CENTER,GridBagConstraints.BOTH,new Insets(0,0,0,0),0,0) );

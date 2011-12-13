@@ -56,9 +56,6 @@ import org.openide.util.NbBundle;
 import org.openide.util.RequestProcessor;
 import org.openide.util.lookup.Lookups;
 
-import static org.antlr.works.editor.grammar.navigation.Bundle.HINT_rules;
-import static org.antlr.works.editor.grammar.navigation.Bundle.LBL_rules;
-
 @NbBundle.Messages({
     "LBL_rules=Rules",
     "HINT_rules=Rules"
@@ -70,12 +67,12 @@ public class GrammarRulesPanel implements NavigatorPanel {
 
     @Override
     public String getDisplayName() {
-        return LBL_rules();
+        return Bundle.LBL_rules();
     }
 
     @Override
     public String getDisplayHint() {
-        return HINT_rules();
+        return Bundle.HINT_rules();
     }
 
     @Override

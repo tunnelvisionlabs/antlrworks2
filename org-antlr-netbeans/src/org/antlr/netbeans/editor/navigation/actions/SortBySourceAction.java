@@ -54,8 +54,6 @@ import org.openide.util.ImageUtilities;
 import org.openide.util.NbBundle;
 import org.openide.util.actions.Presenter;
 
-import static org.antlr.netbeans.editor.navigation.actions.Bundle.LBL_SortBySource;
-
 @NbBundle.Messages({
     "LBL_SortBySource=Sort by Source"
 })
@@ -65,7 +63,7 @@ public class SortBySourceAction extends AbstractAction implements Presenter.Popu
 
     public SortBySourceAction(Filters filters) {
         this.filters = filters;
-        putValue(Action.NAME, LBL_SortBySource());
+        putValue(Action.NAME, Bundle.LBL_SortBySource());
         putValue(Action.SMALL_ICON, ImageUtilities.loadImageIcon("org/antlr/netbeans/editor/navigation/resources/sortPosition.png", false));
     }
 

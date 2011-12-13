@@ -49,8 +49,6 @@ import org.openide.util.datatransfer.PasteType;
 import org.openide.util.lookup.AbstractLookup;
 import org.openide.util.lookup.InstanceContent;
 
-import static org.antlr.netbeans.editor.navigation.Bundle.LBL_WaitNode;
-
 /**
  *
  * @author sam
@@ -312,7 +310,7 @@ public abstract class NavigatorNode extends AbstractNode {
 
         @Override
         public String getDisplayName() {
-            return LBL_WaitNode();
+            return Bundle.LBL_WaitNode();
         }
 
         @Override

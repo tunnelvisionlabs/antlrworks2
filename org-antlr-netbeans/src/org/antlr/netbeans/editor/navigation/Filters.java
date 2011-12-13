@@ -39,9 +39,6 @@ import org.openide.util.ImageUtilities;
 import org.openide.util.NbBundle;
 import org.openide.util.NbPreferences;
 
-import static org.antlr.netbeans.editor.navigation.Bundle.LBL_ShowInherited;
-import static org.antlr.netbeans.editor.navigation.Bundle.LBL_ShowInheritedTip;
-
 /**
  *
  * @author sam
@@ -136,8 +133,8 @@ public abstract class Filters {
     protected void describeFilters(FiltersDescription desc) {
         if (supportsInheritedMembers()) {
             desc.addFilter(SHOW_INHERITED,
-                    LBL_ShowInherited(),
-                    LBL_ShowInheritedTip(),
+                    Bundle.LBL_ShowInherited(),
+                    Bundle.LBL_ShowInheritedTip(),
                     false, ImageUtilities.loadImageIcon("org/antlr/netbeans/editor/navigation/resources/filterHideInherited.png", false), //NOI18N
                     null
                 );

@@ -57,8 +57,6 @@ import org.openide.util.*;
 import org.openide.util.lookup.AbstractLookup;
 import org.openide.util.lookup.InstanceContent;
 
-import static org.antlr.netbeans.editor.navigation.Bundle.TIP_CollapsiblePanel;
-
 /**
  *
  * @author sam
@@ -101,7 +99,7 @@ public abstract class NavigatorPanelUI extends javax.swing.JPanel implements Exp
         // tooltip
         KeyStroke toggleKey = KeyStroke.getKeyStroke(KeyEvent.VK_T, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
         String keyText = Utilities.keyToString(toggleKey);
-        filtersPanel.setToolTipText(TIP_CollapsiblePanel(keyText));
+        filtersPanel.setToolTipText(Bundle.TIP_CollapsiblePanel(keyText));
 
         filters = createFilters();
         filters.getInstance().hookChangeListener(this);

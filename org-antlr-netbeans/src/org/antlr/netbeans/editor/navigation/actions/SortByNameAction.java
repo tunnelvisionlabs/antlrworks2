@@ -54,8 +54,6 @@ import org.openide.util.ImageUtilities;
 import org.openide.util.NbBundle;
 import org.openide.util.actions.Presenter;
 
-import static org.antlr.netbeans.editor.navigation.actions.Bundle.LBL_SortByName;
-
 @NbBundle.Messages({
     "LBL_SortByName=Sort by Name"
 })
@@ -65,7 +63,7 @@ public class SortByNameAction extends AbstractAction implements Presenter.Popup 
 
     public SortByNameAction(Filters filters) {
         this.filters = filters;
-        putValue(Action.NAME, LBL_SortByName());
+        putValue(Action.NAME, Bundle.LBL_SortByName());
         putValue(Action.SMALL_ICON, ImageUtilities.loadImageIcon("org/antlr/netbeans/editor/navigation/resources/sortAlpha.png", false));
     }
 
