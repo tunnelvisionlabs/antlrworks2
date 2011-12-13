@@ -35,7 +35,7 @@ import org.openide.util.Parameters;
 
 /**
  *
- * @author sam
+ * @author Sam Harwell
  */
 public final class DocumentPoint implements Comparable<DocumentPoint> {
     private final StyledDocument document;

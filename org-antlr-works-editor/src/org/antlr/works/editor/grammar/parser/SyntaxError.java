@@ -33,7 +33,7 @@ import org.netbeans.spi.editor.hints.Severity;
 
 /**
  *
- * @author sam
+ * @author Sam Harwell
  */
 public class SyntaxError {
     private final Token offendingToken;

@@ -29,7 +29,7 @@ package org.antlr.netbeans.editor;
 
 /**
  *
- * @author sam
+ * @author Sam Harwell
  */
 public interface TextEdit {
 

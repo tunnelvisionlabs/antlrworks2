@@ -34,7 +34,7 @@ import org.netbeans.spi.editor.fold.FoldManagerFactory;
 
 /**
  *
- * @author sam
+ * @author Sam Harwell
  */
 @MimeRegistration(mimeType=GrammarEditorKit.GRAMMAR_MIME_TYPE, service=FoldManagerFactory.class)
 public class GrammarFoldManagerFactory implements FoldManagerFactory {

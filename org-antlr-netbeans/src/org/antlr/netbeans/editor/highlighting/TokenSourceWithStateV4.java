@@ -32,7 +32,7 @@ import org.antlr.v4.runtime.TokenSource;
 
 /**
  *
- * @author sam
+ * @author Sam Harwell
  */
 public interface TokenSourceWithStateV4<T> extends TokenSource {
     public CharStream getCharStream();

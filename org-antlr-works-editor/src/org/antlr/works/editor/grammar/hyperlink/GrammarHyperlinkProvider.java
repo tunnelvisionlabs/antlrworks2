@@ -43,7 +43,7 @@ import org.netbeans.lib.editor.hyperlink.spi.HyperlinkType;
 
 /**
  *
- * @author sam
+ * @author Sam Harwell
  */
 @MimeRegistration(mimeType=GrammarEditorKit.GRAMMAR_MIME_TYPE, service=HyperlinkProviderExt.class)
 public class GrammarHyperlinkProvider implements HyperlinkProviderExt {

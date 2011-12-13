@@ -33,7 +33,7 @@ import org.antlr.netbeans.editor.DocumentSpan;
 
 /**
  *
- * @author sam
+ * @author Sam Harwell
  */
 public interface Commenter {
 

@@ -29,7 +29,7 @@ package org.antlr.netbeans.editor.commenting;
 
 /**
  *
- * @author sam
+ * @author Sam Harwell
  */
 public class LineCommentFormat extends CommentFormat {
 

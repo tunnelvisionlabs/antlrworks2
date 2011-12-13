@@ -32,7 +32,7 @@ import java.awt.Rectangle;
 
 /**
  *
- * @author sam
+ * @author Sam Harwell
  */
 public interface Element {
 

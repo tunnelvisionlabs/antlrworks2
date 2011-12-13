@@ -47,7 +47,7 @@ import org.openide.util.Exceptions;
 
 /**
  *
- * @author sam
+ * @author Sam Harwell
  */
 public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState>> extends AbstractHighlightsContainer {
     private static final boolean FULL_CHECKS = false;

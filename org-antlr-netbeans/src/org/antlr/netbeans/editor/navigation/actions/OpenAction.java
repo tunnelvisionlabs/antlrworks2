@@ -68,7 +68,7 @@ import org.openide.util.UserQuestionException;
 
 /**
  *
- * @author sam
+ * @author Sam Harwell
  */
 @NbBundle.Messages({
     "LBL_Goto=Go to source",

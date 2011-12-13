@@ -37,7 +37,7 @@ import org.netbeans.modules.parsing.spi.TaskFactory;
 
 /**
  *
- * @author sam
+ * @author Sam Harwell
  */
 @MimeRegistration(mimeType=GrammarEditorKit.GRAMMAR_MIME_TYPE, service=TaskFactory.class)
 public class UpdateAnchorsTaskFactory extends TaskFactory {

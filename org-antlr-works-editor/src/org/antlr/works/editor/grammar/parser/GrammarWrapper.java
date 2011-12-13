@@ -46,7 +46,7 @@ import org.openide.util.Exceptions;
 
 /**
  *
- * @author sam
+ * @author Sam Harwell
  */
 public class GrammarWrapper extends Grammar {
     

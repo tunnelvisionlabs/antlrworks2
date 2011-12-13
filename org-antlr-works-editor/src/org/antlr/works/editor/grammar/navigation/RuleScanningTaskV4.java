@@ -45,7 +45,7 @@ import org.openide.util.Exceptions;
 
 /**
  *
- * @author sam
+ * @author Sam Harwell
  */
 public class RuleScanningTaskV4 extends RuleScanningTask {
 

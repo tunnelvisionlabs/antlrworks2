@@ -32,7 +32,7 @@ import javax.swing.text.JTextComponent;
 
 /**
  *
- * @author sam
+ * @author Sam Harwell
  */
 public class CompletionToolTip extends JToolTip {
 

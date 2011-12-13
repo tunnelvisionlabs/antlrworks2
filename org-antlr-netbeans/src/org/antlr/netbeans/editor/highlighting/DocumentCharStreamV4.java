@@ -36,7 +36,7 @@ import org.openide.text.NbDocument;
 
 /**
  *
- * @author sam
+ * @author Sam Harwell
  */
 public class DocumentCharStreamV4 implements CharStream {
     private boolean explicitCache;

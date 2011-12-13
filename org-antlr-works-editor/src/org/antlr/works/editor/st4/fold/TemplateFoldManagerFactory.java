@@ -34,7 +34,7 @@ import org.netbeans.spi.editor.fold.FoldManagerFactory;
 
 /**
  *
- * @author sam
+ * @author Sam Harwell
  */
 @MimeRegistration(mimeType=StringTemplateEditorKit.TEMPLATE_MIME_TYPE, service=FoldManagerFactory.class)
 public class TemplateFoldManagerFactory implements FoldManagerFactory {

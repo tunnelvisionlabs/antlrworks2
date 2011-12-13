@@ -34,7 +34,7 @@ import org.openide.util.Parameters;
 
 /**
  *
- * @author sam
+ * @author Sam Harwell
  */
 public final class DocumentSpan {
     private final StyledDocument document;

@@ -41,7 +41,7 @@ import org.openide.util.Parameters;
 
 /**
  *
- * @author sam
+ * @author Sam Harwell
  */
 class TextEditImpl implements TextEdit {
     final BaseDocument document;

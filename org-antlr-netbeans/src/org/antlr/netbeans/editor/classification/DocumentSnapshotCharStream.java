@@ -36,7 +36,7 @@ import org.openide.util.Parameters;
 
 /**
  *
- * @author sam
+ * @author Sam Harwell
  */
 public class DocumentSnapshotCharStream implements CharStream {
 

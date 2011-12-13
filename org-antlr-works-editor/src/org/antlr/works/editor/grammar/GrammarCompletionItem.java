@@ -53,7 +53,7 @@ import org.netbeans.spi.editor.completion.support.CompletionUtilities;
 
 /**
  *
- * @author sam
+ * @author Sam Harwell
  */
 public abstract class GrammarCompletionItem implements CompletionItem {
 

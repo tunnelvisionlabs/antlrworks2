@@ -41,7 +41,7 @@ import org.openide.util.NbPreferences;
 
 /**
  *
- * @author sam
+ * @author Sam Harwell
  */
 @NbBundle.Messages({
     "LBL_ShowInherited=Show Inherited",

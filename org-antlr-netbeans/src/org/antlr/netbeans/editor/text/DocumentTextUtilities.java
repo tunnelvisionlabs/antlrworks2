@@ -48,7 +48,7 @@ import org.netbeans.editor.BaseDocument;
 
 /**
  *
- * @author sam
+ * @author Sam Harwell
  */
 public final class DocumentTextUtilities {
 

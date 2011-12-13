@@ -33,7 +33,7 @@ import org.antlr.works.editor.grammar.navigation.GrammarNode;
 
 /**
  *
- * @author sam
+ * @author Sam Harwell
  */
 public class GrammarRuleCompletionItem extends GrammarCompletionItem {
 

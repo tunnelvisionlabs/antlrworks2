@@ -51,7 +51,7 @@ import org.openide.util.lookup.InstanceContent;
 
 /**
  *
- * @author sam
+ * @author Sam Harwell
  */
 @NbBundle.Messages({
     "LBL_WaitNode=Please wait..."

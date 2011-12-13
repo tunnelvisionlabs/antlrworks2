@@ -59,7 +59,7 @@ import org.openide.util.lookup.InstanceContent;
 
 /**
  *
- * @author sam
+ * @author Sam Harwell
  */
 @NbBundle.Messages({
     "TIP_CollapsiblePanel=Click or press {0} to hide/show when the Navigator is active"

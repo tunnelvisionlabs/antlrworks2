@@ -46,7 +46,7 @@ import org.openide.util.Exceptions;
 
 /**
  *
- * @author sam
+ * @author Sam Harwell
  */
 public class TemplateFoldManager implements FoldManager {
     private static final Map<DataObject, TemplateFoldManager> managers =

@@ -43,7 +43,7 @@ import org.openide.util.Exceptions;
 
 /**
  *
- * @author sam
+ * @author Sam Harwell
  */
 @MimeRegistration(mimeType=StringTemplateEditorKit.TEMPLATE_MIME_TYPE, service=TaskFactory.class)
 public class TemplateFoldManagerTaskFactory extends TaskFactory {

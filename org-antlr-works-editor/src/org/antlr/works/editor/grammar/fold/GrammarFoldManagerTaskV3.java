@@ -40,7 +40,7 @@ import org.openide.text.NbDocument;
 
 /**
  *
- * @author sam
+ * @author Sam Harwell
  */
 public class GrammarFoldManagerTaskV3 extends GrammarFoldManagerTask {
 

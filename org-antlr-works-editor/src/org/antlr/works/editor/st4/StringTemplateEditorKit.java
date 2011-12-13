@@ -41,7 +41,7 @@ import org.netbeans.modules.editor.NbEditorKit;
 
 /**
  *
- * @author sam
+ * @author Sam Harwell
  */
 @MimeRegistration(mimeType=StringTemplateEditorKit.TEMPLATE_MIME_TYPE, service=EditorKit.class)
 public class StringTemplateEditorKit extends NbEditorKit {

@@ -50,7 +50,7 @@ import org.stringtemplate.v4.misc.Interval;
 
 /**
  *
- * @author sam
+ * @author Sam Harwell
  */
 public class TemplateFoldManagerTask extends ParserResultTask<TemplateParser.TemplateParserResult> {
 

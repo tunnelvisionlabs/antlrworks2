@@ -38,7 +38,7 @@ import javax.swing.text.StyledDocument;
 
 /**
  *
- * @author sam
+ * @author Sam Harwell
  */
 public final class SelectionHelper {
 

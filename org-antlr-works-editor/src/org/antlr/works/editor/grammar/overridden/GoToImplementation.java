@@ -39,7 +39,7 @@ import org.openide.util.NbBundle;
 
 /**
  *
- * @author sam
+ * @author Sam Harwell
  */
 @EditorActionRegistration(
         name = "goto-implementation",

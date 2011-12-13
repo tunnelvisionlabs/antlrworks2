@@ -34,7 +34,7 @@ import org.netbeans.modules.parsing.spi.SchedulerEvent;
 
 /**
  *
- * @author sam
+ * @author Sam Harwell
  */
 public class UpdateSyntaxDiagramTaskV3 extends UpdateSyntaxDiagramTask {
 
