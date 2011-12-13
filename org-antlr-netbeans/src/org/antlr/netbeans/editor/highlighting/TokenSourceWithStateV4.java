@@ -27,11 +27,15 @@
  */
 package org.antlr.netbeans.editor.highlighting;
 
-import org.antlr.runtime.CharStream;
-import org.antlr.runtime.TokenSource;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.TokenSource;
 
-public interface TokenSourceWithState<T> extends TokenSource {
+/**
+ *
+ * @author sam
+ */
+public interface TokenSourceWithStateV4<T> extends TokenSource {
     public CharStream getCharStream();
-    
+
     public T getState();
 }
