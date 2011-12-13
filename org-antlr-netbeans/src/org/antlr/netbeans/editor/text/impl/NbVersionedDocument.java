@@ -31,11 +31,14 @@ import java.lang.ref.WeakReference;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
-import org.antlr.netbeans.editor.text.VersionedDocument;
+import javax.swing.text.Document;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
+import org.antlr.netbeans.editor.text.VersionedDocument;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.editor.BaseDocument;
 import org.netbeans.lib.editor.util.swing.DocumentUtilities;
+import org.openide.filesystems.FileObject;
+import org.openide.loaders.DataObject;
 import org.openide.util.Exceptions;
 import org.openide.util.Parameters;
 
@@ -71,7 +74,24 @@ public class NbVersionedDocument implements VersionedDocument {
     public DocumentSnapshot getCurrentSnapshot() {
         return applyChanges().getSnapshot();
     }
-    
+
+    @Override
+    public String getMimeType() {
+        return (String)document.getProperty(BaseDocument.MIME_TYPE_PROP);
+    }
+
+    @Override
+    public FileObject getFileObject() {
+        Object property = document.getProperty(Document.StreamDescriptionProperty);
+        if (property instanceof FileObject) {
+            return (FileObject)property;
+        } else if (property instanceof DataObject) {
+            return ((DataObject)property).getPrimaryFile();
+        }
+
+        throw new UnsupportedOperationException("Couldn't get the document's FileObject.");
+    }
+
     private @NonNull NbDocumentVersion applyChanges() {
         document.readLock();
         try {

@@ -28,7 +28,9 @@
 package org.antlr.netbeans.editor.text;
 
 import javax.swing.text.Document;
+import org.netbeans.api.annotations.common.CheckForNull;
 import org.netbeans.api.annotations.common.NonNull;
+import org.openide.filesystems.FileObject;
 
 /**
  *
@@ -38,6 +40,9 @@ public interface VersionedDocument {
 
     public @NonNull DocumentSnapshot getCurrentSnapshot();
 
-    public @NonNull Document getDocument();
+    public @CheckForNull Document getDocument();
 
+    public @NonNull FileObject getFileObject();
+
+    public @NonNull String getMimeType();
 }
