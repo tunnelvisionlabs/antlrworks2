@@ -38,6 +38,11 @@ public interface DocumentVersion {
 
     public @NonNull VersionedDocument getVersionedDocument();
 
+    /**
+     * @deprecated figure out how to handle GrammarTokensTaskTaggerSnapshot ctor without this
+     */
+    public @NonNull DocumentSnapshot getSnapshot();
+
     public int getLength();
 
     public int getVersionNumber();
@@ -59,5 +64,4 @@ public interface DocumentVersion {
     public @NonNull TrackingPositionRegion createTrackingRegion(@NonNull OffsetRegion region, @NonNull TrackingPositionRegion.Bias bias, @NonNull TrackingFidelity fidelity);
 
     public @NonNull TrackingPositionRegion createTrackingRegion(int start, int length, @NonNull TrackingPositionRegion.Bias bias, @NonNull TrackingFidelity fidelity);
-
 }

@@ -98,7 +98,7 @@ public class NbDocumentVersion implements DocumentVersion {
         return lineData;
     }
 
-    @NonNull NbDocumentSnapshot getSnapshot() {
+    public @NonNull NbDocumentSnapshot getSnapshot() {
         synchronized (this) {
             if (snapshot == null) {
                 snapshot = new NbDocumentSnapshot(this);
