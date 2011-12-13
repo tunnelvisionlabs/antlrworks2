@@ -35,7 +35,7 @@ import org.openide.util.Parameters;
  *
  * @author Sam Harwell
  */
-public class SnapshotPositionRegion {
+public final class SnapshotPositionRegion {
 
     @NonNull
     private final DocumentSnapshot snapshot;
@@ -75,6 +75,10 @@ public class SnapshotPositionRegion {
 
     public int getLength() {
         return region.getLength();
+    }
+
+    public boolean isEmpty() {
+        return region.isEmpty();
     }
 
     public @NonNull DocumentSnapshot getSnapshot() {
