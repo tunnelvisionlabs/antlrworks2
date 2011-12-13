@@ -34,7 +34,7 @@ import org.netbeans.spi.editor.highlighting.HighlightsLayer;
 import org.netbeans.spi.editor.highlighting.HighlightsLayerFactory;
 import org.netbeans.spi.editor.highlighting.ZOrder;
 
-@MimeRegistration(mimeType=StringTemplateEditorKit.TEMPLATE_MIME_TYPE, service=HighlightsLayerFactory.class)
+//@MimeRegistration(mimeType=StringTemplateEditorKit.TEMPLATE_MIME_TYPE, service=HighlightsLayerFactory.class)
 public class TemplateHighlighterLayerFactory implements HighlightsLayerFactory {
     @Override
     public HighlightsLayer[] createLayers(Context context) {
