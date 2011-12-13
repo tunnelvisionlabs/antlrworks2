@@ -1,0 +1,42 @@
+<!DOCTYPE fontscolors PUBLIC "-//NetBeans//DTD Editor Fonts and Colors settings 1.1//EN" "http://www.netbeans.org/dtds/EditorFontsColors-1_1.dtd">
+<fontscolors>
+    <!--
+        COMMON
+    -->
+    <fontcolor name="identifier" default="identifier"/>
+    <fontcolor name="keyword" default="keyword"/>
+    <fontcolor name="definition" foreColor="FF2B91AF" />
+    <fontcolor name="reference" foreColor="FF008800">
+        <font style="bold" />
+    </fontcolor>
+    <fontcolor name="comment" default="comment" foreColor="FF008000" />
+    <fontcolor name="stringliteral" default="string" foreColor="FFA31515" />
+    <fontcolor name="number" default="number" />
+    <fontcolor name="whitespace" default="whitespace"/>
+    <fontcolor name="operator" default="operator" />
+
+    <!--
+        ANTLR
+    -->
+    <!-- Slate Blue -->
+    <fontcolor name="parserrule" foreColor="FF6A5ACD" />
+    <!-- Dark Blue -->
+    <fontcolor name="lexerrule" foreColor="FF00008B" />
+    <!-- Teal -->
+    <fontcolor name="validoption" foreColor="FF008080" />
+    <!-- Dark Red -->
+    <fontcolor name="invalidoption" foreColor="FF8B0000" />
+    <!-- Excel formula for 70% opacity: =DEC2HEX(ROUND(HEX2DEC(A1)+0.3*(255-HEX2DEC(A1)),0)) -->
+    <!-- B3008000 -->
+    <fontcolor name="actioncomment" foreColor="FF4DA64D" />
+    <!-- B3000000 -->
+    <fontcolor name="actionliteral" foreColor="FF4D4D4D" />
+    <!-- B3A31515 -->
+    <fontcolor name="actionstringliteral" foreColor="FFBF5B5B" />
+    <!-- B3008800 -->
+    <fontcolor name="actionreference" foreColor="FF4DAC4D" />
+    <fontcolor name="directive" foreColor="FF808080" />
+    <fontcolor name="astoperator">
+        <font style="bold" />
+    </fontcolor>
+</fontscolors>

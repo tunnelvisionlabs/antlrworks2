@@ -64,6 +64,41 @@
                     </file>
                 </folder>-->
             </folder>
+            <folder name="x-antlr3-ldbg">
+                <attr name="SystemFileSystem.localizingBundle" stringvalue="org.antlr.works.editor.Bundle"/>
+
+                <folder name="FontsColors">
+                    <folder name="NetBeans">
+                        <folder name="Defaults">
+                            <file name="FontAndColors.xml" url="grammar/debugger/FontAndColors.xml">
+                                <attr name="SystemFileSystem.localizingBundle" stringvalue="org.antlr.works.editor.Bundle"/>
+                            </file>
+                        </folder>
+                    </folder>
+                </folder>
+
+                <folder name="FoldManager">
+                    <file name="org-netbeans-editor-CustomFoldManager$Factory.instance"/>
+                </folder>
+
+                <folder name="SideBar">
+                    <file name="org-antlr-netbeans-editor-fold-CodeFoldingSideBarFactory.instance">
+                        <attr name="position" intvalue="1500"/>
+                    </file>
+                </folder>
+
+                <!--<folder name="Toolbars">
+                    <folder name="Default">
+                        <file name="separator-before-compatibility-mode.instance">
+                            <attr name="instanceClass" stringvalue="javax.swing.JSeparator"/>
+                            <attr name="position" intvalue="20100"/>
+                        </file>
+                        <file name="toggle-legacy-mode">
+                            <attr name="position" intvalue="20200"/>
+                        </file>
+                    </folder>
+                </folder>-->
+            </folder>
             <folder name="x-stringtemplate4">
                 <attr name="SystemFileSystem.localizingBundle" stringvalue="org.antlr.works.editor.Bundle"/>
 
@@ -189,6 +224,73 @@
                     </file>
                 </folder>
             </folder>
+            <folder name="x-antlr3-ldbg">
+                <folder name="Actions">
+                    <file name="org-openide-actions-CopyAction.shadow">
+                        <attr name="originalFile" stringvalue="Actions/Edit/org-openide-actions-CopyAction.instance"/>
+                        <attr name="position" intvalue="400"/>
+                    </file>
+                    <file name="org-openide-actions-CutAction.shadow">
+                        <attr name="originalFile" stringvalue="Actions/Edit/org-openide-actions-CutAction.instance"/>
+                        <attr name="position" intvalue="300"/>
+                    </file>
+                    <file name="org-openide-actions-DeleteAction.shadow">
+                        <attr name="originalFile" stringvalue="Actions/Edit/org-openide-actions-DeleteAction.instance"/>
+                        <attr name="position" intvalue="600"/>
+                    </file>
+                    <file name="org-openide-actions-FileSystemAction.shadow">
+                        <attr name="originalFile" stringvalue="Actions/System/org-openide-actions-FileSystemAction.instance"/>
+                        <attr name="position" intvalue="1100"/>
+                    </file>
+                    <file name="org-openide-actions-OpenAction.shadow">
+                        <attr name="originalFile" stringvalue="Actions/System/org-openide-actions-OpenAction.instance"/>
+                        <attr name="position" intvalue="100"/>
+                    </file>
+                    <file name="org-openide-actions-PropertiesAction.shadow">
+                        <attr name="originalFile" stringvalue="Actions/System/org-openide-actions-PropertiesAction.instance"/>
+                        <attr name="position" intvalue="1400"/>
+                    </file>
+                    <file name="org-openide-actions-RenameAction.shadow">
+                        <attr name="originalFile" stringvalue="Actions/System/org-openide-actions-RenameAction.instance"/>
+                        <attr name="position" intvalue="700"/>
+                    </file>
+                    <file name="org-openide-actions-SaveAsTemplateAction.shadow">
+                        <attr name="originalFile" stringvalue="Actions/System/org-openide-actions-SaveAsTemplateAction.instance"/>
+                        <attr name="position" intvalue="900"/>
+                    </file>
+                    <file name="org-openide-actions-ToolsAction.shadow">
+                        <attr name="originalFile" stringvalue="Actions/System/org-openide-actions-ToolsAction.instance"/>
+                        <attr name="position" intvalue="1300"/>
+                    </file>
+                    <file name="sep-1.instance">
+                        <attr name="instanceClass" stringvalue="javax.swing.JSeparator"/>
+                        <attr name="position" intvalue="200"/>
+                    </file>
+                    <file name="sep-2.instance">
+                        <attr name="instanceClass" stringvalue="javax.swing.JSeparator"/>
+                        <attr name="position" intvalue="500"/>
+                    </file>
+                    <file name="sep-3.instance">
+                        <attr name="instanceClass" stringvalue="javax.swing.JSeparator"/>
+                        <attr name="position" intvalue="800"/>
+                    </file>
+                    <file name="sep-4.instance">
+                        <attr name="instanceClass" stringvalue="javax.swing.JSeparator"/>
+                        <attr name="position" intvalue="1000"/>
+                    </file>
+                    <file name="sep-5.instance">
+                        <attr name="instanceClass" stringvalue="javax.swing.JSeparator"/>
+                        <attr name="position" intvalue="1200"/>
+                    </file>
+                </folder>
+                <folder name="Factories">
+                    <file name="LexerDebuggerDataLoader.instance">
+                        <attr name="dataObjectClass" stringvalue="org.antlr.works.editor.grammar.debugger.LexerDebuggerDataObject"/>
+                        <attr name="instanceCreate" methodvalue="org.openide.loaders.DataLoaderPool.factory"/>
+                        <attr name="mimeType" stringvalue="text/x-antlr3-ldbg"/>
+                    </file>
+                </folder>
+            </folder>
             <folder name="x-stringtemplate4">
                 <folder name="Actions">
                     <file name="org-openide-actions-CopyAction.shadow">
@@ -272,9 +374,13 @@
                 <attr name="displayName" bundlevalue="org.antlr.works.editor.Bundle#Services/MIMEResolver/GrammarResolver.xml"/>
                 <attr name="position" intvalue="100"/>
             </file>
+            <file name="LexerDebuggerResolver.xml" url="grammar/debugger/LexerDebuggerResolver.xml">
+                <attr name="displayName" bundlevalue="org.antlr.works.editor.Bundle#Services/MIMEResolver/LexerDebuggerResolver.xml"/>
+                <attr name="position" intvalue="101"/>
+            </file>
             <file name="StringTemplateFileTypeResolver.xml" url="st4/StringTemplateFileTypeResolver.xml">
                 <attr name="displayName" bundlevalue="org.antlr.works.editor.Bundle#Services/MIMEResolver/StringTemplateFileTypeResolver.xml"/>
-                <attr name="position" intvalue="100"/>
+                <attr name="position" intvalue="102"/>
             </file>
         </folder>
     </folder>
