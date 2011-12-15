@@ -45,6 +45,7 @@ import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import javax.swing.text.AbstractDocument;
@@ -135,6 +136,7 @@ import org.openide.nodes.Node;
 import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
+import org.openide.util.Parameters;
 
 /**
  *
@@ -146,6 +148,7 @@ import org.openide.util.NbBundle;
     "GCP-instance-members="
 })
 public class GrammarCompletionProvider implements CompletionProvider {
+    // -J-Dorg.antlr.works.editor.grammar.GrammarCompletionProvider.level=FINE
     private static final Logger LOGGER = Logger.getLogger(GrammarCompletionProvider.class.getName());
 
     public static final int AUTO_QUERY_TYPE = 0x0100;
@@ -564,8 +567,8 @@ public class GrammarCompletionProvider implements CompletionProvider {
                 boolean definiteInAction;
                 boolean possibleInRewrite;
                 boolean definiteInRewrite = false;
+                Map<RuleContext, CaretReachedException> parseTrees;
                 CaretToken caretToken = null;
-                Map<ATNConfig, List<Transition>> transitions = null;
                 int grammarType = -1;
 
                 ParserTaskManager taskManager = getParserTaskManager();
@@ -627,33 +630,17 @@ public class GrammarCompletionProvider implements CompletionProvider {
                         TokenSource tokenSource = new CodeCompletionTokenSource(caretOffset, taggerTokenSource);
                         CommonTokenStream tokens = new CommonTokenStream(tokenSource);
 
-                        GrammarParser parser = new GrammarParser(tokens) {{
-                            this._interp = new CompletionParserATNSimulator(_ATN);
-                        }};
+                        CodeCompletionGrammarParser parser = new CodeCompletionGrammarParser(tokens);
                         parser.setBuildParseTree(true);
                         parser.setErrorHandler(new CodeCompletionErrorStrategy());
 
-                        ParseTree parseTree;
-                        RuleContext finalContext = null;
-
                         switch (enclosing.getRule()) {
                         case GrammarParser.RULE_rule:
-                            try {
-                                parseTree = parser.rules();
-                            } catch (CaretReachedException ex) {
-                                for (parseTree = ex.getFinalContext(); parseTree.getParent() != null; parseTree = parseTree.getParent()) {
-                                    // intentionally blank
-                                }
-
-                                finalContext = ex.getFinalContext();
-                                caretToken = ex.getCaretToken();
-                                transitions = ex.getTransitions();
-                            }
-
+                            parseTrees = getParseTrees(parser);
                             break;
 
                         default:
-                            parseTree = null;
+                            parseTrees = null;
                             break;
                         }
 
@@ -662,155 +649,186 @@ public class GrammarCompletionProvider implements CompletionProvider {
                         boolean hasRewriteConfig = false;
                         boolean hasNonRewriteConfig = false;
 
-                        if (transitions != null) {
+                        if (parseTrees != null) {
                             possibleDeclaration = false;
                             possibleReference = false;
-                            IdentityHashMap<PredictionContext, PredictionContext> visited = new IdentityHashMap<PredictionContext, PredictionContext>();
-                            Deque<PredictionContext> workList = new ArrayDeque<PredictionContext>();
-                            Deque<Integer> stateWorkList = new ArrayDeque<Integer>();
-                            for (ATNConfig c : transitions.keySet()) {
-                                boolean currentActionConfig = false;
-                                boolean currentRewriteConfig = false;
-                                visited.clear();
-                                workList.clear();
-                                stateWorkList.clear();
-                                workList.add(c.context);
-                                stateWorkList.add(c.state.stateNumber);
-                                while (!workList.isEmpty()) {
-                                    PredictionContext context = workList.poll();
-                                    int state = stateWorkList.poll();
-                                    if (visited.put(context, context) != null) {
-                                        continue;
-                                    }
 
-                                    for (int i = 0; i < context.invokingStates.length; i++) {
-                                        workList.add(context.parents[i]);
-                                        stateWorkList.add(context.invokingStates[i]);
-                                    }
-
-                                    int ruleIndex = parser.getATN().states.get(state).ruleIndex;
-                                    if (ruleIndex == GrammarParser.RULE_actionBlock) {
-                                        currentActionConfig = true;
-                                    } else if (ruleIndex == GrammarParser.RULE_rewrite) {
-                                        currentRewriteConfig = true;
-                                    }
+                            declarationOrReferenceLoop:
+                            for (Map.Entry<RuleContext, CaretReachedException> entry : parseTrees.entrySet()) {
+                                CaretReachedException ex = entry.getValue();
+                                if (ex == null || ex.getTransitions() == null) {
+                                    continue;
                                 }
 
-                                hasActionConfig |= currentActionConfig;
-                                hasNonActionConfig |= !currentActionConfig;
-                                hasRewriteConfig |= currentRewriteConfig;
-                                hasNonRewriteConfig |= !currentRewriteConfig;
+                                if (ex.getCaretToken() != null) {
+                                    caretToken = ex.getCaretToken();
+                                }
 
-                                for (Transition t : transitions.get(c)) {
-                                    int ruleIndex = t.target.ruleIndex;
-                                    if (ruleIndex == GrammarParser.RULE_id) {
-                                        possibleDeclaration = true;
-                                    } else if (ruleIndex == GrammarParser.RULE_ruleref
-                                        || ruleIndex == GrammarParser.RULE_terminal) {
-                                        possibleReference = true;
+                                Map<ATNConfig, List<Transition>> transitions = entry.getValue().getTransitions();
+                                IdentityHashMap<PredictionContext, PredictionContext> visited = new IdentityHashMap<PredictionContext, PredictionContext>();
+                                Deque<PredictionContext> workList = new ArrayDeque<PredictionContext>();
+                                Deque<Integer> stateWorkList = new ArrayDeque<Integer>();
+                                for (ATNConfig c : transitions.keySet()) {
+                                    boolean currentActionConfig = false;
+                                    boolean currentRewriteConfig = false;
+                                    visited.clear();
+                                    workList.clear();
+                                    stateWorkList.clear();
+                                    workList.add(c.context);
+                                    stateWorkList.add(c.state.stateNumber);
+                                    while (!workList.isEmpty()) {
+                                        PredictionContext context = workList.poll();
+                                        int state = stateWorkList.poll();
+                                        if (visited.put(context, context) != null) {
+                                            continue;
+                                        }
+
+                                        for (int i = 0; i < context.invokingStates.length; i++) {
+                                            workList.add(context.parents[i]);
+                                            stateWorkList.add(context.invokingStates[i]);
+                                        }
+
+                                        int ruleIndex = parser.getATN().states.get(state).ruleIndex;
+                                        if (ruleIndex == GrammarParser.RULE_actionBlock) {
+                                            currentActionConfig = true;
+                                        } else if (ruleIndex == GrammarParser.RULE_rewrite) {
+                                            currentRewriteConfig = true;
+                                        }
+
+                                        if (currentActionConfig && currentRewriteConfig) {
+                                            break;
+                                        }
+                                    }
+
+                                    hasActionConfig |= currentActionConfig;
+                                    hasNonActionConfig |= !currentActionConfig;
+                                    hasRewriteConfig |= currentRewriteConfig;
+                                    hasNonRewriteConfig |= !currentRewriteConfig;
+
+                                    for (Transition t : transitions.get(c)) {
+                                        int ruleIndex = t.target.ruleIndex;
+                                        if (ruleIndex == GrammarParser.RULE_id) {
+                                            possibleDeclaration = true;
+                                        } else if (ruleIndex == GrammarParser.RULE_ruleref
+                                            || ruleIndex == GrammarParser.RULE_terminal) {
+                                            possibleReference = true;
+                                        }
+
+                                        if (possibleDeclaration && possibleReference) {
+                                            break;
+                                        }
+                                    }
+
+                                    if (hasActionConfig && hasNonActionConfig && hasRewriteConfig && hasNonRewriteConfig) {
+                                        break declarationOrReferenceLoop;
                                     }
                                 }
                             }
                         }
 
-//                        StringBuilder summary = new StringBuilder();
-//                        if (transitions != null) {
-//                            for (ATNConfig c : transitions.keySet()) {
-//                                summary.append(c).append("\n");
-//                                for (Transition t : transitions.get(c)) {
-//                                    summary.append("\t").append(t).append("\n");
-//                                }
-//                            }
-//                        }
+                        Map<String, CompletionItem> intermediateResults = new HashMap<String, CompletionItem>();
+                        if (parseTrees != null) {
+                            for (Map.Entry<RuleContext, CaretReachedException> entry : parseTrees.entrySet()) {
 
-                        if (parseTree != null) {
-                            LabelAnalyzer labelAnalyzer = new LabelAnalyzer(finalContext);
-                            ParseTreeWalker.DEFAULT.walk(labelAnalyzer, parseTree);
+                            }
 
-                            possibleInAction = labelAnalyzer.isInAction() || hasActionConfig;
-                            definiteInAction = labelAnalyzer.isInAction() || (hasActionConfig && !hasNonActionConfig);
-                            possibleInRewrite = labelAnalyzer.isInRewrite() || hasRewriteConfig;
-                            definiteInRewrite = labelAnalyzer.isInRewrite() || (hasRewriteConfig && !hasNonRewriteConfig);
-                            possibleKeyword = !definiteInAction;
-                            possibleDeclaration &= !definiteInAction;
-                            possibleReference &= !definiteInAction;
+                            for (Map.Entry<RuleContext, CaretReachedException> entry : parseTrees.entrySet()) {
+                                ParseTree parseTree = entry.getKey();
+                                RuleContext finalContext = entry.getValue() != null ? entry.getValue().getFinalContext() : null;
+                                LabelAnalyzer labelAnalyzer = new LabelAnalyzer(finalContext);
+                                ParseTreeWalker.DEFAULT.walk(labelAnalyzer, parseTree);
 
-                            if (grammarType == GrammarParser.COMBINED) {
-                                Token enclosingRule = labelAnalyzer.getEnclosingRuleName();
-                                if (enclosingRule != null) {
-                                    if (enclosingRule.getType() == GrammarParser.RULE_REF) {
-                                        grammarType = GrammarParser.PARSER;
-                                    } else {
-                                        grammarType = GrammarParser.LEXER;
+                                possibleInAction = labelAnalyzer.isInAction() || hasActionConfig;
+                                definiteInAction = labelAnalyzer.isInAction() || (hasActionConfig && !hasNonActionConfig);
+                                possibleInRewrite = labelAnalyzer.isInRewrite() || hasRewriteConfig;
+                                definiteInRewrite = labelAnalyzer.isInRewrite() || (hasRewriteConfig && !hasNonRewriteConfig);
+                                possibleKeyword |= !definiteInAction;
+                                possibleDeclaration &= !definiteInAction;
+                                possibleReference &= !definiteInAction;
+
+                                if (grammarType == GrammarParser.COMBINED) {
+                                    Token enclosingRule = labelAnalyzer.getEnclosingRuleName();
+                                    if (enclosingRule != null) {
+                                        if (enclosingRule.getType() == GrammarParser.RULE_REF) {
+                                            grammarType = GrammarParser.PARSER;
+                                        } else {
+                                            grammarType = GrammarParser.LEXER;
+                                        }
+                                    }
+                                }
+
+                                if (possibleInAction || possibleInRewrite) {
+                                    if (!definiteInAction && labelAnalyzer.getEnclosingRuleName() != null) {
+                                        CompletionItem item = new EnclosingRuleCompletionItem(labelAnalyzer.getEnclosingRuleName());
+                                        intermediateResults.put(item.getInsertPrefix().toString(), item);
+                                    }
+
+                                    for (Token label : labelAnalyzer.getLabels()) {
+                                        CompletionItem item = new RewriteReferenceCompletionItem(label, true);
+                                        intermediateResults.put(item.getInsertPrefix().toString(), item);
+                                    }
+
+                                    if (possibleInRewrite) {
+                                        for (Token implicit : labelAnalyzer.getUnlabeledElements()) {
+                                            CompletionItem item = new ActionReferenceCompletionItem(implicit, false);
+                                            intermediateResults.put(item.getInsertPrefix().toString(), item);
+                                        }
+                                    }
+
+                                    if (possibleInAction) {
+                                        for (Token implicit : labelAnalyzer.getUnlabeledElements()) {
+                                            CompletionItem item = new ActionReferenceCompletionItem(implicit, false);
+                                            intermediateResults.put(item.getInsertPrefix().toString(), item);
+                                        }
+
+                                        switch (grammarType) {
+                                        case GrammarParser.LEXER:
+                                            intermediateResults.put("$text", new GrammarCompletionItem.KeywordItem("$text"));
+                                            intermediateResults.put("$type", new GrammarCompletionItem.KeywordItem("$type"));
+                                            intermediateResults.put("$line", new GrammarCompletionItem.KeywordItem("$line"));
+                                            intermediateResults.put("$index", new GrammarCompletionItem.KeywordItem("$index"));
+                                            intermediateResults.put("$pos", new GrammarCompletionItem.KeywordItem("$pos"));
+                                            intermediateResults.put("$channel", new GrammarCompletionItem.KeywordItem("$channel"));
+                                            intermediateResults.put("$start", new GrammarCompletionItem.KeywordItem("$start"));
+                                            intermediateResults.put("$stop", new GrammarCompletionItem.KeywordItem("$stop"));
+                                            intermediateResults.put("$int", new GrammarCompletionItem.KeywordItem("$int"));
+                                            break;
+
+                                        case GrammarParser.PARSER:
+                                            intermediateResults.put("$text", new GrammarCompletionItem.KeywordItem("$text"));
+                                            intermediateResults.put("$start", new GrammarCompletionItem.KeywordItem("$start"));
+                                            intermediateResults.put("$stop", new GrammarCompletionItem.KeywordItem("$stop"));
+                                            intermediateResults.put("$tree", new GrammarCompletionItem.KeywordItem("$tree"));
+                                            intermediateResults.put("$st", new GrammarCompletionItem.KeywordItem("$st"));
+                                            break;
+
+                                        case GrammarParser.TREE:
+                                            intermediateResults.put("$text", new GrammarCompletionItem.KeywordItem("$text"));
+                                            intermediateResults.put("$start", new GrammarCompletionItem.KeywordItem("$start"));
+                                            intermediateResults.put("$tree", new GrammarCompletionItem.KeywordItem("$tree"));
+                                            intermediateResults.put("$st", new GrammarCompletionItem.KeywordItem("$st"));
+                                            break;
+
+                                        default:
+                                            // if we're unsure about the type, include all possibilities to make sure we're covered
+                                            intermediateResults.put("$text", new GrammarCompletionItem.KeywordItem("$text"));
+                                            intermediateResults.put("$type", new GrammarCompletionItem.KeywordItem("$type"));
+                                            intermediateResults.put("$line", new GrammarCompletionItem.KeywordItem("$line"));
+                                            intermediateResults.put("$index", new GrammarCompletionItem.KeywordItem("$index"));
+                                            intermediateResults.put("$pos", new GrammarCompletionItem.KeywordItem("$pos"));
+                                            intermediateResults.put("$channel", new GrammarCompletionItem.KeywordItem("$channel"));
+                                            intermediateResults.put("$start", new GrammarCompletionItem.KeywordItem("$start"));
+                                            intermediateResults.put("$stop", new GrammarCompletionItem.KeywordItem("$stop"));
+                                            intermediateResults.put("$int", new GrammarCompletionItem.KeywordItem("$int"));
+                                            intermediateResults.put("$tree", new GrammarCompletionItem.KeywordItem("$tree"));
+                                            intermediateResults.put("$st", new GrammarCompletionItem.KeywordItem("$st"));
+                                            break;
+                                        }
                                     }
                                 }
                             }
 
-                            if (possibleInAction || possibleInRewrite) {
-                                if (!definiteInAction && labelAnalyzer.getEnclosingRuleName() != null) {
-                                    results.add(new EnclosingRuleCompletionItem(labelAnalyzer.getEnclosingRuleName()));
-                                }
-
-                                for (Token label : labelAnalyzer.getLabels()) {
-                                    results.add(new RewriteReferenceCompletionItem(label, true));
-                                }
-
-                                if (possibleInRewrite) {
-                                    for (Token implicit : labelAnalyzer.getUnlabeledElements()) {
-                                        results.add(new ActionReferenceCompletionItem(implicit, false));
-                                    }
-                                }
-
-                                if (possibleInAction) {
-                                    for (Token implicit : labelAnalyzer.getUnlabeledElements()) {
-                                        results.add(new ActionReferenceCompletionItem(implicit, false));
-                                    }
-
-                                    switch (grammarType) {
-                                    case GrammarParser.LEXER:
-                                        results.add(new GrammarCompletionItem.KeywordItem("$text"));
-                                        results.add(new GrammarCompletionItem.KeywordItem("$type"));
-                                        results.add(new GrammarCompletionItem.KeywordItem("$line"));
-                                        results.add(new GrammarCompletionItem.KeywordItem("$index"));
-                                        results.add(new GrammarCompletionItem.KeywordItem("$pos"));
-                                        results.add(new GrammarCompletionItem.KeywordItem("$channel"));
-                                        results.add(new GrammarCompletionItem.KeywordItem("$start"));
-                                        results.add(new GrammarCompletionItem.KeywordItem("$stop"));
-                                        results.add(new GrammarCompletionItem.KeywordItem("$int"));
-                                        break;
-
-                                    case GrammarParser.PARSER:
-                                        results.add(new GrammarCompletionItem.KeywordItem("$text"));
-                                        results.add(new GrammarCompletionItem.KeywordItem("$start"));
-                                        results.add(new GrammarCompletionItem.KeywordItem("$stop"));
-                                        results.add(new GrammarCompletionItem.KeywordItem("$tree"));
-                                        results.add(new GrammarCompletionItem.KeywordItem("$st"));
-                                        break;
-
-                                    case GrammarParser.TREE:
-                                        results.add(new GrammarCompletionItem.KeywordItem("$text"));
-                                        results.add(new GrammarCompletionItem.KeywordItem("$start"));
-                                        results.add(new GrammarCompletionItem.KeywordItem("$tree"));
-                                        results.add(new GrammarCompletionItem.KeywordItem("$st"));
-                                        break;
-
-                                    default:
-                                        // if we're unsure about the type, include all possibilities to make sure we're covered
-                                        results.add(new GrammarCompletionItem.KeywordItem("$text"));
-                                        results.add(new GrammarCompletionItem.KeywordItem("$type"));
-                                        results.add(new GrammarCompletionItem.KeywordItem("$line"));
-                                        results.add(new GrammarCompletionItem.KeywordItem("$index"));
-                                        results.add(new GrammarCompletionItem.KeywordItem("$pos"));
-                                        results.add(new GrammarCompletionItem.KeywordItem("$channel"));
-                                        results.add(new GrammarCompletionItem.KeywordItem("$start"));
-                                        results.add(new GrammarCompletionItem.KeywordItem("$stop"));
-                                        results.add(new GrammarCompletionItem.KeywordItem("$int"));
-                                        results.add(new GrammarCompletionItem.KeywordItem("$tree"));
-                                        results.add(new GrammarCompletionItem.KeywordItem("$st"));
-                                        break;
-                                    }
-                                }
-                            }
+                            results.addAll(intermediateResults.values());
                         }
                     }
                 }
@@ -879,8 +897,98 @@ public class GrammarCompletionProvider implements CompletionProvider {
 
                 applicableTo = snapshot.createTrackingRegion(applicableToSpan, TrackingPositionRegion.Bias.Inclusive);
             }
+
+            private Map<RuleContext, CaretReachedException> getParseTrees(CodeCompletionGrammarParser parser) {
+                List<MultipleDecisionData> potentialAlternatives = new ArrayList<MultipleDecisionData>();
+                List<Integer> currentPath = new ArrayList<Integer>();
+                Map<RuleContext, CaretReachedException> results = new IdentityHashMap<RuleContext, CaretReachedException>();
+                while (true) {
+                    tryParse(parser, potentialAlternatives, currentPath, results);
+                    if (!incrementCurrentPath(potentialAlternatives, currentPath)) {
+                        break;
+                    }
+                }
+
+                if (LOGGER.isLoggable(Level.FINE)) {
+                    for (Map.Entry<RuleContext, CaretReachedException> entry : results.entrySet()) {
+                        LOGGER.log(Level.FINE, entry.getKey().toStringTree(parser));
+                    }
+                }
+
+                return results;
+            }
+
+            private boolean incrementCurrentPath(List<MultipleDecisionData> potentialAlternatives, List<Integer> currentPath) {
+                for (int i = currentPath.size() - 1; i >= 0; i--) {
+                    if (currentPath.get(i) < potentialAlternatives.get(i).alternatives.length - 1) {
+                        currentPath.set(i, currentPath.get(i) + 1);
+                        return true;
+                    }
+
+                    potentialAlternatives.remove(i);
+                    currentPath.remove(i);
+                }
+
+                return false;
+            }
+
+            private void tryParse(CodeCompletionGrammarParser parser, List<MultipleDecisionData> potentialAlternatives, List<Integer> currentPath, Map<RuleContext, CaretReachedException> results) {
+                RuleContext parseTree;
+                try {
+                    parser.getTokenStream().seek(0);
+                    parser.getInterpreter().setFixedDecisions(potentialAlternatives, currentPath);
+                    parseTree = parser.rules();
+                    results.put(parseTree, null);
+                } catch (CaretReachedException ex) {
+                    for (parseTree = ex.getFinalContext(); parseTree.getParent() != null; parseTree = (RuleContext)parseTree.getParent()) {
+                        // intentionally blank
+                    }
+
+                    if (ex.getTransitions() != null) {
+                        IntervalSet alts = new IntervalSet();
+                        for (ATNConfig c : ex.getTransitions().keySet()) {
+                            alts.add(c.alt);
+                        }
+
+                        if (alts.size() > 1) {
+                            MultipleDecisionData decisionData = new MultipleDecisionData();
+                            decisionData.inputIndex = parser.getInputStream().index();
+                            decisionData.decision = 0;
+                            if (ex.getCause() != null) {
+                                ATNState state = parser.getATN().states.get(((ParserRuleContext<?>)ex.getCause().getCtx()).s);
+                                if (state instanceof DecisionState) {
+                                    decisionData.decision = ((DecisionState)state).decision;
+                                }
+                            }
+                            decisionData.alternatives = alts.toArray();
+                            potentialAlternatives.add(decisionData);
+                            currentPath.add(-1);
+                        }
+                        else if (alts.size() == 1) {
+                            results.put(parseTree, ex);
+                        }
+                    }
+                    else {
+                        results.put(parseTree, ex);
+                    }
+                }
+            }
         }
-        
+
+        private static class CodeCompletionGrammarParser extends GrammarParser {
+
+            public CodeCompletionGrammarParser(TokenStream input) {
+                super(input);
+                _interp = new CompletionParserATNSimulator(_ATN);
+            }
+
+            @Override
+            public CompletionParserATNSimulator getInterpreter() {
+                return (CompletionParserATNSimulator)super.getInterpreter();
+            }
+
+        }
+
         private static class CaretToken extends CommonToken {
 
             public static final int CARET_TOKEN_TYPE = -2;
@@ -1023,9 +1131,9 @@ public class GrammarCompletionProvider implements CompletionProvider {
 
             @Override
             public void recover(BaseRecognizer<Token> recognizer, RecognitionException e) {
-                if (recognizer instanceof GrammarParser
+                if (recognizer instanceof CodeCompletionGrammarParser
                     && recognizer.getInputStream() instanceof TokenStream
-                    && ((TokenStream)recognizer.getInputStream()).LT(1) instanceof CaretToken) {
+                    && ((CodeCompletionGrammarParser)recognizer).getInterpreter().caretTransitions != null) {
 
 //                    int stateNumber = recognizer.getContext().s;
 //                    ATNState state = recognizer.getATN().states.get(stateNumber);
@@ -1035,9 +1143,9 @@ public class GrammarCompletionProvider implements CompletionProvider {
 //                        int prediction = simulator.adaptivePredict((ObjectStream)recognizer.getInputStream(), decision, recognizer.getContext());
 //                    }
 
-                    GrammarParser parser = (GrammarParser)recognizer;
-                    CaretToken token = (CaretToken)((TokenStream)recognizer.getInputStream()).LT(1);
-                    CompletionParserATNSimulator interpreter = (CompletionParserATNSimulator)recognizer.getInterpreter();
+                    CodeCompletionGrammarParser parser = (CodeCompletionGrammarParser)recognizer;
+                    CaretToken token = parser.getInterpreter().caretToken;
+                    CompletionParserATNSimulator interpreter = parser.getInterpreter();
 
                     throw new CaretReachedException(parser.getContext(), token, interpreter.caretTransitions, e);
                 }
@@ -1047,14 +1155,14 @@ public class GrammarCompletionProvider implements CompletionProvider {
 
             @Override
             public Token recoverInline(BaseRecognizer<Token> recognizer) throws RecognitionException {
-                if (recognizer instanceof GrammarParser
+                if (recognizer instanceof CodeCompletionGrammarParser
                     && recognizer.getInputStream() instanceof TokenStream
                     && ((TokenStream)recognizer.getInputStream()).LT(1) instanceof CaretToken) {
 
-                    GrammarParser parser = (GrammarParser)recognizer;
+                    CodeCompletionGrammarParser parser = (CodeCompletionGrammarParser)recognizer;
                     CaretToken token = (CaretToken)((TokenStream)recognizer.getInputStream()).LT(1);
 
-                    CompletionParserATNSimulator interp = (CompletionParserATNSimulator)recognizer.getInterpreter();
+                    CompletionParserATNSimulator interp = parser.getInterpreter();
                     int stateNumber = recognizer.getContext().s;
                     ATNState state = interp.atn.states.get(stateNumber);
 
@@ -1111,12 +1219,43 @@ public class GrammarCompletionProvider implements CompletionProvider {
             }
         }
 
+        private static final class MultipleDecisionData {
+            public int inputIndex;
+            public int decision;
+            public int[] alternatives;
+        }
+
         private static class CompletionParserATNSimulator extends ParserATNSimulator<Token> {
 
             private Map<ATNConfig, List<Transition>> caretTransitions;
+            private CaretToken caretToken;
+
+            private List<MultipleDecisionData> decisionPoints;
+            private List<Integer> selections;
 
             public CompletionParserATNSimulator(ATN atn) {
                 super(atn);
+            }
+
+            public void setFixedDecisions(List<MultipleDecisionData> decisionPoints, List<Integer> selections) {
+                Parameters.notNull("decisionPoints", decisionPoints);
+                Parameters.notNull("selections", selections);
+                this.decisionPoints = decisionPoints;
+                this.selections = selections;
+            }
+
+            @Override
+            public int adaptivePredict(SymbolStream<Token> input, int decision, ParserRuleContext<?> outerContext) {
+                if (decisionPoints != null) {
+                    int index = input.index();
+                    for (int i = 0; i < decisionPoints.size(); i++) {
+                        if (decisionPoints.get(i).inputIndex == index && (decision == 0 || decisionPoints.get(i).decision == decision)) {
+                            return decisionPoints.get(i).alternatives[selections.get(i)];
+                        }
+                    }
+                }
+
+                return super.adaptivePredict(input, decision, outerContext);
             }
 
             @Override
@@ -1348,6 +1487,7 @@ public class GrammarCompletionProvider implements CompletionProvider {
                     else if (t == CaretToken.CARET_TOKEN_TYPE) {
 //                        LOGGER.warning("The current implementation does not support multiple ambiguous alternatives."); //NOI18N
                         caretTransitions = transitions;
+                        caretToken = (CaretToken)input.LT(1);
                         break;
                     }
 
@@ -1417,7 +1557,7 @@ public class GrammarCompletionProvider implements CompletionProvider {
                     // special
                     add(GrammarLexer.ARG_ACTION_WORD);
                     add(GrammarLexer.ACTION_REFERENCE);
-//                    add(GrammarLexer.ACTION_WORD);
+                    add(GrammarLexer.ACTION_WORD);
 
                     Collections.sort(this);
                 }};
@@ -1496,6 +1636,11 @@ public class GrammarCompletionProvider implements CompletionProvider {
 
             public Map<ATNConfig, List<Transition>> getTransitions() {
                 return transitions;
+            }
+
+            @Override
+            public RecognitionException getCause() {
+                return (RecognitionException)super.getCause();
             }
         }
 
