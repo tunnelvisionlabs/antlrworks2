@@ -158,7 +158,10 @@ public class GrammarCompletionProvider implements CompletionProvider {
         if (typedText != null && typedText.length() == 1
             && (getGrammarCompletionAutoPopupTriggers().indexOf(typedText.charAt(0)) >= 0
             || (autoPopupOnGrammarIdentifierPart() && GrammarCompletionQuery.isGrammarIdentifierPart(typedText)))) {
-            if (isGrammarContext(component, component.getSelectionStart() - 1, true)) {
+
+            boolean allowInStrings = false;
+            boolean allowInActions = getGrammarCompletionAutoPopupTriggers().indexOf(typedText.charAt(0)) >= 0;
+            if (isGrammarContext(component, component.getSelectionStart() - 1, allowInStrings, allowInActions)) {
                 return COMPLETION_QUERY_TYPE | AUTO_QUERY_TYPE;
             }
         }
@@ -196,7 +199,7 @@ public class GrammarCompletionProvider implements CompletionProvider {
         return grammarCompletionSelectors;
     }
 
-    private static boolean isGrammarContext(JTextComponent component, int offset, boolean allowInStrings) {
+    private static boolean isGrammarContext(JTextComponent component, int offset, boolean allowInStrings, boolean allowInActions) {
         Document document = component.getDocument();
         if (document instanceof AbstractDocument) {
             ((AbstractDocument)document).readLock();
@@ -255,6 +258,10 @@ public class GrammarCompletionProvider implements CompletionProvider {
                 case GrammarLexer.DOUBLE_QUOTE_STRING_LITERAL:
                 case GrammarLexer.DOUBLE_ANGLE_STRING_LITERAL:
                     return allowInStrings;
+
+                case GrammarLexer.ARG_ACTION_WORD:
+                case GrammarLexer.ACTION_WORD:
+                    return allowInActions;
 
                 default:
                     return true;
@@ -354,7 +361,7 @@ public class GrammarCompletionProvider implements CompletionProvider {
         protected void query(CompletionResultSet resultSet, Document doc, int caretOffset) {
             try {
                 this.caretOffset = caretOffset;
-                if (queryType == TOOLTIP_QUERY_TYPE || isGrammarContext(component, caretOffset, true)) {
+                if (queryType == TOOLTIP_QUERY_TYPE || isGrammarContext(component, caretOffset, true, true)) {
                     results = null;
                     documentation = null;
                     if (toolTip != null) {
