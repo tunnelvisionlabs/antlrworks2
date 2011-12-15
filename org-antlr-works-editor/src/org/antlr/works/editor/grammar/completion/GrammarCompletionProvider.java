@@ -785,45 +785,45 @@ public class GrammarCompletionProvider implements CompletionProvider {
 
                                         switch (grammarType) {
                                         case GrammarParser.LEXER:
-                                            intermediateResults.put("$text", new GrammarCompletionItem.KeywordItem("$text"));
-                                            intermediateResults.put("$type", new GrammarCompletionItem.KeywordItem("$type"));
-                                            intermediateResults.put("$line", new GrammarCompletionItem.KeywordItem("$line"));
-                                            intermediateResults.put("$index", new GrammarCompletionItem.KeywordItem("$index"));
-                                            intermediateResults.put("$pos", new GrammarCompletionItem.KeywordItem("$pos"));
-                                            intermediateResults.put("$channel", new GrammarCompletionItem.KeywordItem("$channel"));
-                                            intermediateResults.put("$start", new GrammarCompletionItem.KeywordItem("$start"));
-                                            intermediateResults.put("$stop", new GrammarCompletionItem.KeywordItem("$stop"));
-                                            intermediateResults.put("$int", new GrammarCompletionItem.KeywordItem("$int"));
+                                            intermediateResults.put("$text", new KeywordCompletionItem("$text"));
+                                            intermediateResults.put("$type", new KeywordCompletionItem("$type"));
+                                            intermediateResults.put("$line", new KeywordCompletionItem("$line"));
+                                            intermediateResults.put("$index", new KeywordCompletionItem("$index"));
+                                            intermediateResults.put("$pos", new KeywordCompletionItem("$pos"));
+                                            intermediateResults.put("$channel", new KeywordCompletionItem("$channel"));
+                                            intermediateResults.put("$start", new KeywordCompletionItem("$start"));
+                                            intermediateResults.put("$stop", new KeywordCompletionItem("$stop"));
+                                            intermediateResults.put("$int", new KeywordCompletionItem("$int"));
                                             break;
 
                                         case GrammarParser.PARSER:
-                                            intermediateResults.put("$text", new GrammarCompletionItem.KeywordItem("$text"));
-                                            intermediateResults.put("$start", new GrammarCompletionItem.KeywordItem("$start"));
-                                            intermediateResults.put("$stop", new GrammarCompletionItem.KeywordItem("$stop"));
-                                            intermediateResults.put("$tree", new GrammarCompletionItem.KeywordItem("$tree"));
-                                            intermediateResults.put("$st", new GrammarCompletionItem.KeywordItem("$st"));
+                                            intermediateResults.put("$text", new KeywordCompletionItem("$text"));
+                                            intermediateResults.put("$start", new KeywordCompletionItem("$start"));
+                                            intermediateResults.put("$stop", new KeywordCompletionItem("$stop"));
+                                            intermediateResults.put("$tree", new KeywordCompletionItem("$tree"));
+                                            intermediateResults.put("$st", new KeywordCompletionItem("$st"));
                                             break;
 
                                         case GrammarParser.TREE:
-                                            intermediateResults.put("$text", new GrammarCompletionItem.KeywordItem("$text"));
-                                            intermediateResults.put("$start", new GrammarCompletionItem.KeywordItem("$start"));
-                                            intermediateResults.put("$tree", new GrammarCompletionItem.KeywordItem("$tree"));
-                                            intermediateResults.put("$st", new GrammarCompletionItem.KeywordItem("$st"));
+                                            intermediateResults.put("$text", new KeywordCompletionItem("$text"));
+                                            intermediateResults.put("$start", new KeywordCompletionItem("$start"));
+                                            intermediateResults.put("$tree", new KeywordCompletionItem("$tree"));
+                                            intermediateResults.put("$st", new KeywordCompletionItem("$st"));
                                             break;
 
                                         default:
                                             // if we're unsure about the type, include all possibilities to make sure we're covered
-                                            intermediateResults.put("$text", new GrammarCompletionItem.KeywordItem("$text"));
-                                            intermediateResults.put("$type", new GrammarCompletionItem.KeywordItem("$type"));
-                                            intermediateResults.put("$line", new GrammarCompletionItem.KeywordItem("$line"));
-                                            intermediateResults.put("$index", new GrammarCompletionItem.KeywordItem("$index"));
-                                            intermediateResults.put("$pos", new GrammarCompletionItem.KeywordItem("$pos"));
-                                            intermediateResults.put("$channel", new GrammarCompletionItem.KeywordItem("$channel"));
-                                            intermediateResults.put("$start", new GrammarCompletionItem.KeywordItem("$start"));
-                                            intermediateResults.put("$stop", new GrammarCompletionItem.KeywordItem("$stop"));
-                                            intermediateResults.put("$int", new GrammarCompletionItem.KeywordItem("$int"));
-                                            intermediateResults.put("$tree", new GrammarCompletionItem.KeywordItem("$tree"));
-                                            intermediateResults.put("$st", new GrammarCompletionItem.KeywordItem("$st"));
+                                            intermediateResults.put("$text", new KeywordCompletionItem("$text"));
+                                            intermediateResults.put("$type", new KeywordCompletionItem("$type"));
+                                            intermediateResults.put("$line", new KeywordCompletionItem("$line"));
+                                            intermediateResults.put("$index", new KeywordCompletionItem("$index"));
+                                            intermediateResults.put("$pos", new KeywordCompletionItem("$pos"));
+                                            intermediateResults.put("$channel", new KeywordCompletionItem("$channel"));
+                                            intermediateResults.put("$start", new KeywordCompletionItem("$start"));
+                                            intermediateResults.put("$stop", new KeywordCompletionItem("$stop"));
+                                            intermediateResults.put("$int", new KeywordCompletionItem("$int"));
+                                            intermediateResults.put("$tree", new KeywordCompletionItem("$tree"));
+                                            intermediateResults.put("$st", new KeywordCompletionItem("$st"));
                                             break;
                                         }
                                     }
@@ -837,7 +837,7 @@ public class GrammarCompletionProvider implements CompletionProvider {
 
                 if (possibleKeyword) {
                     // Add keywords
-                    results.addAll(GrammarCompletionItem.KEYWORD_ITEMS);
+                    results.addAll(KeywordCompletionItem.KEYWORD_ITEMS);
                 }
 
                 if (possibleReference) {

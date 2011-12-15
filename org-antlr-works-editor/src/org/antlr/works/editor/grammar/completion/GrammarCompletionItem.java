@@ -75,28 +75,6 @@ public abstract class GrammarCompletionItem implements CompletionItem {
     public static final String BOLD = "<b>"; //NOI18N
     public static final String BOLD_END = "</b>"; //NOI18N
 
-    public static final Collection<KeywordItem> KEYWORD_ITEMS =
-        new ArrayList<KeywordItem>() {{
-            add(new KeywordItem("lexer"));
-            add(new KeywordItem("parser"));
-            add(new KeywordItem("catch"));
-            add(new KeywordItem("finally"));
-            add(new KeywordItem("grammar"));
-            add(new KeywordItem("locals"));
-            add(new KeywordItem("mode"));
-            add(new KeywordItem("private"));
-            add(new KeywordItem("protected"));
-            add(new KeywordItem("public"));
-            add(new KeywordItem("returns"));
-            add(new KeywordItem("throws"));
-            add(new KeywordItem("tree"));
-            add(new KeywordItem("scope"));
-            add(new KeywordItem("import"));
-            add(new KeywordItem("fragment"));
-            add(new KeywordItem("tokens"));
-            add(new KeywordItem("options"));
-        }};
-
     protected GrammarCompletionItem() {
     }
 
@@ -254,47 +232,5 @@ public abstract class GrammarCompletionItem implements CompletionItem {
                 }
             }
         });
-    }
-
-    public static class KeywordItem extends GrammarCompletionItem {
-
-        private final String keyword;
-
-        private String leftText;
-
-        public KeywordItem(String keyword) {
-            this.keyword = keyword;
-        }
-
-        @Override
-        public int getSortPriority() {
-            return KEYWORD_SORT_PRIORITY;
-        }
-
-        @Override
-        public String getSortTextImpl() {
-            return keyword;
-        }
-
-        @Override
-        public CharSequence getInsertPrefix() {
-            return keyword;
-        }
-
-        @Override
-        protected String getLeftHtmlText() {
-            if (leftText == null) {
-                StringBuilder builder = new StringBuilder();
-                builder.append(KEYWORD_COLOR);
-                builder.append(BOLD);
-                builder.append(keyword);
-                builder.append(BOLD_END);
-                builder.append(COLOR_END);
-                leftText = builder.toString();
-            }
-            
-            return leftText;
-        }
-
     }
 }
