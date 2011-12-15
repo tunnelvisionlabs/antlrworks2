@@ -173,8 +173,8 @@ public class GrammarParserAnchorListener extends BlankGrammarParserListener {
         @Override
         public String toString() {
             String ruleName;
-            if (rule >= 0 && rule <= GrammarParser.ruleNames.size()) {
-                ruleName = GrammarParser.ruleNames.get(rule);
+            if (rule >= 0 && rule <= GrammarParser.ruleNames.length) {
+                ruleName = GrammarParser.ruleNames[rule];
             } else {
                 ruleName = "?";
             }

@@ -47,9 +47,9 @@ public class LexerDebuggerTest {
 
     public static List<String> getTokenNames() {
         if (DEBUG_TEMPLATE_FILES) {
-            return GroupHighlighterLexerBase.tokenNames;
+            return Arrays.asList(GroupHighlighterLexerBase.tokenNames);
         } else {
-            return GrammarLexer.tokenNames;
+            return Arrays.asList(GrammarLexer.tokenNames);
         }
     }
 

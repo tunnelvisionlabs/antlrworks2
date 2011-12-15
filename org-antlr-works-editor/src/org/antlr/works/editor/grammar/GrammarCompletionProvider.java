@@ -1121,7 +1121,7 @@ public class GrammarCompletionProvider implements CompletionProvider {
             public int execATN(SymbolStream<Token> input, DFA dfa, int startIndex, ATNConfigSet s0, ParserRuleContext<?> globalContext, boolean useContext, int consumedContextFrames) {
                 if ( debug ) System.out.println("execATN decision "+dfa.decision+" exec LA(1)=="+ getLookaheadName(input));
                 ATN_failover++;
-                ATNConfigSet closure = new ATNConfigSet(!dfa.isContextSensitive, mergeATNConfigs && !delayMergeATN);
+                ATNConfigSet closure = new ATNConfigSet(!dfa.isContextSensitive, mergeATNConfigs);
 
                 closure.addAll(s0);
 
@@ -1141,7 +1141,7 @@ public class GrammarCompletionProvider implements CompletionProvider {
 
                 prevAccept = null;
                 prevAcceptIndex = -1;
-                ATNConfigSet reach = new ATNConfigSet(!dfa.isContextSensitive, mergeATNConfigs && !delayMergeATN);
+                ATNConfigSet reach = new ATNConfigSet(!dfa.isContextSensitive, mergeATNConfigs);
                 LinkedHashMap<ATNConfig, List<Transition>> transitions = null;
 
                 RuleContext remainingGlobalContext = getRemainingContext(globalContext, consumedContextFrames);
@@ -1222,7 +1222,7 @@ public class GrammarCompletionProvider implements CompletionProvider {
                     } while (useContext && stepIntoGlobal);
 
                     // resolve ambig in DFAState for reach
-                    Set<Integer> ambigAlts = getAmbiguousAlts(reach);
+                    IntervalSet ambigAlts = getAmbiguousAlts(reach);
                     if ( ambigAlts!=null ) {
                         if ( debug ) {
                             int i = -1;
@@ -1245,9 +1245,7 @@ public class GrammarCompletionProvider implements CompletionProvider {
                                                             ambigAlts, altToPred, reach);
                             }
                             List<DFAState.PredPrediction> predPredictions =
-                                getPredicatePredictions(altToPred);
-
-                            mergeStates(reach);
+                                getPredicatePredictions(ambigAlts, altToPred);
 
                             if ( buildDFA ) {
                                 DFAState accept = addDFAEdge(dfa, closure, t, contextElements, reach);
@@ -1264,7 +1262,7 @@ public class GrammarCompletionProvider implements CompletionProvider {
                             return uniqueAlt;
                         }
 
-                        dfa.conflict = true; // at least one DFA state is ambiguous
+                        dfa.conflictSet = reach.clone(); // at least one DFA state is ambiguous
                         if ( !userWantsCtxSensitive ) reportConflict(startIndex, input.index(), ambigAlts, reach);
 
                         if (userWantsCtxSensitive && !useContext && !stepIntoGlobal) {
@@ -1302,8 +1300,6 @@ public class GrammarCompletionProvider implements CompletionProvider {
 
                     // if reach predicts single alt, can stop
 
-                        mergeStates(reach);
-
                     int uniqueAlt = getUniqueAlt(reach);
                     if ( uniqueAlt!=ATN.INVALID_ALT_NUMBER ) {
                         if ( debug ) System.out.println("PREDICT alt "+uniqueAlt+
@@ -1316,7 +1312,7 @@ public class GrammarCompletionProvider implements CompletionProvider {
                         // now check to see if we have a validating predicate.
                         // We know that it's validating because there is only
                         // one predicted alternative
-                        Set<Integer> uniqueAltSet = new HashSet<Integer>();
+                        IntervalSet uniqueAltSet = new IntervalSet();
                         uniqueAltSet.add(uniqueAlt);
                         SemanticContext[] altToPred =
                             getPredsForAmbigAlts(decState, uniqueAltSet, reach);
@@ -1325,7 +1321,7 @@ public class GrammarCompletionProvider implements CompletionProvider {
                             // we have a validating predicate; test it
                             // Update DFA so reach becomes accept state with predicate
                             List<DFAState.PredPrediction> predPredictions =
-                                getPredicatePredictions(altToPred);
+                                getPredicatePredictions(uniqueAltSet, altToPred);
                             makeAcceptState(accept, predPredictions);
                             // rewind input so pred's LT(i) calls make sense
                             input.seek(startIndex);
@@ -1465,7 +1461,7 @@ public class GrammarCompletionProvider implements CompletionProvider {
             }
 
             private String getRuleName(int index) {
-                if ( parser!=null && index>=0 ) return parser.getRuleNames().get(index);
+                if ( parser!=null && index>=0 ) return parser.getRuleNames()[index];
                 return "<rule "+index+">";
             }
         }
