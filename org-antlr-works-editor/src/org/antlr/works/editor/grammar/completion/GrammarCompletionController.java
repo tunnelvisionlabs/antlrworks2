@@ -25,7 +25,7 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.antlr.works.editor.grammar;
+package org.antlr.works.editor.grammar.completion;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -45,7 +45,7 @@ import javax.swing.text.JTextComponent;
 import org.antlr.netbeans.editor.text.TrackingPositionRegion;
 import org.antlr.netbeans.editor.text.VersionedDocument;
 import org.antlr.netbeans.editor.text.VersionedDocumentUtilities;
-import org.antlr.works.editor.grammar.GrammarCompletionProvider.GrammarCompletionQuery;
+import org.antlr.works.editor.grammar.completion.GrammarCompletionProvider.GrammarCompletionQuery;
 import org.netbeans.api.annotations.common.CheckForNull;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;
