@@ -31,8 +31,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Locale;
 import javax.swing.ImageIcon;
 import javax.swing.text.BadLocationException;
@@ -94,7 +92,7 @@ public abstract class GrammarCompletionItem implements CompletionItem {
             return;
         }
 
-        GrammarCompletionProvider.GrammarCompletionQuery query = controller.getQuery();
+        GrammarCompletionQuery query = controller.getQuery();
 
         TrackingPositionRegion applicableTo = query.getApplicableTo();
         if (applicableTo == null) {

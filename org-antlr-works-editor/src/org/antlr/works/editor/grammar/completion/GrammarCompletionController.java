@@ -44,7 +44,6 @@ import javax.swing.text.JTextComponent;
 import org.antlr.netbeans.editor.text.TrackingPositionRegion;
 import org.antlr.netbeans.editor.text.VersionedDocument;
 import org.antlr.netbeans.editor.text.VersionedDocumentUtilities;
-import org.antlr.works.editor.grammar.completion.GrammarCompletionProvider.GrammarCompletionQuery;
 import org.netbeans.api.annotations.common.CheckForNull;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.editor.BaseDocument;
@@ -74,12 +73,12 @@ public class GrammarCompletionController implements CompletionController {
 
     private final JTextComponent component;
     private final AsyncCompletionTask task;
-    private final GrammarCompletionProvider.GrammarCompletionQuery query;
+    private final GrammarCompletionQuery query;
 
     public GrammarCompletionController(@NonNull JTextComponent component, @NonNull CompletionTask task, int queryType) {
         this.component = component;
         this.task = (AsyncCompletionTask)task;
-        this.query = (GrammarCompletionProvider.GrammarCompletionQuery)this.task.getQuery();
+        this.query = (GrammarCompletionQuery)this.task.getQuery();
     }
 
     static void addRecentCompletion(String completion) {
