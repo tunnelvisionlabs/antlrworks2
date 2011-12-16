@@ -62,6 +62,7 @@ import org.antlr.netbeans.parsing.spi.ParserData;
 import org.antlr.netbeans.parsing.spi.ParserDataOptions;
 import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.NoViableAltException;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.Token;
@@ -764,7 +765,13 @@ public final class GrammarCompletionQuery extends AsyncCompletionQuery {
                     // intentionally blank
                 }
 
-                if (ex.getTransitions() != null) {
+                NoViableAltException nvae = null;
+                if (ex.getCause() instanceof NoViableAltException) {
+                    nvae = (NoViableAltException)ex.getCause();
+                }
+
+                boolean decisionAtCaret = nvae == null || nvae.startToken instanceof CaretToken;
+                if (!decisionAtCaret && ex.getTransitions() != null) {
                     IntervalSet alts = new IntervalSet();
                     for (ATNConfig c : ex.getTransitions().keySet()) {
                         alts.add(c.alt);
