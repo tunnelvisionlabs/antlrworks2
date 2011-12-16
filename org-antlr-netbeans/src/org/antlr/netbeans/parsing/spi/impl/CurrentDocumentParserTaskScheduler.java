@@ -35,6 +35,8 @@ import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
+ * A task scheduler which schedules tasks when the active editor changes and
+ * after the content of the active editor's document changes.
  *
  * @author Sam Harwell
  */

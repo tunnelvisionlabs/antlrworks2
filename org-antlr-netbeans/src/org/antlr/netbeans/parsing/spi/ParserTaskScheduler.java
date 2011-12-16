@@ -58,7 +58,21 @@ public abstract class ParserTaskScheduler {
     public static final Class<? extends ParserTaskScheduler> SELECTED_NODES_SENSITIVE_TASK_SCHEDULER =
         SelectedNodesParserTaskScheduler.class;
 
+    private boolean initialized;
+
+    public final void initialize() {
+        if (initialized) {
+            throw new IllegalStateException("The scheduler is already initialized.");
+        }
+
+        initializeImpl();
+    }
+
     protected void schedule(VersionedDocument document) {
+        if (document == null) {
+            return;
+        }
+
         @SuppressWarnings("unchecked")
         Collection<? extends ParserDataDefinition<?>> mimeData = (Collection<? extends ParserDataDefinition<?>>)MimeLookup.getLookup(document.getMimeType()).lookupAll(ParserDataDefinition.class);
         List<ParserDataDefinition<?>> currentScheduledData = new ArrayList<ParserDataDefinition<?>>();
@@ -77,5 +91,8 @@ public abstract class ParserTaskScheduler {
 
     protected ParserTaskManager getTaskManager() {
         return Lookup.getDefault().lookup(ParserTaskManager.class);
+    }
+
+    protected void initializeImpl() {
     }
 }

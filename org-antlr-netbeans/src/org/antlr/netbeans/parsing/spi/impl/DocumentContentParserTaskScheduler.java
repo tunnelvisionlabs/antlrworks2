@@ -27,12 +27,18 @@
  */
 package org.antlr.netbeans.parsing.spi.impl;
 
+import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
 
 /**
+ * A task scheduler which schedules tasks when the content of a document changes.
  *
  * @author Sam Harwell
  */
 public class DocumentContentParserTaskScheduler extends ParserTaskScheduler {
+
+    @Override
+    protected void initializeImpl() {
+    }
 
 }

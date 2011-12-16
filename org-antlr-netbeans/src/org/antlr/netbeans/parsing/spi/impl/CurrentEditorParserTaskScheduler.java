@@ -33,11 +33,13 @@ import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
 import org.antlr.netbeans.editor.text.VersionedDocument;
 import org.antlr.netbeans.editor.text.VersionedDocumentUtilities;
+import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
 import org.netbeans.api.editor.EditorRegistry;
 import org.openide.filesystems.FileObject;
 
 /**
+ * A task scheduler which schedules tasks when the active editor window changes.
  *
  * @author Sam Harwell
  */
@@ -45,8 +47,8 @@ public abstract class CurrentEditorParserTaskScheduler extends ParserTaskSchedul
 
     private JTextComponent currentEditor;
 
-    @SuppressWarnings("OverridableMethodCallInConstructor")
-    public CurrentEditorParserTaskScheduler() {
+    @Override
+    protected void initializeImpl() {
         setEditor(EditorRegistry.focusedComponent());
         EditorRegistry.addPropertyChangeListener(new EditorRegistryListener());
     }

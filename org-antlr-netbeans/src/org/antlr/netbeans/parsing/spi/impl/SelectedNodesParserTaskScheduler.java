@@ -51,7 +51,8 @@ public class SelectedNodesParserTaskScheduler extends ParserTaskScheduler {
 
     private VersionedDocument versionedDocument;
 
-    public SelectedNodesParserTaskScheduler() {
+    @Override
+    protected void initializeImpl() {
         TopComponent.getRegistry().addPropertyChangeListener(new TopComponentListener());
         refresh();
     }
