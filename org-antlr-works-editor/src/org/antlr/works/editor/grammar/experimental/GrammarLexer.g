@@ -577,102 +577,102 @@ ERRCHAR
 
 mode ArgAction;
 
-ARG_ACTION_LT       : '<' ;
-ARG_ACTION_GT       : '>' ;
-ARG_ACTION_LPAREN   : '(' ;
-ARG_ACTION_RPAREN   : ')' ;
-ARG_ACTION_EQUALS   : '=' ;
-ARG_ACTION_COMMA    : ',' ;
+    ARG_ACTION_LT       : '<' ;
+    ARG_ACTION_GT       : '>' ;
+    ARG_ACTION_LPAREN   : '(' ;
+    ARG_ACTION_RPAREN   : ')' ;
+    ARG_ACTION_EQUALS   : '=' ;
+    ARG_ACTION_COMMA    : ',' ;
 
-ARG_ACTION_ESCAPE
-    :   '\\' .
-    ;
+    ARG_ACTION_ESCAPE
+        :   '\\' .
+        ;
 
-ARG_ACTION_WORD
-    :   ('$' | 'a'..'z' | 'A'..'Z' | '0'..'9' | '_')
-        ('a'..'z' | 'A'..'Z' | '0'..'9' | '_')*
-    ;
+    ARG_ACTION_WORD
+        :   ('$' | 'a'..'z' | 'A'..'Z' | '0'..'9' | '_')
+            ('a'..'z' | 'A'..'Z' | '0'..'9' | '_')*
+        ;
 
-ARG_ACTION_ELEMENT
-    :   ACTION_STRING_LITERAL
-    |   ACTION_CHAR_LITERAL
-    ;
+    ARG_ACTION_ELEMENT
+        :   ACTION_STRING_LITERAL
+        |   ACTION_CHAR_LITERAL
+        ;
 
-ARG_ACTION_TEXT
-    :   ~(  '\'' | '"'
-        |   ']'
-        |   '\\'
-        |   '=' | ',' | '<' | '>' | '(' | ')'
-        |   '$' | 'a'..'z' | 'A'..'Z' | '0'..'9' | '_'
-        )+
-    ;
+    ARG_ACTION_TEXT
+        :   ~(  '\'' | '"'
+            |   ']'
+            |   '\\'
+            |   '=' | ',' | '<' | '>' | '(' | ')'
+            |   '$' | 'a'..'z' | 'A'..'Z' | '0'..'9' | '_'
+            )+
+        ;
 
-END_ARG_ACTION
-    :   ']' {popMode();}
-    ;
+    END_ARG_ACTION
+        :   ']' {popMode();}
+        ;
 
 mode Action;
 
-NESTED_ACTION
-    :   '{' {$type = BEGIN_ACTION; pushMode(Action);}
-    ;
+    NESTED_ACTION
+        :   '{' {$type = BEGIN_ACTION; pushMode(Action);}
+        ;
 
-ACTION_DOT      : '.' ;
-ACTION_LT       : '<' ;
-ACTION_GT       : '>' ;
-ACTION_LPAREN   : '(' ;
-ACTION_RPAREN   : ')' ;
-ACTION_LBRACK   : '[' ;
-ACTION_RBRACK   : ']' ;
-ACTION_EQUALS   : '=' ;
-ACTION_COMMA    : ',' ;
-ACTION_COLON2   : '::' ;
-ACTION_COLON    : ':' ;
-ACTION_MINUS    : '-' ;
+    ACTION_DOT      : '.' ;
+    ACTION_LT       : '<' ;
+    ACTION_GT       : '>' ;
+    ACTION_LPAREN   : '(' ;
+    ACTION_RPAREN   : ')' ;
+    ACTION_LBRACK   : '[' ;
+    ACTION_RBRACK   : ']' ;
+    ACTION_EQUALS   : '=' ;
+    ACTION_COMMA    : ',' ;
+    ACTION_COLON2   : '::' ;
+    ACTION_COLON    : ':' ;
+    ACTION_MINUS    : '-' ;
 
-ACTION_ESCAPE
-    :   '\\' .
-    ;
+    ACTION_ESCAPE
+        :   '\\' .
+        ;
 
-ACTION_WORD
-    :   ('a'..'z' | 'A'..'Z' | '0'..'9' | '_')+
-    ;
+    ACTION_WORD
+        :   ('a'..'z' | 'A'..'Z' | '0'..'9' | '_')+
+        ;
 
-ACTION_REFERENCE
-    :   '$' ACTION_WORD?
-    ;
+    ACTION_REFERENCE
+        :   '$' ACTION_WORD?
+        ;
 
-ACTION_COMMENT
-    :   COMMENT
-    ;
+    ACTION_COMMENT
+        :   COMMENT
+        ;
 
-ACTION_LITERAL
-    :   ACTION_STRING_LITERAL
-    |   ACTION_CHAR_LITERAL
-    ;
+    ACTION_LITERAL
+        :   ACTION_STRING_LITERAL
+        |   ACTION_CHAR_LITERAL
+        ;
 
-ACTION_TEXT
-    :   (   '/' ~('*' | '/')
-        |   ~(  '\'' | '"'                                          // strings
-            |   '{' | '}'                                           // nested actions
-            |   '\\'                                                // escapes
-            |   '/'                                                 // potential comments
-            |   '.' | '=' | ',' | '<' | '>' | '(' | ')' | '[' | ']' | ':' | '-' // delimiters
-            |   '$' | 'a'..'z' | 'A'..'Z' | '0'..'9' | '_'          // words
-            |   ' ' | '\t' | '\r' | '\n'
-            )
-        )+
-    ;
+    ACTION_TEXT
+        :   (   '/' ~('*' | '/')
+            |   ~(  '\'' | '"'                                          // strings
+                |   '{' | '}'                                           // nested actions
+                |   '\\'                                                // escapes
+                |   '/'                                                 // potential comments
+                |   '.' | '=' | ',' | '<' | '>' | '(' | ')' | '[' | ']' | ':' | '-' // delimiters
+                |   '$' | 'a'..'z' | 'A'..'Z' | '0'..'9' | '_'          // words
+                |   ' ' | '\t' | '\r' | '\n'
+                )
+            )+
+        ;
 
-ACTION_WS
-    :   (' ' | '\t')+
-    ;
+    ACTION_WS
+        :   (' ' | '\t')+
+        ;
 
-ACTION_NEWLINE
-    :   '\r' '\n'?
-    |   '\n'
-    ;
+    ACTION_NEWLINE
+        :   '\r' '\n'?
+        |   '\n'
+        ;
 
-END_ACTION
-    :   '}' {popMode();}
-    ;
+    END_ACTION
+        :   '}' {popMode();}
+        ;
