@@ -27,6 +27,7 @@
  */
 package org.antlr.netbeans.parsing.spi.impl;
 
+import com.sun.xml.internal.ws.util.CompletedFuture;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -56,9 +57,12 @@ import org.antlr.netbeans.parsing.spi.ParserTaskDefinition;
 import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.netbeans.parsing.spi.ParserTaskProvider;
 import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
+import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.editor.mimelookup.MimeLookup;
 import org.netbeans.editor.BaseDocument;
 import org.netbeans.lib.editor.util.ListenerList;
+import org.openide.util.Exceptions;
+import org.openide.util.Lookup;
 import org.openide.util.Parameters;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -73,11 +77,9 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
 
     private final Map<ParserDataDefinition<?>, ListenerList<ParserDataListener<?>>> dataListeners =
         new HashMap<ParserDataDefinition<?>, ListenerList<ParserDataListener<?>>>();
-    
+
     private final Map<String, Collection<? extends ParserTaskProvider>> taskProviders =
         new HashMap<String, Collection<? extends ParserTaskProvider>>();
-
-    private Collection<? extends ParserTaskScheduler> taskSchedulers;
 
     private final RejectionHandler rejectionHandler;
     private final ScheduledThreadPoolExecutor highPriorityExecutor;
@@ -109,33 +111,15 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
         Parameters.notNull("definition", definition);
         Parameters.notNull("options", options);
 
-        ParserTaskProvider provider = getTaskProvider(snapshot.getVersionedDocument(), definition);
-        final ParserTask task = provider.createTask(snapshot.getVersionedDocument());
-        Callable<ParserData<T>> callable = new Callable<ParserData<T>>() {
-
-            @Override
-            @SuppressWarnings("unchecked")
-            public ParserData<T> call() throws Exception {
-                final List<ParserData<?>> results = new ArrayList<ParserData<?>>();
-
-                ParserResultHandler handler = new ParserResultHandler() {
-                    @Override
-                    public <T> void addResult(ParserData<T> result) {
-                        results.add(result);
-                    }
-                };
-
-                task.parse(ParserTaskManagerImpl.this, null, snapshot, Collections.<ParserDataDefinition<?>>singleton(definition), handler);
-
-                for (ParserData<?> result : results) {
-                    if (result.getDefinition().equals(definition)) {
-                        return (ParserData<T>)result;
-                    }
-                }
-
-                return null;
+        Callable<ParserData<T>> callable = createCallable(snapshot, definition);
+        if (options.contains(ParserDataOptions.SYNCHRONOUS)) {
+            try {
+                return new CompletedFuture<ParserData<T>>(callable.call(), null);
+            } catch (Exception ex) {
+                Exceptions.printStackTrace(ex);
+                return new CompletedFuture<ParserData<T>>(null, ex);
             }
-        };
+        }
 
         return lowPriorityExecutor.schedule(callable, 0, TimeUnit.NANOSECONDS);
     }
@@ -167,12 +151,23 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
 
     @Override
     public <T> ScheduledFuture<ParserData<T>> schedule(VersionedDocument document, ParserDataDefinition<T> data, long delay, TimeUnit timeUnit) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        Callable<ParserData<T>> callable = createCallable(document.getCurrentSnapshot(), data);
+        return lowPriorityExecutor.schedule(callable, delay, timeUnit);
     }
 
     @Override
-    public Collection<ScheduledFuture<ParserData<?>>> schedule(VersionedDocument document, Collection<ParserDataDefinition<?>> data, long delay, TimeUnit timeUnit) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    @SuppressWarnings("unchecked")
+    public Collection<ScheduledFuture<ParserData<?>>> schedule(VersionedDocument document, @NonNull Collection<ParserDataDefinition<?>> data, long delay, TimeUnit timeUnit) {
+        if (data.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        List<ScheduledFuture<ParserData<?>>> futures = new ArrayList<ScheduledFuture<ParserData<?>>>();
+        for (ParserDataDefinition<?> dataDefinition : data) {
+            futures.add((ScheduledFuture<ParserData<?>>)schedule(document, dataDefinition, delay, timeUnit));
+        }
+
+        return futures;
     }
 
     @Override
@@ -208,6 +203,11 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
                 dataListeners.remove(definition);
             }
         }
+    }
+
+    private <T> Callable<ParserData<T>> createCallable(DocumentSnapshot snapshot, ParserDataDefinition<T> data) {
+        Callable<ParserData<T>> callable = new UpdateDataCallable<T>(snapshot, data);
+        return callable;
     }
 
     private <T> void fireDataChanged(ParserDataDefinition<T> definition, ParserData<T> data) {
@@ -278,5 +278,46 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
             return thread;
         }
 
+    }
+
+    private class UpdateDataCallable<T> implements Callable<ParserData<T>> {
+        private final DocumentSnapshot snapshot;
+        private final ParserDataDefinition<T> data;
+
+        public UpdateDataCallable(DocumentSnapshot snapshot, ParserDataDefinition<T> data) {
+            this.snapshot = snapshot;
+            this.data = data;
+        }
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public ParserData<T> call() throws Exception {
+            ParserTaskProvider provider = getTaskProvider(snapshot.getVersionedDocument(), data);
+            final ParserTask task = provider.createTask(snapshot.getVersionedDocument());
+
+            ResultAggregator handler = new ResultAggregator();
+            task.parse(ParserTaskManagerImpl.this, null, snapshot, Collections.<ParserDataDefinition<?>>singleton(data), handler);
+
+            for (ParserData<?> result : handler.getResults()) {
+                if (result.getDefinition().equals(data)) {
+                    return (ParserData<T>)result;
+                }
+            }
+
+            return null;
+        }
+    }
+
+    private static class ResultAggregator implements ParserResultHandler {
+        private final List<ParserData<?>> results = new ArrayList<ParserData<?>>();
+
+        @Override
+        public <T> void addResult(ParserData<T> result) {
+            results.add(result);
+        }
+
+        public List<ParserData<?>> getResults() {
+            return results;
+        }
     }
 }
