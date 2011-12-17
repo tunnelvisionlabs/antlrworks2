@@ -413,24 +413,30 @@ public final class GrammarCompletionQuery extends AsyncCompletionQuery {
 
             if (anchors != null) {
                 GrammarParserAnchorListener.Anchor enclosing = null;
+                GrammarParserAnchorListener.Anchor previous = null;
+                GrammarParserAnchorListener.Anchor next = null;
 
                 /*
-                    * parse the current rule
-                    */
+                 * parse the current rule
+                 */
                 for (GrammarParserAnchorListener.Anchor anchor : anchors) {
                     if (anchor instanceof GrammarParserAnchorListener.GrammarTypeAnchor) {
                         grammarType = ((GrammarParserAnchorListener.GrammarTypeAnchor)anchor).getGrammarType();
                         continue;
                     }
 
-                    if (anchor.getSpan().getStartPosition(snapshot).getOffset() <= caretOffset && anchor.getSpan().getEndPosition(snapshot).getOffset() > caretOffset) {
-                        enclosing = anchor;
-                    } else if (anchor.getSpan().getStartPosition(snapshot).getOffset() > caretOffset) {
+                    if (anchor.getSpan().getStartPosition(snapshot).getOffset() <= caretOffset) {
+                        previous = anchor;
+                        if (anchor.getSpan().getEndPosition(snapshot).getOffset() > caretOffset) {
+                            enclosing = anchor;
+                        }
+                    } else {
+                        next = anchor;
                         break;
                     }
                 }
 
-                if (enclosing != null) {
+                if (previous != null) {
                     Future<ParserData<Tagger<TokenTag>>> futureTokensData = taskManager.getData(snapshot, GrammarParserDataDefinitions.LEXER_TOKENS, EnumSet.of(ParserDataOptions.SYNCHRONOUS));
                     Tagger<TokenTag> tagger = null;
                     try {
@@ -442,7 +448,13 @@ public final class GrammarCompletionQuery extends AsyncCompletionQuery {
                     }
 
                     int regionEnd = Math.min(snapshot.length(), caretOffset + 1);
-                    OffsetRegion region = OffsetRegion.fromBounds(enclosing.getSpan().getStartPosition(snapshot).getOffset(), regionEnd);
+                    OffsetRegion region;
+                    if (enclosing != null) {
+                        region = OffsetRegion.fromBounds(enclosing.getSpan().getStartPosition(snapshot).getOffset(), regionEnd);
+                    } else {
+                        region = OffsetRegion.fromBounds(previous.getSpan().getEndPosition(snapshot).getOffset(), regionEnd);
+                    }
+
                     TaggerTokenSource taggerTokenSource = new TaggerTokenSource(tagger, new SnapshotPositionRegion(snapshot, region));
 
 //                        CharStream input = new DocumentSnapshotCharStream(snapshot);
@@ -455,7 +467,7 @@ public final class GrammarCompletionQuery extends AsyncCompletionQuery {
                     parser.setBuildParseTree(true);
                     parser.setErrorHandler(new CodeCompletionErrorStrategy());
 
-                    switch (enclosing.getRule()) {
+                    switch (previous.getRule()) {
                     case GrammarParser.RULE_rule:
                         parseTrees = getParseTrees(parser);
                         break;
