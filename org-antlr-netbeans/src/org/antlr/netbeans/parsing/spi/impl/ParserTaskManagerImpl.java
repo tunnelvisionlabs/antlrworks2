@@ -112,6 +112,14 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
         Parameters.notNull("options", options);
 
         Callable<ParserData<T>> callable = createCallable(snapshot, definition);
+        if (options.contains(ParserDataOptions.ALLOW_STALE)) {
+            @SuppressWarnings("unchecked")
+            ParserData<T> cachedData = (ParserData<T>)snapshot.getVersionedDocument().getDocument().getProperty(definition);
+            if (cachedData != null || options.contains(ParserDataOptions.NO_UPDATE)) {
+                return new CompletedFuture<ParserData<T>>(cachedData, null);
+            }
+        }
+
         if (options.contains(ParserDataOptions.SYNCHRONOUS)) {
             try {
                 return new CompletedFuture<ParserData<T>>(callable.call(), null);
@@ -277,7 +285,6 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
             thread.setPriority(priority);
             return thread;
         }
-
     }
 
     private class UpdateDataCallable<T> implements Callable<ParserData<T>> {
@@ -297,6 +304,13 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
 
             ResultAggregator handler = new ResultAggregator();
             task.parse(ParserTaskManagerImpl.this, null, snapshot, Collections.<ParserDataDefinition<?>>singleton(data), handler);
+
+            Document document = snapshot.getVersionedDocument().getDocument();
+            if (document != null) {
+                for (ParserData<?> result : handler.getResults()) {
+                    document.putProperty(result.getDefinition(), result);
+                }
+            }
 
             for (ParserData<?> result : handler.getResults()) {
                 if (result.getDefinition().equals(data)) {
