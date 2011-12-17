@@ -70,12 +70,15 @@ import org.antlr.v4.runtime.TokenSource;
 import org.antlr.v4.runtime.atn.ATNConfig;
 import org.antlr.v4.runtime.atn.ATNState;
 import org.antlr.v4.runtime.atn.DecisionState;
+import org.antlr.v4.runtime.atn.NotSetTransition;
 import org.antlr.v4.runtime.atn.PredictionContext;
 import org.antlr.v4.runtime.atn.Transition;
+import org.antlr.v4.runtime.atn.WildcardTransition;
 import org.antlr.v4.runtime.misc.IntervalSet;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
+import org.antlr.works.editor.grammar.experimental.GrammarLexer;
 import org.antlr.works.editor.grammar.experimental.GrammarParser;
 import org.antlr.works.editor.grammar.experimental.GrammarParserAnchorListener;
 import org.antlr.works.editor.grammar.experimental.TaggerTokenSource;
@@ -388,7 +391,7 @@ public final class GrammarCompletionQuery extends AsyncCompletionQuery {
             boolean definiteInAction;
             boolean possibleInRewrite;
             boolean definiteInRewrite = false;
-            Map<RuleContext, CaretReachedException> parseTrees;
+            Map<RuleContext, CaretReachedException> parseTrees = null;
             CaretToken caretToken = null;
             int grammarType = -1;
 
@@ -561,8 +564,57 @@ public final class GrammarCompletionQuery extends AsyncCompletionQuery {
 
                     Map<String, CompletionItem> intermediateResults = new HashMap<String, CompletionItem>();
                     if (parseTrees != null) {
-                        for (Map.Entry<RuleContext, CaretReachedException> entry : parseTrees.entrySet()) {
+                        /*
+                         * KEYWORD ANALYSIS
+                         */
+                        IntervalSet remainingKeywords = new IntervalSet();
+                        remainingKeywords.add(GrammarLexer.OPTIONS);
+                        remainingKeywords.add(GrammarLexer.TOKENS);
+                        remainingKeywords.add(GrammarLexer.SCOPE);
+                        remainingKeywords.add(GrammarLexer.IMPORT);
+                        remainingKeywords.add(GrammarLexer.FRAGMENT);
+                        remainingKeywords.add(GrammarLexer.LEXER);
+                        remainingKeywords.add(GrammarLexer.PARSER);
+                        remainingKeywords.add(GrammarLexer.TREE);
+                        remainingKeywords.add(GrammarLexer.GRAMMAR);
+                        remainingKeywords.add(GrammarLexer.PROTECTED);
+                        remainingKeywords.add(GrammarLexer.PUBLIC);
+                        remainingKeywords.add(GrammarLexer.PRIVATE);
+                        remainingKeywords.add(GrammarLexer.RETURNS);
+                        remainingKeywords.add(GrammarLexer.LOCALS);
+                        remainingKeywords.add(GrammarLexer.THROWS);
+                        remainingKeywords.add(GrammarLexer.CATCH);
+                        remainingKeywords.add(GrammarLexer.FINALLY);
+                        remainingKeywords.add(GrammarLexer.TEMPLATE);
+                        remainingKeywords.add(GrammarLexer.MODE);
 
+                        for (Map.Entry<RuleContext, CaretReachedException> entry : parseTrees.entrySet()) {
+                            CaretReachedException caretReachedException = entry.getValue();
+                            if (caretReachedException == null || caretReachedException.getTransitions() == null) {
+                                continue;
+                            }
+
+                            Map<ATNConfig, List<Transition>> transitions = caretReachedException.getTransitions();
+                            for (List<Transition> transitionList : transitions.values()) {
+                                for (Transition transition : transitionList) {
+                                    if (transition.isEpsilon() || transition instanceof WildcardTransition || transition instanceof NotSetTransition) {
+                                        continue;
+                                    }
+
+                                    IntervalSet label = transition.label();
+                                    if (label == null) {
+                                        continue;
+                                    }
+
+                                    for (int keyword : remainingKeywords.toArray()) {
+                                        if (label.contains(keyword)) {
+                                            remainingKeywords.remove(keyword);
+                                            KeywordCompletionItem item = new KeywordCompletionItem(GrammarLexer.tokenNames[keyword].toLowerCase());
+                                            intermediateResults.put(item.getInsertPrefix().toString(), item);
+                                        }
+                                    }
+                                }
+                            }
                         }
 
                         for (Map.Entry<RuleContext, CaretReachedException> entry : parseTrees.entrySet()) {
@@ -666,7 +718,7 @@ public final class GrammarCompletionQuery extends AsyncCompletionQuery {
                 }
             }
 
-            if (possibleKeyword) {
+            if (parseTrees == null && possibleKeyword) {
                 // Add keywords
                 results.addAll(KeywordCompletionItem.KEYWORD_ITEMS);
             }
