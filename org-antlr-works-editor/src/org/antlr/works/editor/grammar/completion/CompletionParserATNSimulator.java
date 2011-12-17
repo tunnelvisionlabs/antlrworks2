@@ -52,6 +52,7 @@ public class CompletionParserATNSimulator extends ParserATNSimulator<Token> {
 
     public CompletionParserATNSimulator(ATN atn) {
         super(atn);
+        disable_global_context = true;
     }
 
     public Map<ATNConfig, List<Transition>> getCaretTransitions() {
