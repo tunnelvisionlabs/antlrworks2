@@ -150,7 +150,11 @@ public class GrammarCompletionController implements CompletionController {
                 boolean selected =
                     (!(bestMatch instanceof GrammarCompletionItem) || ((GrammarCompletionItem)bestMatch).allowInitialSelection())
                     && evaluatedText != null && !evaluatedText.isEmpty();
-                boolean unique = evaluatedText.length() == completionPrefix.length() && (prefixMatch == 1);
+
+                boolean unique = !completionPrefix.isEmpty()
+                    && (prefixMatch == 1)
+                    && evaluatedText.length() == completionPrefix.length();
+
                 return new Selection(index, selected, unique);
             }
 
