@@ -35,6 +35,7 @@ import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.v4.parse.ANTLRParser;
 import org.antlr.v4.tool.ast.GrammarAST;
+import org.antlr.v4.tool.ast.GrammarASTErrorNode;
 import org.antlr.v4.tool.ast.GrammarRootAST;
 import org.antlr.works.editor.grammar.parser.GrammarParser;
 import org.antlr.works.editor.grammar.parser.GrammarParserV4;
@@ -112,6 +113,10 @@ public class RuleScanningTaskV4 extends RuleScanningTask {
         List<GrammarAST> rules = parseResult.getNodesWithType(ANTLRParser.RULE);
         if (rules != null) {
             for (GrammarAST child : rules) {
+                if (child.getChild(0) instanceof GrammarASTErrorNode) {
+                    continue;
+                }
+
                 String ruleName = child.getChild(0).getText();
                 if ("Tokens".equals(ruleName)) {
                     continue;
