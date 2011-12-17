@@ -33,6 +33,7 @@ import org.antlr.netbeans.editor.tagging.Tagger;
 import org.antlr.netbeans.parsing.spi.ParserDataDefinition;
 import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
 import org.antlr.works.editor.grammar.experimental.GrammarParserAnchorListener.Anchor;
+import org.netbeans.api.editor.mimelookup.MimeRegistration;
 
 /**
  *
@@ -44,6 +45,21 @@ public class GrammarParserDataDefinitions {
     public static final ParserDataDefinition<Tagger<TokenTag>> LEXER_TOKENS = new LexerTokensDataDefinition();
 
     private GrammarParserDataDefinitions() {
+    }
+
+    @MimeRegistration(mimeType=GrammarEditorKit.GRAMMAR_MIME_TYPE, service=ParserDataDefinition.class)
+    public static ParserDataDefinition<List<Anchor>> getReferenceAnchorPointsDataDefinition() {
+        return REFERENCE_ANCHOR_POINTS;
+    }
+
+    @MimeRegistration(mimeType=GrammarEditorKit.GRAMMAR_MIME_TYPE, service=ParserDataDefinition.class)
+    public static ParserDataDefinition<List<Anchor>> getDynamicAnchorPointsDataDefinition() {
+        return DYNAMIC_ANCHOR_POINTS;
+    }
+
+    @MimeRegistration(mimeType=GrammarEditorKit.GRAMMAR_MIME_TYPE, service=ParserDataDefinition.class)
+    public static ParserDataDefinition<Tagger<TokenTag>> getLexerTokensDataDefinition() {
+        return LEXER_TOKENS;
     }
 
     private static final class ReferenceAnchorPointsDataDefinition implements ParserDataDefinition<List<Anchor>> {
