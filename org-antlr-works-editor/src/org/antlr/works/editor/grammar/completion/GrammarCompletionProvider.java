@@ -172,6 +172,16 @@ public class GrammarCompletionProvider implements CompletionProvider {
                 }
 
                 if (token == null) {
+                    // try again without skipping off-channel tokens
+                    for (TaggedPositionRegion<TokenTag> taggedRegion : tags) {
+                        token = taggedRegion.getTag().getToken();
+                        if (token.getStartIndex() <= offset && token.getStopIndex() >= offset) {
+                            break;
+                        }
+                    }
+                }
+
+                if (token == null) {
                     return false;
                 }
 
@@ -188,8 +198,11 @@ public class GrammarCompletionProvider implements CompletionProvider {
                 case GrammarLexer.ACTION_WORD:
                     return allowInActions;
 
-                default:
+                case GrammarLexer.WS:
                     return true;
+
+                default:
+                    return token.getChannel() == Lexer.DEFAULT_TOKEN_CHANNEL;
                 }
 
                 //List<Token> tokens;
