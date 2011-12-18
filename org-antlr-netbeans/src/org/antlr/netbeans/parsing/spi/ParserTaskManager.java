@@ -33,10 +33,12 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import javax.swing.text.JTextComponent;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.netbeans.editor.text.VersionedDocument;
 import org.netbeans.api.annotations.common.CheckForNull;
 import org.netbeans.api.annotations.common.NonNull;
+import org.netbeans.api.annotations.common.NullAllowed;
 
 /**
  *
@@ -52,6 +54,14 @@ public interface ParserTaskManager {
 
     @NonNull Future<ParserData<?>>[] getData(@NonNull DocumentSnapshot snapshot, @NonNull Collection<ParserDataDefinition<?>> definitions, @NonNull EnumSet<ParserDataOptions> options);
 
+    @CheckForNull <T> Future<ParserData<T>> getData(@NonNull DocumentSnapshot snapshot, @NullAllowed JTextComponent component, @NonNull ParserDataDefinition<T> definition);
+
+    @NonNull Future<ParserData<?>>[] getData(@NonNull DocumentSnapshot snapshot, @NullAllowed JTextComponent component, @NonNull Collection<ParserDataDefinition<?>> definitions);
+
+    @CheckForNull <T> Future<ParserData<T>> getData(@NonNull DocumentSnapshot snapshot, @NullAllowed JTextComponent component, @NonNull ParserDataDefinition<T> definition, @NonNull EnumSet<ParserDataOptions> options);
+
+    @NonNull Future<ParserData<?>>[] getData(@NonNull DocumentSnapshot snapshot, @NullAllowed JTextComponent component, @NonNull Collection<ParserDataDefinition<?>> definitions, @NonNull EnumSet<ParserDataOptions> options);
+
     <T> ScheduledFuture<ParserData<T>> schedule(@NonNull VersionedDocument document, @NonNull ParserDataDefinition<T> data);
 
     Collection<ScheduledFuture<ParserData<?>>> schedule(@NonNull VersionedDocument document, @NonNull Collection<ParserDataDefinition<?>> data);
@@ -59,6 +69,14 @@ public interface ParserTaskManager {
     <T> ScheduledFuture<ParserData<T>> schedule(@NonNull VersionedDocument document, @NonNull ParserDataDefinition<T> data, long delay, @NonNull TimeUnit timeUnit);
 
     Collection<ScheduledFuture<ParserData<?>>> schedule(@NonNull VersionedDocument document, @NonNull Collection<ParserDataDefinition<?>> data, long delay, @NonNull TimeUnit timeUnit);
+
+    <T> ScheduledFuture<ParserData<T>> schedule(@NonNull VersionedDocument document, @NullAllowed JTextComponent component, @NonNull ParserDataDefinition<T> data);
+
+    Collection<ScheduledFuture<ParserData<?>>> schedule(@NonNull VersionedDocument document, @NullAllowed JTextComponent component, @NonNull Collection<ParserDataDefinition<?>> data);
+
+    <T> ScheduledFuture<ParserData<T>> schedule(@NonNull VersionedDocument document, @NullAllowed JTextComponent component, @NonNull ParserDataDefinition<T> data, long delay, @NonNull TimeUnit timeUnit);
+
+    Collection<ScheduledFuture<ParserData<?>>> schedule(@NonNull VersionedDocument document, @NullAllowed JTextComponent component, @NonNull Collection<ParserDataDefinition<?>> data, long delay, @NonNull TimeUnit timeUnit);
 
     @NonNull <T> ScheduledFuture<T> scheduleHighPriority(@NonNull Callable<T> callable);
 

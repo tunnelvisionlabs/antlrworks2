@@ -44,6 +44,7 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import javax.swing.text.Document;
+import javax.swing.text.JTextComponent;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.netbeans.editor.text.VersionedDocument;
 import org.antlr.netbeans.parsing.spi.ParserData;
@@ -97,21 +98,41 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
 
     @Override
     public <T> Future<ParserData<T>> getData(DocumentSnapshot snapshot, ParserDataDefinition<T> definition) {
-        return getData(snapshot, definition, EnumSet.noneOf(ParserDataOptions.class));
+        return getData(snapshot, null, definition);
     }
 
     @Override
     public Future<ParserData<?>>[] getData(DocumentSnapshot snapshot, Collection<ParserDataDefinition<?>> definitions) {
-        return getData(snapshot, definitions, EnumSet.noneOf(ParserDataOptions.class));
+        return getData(snapshot, null, definitions);
     }
 
     @Override
     public <T> Future<ParserData<T>> getData(final DocumentSnapshot snapshot, final ParserDataDefinition<T> definition, EnumSet<ParserDataOptions> options) {
+        return getData(snapshot, null, definition, options);
+    }
+
+    @Override
+    public Future<ParserData<?>>[] getData(DocumentSnapshot snapshot, Collection<ParserDataDefinition<?>> definitions, EnumSet<ParserDataOptions> options) {
+        return getData(snapshot, null, definitions, options);
+    }
+
+    @Override
+    public <T> Future<ParserData<T>> getData(DocumentSnapshot snapshot, JTextComponent component, ParserDataDefinition<T> definition) {
+        return getData(snapshot, definition, EnumSet.noneOf(ParserDataOptions.class));
+    }
+
+    @Override
+    public Future<ParserData<?>>[] getData(DocumentSnapshot snapshot, JTextComponent component, Collection<ParserDataDefinition<?>> definitions) {
+        return getData(snapshot, definitions, EnumSet.noneOf(ParserDataOptions.class));
+    }
+
+    @Override
+    public <T> Future<ParserData<T>> getData(final DocumentSnapshot snapshot, JTextComponent component, final ParserDataDefinition<T> definition, EnumSet<ParserDataOptions> options) {
         Parameters.notNull("snapshot", snapshot);
         Parameters.notNull("definition", definition);
         Parameters.notNull("options", options);
 
-        Callable<ParserData<T>> callable = createCallable(snapshot, definition);
+        Callable<ParserData<T>> callable = createCallable(snapshot, component, definition);
         if (options.contains(ParserDataOptions.ALLOW_STALE)) {
             @SuppressWarnings("unchecked")
             ParserData<T> cachedData = (ParserData<T>)snapshot.getVersionedDocument().getDocument().getProperty(definition);
@@ -133,7 +154,7 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
     }
 
     @Override
-    public Future<ParserData<?>>[] getData(DocumentSnapshot snapshot, Collection<ParserDataDefinition<?>> definitions, EnumSet<ParserDataOptions> options) {
+    public Future<ParserData<?>>[] getData(DocumentSnapshot snapshot, JTextComponent component, Collection<ParserDataDefinition<?>> definitions, EnumSet<ParserDataOptions> options) {
         Parameters.notNull("snapshot", snapshot);
         Parameters.notNull("definitions", definitions);
         Parameters.notNull("options", options);
@@ -149,30 +170,50 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
 
     @Override
     public <T> ScheduledFuture<ParserData<T>> schedule(VersionedDocument document, ParserDataDefinition<T> data) {
-        return schedule(document, data, DEFAULT_DELAY, DEFAULT_TIMEUNIT);
+        return schedule(document, null, data);
     }
 
     @Override
     public Collection<ScheduledFuture<ParserData<?>>> schedule(VersionedDocument document, Collection<ParserDataDefinition<?>> data) {
-        return schedule(document, data, DEFAULT_DELAY, DEFAULT_TIMEUNIT);
+        return schedule(document, null, data);
     }
 
     @Override
     public <T> ScheduledFuture<ParserData<T>> schedule(VersionedDocument document, ParserDataDefinition<T> data, long delay, TimeUnit timeUnit) {
-        Callable<ParserData<T>> callable = createCallable(document.getCurrentSnapshot(), data);
+        return schedule(document, null, data, delay, timeUnit);
+    }
+
+    @Override
+    public Collection<ScheduledFuture<ParserData<?>>> schedule(VersionedDocument document, @NonNull Collection<ParserDataDefinition<?>> data, long delay, TimeUnit timeUnit) {
+        return schedule(document, null, data, delay, timeUnit);
+    }
+
+    @Override
+    public <T> ScheduledFuture<ParserData<T>> schedule(VersionedDocument document, JTextComponent component, ParserDataDefinition<T> data) {
+        return schedule(document, component, data, DEFAULT_DELAY, DEFAULT_TIMEUNIT);
+    }
+
+    @Override
+    public Collection<ScheduledFuture<ParserData<?>>> schedule(VersionedDocument document, JTextComponent component, Collection<ParserDataDefinition<?>> data) {
+        return schedule(document, component, data, DEFAULT_DELAY, DEFAULT_TIMEUNIT);
+    }
+
+    @Override
+    public <T> ScheduledFuture<ParserData<T>> schedule(VersionedDocument document, JTextComponent component, ParserDataDefinition<T> data, long delay, TimeUnit timeUnit) {
+        Callable<ParserData<T>> callable = createCallable(document.getCurrentSnapshot(), component, data);
         return lowPriorityExecutor.schedule(callable, delay, timeUnit);
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public Collection<ScheduledFuture<ParserData<?>>> schedule(VersionedDocument document, @NonNull Collection<ParserDataDefinition<?>> data, long delay, TimeUnit timeUnit) {
+    public Collection<ScheduledFuture<ParserData<?>>> schedule(VersionedDocument document, JTextComponent component, @NonNull Collection<ParserDataDefinition<?>> data, long delay, TimeUnit timeUnit) {
         if (data.isEmpty()) {
             return Collections.emptyList();
         }
 
         List<ScheduledFuture<ParserData<?>>> futures = new ArrayList<ScheduledFuture<ParserData<?>>>();
         for (ParserDataDefinition<?> dataDefinition : data) {
-            futures.add((ScheduledFuture<ParserData<?>>)schedule(document, dataDefinition, delay, timeUnit));
+            futures.add((ScheduledFuture<ParserData<?>>)schedule(document, component, dataDefinition, delay, timeUnit));
         }
 
         return futures;
@@ -213,8 +254,8 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
         }
     }
 
-    private <T> Callable<ParserData<T>> createCallable(DocumentSnapshot snapshot, ParserDataDefinition<T> data) {
-        Callable<ParserData<T>> callable = new UpdateDataCallable<T>(snapshot, data);
+    private <T> Callable<ParserData<T>> createCallable(DocumentSnapshot snapshot, JTextComponent component, ParserDataDefinition<T> data) {
+        Callable<ParserData<T>> callable = new UpdateDataCallable<T>(snapshot, component, data);
         return callable;
     }
 
@@ -293,10 +334,12 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
 
     private class UpdateDataCallable<T> implements Callable<ParserData<T>> {
         private final DocumentSnapshot snapshot;
+        private final JTextComponent component;
         private final ParserDataDefinition<T> data;
 
-        public UpdateDataCallable(DocumentSnapshot snapshot, ParserDataDefinition<T> data) {
+        public UpdateDataCallable(DocumentSnapshot snapshot, JTextComponent component, ParserDataDefinition<T> data) {
             this.snapshot = snapshot;
+            this.component = component;
             this.data = data;
         }
 
@@ -307,7 +350,7 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
             final ParserTask task = provider.createTask(snapshot.getVersionedDocument());
 
             ResultAggregator handler = new ResultAggregator();
-            task.parse(ParserTaskManagerImpl.this, null, snapshot, Collections.<ParserDataDefinition<?>>singleton(data), handler);
+            task.parse(ParserTaskManagerImpl.this, component, snapshot, Collections.<ParserDataDefinition<?>>singleton(data), handler);
 
             Document document = snapshot.getVersionedDocument().getDocument();
             if (document != null) {

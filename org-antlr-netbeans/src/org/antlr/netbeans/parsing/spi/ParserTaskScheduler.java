@@ -32,6 +32,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import javax.swing.text.JTextComponent;
 import org.antlr.netbeans.editor.text.VersionedDocument;
 import org.antlr.netbeans.parsing.spi.impl.CurrentDocumentParserTaskScheduler;
 import org.antlr.netbeans.parsing.spi.impl.CursorSensitiveParserTaskScheduler;
@@ -69,6 +70,10 @@ public abstract class ParserTaskScheduler {
     }
 
     protected void schedule(VersionedDocument document) {
+        schedule(document, null);
+    }
+
+    protected void schedule(VersionedDocument document, JTextComponent component) {
         if (document == null) {
             return;
         }
@@ -82,7 +87,7 @@ public abstract class ParserTaskScheduler {
             }
         }
 
-        Collection<ScheduledFuture<ParserData<?>>> future = getTaskManager().schedule(document, currentScheduledData, getParseDelayMilliseconds(), TimeUnit.MILLISECONDS);
+        Collection<ScheduledFuture<ParserData<?>>> future = getTaskManager().schedule(document, component, currentScheduledData, getParseDelayMilliseconds(), TimeUnit.MILLISECONDS);
     }
     
     protected int getParseDelayMilliseconds() {

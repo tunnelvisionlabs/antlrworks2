@@ -43,8 +43,8 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service=ParserTaskScheduler.class)
 public class CurrentDocumentParserTaskScheduler extends CurrentEditorParserTaskScheduler {
 
-    private Document currentDocument;
-    private VersionedDocument versionedDocument;
+    protected Document currentDocument;
+    protected VersionedDocument versionedDocument;
 
     @Override
     protected void setEditor(JTextComponent editor) {
@@ -55,11 +55,11 @@ public class CurrentDocumentParserTaskScheduler extends CurrentEditorParserTaskS
             }
 
             versionedDocument = VersionedDocumentUtilities.getVersionedDocument(document);
-            schedule(versionedDocument);
+            schedule(versionedDocument, editor);
         } else {
             currentDocument = null;
             versionedDocument = null;
-            schedule(null);
+            schedule(null, null);
         }
     }
 
