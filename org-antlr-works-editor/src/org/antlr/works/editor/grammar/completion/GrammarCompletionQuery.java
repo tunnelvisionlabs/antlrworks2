@@ -396,22 +396,20 @@ public final class GrammarCompletionQuery extends AsyncCompletionQuery {
             int grammarType = -1;
 
             ParserTaskManager taskManager = getParserTaskManager();
+            if (taskManager == null) {
+                return;
+            }
+
             List<GrammarParserAnchorListener.Anchor> anchors;
-            if (taskManager != null) {
-                Future<ParserData<List<GrammarParserAnchorListener.Anchor>>> result =
-                    taskManager.getData(snapshot, GrammarParserDataDefinitions.DYNAMIC_ANCHOR_POINTS, EnumSet.of(ParserDataOptions.SYNCHRONOUS));
-                try {
-                    anchors = result.get().getData();
-                } catch (InterruptedException ex) {
-                    anchors = null;
-                } catch (ExecutionException ex) {
-                    Exceptions.printStackTrace(ex);
-                    anchors = null;
-                }
-            } else {
-                @SuppressWarnings("unchecked")
-                List<GrammarParserAnchorListener.Anchor> anchorsObject = (List<GrammarParserAnchorListener.Anchor>)document.getProperty(UpdateAnchorsTask.class);
-                anchors = anchorsObject;
+            Future<ParserData<List<GrammarParserAnchorListener.Anchor>>> result =
+                taskManager.getData(snapshot, GrammarParserDataDefinitions.DYNAMIC_ANCHOR_POINTS, EnumSet.of(ParserDataOptions.SYNCHRONOUS));
+            try {
+                anchors = result.get().getData();
+            } catch (InterruptedException ex) {
+                anchors = null;
+            } catch (ExecutionException ex) {
+                Exceptions.printStackTrace(ex);
+                anchors = null;
             }
 
             if (anchors != null) {
