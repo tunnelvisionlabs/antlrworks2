@@ -82,7 +82,6 @@ import org.antlr.works.editor.grammar.experimental.GrammarLexer;
 import org.antlr.works.editor.grammar.experimental.GrammarParser;
 import org.antlr.works.editor.grammar.experimental.GrammarParserAnchorListener;
 import org.antlr.works.editor.grammar.experimental.TaggerTokenSource;
-import org.antlr.works.editor.grammar.experimental.UpdateAnchorsTask;
 import org.antlr.works.editor.grammar.navigation.GrammarNode;
 import org.antlr.works.editor.grammar.navigation.GrammarRulesPanel;
 import org.antlr.works.editor.grammar.navigation.GrammarRulesPanelUI;
