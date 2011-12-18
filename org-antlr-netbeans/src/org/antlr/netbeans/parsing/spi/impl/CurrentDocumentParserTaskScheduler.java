@@ -47,6 +47,11 @@ public class CurrentDocumentParserTaskScheduler extends CurrentEditorParserTaskS
     protected VersionedDocument versionedDocument;
 
     @Override
+    protected int getParseDelayMilliseconds() {
+        return 50;
+    }
+
+    @Override
     protected void setEditor(JTextComponent editor) {
         if (editor != null) {
             Document document = editor.getDocument();

@@ -74,6 +74,10 @@ public abstract class ParserTaskScheduler {
     }
 
     protected void schedule(VersionedDocument document, JTextComponent component) {
+        schedule(document, component, getParseDelayMilliseconds(), TimeUnit.MILLISECONDS);
+    }
+
+    protected void schedule(VersionedDocument document, JTextComponent component, int delay, TimeUnit timeUnit) {
         if (document == null) {
             return;
         }
@@ -87,7 +91,7 @@ public abstract class ParserTaskScheduler {
             }
         }
 
-        Collection<ScheduledFuture<ParserData<?>>> future = getTaskManager().schedule(document, component, currentScheduledData, getParseDelayMilliseconds(), TimeUnit.MILLISECONDS);
+        Collection<ScheduledFuture<ParserData<?>>> future = getTaskManager().schedule(document, component, currentScheduledData, delay, timeUnit);
     }
     
     protected int getParseDelayMilliseconds() {
