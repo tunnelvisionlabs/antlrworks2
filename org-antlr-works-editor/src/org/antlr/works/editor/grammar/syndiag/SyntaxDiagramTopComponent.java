@@ -37,9 +37,15 @@ import javax.swing.SwingUtilities;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.netbeans.editor.text.OffsetRegion;
 import org.antlr.netbeans.editor.text.SnapshotPositionRegion;
+import org.antlr.netbeans.parsing.spi.ParserData;
+import org.antlr.netbeans.parsing.spi.ParserDataEvent;
+import org.antlr.netbeans.parsing.spi.ParserDataListener;
+import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
 import org.antlr.works.editor.grammar.experimental.BlankGrammarParserListener;
+import org.antlr.works.editor.grammar.experimental.CurrentRuleContextData;
 import org.antlr.works.editor.grammar.experimental.GrammarParser;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.altListContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.alternativeContext;
@@ -51,6 +57,7 @@ import org.antlr.works.editor.grammar.experimental.GrammarParser.ruleContext;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
+import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
 import org.openide.util.Parameters;
 import org.openide.windows.TopComponent;
@@ -86,6 +93,9 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
         initComponents();
         setName(Bundle.CTL_SyntaxDiagramTopComponent());
         setToolTipText(Bundle.HINT_SyntaxDiagramTopComponent());
+
+        ParserTaskManager taskManager = Lookup.getDefault().lookup(ParserTaskManager.class);
+        taskManager.addDataListener(GrammarParserDataDefinitions.CURRENT_RULE_CONTEXT, new CurrentRuleContextListener());
     }
 
     public static SyntaxDiagramTopComponent getInstance() {
@@ -195,6 +205,25 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
     void readProperties(Properties properties) {
         String version = properties.getProperty("version");
         // TODO read your settings according to their version
+    }
+
+    private class CurrentRuleContextListener implements ParserDataListener<CurrentRuleContextData> {
+
+        @Override
+        public void dataChanged(ParserDataEvent<CurrentRuleContextData> event) {
+            ParserData<CurrentRuleContextData> parserData = event.getData();
+            final CurrentRuleContextData ruleContext = parserData.getData();
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    SyntaxDiagramTopComponent syntaxDiagram = SyntaxDiagramTopComponent.getInstance();
+                    if (syntaxDiagram != null) {
+                        syntaxDiagram.setRuleContext(ruleContext.getSnapshot(), ruleContext.getGrammarType(), ruleContext.getContext());
+                    }
+                }
+            });
+        }
+
     }
 
     private static class SyntaxBuilderListener extends BlankGrammarParserListener {
