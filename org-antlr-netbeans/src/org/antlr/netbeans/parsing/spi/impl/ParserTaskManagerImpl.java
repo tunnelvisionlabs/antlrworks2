@@ -224,6 +224,10 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
             listeners = dataListeners.get(definition);
         }
 
+        if (listeners == null) {
+            return;
+        }
+
         ParserDataEvent<T> event = new ParserDataEvent<T>(this, definition, data);
         for (ParserDataListener<?> listener : listeners.getListeners()) {
             @SuppressWarnings("unchecked")
@@ -309,6 +313,7 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
             if (document != null) {
                 for (ParserData<?> result : handler.getResults()) {
                     document.putProperty(result.getDefinition(), result);
+                    fireDataChanged((ParserDataDefinition)result.getDefinition(), result);
                 }
             }
 
