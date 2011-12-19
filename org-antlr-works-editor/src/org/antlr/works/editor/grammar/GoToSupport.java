@@ -232,7 +232,7 @@ public class GoToSupport {
             return false;
         }
 
-        highlighter.getHighlights(span.getStart().getOffset(), span.getEnd().getOffset(), highlights, tokens, false);
+        highlighter.getHighlights(span.getStart().getOffset(), span.getEnd().getOffset(), highlights, tokens, false, false);
         return true;
     }
 

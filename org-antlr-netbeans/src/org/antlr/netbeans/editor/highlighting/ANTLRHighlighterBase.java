@@ -40,10 +40,14 @@ import org.antlr.netbeans.editor.text.OffsetRegion;
 import org.antlr.runtime.CharStream;
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.Token;
+import org.antlr.v4.runtime.misc.Interval;
+import org.netbeans.api.annotations.common.CheckForNull;
+import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.spi.editor.highlighting.HighlightsSequence;
 import org.netbeans.spi.editor.highlighting.support.AbstractHighlightsContainer;
 import org.openide.text.NbDocument;
 import org.openide.util.Exceptions;
+import org.openide.util.Parameters;
 
 public abstract class ANTLRHighlighterBase<TState extends LineStateInfo<TState>> extends AbstractHighlightsContainer {
     private static final boolean FIX_HIGHLIGHTER_UPDATE_BUG = false;
@@ -54,7 +58,8 @@ public abstract class ANTLRHighlighterBase<TState extends LineStateInfo<TState>>
     private final StyledDocument document;
     private final DocumentListenerImpl documentListener;
     private final ArrayList<TState> lineStates = new ArrayList<TState>();
-    
+    private final boolean propagateChangedImmediately;
+
     private Integer firstDirtyLine;
     private Integer lastDirtyLine;
     private Integer firstChangedLine;
@@ -62,11 +67,18 @@ public abstract class ANTLRHighlighterBase<TState extends LineStateInfo<TState>>
     
     private boolean failedTimeout;
 
-    public ANTLRHighlighterBase(StyledDocument document) {
+    public ANTLRHighlighterBase(@NonNull StyledDocument document) {
+        this(document, true);
+    }
+
+    public ANTLRHighlighterBase(@NonNull StyledDocument document, boolean propagateChanges) {
+        Parameters.notNull("document", document);
         this.document = document;
+        this.propagateChangedImmediately = propagateChanges;
         this.documentListener = new DocumentListenerImpl();
     }
 
+    @NonNull
     protected final StyledDocument getDocument() {
         return document;
     }
@@ -86,17 +98,19 @@ public abstract class ANTLRHighlighterBase<TState extends LineStateInfo<TState>>
     @Override
     public HighlightsSequence getHighlights(int startOffset, int endOffset) {
         List<Highlight> highlights = new ArrayList<Highlight>();
-        getHighlights(startOffset, endOffset, highlights, null, true);
+        getHighlights(startOffset, endOffset, highlights, null, true, false);
         return new HighlightsList(highlights);
     }
 
-    public void getHighlights(int startOffset, int endOffset, List<Highlight> highlights, List<Token> tokens, boolean updateOffsets) {
-        if (highlights == null && tokens == null) {
-            return;
+    @CheckForNull
+    public Interval getHighlights(int startOffset, int endOffset, List<Highlight> highlights, List<Token> tokens, boolean updateOffsets, boolean propagate) {
+        if (highlights == null && tokens == null && !propagate) {
+            return null;
         }
 
-        if (endOffset == Integer.MAX_VALUE)
+        if (endOffset == Integer.MAX_VALUE) {
             endOffset = document.getLength();
+        }
         
         if (highlights != null) {
             highlights.clear();
@@ -108,11 +122,13 @@ public abstract class ANTLRHighlighterBase<TState extends LineStateInfo<TState>>
 
         OffsetRegion span = OffsetRegion.fromBounds(startOffset, endOffset);
 
-        if (failedTimeout)
-            return;
-        
+        if (failedTimeout) {
+            return null;
+        }
+
+        int firstUpdatedLine;
+        int lastUpdatedLine;
         boolean spanExtended = false;
-        
         int extendMultiLineSpanToLine = 0;
         OffsetRegion extendedSpan = span;
         
@@ -122,12 +138,14 @@ public abstract class ANTLRHighlighterBase<TState extends LineStateInfo<TState>>
             ParseRequest<TState> request = adjustParseSpan(span);
             TState startState = request.getState();
             span = request.getRegion();
-            
+            firstUpdatedLine = NbDocument.findLineNumber(document, span.getStart());
+            lastUpdatedLine = NbDocument.findLineNumber(document, span.getEnd());
+
             CharStream input;
             try {
                 input = createInputStream(span);
             } catch (BadLocationException ex) {
-                return;
+                return null;
             }
             
             TokenSourceWithState<TState> lexer = createLexer(input, startState);
@@ -184,9 +202,6 @@ public abstract class ANTLRHighlighterBase<TState extends LineStateInfo<TState>>
                 if (token.getType() == Token.EOF)
                     break;
 
-                previousToken = token;
-                previousTokenEndsLine = tokenEndsAtEndOfLine(lexer, token);
-
                 if (updateOffsets && isMultiLineToken(lexer, token))
                 {
                     int startLine = NbDocument.findLineNumber(document, token.getStartIndex());
@@ -201,7 +216,7 @@ public abstract class ANTLRHighlighterBase<TState extends LineStateInfo<TState>>
                     }
                 }
 
-                boolean tokenEndsLine = previousTokenEndsLine;
+                boolean tokenEndsLine = tokenEndsAtEndOfLine(lexer, token);
                 if (updateOffsets && tokenEndsLine)
                 {
                     TState stateAtEndOfLine = lexer.getState();
@@ -232,11 +247,23 @@ public abstract class ANTLRHighlighterBase<TState extends LineStateInfo<TState>>
                     }
                 }
 
-                if (token.getStartIndex() >= span.getEnd())
-                    break;
+                previousToken = token;
+                previousTokenEndsLine = tokenEndsLine;
 
-                if (token.getStopIndex() < requestedSpan.getStart())
+                boolean canBreak = !propagate || !spanExtended;
+                if (propagate && spanExtended) {
+                    span = OffsetRegion.fromBounds(span.getStart(), extendedSpan.getEnd());
+                    lastUpdatedLine = NbDocument.findLineNumber(document, span.getEnd());
+                    spanExtended = false;
+                }
+
+                if (canBreak && (token.getStartIndex() >= span.getEnd())) {
+                    break;
+                }
+
+                if (token.getStopIndex() < requestedSpan.getStart()) {
                     continue;
+                }
 
                 if (tokens != null) {
                     tokens.add(token);
@@ -248,13 +275,14 @@ public abstract class ANTLRHighlighterBase<TState extends LineStateInfo<TState>>
                         highlights.addAll(tokenClassificationSpans);
                     }
                 }
-                
-                if (!inBounds)
+
+                if (canBreak && !inBounds) {
                     break;
+                }
             }
         }
         
-        if (updateOffsets && extendMultiLineSpanToLine > 0) {
+        if (updateOffsets && extendMultiLineSpanToLine > 0 && !propagate) {
             int endPosition = extendMultiLineSpanToLine < NbDocument.findLineRootElement(document).getElementCount() - 1 ? NbDocument.findLineOffset(document, extendMultiLineSpanToLine + 1) : document.getLength();
             if (endPosition > extendedSpan.getEnd()) {
                 spanExtended = true;
@@ -270,6 +298,8 @@ public abstract class ANTLRHighlighterBase<TState extends LineStateInfo<TState>>
             int lastLine = NbDocument.findLineNumber(document, extendedSpan.getEnd()) - 1;
             forceRehighlightLines(firstLine, lastLine);
         }
+
+        return new Interval(firstUpdatedLine, lastUpdatedLine);
     }
 
     protected void setLineState(int line, TState state) {
@@ -490,6 +520,30 @@ public abstract class ANTLRHighlighterBase<TState extends LineStateInfo<TState>>
 
                 firstChangedLine = null;
                 lastChangedLine = null;
+
+                if (propagateChangedImmediately) {
+                    if (firstDirtyLine != null) {
+                        startRehighlightLine = Math.min(startRehighlightLine, firstDirtyLine);
+                    }
+
+                    if (lastDirtyLine != null) {
+                        endRehighlightLine = Math.max(endRehighlightLine, lastDirtyLine);
+                    }
+
+                    int startOffset = NbDocument.findLineOffset(document, startRehighlightLine);
+                    int endOffset;
+                    if (endRehighlightLine == NbDocument.findLineRootElement(document).getElementCount() - 1) {
+                        endOffset = document.getLength();
+                    } else {
+                        endOffset = NbDocument.findLineOffset(document, endRehighlightLine + 1) - 1;
+                    }
+
+                    Interval propagatedChangedLines = getHighlights(startOffset, endOffset, null, null, true, true);
+                    if (propagatedChangedLines != null) {
+                        forceRehighlightLines(propagatedChangedLines.a, propagatedChangedLines.b);
+                        return;
+                    }
+                }
 
                 forceRehighlightLines(startRehighlightLine, endRehighlightLine);
             }
