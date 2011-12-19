@@ -27,20 +27,18 @@
  */
 package org.antlr.works.editor.grammar.completion;
 
-import org.antlr.v4.runtime.Token;
-
 /**
  *
  * @author Sam Harwell
  */
 public abstract class ElementReferenceCompletionItem extends GrammarCompletionItem {
 
-    private final Token label;
+    private final String label;
     private final boolean explicit;
 
     private String leftText;
 
-    public ElementReferenceCompletionItem(Token label, boolean explicit) {
+    public ElementReferenceCompletionItem(String label, boolean explicit) {
         this.label = label;
         this.explicit = explicit;
     }
@@ -52,12 +50,12 @@ public abstract class ElementReferenceCompletionItem extends GrammarCompletionIt
 
     @Override
     public String getSortTextImpl() {
-        return getPrefix() + label.getText();
+        return getPrefix() + label;
     }
 
     @Override
     public CharSequence getInsertPrefix() {
-        return getPrefix() + label.getText();
+        return getPrefix() + label;
     }
 
     public boolean isExplicit() {
@@ -74,7 +72,7 @@ public abstract class ElementReferenceCompletionItem extends GrammarCompletionIt
             builder.append(REFERENCE_COLOR);
             builder.append(BOLD);
 
-            builder.append(getPrefix()).append(label.getText());
+            builder.append(getPrefix()).append(label);
 
             builder.append(BOLD_END);
             builder.append(COLOR_END);

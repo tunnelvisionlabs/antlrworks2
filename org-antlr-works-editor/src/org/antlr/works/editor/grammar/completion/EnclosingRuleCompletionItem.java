@@ -27,7 +27,6 @@
  */
 package org.antlr.works.editor.grammar.completion;
 
-import org.antlr.v4.runtime.Token;
 import org.netbeans.api.annotations.common.NonNull;
 
 /**
@@ -36,7 +35,7 @@ import org.netbeans.api.annotations.common.NonNull;
  */
 public class EnclosingRuleCompletionItem extends RewriteReferenceCompletionItem {
 
-    public EnclosingRuleCompletionItem(@NonNull Token enclosingRuleName) {
+    public EnclosingRuleCompletionItem(@NonNull String enclosingRuleName) {
         super(enclosingRuleName, false);
     }
 

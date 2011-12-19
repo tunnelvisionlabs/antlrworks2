@@ -711,26 +711,60 @@ public final class GrammarCompletionQuery extends AsyncCompletionQuery {
 
                             if (!inExpression && (possibleInAction || possibleInRewrite)) {
                                 if (!definiteInAction && labelAnalyzer.getEnclosingRuleName() != null) {
-                                    CompletionItem item = new EnclosingRuleCompletionItem(labelAnalyzer.getEnclosingRuleName());
+                                    CompletionItem item = new EnclosingRuleCompletionItem(labelAnalyzer.getEnclosingRuleName().getText());
                                     intermediateResults.put(item.getInsertPrefix().toString(), item);
                                 }
 
                                 for (Token label : labelAnalyzer.getLabels()) {
-                                    CompletionItem item = new RewriteReferenceCompletionItem(label, true);
+                                    CompletionItem item = new RewriteReferenceCompletionItem(label.getText(), true);
                                     intermediateResults.put(item.getInsertPrefix().toString(), item);
                                 }
 
                                 if (possibleInRewrite) {
                                     for (Token implicit : labelAnalyzer.getUnlabeledElements()) {
-                                        CompletionItem item = new ActionReferenceCompletionItem(implicit, false);
+                                        CompletionItem item = new ActionReferenceCompletionItem(implicit.getText(), false);
                                         intermediateResults.put(item.getInsertPrefix().toString(), item);
                                     }
                                 }
 
                                 if (possibleInAction && !inExpression) {
                                     for (Token implicit : labelAnalyzer.getUnlabeledElements()) {
-                                        CompletionItem item = new ActionReferenceCompletionItem(implicit, false);
-                                        intermediateResults.put(item.getInsertPrefix().toString(), item);
+                                        // only add implicit tokens here. all implicit rule references will be added separately
+                                        if (Character.isUpperCase(implicit.getText().charAt(0))) {
+                                            CompletionItem item = new ActionReferenceCompletionItem(implicit.getText(), false);
+                                            intermediateResults.put(item.getInsertPrefix().toString(), item);
+                                        }
+                                    }
+
+                                    if (grammarType != GrammarParser.LEXER) {
+                                        // Add rules from the grammar
+                                        GrammarRulesPanelUI ui = GrammarRulesPanel.findGrammarRulesPanelUI();
+                                        ExplorerManager explorerManager = (ui != null) ? ui.getExplorerManager() : null;
+                                        Node rootContext = (explorerManager != null) ? explorerManager.getRootContext() : null;
+                                        if (ui != null) {
+                                            List<Description> rules = new ArrayList<Description>();
+                                            Queue<Description> workList = new ArrayDeque<Description>();
+                                            if (rootContext instanceof GrammarNode) {
+                                                workList.add(((GrammarNode)rootContext).getDescription());
+                                            }
+
+                                            while (!workList.isEmpty()) {
+                                                Description description = workList.remove();
+                                                if (description.getOffset() > 0) {
+                                                    rules.add(description);
+                                                }
+
+                                                if (description.getChildren() != null) {
+                                                    workList.addAll(description.getChildren());
+                                                }
+                                            }
+
+                                            for (Description rule : rules) {
+                                                if (Character.isLowerCase(rule.getName().charAt(0))) {
+                                                    results.add(new ActionReferenceCompletionItem(rule.getName(), false));
+                                                }
+                                            }
+                                        }
                                     }
 
                                     switch (grammarType) {
