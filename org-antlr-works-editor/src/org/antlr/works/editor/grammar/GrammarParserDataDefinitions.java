@@ -32,6 +32,8 @@ import org.antlr.netbeans.editor.classification.TokenTag;
 import org.antlr.netbeans.editor.tagging.Tagger;
 import org.antlr.netbeans.parsing.spi.ParserDataDefinition;
 import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
+import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.Token;
 import org.antlr.works.editor.grammar.codemodel.FileModel;
 import org.antlr.works.editor.grammar.experimental.CurrentRuleContextData;
 import org.antlr.works.editor.grammar.experimental.GrammarParserAnchorListener.Anchor;
@@ -43,6 +45,8 @@ import org.netbeans.api.editor.mimelookup.MimeRegistration;
  */
 public class GrammarParserDataDefinitions {
     public static final ParserDataDefinition<List<Anchor>> REFERENCE_ANCHOR_POINTS = new ReferenceAnchorPointsDataDefinition();
+    public static final ParserDataDefinition<ParserRuleContext<Token>> REFERENCE_PARSE_TREE = new ReferenceParseTreeDataDefinition();
+
     public static final ParserDataDefinition<List<Anchor>> DYNAMIC_ANCHOR_POINTS = new DynamicAnchorPointsDataDefinition();
     public static final ParserDataDefinition<Tagger<TokenTag>> LEXER_TOKENS = new LexerTokensDataDefinition();
     public static final ParserDataDefinition<CurrentRuleContextData> CURRENT_RULE_CONTEXT = new CurrentRuleContextDataDefinition();
@@ -54,6 +58,11 @@ public class GrammarParserDataDefinitions {
     @MimeRegistration(mimeType=GrammarEditorKit.GRAMMAR_MIME_TYPE, service=ParserDataDefinition.class)
     public static ParserDataDefinition<List<Anchor>> getReferenceAnchorPointsDataDefinition() {
         return REFERENCE_ANCHOR_POINTS;
+    }
+
+    @MimeRegistration(mimeType=GrammarEditorKit.GRAMMAR_MIME_TYPE, service=ParserDataDefinition.class)
+    public static ParserDataDefinition<ParserRuleContext<Token>> getReferenceParseTreeDataDefinition() {
+        return REFERENCE_PARSE_TREE;
     }
 
     @MimeRegistration(mimeType=GrammarEditorKit.GRAMMAR_MIME_TYPE, service=ParserDataDefinition.class)
@@ -91,7 +100,27 @@ public class GrammarParserDataDefinitions {
 
         @Override
         public Class<? extends ParserTaskScheduler> getScheduler() {
-            return ParserTaskScheduler.EDITOR_SENSITIVE_TASK_SCHEDULER;
+            return ParserTaskScheduler.CONTENT_SENSITIVE_TASK_SCHEDULER;
+        }
+
+    }
+
+    private static final class ReferenceParseTreeDataDefinition implements ParserDataDefinition<ParserRuleContext<Token>> {
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public Class<ParserRuleContext<Token>> getDataType() {
+            return (Class<ParserRuleContext<Token>>)(Object)ParserRuleContext.class;
+        }
+
+        @Override
+        public boolean isComponentSpecific() {
+            return false;
+        }
+
+        @Override
+        public Class<? extends ParserTaskScheduler> getScheduler() {
+            return ParserTaskScheduler.CONTENT_SENSITIVE_TASK_SCHEDULER;
         }
 
     }

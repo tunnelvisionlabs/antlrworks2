@@ -49,6 +49,8 @@ import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.netbeans.parsing.spi.ParserTaskProvider;
 import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenSource;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.works.editor.grammar.GrammarEditorKit;
@@ -96,6 +98,9 @@ public class ReferenceAnchorsParserTask implements ParserTask {
         parser.setBuildParseTree(true);
         GrammarParser.grammarSpecContext parseResult = parser.grammarSpec();
 
+        ParserData<ParserRuleContext<Token>> parseTreeResult = new BaseParserData<ParserRuleContext<Token>>(GrammarParserDataDefinitions.REFERENCE_PARSE_TREE, snapshot, parseResult);
+        results.addResult(parseTreeResult);
+
         GrammarParserAnchorListener listener = new GrammarParserAnchorListener(snapshot);
         ParseTreeWalker.DEFAULT.walk(listener, parseResult);
         ParserData<List<Anchor>> result = new BaseParserData<List<Anchor>>(GrammarParserDataDefinitions.REFERENCE_ANCHOR_POINTS, snapshot, listener.getAnchors());
@@ -128,7 +133,10 @@ public class ReferenceAnchorsParserTask implements ParserTask {
         private static final Collection<ParserDataDefinition<?>> INPUTS =
             Collections.<ParserDataDefinition<?>>emptyList();
         private static final Collection<ParserDataDefinition<?>> OUTPUTS =
-            Arrays.<ParserDataDefinition<?>>asList(GrammarParserDataDefinitions.REFERENCE_ANCHOR_POINTS, GrammarParserDataDefinitions.FILE_MODEL);
+            Arrays.<ParserDataDefinition<?>>asList(
+                GrammarParserDataDefinitions.REFERENCE_ANCHOR_POINTS,
+                GrammarParserDataDefinitions.REFERENCE_PARSE_TREE,
+                GrammarParserDataDefinitions.FILE_MODEL);
 
         @Override
         public Collection<ParserDataDefinition<?>> getInputs() {
