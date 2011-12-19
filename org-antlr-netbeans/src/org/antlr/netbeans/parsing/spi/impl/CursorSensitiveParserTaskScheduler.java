@@ -29,10 +29,7 @@ package org.antlr.netbeans.parsing.spi.impl;
 
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
-import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
-import org.antlr.netbeans.editor.text.VersionedDocument;
-import org.antlr.netbeans.editor.text.VersionedDocumentUtilities;
 import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
 import org.openide.util.lookup.ServiceProvider;
 
