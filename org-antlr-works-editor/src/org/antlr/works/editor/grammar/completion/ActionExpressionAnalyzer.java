@@ -66,13 +66,12 @@ public class ActionExpressionAnalyzer extends BlankGrammarParserListener {
     @Override
     public void enterRule(actionScopeExpressionContext ctx) {
         if (ctx.op != null && ctx.member == null) {
-            /* action scope expressions are only used for label or rule references
-             *   $ruleName::  (direct reference)
-             *   $labelName:: (indirect reference)
+            /* action scope expressions are only used for rule references
+             *   $ruleName::
              */
 
             ruleContext enclosingRule = getEnclosingRuleContext(ctx);
-            RuleModel referencedRule = getReferencedRule(enclosingRule, ctx.ref);
+            RuleModel referencedRule = getReferencedRule(enclosingRule, ctx.ref, false);
             if (referencedRule != null) {
                 // for a scope reference, we can reference the parameters, locals, return values, and labels
                 members.addAll(referencedRule.getParameters());
@@ -86,13 +85,13 @@ public class ActionExpressionAnalyzer extends BlankGrammarParserListener {
     @Override
     public void enterRule(actionExpressionContext ctx) {
         if (ctx.op != null && ctx.member == null) {
-            /* action scope expressions are only used for label or rule references
-             *   $ruleName::  (direct reference)
-             *   $labelName:: (indirect reference)
+            /* action expressions are used for label references (explicit or implicit)
+             *   $elementName. (implicit label reference)
+             *   $labelName.   (explicit label reference)
              */
 
             ruleContext enclosingRule = getEnclosingRuleContext(ctx);
-            RuleModel referencedRule = getReferencedRule(enclosingRule, ctx.ref);
+            RuleModel referencedRule = getReferencedRule(enclosingRule, ctx.ref, true);
             if (referencedRule != null) {
                 // for a regular reference, we can reference the return values and labels
                 members.addAll(referencedRule.getReturnValues());
@@ -106,17 +105,20 @@ public class ActionExpressionAnalyzer extends BlankGrammarParserListener {
         }
     }
 
-    private RuleModel getReferencedRule(ruleContext enclosingRule, Token reference) {
+    private RuleModel getReferencedRule(ruleContext enclosingRule, Token reference, boolean followLabels) {
         String enclosingRuleName = enclosingRule.name.start.getText();
         RuleModel ruleModel = fileModel.getRule(enclosingRuleName);
         RuleModel referencedRule = null;
-        /* first try for a label reference. even though labels are not allowed to
-         * alias rule names, we want to minimize the impact of this restriction
-         * on the ability of code completion to provide useful results.
-         */
-        LabelModel label = ruleModel.getLabel(reference.getText().substring(1));
-        if (label != null) {
-            throw new UnsupportedOperationException("Not implemented yet.");
+
+        if (followLabels) {
+            /* first try for a label reference. even though labels are not allowed to
+             * alias rule names, we want to minimize the impact of this restriction
+             * on the ability of code completion to provide useful results.
+             */
+            LabelModel label = ruleModel.getLabel(reference.getText().substring(1));
+            if (label != null) {
+                throw new UnsupportedOperationException("Not implemented yet.");
+            }
         }
 
         if (referencedRule == null) {
