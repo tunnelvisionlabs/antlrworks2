@@ -212,7 +212,7 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
         }
 
         List<ScheduledFuture<ParserData<?>>> futures = new ArrayList<ScheduledFuture<ParserData<?>>>();
-        for (ParserDataDefinition<?> dataDefinition : data) {
+        for (ParserDataDefinition dataDefinition : data) {
             futures.add((ScheduledFuture<ParserData<?>>)schedule(document, component, dataDefinition, delay, timeUnit));
         }
 
