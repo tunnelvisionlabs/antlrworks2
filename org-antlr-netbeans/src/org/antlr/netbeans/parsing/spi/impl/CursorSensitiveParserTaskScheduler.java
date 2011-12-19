@@ -56,6 +56,7 @@ public class CursorSensitiveParserTaskScheduler extends CurrentDocumentParserTas
         }
 
         super.setEditor(editor);
+        currentEditor = editor;
 
         if (editor != null) {
             if (caretListener == null) {
