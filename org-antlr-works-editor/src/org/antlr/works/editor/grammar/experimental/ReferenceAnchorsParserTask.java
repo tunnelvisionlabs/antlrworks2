@@ -27,22 +27,17 @@
  */
 package org.antlr.works.editor.grammar.experimental;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
-import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
 import org.antlr.netbeans.editor.classification.TokenTag;
-import org.antlr.netbeans.editor.tagging.TaggedPositionRegion;
 import org.antlr.netbeans.editor.tagging.Tagger;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
-import org.antlr.netbeans.editor.text.DocumentSnapshotLine;
-import org.antlr.netbeans.editor.text.NormalizedSnapshotPositionRegionCollection;
-import org.antlr.netbeans.editor.text.SnapshotPositionRegion;
 import org.antlr.netbeans.editor.text.VersionedDocument;
 import org.antlr.netbeans.parsing.spi.BaseParserData;
 import org.antlr.netbeans.parsing.spi.ParserData;
@@ -53,16 +48,13 @@ import org.antlr.netbeans.parsing.spi.ParserTaskDefinition;
 import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.netbeans.parsing.spi.ParserTaskProvider;
 import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
-import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenSource;
-import org.antlr.v4.runtime.atn.ParserATNSimulator;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.works.editor.grammar.GrammarEditorKit;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
+import org.antlr.works.editor.grammar.codemodel.FileModel;
 import org.antlr.works.editor.grammar.experimental.GrammarParserAnchorListener.Anchor;
-import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 
 /**
@@ -105,10 +97,14 @@ public class ReferenceAnchorsParserTask implements ParserTask {
         GrammarParser.grammarSpecContext parseResult = parser.grammarSpec();
 
         GrammarParserAnchorListener listener = new GrammarParserAnchorListener(snapshot);
-        ParseTreeWalker walker = new ParseTreeWalker();
-        walker.walk(listener, parseResult);
+        ParseTreeWalker.DEFAULT.walk(listener, parseResult);
         ParserData<List<Anchor>> result = new BaseParserData<List<Anchor>>(GrammarParserDataDefinitions.REFERENCE_ANCHOR_POINTS, snapshot, listener.getAnchors());
         results.addResult(result);
+
+        CodeModelBuilderListener codeModelBuilderListener = new CodeModelBuilderListener(snapshot, tokenStream);
+        ParseTreeWalker.DEFAULT.walk(codeModelBuilderListener, parseResult);
+        ParserData<FileModel> fileModelResult = new BaseParserData<FileModel>(GrammarParserDataDefinitions.FILE_MODEL, snapshot, codeModelBuilderListener.getFileModel());
+        results.addResult(fileModelResult);
     }
 
     private static class InterruptableTokenStream extends CommonTokenStream {
@@ -132,7 +128,7 @@ public class ReferenceAnchorsParserTask implements ParserTask {
         private static final Collection<ParserDataDefinition<?>> INPUTS =
             Collections.<ParserDataDefinition<?>>emptyList();
         private static final Collection<ParserDataDefinition<?>> OUTPUTS =
-            Collections.<ParserDataDefinition<?>>singletonList(GrammarParserDataDefinitions.REFERENCE_ANCHOR_POINTS);
+            Arrays.<ParserDataDefinition<?>>asList(GrammarParserDataDefinitions.REFERENCE_ANCHOR_POINTS, GrammarParserDataDefinitions.FILE_MODEL);
 
         @Override
         public Collection<ParserDataDefinition<?>> getInputs() {

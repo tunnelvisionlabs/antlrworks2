@@ -75,11 +75,23 @@ public class BlankGrammarParserListener implements GrammarParserListener {
 	@Override public void enterRule(GrammarParser.actionScopeExpressionContext ctx) { }
 	@Override public void exitRule(GrammarParser.actionScopeExpressionContext ctx) { }
 
-	@Override public void enterRule(GrammarParser.actionIgnoredContext ctx) { }
-	@Override public void exitRule(GrammarParser.actionIgnoredContext ctx) { }
-
 	@Override public void enterRule(GrammarParser.argActionBlockContext ctx) { }
 	@Override public void exitRule(GrammarParser.argActionBlockContext ctx) { }
+
+	@Override public void enterRule(GrammarParser.argActionParametersContext ctx) { }
+	@Override public void exitRule(GrammarParser.argActionParametersContext ctx) { }
+
+	@Override public void enterRule(GrammarParser.argActionParameterContext ctx) { }
+	@Override public void exitRule(GrammarParser.argActionParameterContext ctx) { }
+
+	@Override public void enterRule(GrammarParser.argActionParameterTypeContext ctx) { }
+	@Override public void exitRule(GrammarParser.argActionParameterTypeContext ctx) { }
+
+	@Override public void enterRule(GrammarParser.argActionParameterTypePartContext ctx) { }
+	@Override public void exitRule(GrammarParser.argActionParameterTypePartContext ctx) { }
+
+	@Override public void enterRule(GrammarParser.ignoredContext ctx) { }
+	@Override public void exitRule(GrammarParser.ignoredContext ctx) { }
 
 	@Override public void enterRule(GrammarParser.actionContext ctx) { }
 	@Override public void exitRule(GrammarParser.actionContext ctx) { }

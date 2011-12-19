@@ -32,6 +32,7 @@ import org.antlr.netbeans.editor.classification.TokenTag;
 import org.antlr.netbeans.editor.tagging.Tagger;
 import org.antlr.netbeans.parsing.spi.ParserDataDefinition;
 import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
+import org.antlr.works.editor.grammar.codemodel.FileModel;
 import org.antlr.works.editor.grammar.experimental.CurrentRuleContextData;
 import org.antlr.works.editor.grammar.experimental.GrammarParserAnchorListener.Anchor;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
@@ -45,6 +46,7 @@ public class GrammarParserDataDefinitions {
     public static final ParserDataDefinition<List<Anchor>> DYNAMIC_ANCHOR_POINTS = new DynamicAnchorPointsDataDefinition();
     public static final ParserDataDefinition<Tagger<TokenTag>> LEXER_TOKENS = new LexerTokensDataDefinition();
     public static final ParserDataDefinition<CurrentRuleContextData> CURRENT_RULE_CONTEXT = new CurrentRuleContextDataDefinition();
+    public static final ParserDataDefinition<FileModel> FILE_MODEL = new FileModelDataDefinition();
 
     private GrammarParserDataDefinitions() {
     }
@@ -67,6 +69,11 @@ public class GrammarParserDataDefinitions {
     @MimeRegistration(mimeType=GrammarEditorKit.GRAMMAR_MIME_TYPE, service=ParserDataDefinition.class)
     public static ParserDataDefinition<CurrentRuleContextData> getCurrentRuleContextDataDefinition() {
         return CURRENT_RULE_CONTEXT;
+    }
+
+    @MimeRegistration(mimeType=GrammarEditorKit.GRAMMAR_MIME_TYPE, service=ParserDataDefinition.class)
+    public static ParserDataDefinition<FileModel> getFileModelDataDefinition() {
+        return FILE_MODEL;
     }
 
     private static final class ReferenceAnchorPointsDataDefinition implements ParserDataDefinition<List<Anchor>> {
@@ -144,6 +151,25 @@ public class GrammarParserDataDefinitions {
         @Override
         public Class<? extends ParserTaskScheduler> getScheduler() {
             return ParserTaskScheduler.CURSOR_SENSITIVE_TASK_SCHEDULER;
+        }
+
+    }
+
+    private static final class FileModelDataDefinition implements ParserDataDefinition<FileModel> {
+
+        @Override
+        public Class<FileModel> getDataType() {
+            return FileModel.class;
+        }
+
+        @Override
+        public boolean isComponentSpecific() {
+            return false;
+        }
+
+        @Override
+        public Class<? extends ParserTaskScheduler> getScheduler() {
+            return ParserTaskScheduler.CONTENT_SENSITIVE_TASK_SCHEDULER;
         }
 
     }

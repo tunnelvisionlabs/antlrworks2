@@ -74,11 +74,23 @@ public interface GrammarParserListener extends ParseTreeListener<Token> {
 	void enterRule(GrammarParser.actionScopeExpressionContext ctx);
 	void exitRule(GrammarParser.actionScopeExpressionContext ctx);
 
-	void enterRule(GrammarParser.actionIgnoredContext ctx);
-	void exitRule(GrammarParser.actionIgnoredContext ctx);
-
 	void enterRule(GrammarParser.argActionBlockContext ctx);
 	void exitRule(GrammarParser.argActionBlockContext ctx);
+
+	void enterRule(GrammarParser.argActionParametersContext ctx);
+	void exitRule(GrammarParser.argActionParametersContext ctx);
+
+	void enterRule(GrammarParser.argActionParameterContext ctx);
+	void exitRule(GrammarParser.argActionParameterContext ctx);
+
+	void enterRule(GrammarParser.argActionParameterTypeContext ctx);
+	void exitRule(GrammarParser.argActionParameterTypeContext ctx);
+
+	void enterRule(GrammarParser.argActionParameterTypePartContext ctx);
+	void exitRule(GrammarParser.argActionParameterTypePartContext ctx);
+
+	void enterRule(GrammarParser.ignoredContext ctx);
+	void exitRule(GrammarParser.ignoredContext ctx);
 
 	void enterRule(GrammarParser.actionContext ctx);
 	void exitRule(GrammarParser.actionContext ctx);

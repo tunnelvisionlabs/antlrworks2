@@ -324,7 +324,8 @@ actionBlock
             (   actionBlock
             |   actionExpression
             |   actionScopeExpression
-            |   actionIgnored
+            |   ACTION_WS
+            |   ACTION_NEWLINE
             |   ACTION_COMMENT
             |   ACTION_LITERAL
             |   ACTION_TEXT
@@ -348,17 +349,11 @@ actionBlock
     ;
 
 actionExpression
-    :   ACTION_REFERENCE actionIgnored* ACTION_DOT actionIgnored* ACTION_WORD
+    :   ref=ACTION_REFERENCE ignored* op=ACTION_DOT ignored* member=ACTION_WORD
     ;
 
 actionScopeExpression
-    :   ACTION_REFERENCE actionIgnored* (ACTION_LBRACK actionIgnored* (ACTION_MINUS actionIgnored*)? ACTION_WORD actionIgnored* ACTION_RBRACK actionIgnored*)? ACTION_COLON2 actionIgnored* ACTION_WORD
-    ;
-
-actionIgnored
-    :   ACTION_WS
-    |   ACTION_NEWLINE
-    |   ACTION_COMMENT
+    :   ref=ACTION_REFERENCE ignored* (ACTION_LBRACK ignored* (neg=ACTION_MINUS ignored*)? index=ACTION_WORD ignored* ACTION_RBRACK ignored*)? op=ACTION_COLON2 ignored* member=ACTION_WORD
     ;
 
 argActionBlock
@@ -373,8 +368,38 @@ argActionBlock
             |   ARG_ACTION_COMMA
             |   ARG_ACTION_ESCAPE
             |   ARG_ACTION_WORD
+            |   ARG_ACTION_WS
+            |   ARG_ACTION_NEWLINE
             )*
         END_ARG_ACTION
+    ;
+
+argActionParameters
+    :   BEGIN_ARG_ACTION
+            ignored* (parameters+=argActionParameter ignored* (ARG_ACTION_COMMA ignored* parameters+=argActionParameter ignored*)*)?
+        END_ARG_ACTION
+    ;
+
+argActionParameter
+    :   type=argActionParameterType? ignored* name=ARG_ACTION_WORD
+    ;
+
+argActionParameterType
+    :   argActionParameterTypePart (ignored* argActionParameterTypePart)*
+    ;
+
+argActionParameterTypePart
+    :   ARG_ACTION_WORD
+    |   ARG_ACTION_LT argActionParameterType? ARG_ACTION_GT
+    |   ARG_ACTION_LPAREN argActionParameterType? ARG_ACTION_RPAREN
+    ;
+
+ignored
+    :   ACTION_WS
+    |   ACTION_NEWLINE
+    |   ACTION_COMMENT
+    |   ARG_ACTION_WS
+    |   ARG_ACTION_NEWLINE
     ;
 
 // A declaration of a language target specifc section,
@@ -456,7 +481,7 @@ rule
 	  // semantic verifcation, type assignment etc. We require that
 	  // the input parameters are the next syntactically significant element
 	  // following the rule id.
-	  argActionBlock?
+	  parameters=argActionParameters?
 
 	  ruleReturns?
 
@@ -537,7 +562,7 @@ rulePrequel
 // as a single lexical action element, to be processed later.
 //
 ruleReturns
-	: RETURNS/*^*/ argActionBlock/*<ActionAST>*/
+	: RETURNS/*^*/ values=argActionParameters/*<ActionAST>*/
 	;
 
 // --------------
@@ -556,7 +581,7 @@ throwsSpec
     ;
 
 // locals [Cat x, float g]
-locals_ : LOCALS/*^*/ argActionBlock/*<ActionAST>*/ ;
+locals_ : LOCALS/*^*/ values=argActionParameters/*<ActionAST>*/ ;
 
 // @ Sections are generally target language specific things
 // such as local variable declarations, code to run before the
@@ -688,7 +713,7 @@ element
 	//}
 
 labeledElement
-	:	id (ass=ASSIGN|ass=PLUS_ASSIGN)
+	:	label=id (ass=ASSIGN|ass=PLUS_ASSIGN)
 		(	atom						//-> ^($ass id atom)
 		|	block (op=ROOT|op=BANG)?	//-> {$op!=null}? ^($ass id ^($op block))
 										//->				^($ass id block)

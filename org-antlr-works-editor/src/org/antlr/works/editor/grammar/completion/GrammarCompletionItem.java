@@ -59,6 +59,7 @@ public abstract class GrammarCompletionItem implements CompletionItem {
     public static final int RULE_SORT_PRIORITY = 100;
     public static final int ELEMENT_REFERENCE_SORT_PRIORITY = 100;
     public static final int PROPERTY_SORT_PRIORITY = 100;
+    public static final int MEMBER_SORT_PRIORITY = 100;
     public static final int DECLARATION_SORT_PRIORITY = -100;
 
     public static final String KEYWORD_COLOR = "<font color=#000099>"; //NOI18N

@@ -77,9 +77,15 @@ import org.antlr.v4.runtime.atn.WildcardTransition;
 import org.antlr.v4.runtime.misc.IntervalSet;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import org.antlr.v4.runtime.tree.Tree;
+import org.antlr.v4.runtime.tree.Trees;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
+import org.antlr.works.editor.grammar.codemodel.AttributeModel;
+import org.antlr.works.editor.grammar.codemodel.FileModel;
 import org.antlr.works.editor.grammar.experimental.GrammarLexer;
 import org.antlr.works.editor.grammar.experimental.GrammarParser;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.actionExpressionContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.actionScopeExpressionContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParserAnchorListener;
 import org.antlr.works.editor.grammar.experimental.TaggerTokenSource;
 import org.antlr.works.editor.grammar.navigation.GrammarNode;
@@ -614,6 +620,70 @@ public final class GrammarCompletionQuery extends AsyncCompletionQuery {
                             }
                         }
 
+                        /*
+                         * EXPRESSION ANALYSIS
+                         */
+                        FileModel fileModel = null;
+                        boolean fileModelDataFailed = false;
+                        boolean inExpression = false;
+
+                        for (Map.Entry<RuleContext, CaretReachedException> entry : parseTrees.entrySet()) {
+                            RuleContext finalContext = entry.getValue() != null ? entry.getValue().getFinalContext() : null;
+                            if (finalContext == null) {
+                                continue;
+                            }
+
+                            ParseTree expressionRoot = null;
+                            if (finalContext instanceof actionScopeExpressionContext
+                                || finalContext instanceof actionExpressionContext) {
+                                expressionRoot = finalContext;
+                            }
+
+                            for (Tree tree : Trees.getAncestors(finalContext)) {
+                                if (tree instanceof actionScopeExpressionContext
+                                    || tree instanceof actionExpressionContext) {
+                                    expressionRoot = (ParseTree)tree;
+                                }
+                            }
+
+                            if (expressionRoot == null) {
+                                continue;
+                            } else if (expressionRoot instanceof actionScopeExpressionContext) {
+                                if (((actionScopeExpressionContext)expressionRoot).op == null) {
+                                    continue;
+                                }
+                            } else if (expressionRoot instanceof actionExpressionContext) {
+                                if (((actionExpressionContext)expressionRoot).op == null) {
+                                    continue;
+                                }
+                            }
+
+                            if (fileModel == null && !fileModelDataFailed) {
+                                Future<ParserData<FileModel>> futureFileModelData = taskManager.getData(snapshot, GrammarParserDataDefinitions.FILE_MODEL, EnumSet.of(ParserDataOptions.SYNCHRONOUS));
+                                try {
+                                    fileModel = futureFileModelData.get().getData();
+                                } catch (InterruptedException ex) {
+                                    Exceptions.printStackTrace(ex);
+                                    fileModelDataFailed = true;
+                                } catch (ExecutionException ex) {
+                                    Exceptions.printStackTrace(ex);
+                                    fileModelDataFailed = true;
+                                }
+                            }
+
+                            if (fileModel == null) {
+                                continue;
+                            }
+
+                            inExpression = true;
+                            ActionExpressionAnalyzer expressionAnalyzer = new ActionExpressionAnalyzer(fileModel, finalContext);
+                            ParseTreeWalker.DEFAULT.walk(expressionAnalyzer, expressionRoot);
+                            for (AttributeModel member : expressionAnalyzer.getMembers()) {
+                                CompletionItem item = new MemberCompletionItem(member);
+                                intermediateResults.put(item.getInsertPrefix().toString(), item);
+                            }
+                        }
+
                         for (Map.Entry<RuleContext, CaretReachedException> entry : parseTrees.entrySet()) {
                             ParseTree parseTree = entry.getKey();
                             RuleContext finalContext = entry.getValue() != null ? entry.getValue().getFinalContext() : null;
@@ -639,7 +709,7 @@ public final class GrammarCompletionQuery extends AsyncCompletionQuery {
                                 }
                             }
 
-                            if (possibleInAction || possibleInRewrite) {
+                            if (!inExpression && (possibleInAction || possibleInRewrite)) {
                                 if (!definiteInAction && labelAnalyzer.getEnclosingRuleName() != null) {
                                     CompletionItem item = new EnclosingRuleCompletionItem(labelAnalyzer.getEnclosingRuleName());
                                     intermediateResults.put(item.getInsertPrefix().toString(), item);
@@ -657,7 +727,7 @@ public final class GrammarCompletionQuery extends AsyncCompletionQuery {
                                     }
                                 }
 
-                                if (possibleInAction) {
+                                if (possibleInAction && !inExpression) {
                                     for (Token implicit : labelAnalyzer.getUnlabeledElements()) {
                                         CompletionItem item = new ActionReferenceCompletionItem(implicit, false);
                                         intermediateResults.put(item.getInsertPrefix().toString(), item);

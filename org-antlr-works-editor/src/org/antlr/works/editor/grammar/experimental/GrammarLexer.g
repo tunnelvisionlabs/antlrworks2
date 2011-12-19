@@ -604,7 +604,17 @@ mode ArgAction;
             |   '\\'
             |   '=' | ',' | '<' | '>' | '(' | ')'
             |   '$' | 'a'..'z' | 'A'..'Z' | '0'..'9' | '_'
+            |   ' ' | '\t' | '\r' | '\n'
             )+
+        ;
+
+    ARG_ACTION_WS
+        :   (' ' | '\t')+
+        ;
+
+    ARG_ACTION_NEWLINE
+        :   '\r' '\n'?
+        |   '\n'
         ;
 
     END_ARG_ACTION
