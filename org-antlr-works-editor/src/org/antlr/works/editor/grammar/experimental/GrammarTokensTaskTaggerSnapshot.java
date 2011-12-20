@@ -111,7 +111,7 @@ class GrammarTokensTaskTaggerSnapshot extends AbstractTagger<TokenTag> {
 
                 /* processChange */
                 int lineNumberFromPosition = source.findLineNumber(oldOffset);
-                int num2 = source.findLineNumber(oldOffset + oldLength);
+                int num2 = source.findLineNumber(oldOffset + oldLength - 1);
                 if (lineCountDelta < 0) {
                     lineStates.subList(lineNumberFromPosition, lineNumberFromPosition + Math.abs(lineCountDelta)).clear();
                 } else if (lineCountDelta > 0) {

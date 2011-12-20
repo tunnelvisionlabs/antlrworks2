@@ -178,7 +178,7 @@ public class LineTextCache {
                 previousLineEnded = lastLine.charAt(lastLine.length() - 1) == '\n';
             }
 
-            if (!previousLineEnded && (currentChange == null || getLineEnd(oldBlock, oldLine) <= currentChange.getOldOffset())) {
+            if (!previousLineEnded && (currentChange == null || lineEndsBeforeChange(oldBlock, oldLine, currentChange))) {
                 if (modifiedBlock == null) {
                     modifiedBlock = new ArrayList<String>();
                 }
@@ -204,42 +204,52 @@ public class LineTextCache {
             }
 
             // 2. finish off the current block if necessary
-            if (modifiedBlock != null && (currentChange == null || getBlockEnd(oldBlock) <= currentChange.getOldOffset())) {
+            if (modifiedBlock != null && (currentChange == null || blockEndsBeforeChange(oldBlock, currentChange))) {
                 assert oldColumn == 0 : "Should be at the beginning of a line.";
 
-                List<String> remainingLines = lineData.get(oldBlock).subList(oldBlockLine, lineData.get(oldBlock).size());
-                if (modifiedBlock.size() + lineData.get(oldBlock).size() - oldBlockLine < MaximumBlockLength) {
-                    modifiedBlock.addAll(remainingLines);
-                    for (String text : remainingLines) {
-                        newPosition += text.length();
-                    }
-
+                if (oldBlock == lineData.size()) {
+                    // special handling for updates at the end of the last block
                     if (!modifiedBlock.isEmpty()) {
                         next.lineData.add(modifiedBlock);
                     }
+
+                    modifiedBlock = null;
                 } else {
-                    if (!modifiedBlock.isEmpty()) {
-                        next.lineData.add(modifiedBlock);
-                    }
-                    if (oldBlockLine > 0) {
-                        next.lineData.add(new ArrayList<String>(remainingLines));
+                    List<String> remainingLines = lineData.get(oldBlock).subList(oldBlockLine, lineData.get(oldBlock).size());
+                    if (modifiedBlock.size() + lineData.get(oldBlock).size() - oldBlockLine < MaximumBlockLength) {
+                        modifiedBlock.addAll(remainingLines);
+                        for (String text : remainingLines) {
+                            newPosition += text.length();
+                        }
+
+                        if (!modifiedBlock.isEmpty()) {
+                            next.lineData.add(modifiedBlock);
+                        }
                     } else {
-                        next.lineData.add(lineData.get(oldBlock));
+                        if (!modifiedBlock.isEmpty()) {
+                            next.lineData.add(modifiedBlock);
+                        }
+
+                        if (oldBlockLine > 0) {
+                            next.lineData.add(new ArrayList<String>(remainingLines));
+                        } else {
+                            next.lineData.add(lineData.get(oldBlock));
+                        }
+
+                        for (String text : remainingLines) {
+                            newPosition += text.length();
+                        }
                     }
 
-                    for (String text : remainingLines) {
-                        newPosition += text.length();
-                    }
+                    modifiedBlock = null;
+                    oldLine = blockLineOffsets.get(oldBlock) + lineData.get(oldBlock).size();
+                    oldBlock++;
+                    oldBlockLine = 0;
                 }
-
-                modifiedBlock = null;
-                oldLine = blockLineOffsets.get(oldBlock) + lineData.get(oldBlock).size();
-                oldBlock++;
-                oldBlockLine = 0;
             }
 
             // 3. move any whole blocks we can
-            while (oldBlock < lineData.size() && (currentChange == null || getBlockEnd(oldBlock) <= currentChange.getOldOffset())) {
+            while (oldBlock < lineData.size() && (currentChange == null || blockEndsBeforeChange(oldBlock, currentChange))) {
                 if (modifiedBlock != null) {
                     if (!modifiedBlock.isEmpty()) {
                         next.lineData.add(modifiedBlock);
@@ -255,7 +265,7 @@ public class LineTextCache {
             }
 
             // 4. now move any whole lines we can
-            while (oldLine < getLineCount() && (currentChange == null || getLineEnd(oldBlock, oldLine) <= currentChange.getOldOffset())) {
+            while (oldLine < getLineCount() && (currentChange == null || lineEndsBeforeChange(oldBlock, oldLine, currentChange))) {
                 if (modifiedBlock != null && modifiedBlock.size() == MaximumBlockLength) {
                     next.lineData.add(modifiedBlock);
                     modifiedBlock = null;
@@ -377,6 +387,24 @@ public class LineTextCache {
 //        assert next.getLength() == next.getBlockEnd(next.lineData.size() - 1) : "Lengths should match";
 
         return next;
+    }
+
+    public boolean lineEndsBeforeChange(int block, int line, DocumentChange change) {
+        if (getLineEnd(block, line) < change.getOldOffset()) {
+            return true;
+        }
+
+        return getLineEnd(block, line) == change.getOldOffset()
+            && line < getLineCount() - 1;
+    }
+
+    public boolean blockEndsBeforeChange(int block, DocumentChange change) {
+        if (getBlockEnd(block) < change.getOldOffset()) {
+            return true;
+        }
+
+        return getBlockEnd(block) == change.getOldOffset()
+            && block < lineData.size() - 1;
     }
 
     public int getBlockEnd(int block) {
