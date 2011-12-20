@@ -53,6 +53,7 @@ import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.atn.LexerATNSimulator;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;
+import org.openide.util.Exceptions;
 import org.openide.util.Parameters;
 
 /**
@@ -248,10 +249,10 @@ class GrammarTokensTaskTaggerSnapshot extends AbstractTagger<TokenTag> {
                     if (token.getType() == Token.EOF)
                         startLineCurrent = snapshot.getLineCount();
                     else
-                        startLineCurrent = token.getLine();
+                        startLineCurrent = snapshot.findLineNumber(token.getStartIndex());
 
-                    if (previousToken == null || previousToken.getLine() < startLineCurrent - 1)
-                    {
+//                    if (previousToken == null || previousToken.getLine() < startLineCurrent - 1)
+//                    {
                         // endLinePrevious is the line number the previous token ended on
                         int endLinePrevious;
                         if (previousToken != null)
@@ -259,7 +260,7 @@ class GrammarTokensTaskTaggerSnapshot extends AbstractTagger<TokenTag> {
                         else
                             endLinePrevious = snapshot.findLineNumber(span.getStart()) - 1;
 
-                        if (startLineCurrent > endLinePrevious + 1)
+                        if (startLineCurrent > endLinePrevious + 1 || (startLineCurrent == endLinePrevious + 1 && !previousTokenEndsLine))
                         {
                             int firstMultilineLine = endLinePrevious;
                             if (previousToken == null || previousTokenEndsLine)
@@ -274,14 +275,11 @@ class GrammarTokensTaskTaggerSnapshot extends AbstractTagger<TokenTag> {
                                     setLineState(i, lineStates.get(i).createMultiLineState());
                             }
                         }
-                    }
+//                    }
                 }
 
                 if (token.getType() == Token.EOF)
                     break;
-
-                previousToken = token;
-                previousTokenEndsLine = tokenEndsAtEndOfLine(lexer, token);
 
                 if (updateOffsets && isMultiLineToken(lexer, token))
                 {
@@ -297,7 +295,7 @@ class GrammarTokensTaskTaggerSnapshot extends AbstractTagger<TokenTag> {
                     }
                 }
 
-                boolean tokenEndsLine = previousTokenEndsLine;
+                boolean tokenEndsLine = tokenEndsAtEndOfLine(lexer, token);
                 if (updateOffsets && tokenEndsLine)
                 {
                     LexerState stateAtEndOfLine = lexer.getState();
@@ -328,19 +326,25 @@ class GrammarTokensTaskTaggerSnapshot extends AbstractTagger<TokenTag> {
                     }
                 }
 
-                if (token.getStartIndex() >= span.getEnd())
-                    break;
+                previousToken = token;
+                previousTokenEndsLine = tokenEndsLine;
 
-                if (token.getStopIndex() < requestedSpan.getStart())
+                if (token.getStartIndex() >= span.getEnd()) {
+                    break;
+                }
+
+                if (token.getStopIndex() < requestedSpan.getStart()) {
                     continue;
+                }
 
                 Collection<TaggedPositionRegion<TokenTag>> tokenClassificationSpans = getTagsForToken(token);
                 if (tokenClassificationSpans != null) {
                     tags.addAll(tokenClassificationSpans);
                 }
 
-                if (!inBounds)
+                if (!inBounds) {
                     break;
+                }
             }
         }
 
@@ -419,9 +423,9 @@ class GrammarTokensTaskTaggerSnapshot extends AbstractTagger<TokenTag> {
     }
 
     protected boolean isMultiLineToken(TokenSourceWithStateV4<LexerState> lexer, CommonToken token) {
-        if (lexer != null && lexer.getLine() > token.getLine()) {
+        /*if (lexer != null && lexer.getLine() > token.getLine()) {
             return true;
-        }
+        }*/
 
         int startLine = snapshot.findLineNumber(token.getStartIndex());
         int stopLine = snapshot.findLineNumber(token.getStopIndex() + 1);
@@ -440,7 +444,14 @@ class GrammarTokensTaskTaggerSnapshot extends AbstractTagger<TokenTag> {
             return c == '\r' || c == '\n';
         }
 
-        int line = snapshot.findLineNumber(token.getStopIndex() + 1);
+        if (token.getStopIndex() + 1 >= snapshot.length()) {
+            return true;
+        }
+
+        char c = snapshot.subSequence(token.getStopIndex() + 1, token.getStopIndex() + 1).charAt(0);
+        return c == '\r' || c == '\n';
+
+        /*int line = snapshot.findLineNumber(token.getStopIndex() + 1);
         int lineStart = snapshot.findLineFromOffset(line).getStart().getOffset();
         int nextLineStart = snapshot.findLineFromOffset(line + 1).getStart().getOffset();
         int lineEnd = nextLineStart - 1;
@@ -451,7 +462,7 @@ class GrammarTokensTaskTaggerSnapshot extends AbstractTagger<TokenTag> {
             }
         }
 
-        return lineEnd <= token.getStopIndex() + 1 && nextLineStart >= token.getStopIndex() + 1;
+        return lineEnd <= token.getStopIndex() + 1 && nextLineStart >= token.getStopIndex() + 1;*/
     }
 
     protected CharStream createInputStream(OffsetRegion span) throws BadLocationException {

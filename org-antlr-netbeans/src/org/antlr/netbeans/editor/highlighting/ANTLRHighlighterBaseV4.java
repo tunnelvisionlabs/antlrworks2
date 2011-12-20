@@ -189,7 +189,7 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
                         else
                             endLinePrevious = NbDocument.findLineNumber(document, span.getStart()) - 1;
 
-                        if (startLineCurrent > endLinePrevious + 1)
+                        if (startLineCurrent > endLinePrevious + 1 || (startLineCurrent == endLinePrevious + 1 && !previousTokenEndsLine))
                         {
                             int firstMultilineLine = endLinePrevious;
                             if (previousToken == null || previousTokenEndsLine)
