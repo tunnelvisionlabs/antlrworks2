@@ -119,12 +119,20 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
         this.snapshot = snapshot;
         this.context = context;
         if (context != null) {
-            SyntaxBuilderListener listener = new SyntaxBuilderListener(grammarType, snapshot);
-            new ParseTreeWalker().walk(listener, context);
-            this.diagram = new Diagram(listener.getRule());
-            this.jScrollPane1.setViewportView(diagram);
-            this.jScrollPane1.validate();
-            this.diagram.getRule().updatePositions();
+            try {
+                SyntaxBuilderListener listener = new SyntaxBuilderListener(grammarType, snapshot);
+                new ParseTreeWalker().walk(listener, context);
+                this.diagram = new Diagram(listener.getRule());
+                this.jScrollPane1.setViewportView(diagram);
+                this.jScrollPane1.validate();
+                this.diagram.getRule().updatePositions();
+            } catch (NullPointerException ex) {
+                if (jScrollPane1 != null) {
+                    this.jScrollPane1.setViewportView(null);
+                }
+
+                this.diagram = null;
+            }
         }
     }
 
