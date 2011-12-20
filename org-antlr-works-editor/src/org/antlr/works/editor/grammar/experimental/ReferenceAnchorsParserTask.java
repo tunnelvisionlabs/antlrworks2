@@ -56,7 +56,8 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.works.editor.grammar.GrammarEditorKit;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
 import org.antlr.works.editor.grammar.codemodel.FileModel;
-import org.antlr.works.editor.grammar.experimental.GrammarParserAnchorListener.Anchor;
+import org.antlr.works.editor.shared.TaggerTokenSource;
+import org.antlr.works.editor.shared.completion.Anchor;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 
 /**

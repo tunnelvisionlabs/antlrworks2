@@ -36,7 +36,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.works.editor.grammar.codemodel.FileModel;
 import org.antlr.works.editor.grammar.experimental.CurrentRuleContextData;
-import org.antlr.works.editor.grammar.experimental.GrammarParserAnchorListener.Anchor;
+import org.antlr.works.editor.shared.completion.Anchor;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 
 /**

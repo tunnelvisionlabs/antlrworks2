@@ -87,10 +87,11 @@ import org.antlr.works.editor.grammar.experimental.GrammarParser;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.actionExpressionContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.actionScopeExpressionContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParserAnchorListener;
-import org.antlr.works.editor.grammar.experimental.TaggerTokenSource;
 import org.antlr.works.editor.grammar.navigation.GrammarNode;
 import org.antlr.works.editor.grammar.navigation.GrammarRulesPanel;
 import org.antlr.works.editor.grammar.navigation.GrammarRulesPanelUI;
+import org.antlr.works.editor.shared.TaggerTokenSource;
+import org.antlr.works.editor.shared.completion.Anchor;
 import org.netbeans.api.editor.completion.Completion;
 import org.netbeans.editor.BaseDocument;
 import org.netbeans.spi.editor.completion.CompletionDocumentation;
@@ -405,8 +406,8 @@ public final class GrammarCompletionQuery extends AsyncCompletionQuery {
                 return;
             }
 
-            List<GrammarParserAnchorListener.Anchor> anchors;
-            Future<ParserData<List<GrammarParserAnchorListener.Anchor>>> result =
+            List<Anchor> anchors;
+            Future<ParserData<List<Anchor>>> result =
                 taskManager.getData(snapshot, GrammarParserDataDefinitions.DYNAMIC_ANCHOR_POINTS, EnumSet.of(ParserDataOptions.SYNCHRONOUS));
             try {
                 anchors = result.get().getData();
@@ -418,14 +419,14 @@ public final class GrammarCompletionQuery extends AsyncCompletionQuery {
             }
 
             if (anchors != null) {
-                GrammarParserAnchorListener.Anchor enclosing = null;
-                GrammarParserAnchorListener.Anchor previous = null;
-                GrammarParserAnchorListener.Anchor next = null;
+                Anchor enclosing = null;
+                Anchor previous = null;
+                Anchor next = null;
 
                 /*
                  * parse the current rule
                  */
-                for (GrammarParserAnchorListener.Anchor anchor : anchors) {
+                for (Anchor anchor : anchors) {
                     if (anchor instanceof GrammarParserAnchorListener.GrammarTypeAnchor) {
                         grammarType = ((GrammarParserAnchorListener.GrammarTypeAnchor)anchor).getGrammarType();
                         continue;

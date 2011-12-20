@@ -52,6 +52,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.TokenSource;
 import org.antlr.works.editor.grammar.GrammarEditorKit;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
+import org.antlr.works.editor.shared.completion.Anchor;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 
 /**
@@ -80,20 +81,20 @@ public class CurrentRuleContextParserTask implements ParserTask {
 
         int caretOffset = component.getCaretPosition();
 
-        Future<ParserData<List<GrammarParserAnchorListener.Anchor>>> result =
+        Future<ParserData<List<Anchor>>> result =
             taskManager.getData(snapshot, GrammarParserDataDefinitions.DYNAMIC_ANCHOR_POINTS, EnumSet.of(ParserDataOptions.SYNCHRONOUS));
 
-        ParserData<List<GrammarParserAnchorListener.Anchor>> anchorsData = result.get();
-        List<GrammarParserAnchorListener.Anchor> anchors = anchorsData.getData();
+        ParserData<List<Anchor>> anchorsData = result.get();
+        List<Anchor> anchors = anchorsData.getData();
 
         if (anchors != null) {
-            GrammarParserAnchorListener.Anchor enclosing = null;
+            Anchor enclosing = null;
             int grammarType = -1;
 
             /*
              * parse the current rule
              */
-            for (GrammarParserAnchorListener.Anchor anchor : anchors) {
+            for (Anchor anchor : anchors) {
                 if (anchor instanceof GrammarParserAnchorListener.GrammarTypeAnchor) {
                     grammarType = ((GrammarParserAnchorListener.GrammarTypeAnchor)anchor).getGrammarType();
                     continue;

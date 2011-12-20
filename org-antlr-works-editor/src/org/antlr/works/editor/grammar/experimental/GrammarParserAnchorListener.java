@@ -28,6 +28,7 @@
 package org.antlr.works.editor.grammar.experimental;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
 import java.util.concurrent.CancellationException;
@@ -37,6 +38,8 @@ import org.antlr.netbeans.editor.text.TrackingPositionRegion;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.grammarTypeContext;
+import org.antlr.works.editor.shared.completion.AbstractAnchor;
+import org.antlr.works.editor.shared.completion.Anchor;
 import org.netbeans.api.annotations.common.NonNull;
 import org.openide.util.Parameters;
 
@@ -138,52 +141,22 @@ public class GrammarParserAnchorListener extends BlankGrammarParserListener {
         if (rule == GrammarParser.RULE_grammarType) {
             return new GrammarTypeAnchor((GrammarParser.grammarTypeContext)ctx, trackingSpan);
         } else {
-            return new AnchorImpl(trackingSpan, rule);
+            return new GrammarAnchor(trackingSpan, rule);
         }
     }
 
-    public interface Anchor {
-
-        public TrackingPositionRegion getSpan();
-
-        public int getRule();
-
-    }
-
-    public static class AnchorImpl implements Anchor {
-        private final TrackingPositionRegion span;
-        private final int rule;
-
-        private AnchorImpl(@NonNull TrackingPositionRegion span, int rule) {
-            Parameters.notNull("span", span);
-            this.span = span;
-            this.rule = rule;
+    public static class GrammarAnchor extends AbstractAnchor {
+        private GrammarAnchor(@NonNull TrackingPositionRegion span, int rule) {
+            super(span, rule);
         }
 
         @Override
-        public TrackingPositionRegion getSpan() {
-            return span;
-        }
-
-        @Override
-        public int getRule() {
-            return rule;
-        }
-
-        @Override
-        public String toString() {
-            String ruleName;
-            if (rule >= 0 && rule <= GrammarParser.ruleNames.length) {
-                ruleName = GrammarParser.ruleNames[rule];
-            } else {
-                ruleName = "?";
-            }
-
-            return ruleName + ": " + span.toString();
+        protected List<String> getRuleNames() {
+            return Arrays.asList(GrammarParser.ruleNames);
         }
     }
 
-    public static class GrammarTypeAnchor extends AnchorImpl {
+    public static class GrammarTypeAnchor extends GrammarAnchor {
 
         private final int grammarType;
 
