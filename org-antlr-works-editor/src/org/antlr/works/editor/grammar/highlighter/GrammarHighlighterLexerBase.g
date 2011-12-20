@@ -128,7 +128,7 @@ CHAR_LITERAL
 		(	'\\' .
 		|	~('\r' | '\n' | '\'' | '\\')
 		)*
-		'\''
+		'\''?
 	;
 
 STRING_LITERAL
@@ -136,7 +136,7 @@ STRING_LITERAL
 		(	'\\' .
 		|	~('\r' | '\n' | '"' | '\\')
 		)*
-		'"'
+		'"'?
 	;
 
 OPEN_ELEMENT_OPTION

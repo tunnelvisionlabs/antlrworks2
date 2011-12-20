@@ -1,4 +1,4 @@
-// $ANTLR 3.4 GrammarHighlighterLexerBase.g 2011-09-24 13:13:21
+// $ANTLR 3.4 GrammarHighlighterLexerBase.g 2011-12-19 20:28:35
 
 /*
  * [The "BSD license"]
@@ -683,8 +683,8 @@ public class GrammarHighlighterLexerBase extends Lexer {
         try {
             int _type = CHAR_LITERAL;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GrammarHighlighterLexerBase.g:127:2: ( '\\'' ( '\\\\' . |~ ( '\\r' | '\\n' | '\\'' | '\\\\' ) )* '\\'' )
-            // GrammarHighlighterLexerBase.g:127:4: '\\'' ( '\\\\' . |~ ( '\\r' | '\\n' | '\\'' | '\\\\' ) )* '\\''
+            // GrammarHighlighterLexerBase.g:127:2: ( '\\'' ( '\\\\' . |~ ( '\\r' | '\\n' | '\\'' | '\\\\' ) )* ( '\\'' )? )
+            // GrammarHighlighterLexerBase.g:127:4: '\\'' ( '\\\\' . |~ ( '\\r' | '\\n' | '\\'' | '\\\\' ) )* ( '\\'' )?
             {
             match('\''); 
 
@@ -734,7 +734,24 @@ public class GrammarHighlighterLexerBase extends Lexer {
             } while (true);
 
 
-            match('\''); 
+            // GrammarHighlighterLexerBase.g:131:3: ( '\\'' )?
+            int alt8=2;
+            int LA8_0 = input.LA(1);
+
+            if ( (LA8_0=='\'') ) {
+                alt8=1;
+            }
+            switch (alt8) {
+                case 1 :
+                    // GrammarHighlighterLexerBase.g:131:3: '\\''
+                    {
+                    match('\''); 
+
+                    }
+                    break;
+
+            }
+
 
             }
 
@@ -752,26 +769,26 @@ public class GrammarHighlighterLexerBase extends Lexer {
         try {
             int _type = STRING_LITERAL;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GrammarHighlighterLexerBase.g:135:2: ( '\"' ( '\\\\' . |~ ( '\\r' | '\\n' | '\"' | '\\\\' ) )* '\"' )
-            // GrammarHighlighterLexerBase.g:135:4: '\"' ( '\\\\' . |~ ( '\\r' | '\\n' | '\"' | '\\\\' ) )* '\"'
+            // GrammarHighlighterLexerBase.g:135:2: ( '\"' ( '\\\\' . |~ ( '\\r' | '\\n' | '\"' | '\\\\' ) )* ( '\"' )? )
+            // GrammarHighlighterLexerBase.g:135:4: '\"' ( '\\\\' . |~ ( '\\r' | '\\n' | '\"' | '\\\\' ) )* ( '\"' )?
             {
             match('\"'); 
 
             // GrammarHighlighterLexerBase.g:136:3: ( '\\\\' . |~ ( '\\r' | '\\n' | '\"' | '\\\\' ) )*
-            loop8:
+            loop9:
             do {
-                int alt8=3;
-                int LA8_0 = input.LA(1);
+                int alt9=3;
+                int LA9_0 = input.LA(1);
 
-                if ( (LA8_0=='\\') ) {
-                    alt8=1;
+                if ( (LA9_0=='\\') ) {
+                    alt9=1;
                 }
-                else if ( ((LA8_0 >= '\u0000' && LA8_0 <= '\t')||(LA8_0 >= '\u000B' && LA8_0 <= '\f')||(LA8_0 >= '\u000E' && LA8_0 <= '!')||(LA8_0 >= '#' && LA8_0 <= '[')||(LA8_0 >= ']' && LA8_0 <= '\uFFFF')) ) {
-                    alt8=2;
+                else if ( ((LA9_0 >= '\u0000' && LA9_0 <= '\t')||(LA9_0 >= '\u000B' && LA9_0 <= '\f')||(LA9_0 >= '\u000E' && LA9_0 <= '!')||(LA9_0 >= '#' && LA9_0 <= '[')||(LA9_0 >= ']' && LA9_0 <= '\uFFFF')) ) {
+                    alt9=2;
                 }
 
 
-                switch (alt8) {
+                switch (alt9) {
             	case 1 :
             	    // GrammarHighlighterLexerBase.g:136:5: '\\\\' .
             	    {
@@ -798,12 +815,29 @@ public class GrammarHighlighterLexerBase extends Lexer {
             	    break;
 
             	default :
-            	    break loop8;
+            	    break loop9;
                 }
             } while (true);
 
 
-            match('\"'); 
+            // GrammarHighlighterLexerBase.g:139:3: ( '\"' )?
+            int alt10=2;
+            int LA10_0 = input.LA(1);
+
+            if ( (LA10_0=='\"') ) {
+                alt10=1;
+            }
+            switch (alt10) {
+                case 1 :
+                    // GrammarHighlighterLexerBase.g:139:3: '\"'
+                    {
+                    match('\"'); 
+
+                    }
+                    break;
+
+            }
+
 
             }
 
@@ -1490,36 +1524,36 @@ public class GrammarHighlighterLexerBase extends Lexer {
             // GrammarHighlighterLexerBase.g:215:4: (~ ( '\\r' | '\\n' | '>' ) |{...}? => '>' )* ( '>>' |)
             {
             // GrammarHighlighterLexerBase.g:215:4: (~ ( '\\r' | '\\n' | '>' ) |{...}? => '>' )*
-            loop9:
+            loop11:
             do {
-                int alt9=3;
-                int LA9_0 = input.LA(1);
+                int alt11=3;
+                int LA11_0 = input.LA(1);
 
-                if ( (LA9_0=='>') ) {
-                    int LA9_1 = input.LA(2);
+                if ( (LA11_0=='>') ) {
+                    int LA11_1 = input.LA(2);
 
-                    if ( (LA9_1=='>') ) {
-                        int LA9_4 = input.LA(3);
+                    if ( (LA11_1=='>') ) {
+                        int LA11_4 = input.LA(3);
 
                         if ( ((input.LA(2) != '>')) ) {
-                            alt9=2;
+                            alt11=2;
                         }
 
 
                     }
 
                     else {
-                        alt9=2;
+                        alt11=2;
                     }
 
 
                 }
-                else if ( ((LA9_0 >= '\u0000' && LA9_0 <= '\t')||(LA9_0 >= '\u000B' && LA9_0 <= '\f')||(LA9_0 >= '\u000E' && LA9_0 <= '=')||(LA9_0 >= '?' && LA9_0 <= '\uFFFF')) ) {
-                    alt9=1;
+                else if ( ((LA11_0 >= '\u0000' && LA11_0 <= '\t')||(LA11_0 >= '\u000B' && LA11_0 <= '\f')||(LA11_0 >= '\u000E' && LA11_0 <= '=')||(LA11_0 >= '?' && LA11_0 <= '\uFFFF')) ) {
+                    alt11=1;
                 }
 
 
-                switch (alt9) {
+                switch (alt11) {
             	case 1 :
             	    // GrammarHighlighterLexerBase.g:215:6: ~ ( '\\r' | '\\n' | '>' )
             	    {
@@ -1548,22 +1582,22 @@ public class GrammarHighlighterLexerBase extends Lexer {
             	    break;
 
             	default :
-            	    break loop9;
+            	    break loop11;
                 }
             } while (true);
 
 
             // GrammarHighlighterLexerBase.g:218:3: ( '>>' |)
-            int alt10=2;
-            int LA10_0 = input.LA(1);
+            int alt12=2;
+            int LA12_0 = input.LA(1);
 
-            if ( (LA10_0=='>') ) {
-                alt10=1;
+            if ( (LA12_0=='>') ) {
+                alt12=1;
             }
             else {
-                alt10=2;
+                alt12=2;
             }
-            switch (alt10) {
+            switch (alt12) {
                 case 1 :
                     // GrammarHighlighterLexerBase.g:218:5: '>>'
                     {
@@ -1605,57 +1639,56 @@ public class GrammarHighlighterLexerBase extends Lexer {
             match('\\'); 
 
             // GrammarHighlighterLexerBase.g:226:3: ( 'n' | 'r' | 't' | 'b' | 'f' | '\"' | '\\'' | '\\\\' | '>' | 'u' XDIGIT XDIGIT XDIGIT XDIGIT | . )
-            int alt11=11;
-            int LA11_0 = input.LA(1);
+            int alt13=11;
+            int LA13_0 = input.LA(1);
 
-            if ( (LA11_0=='n') ) {
-                alt11=1;
+            if ( (LA13_0=='n') ) {
+                alt13=1;
             }
-            else if ( (LA11_0=='r') ) {
-                alt11=2;
+            else if ( (LA13_0=='r') ) {
+                alt13=2;
             }
-            else if ( (LA11_0=='t') ) {
-                alt11=3;
+            else if ( (LA13_0=='t') ) {
+                alt13=3;
             }
-            else if ( (LA11_0=='b') ) {
-                alt11=4;
+            else if ( (LA13_0=='b') ) {
+                alt13=4;
             }
-            else if ( (LA11_0=='f') ) {
-                alt11=5;
+            else if ( (LA13_0=='f') ) {
+                alt13=5;
             }
-            else if ( (LA11_0=='\"') ) {
-                alt11=6;
+            else if ( (LA13_0=='\"') ) {
+                alt13=6;
             }
-            else if ( (LA11_0=='\'') ) {
-                alt11=7;
+            else if ( (LA13_0=='\'') ) {
+                alt13=7;
             }
-            else if ( (LA11_0=='\\') ) {
-                alt11=8;
+            else if ( (LA13_0=='\\') ) {
+                alt13=8;
             }
-            else if ( (LA11_0=='>') ) {
-                alt11=9;
+            else if ( (LA13_0=='>') ) {
+                alt13=9;
             }
-            else if ( (LA11_0=='u') ) {
-                int LA11_10 = input.LA(2);
+            else if ( (LA13_0=='u') ) {
+                int LA13_10 = input.LA(2);
 
-                if ( ((LA11_10 >= '0' && LA11_10 <= '9')||(LA11_10 >= 'A' && LA11_10 <= 'F')||(LA11_10 >= 'a' && LA11_10 <= 'f')) ) {
-                    alt11=10;
+                if ( ((LA13_10 >= '0' && LA13_10 <= '9')||(LA13_10 >= 'A' && LA13_10 <= 'F')||(LA13_10 >= 'a' && LA13_10 <= 'f')) ) {
+                    alt13=10;
                 }
                 else {
-                    alt11=11;
+                    alt13=11;
                 }
             }
-            else if ( ((LA11_0 >= '\u0000' && LA11_0 <= '!')||(LA11_0 >= '#' && LA11_0 <= '&')||(LA11_0 >= '(' && LA11_0 <= '=')||(LA11_0 >= '?' && LA11_0 <= '[')||(LA11_0 >= ']' && LA11_0 <= 'a')||(LA11_0 >= 'c' && LA11_0 <= 'e')||(LA11_0 >= 'g' && LA11_0 <= 'm')||(LA11_0 >= 'o' && LA11_0 <= 'q')||LA11_0=='s'||(LA11_0 >= 'v' && LA11_0 <= '\uFFFF')) ) {
-                alt11=11;
+            else if ( ((LA13_0 >= '\u0000' && LA13_0 <= '!')||(LA13_0 >= '#' && LA13_0 <= '&')||(LA13_0 >= '(' && LA13_0 <= '=')||(LA13_0 >= '?' && LA13_0 <= '[')||(LA13_0 >= ']' && LA13_0 <= 'a')||(LA13_0 >= 'c' && LA13_0 <= 'e')||(LA13_0 >= 'g' && LA13_0 <= 'm')||(LA13_0 >= 'o' && LA13_0 <= 'q')||LA13_0=='s'||(LA13_0 >= 'v' && LA13_0 <= '\uFFFF')) ) {
+                alt13=11;
             }
             else {
-                NoViableAltException nvae =
-                    new NoViableAltException("", 11, 0, input);
+            	NoViableAltException nvae =
+            		new NoViableAltException("", 13, 0, input);
 
-                throw nvae;
-
+            	throw nvae;
             }
-            switch (alt11) {
+            switch (alt13) {
                 case 1 :
                     // GrammarHighlighterLexerBase.g:226:5: 'n'
                     {
@@ -1794,18 +1827,18 @@ public class GrammarHighlighterLexerBase extends Lexer {
             // GrammarHighlighterLexerBase.g:248:4: ( '0' .. '9' )+
             {
             // GrammarHighlighterLexerBase.g:248:4: ( '0' .. '9' )+
-            int cnt12=0;
-            loop12:
+            int cnt14=0;
+            loop14:
             do {
-                int alt12=2;
-                int LA12_0 = input.LA(1);
+                int alt14=2;
+                int LA14_0 = input.LA(1);
 
-                if ( ((LA12_0 >= '0' && LA12_0 <= '9')) ) {
-                    alt12=1;
+                if ( ((LA14_0 >= '0' && LA14_0 <= '9')) ) {
+                    alt14=1;
                 }
 
 
-                switch (alt12) {
+                switch (alt14) {
             	case 1 :
             	    // GrammarHighlighterLexerBase.g:
             	    {
@@ -1823,12 +1856,12 @@ public class GrammarHighlighterLexerBase extends Lexer {
             	    break;
 
             	default :
-            	    if ( cnt12 >= 1 ) break loop12;
+            	    if ( cnt14 >= 1 ) break loop14;
                         EarlyExitException eee =
-                            new EarlyExitException(12, input);
+                            new EarlyExitException(14, input);
                         throw eee;
                 }
-                cnt12++;
+                cnt14++;
             } while (true);
 
 
@@ -1866,9 +1899,9 @@ public class GrammarHighlighterLexerBase extends Lexer {
 
     public void mTokens() throws RecognitionException {
         // GrammarHighlighterLexerBase.g:1:8: ( IDENTIFIER | DIRECTIVE | REFERENCE | WS | NEWLINE | COMMENT | ML_COMMENT | CHAR_LITERAL | STRING_LITERAL | OPEN_ELEMENT_OPTION | CLOSE_ELEMENT_OPTION | AMPERSAND | COMMA | QUESTION | TREE_BEGIN | LPAREN | RPAREN | COLON | STAR | PLUS | ASSIGN | PLUS_ASSIGN | IMPLIES | REWRITE | SEMI | ROOT | BANG | OR | WILDCARD | ETC | RANGE | NOT | LBRACK | RBRACK | LCURLY | RCURLY | DOLLAR | ESCAPE_BRACKET | DOUBLE_ANGLE_STRING_LITERAL | INT | ANYCHAR )
-        int alt13=41;
-        alt13 = dfa13.predict(input);
-        switch (alt13) {
+        int alt15=41;
+        alt15 = dfa15.predict(input);
+        switch (alt15) {
             case 1 :
                 // GrammarHighlighterLexerBase.g:1:10: IDENTIFIER
                 {
@@ -2203,31 +2236,31 @@ public class GrammarHighlighterLexerBase extends Lexer {
     }
 
 
-    protected DFA13 dfa13 = new DFA13(this);
-    static final String DFA13_eotS =
-        "\2\uffff\1\44\1\46\1\uffff\1\41\1\uffff\3\41\1\56\3\uffff\1\63\4"+
-        "\uffff\1\71\1\73\1\41\3\uffff\1\101\5\uffff\1\41\40\uffff\1\112"+
-        "\12\uffff";
-    static final String DFA13_eofS =
+    protected DFA15 dfa15 = new DFA15(this);
+    static final String DFA15_eotS =
+        "\2\uffff\1\44\1\46\1\uffff\1\41\1\uffff\1\41\2\uffff\1\56\3\uffff"+
+        "\1\63\4\uffff\1\71\1\73\1\41\3\uffff\1\101\5\uffff\1\41\40\uffff"+
+        "\1\112\12\uffff";
+    static final String DFA15_eofS =
         "\113\uffff";
-    static final String DFA13_minS =
-        "\1\0\1\uffff\2\101\1\uffff\1\12\1\uffff\1\52\2\0\1\74\3\uffff\1"+
-        "\50\4\uffff\1\75\2\76\3\uffff\1\56\5\uffff\1\135\40\uffff\1\56\12"+
-        "\uffff";
-    static final String DFA13_maxS =
+    static final String DFA15_minS =
+        "\1\0\1\uffff\2\101\1\uffff\1\12\1\uffff\1\52\2\uffff\1\74\3\uffff"+
+        "\1\50\4\uffff\1\75\2\76\3\uffff\1\56\5\uffff\1\135\40\uffff\1\56"+
+        "\12\uffff";
+    static final String DFA15_maxS =
         "\1\uffff\1\uffff\2\172\1\uffff\1\12\1\uffff\1\57\2\uffff\1\74\3"+
         "\uffff\1\50\4\uffff\1\75\2\76\3\uffff\1\56\5\uffff\1\135\40\uffff"+
         "\1\56\12\uffff";
-    static final String DFA13_acceptS =
-        "\1\uffff\1\1\2\uffff\1\4\1\uffff\1\5\4\uffff\1\13\1\15\1\16\1\uffff"+
-        "\1\20\1\21\1\22\1\23\3\uffff\1\31\1\33\1\34\1\uffff\1\40\1\41\1"+
-        "\42\1\43\1\44\1\uffff\1\50\1\51\1\1\1\2\1\14\1\3\1\45\1\4\1\5\1"+
-        "\6\1\7\1\10\1\11\1\47\1\12\1\13\1\15\1\16\1\17\1\32\1\20\1\21\1"+
-        "\22\1\23\1\26\1\24\1\27\1\25\1\30\1\31\1\33\1\34\1\uffff\1\35\1"+
-        "\40\1\41\1\42\1\43\1\44\1\46\1\50\1\36\1\37";
-    static final String DFA13_specialS =
-        "\1\0\7\uffff\1\2\1\1\101\uffff}>";
-    static final String[] DFA13_transitionS = {
+    static final String DFA15_acceptS =
+        "\1\uffff\1\1\2\uffff\1\4\1\uffff\1\5\1\uffff\1\10\1\11\1\uffff\1"+
+        "\13\1\15\1\16\1\uffff\1\20\1\21\1\22\1\23\3\uffff\1\31\1\33\1\34"+
+        "\1\uffff\1\40\1\41\1\42\1\43\1\44\1\uffff\1\50\1\51\1\1\1\2\1\14"+
+        "\1\3\1\45\1\4\1\5\1\6\1\7\1\10\1\11\1\47\1\12\1\13\1\15\1\16\1\17"+
+        "\1\32\1\20\1\21\1\22\1\23\1\26\1\24\1\27\1\25\1\30\1\31\1\33\1\34"+
+        "\1\uffff\1\35\1\40\1\41\1\42\1\43\1\44\1\46\1\50\1\36\1\37";
+    static final String DFA15_specialS =
+        "\1\0\112\uffff}>";
+    static final String[] DFA15_transitionS = {
             "\11\41\1\4\1\6\2\41\1\5\22\41\1\4\1\27\1\11\1\41\1\3\2\41\1"+
             "\10\1\17\1\20\1\22\1\23\1\14\1\25\1\31\1\7\12\40\1\21\1\26\1"+
             "\12\1\24\1\13\1\15\1\2\32\1\1\33\1\37\1\34\1\16\1\1\1\41\32"+
@@ -2239,8 +2272,8 @@ public class GrammarHighlighterLexerBase extends Lexer {
             "\1\50",
             "",
             "\1\52\4\uffff\1\51",
-            "\12\53\1\uffff\2\53\1\uffff\ufff2\53",
-            "\12\54\1\uffff\2\54\1\uffff\ufff2\54",
+            "",
+            "",
             "\1\55",
             "",
             "",
@@ -2308,34 +2341,34 @@ public class GrammarHighlighterLexerBase extends Lexer {
             ""
     };
 
-    static final short[] DFA13_eot = DFA.unpackEncodedString(DFA13_eotS);
-    static final short[] DFA13_eof = DFA.unpackEncodedString(DFA13_eofS);
-    static final char[] DFA13_min = DFA.unpackEncodedStringToUnsignedChars(DFA13_minS);
-    static final char[] DFA13_max = DFA.unpackEncodedStringToUnsignedChars(DFA13_maxS);
-    static final short[] DFA13_accept = DFA.unpackEncodedString(DFA13_acceptS);
-    static final short[] DFA13_special = DFA.unpackEncodedString(DFA13_specialS);
-    static final short[][] DFA13_transition;
+    static final short[] DFA15_eot = DFA.unpackEncodedString(DFA15_eotS);
+    static final short[] DFA15_eof = DFA.unpackEncodedString(DFA15_eofS);
+    static final char[] DFA15_min = DFA.unpackEncodedStringToUnsignedChars(DFA15_minS);
+    static final char[] DFA15_max = DFA.unpackEncodedStringToUnsignedChars(DFA15_maxS);
+    static final short[] DFA15_accept = DFA.unpackEncodedString(DFA15_acceptS);
+    static final short[] DFA15_special = DFA.unpackEncodedString(DFA15_specialS);
+    static final short[][] DFA15_transition;
 
     static {
-        int numStates = DFA13_transitionS.length;
-        DFA13_transition = new short[numStates][];
+        int numStates = DFA15_transitionS.length;
+        DFA15_transition = new short[numStates][];
         for (int i=0; i<numStates; i++) {
-            DFA13_transition[i] = DFA.unpackEncodedString(DFA13_transitionS[i]);
+            DFA15_transition[i] = DFA.unpackEncodedString(DFA15_transitionS[i]);
         }
     }
 
-    class DFA13 extends DFA {
+    class DFA15 extends DFA {
 
-        public DFA13(BaseRecognizer recognizer) {
+        public DFA15(BaseRecognizer recognizer) {
             this.recognizer = recognizer;
-            this.decisionNumber = 13;
-            this.eot = DFA13_eot;
-            this.eof = DFA13_eof;
-            this.min = DFA13_min;
-            this.max = DFA13_max;
-            this.accept = DFA13_accept;
-            this.special = DFA13_special;
-            this.transition = DFA13_transition;
+            this.decisionNumber = 15;
+            this.eot = DFA15_eot;
+            this.eof = DFA15_eof;
+            this.min = DFA15_min;
+            this.max = DFA15_max;
+            this.accept = DFA15_accept;
+            this.special = DFA15_special;
+            this.transition = DFA15_transition;
         }
         public String getDescription() {
             return "1:1: Tokens : ( IDENTIFIER | DIRECTIVE | REFERENCE | WS | NEWLINE | COMMENT | ML_COMMENT | CHAR_LITERAL | STRING_LITERAL | OPEN_ELEMENT_OPTION | CLOSE_ELEMENT_OPTION | AMPERSAND | COMMA | QUESTION | TREE_BEGIN | LPAREN | RPAREN | COLON | STAR | PLUS | ASSIGN | PLUS_ASSIGN | IMPLIES | REWRITE | SEMI | ROOT | BANG | OR | WILDCARD | ETC | RANGE | NOT | LBRACK | RBRACK | LCURLY | RCURLY | DOLLAR | ESCAPE_BRACKET | DOUBLE_ANGLE_STRING_LITERAL | INT | ANYCHAR );";
@@ -2345,100 +2378,80 @@ public class GrammarHighlighterLexerBase extends Lexer {
         	int _s = s;
             switch ( s ) {
                     case 0 : 
-                        int LA13_0 = input.LA(1);
+                        int LA15_0 = input.LA(1);
 
                         s = -1;
-                        if ( ((LA13_0 >= 'A' && LA13_0 <= 'Z')||LA13_0=='_'||(LA13_0 >= 'a' && LA13_0 <= 'z')) ) {s = 1;}
+                        if ( ((LA15_0 >= 'A' && LA15_0 <= 'Z')||LA15_0=='_'||(LA15_0 >= 'a' && LA15_0 <= 'z')) ) {s = 1;}
 
-                        else if ( (LA13_0=='@') ) {s = 2;}
+                        else if ( (LA15_0=='@') ) {s = 2;}
 
-                        else if ( (LA13_0=='$') ) {s = 3;}
+                        else if ( (LA15_0=='$') ) {s = 3;}
 
-                        else if ( (LA13_0=='\t'||LA13_0==' ') ) {s = 4;}
+                        else if ( (LA15_0=='\t'||LA15_0==' ') ) {s = 4;}
 
-                        else if ( (LA13_0=='\r') ) {s = 5;}
+                        else if ( (LA15_0=='\r') ) {s = 5;}
 
-                        else if ( (LA13_0=='\n') ) {s = 6;}
+                        else if ( (LA15_0=='\n') ) {s = 6;}
 
-                        else if ( (LA13_0=='/') ) {s = 7;}
+                        else if ( (LA15_0=='/') ) {s = 7;}
 
-                        else if ( (LA13_0=='\'') ) {s = 8;}
+                        else if ( (LA15_0=='\'') ) {s = 8;}
 
-                        else if ( (LA13_0=='\"') ) {s = 9;}
+                        else if ( (LA15_0=='\"') ) {s = 9;}
 
-                        else if ( (LA13_0=='<') ) {s = 10;}
+                        else if ( (LA15_0=='<') ) {s = 10;}
 
-                        else if ( (LA13_0=='>') ) {s = 11;}
+                        else if ( (LA15_0=='>') ) {s = 11;}
 
-                        else if ( (LA13_0==',') ) {s = 12;}
+                        else if ( (LA15_0==',') ) {s = 12;}
 
-                        else if ( (LA13_0=='?') ) {s = 13;}
+                        else if ( (LA15_0=='?') ) {s = 13;}
 
-                        else if ( (LA13_0=='^') ) {s = 14;}
+                        else if ( (LA15_0=='^') ) {s = 14;}
 
-                        else if ( (LA13_0=='(') ) {s = 15;}
+                        else if ( (LA15_0=='(') ) {s = 15;}
 
-                        else if ( (LA13_0==')') ) {s = 16;}
+                        else if ( (LA15_0==')') ) {s = 16;}
 
-                        else if ( (LA13_0==':') ) {s = 17;}
+                        else if ( (LA15_0==':') ) {s = 17;}
 
-                        else if ( (LA13_0=='*') ) {s = 18;}
+                        else if ( (LA15_0=='*') ) {s = 18;}
 
-                        else if ( (LA13_0=='+') ) {s = 19;}
+                        else if ( (LA15_0=='+') ) {s = 19;}
 
-                        else if ( (LA13_0=='=') ) {s = 20;}
+                        else if ( (LA15_0=='=') ) {s = 20;}
 
-                        else if ( (LA13_0=='-') ) {s = 21;}
+                        else if ( (LA15_0=='-') ) {s = 21;}
 
-                        else if ( (LA13_0==';') ) {s = 22;}
+                        else if ( (LA15_0==';') ) {s = 22;}
 
-                        else if ( (LA13_0=='!') ) {s = 23;}
+                        else if ( (LA15_0=='!') ) {s = 23;}
 
-                        else if ( (LA13_0=='|') ) {s = 24;}
+                        else if ( (LA15_0=='|') ) {s = 24;}
 
-                        else if ( (LA13_0=='.') ) {s = 25;}
+                        else if ( (LA15_0=='.') ) {s = 25;}
 
-                        else if ( (LA13_0=='~') ) {s = 26;}
+                        else if ( (LA15_0=='~') ) {s = 26;}
 
-                        else if ( (LA13_0=='[') ) {s = 27;}
+                        else if ( (LA15_0=='[') ) {s = 27;}
 
-                        else if ( (LA13_0==']') ) {s = 28;}
+                        else if ( (LA15_0==']') ) {s = 28;}
 
-                        else if ( (LA13_0=='{') ) {s = 29;}
+                        else if ( (LA15_0=='{') ) {s = 29;}
 
-                        else if ( (LA13_0=='}') ) {s = 30;}
+                        else if ( (LA15_0=='}') ) {s = 30;}
 
-                        else if ( (LA13_0=='\\') ) {s = 31;}
+                        else if ( (LA15_0=='\\') ) {s = 31;}
 
-                        else if ( ((LA13_0 >= '0' && LA13_0 <= '9')) ) {s = 32;}
+                        else if ( ((LA15_0 >= '0' && LA15_0 <= '9')) ) {s = 32;}
 
-                        else if ( ((LA13_0 >= '\u0000' && LA13_0 <= '\b')||(LA13_0 >= '\u000B' && LA13_0 <= '\f')||(LA13_0 >= '\u000E' && LA13_0 <= '\u001F')||LA13_0=='#'||(LA13_0 >= '%' && LA13_0 <= '&')||LA13_0=='`'||(LA13_0 >= '\u007F' && LA13_0 <= '\uFFFF')) ) {s = 33;}
-
-                        if ( s>=0 ) return s;
-                        break;
-                    case 1 : 
-                        int LA13_9 = input.LA(1);
-
-                        s = -1;
-                        if ( ((LA13_9 >= '\u0000' && LA13_9 <= '\t')||(LA13_9 >= '\u000B' && LA13_9 <= '\f')||(LA13_9 >= '\u000E' && LA13_9 <= '\uFFFF')) ) {s = 44;}
-
-                        else s = 33;
-
-                        if ( s>=0 ) return s;
-                        break;
-                    case 2 : 
-                        int LA13_8 = input.LA(1);
-
-                        s = -1;
-                        if ( ((LA13_8 >= '\u0000' && LA13_8 <= '\t')||(LA13_8 >= '\u000B' && LA13_8 <= '\f')||(LA13_8 >= '\u000E' && LA13_8 <= '\uFFFF')) ) {s = 43;}
-
-                        else s = 33;
+                        else if ( ((LA15_0 >= '\u0000' && LA15_0 <= '\b')||(LA15_0 >= '\u000B' && LA15_0 <= '\f')||(LA15_0 >= '\u000E' && LA15_0 <= '\u001F')||LA15_0=='#'||(LA15_0 >= '%' && LA15_0 <= '&')||LA15_0=='`'||(LA15_0 >= '\u007F' && LA15_0 <= '\uFFFF')) ) {s = 33;}
 
                         if ( s>=0 ) return s;
                         break;
             }
             NoViableAltException nvae =
-                new NoViableAltException(getDescription(), 13, _s, input);
+                new NoViableAltException(getDescription(), 15, _s, input);
             error(nvae);
             throw nvae;
         }
