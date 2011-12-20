@@ -110,34 +110,34 @@ class GrammarTokensTaskTaggerSnapshot extends AbstractTagger<TokenTag> {
                 int newLength = change.getNewLength();
 
                 /* processChange */
-                int lineNumberFromPosition = source.findLineNumber(oldOffset);
-                int num2 = source.findLineNumber(oldOffset + oldLength - 1);
+                int oldStartLine = source.findLineNumber(oldOffset);
+                int oldEndLine = source.findLineNumber(oldOffset + oldLength - 1);
                 if (lineCountDelta < 0) {
-                    lineStates.subList(lineNumberFromPosition, lineNumberFromPosition + Math.abs(lineCountDelta)).clear();
+                    lineStates.subList(oldStartLine, oldStartLine + Math.abs(lineCountDelta)).clear();
                 } else if (lineCountDelta > 0) {
-                    LexerState endLineState = lineStates.get(lineNumberFromPosition);
+                    LexerState endLineState = lineStates.get(oldStartLine);
                     ArrayList<LexerState> insertedElements = new ArrayList<LexerState>();
                     for (int j = 0; j < lineCountDelta; j++) {
                         insertedElements.add(endLineState);
                     }
-                    lineStates.addAll(lineNumberFromPosition, insertedElements);
+                    lineStates.addAll(oldStartLine, insertedElements);
                 }
 
-                if (lastDirtyLine != null && lastDirtyLine > lineNumberFromPosition) {
+                if (lastDirtyLine != null && lastDirtyLine > oldStartLine) {
                     lastDirtyLine += lineCountDelta;
                 }
 
-                if (lastChangedLine != null && lastChangedLine > lineNumberFromPosition) {
+                if (lastChangedLine != null && lastChangedLine > oldStartLine) {
                     lastChangedLine += lineCountDelta;
                 }
 
-                for (int j = lineNumberFromPosition; j <= num2; j++) {
+                for (int j = oldStartLine; j <= oldEndLine; j++) {
                     LexerState state = lineStates.get(i);
                     lineStates.set(j, state.createDirtyState());
                 }
 
-                firstChangedLine = firstChangedLine != null ? Math.min(firstChangedLine, lineNumberFromPosition) : lineNumberFromPosition;
-                lastChangedLine = lastChangedLine != null ? Math.max(lastChangedLine, num2) : num2;
+                firstChangedLine = firstChangedLine != null ? Math.min(firstChangedLine, oldStartLine) : oldStartLine;
+                lastChangedLine = lastChangedLine != null ? Math.max(lastChangedLine, oldEndLine) : oldEndLine;
 
                 /* processAfterChange */
                 if (firstChangedLine != null && lastChangedLine != null) {
