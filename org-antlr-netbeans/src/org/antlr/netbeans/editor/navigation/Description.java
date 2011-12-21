@@ -29,12 +29,9 @@ package org.antlr.netbeans.editor.navigation;
 
 import java.util.Collection;
 import java.util.Comparator;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
-import javax.swing.text.Position;
-import org.netbeans.modules.parsing.api.Snapshot;
+import org.antlr.netbeans.editor.text.DocumentSnapshot;
+import org.antlr.netbeans.editor.text.SnapshotPosition;
 import org.openide.filesystems.FileObject;
-import org.openide.util.Exceptions;
 
 /**
  *
@@ -56,7 +53,7 @@ public class Description {
     private String htmlHeader;
     private Collection<Description> children;
     private int offset;
-    private Position position;
+    private SnapshotPosition position;
 
     public Description(NavigatorPanelUI ui) {
         this.ui = ui;
@@ -107,24 +104,18 @@ public class Description {
         this.htmlHeader = htmlHeader;
     }
 
-    public void setOffset(Snapshot snapshot, FileObject fileObject, int snapshotOffset) {
+    public void setOffset(DocumentSnapshot snapshot, FileObject fileObject, int snapshotOffset) {
         if (snapshot == null) {
+            assert fileObject != null;
             this.fileObject = fileObject;
             offset = snapshotOffset;
             position = null;
         } else {
-            this.fileObject = snapshot.getSource().getFileObject();
-            offset = snapshot.getOriginalOffset(snapshotOffset);
-            position = null;
+            this.fileObject = snapshot.getVersionedDocument().getFileObject();
+            this.offset = snapshotOffset;
+            this.position = null;
             if (offset >= 0) {
-                Document document = snapshot.getSource().getDocument(false);
-                if (document != null) {
-                    try {
-                        position = document.createPosition(offset);
-                    } catch (BadLocationException ex) {
-                        Exceptions.printStackTrace(ex);
-                    }
-                }
+                position = new SnapshotPosition(snapshot, offset);
             }
         }
     }

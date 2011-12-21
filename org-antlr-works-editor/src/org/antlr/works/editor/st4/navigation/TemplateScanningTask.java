@@ -48,7 +48,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Logger;
+import javax.swing.text.Document;
 import org.antlr.netbeans.editor.navigation.Description;
+import org.antlr.netbeans.editor.text.DocumentSnapshot;
+import org.antlr.netbeans.editor.text.VersionedDocument;
+import org.antlr.netbeans.editor.text.VersionedDocumentUtilities;
 import org.antlr.works.editor.st4.navigation.TemplateNode.TemplateDescription;
 import org.antlr.works.editor.st4.parser.TemplateGroupWrapper.TemplateInformation;
 import org.antlr.works.editor.st4.parser.TemplateParser.TemplateGroupRuleReturnScope;
@@ -78,6 +82,10 @@ public class TemplateScanningTask extends ParserResultTask<TemplateParserResult>
                 return;
             }
 
+            Document document = result.getSnapshot().getSource().getDocument(false);
+            VersionedDocument versionedDocument = VersionedDocumentUtilities.getVersionedDocument(document);
+            DocumentSnapshot documentSnapshot = versionedDocument.getCurrentSnapshot();
+
             // don't update if there were errors and a result is already displayed
             /*if (!result.getParser().getSyntaxErrors().isEmpty() && !ui.isShowingWaitNode()) {
                 return;
@@ -104,7 +112,7 @@ public class TemplateScanningTask extends ParserResultTask<TemplateParserResult>
                         String sig = String.format("%s.%s()", templateInfo.getEnclosingTemplateName(), templateInfo.getNameToken().getText());
 
                         TemplateDescription description = new TemplateDescription(ui, sig);
-                        description.setOffset(result.getSnapshot(), rootDescription.getFileObject(), sourceInterval.a);
+                        description.setOffset(documentSnapshot, rootDescription.getFileObject(), sourceInterval.a);
                         description.setHtmlHeader(String.format("%s.%s<font color='808080'>()</font>", templateInfo.getEnclosingTemplateName(), templateInfo.getNameToken().getText()));
                         rootDescription.getChildren().add(description);
                     }
@@ -116,7 +124,7 @@ public class TemplateScanningTask extends ParserResultTask<TemplateParserResult>
                         String sig = String.format("%s(%s)", name, Misc.join(argumentNames.iterator(), ", "));
 
                         TemplateDescription description = new TemplateDescription(ui, sig);
-                        description.setOffset(result.getSnapshot(), rootDescription.getFileObject(), sourceInterval.a);
+                        description.setOffset(documentSnapshot, rootDescription.getFileObject(), sourceInterval.a);
                         description.setHtmlHeader(String.format("%s<font color='808080'>(%s)</font>", name, Misc.join(argumentNames.iterator(), ", ")));
                         rootDescription.getChildren().add(description);
                     }

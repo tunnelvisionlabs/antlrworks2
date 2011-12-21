@@ -29,8 +29,12 @@ package org.antlr.works.editor.grammar.navigation;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import javax.swing.text.Document;
 import org.antlr.grammar.v3.ANTLRParser;
 import org.antlr.netbeans.editor.navigation.Description;
+import org.antlr.netbeans.editor.text.DocumentSnapshot;
+import org.antlr.netbeans.editor.text.VersionedDocument;
+import org.antlr.netbeans.editor.text.VersionedDocumentUtilities;
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
@@ -101,6 +105,10 @@ public class RuleScanningTaskV3 extends RuleScanningTask {
                                     GrammarNode.GrammarNodeDescription parserRulesRootDescription,
                                     GrammarNode.GrammarNodeDescription lexerRulesRootDescription) {
 
+        Document document = snapshot.getSource().getDocument(false);
+        VersionedDocument versionedDocument = VersionedDocumentUtilities.getVersionedDocument(document);
+        DocumentSnapshot documentSnapshot = versionedDocument.getCurrentSnapshot();
+
         ANTLRParser.grammar__return parseResult = result.getResult();
         FileObject fileObject = result.getFileObject();
         Tree tree = (Tree)parseResult.getTree();
@@ -119,7 +127,7 @@ public class RuleScanningTaskV3 extends RuleScanningTask {
                 }
 
                 GrammarNode.GrammarNodeDescription ruleDescription = new GrammarNode.GrammarNodeDescription(ui, ruleName);
-                ruleDescription.setOffset(snapshot, fileObject, ((CommonToken)((CommonTree)child.getChild(0)).getToken()).getStartIndex());
+                ruleDescription.setOffset(documentSnapshot, fileObject, ((CommonToken)((CommonTree)child.getChild(0)).getToken()).getStartIndex());
                 ruleDescription.setInherited(snapshot == null); // for now, go on the fact that snapshots aren't available for imported files
 
                 if (Character.isLowerCase(ruleName.charAt(0))) {
@@ -137,7 +145,7 @@ public class RuleScanningTaskV3 extends RuleScanningTask {
                         }
 
                         GrammarNode.GrammarNodeDescription ruleDescription = new GrammarNode.GrammarNodeDescription(ui, ruleName);
-                        ruleDescription.setOffset(snapshot, fileObject, ((CommonToken)((CommonTree)tokenChild.getChild(0)).getToken()).getStartIndex());
+                        ruleDescription.setOffset(documentSnapshot, fileObject, ((CommonToken)((CommonTree)tokenChild.getChild(0)).getToken()).getStartIndex());
                         ruleDescription.setInherited(snapshot == null); // for now, go on the fact that snapshots aren't available for imported files
 
                         if (Character.isLowerCase(ruleName.charAt(0))) {
@@ -152,7 +160,7 @@ public class RuleScanningTaskV3 extends RuleScanningTask {
                         }
 
                         GrammarNode.GrammarNodeDescription ruleDescription = new GrammarNode.GrammarNodeDescription(ui, ruleName);
-                        ruleDescription.setOffset(snapshot, fileObject, ((CommonToken)((CommonTree)tokenChild).getToken()).getStartIndex());
+                        ruleDescription.setOffset(documentSnapshot, fileObject, ((CommonToken)((CommonTree)tokenChild).getToken()).getStartIndex());
                         ruleDescription.setInherited(snapshot == null); // for now, go on the fact that snapshots aren't available for imported files
 
                         if (Character.isLowerCase(ruleName.charAt(0))) {
