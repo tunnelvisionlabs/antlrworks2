@@ -99,6 +99,11 @@ public class TemplateParserDataDefinitions {
         }
 
         @Override
+        public boolean isCacheable() {
+            return true;
+        }
+
+        @Override
         public Class<? extends ParserTaskScheduler> getScheduler() {
             return ParserTaskScheduler.CONTENT_SENSITIVE_TASK_SCHEDULER;
         }
@@ -116,6 +121,11 @@ public class TemplateParserDataDefinitions {
         @Override
         public boolean isComponentSpecific() {
             return false;
+        }
+
+        @Override
+        public boolean isCacheable() {
+            return true;
         }
 
         @Override
@@ -139,6 +149,11 @@ public class TemplateParserDataDefinitions {
         }
 
         @Override
+        public boolean isCacheable() {
+            return true;
+        }
+
+        @Override
         public Class<? extends ParserTaskScheduler> getScheduler() {
             return ParserTaskScheduler.EDITOR_SENSITIVE_TASK_SCHEDULER;
         }
@@ -155,6 +170,11 @@ public class TemplateParserDataDefinitions {
         @Override
         public boolean isComponentSpecific() {
             return false;
+        }
+
+        @Override
+        public boolean isCacheable() {
+            return true;
         }
 
         @Override
@@ -178,6 +198,11 @@ public class TemplateParserDataDefinitions {
         }
 
         @Override
+        public boolean isCacheable() {
+            return false;
+        }
+
+        @Override
         public Class<? extends ParserTaskScheduler> getScheduler() {
             return ParserTaskScheduler.CURSOR_SENSITIVE_TASK_SCHEDULER;
         }
@@ -194,6 +219,11 @@ public class TemplateParserDataDefinitions {
         @Override
         public boolean isComponentSpecific() {
             return false;
+        }
+
+        @Override
+        public boolean isCacheable() {
+            return true;
         }
 
         @Override

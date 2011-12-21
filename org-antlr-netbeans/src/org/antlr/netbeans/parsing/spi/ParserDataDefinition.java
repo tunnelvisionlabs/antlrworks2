@@ -41,6 +41,12 @@ public interface ParserDataDefinition<T> {
     /** True if the data is specific to a {@link JTextComponent} instead of just a {@link Document}. */
     boolean isComponentSpecific();
 
+    /** True if the data is unique for a given {@link Document} or {@link JTextComponent}
+     *  and may be cached. Some data, such as the context where the caret is, may change
+     *  even when the content of the document has not changed.
+     */
+    boolean isCacheable();
+
     Class<? extends ParserTaskScheduler> getScheduler();
 
 }

@@ -364,7 +364,10 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
             Document document = snapshot.getVersionedDocument().getDocument();
             if (document != null) {
                 for (ParserData<?> result : handler.getResults()) {
-                    document.putProperty(result.getDefinition(), result);
+                    if (result.getDefinition().isCacheable()) {
+                        document.putProperty(result.getDefinition(), result);
+                    }
+
                     fireDataChanged((ParserDataDefinition)result.getDefinition(), result);
                 }
             }
