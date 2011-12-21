@@ -99,7 +99,17 @@ public class TemplateHighlighter extends ANTLRHighlighterBaseV4<TemplateHighligh
         case GroupHighlighterLexerBase.ELSE:
         case GroupHighlighterLexerBase.ENDIF:
         case GroupHighlighterLexerBase.END:
+
         case GroupHighlighterLexerBase.SUPER:
+        case GroupHighlighterLexerBase.FIRST:
+        case GroupHighlighterLexerBase.LAST:
+        case GroupHighlighterLexerBase.REST:
+        case GroupHighlighterLexerBase.TRUNC:
+        case GroupHighlighterLexerBase.STRIP:
+        case GroupHighlighterLexerBase.TRIM:
+        case GroupHighlighterLexerBase.LENGTH:
+        case GroupHighlighterLexerBase.STRLEN:
+        case GroupHighlighterLexerBase.REVERSE:
             return keywordAttributes;
 
         case GroupHighlighterLexerBase.ID:

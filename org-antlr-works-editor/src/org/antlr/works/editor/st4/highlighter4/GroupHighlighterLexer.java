@@ -74,18 +74,53 @@ public class GroupHighlighterLexer extends GroupHighlighterLexerBase {
     public Token emit() {
         switch (type) {
         case LBRACE:
-            if (input.index() > tokenStartCharIndex + 1) {
-                getInterpreter().resetAcceptPosition(input, tokenStartCharIndex, tokenStartLine, tokenStartCharPositionInLine);
+            if (handleAcceptPositionForKeyword("[")) {
                 pushMode(AnonymousTemplateParameters);
             }
+
             break;
 
         case DELIMITERS:
-            if (type == DELIMITERS && input.index() > tokenStartCharIndex + "delimiters".length()) {
-                int offset = "delimiters".length() - 1;
-                getInterpreter().resetAcceptPosition(input, tokenStartCharIndex + offset, tokenStartLine, tokenStartCharPositionInLine + offset);
+            if (handleAcceptPositionForKeyword("delimiters")) {
                 pushMode(DelimitersOpenSpec);
             }
+
+            break;
+
+        case FIRST:
+            handleAcceptPositionForKeyword("first");
+            break;
+
+        case LAST:
+            handleAcceptPositionForKeyword("last");
+            break;
+
+        case REST:
+            handleAcceptPositionForKeyword("rest");
+            break;
+
+        case TRUNC:
+            handleAcceptPositionForKeyword("trunc");
+            break;
+
+        case STRIP:
+            handleAcceptPositionForKeyword("strip");
+            break;
+
+        case TRIM:
+            handleAcceptPositionForKeyword("trim");
+            break;
+
+        case LENGTH:
+            handleAcceptPositionForKeyword("length");
+            break;
+
+        case STRLEN:
+            handleAcceptPositionForKeyword("strlen");
+            break;
+
+        case REVERSE:
+            handleAcceptPositionForKeyword("reverse");
             break;
 
         case DelimitersOpenSpec_DELIMITER_STRING:
@@ -103,6 +138,16 @@ public class GroupHighlighterLexer extends GroupHighlighterLexerBase {
         }
 
         return super.emit();
+    }
+
+    private boolean handleAcceptPositionForKeyword(String keyword) {
+        if (input.index() > tokenStartCharIndex + keyword.length()) {
+            int offset = keyword.length() - 1;
+            getInterpreter().resetAcceptPosition(input, tokenStartCharIndex + offset, tokenStartLine, tokenStartCharPositionInLine + offset);
+            return true;
+        }
+
+        return false;
     }
 
     @Override

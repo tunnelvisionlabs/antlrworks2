@@ -213,6 +213,18 @@ mode TemplateExpression;
     ENDIF : 'endif';
     ELSE : 'else';
     END : 'end';
+
+    // intrinsics
+    FIRST : 'first' WS_CHAR* '(';
+    LAST : 'last' WS_CHAR* '(';
+    REST : 'rest' WS_CHAR* '(';
+    TRUNC : 'trunc' WS_CHAR* '(';
+    STRIP : 'strip' WS_CHAR* '(';
+    TRIM : 'trim' WS_CHAR* '(';
+    LENGTH : 'length' WS_CHAR* '(';
+    STRLEN : 'strlen' WS_CHAR* '(';
+    REVERSE : 'reverse' WS_CHAR* '(';
+
     ELLIPSIS : '...';
     NOT : '!';
     OR : '||';
