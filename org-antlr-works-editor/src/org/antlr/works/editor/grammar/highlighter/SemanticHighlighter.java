@@ -36,6 +36,7 @@ import java.util.Deque;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.Callable;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
@@ -79,16 +80,14 @@ import org.netbeans.spi.editor.highlighting.support.AbstractHighlightsContainer;
 import org.netbeans.spi.editor.highlighting.support.OffsetsBag;
 import org.openide.util.Lookup;
 import org.openide.util.Parameters;
-import org.openide.util.RequestProcessor;
 
 /**
  *
  * @author Sam Harwell
  */
 public class SemanticHighlighter extends AbstractHighlightsContainer {
-    private static final RequestProcessor RP = new RequestProcessor(SemanticHighlighter.class);
-
     private final StyledDocument document;
+    private final ParserTaskManager taskManager;
     private final VersionedDocument versionedDocument;
     private final DataListener dataListener;
     private final EditorRegistryListener editorRegistryListener;
@@ -103,6 +102,7 @@ public class SemanticHighlighter extends AbstractHighlightsContainer {
     private SemanticHighlighter(@NonNull StyledDocument document) {
         Parameters.notNull("document", document);
         this.document = document;
+        this.taskManager = Lookup.getDefault().lookup(ParserTaskManager.class);
         this.versionedDocument = VersionedDocumentUtilities.getVersionedDocument(document);
         this.dataListener = new DataListener();
         this.editorRegistryListener = new EditorRegistryListener();
@@ -137,7 +137,6 @@ public class SemanticHighlighter extends AbstractHighlightsContainer {
     private void addComponent(JTextComponent component) {
         components.add(component);
         if (components.size() == 1) {
-            ParserTaskManager taskManager = Lookup.getDefault().lookup(ParserTaskManager.class);
             taskManager.addDataListener(GrammarParserDataDefinitions.REFERENCE_PARSE_TREE, dataListener);
             EditorRegistry.addPropertyChangeListener(editorRegistryListener);
         }
@@ -145,7 +144,6 @@ public class SemanticHighlighter extends AbstractHighlightsContainer {
 
     private void removeComponent(JTextComponent component) {
         if (components.remove(component) && components.isEmpty()) {
-            ParserTaskManager taskManager = Lookup.getDefault().lookup(ParserTaskManager.class);
             taskManager.removeDataListener(GrammarParserDataDefinitions.REFERENCE_PARSE_TREE, dataListener);
             EditorRegistry.removePropertyChangeListener(editorRegistryListener);
         }
@@ -262,9 +260,9 @@ public class SemanticHighlighter extends AbstractHighlightsContainer {
                 return;
             }
 
-            RP.post(new Runnable() {
+            taskManager.scheduleHighPriority(new Callable<Void>() {
                 @Override
-                public void run() {
+                public Void call() {
                     final SemanticAnalyzerListener listener = new SemanticAnalyzerListener();
                     ParseTreeWalker.DEFAULT.walk(listener, parserData.getData());
                     ((BaseDocument)document).runAtomicAsUser(new Runnable() {
@@ -277,6 +275,8 @@ public class SemanticHighlighter extends AbstractHighlightsContainer {
                             addHighlights(container, snapshot, currentSnapshot, listener.getLocalsDeclarations(), localDeclarationAttributes);
                         }
                     });
+
+                    return null;
                 }
             });
         }

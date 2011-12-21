@@ -1,6 +1,29 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * [The "BSD license"]
+ *  Copyright (c) 2011 Sam Harwell
+ *  All rights reserved.
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions
+ *  are met:
+ *  1. Redistributions of source code must retain the above copyright
+ *      notice, this list of conditions and the following disclaimer.
+ *  2. Redistributions in binary form must reproduce the above copyright
+ *      notice, this list of conditions and the following disclaimer in the
+ *      documentation and/or other materials provided with the distribution.
+ *  3. The name of the author may not be used to endorse or promote products
+ *      derived from this software without specific prior written permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+ *  IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ *  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ *  IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+ *  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+ *  NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ *  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ *  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package org.antlr.works.editor.st4.highlighter4;
 
@@ -13,6 +36,7 @@ import java.util.Deque;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.Callable;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
@@ -30,7 +54,6 @@ import org.antlr.netbeans.parsing.spi.ParserDataListener;
 import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
-import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.works.editor.st4.StringTemplateEditorKit;
 import org.antlr.works.editor.st4.TemplateParserDataDefinitions;
@@ -61,7 +84,6 @@ import org.netbeans.spi.editor.highlighting.support.AbstractHighlightsContainer;
 import org.netbeans.spi.editor.highlighting.support.OffsetsBag;
 import org.openide.util.Lookup;
 import org.openide.util.Parameters;
-import org.openide.util.RequestProcessor;
 
 /**
  *
@@ -69,9 +91,8 @@ import org.openide.util.RequestProcessor;
  */
 public class SemanticHighlighter extends AbstractHighlightsContainer {
 
-    private static final RequestProcessor RP = new RequestProcessor(SemanticHighlighter.class);
-
     private final StyledDocument document;
+    private final ParserTaskManager taskManager;
     private final VersionedDocument versionedDocument;
     private final DataListener dataListener;
     private final EditorRegistryListener editorRegistryListener;
@@ -93,6 +114,7 @@ public class SemanticHighlighter extends AbstractHighlightsContainer {
     private SemanticHighlighter(@NonNull StyledDocument document) {
         Parameters.notNull("document", document);
         this.document = document;
+        this.taskManager = Lookup.getDefault().lookup(ParserTaskManager.class);
         this.versionedDocument = VersionedDocumentUtilities.getVersionedDocument(document);
         this.dataListener = new DataListener();
         this.editorRegistryListener = new EditorRegistryListener();
@@ -134,7 +156,6 @@ public class SemanticHighlighter extends AbstractHighlightsContainer {
     private void addComponent(JTextComponent component) {
         components.add(component);
         if (components.size() == 1) {
-            ParserTaskManager taskManager = Lookup.getDefault().lookup(ParserTaskManager.class);
             taskManager.addDataListener(TemplateParserDataDefinitions.REFERENCE_PARSE_TREE, dataListener);
             EditorRegistry.addPropertyChangeListener(editorRegistryListener);
         }
@@ -142,7 +163,6 @@ public class SemanticHighlighter extends AbstractHighlightsContainer {
 
     private void removeComponent(JTextComponent component) {
         if (components.remove(component) && components.isEmpty()) {
-            ParserTaskManager taskManager = Lookup.getDefault().lookup(ParserTaskManager.class);
             taskManager.removeDataListener(TemplateParserDataDefinitions.REFERENCE_PARSE_TREE, dataListener);
             EditorRegistry.removePropertyChangeListener(editorRegistryListener);
         }
@@ -345,9 +365,9 @@ public class SemanticHighlighter extends AbstractHighlightsContainer {
                 return;
             }
 
-            RP.post(new Runnable() {
+            taskManager.scheduleHighPriority(new Callable<Void>() {
                 @Override
-                public void run() {
+                public Void call() {
                     final SemanticAnalyzerListener listener = new SemanticAnalyzerListener();
                     ParseTreeWalker.DEFAULT.walk(listener, parserData.getData());
                     ((BaseDocument)document).runAtomicAsUser(new Runnable() {
@@ -367,6 +387,8 @@ public class SemanticHighlighter extends AbstractHighlightsContainer {
                             addHighlights(container, snapshot, currentSnapshot, listener.getOptions(), expressionOptionAttributes);
                         }
                     });
+
+                    return null;
                 }
             });
         }
