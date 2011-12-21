@@ -237,7 +237,9 @@ public abstract class AbstractTokensTaskTaggerSnapshot<TState extends LineStateI
                 // TODO: perform this under a read lock
                 Token token = lexer.nextToken();
 
-                boolean inBounds = token.getStartIndex() < span.getEnd();
+                // The latter is true for EOF token with span.getEnd() at the end of the document
+                boolean inBounds = token.getStartIndex() < span.getEnd()
+                    || token.getStopIndex() < span.getEnd();
 
                 if (updateOffsets) {
                     int startLineCurrent;

@@ -171,7 +171,9 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
                 // TODO: perform this under a read lock
                 CommonToken token = (CommonToken)lexer.nextToken();
 
-                boolean inBounds = token.getStartIndex() < span.getEnd();
+                // The latter is true for EOF token with span.getEnd() at the end of the document
+                boolean inBounds = token.getStartIndex() < span.getEnd()
+                    || token.getStopIndex() < span.getEnd();
 
                 if (updateOffsets) {
                     int startLineCurrent;
@@ -200,7 +202,7 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
                                 if (!lineStates.get(i).getIsMultiLineToken() || lineStateChanged)
                                     extendMultiLineSpanToLine = i + 1;
 
-                                if (inBounds)
+                                if (inBounds || propagate)
                                     setLineState(i, lineStates.get(i).createMultiLineState());
                             }
                         }
@@ -219,7 +221,7 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
                         if (!lineStates.get(i).getIsMultiLineToken())
                             extendMultiLineSpanToLine = i + 1;
 
-                        if (inBounds)
+                        if (inBounds || propagate)
                             setLineState(i, lineStates.get(i).createMultiLineState());
                     }
                 }
@@ -235,7 +237,7 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
 
                     // even if the state didn't change, we call SetLineState to make sure the _first/_lastChangedLine values get updated.
                     // have to check bounds for this one or the editor might not get an update (if the token ends a line)
-                    if (updateOffsets && inBounds)
+                    if (updateOffsets && (inBounds || propagate))
                         setLineState(line, stateAtEndOfLine);
 
                     if (lineStateChanged)
