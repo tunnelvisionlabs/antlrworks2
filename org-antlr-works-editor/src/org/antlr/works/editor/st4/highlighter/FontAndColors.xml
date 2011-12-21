@@ -8,8 +8,8 @@
     <fontcolor name="reference" foreColor="FF008800">
         <font style="bold" />
     </fontcolor>
-    <fontcolor name="comment" default="comment" foreColor="FF008000" />
-    <fontcolor name="stringliteral" default="string" foreColor="FFA31515" />
+    <fontcolor name="comment" default="comment" />
+    <fontcolor name="stringliteral" default="string" />
     <fontcolor name="whitespace" default="whitespace"/>
     <fontcolor name="operator" default="operator" />
 
