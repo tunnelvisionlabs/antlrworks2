@@ -70,7 +70,7 @@ public class SemanticReferencesHighlighter extends AbstractHighlightsContainer {
             StyledDocument document = (StyledDocument)context.getDocument();
             SemanticReferencesHighlighter highlighter = new SemanticReferencesHighlighter(document);
             highlighter.initialize();
-            return new HighlightsLayer[] { HighlightsLayer.create(SemanticReferencesHighlighter.class.getName(), ZOrder.SYNTAX_RACK, true, highlighter) };
+            return new HighlightsLayer[] { HighlightsLayer.create(SemanticReferencesHighlighter.class.getName(), ZOrder.SYNTAX_RACK.forPosition(5), true, highlighter) };
         }
 
     }
