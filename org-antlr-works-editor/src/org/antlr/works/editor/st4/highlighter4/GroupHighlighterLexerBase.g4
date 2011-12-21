@@ -207,6 +207,7 @@ mode TemplateExpression;
     TemplateExpression_LBRACE : LBRACE {$type = LBRACE; pushMode(AnonymousTemplate);};
     TemplateExpression_WS : WS {$type = WS;};
 
+    SUPER : 'super';
     IF : 'if';
     ELSEIF : 'elseif';
     ENDIF : 'endif';
