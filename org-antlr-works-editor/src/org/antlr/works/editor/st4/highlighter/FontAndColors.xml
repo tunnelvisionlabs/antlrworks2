@@ -16,6 +16,30 @@
     <!--
         StringTemplate
     -->
+    <fontcolor name="templateUse" default="identifier"/>
+    <fontcolor name="templateDeclaration" default="templateUse">
+        <font style="bold"/>
+    </fontcolor>
+    <fontcolor name="regionUse" default="templateUse">
+        <font style="italic"/>
+    </fontcolor>
+    <fontcolor name="regionDeclaration" default="regionUse">
+        <font style="bold,italic"/>
+    </fontcolor>
+    <fontcolor name="dictionaryUse" default="templateUse"/>
+    <fontcolor name="dictionaryDeclaration" default="dictionaryUse">
+        <font style="bold"/>
+    </fontcolor>
+    <fontcolor name="parameterUse" default="identifier" foreColor="FF008000"/>
+    <fontcolor name="parameterDeclaration" default="parameterUse" />
+    <fontcolor name="attributeUse" default="parameterUse">
+        <font style="italic" />
+    </fontcolor>
+
+    <fontcolor name="expressionOption" default="identifier">
+        <font style="italic"/>
+    </fontcolor>
+
     <fontcolor name="bigStringDelimiter" bgColor="FFFFFF00" />
     <fontcolor name="expressionDelimiter" />
     <fontcolor name="anonymousTemplateDelimiter">

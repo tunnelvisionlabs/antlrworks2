@@ -38,6 +38,7 @@ public class TemplateHighlighter extends ANTLRHighlighterBaseV4<TemplateHighligh
     private final AttributeSet anonymousTemplateDelimiterAttributes;
     private final AttributeSet escapeCharacterAttributes;
     private final AttributeSet escapeTagAttributes;
+    private final AttributeSet regionUseAttributes;
 
     private TemplateHighlighterLexer lexer;
 
@@ -57,6 +58,7 @@ public class TemplateHighlighter extends ANTLRHighlighterBaseV4<TemplateHighligh
         anonymousTemplateDelimiterAttributes = getFontAndColors(settings, "anonymousTemplateDelimiter");
         escapeCharacterAttributes = getFontAndColors(settings, "escapeCharacter");
         escapeTagAttributes = getFontAndColors(settings, "escapeTag");
+        this.regionUseAttributes = getFontAndColors(settings, "regionUse");
     }
 
     private static AttributeSet getFontAndColors(FontColorSettings settings, String category) {
@@ -147,7 +149,7 @@ public class TemplateHighlighter extends ANTLRHighlighterBaseV4<TemplateHighligh
             return stringLiteralAttributes;
 
         case GroupHighlighterLexerBase.REGION_ID:
-            return symbolReferenceAttributes;
+            return regionUseAttributes;
 
         default:
             return null;
