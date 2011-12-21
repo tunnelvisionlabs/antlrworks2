@@ -30,6 +30,8 @@ package org.antlr.netbeans.parsing.spi;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.WeakHashMap;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import javax.swing.text.JTextComponent;
@@ -59,6 +61,9 @@ public abstract class ParserTaskScheduler {
     public static final Class<? extends ParserTaskScheduler> SELECTED_NODES_SENSITIVE_TASK_SCHEDULER =
         SelectedNodesParserTaskScheduler.class;
 
+    private final Map<VersionedDocument, Collection<ScheduledFuture<ParserData<?>>>> scheduledDocumentTasks =
+        new WeakHashMap<VersionedDocument, Collection<ScheduledFuture<ParserData<?>>>>();
+
     private boolean initialized;
 
     public final void initialize() {
@@ -82,6 +87,24 @@ public abstract class ParserTaskScheduler {
             return;
         }
 
+        Collection<ScheduledFuture<ParserData<?>>> existing;
+        synchronized(scheduledDocumentTasks) {
+            existing = scheduledDocumentTasks.get(document);
+            if (existing == null) {
+                existing = new ArrayList<ScheduledFuture<ParserData<?>>>();
+                scheduledDocumentTasks.put(document, existing);
+            }
+        }
+
+        synchronized (existing) {
+            for (ScheduledFuture<ParserData<?>> future : existing) {
+                future.cancel(false);
+            }
+
+            existing.clear();
+        }
+
+        // Schedule data updates
         @SuppressWarnings("unchecked")
         Collection<? extends ParserDataDefinition<?>> mimeData = (Collection<? extends ParserDataDefinition<?>>)MimeLookup.getLookup(document.getMimeType()).lookupAll(ParserDataDefinition.class);
         List<ParserDataDefinition<?>> currentScheduledData = new ArrayList<ParserDataDefinition<?>>();
@@ -91,7 +114,10 @@ public abstract class ParserTaskScheduler {
             }
         }
 
-        Collection<ScheduledFuture<ParserData<?>>> future = getTaskManager().schedule(document, component, currentScheduledData, delay, timeUnit);
+        Collection<ScheduledFuture<ParserData<?>>> futures = getTaskManager().schedule(document, component, currentScheduledData, delay, timeUnit);
+        synchronized (existing) {
+            existing.addAll(futures);
+        }
     }
     
     protected int getParseDelayMilliseconds() {
