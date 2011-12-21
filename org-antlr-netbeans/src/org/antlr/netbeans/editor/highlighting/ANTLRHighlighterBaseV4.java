@@ -38,7 +38,6 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.StyledDocument;
 import org.antlr.netbeans.editor.text.OffsetRegion;
 import org.antlr.v4.runtime.CharStream;
-import org.antlr.v4.runtime.CommonToken;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Interval;
 import org.netbeans.api.annotations.common.CheckForNull;
@@ -157,7 +156,7 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
 
             TokenSourceWithStateV4<TState> lexer = createLexer(input, startState);
 
-            CommonToken previousToken = null;
+            Token previousToken = null;
 //            int previousTokenLine = 0;
             boolean previousTokenEndsLine = false;
 
@@ -169,7 +168,7 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
             while (true)
             {
                 // TODO: perform this under a read lock
-                CommonToken token = (CommonToken)lexer.nextToken();
+                Token token = lexer.nextToken();
 
                 // The latter is true for EOF token with span.getEnd() at the end of the document
                 boolean inBounds = token.getStartIndex() < span.getEnd()
@@ -401,12 +400,12 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
         return request;
     }
 
-    protected boolean tokenSkippedLines(int endLinePrevious, CommonToken token) {
+    protected boolean tokenSkippedLines(int endLinePrevious, Token token) {
         int startLineCurrent = NbDocument.findLineNumber(this.document, token.getStartIndex());
         return startLineCurrent > endLinePrevious + 1;
     }
 
-    protected boolean isMultiLineToken(TokenSourceWithStateV4<TState> lexer, CommonToken token) {
+    protected boolean isMultiLineToken(TokenSourceWithStateV4<TState> lexer, Token token) {
         /*if (lexer != null && lexer.getLine() > token.getLine()) {
             return true;
         }*/
@@ -416,7 +415,7 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
         return startLine != stopLine;
     }
 
-    protected boolean tokenEndsAtEndOfLine(TokenSourceWithStateV4<TState> lexer, CommonToken token) {
+    protected boolean tokenEndsAtEndOfLine(TokenSourceWithStateV4<TState> lexer, Token token) {
         CharStream charStream = lexer.getCharStream();
         if (charStream != null) {
             int nextCharIndex = token.getStopIndex() + 1;
@@ -472,7 +471,7 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
 
     protected abstract TokenSourceWithStateV4<TState> createLexer(CharStream input, TState startState);
 
-    protected Collection<Highlight> getHighlightsForToken(CommonToken token) {
+    protected Collection<Highlight> getHighlightsForToken(Token token) {
         AttributeSet attributes = highlightToken(token);
         if (attributes != null && attributes.getAttributeCount() > 0) {
             return new SingleHighlightSequence(new Highlight(token.getStartIndex(), token.getStopIndex() + 1, attributes));

@@ -14,7 +14,6 @@ import org.antlr.netbeans.editor.highlighting.Highlight;
 import org.antlr.netbeans.editor.highlighting.TokenSourceWithStateV4;
 import org.antlr.netbeans.editor.text.OffsetRegion;
 import org.antlr.v4.runtime.CharStream;
-import org.antlr.v4.runtime.CommonToken;
 import org.antlr.v4.runtime.Token;
 import org.antlr.works.editor.st4.StringTemplateEditorKit;
 import org.netbeans.api.editor.mimelookup.MimeLookup;
@@ -145,7 +144,7 @@ public class TemplateHighlighter extends ANTLRHighlighterBaseV4<TemplateHighligh
     }
 
     @Override
-    protected Collection<Highlight> getHighlightsForToken(CommonToken token) {
+    protected Collection<Highlight> getHighlightsForToken(Token token) {
 //        if (token.getType() == GroupHighlighterLexer.LEGACY_DELIMITERS) {
 //            throw new UnsupportedOperationException("Not implemented yet.");
 //        } else {
