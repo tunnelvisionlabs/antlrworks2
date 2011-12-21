@@ -157,7 +157,7 @@ public class RuleScanningTaskV4 extends RuleScanningTask {
                     } else {
                         lexerRulesRootDescription.getChildren().add(ruleDescription);
                     }
-                } else if (child.getChildCount() == 0) {
+                } else if (child.getChildCount() == 0 && child.getToken() != null) {
                     String ruleName = child.getText();
                     if (ruleName == null || ruleName.length() == 0) {
                         continue;
