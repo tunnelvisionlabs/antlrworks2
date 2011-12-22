@@ -45,6 +45,7 @@ import org.antlr.netbeans.editor.commenting.ExtendedCommentAction;
 import org.antlr.netbeans.editor.commenting.ExtendedUncommentAction;
 import org.antlr.netbeans.editor.commenting.LineCommentFormat;
 import org.antlr.netbeans.editor.commenting.StandardCommenter;
+import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.netbeans.api.editor.mimelookup.MimeLookup;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.netbeans.api.editor.settings.SimpleValueNames;
@@ -114,6 +115,15 @@ public class GrammarEditorKit extends NbEditorKit {
         }
 
         return actions;
+    }
+
+    public static boolean isLegacyMode(DocumentSnapshot snapshot) {
+        Document document = snapshot.getVersionedDocument().getDocument();
+        if (document == null) {
+            return false;
+        }
+
+        return isLegacyMode(document);
     }
 
     public static boolean isLegacyMode(Snapshot snapshot) {

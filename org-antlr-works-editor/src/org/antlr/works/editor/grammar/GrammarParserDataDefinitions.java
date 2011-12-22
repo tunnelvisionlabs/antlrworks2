@@ -36,6 +36,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.works.editor.grammar.codemodel.FileModel;
 import org.antlr.works.editor.grammar.experimental.CurrentRuleContextData;
+import org.antlr.works.editor.grammar.parser.CompiledModel;
 import org.antlr.works.editor.shared.completion.Anchor;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 
@@ -44,6 +45,8 @@ import org.netbeans.api.editor.mimelookup.MimeRegistration;
  * @author Sam Harwell
  */
 public class GrammarParserDataDefinitions {
+    public static final ParserDataDefinition<CompiledModel> COMPILED_MODEL = new CompiledModelDataDefinition();
+
     public static final ParserDataDefinition<List<Anchor>> REFERENCE_ANCHOR_POINTS = new ReferenceAnchorPointsDataDefinition();
     public static final ParserDataDefinition<ParserRuleContext<Token>> REFERENCE_PARSE_TREE = new ReferenceParseTreeDataDefinition();
 
@@ -53,6 +56,11 @@ public class GrammarParserDataDefinitions {
     public static final ParserDataDefinition<FileModel> FILE_MODEL = new FileModelDataDefinition();
 
     private GrammarParserDataDefinitions() {
+    }
+
+    @MimeRegistration(mimeType=GrammarEditorKit.GRAMMAR_MIME_TYPE, service=ParserDataDefinition.class)
+    public static ParserDataDefinition<CompiledModel> getCompiledModelDataDefinition() {
+        return COMPILED_MODEL;
     }
 
     @MimeRegistration(mimeType=GrammarEditorKit.GRAMMAR_MIME_TYPE, service=ParserDataDefinition.class)
@@ -83,6 +91,31 @@ public class GrammarParserDataDefinitions {
     @MimeRegistration(mimeType=GrammarEditorKit.GRAMMAR_MIME_TYPE, service=ParserDataDefinition.class)
     public static ParserDataDefinition<FileModel> getFileModelDataDefinition() {
         return FILE_MODEL;
+    }
+
+    private static final class CompiledModelDataDefinition implements ParserDataDefinition<CompiledModel> {
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public Class<CompiledModel> getDataType() {
+            return CompiledModel.class;
+        }
+
+        @Override
+        public boolean isComponentSpecific() {
+            return false;
+        }
+
+        @Override
+        public boolean isCacheable() {
+            return true;
+        }
+
+        @Override
+        public Class<? extends ParserTaskScheduler> getScheduler() {
+            return ParserTaskScheduler.CONTENT_SENSITIVE_TASK_SCHEDULER;
+        }
+
     }
 
     private static final class ReferenceAnchorPointsDataDefinition implements ParserDataDefinition<List<Anchor>> {
