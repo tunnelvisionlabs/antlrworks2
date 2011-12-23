@@ -64,7 +64,7 @@ public class CurrentDocumentParserTaskScheduler extends CurrentEditorParserTaskS
         } else {
             currentDocument = null;
             versionedDocument = null;
-            schedule(null, null);
+            schedule((VersionedDocument)null, (JTextComponent)null);
         }
     }
 

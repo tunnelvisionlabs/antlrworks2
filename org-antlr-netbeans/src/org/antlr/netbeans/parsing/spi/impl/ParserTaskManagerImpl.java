@@ -59,6 +59,7 @@ import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.netbeans.parsing.spi.ParserTaskProvider;
 import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
 import org.netbeans.api.annotations.common.NonNull;
+import org.netbeans.api.annotations.common.NullAllowed;
 import org.netbeans.api.editor.mimelookup.MimeLookup;
 import org.netbeans.editor.BaseDocument;
 import org.netbeans.lib.editor.util.ListenerList;
@@ -75,6 +76,8 @@ import org.openide.util.lookup.ServiceProvider;
 public class ParserTaskManagerImpl implements ParserTaskManager {
     private static final Long DEFAULT_DELAY = 500L;
     private static final TimeUnit DEFAULT_TIMEUNIT = TimeUnit.MILLISECONDS;
+
+    private final ListenerList<ParserDataListener<Object>> globalListeners = new ListenerList<ParserDataListener<Object>>();
 
     private final Map<ParserDataDefinition<?>, ListenerList<ParserDataListener<?>>> dataListeners =
         new HashMap<ParserDataDefinition<?>, ListenerList<ParserDataListener<?>>>();
@@ -132,25 +135,23 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
         Parameters.notNull("definition", definition);
         Parameters.notNull("options", options);
 
-        Callable<ParserData<T>> callable = createCallable(snapshot, component, definition);
-        if (options.contains(ParserDataOptions.ALLOW_STALE)) {
-            @SuppressWarnings("unchecked")
-            ParserData<T> cachedData = (ParserData<T>)snapshot.getVersionedDocument().getDocument().getProperty(definition);
-            boolean useCached = options.contains(ParserDataOptions.NO_UPDATE);
-            if (!useCached && cachedData != null) {
-                if (options.contains(ParserDataOptions.ALLOW_STALE)) {
-                    useCached = true;
-                } else if (cachedData.getSnapshot().equals(snapshot)) {
-                    useCached = true;
-                }
-            }
-
-            if (useCached) {
-                return new CompletedFuture<ParserData<T>>(cachedData, null);
+        @SuppressWarnings("unchecked")
+        ParserData<T> cachedData = (ParserData<T>)snapshot.getVersionedDocument().getDocument().getProperty(definition);
+        boolean useCached = options.contains(ParserDataOptions.NO_UPDATE);
+        if (!useCached && cachedData != null) {
+            if (options.contains(ParserDataOptions.ALLOW_STALE)) {
+                useCached = true;
+            } else if (cachedData.getSnapshot().equals(snapshot)) {
+                useCached = true;
             }
         }
 
-        if (options.contains(ParserDataOptions.SYNCHRONOUS)) {
+        if (useCached) {
+            return new CompletedFuture<ParserData<T>>(cachedData, null);
+        }
+
+        Callable<ParserData<T>> callable = createCallable(snapshot, component, definition);
+        if (options.contains(ParserDataOptions.SYNCHRONOUS) || isParserThread()) {
             try {
                 return new CompletedFuture<ParserData<T>>(callable.call(), null);
             } catch (Exception ex) {
@@ -178,54 +179,111 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
     }
 
     @Override
-    public <T> ScheduledFuture<ParserData<T>> schedule(VersionedDocument document, ParserDataDefinition<T> data) {
-        return schedule(document, null, data);
+    public <T> ScheduledFuture<ParserData<T>> scheduleData(VersionedDocument document, ParserDataDefinition<T> data) {
+        return scheduleData(document, null, data);
     }
 
     @Override
-    public Collection<ScheduledFuture<ParserData<?>>> schedule(VersionedDocument document, Collection<ParserDataDefinition<?>> data) {
-        return schedule(document, null, data);
+    public Collection<ScheduledFuture<ParserData<?>>> scheduleData(VersionedDocument document, Collection<ParserDataDefinition<?>> data) {
+        return scheduleData(document, null, data);
     }
 
     @Override
-    public <T> ScheduledFuture<ParserData<T>> schedule(VersionedDocument document, ParserDataDefinition<T> data, long delay, TimeUnit timeUnit) {
-        return schedule(document, null, data, delay, timeUnit);
+    public <T> ScheduledFuture<ParserData<T>> scheduleData(VersionedDocument document, ParserDataDefinition<T> data, long delay, TimeUnit timeUnit) {
+        return scheduleData(document, null, data, delay, timeUnit);
     }
 
     @Override
-    public Collection<ScheduledFuture<ParserData<?>>> schedule(VersionedDocument document, @NonNull Collection<ParserDataDefinition<?>> data, long delay, TimeUnit timeUnit) {
-        return schedule(document, null, data, delay, timeUnit);
+    public Collection<ScheduledFuture<ParserData<?>>> scheduleData(VersionedDocument document, @NonNull Collection<ParserDataDefinition<?>> data, long delay, TimeUnit timeUnit) {
+        return scheduleData(document, null, data, delay, timeUnit);
     }
 
     @Override
-    public <T> ScheduledFuture<ParserData<T>> schedule(VersionedDocument document, JTextComponent component, ParserDataDefinition<T> data) {
-        return schedule(document, component, data, DEFAULT_DELAY, DEFAULT_TIMEUNIT);
+    public <T> ScheduledFuture<ParserData<T>> scheduleData(VersionedDocument document, JTextComponent component, ParserDataDefinition<T> data) {
+        return scheduleData(document, component, data, DEFAULT_DELAY, DEFAULT_TIMEUNIT);
     }
 
     @Override
-    public Collection<ScheduledFuture<ParserData<?>>> schedule(VersionedDocument document, JTextComponent component, Collection<ParserDataDefinition<?>> data) {
-        return schedule(document, component, data, DEFAULT_DELAY, DEFAULT_TIMEUNIT);
+    public Collection<ScheduledFuture<ParserData<?>>> scheduleData(VersionedDocument document, JTextComponent component, Collection<ParserDataDefinition<?>> data) {
+        return scheduleData(document, component, data, DEFAULT_DELAY, DEFAULT_TIMEUNIT);
     }
 
     @Override
-    public <T> ScheduledFuture<ParserData<T>> schedule(VersionedDocument document, JTextComponent component, ParserDataDefinition<T> data, long delay, TimeUnit timeUnit) {
+    public <T> ScheduledFuture<ParserData<T>> scheduleData(VersionedDocument document, JTextComponent component, ParserDataDefinition<T> data, long delay, TimeUnit timeUnit) {
         Callable<ParserData<T>> callable = createCallable(document.getCurrentSnapshot(), component, data);
         return lowPriorityExecutor.schedule(callable, delay, timeUnit);
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public Collection<ScheduledFuture<ParserData<?>>> schedule(VersionedDocument document, JTextComponent component, @NonNull Collection<ParserDataDefinition<?>> data, long delay, TimeUnit timeUnit) {
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    public Collection<ScheduledFuture<ParserData<?>>> scheduleData(VersionedDocument document, JTextComponent component, @NonNull Collection<ParserDataDefinition<?>> data, long delay, TimeUnit timeUnit) {
         if (data.isEmpty()) {
             return Collections.emptyList();
         }
 
         List<ScheduledFuture<ParserData<?>>> futures = new ArrayList<ScheduledFuture<ParserData<?>>>();
         for (ParserDataDefinition dataDefinition : data) {
-            futures.add((ScheduledFuture<ParserData<?>>)schedule(document, component, dataDefinition, delay, timeUnit));
+            futures.add((ScheduledFuture<ParserData<?>>)scheduleData(document, component, dataDefinition, delay, timeUnit));
         }
 
         return futures;
+    }
+
+    @Override
+    public ScheduledFuture<Collection<ParserData<?>>> schedule(@NonNull VersionedDocument document, @NonNull ParserTaskProvider provider) {
+        return schedule(document, null, provider);
+    }
+
+    @Override
+    public Collection<ScheduledFuture<Collection<ParserData<?>>>> schedule(@NonNull VersionedDocument document, @NonNull Collection<ParserTaskProvider> providers) {
+        return schedule(document, null, providers);
+    }
+
+    @Override
+    public ScheduledFuture<Collection<ParserData<?>>> schedule(@NonNull VersionedDocument document, @NonNull ParserTaskProvider provider, long delay, @NonNull TimeUnit timeUnit) {
+        return schedule(document, null, provider, delay, timeUnit);
+    }
+
+    @Override
+    public Collection<ScheduledFuture<Collection<ParserData<?>>>> schedule(@NonNull VersionedDocument document, @NonNull Collection<ParserTaskProvider> providers, long delay, @NonNull TimeUnit timeUnit) {
+        return schedule(document, null, providers, delay, timeUnit);
+    }
+
+    @Override
+    public ScheduledFuture<Collection<ParserData<?>>> schedule(@NonNull VersionedDocument document, @NullAllowed JTextComponent component, @NonNull ParserTaskProvider provider) {
+        return schedule(document, component, provider, DEFAULT_DELAY, DEFAULT_TIMEUNIT);
+    }
+
+    @Override
+    public Collection<ScheduledFuture<Collection<ParserData<?>>>> schedule(@NonNull VersionedDocument document, @NullAllowed JTextComponent component, @NonNull Collection<ParserTaskProvider> providers) {
+        return schedule(document, component, providers, DEFAULT_DELAY, DEFAULT_TIMEUNIT);
+    }
+
+    @Override
+    public ScheduledFuture<Collection<ParserData<?>>> schedule(@NonNull VersionedDocument document, @NullAllowed JTextComponent component, @NonNull ParserTaskProvider provider, long delay, @NonNull TimeUnit timeUnit) {
+        Callable<Collection<ParserData<?>>> callable = createCallable(document.getCurrentSnapshot(), component, provider);
+        return lowPriorityExecutor.schedule(callable, delay, timeUnit);
+    }
+
+    @Override
+    public Collection<ScheduledFuture<Collection<ParserData<?>>>> schedule(@NonNull VersionedDocument document, @NullAllowed JTextComponent component, @NonNull Collection<ParserTaskProvider> providers, long delay, @NonNull TimeUnit timeUnit) {
+        if (providers.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        Collection<ScheduledFuture<Collection<ParserData<?>>>> result = new ArrayList<ScheduledFuture<Collection<ParserData<?>>>>();
+        for (ParserTaskProvider provider : providers) {
+            result.add(schedule(document, component, provider, delay, timeUnit));
+        }
+
+        return result;
+    }
+
+    @Override
+    public <T> ScheduledFuture<T> scheduleLowPriority(Callable<T> callable) {
+        Parameters.notNull("callable", callable);
+
+        return lowPriorityExecutor.schedule(callable, 0, TimeUnit.MILLISECONDS);
     }
 
     @Override
@@ -236,7 +294,28 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
     }
 
     @Override
+    public void addDataListener(ParserDataListener<Object> listener) {
+        Parameters.notNull("listener", listener);
+
+        synchronized (globalListeners) {
+            globalListeners.add(listener);
+        }
+    }
+
+    @Override
+    public void removeDataListener(ParserDataListener<Object> listener) {
+        Parameters.notNull("listener", listener);
+
+        synchronized (globalListeners) {
+            globalListeners.remove(listener);
+        }
+    }
+
+    @Override
     public <T> void addDataListener(ParserDataDefinition<T> definition, ParserDataListener<T> listener) {
+        Parameters.notNull("definition", definition);
+        Parameters.notNull("listener", listener);
+
         synchronized (dataListeners) {
             ListenerList<ParserDataListener<?>> listeners = dataListeners.get(definition);
             if (listeners == null) {
@@ -250,6 +329,9 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
 
     @Override
     public <T> void removeDataListener(ParserDataDefinition<T> definition, ParserDataListener<T> listener) {
+        Parameters.notNull("definition", definition);
+        Parameters.notNull("listener", listener);
+
         synchronized (dataListeners) {
             ListenerList<ParserDataListener<?>> listeners = dataListeners.get(definition);
             if (listeners == null) {
@@ -263,8 +345,17 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
         }
     }
 
+    private static boolean isParserThread() {
+        return Thread.currentThread() instanceof ParserThread;
+    }
+
     private <T> Callable<ParserData<T>> createCallable(DocumentSnapshot snapshot, JTextComponent component, ParserDataDefinition<T> data) {
         Callable<ParserData<T>> callable = new UpdateDataCallable<T>(snapshot, component, data);
+        return callable;
+    }
+
+    private Callable<Collection<ParserData<?>>> createCallable(DocumentSnapshot snapshot, JTextComponent component, ParserTaskProvider provider) {
+        Callable<Collection<ParserData<?>>> callable = new UpdateTaskCallable(snapshot, component, provider);
         return callable;
     }
 
@@ -274,15 +365,22 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
             listeners = dataListeners.get(definition);
         }
 
-        if (listeners == null) {
+        if (listeners == null && globalListeners.getListenerCount() == 0) {
             return;
         }
 
         ParserDataEvent<T> event = new ParserDataEvent<T>(this, definition, data);
-        for (ParserDataListener<?> listener : listeners.getListeners()) {
-            @SuppressWarnings("unchecked")
-            ParserDataListener<T> typedListener = (ParserDataListener<T>)listener;
-            typedListener.dataChanged(event);
+
+        if (listeners != null) {
+            for (ParserDataListener<?> listener : listeners.getListeners()) {
+                @SuppressWarnings("unchecked")
+                ParserDataListener<T> typedListener = (ParserDataListener<T>)listener;
+                typedListener.dataChanged(event);
+            }
+        }
+
+        for (ParserDataListener<Object> listener : globalListeners.getListeners()) {
+            listener.dataChanged(event);
         }
     }
 
@@ -322,6 +420,14 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
 
     }
 
+    private static class ParserThread extends Thread {
+
+        public ParserThread(Runnable target) {
+            super(target);
+        }
+
+    }
+
     private static class ParserThreadFactory implements ThreadFactory {
         private final int priority;
 
@@ -335,7 +441,7 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
 
         @Override
         public Thread newThread(Runnable r) {
-            Thread thread = new Thread(r);
+            Thread thread = new ParserThread(r);
             thread.setPriority(priority);
             return thread;
         }
@@ -355,6 +461,16 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
         @Override
         @SuppressWarnings("unchecked")
         public ParserData<T> call() throws Exception {
+            if (data.isCacheable()) {
+                Document document = snapshot.getVersionedDocument().getDocument();
+                if (document != null) {
+                    ParserData<T> cachedData = (ParserData<T>)document.getProperty(data);
+                    if (cachedData != null && cachedData.getSnapshot().equals(snapshot)) {
+                        return cachedData;
+                    }
+                }
+            }
+
             ParserTaskProvider provider = getTaskProvider(snapshot.getVersionedDocument(), data);
             final ParserTask task = provider.createTask(snapshot.getVersionedDocument());
 
@@ -379,6 +495,40 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
             }
 
             return null;
+        }
+    }
+
+    private class UpdateTaskCallable implements Callable<Collection<ParserData<?>>> {
+        private final DocumentSnapshot snapshot;
+        private final JTextComponent component;
+        private final ParserTaskProvider provider;
+
+        public UpdateTaskCallable(DocumentSnapshot snapshot, JTextComponent component, ParserTaskProvider provider) {
+            this.snapshot = snapshot;
+            this.component = component;
+            this.provider = provider;
+        }
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public Collection<ParserData<?>> call() throws Exception {
+            final ParserTask task = provider.createTask(snapshot.getVersionedDocument());
+
+            ResultAggregator handler = new ResultAggregator();
+            task.parse(ParserTaskManagerImpl.this, component, snapshot, provider.getDefinition().getOutputs(), handler);
+
+            Document document = snapshot.getVersionedDocument().getDocument();
+            if (document != null) {
+                for (ParserData<?> result : handler.getResults()) {
+                    if (result.getDefinition().isCacheable()) {
+                        document.putProperty(result.getDefinition(), result);
+                    }
+
+                    fireDataChanged((ParserDataDefinition)result.getDefinition(), result);
+                }
+            }
+
+            return handler.getResults();
         }
     }
 

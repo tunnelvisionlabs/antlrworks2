@@ -29,8 +29,9 @@ package org.antlr.netbeans.parsing.spi;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.WeakHashMap;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
@@ -38,8 +39,10 @@ import javax.swing.text.JTextComponent;
 import org.antlr.netbeans.editor.text.VersionedDocument;
 import org.antlr.netbeans.parsing.spi.impl.CurrentDocumentParserTaskScheduler;
 import org.antlr.netbeans.parsing.spi.impl.CursorSensitiveParserTaskScheduler;
+import org.antlr.netbeans.parsing.spi.impl.DataInputParserTaskScheduler;
 import org.antlr.netbeans.parsing.spi.impl.DocumentContentParserTaskScheduler;
 import org.antlr.netbeans.parsing.spi.impl.SelectedNodesParserTaskScheduler;
+import org.netbeans.api.annotations.common.NullAllowed;
 import org.netbeans.api.editor.mimelookup.MimeLookup;
 import org.openide.util.Lookup;
 
@@ -61,8 +64,14 @@ public abstract class ParserTaskScheduler {
     public static final Class<? extends ParserTaskScheduler> SELECTED_NODES_SENSITIVE_TASK_SCHEDULER =
         SelectedNodesParserTaskScheduler.class;
 
-    private final Map<VersionedDocument, Collection<ScheduledFuture<ParserData<?>>>> scheduledDocumentTasks =
+    public static final Class<? extends ParserTaskScheduler> INPUT_SENSITIVE_TASK_SCHEDULER =
+        DataInputParserTaskScheduler.class;
+
+    private final Map<VersionedDocument, Collection<ScheduledFuture<ParserData<?>>>> scheduledDocumentDataTasks =
         new WeakHashMap<VersionedDocument, Collection<ScheduledFuture<ParserData<?>>>>();
+
+    private final Map<VersionedDocument, Collection<ScheduledFuture<Collection<ParserData<?>>>>> scheduledDocumentTasks =
+        new WeakHashMap<VersionedDocument, Collection<ScheduledFuture<Collection<ParserData<?>>>>>();
 
     private boolean initialized;
 
@@ -75,7 +84,7 @@ public abstract class ParserTaskScheduler {
     }
 
     protected void schedule(VersionedDocument document) {
-        schedule(document, null);
+        schedule(document, (JTextComponent)null);
     }
 
     protected void schedule(VersionedDocument document, JTextComponent component) {
@@ -88,11 +97,11 @@ public abstract class ParserTaskScheduler {
         }
 
         Collection<ScheduledFuture<ParserData<?>>> existing;
-        synchronized(scheduledDocumentTasks) {
-            existing = scheduledDocumentTasks.get(document);
+        synchronized(scheduledDocumentDataTasks) {
+            existing = scheduledDocumentDataTasks.get(document);
             if (existing == null) {
                 existing = new ArrayList<ScheduledFuture<ParserData<?>>>();
-                scheduledDocumentTasks.put(document, existing);
+                scheduledDocumentDataTasks.put(document, existing);
             }
         }
 
@@ -107,14 +116,59 @@ public abstract class ParserTaskScheduler {
         // Schedule data updates
         @SuppressWarnings("unchecked")
         Collection<? extends ParserDataDefinition<?>> mimeData = (Collection<? extends ParserDataDefinition<?>>)MimeLookup.getLookup(document.getMimeType()).lookupAll(ParserDataDefinition.class);
-        List<ParserDataDefinition<?>> currentScheduledData = new ArrayList<ParserDataDefinition<?>>();
+        Set<ParserDataDefinition<?>> currentScheduledData = new HashSet<ParserDataDefinition<?>>();
         for (ParserDataDefinition<?> data : mimeData) {
-            if (getClass().isAssignableFrom(data.getScheduler())) {
+            if (getClass().equals(data.getScheduler())) {
                 currentScheduledData.add(data);
             }
         }
 
-        Collection<ScheduledFuture<ParserData<?>>> futures = getTaskManager().schedule(document, component, currentScheduledData, delay, timeUnit);
+        Collection<ScheduledFuture<ParserData<?>>> futures = getTaskManager().scheduleData(document, component, currentScheduledData, delay, timeUnit);
+        synchronized (existing) {
+            existing.addAll(futures);
+        }
+    }
+
+    protected void schedule(VersionedDocument document, Collection<ParserTaskProvider> tasks) {
+        schedule(document, null, tasks);
+    }
+
+    protected void schedule(VersionedDocument document, JTextComponent component, Collection<ParserTaskProvider> tasks) {
+        schedule(document, component, tasks, getParseDelayMilliseconds(), TimeUnit.MILLISECONDS);
+    }
+
+    protected void schedule(VersionedDocument document, JTextComponent component, Collection<? extends ParserTaskProvider> taskProviders, int delay, TimeUnit timeUnit) {
+        if (document == null) {
+            return;
+        }
+
+        Collection<ScheduledFuture<Collection<ParserData<?>>>> existing;
+        synchronized(scheduledDocumentTasks) {
+            existing = scheduledDocumentTasks.get(document);
+            if (existing == null) {
+                existing = new ArrayList<ScheduledFuture<Collection<ParserData<?>>>>();
+                scheduledDocumentTasks.put(document, existing);
+            }
+        }
+
+        synchronized (existing) {
+            for (ScheduledFuture<Collection<ParserData<?>>> future : existing) {
+                future.cancel(false);
+            }
+
+            existing.clear();
+        }
+
+        // Schedule task updates
+        Set<ParserTaskProvider> currentScheduledProviders = new HashSet<ParserTaskProvider>();
+        providerLoop:
+        for (ParserTaskProvider provider : taskProviders) {
+            if (getClass().equals(provider.getDefinition().getScheduler())) {
+                currentScheduledProviders.add(provider);
+            }
+        }
+
+        Collection<ScheduledFuture<Collection<ParserData<?>>>> futures = getTaskManager().schedule(document, component, currentScheduledProviders, delay, timeUnit);
         synchronized (existing) {
             existing.addAll(futures);
         }
