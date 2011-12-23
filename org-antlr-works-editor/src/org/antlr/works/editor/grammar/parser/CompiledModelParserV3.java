@@ -75,7 +75,7 @@ public class CompiledModelParserV3 extends CompiledModelParser {
             ErrorManager.setErrorListener(new ANTLRErrorProvidingParser.ErrorListener());
             Tool tool = new Tool();
             tool.setLibDirectory(new File(snapshot.getVersionedDocument().getFileObject().getPath()).getParent());
-            NewGrammarWrapper g = new NewGrammarWrapper(tool);
+            GrammarWrapper g = new GrammarWrapper(tool);
             g.setFileName(""); // work around a bug in Grammar.setName that results in a NPE
             ANTLRParser.grammar__return result = parser.grammar_(g);
 

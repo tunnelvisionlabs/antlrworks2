@@ -45,7 +45,7 @@ public class CompiledModelV3 extends CompiledModel {
         return (CompiledFileModelV3)super.getResult();
     }
 
-    public NewGrammarWrapper getRootGrammar() {
+    public GrammarWrapper getRootGrammar() {
         return getResult().getGrammar();
     }
 

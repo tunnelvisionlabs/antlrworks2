@@ -48,18 +48,18 @@ import org.openide.util.Exceptions;
  *
  * @author Sam Harwell
  */
-public class NewGrammarWrapper extends Grammar {
+public class GrammarWrapper extends Grammar {
     
     private final List<CompiledFileModelV3> imported = new ArrayList<CompiledFileModelV3>();
 
-    public NewGrammarWrapper() {
+    public GrammarWrapper() {
     }
 
-    public NewGrammarWrapper(Tool tool) {
+    public GrammarWrapper(Tool tool) {
         super(tool);
     }
 
-    public NewGrammarWrapper(Tool tool, String fileName, CompositeGrammar composite) {
+    public GrammarWrapper(Tool tool, String fileName, CompositeGrammar composite) {
         super(tool, fileName, composite);
     }
 
@@ -109,7 +109,7 @@ public class NewGrammarWrapper extends Grammar {
             tokens = tokenList.toArray(tokens);
 
             try {
-                NewGrammarWrapper g = new NewGrammarWrapper(this.tool, fullName, this.composite);
+                GrammarWrapper g = new GrammarWrapper(this.tool, fullName, this.composite);
                 g.setFileName(fullName); // work around a bug in Grammar.setName that results in a NPE
                 ANTLRParser.grammar__return result = parser.grammar_(g);
                 imported.add(new CompiledFileModelV3(parser, g, result, fileObject, tokens));

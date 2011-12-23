@@ -39,17 +39,17 @@ import org.openide.filesystems.FileObject;
 public class CompiledFileModelV3 extends CompiledFileModel {
 
     private final ANTLRErrorProvidingParser parser;
-    private final NewGrammarWrapper grammar;
+    private final GrammarWrapper grammar;
     private final ANTLRParser.grammar__return result;
 
-    public CompiledFileModelV3(ANTLRErrorProvidingParser parser, NewGrammarWrapper grammar, ANTLRParser.grammar__return result, FileObject fileObject, CommonToken[] tokens) {
+    public CompiledFileModelV3(ANTLRErrorProvidingParser parser, GrammarWrapper grammar, ANTLRParser.grammar__return result, FileObject fileObject, CommonToken[] tokens) {
         super(fileObject, tokens);
         this.parser = parser;
         this.grammar = grammar;
         this.result = result;
     }
 
-    public NewGrammarWrapper getGrammar() {
+    public GrammarWrapper getGrammar() {
         return grammar;
     }
 
