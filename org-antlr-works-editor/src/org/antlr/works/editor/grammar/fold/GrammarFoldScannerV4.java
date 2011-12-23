@@ -36,21 +36,21 @@ import org.antlr.v4.parse.ANTLRParser;
 import org.antlr.v4.runtime.misc.IntervalSet;
 import org.antlr.v4.tool.ast.GrammarAST;
 import org.antlr.v4.tool.ast.GrammarRootAST;
-import org.antlr.works.editor.grammar.parser.GrammarParser.GrammarParserResult;
-import org.antlr.works.editor.grammar.parser.GrammarParserV4;
+import org.antlr.works.editor.grammar.parser.CompiledModel;
+import org.antlr.works.editor.grammar.parser.CompiledModelV4;
 import org.openide.text.NbDocument;
 
 /**
  *
  * @author Sam Harwell
  */
-public class GrammarFoldManagerTaskV4 extends GrammarFoldManagerTask {
+public class GrammarFoldScannerV4 extends GrammarFoldScanner {
 
     @Override
-    protected List<FoldInfo> calculateFolds(StyledDocument document, GrammarParserResult result) {
-        GrammarParserV4.GrammarParserResultV4 result4 = (GrammarParserV4.GrammarParserResultV4)result;
+    protected List<FoldInfo> calculateFolds(StyledDocument document, CompiledModel baseResult) {
+        CompiledModelV4 result4 = (CompiledModelV4)baseResult;
 
-        final List<GrammarFoldManagerTask.FoldInfo> folds = new ArrayList<GrammarFoldManagerTask.FoldInfo>();
+        final List<FoldInfo> folds = new ArrayList<FoldInfo>();
 
         GrammarRootAST parseResult = result4.getResult().getResult();
         if (parseResult != null) {
@@ -63,7 +63,7 @@ public class GrammarFoldManagerTaskV4 extends GrammarFoldManagerTask {
 
             List<GrammarAST> foldNodes = parseResult.getNodesWithType(foldTypes);
             for (GrammarAST child : foldNodes) {
-                String blockHint = null;
+                String blockHint;
                 switch (child.getType()) {
                 case ANTLRParser.MODE:
                     blockHint = "mode " + child.getChild(0).getText();
@@ -97,7 +97,7 @@ public class GrammarFoldManagerTaskV4 extends GrammarFoldManagerTask {
                     continue;
                 }
 
-                GrammarFoldManagerTask.FoldInfo fold = createFold(child, blockHint, document, result.getResult().getTokens());
+                FoldInfo fold = createFold(child, blockHint, document, result4.getResult().getTokens());
                 if (fold != null) {
                     folds.add(fold);
                 }
@@ -125,7 +125,7 @@ public class GrammarFoldManagerTaskV4 extends GrammarFoldManagerTask {
                         throw new IllegalStateException();
                     }
 
-                    GrammarFoldManagerTask.FoldInfo info = new GrammarFoldManagerTask.FoldInfo(document, token.getStartIndex(), token.getStopIndex() + 1, blockHint);
+                    FoldInfo info = new FoldInfo(document, token.getStartIndex(), token.getStopIndex() + 1, blockHint);
                     folds.add(info);
 
                     break;
@@ -158,7 +158,7 @@ public class GrammarFoldManagerTaskV4 extends GrammarFoldManagerTask {
             return null;
         }
 
-        GrammarFoldManagerTask.FoldInfo fold = new GrammarFoldManagerTask.FoldInfo(document, startToken.getStartIndex(), stopToken.getStopIndex() + 1, blockHint);
+        FoldInfo fold = new FoldInfo(document, startToken.getStartIndex(), stopToken.getStopIndex() + 1, blockHint);
         return fold;
     }
 

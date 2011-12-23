@@ -34,21 +34,21 @@ import org.antlr.grammar.v3.ANTLRParser;
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.CommonTree;
-import org.antlr.works.editor.grammar.parser.GrammarParser;
-import org.antlr.works.editor.grammar.parser.GrammarParserV3;
+import org.antlr.works.editor.grammar.parser.CompiledModel;
+import org.antlr.works.editor.grammar.parser.CompiledModelV3;
 import org.openide.text.NbDocument;
 
 /**
  *
  * @author Sam Harwell
  */
-public class GrammarFoldManagerTaskV3 extends GrammarFoldManagerTask {
+public class GrammarFoldScannerV3 extends GrammarFoldScanner {
 
     @Override
-    protected List<GrammarFoldManagerTask.FoldInfo> calculateFolds(StyledDocument document, GrammarParser.GrammarParserResult result) {
-        GrammarParserV3.GrammarParserResultV3 result3 = (GrammarParserV3.GrammarParserResultV3)result;
+    protected List<FoldInfo> calculateFolds(StyledDocument document, CompiledModel baseResult) {
+        CompiledModelV3 result3 = (CompiledModelV3)baseResult;
 
-        final List<GrammarFoldManagerTask.FoldInfo> folds = new ArrayList<GrammarFoldManagerTask.FoldInfo>();
+        final List<FoldInfo> folds = new ArrayList<FoldInfo>();
 
         /*if (!result.getParser().getSyntaxErrors().isEmpty() && !foldManager.currentFolds.isEmpty()) {
             return;
@@ -81,12 +81,12 @@ public class GrammarFoldManagerTaskV3 extends GrammarFoldManagerTask {
                         blockHint = "options {...}";
                     }
 
-                    CommonToken startToken = result.getResult().getTokens()[child.getTokenStartIndex()];
-                    CommonToken stopToken = result.getResult().getTokens()[child.getTokenStopIndex()];
+                    CommonToken startToken = result3.getResult().getTokens()[child.getTokenStartIndex()];
+                    CommonToken stopToken = result3.getResult().getTokens()[child.getTokenStopIndex()];
 
                     if (startToken.getType() == ANTLRParser.DOC_COMMENT) {
                         for (int index = child.getTokenStartIndex(); index <= child.getTokenStopIndex(); index++) {
-                            startToken = result.getResult().getTokens()[index];
+                            startToken = result3.getResult().getTokens()[index];
                             if (startToken.getType() != ANTLRParser.DOC_COMMENT && startToken.getChannel() != Token.HIDDEN_CHANNEL) {
                                 break;
                             }
@@ -99,12 +99,12 @@ public class GrammarFoldManagerTaskV3 extends GrammarFoldManagerTask {
                         continue;
                     }
 
-                    GrammarFoldManagerTask.FoldInfo info = new GrammarFoldManagerTask.FoldInfo(document, startToken.getStartIndex(), stopToken.getStopIndex() + 1, blockHint);
+                    FoldInfo info = new FoldInfo(document, startToken.getStartIndex(), stopToken.getStopIndex() + 1, blockHint);
                     folds.add(info);
                 }
             }
 
-            for (CommonToken token : result.getResult().getTokens()) {
+            for (CommonToken token : result3.getResult().getTokens()) {
                 switch (token.getType()) {
                 case ANTLRParser.DOC_COMMENT:
                 case ANTLRParser.ML_COMMENT:
@@ -126,7 +126,7 @@ public class GrammarFoldManagerTaskV3 extends GrammarFoldManagerTask {
                         throw new IllegalStateException();
                     }
 
-                    GrammarFoldManagerTask.FoldInfo info = new GrammarFoldManagerTask.FoldInfo(document, token.getStartIndex(), token.getStopIndex() + 1, blockHint);
+                    FoldInfo info = new FoldInfo(document, token.getStartIndex(), token.getStopIndex() + 1, blockHint);
                     folds.add(info);
 
                     break;

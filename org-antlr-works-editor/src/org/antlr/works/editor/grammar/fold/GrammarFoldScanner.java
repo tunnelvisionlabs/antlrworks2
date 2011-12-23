@@ -30,17 +30,13 @@ package org.antlr.works.editor.grammar.fold;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.EnumSet;
 import java.util.List;
 import javax.swing.SwingUtilities;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.StyledDocument;
-import org.antlr.works.editor.grammar.parser.GrammarParser;
-import org.antlr.works.editor.grammar.parser.GrammarParserResultTask;
+import org.antlr.works.editor.grammar.parser.CompiledModel;
 import org.netbeans.api.editor.fold.Fold;
 import org.netbeans.api.editor.fold.FoldType;
-import org.netbeans.modules.parsing.spi.Scheduler;
-import org.netbeans.modules.parsing.spi.SchedulerEvent;
 import org.netbeans.spi.editor.fold.FoldHierarchyTransaction;
 import org.netbeans.spi.editor.fold.FoldOperation;
 import org.openide.filesystems.FileObject;
@@ -50,20 +46,17 @@ import org.openide.util.Exceptions;
  *
  * @author Sam Harwell
  */
-public abstract class GrammarFoldManagerTask extends GrammarParserResultTask {
-    
-    private static final EnumSet<Input> inputs = EnumSet.<Input>of(Input.ToolAST);
+public abstract class GrammarFoldScanner {
 
-    @Override
     @SuppressWarnings("fallthrough")
-    public void run(GrammarParser.GrammarParserResult result, SchedulerEvent event) {
-        FileObject fileObject = result.getSnapshot().getSource().getFileObject();
+    public void run(CompiledModel result) {
+        FileObject fileObject = result.getSnapshot().getVersionedDocument().getFileObject();
         final GrammarFoldManager foldManager = GrammarFoldManager.getFoldManager(fileObject);
         if (foldManager == null) {
             return;
         }
 
-        final StyledDocument document = (StyledDocument)result.getSnapshot().getSource().getDocument(false);
+        final StyledDocument document = (StyledDocument)result.getSnapshot().getVersionedDocument().getDocument();
         if (document == null) {
             return;
         }
@@ -142,26 +135,7 @@ public abstract class GrammarFoldManagerTask extends GrammarParserResultTask {
         });
     }
 
-    protected abstract List<FoldInfo> calculateFolds(StyledDocument document, GrammarParser.GrammarParserResult result);
-
-    @Override
-    public EnumSet<Input> getTaskInputs() {
-        return inputs;
-    }
-
-    @Override
-    public int getPriority() {
-        return 100;
-    }
-
-    @Override
-    public Class<? extends Scheduler> getSchedulerClass() {
-        return Scheduler.EDITOR_SENSITIVE_TASK_SCHEDULER;
-    }
-
-    @Override
-    public void cancel() {
-    }
+    protected abstract List<FoldInfo> calculateFolds(StyledDocument document, CompiledModel result);
 
     private static class FoldComparator implements Comparator<Fold> {
 
