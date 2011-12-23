@@ -29,14 +29,15 @@ package org.antlr.works.editor.grammar.fold;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.text.StyledDocument;
 import org.antlr.grammar.v3.ANTLRParser;
+import org.antlr.netbeans.editor.text.DocumentSnapshot;
+import org.antlr.netbeans.editor.text.OffsetRegion;
+import org.antlr.netbeans.editor.text.SnapshotPositionRegion;
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.works.editor.grammar.parser.CompiledModel;
 import org.antlr.works.editor.grammar.parser.CompiledModelV3;
-import org.openide.text.NbDocument;
 
 /**
  *
@@ -45,8 +46,9 @@ import org.openide.text.NbDocument;
 public class GrammarFoldScannerV3 extends GrammarFoldScanner {
 
     @Override
-    protected List<FoldInfo> calculateFolds(StyledDocument document, CompiledModel baseResult) {
+    protected List<FoldInfo> calculateFolds(CompiledModel baseResult) {
         CompiledModelV3 result3 = (CompiledModelV3)baseResult;
+        DocumentSnapshot snapshot = result3.getSnapshot();
 
         final List<FoldInfo> folds = new ArrayList<FoldInfo>();
 
@@ -93,13 +95,14 @@ public class GrammarFoldScannerV3 extends GrammarFoldScanner {
                         }
                     }
 
-                    int startLine = NbDocument.findLineNumber(document, startToken.getStartIndex());
-                    int stopLine = NbDocument.findLineNumber(document, stopToken.getStopIndex() + 1);
+                    int startLine = snapshot.findLineNumber(startToken.getStartIndex());
+                    int stopLine = snapshot.findLineNumber(stopToken.getStopIndex());
                     if (startLine >= stopLine) {
                         continue;
                     }
 
-                    FoldInfo info = new FoldInfo(document, startToken.getStartIndex(), stopToken.getStopIndex() + 1, blockHint);
+                    SnapshotPositionRegion region = new SnapshotPositionRegion(snapshot, OffsetRegion.fromBounds(startToken.getStartIndex(), stopToken.getStopIndex() + 1));
+                    FoldInfo info = new FoldInfo(region, blockHint);
                     folds.add(info);
                 }
             }
@@ -109,8 +112,8 @@ public class GrammarFoldScannerV3 extends GrammarFoldScanner {
                 case ANTLRParser.DOC_COMMENT:
                 case ANTLRParser.ML_COMMENT:
                 case ANTLRParser.ACTION:
-                    int startLine = NbDocument.findLineNumber(document, token.getStartIndex());
-                    int stopLine = NbDocument.findLineNumber(document, token.getStopIndex() + 1);
+                    int startLine = snapshot.findLineNumber(token.getStartIndex());
+                    int stopLine = snapshot.findLineNumber(token.getStopIndex());
                     if (startLine >= stopLine) {
                         continue;
                     }
@@ -126,7 +129,8 @@ public class GrammarFoldScannerV3 extends GrammarFoldScanner {
                         throw new IllegalStateException();
                     }
 
-                    FoldInfo info = new FoldInfo(document, token.getStartIndex(), token.getStopIndex() + 1, blockHint);
+                    SnapshotPositionRegion region = new SnapshotPositionRegion(snapshot, OffsetRegion.fromBounds(token.getStartIndex(), token.getStopIndex() + 1));
+                    FoldInfo info = new FoldInfo(region, blockHint);
                     folds.add(info);
 
                     break;

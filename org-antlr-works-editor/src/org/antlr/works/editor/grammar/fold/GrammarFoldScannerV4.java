@@ -29,7 +29,9 @@ package org.antlr.works.editor.grammar.fold;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.text.StyledDocument;
+import org.antlr.netbeans.editor.text.DocumentSnapshot;
+import org.antlr.netbeans.editor.text.OffsetRegion;
+import org.antlr.netbeans.editor.text.SnapshotPositionRegion;
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.Token;
 import org.antlr.v4.parse.ANTLRParser;
@@ -38,7 +40,6 @@ import org.antlr.v4.tool.ast.GrammarAST;
 import org.antlr.v4.tool.ast.GrammarRootAST;
 import org.antlr.works.editor.grammar.parser.CompiledModel;
 import org.antlr.works.editor.grammar.parser.CompiledModelV4;
-import org.openide.text.NbDocument;
 
 /**
  *
@@ -47,8 +48,9 @@ import org.openide.text.NbDocument;
 public class GrammarFoldScannerV4 extends GrammarFoldScanner {
 
     @Override
-    protected List<FoldInfo> calculateFolds(StyledDocument document, CompiledModel baseResult) {
+    protected List<FoldInfo> calculateFolds(CompiledModel baseResult) {
         CompiledModelV4 result4 = (CompiledModelV4)baseResult;
+        DocumentSnapshot snapshot = result4.getSnapshot();
 
         final List<FoldInfo> folds = new ArrayList<FoldInfo>();
 
@@ -97,7 +99,7 @@ public class GrammarFoldScannerV4 extends GrammarFoldScanner {
                     continue;
                 }
 
-                FoldInfo fold = createFold(child, blockHint, document, result4.getResult().getTokens());
+                FoldInfo fold = createFold(child, blockHint, snapshot, result4.getResult().getTokens());
                 if (fold != null) {
                     folds.add(fold);
                 }
@@ -108,8 +110,8 @@ public class GrammarFoldScannerV4 extends GrammarFoldScanner {
                 case ANTLRParser.DOC_COMMENT:
                 case ANTLRParser.COMMENT:
                 case ANTLRParser.ACTION:
-                    int startLine = NbDocument.findLineNumber(document, token.getStartIndex());
-                    int stopLine = NbDocument.findLineNumber(document, token.getStopIndex() + 1);
+                    int startLine = snapshot.findLineNumber(token.getStartIndex());
+                    int stopLine = snapshot.findLineNumber(token.getStopIndex());
                     if (startLine >= stopLine) {
                         continue;
                     }
@@ -125,7 +127,8 @@ public class GrammarFoldScannerV4 extends GrammarFoldScanner {
                         throw new IllegalStateException();
                     }
 
-                    FoldInfo info = new FoldInfo(document, token.getStartIndex(), token.getStopIndex() + 1, blockHint);
+                    SnapshotPositionRegion region = new SnapshotPositionRegion(snapshot, OffsetRegion.fromBounds(token.getStartIndex(), token.getStopIndex() + 1));
+                    FoldInfo info = new FoldInfo(region, blockHint);
                     folds.add(info);
 
                     break;
@@ -139,7 +142,7 @@ public class GrammarFoldScannerV4 extends GrammarFoldScanner {
         return folds;
     }
 
-    private static FoldInfo createFold(GrammarAST child, String blockHint, StyledDocument document, CommonToken[] tokens) {
+    private static FoldInfo createFold(GrammarAST child, String blockHint, DocumentSnapshot snapshot, CommonToken[] tokens) {
         CommonToken startToken = tokens[child.getTokenStartIndex()];
         CommonToken stopToken = tokens[child.getTokenStopIndex()];
 
@@ -152,13 +155,14 @@ public class GrammarFoldScannerV4 extends GrammarFoldScanner {
             }
         }
 
-        int startLine = NbDocument.findLineNumber(document, startToken.getStartIndex());
-        int stopLine = NbDocument.findLineNumber(document, stopToken.getStopIndex() + 1);
+        int startLine = snapshot.findLineNumber(startToken.getStartIndex());
+        int stopLine = snapshot.findLineNumber(stopToken.getStopIndex());
         if (startLine >= stopLine) {
             return null;
         }
 
-        FoldInfo fold = new FoldInfo(document, startToken.getStartIndex(), stopToken.getStopIndex() + 1, blockHint);
+        SnapshotPositionRegion region = new SnapshotPositionRegion(snapshot, OffsetRegion.fromBounds(startToken.getStartIndex(), stopToken.getStopIndex() + 1));
+        FoldInfo fold = new FoldInfo(region, blockHint);
         return fold;
     }
 

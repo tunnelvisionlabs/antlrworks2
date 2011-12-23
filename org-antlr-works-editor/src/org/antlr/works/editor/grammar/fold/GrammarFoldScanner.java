@@ -33,8 +33,13 @@ import java.util.Comparator;
 import java.util.List;
 import javax.swing.SwingUtilities;
 import javax.swing.text.BadLocationException;
-import javax.swing.text.StyledDocument;
+import org.antlr.netbeans.editor.text.DocumentSnapshot;
+import org.antlr.netbeans.editor.text.OffsetRegion;
+import org.antlr.netbeans.editor.text.SnapshotPositionRegion;
+import org.antlr.netbeans.editor.text.TrackingPositionRegion;
+import org.antlr.netbeans.editor.text.VersionedDocument;
 import org.antlr.works.editor.grammar.parser.CompiledModel;
+import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.editor.fold.Fold;
 import org.netbeans.api.editor.fold.FoldType;
 import org.netbeans.spi.editor.fold.FoldHierarchyTransaction;
@@ -50,23 +55,24 @@ public abstract class GrammarFoldScanner {
 
     @SuppressWarnings("fallthrough")
     public void run(CompiledModel result) {
-        FileObject fileObject = result.getSnapshot().getVersionedDocument().getFileObject();
+        final VersionedDocument versionedDocument = result.getSnapshot().getVersionedDocument();
+        final FileObject fileObject = versionedDocument.getFileObject();
         final GrammarFoldManager foldManager = GrammarFoldManager.getFoldManager(fileObject);
         if (foldManager == null) {
             return;
         }
 
-        final StyledDocument document = (StyledDocument)result.getSnapshot().getVersionedDocument().getDocument();
-        if (document == null) {
-            return;
-        }
-
         // calculate the folds
-        final List<FoldInfo> folds = calculateFolds(document, result);
+        final List<FoldInfo> folds = calculateFolds(result);
 
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
+                DocumentSnapshot currentSnapshot = versionedDocument.getCurrentSnapshot();
+                for (int i = 0; i < folds.size(); i++) {
+                    folds.set(i, folds.get(i).translateTo(currentSnapshot));
+                }
+
                 FoldOperation operation = foldManager.getOperation();
                 operation.getHierarchy().lock();
                 try{
@@ -83,7 +89,8 @@ public abstract class GrammarFoldScanner {
                         int j = 0;
                         while (i < foldManager.currentFolds.size() && j < folds.size()) {
                             Fold existingFold = foldManager.currentFolds.get(i);
-                            FoldInfo existing = new FoldInfo(document, existingFold.getStartOffset(), existingFold.getEndOffset(), existingFold.getDescription());
+                            SnapshotPositionRegion existingRegion = new SnapshotPositionRegion(currentSnapshot, OffsetRegion.fromBounds(existingFold.getStartOffset(), existingFold.getEndOffset()));
+                            FoldInfo existing = new FoldInfo(existingRegion, existingFold.getDescription());
                             FoldInfo next = folds.get(j);
                             int compared = FoldInfoComparator.INSTANCE.compare(existing, next);
                             if (compared == 0) {
@@ -115,8 +122,8 @@ public abstract class GrammarFoldScanner {
                             FoldType foldType = new FoldType("code-block");
                             String description = foldInfo.blockHint;
                             boolean collapsed = false;
-                            int startOffset = foldInfo.startIndex;
-                            int endOffset = foldInfo.stopIndex;
+                            int startOffset = foldInfo.region.getStart().getOffset();
+                            int endOffset = foldInfo.region.getEnd().getOffset();
                             int startGuardedLength = 0;
                             int endGuardedLength = 0;
                             try {
@@ -135,7 +142,7 @@ public abstract class GrammarFoldScanner {
         });
     }
 
-    protected abstract List<FoldInfo> calculateFolds(StyledDocument document, CompiledModel result);
+    protected abstract List<FoldInfo> calculateFolds(CompiledModel result);
 
     private static class FoldComparator implements Comparator<Fold> {
 
@@ -160,10 +167,10 @@ public abstract class GrammarFoldScanner {
 
         @Override
         public int compare(FoldInfo o1, FoldInfo o2) {
-            if (o1.startIndex != o2.startIndex) {
-                return o1.startIndex - o2.startIndex;
-            } else if (o1.stopIndex != o2.stopIndex) {
-                return o1.stopIndex - o2.stopIndex;
+            if (!o1.region.getStart().equals(o2.region.getStart())) {
+                return o1.region.getStart().compareTo(o2.region.getStart());
+            } else if (!o1.region.getEnd().equals(o2.region.getEnd())) {
+                return o1.region.getEnd().compareTo(o2.region.getEnd());
             } else {
                 return o1.blockHint.compareTo(o2.blockHint);
             }
@@ -172,30 +179,24 @@ public abstract class GrammarFoldScanner {
     }
 
     public static class FoldInfo {
-        private final StyledDocument document;
-        private final int startIndex;
-        private final int stopIndex;
+        private final SnapshotPositionRegion region;
         private final String blockHint;
         private final String preview;
 
-        protected FoldInfo(StyledDocument document, int startIndex, int stopIndex, String blockHint) {
-            this.document = document;
-            this.startIndex = startIndex;
-            this.stopIndex = stopIndex;
+        protected FoldInfo(@NonNull SnapshotPositionRegion region, @NonNull String blockHint) {
+            this.region = region;
             this.blockHint = blockHint;
-
-            @SuppressWarnings("LocalVariableHidesMemberVariable")
-            String preview;
-            try {
-                preview = document.getText(startIndex, stopIndex - startIndex);
-            } catch (BadLocationException ex) {
-                preview = "";
-                Exceptions.printStackTrace(ex);
-            }
-
-            this.preview = preview;
+            this.preview = region.getText();
         }
 
+        protected FoldInfo translateTo(@NonNull DocumentSnapshot snapshot) {
+            if (snapshot.equals(region.getSnapshot())) {
+                return this;
+            }
+
+            TrackingPositionRegion trackingRegion = snapshot.createTrackingRegion(region.getRegion(), TrackingPositionRegion.Bias.Exclusive);
+            return new FoldInfo(trackingRegion.getRegion(snapshot), blockHint);
+        }
     }
 
 }
