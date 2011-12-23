@@ -44,15 +44,25 @@
 
 package org.antlr.works.editor.grammar.navigation;
 
+import org.antlr.netbeans.editor.navigation.Description;
 import org.antlr.netbeans.editor.navigation.Filters;
 import org.antlr.netbeans.editor.navigation.NavigatorPanelUI;
 import org.antlr.works.editor.grammar.navigation.GrammarNode.GrammarNodeFactory;
+import org.netbeans.api.annotations.common.CheckForNull;
+import org.netbeans.api.annotations.common.NullAllowed;
 
 public class GrammarRulesPanelUI extends NavigatorPanelUI {
+
+    private String currentRuleName;
 
     @SuppressWarnings("LeakingThisInConstructor")
     public GrammarRulesPanelUI() {
         super(new GrammarNodeFactory());
+    }
+
+    @CheckForNull
+    public String getCurrentRuleName() {
+        return currentRuleName;
     }
 
     @Override
@@ -60,4 +70,8 @@ public class GrammarRulesPanelUI extends NavigatorPanelUI {
         return new GrammarRuleFilters(this);
     }
 
+    public void refresh(Description description, @NullAllowed String currentRule) {
+        this.currentRuleName = currentRule;
+        super.refresh(description);
+    }
 }

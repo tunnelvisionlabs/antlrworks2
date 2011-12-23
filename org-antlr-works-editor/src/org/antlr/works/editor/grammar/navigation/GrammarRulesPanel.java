@@ -82,24 +82,11 @@ public class GrammarRulesPanel implements NavigatorPanel {
 
     @Override
     public void panelActivated(Lookup context) {
-        getGrammarRulesPanelUI().showWaitNode();
-        RequestProcessor.post(new Runnable() {
-            @Override
-            public void run() {
-                //throw new UnsupportedOperationException("Not supported yet.");
-            }
-        });
     }
 
     @Override
     public void panelDeactivated() {
         getGrammarRulesPanelUI().showWaitNode();
-        RequestProcessor.post(new Runnable() {
-            @Override
-            public void run() {
-                //throw new UnsupportedOperationException("Not supported yet.");
-            }
-        });
     }
 
     @Override

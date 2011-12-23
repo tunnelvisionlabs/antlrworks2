@@ -29,6 +29,7 @@ package org.antlr.works.editor.grammar;
 
 import java.util.List;
 import org.antlr.netbeans.editor.classification.TokenTag;
+import org.antlr.netbeans.editor.navigation.Description;
 import org.antlr.netbeans.editor.tagging.Tagger;
 import org.antlr.netbeans.parsing.spi.ParserDataDefinition;
 import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
@@ -54,6 +55,8 @@ public class GrammarParserDataDefinitions {
     public static final ParserDataDefinition<Tagger<TokenTag>> LEXER_TOKENS = new LexerTokensDataDefinition();
     public static final ParserDataDefinition<CurrentRuleContextData> CURRENT_RULE_CONTEXT = new CurrentRuleContextDataDefinition();
     public static final ParserDataDefinition<FileModel> FILE_MODEL = new FileModelDataDefinition();
+
+    public static final ParserDataDefinition<Description> NAVIGATOR_ROOT = new NavigatorRootDataDefinition();
 
     private GrammarParserDataDefinitions() {
     }
@@ -91,6 +94,11 @@ public class GrammarParserDataDefinitions {
     @MimeRegistration(mimeType=GrammarEditorKit.GRAMMAR_MIME_TYPE, service=ParserDataDefinition.class)
     public static ParserDataDefinition<FileModel> getFileModelDataDefinition() {
         return FILE_MODEL;
+    }
+
+    @MimeRegistration(mimeType=GrammarEditorKit.GRAMMAR_MIME_TYPE, service=ParserDataDefinition.class)
+    public static ParserDataDefinition<Description> getNavigatorRootDataDefinition() {
+        return NAVIGATOR_ROOT;
     }
 
     private static final class CompiledModelDataDefinition implements ParserDataDefinition<CompiledModel> {
@@ -247,6 +255,30 @@ public class GrammarParserDataDefinitions {
         @Override
         public Class<FileModel> getDataType() {
             return FileModel.class;
+        }
+
+        @Override
+        public boolean isComponentSpecific() {
+            return false;
+        }
+
+        @Override
+        public boolean isCacheable() {
+            return true;
+        }
+
+        @Override
+        public Class<? extends ParserTaskScheduler> getScheduler() {
+            return ParserTaskScheduler.CONTENT_SENSITIVE_TASK_SCHEDULER;
+        }
+
+    }
+
+    private static final class NavigatorRootDataDefinition implements ParserDataDefinition<Description> {
+
+        @Override
+        public Class<Description> getDataType() {
+            return Description.class;
         }
 
         @Override

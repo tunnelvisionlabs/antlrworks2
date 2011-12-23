@@ -57,6 +57,22 @@ public class GrammarNode extends NavigatorNode {
     }
 
     @Override
+    public GrammarRulesPanelUI getUI() {
+        return (GrammarRulesPanelUI)super.getUI();
+    }
+
+    @Override
+    public void updateRecursively(Description newDescription) {
+        super.updateRecursively(newDescription);
+
+        if (newDescription != null && newDescription.getName() != null) {
+            String currentRuleName = getUI().getCurrentRuleName();
+            boolean currentNode = newDescription.getName().equals(currentRuleName);
+            // TODO: highlight current node
+        }
+    }
+
+    @Override
     public Image getIcon(int type) {
         String name = getDescription().getName();
         if (getDescription().getChildren() != null && !getDescription().getChildren().isEmpty()) {
