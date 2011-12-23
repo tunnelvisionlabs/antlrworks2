@@ -52,8 +52,8 @@ import org.openide.util.ImageUtilities;
 
 public class GrammarNode extends NavigatorNode {
 
-    public GrammarNode(Description description) {
-        super(description, new GrammarNodeFactory());
+    public GrammarNode(NavigatorPanelUI ui, Description description) {
+        super(ui, description, GrammarNodeFactory.INSTANCE);
     }
 
     @Override
@@ -74,12 +74,11 @@ public class GrammarNode extends NavigatorNode {
 
     public static class GrammarNodeDescription extends Description {
 
-        public GrammarNodeDescription(NavigatorPanelUI ui) {
-            super(ui);
+        public GrammarNodeDescription() {
         }
 
-        public GrammarNodeDescription(NavigatorPanelUI ui, String name) {
-            super(ui, name);
+        public GrammarNodeDescription(String name) {
+            super(name);
         }
 
         @Override
@@ -97,11 +96,12 @@ public class GrammarNode extends NavigatorNode {
         }
     }
 
-    static class GrammarNodeFactory implements Factory {
+    protected static class GrammarNodeFactory implements Factory {
+        public static final GrammarNodeFactory INSTANCE = new GrammarNodeFactory();
 
         @Override
-        public NavigatorNode createNode(Description key) {
-            return new GrammarNode(key);
+        public NavigatorNode createNode(NavigatorPanelUI ui, Description key) {
+            return new GrammarNode(ui, key);
         }
 
     }

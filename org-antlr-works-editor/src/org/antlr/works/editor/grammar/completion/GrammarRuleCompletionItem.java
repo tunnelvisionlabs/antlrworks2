@@ -29,6 +29,7 @@ package org.antlr.works.editor.grammar.completion;
 
 import javax.swing.ImageIcon;
 import org.antlr.netbeans.editor.navigation.Description;
+import org.antlr.netbeans.editor.navigation.NavigatorPanelUI;
 import org.antlr.works.editor.grammar.navigation.GrammarNode;
 
 /**
@@ -37,11 +38,13 @@ import org.antlr.works.editor.grammar.navigation.GrammarNode;
  */
 public class GrammarRuleCompletionItem extends GrammarCompletionItem {
 
+    private final NavigatorPanelUI ui;
     private final Description rule;
 
     private String leftText;
 
-    public GrammarRuleCompletionItem(Description rule) {
+    public GrammarRuleCompletionItem(NavigatorPanelUI ui, Description rule) {
+        this.ui = ui;
         this.rule = rule;
     }
 
@@ -62,7 +65,7 @@ public class GrammarRuleCompletionItem extends GrammarCompletionItem {
 
     @Override
     protected ImageIcon getIcon() {
-        return new ImageIcon(new GrammarNode(rule).getIcon(0));
+        return new ImageIcon(new GrammarNode(ui, rule).getIcon(0));
     }
 
     @Override

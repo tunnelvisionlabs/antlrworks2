@@ -36,6 +36,7 @@ import java.util.HashSet;
 import java.util.List;
 import javax.swing.Action;
 import org.antlr.netbeans.editor.navigation.actions.OpenAction;
+import org.netbeans.api.annotations.common.NonNull;
 import org.openide.filesystems.FileObject;
 import org.openide.loaders.DataObject;
 import org.openide.loaders.DataObjectNotFoundException;
@@ -59,13 +60,19 @@ import org.openide.util.lookup.InstanceContent;
 public abstract class NavigatorNode extends AbstractNode {
 
     private static Node WAIT_NODE;
+    private final NavigatorPanelUI ui;
     private Description description;
     private OpenAction openAction;
 
-    public NavigatorNode(Description description, Factory nodeFactory) {
-        super(description.getChildren() == null ? Children.LEAF : new ElementChildren(description.getChildren(), description.getUI().getFilters(), nodeFactory), prepareLookup(description));
+    public NavigatorNode(@NonNull NavigatorPanelUI ui, @NonNull Description description, Factory nodeFactory) {
+        super(description.getChildren() == null ? Children.LEAF : new ElementChildren(ui, description.getChildren(), nodeFactory), prepareLookup(description));
+        this.ui = ui;
         this.description = description;
         setDisplayName(description.getName());
+    }
+
+    public NavigatorPanelUI getUI() {
+        return ui;
     }
 
     @Override
@@ -94,9 +101,9 @@ public abstract class NavigatorNode extends AbstractNode {
     @Override
     public Action[] getActions(boolean context) {
         if (context || description.getName() == null || description.getFileObject() == null || (description.getChildren() != null && !description.getChildren().isEmpty())) {
-            return description.getUI().getActions();
+            return getUI().getActions();
         } else {
-            Action[] panelActions = description.getUI().getActions();
+            Action[] panelActions = getUI().getActions();
 
             int extraActionCount = 2;
             Action[] actions = new Action[extraActionCount + panelActions.length];
@@ -155,15 +162,15 @@ public abstract class NavigatorNode extends AbstractNode {
     public void refreshRecursively() {
         Children ch = getChildren();
         if (ch instanceof ElementChildren) {
-            boolean scrollOnExpand = description.getUI().getScrollOnExpand();
-            description.getUI().setScrollOnExpand(false);
-            ((ElementChildren)ch).resetKeys(description.getChildren(), description.getUI().getFilters());
+            boolean scrollOnExpand = getUI().getScrollOnExpand();
+            getUI().setScrollOnExpand(false);
+            ((ElementChildren)ch).resetKeys(description.getChildren(), getUI().getFilters());
             for (Node sub : ch.getNodes()) {
-                description.getUI().expandNode(sub);
+                getUI().expandNode(sub);
                 ((NavigatorNode)sub).refreshRecursively();
             }
 
-            description.getUI().setScrollOnExpand(scrollOnExpand);
+            getUI().setScrollOnExpand(scrollOnExpand);
         }
     }
 
@@ -182,7 +189,7 @@ public abstract class NavigatorNode extends AbstractNode {
             }
 
             // Now refresh keys
-            ((ElementChildren)children).resetKeys(newDescription.getChildren(), newDescription.getUI().getFilters());
+            ((ElementChildren)children).resetKeys(newDescription.getChildren(), getUI().getFilters());
 
             // Reread nodes
             nodes = children.getNodes(true);
@@ -191,7 +198,7 @@ public abstract class NavigatorNode extends AbstractNode {
                 NavigatorNode node = oldD2node.get(newSub);
                 if (node != null) { // filtered out
                     if (!oldChildren.contains(newSub) && node.getChildren() != Children.LEAF) {
-                        description.getUI().expandNode(node); // Make sure new nodes get expanded
+                        getUI().expandNode(node); // Make sure new nodes get expanded
                     }
                     node.updateRecursively(newSub); // update the node recursively
                 }
@@ -322,16 +329,18 @@ public abstract class NavigatorNode extends AbstractNode {
 
     public static final class ElementChildren extends Children.Keys<Description> {
 
+        private final NavigatorPanelUI ui;
         private final Factory nodeFactory;
 
-        public ElementChildren(Collection<Description> descriptions, Filters filters, Factory nodeFactory) {
+        public ElementChildren(NavigatorPanelUI ui, Collection<Description> descriptions, Factory nodeFactory) {
+            this.ui = ui;
             this.nodeFactory = nodeFactory;
-            resetKeys(descriptions, filters);
+            resetKeys(descriptions, ui.getFilters());
         }
 
         @Override
         protected Node[] createNodes(Description key) {
-            return new Node[] { nodeFactory.createNode(key) };
+            return new Node[] { nodeFactory.createNode(ui, key) };
         }
 
         private void resetKeys(Collection<Description> descriptions, Filters filters) {
@@ -342,7 +351,7 @@ public abstract class NavigatorNode extends AbstractNode {
 
     public interface Factory {
 
-        public NavigatorNode createNode(Description key);
+        public NavigatorNode createNode(NavigatorPanelUI ui, Description key);
 
     }
 }

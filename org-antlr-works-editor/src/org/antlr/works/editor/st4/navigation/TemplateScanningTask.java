@@ -91,7 +91,7 @@ public class TemplateScanningTask extends ParserResultTask<TemplateParserResult>
                 return;
             }*/
 
-            TemplateDescription rootDescription = new TemplateDescription(ui);
+            TemplateDescription rootDescription = new TemplateDescription();
             rootDescription.setChildren(new ArrayList<Description>());
             rootDescription.setFileObject(result.getSnapshot().getSource().getFileObject());
 
@@ -111,7 +111,7 @@ public class TemplateScanningTask extends ParserResultTask<TemplateParserResult>
                     {
                         String sig = String.format("%s.%s()", templateInfo.getEnclosingTemplateName(), templateInfo.getNameToken().getText());
 
-                        TemplateDescription description = new TemplateDescription(ui, sig);
+                        TemplateDescription description = new TemplateDescription(sig);
                         description.setOffset(documentSnapshot, rootDescription.getFileObject(), sourceInterval.a);
                         description.setHtmlHeader(String.format("%s.%s<font color='808080'>()</font>", templateInfo.getEnclosingTemplateName(), templateInfo.getNameToken().getText()));
                         rootDescription.getChildren().add(description);
@@ -123,7 +123,7 @@ public class TemplateScanningTask extends ParserResultTask<TemplateParserResult>
                         Iterable<String> argumentNames = template.formalArguments != null ? template.formalArguments.keySet() : Collections.<String>emptyList();
                         String sig = String.format("%s(%s)", name, Misc.join(argumentNames.iterator(), ", "));
 
-                        TemplateDescription description = new TemplateDescription(ui, sig);
+                        TemplateDescription description = new TemplateDescription(sig);
                         description.setOffset(documentSnapshot, rootDescription.getFileObject(), sourceInterval.a);
                         description.setHtmlHeader(String.format("%s<font color='808080'>(%s)</font>", name, Misc.join(argumentNames.iterator(), ", ")));
                         rootDescription.getChildren().add(description);

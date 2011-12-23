@@ -852,7 +852,7 @@ public final class GrammarCompletionQuery extends AsyncCompletionQuery {
 
                     for (Description rule : rules) {
                         if (!tokenReferencesOnly || Character.isUpperCase(rule.getName().charAt(0))) {
-                            results.add(new GrammarRuleCompletionItem(rule));
+                            results.add(new GrammarRuleCompletionItem(ui, rule));
                         }
                     }
                 }

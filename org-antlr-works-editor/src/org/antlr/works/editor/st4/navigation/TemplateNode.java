@@ -47,12 +47,13 @@ package org.antlr.works.editor.st4.navigation;
 import java.awt.Image;
 import org.antlr.netbeans.editor.navigation.Description;
 import org.antlr.netbeans.editor.navigation.NavigatorNode;
+import org.antlr.netbeans.editor.navigation.NavigatorPanelUI;
 import org.openide.util.ImageUtilities;
 
 public class TemplateNode extends NavigatorNode {
 
-    public TemplateNode(Description description) {
-        super(description, new TemplateNodeFactory());
+    public TemplateNode(NavigatorPanelUI ui, Description description) {
+        super(ui, description, TemplateNodeFactory.INSTANCE);
     }
 
     @Override
@@ -63,12 +64,11 @@ public class TemplateNode extends NavigatorNode {
 
     public static class TemplateDescription extends Description {
 
-        public TemplateDescription(TemplatesPanelUI ui) {
-            super(ui);
+        public TemplateDescription() {
         }
 
-        public TemplateDescription(TemplatesPanelUI ui, String name) {
-            super(ui, name);
+        public TemplateDescription(String name) {
+            super(name);
         }
 
         @Override
@@ -86,11 +86,12 @@ public class TemplateNode extends NavigatorNode {
         }
     }
 
-    static class TemplateNodeFactory implements Factory {
+    protected static class TemplateNodeFactory implements Factory {
+        public static final TemplateNodeFactory INSTANCE = new TemplateNodeFactory();
 
         @Override
-        public NavigatorNode createNode(Description key) {
-            return new TemplateNode(key);
+        public NavigatorNode createNode(NavigatorPanelUI ui, Description key) {
+            return new TemplateNode(ui, key);
         }
 
     }

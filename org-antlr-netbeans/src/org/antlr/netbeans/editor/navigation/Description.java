@@ -46,7 +46,6 @@ public class Description {
 
     public static final String INHERITED_COLOR = "#7D694A";
 
-    private final NavigatorPanelUI ui;
     private FileObject fileObject;
     private boolean inherited;
     private String name;
@@ -55,17 +54,11 @@ public class Description {
     private int offset;
     private SnapshotPosition position;
 
-    public Description(NavigatorPanelUI ui) {
-        this.ui = ui;
+    public Description() {
     }
 
-    public Description(NavigatorPanelUI ui, String name) {
-        this.ui = ui;
+    public Description(String name) {
         this.name = name;
-    }
-
-    public NavigatorPanelUI getUI() {
-        return ui;
     }
 
     public Collection<Description> getChildren() {

@@ -53,7 +53,11 @@ import org.openide.explorer.ExplorerManager;
 import org.openide.explorer.view.BeanTreeView;
 import org.openide.filesystems.FileObject;
 import org.openide.nodes.Node;
-import org.openide.util.*;
+import org.openide.util.Lookup;
+import org.openide.util.NbBundle;
+import org.openide.util.NbPreferences;
+import org.openide.util.RequestProcessor;
+import org.openide.util.Utilities;
 import org.openide.util.lookup.AbstractLookup;
 import org.openide.util.lookup.InstanceContent;
 
@@ -250,7 +254,7 @@ public abstract class NavigatorPanelUI extends javax.swing.JPanel implements Exp
                     @Override
                     public void run() {
                         treeView.setRootVisible(false);
-                        explorerManager.setRootContext(nodeFactory.createNode(description));
+                        explorerManager.setRootContext(nodeFactory.createNode(NavigatorPanelUI.this, description));
                         boolean scrollOnExpand = getScrollOnExpand();
                         treeView.setAutoWaitCursor(false);
                         treeView.expandAll();
