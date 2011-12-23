@@ -34,7 +34,7 @@ import org.antlr.works.editor.grammar.experimental.GrammarParser.ruleContext;
  *
  * @author Sam Harwell
  */
-public class CurrentRuleContextData {
+public final class CurrentRuleContextData {
     private final DocumentSnapshot snapshot;
     private final int grammarType;
     private final ruleContext context;
@@ -55,5 +55,17 @@ public class CurrentRuleContextData {
 
     public ruleContext getContext() {
         return context;
+    }
+
+    public String getRuleName() {
+        if (context == null) {
+            return null;
+        }
+
+        if (context.name == null || context.name.start == null) {
+            return null;
+        }
+
+        return context.name.start.getText();
     }
 }
