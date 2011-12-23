@@ -87,9 +87,11 @@ public class CurrentRuleContextParserTask implements ParserTask {
         ParserData<List<Anchor>> anchorsData = result.get();
         List<Anchor> anchors = anchorsData.getData();
 
+        GrammarParser.ruleContext ruleContext = null;
+        int grammarType = -1;
+
         if (anchors != null) {
             Anchor enclosing = null;
-            int grammarType = -1;
 
             /*
              * parse the current rule
@@ -114,12 +116,12 @@ public class CurrentRuleContextParserTask implements ParserTask {
                 CommonTokenStream tokens = new TaskTokenStream(lexer);
                 GrammarParser parser = new GrammarParser(tokens);
                 parser.setBuildParseTree(true);
-
-                GrammarParser.ruleContext ruleContext = parser.rule();
-                CurrentRuleContextData data = new CurrentRuleContextData(snapshot, grammarType, ruleContext);
-                results.addResult(new BaseParserData<CurrentRuleContextData>(GrammarParserDataDefinitions.CURRENT_RULE_CONTEXT, snapshot, data));
+                ruleContext = parser.rule();
             }
         }
+
+        CurrentRuleContextData data = new CurrentRuleContextData(snapshot, grammarType, ruleContext);
+        results.addResult(new BaseParserData<CurrentRuleContextData>(GrammarParserDataDefinitions.CURRENT_RULE_CONTEXT, snapshot, data));
     }
 
     private class TaskTokenStream extends CommonTokenStream {
