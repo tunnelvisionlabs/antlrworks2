@@ -218,8 +218,8 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
     private class CurrentRuleContextListener implements ParserDataListener<CurrentRuleContextData> {
 
         @Override
-        public void dataChanged(ParserDataEvent<CurrentRuleContextData> event) {
-            ParserData<CurrentRuleContextData> parserData = event.getData();
+        public void dataChanged(ParserDataEvent<? extends CurrentRuleContextData> event) {
+            ParserData<? extends CurrentRuleContextData> parserData = event.getData();
             final CurrentRuleContextData ruleContext = parserData.getData();
             SwingUtilities.invokeLater(new Runnable() {
                 @Override

@@ -354,8 +354,8 @@ public class SemanticHighlighter extends AbstractHighlightsContainer {
     private class DataListener implements ParserDataListener<ParserRuleContext<Token>> {
 
         @Override
-        public void dataChanged(ParserDataEvent<ParserRuleContext<Token>> event) {
-            final ParserData<ParserRuleContext<Token>> parserData = event.getData();
+        public void dataChanged(ParserDataEvent<? extends ParserRuleContext<Token>> event) {
+            final ParserData<? extends ParserRuleContext<Token>> parserData = event.getData();
             if (parserData == null) {
                 return;
             }

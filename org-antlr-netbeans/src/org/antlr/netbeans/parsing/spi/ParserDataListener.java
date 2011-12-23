@@ -36,6 +36,6 @@ import org.netbeans.api.annotations.common.NonNull;
  */
 public interface ParserDataListener<T> extends EventListener {
 
-    void dataChanged(@NonNull ParserDataEvent<T> event);
+    void dataChanged(@NonNull ParserDataEvent<? extends T> event);
 
 }
