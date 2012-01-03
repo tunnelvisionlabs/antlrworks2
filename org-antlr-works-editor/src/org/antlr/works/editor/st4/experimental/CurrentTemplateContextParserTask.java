@@ -87,6 +87,8 @@ public class CurrentTemplateContextParserTask implements ParserTask {
         ParserData<List<Anchor>> anchorsData = result.get();
         List<Anchor> anchors = anchorsData.getData();
 
+        TemplateParser.groupContext ruleContext = null;
+
         if (anchors != null) {
             Anchor enclosing = null;
 //            int grammarType = -1;
@@ -115,11 +117,12 @@ public class CurrentTemplateContextParserTask implements ParserTask {
                 TemplateParser parser = new TemplateParser(tokens);
                 parser.setBuildParseTree(true);
 
-                TemplateParser.groupContext ruleContext = parser.group();
-                CurrentTemplateContextData data = new CurrentTemplateContextData(snapshot, ruleContext);
-                results.addResult(new BaseParserData<CurrentTemplateContextData>(TemplateParserDataDefinitions.CURRENT_TEMPLATE_CONTEXT, snapshot, data));
+                ruleContext = parser.group();
             }
         }
+
+        CurrentTemplateContextData data = new CurrentTemplateContextData(snapshot, ruleContext);
+        results.addResult(new BaseParserData<CurrentTemplateContextData>(TemplateParserDataDefinitions.CURRENT_TEMPLATE_CONTEXT, snapshot, data));
     }
 
     private class TaskTokenStream extends CommonTokenStream {
