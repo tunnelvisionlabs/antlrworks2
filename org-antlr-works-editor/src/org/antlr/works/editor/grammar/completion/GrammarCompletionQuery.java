@@ -170,9 +170,9 @@ public final class GrammarCompletionQuery extends AsyncCompletionQuery {
                     return;
                 }
             }
-        }
 
-        Completion.get().hideCompletion();
+            Completion.get().hideCompletion();
+        }
     }
 
     @Override
