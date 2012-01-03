@@ -57,6 +57,7 @@ public class TemplatesPanelUI extends NavigatorPanelUI {
     @SuppressWarnings("LeakingThisInConstructor")
     public TemplatesPanelUI() {
         super(new TemplateNode.TemplateNodeFactory());
+        getTreeView().getToolTipManager().setEnabled(false);
     }
 
     @CheckForNull

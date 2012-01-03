@@ -58,6 +58,7 @@ public class GrammarRulesPanelUI extends NavigatorPanelUI {
     @SuppressWarnings("LeakingThisInConstructor")
     public GrammarRulesPanelUI() {
         super(new GrammarNodeFactory());
+        getTreeView().getToolTipManager().setEnabled(false);
     }
 
     @CheckForNull

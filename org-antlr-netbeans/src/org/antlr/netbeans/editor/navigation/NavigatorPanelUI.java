@@ -131,6 +131,10 @@ public abstract class NavigatorPanelUI extends javax.swing.JPanel implements Exp
         filtersPanel.addPropertyChangeListener(this);
     }
 
+    protected NavigatorBeanTreeView getTreeView() {
+        return treeView;
+    }
+
     @Override
     public boolean requestFocusInWindow() {
         boolean result = super.requestFocusInWindow();
@@ -286,9 +290,13 @@ public abstract class NavigatorPanelUI extends javax.swing.JPanel implements Exp
             this.toolTipManager = new ToolTipManagerEx( this );
         }
 
+        public ToolTipManagerEx getToolTipManager() {
+            return toolTipManager;
+        }
+
         public boolean getScrollOnExpand() {
             return tree.getScrollsOnExpand();
-}
+        }
 
         public void setScrollOnExpand( boolean scroll ) {
             this.tree.setScrollsOnExpand( scroll );
