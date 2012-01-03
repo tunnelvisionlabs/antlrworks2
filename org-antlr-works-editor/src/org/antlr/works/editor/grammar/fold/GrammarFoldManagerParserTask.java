@@ -44,7 +44,6 @@ import org.antlr.netbeans.parsing.spi.ParserTaskProvider;
 import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
 import org.antlr.works.editor.grammar.GrammarEditorKit;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
-import org.antlr.works.editor.grammar.navigation.RuleScanningParserTask;
 import org.antlr.works.editor.grammar.parser.CompiledModel;
 import org.antlr.works.editor.grammar.parser.CompiledModelV3;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
