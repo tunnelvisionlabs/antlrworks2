@@ -73,7 +73,7 @@ public class GrammarCompletionProvider implements CompletionProvider {
     // -J-Dorg.antlr.works.editor.grammar.GrammarCompletionProvider.level=FINE
     private static final Logger LOGGER = Logger.getLogger(GrammarCompletionProvider.class.getName());
 
-    public static final int AUTO_QUERY_TYPE = 0x0100;
+    public static final int AUTO_QUERY_TYPE = 0x00010000;
 
     private static String grammarCompletionAutoPopupTriggers = "$";
     private static String grammarCompletionSelectors = "";

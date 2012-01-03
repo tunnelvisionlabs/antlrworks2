@@ -156,6 +156,10 @@ public final class GrammarCompletionQuery extends AsyncCompletionQuery {
         return extend;
     }
 
+    public boolean isExplicitQuery() {
+        return (queryType & GrammarCompletionProvider.AUTO_QUERY_TYPE) == 0;
+    }
+
     @Override
     protected void preQueryUpdate(JTextComponent component) {
         if (applicableTo != null) {
@@ -178,7 +182,7 @@ public final class GrammarCompletionQuery extends AsyncCompletionQuery {
     @Override
     protected void prepareQuery(JTextComponent component) {
         this.component = component;
-        if (queryType == CompletionProvider.TOOLTIP_QUERY_TYPE) {
+        if ((queryType & CompletionProvider.TOOLTIP_QUERY_TYPE) == CompletionProvider.TOOLTIP_QUERY_TYPE) {
             this.toolTip = new CompletionToolTip(component);
         }
     }
@@ -194,7 +198,7 @@ public final class GrammarCompletionQuery extends AsyncCompletionQuery {
     protected void query(CompletionResultSet resultSet, Document doc, int caretOffset) {
         try {
             this.caretOffset = caretOffset;
-            if (queryType == CompletionProvider.TOOLTIP_QUERY_TYPE || GrammarCompletionProvider.isGrammarContext(component, caretOffset, true, true)) {
+            if ((queryType & CompletionProvider.TOOLTIP_QUERY_TYPE) == CompletionProvider.TOOLTIP_QUERY_TYPE || GrammarCompletionProvider.isGrammarContext(component, caretOffset, true, true)) {
                 results = null;
                 documentation = null;
                 if (toolTip != null) {
@@ -202,7 +206,7 @@ public final class GrammarCompletionQuery extends AsyncCompletionQuery {
                 }
 
                 applicableTo = null;
-                if (queryType == CompletionProvider.DOCUMENTATION_QUERY_TYPE) {
+                if ((queryType & CompletionProvider.DOCUMENTATION_QUERY_TYPE) == CompletionProvider.DOCUMENTATION_QUERY_TYPE) {
                     throw new UnsupportedOperationException("Not implemented yet.");
                 }
 
@@ -234,11 +238,11 @@ public final class GrammarCompletionQuery extends AsyncCompletionQuery {
                         } else if (hasAdditionalItems == ADDITIONAL_MEMBER_ITEMS) {
                             resultSet.setHasAdditionalItemsText(Bundle.GCP_instance_members());
                         }
-                    } else if (queryType == CompletionProvider.TOOLTIP_QUERY_TYPE) {
+                    } else if ((queryType & CompletionProvider.TOOLTIP_QUERY_TYPE) == CompletionProvider.TOOLTIP_QUERY_TYPE) {
                         if (toolTip != null && toolTip.hasData()) {
                             resultSet.setToolTip(toolTip);
                         }
-                    } else if (queryType == CompletionProvider.DOCUMENTATION_QUERY_TYPE) {
+                    } else if ((queryType & CompletionProvider.DOCUMENTATION_QUERY_TYPE) == CompletionProvider.DOCUMENTATION_QUERY_TYPE) {
                         throw new UnsupportedOperationException("Not implemented yet.");
                     }
 
@@ -276,7 +280,7 @@ public final class GrammarCompletionQuery extends AsyncCompletionQuery {
 
                 return true;
             }
-        } else if (queryType == CompletionProvider.TOOLTIP_QUERY_TYPE) {
+        } else if ((queryType & CompletionProvider.RESERVED_QUERY_MASK) == CompletionProvider.TOOLTIP_QUERY_TYPE) {
             try {
                 if (newOffset == caretOffset) {
                     filterPrefix = EMPTY;
@@ -302,7 +306,7 @@ public final class GrammarCompletionQuery extends AsyncCompletionQuery {
                     if (filterPrefix != null) {
                         Collection<? extends CompletionItem> filtered = getFilteredData(results, filterPrefix);
                         resultSet.addAllItems(filtered);
-                        if (possibleDeclaration && getApplicableTo() != null) {
+                        if (possibleDeclaration && !isExplicitQuery() && getApplicableTo() != null) {
                             VersionedDocument textBuffer = VersionedDocumentUtilities.getVersionedDocument(component.getDocument());
                             DocumentSnapshot snapshot = textBuffer.getCurrentSnapshot();
                             SnapshotPositionRegion applicableSpan = getApplicableTo().getRegion(snapshot);
@@ -317,7 +321,7 @@ public final class GrammarCompletionQuery extends AsyncCompletionQuery {
                         Completion.get().hideCompletion();
                     }
                 }
-            } else if (queryType == CompletionProvider.TOOLTIP_QUERY_TYPE) {
+            } else if ((queryType & CompletionProvider.RESERVED_QUERY_MASK) == CompletionProvider.TOOLTIP_QUERY_TYPE) {
                 resultSet.setToolTip(toolTip != null ? toolTip : null);
             }
 
@@ -382,7 +386,7 @@ public final class GrammarCompletionQuery extends AsyncCompletionQuery {
         private void runImpl(BaseDocument document) {
             results = new ArrayList<CompletionItem>();
             possibleDeclaration = true;
-            possibleReference = (queryType & GrammarCompletionProvider.AUTO_QUERY_TYPE) != 0;
+            possibleReference = true;
             possibleKeyword = true;
 
             // Add context items (labels, etc). Use anchor points to optimize information gathering.
