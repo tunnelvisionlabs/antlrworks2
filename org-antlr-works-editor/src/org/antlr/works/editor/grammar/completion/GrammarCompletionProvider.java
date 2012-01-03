@@ -80,13 +80,35 @@ public class GrammarCompletionProvider implements CompletionProvider {
 
     @Override
     public int getAutoQueryTypes(JTextComponent component, String typedText) {
-        if (typedText != null && typedText.length() == 1
-            && (getGrammarCompletionAutoPopupTriggers().indexOf(typedText.charAt(0)) >= 0
-            || (autoPopupOnGrammarIdentifierPart() && GrammarCompletionQuery.isGrammarIdentifierPart(typedText)))) {
+        if (typedText == null || typedText.length() != 1) {
+            return 0;
+        }
+
+        boolean triggered = getGrammarCompletionAutoPopupTriggers().indexOf(typedText.charAt(0)) >= 0;
+        if (triggered || (autoPopupOnGrammarIdentifierPart() && GrammarCompletionQuery.isGrammarIdentifierPart(typedText))) {
+            int offset = component.getSelectionStart() - 1;
+            Token contextToken = getGrammarContext(component, offset);
+            if (contextToken == null) {
+                return 0;
+            }
+
+            if (!triggered) {
+                // the caret must be at the end of the identifier. note that the
+                // offset is already 1 position before the caret, so no need to
+                // add 1 to contextToken.getStopIndex().
+                if (offset != contextToken.getStopIndex()) {
+                    return 0;
+                }
+
+                // only trigger for the first character of the identifier
+                if (contextToken.getStopIndex() > contextToken.getStartIndex()) {
+                    return 0;
+                }
+            }
 
             boolean allowInStrings = false;
-            boolean allowInActions = getGrammarCompletionAutoPopupTriggers().indexOf(typedText.charAt(0)) >= 0;
-            if (isGrammarContext(component, component.getSelectionStart() - 1, allowInStrings, allowInActions)) {
+            boolean allowInActions = triggered;
+            if (isGrammarContext(contextToken, offset, allowInStrings, allowInActions)) {
                 return COMPLETION_QUERY_TYPE | AUTO_QUERY_TYPE;
             }
         }
@@ -124,7 +146,7 @@ public class GrammarCompletionProvider implements CompletionProvider {
         return grammarCompletionSelectors;
     }
 
-    /*package*/ static boolean isGrammarContext(JTextComponent component, int offset, boolean allowInStrings, boolean allowInActions) {
+    /*package*/ static Token getGrammarContext(JTextComponent component, int offset) {
         Document document = component.getDocument();
         if (document instanceof AbstractDocument) {
             ((AbstractDocument)document).readLock();
@@ -139,10 +161,10 @@ public class GrammarCompletionProvider implements CompletionProvider {
                     tagger = futureTokensData.get().getData();
                 } catch (InterruptedException ex) {
                     Exceptions.printStackTrace(ex);
-                    return false;
+                    return null;
                 } catch (ExecutionException ex) {
                     Exceptions.printStackTrace(ex);
-                    return false;
+                    return null;
                 }
 
                 // get the token(s) at the cursor position, with affinity both directions
@@ -181,30 +203,7 @@ public class GrammarCompletionProvider implements CompletionProvider {
                     }
                 }
 
-                if (token == null) {
-                    return false;
-                }
-
-                switch (token.getType()) {
-                case GrammarLexer.ACTION_COMMENT:
-                    return false;
-
-                case GrammarLexer.STRING_LITERAL:
-                case GrammarLexer.DOUBLE_QUOTE_STRING_LITERAL:
-                case GrammarLexer.DOUBLE_ANGLE_STRING_LITERAL:
-                    return allowInStrings;
-
-                case GrammarLexer.ARG_ACTION_WORD:
-                case GrammarLexer.ACTION_WORD:
-                    return allowInActions;
-
-                case GrammarLexer.WS:
-                    return true;
-
-                default:
-                    return token.getChannel() == Lexer.DEFAULT_TOKEN_CHANNEL;
-                }
-
+                return token;
                 //List<Token> tokens;
 //            } catch (BadLocationException ex) {
 //                Exceptions.printStackTrace(ex);
@@ -214,6 +213,36 @@ public class GrammarCompletionProvider implements CompletionProvider {
             if (document instanceof AbstractDocument) {
                 ((AbstractDocument)document).readUnlock();
             }
+        }
+    }
+
+    /*package*/ static boolean isGrammarContext(JTextComponent component, int offset, boolean allowInStrings, boolean allowInActions) {
+        return isGrammarContext(getGrammarContext(component, offset), offset, allowInStrings, allowInActions);
+    }
+
+    /*package*/ static boolean isGrammarContext(Token token, int offset, boolean allowInStrings, boolean allowInActions) {
+        if (token == null) {
+            return false;
+        }
+
+        switch (token.getType()) {
+        case GrammarLexer.ACTION_COMMENT:
+            return false;
+
+        case GrammarLexer.STRING_LITERAL:
+        case GrammarLexer.DOUBLE_QUOTE_STRING_LITERAL:
+        case GrammarLexer.DOUBLE_ANGLE_STRING_LITERAL:
+            return allowInStrings;
+
+        case GrammarLexer.ARG_ACTION_WORD:
+        case GrammarLexer.ACTION_WORD:
+            return allowInActions;
+
+        case GrammarLexer.WS:
+            return true;
+
+        default:
+            return token.getChannel() == Lexer.DEFAULT_TOKEN_CHANNEL;
         }
     }
 }
