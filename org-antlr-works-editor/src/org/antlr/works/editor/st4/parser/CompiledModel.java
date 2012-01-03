@@ -1,6 +1,6 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -27,20 +27,36 @@
  */
 package org.antlr.works.editor.st4.parser;
 
-import java.util.Collection;
-import java.util.Collections;
-import org.antlr.works.editor.st4.StringTemplateEditorKit;
-import org.netbeans.api.editor.mimelookup.MimeRegistration;
-import org.netbeans.modules.parsing.api.Snapshot;
-import org.netbeans.modules.parsing.spi.SchedulerTask;
-import org.netbeans.modules.parsing.spi.TaskFactory;
+import java.util.List;
+import org.antlr.netbeans.editor.text.DocumentSnapshot;
+import org.openide.util.Parameters;
 
-@MimeRegistration(mimeType=StringTemplateEditorKit.TEMPLATE_MIME_TYPE, service=TaskFactory.class)
-public class SyntaxErrorsHighlightingTaskFactory extends TaskFactory {
+/**
+ *
+ * @author Sam Harwell
+ */
+public class CompiledModel {
 
-    @Override
-    public Collection<? extends SchedulerTask> create(Snapshot snapshot) {
-        return Collections.singleton(new SyntaxErrorsHighlightingTask());
+    private final DocumentSnapshot snapshot;
+    private final CompiledFileModel result;
+
+    public CompiledModel(DocumentSnapshot snapshot, CompiledFileModel result) {
+        Parameters.notNull("result", result);
+
+        this.snapshot = snapshot;
+        this.result = result;
+    }
+
+    public DocumentSnapshot getSnapshot() {
+        return snapshot;
+    }
+
+    public CompiledFileModel getResult() {
+        return result;
+    }
+
+    public List<CompiledFileModel> getImportedGroupResults() {
+        return getResult().getImportedGroupResults();
     }
 
 }

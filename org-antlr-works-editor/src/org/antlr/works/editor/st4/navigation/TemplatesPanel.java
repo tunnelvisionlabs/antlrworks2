@@ -77,37 +77,24 @@ public class TemplatesPanel implements NavigatorPanel {
 
     @Override
     public JComponent getComponent() {
-        return getGrammarRulesPanelUI();
+        return getTemplatesPanelUI();
     }
 
     @Override
     public void panelActivated(Lookup context) {
-        getGrammarRulesPanelUI().showWaitNode();
-        RequestProcessor.post(new Runnable() {
-            @Override
-            public void run() {
-                //throw new UnsupportedOperationException("Not supported yet.");
-            }
-        });
     }
 
     @Override
     public void panelDeactivated() {
-        getGrammarRulesPanelUI().showWaitNode();
-        RequestProcessor.post(new Runnable() {
-            @Override
-            public void run() {
-                //throw new UnsupportedOperationException("Not supported yet.");
-            }
-        });
+        getTemplatesPanelUI().showWaitNode();
     }
 
     @Override
     public Lookup getLookup() {
-        return getGrammarRulesPanelUI().getLookup();
+        return getTemplatesPanelUI().getLookup();
     }
 
-    private synchronized TemplatesPanelUI getGrammarRulesPanelUI() {
+    private synchronized TemplatesPanelUI getTemplatesPanelUI() {
         if (this.component == null) {
             this.component = new TemplatesPanelUI();
         }
@@ -160,8 +147,8 @@ public class TemplatesPanel implements NavigatorPanel {
             return;
         }
 
-        TemplatesPanel grammarRulesPanel = (TemplatesPanel)panel;
-        JComponent component = grammarRulesPanel.getComponent();
+        TemplatesPanel templatesPanel = (TemplatesPanel)panel;
+        JComponent component = templatesPanel.getComponent();
         assert component == null || component instanceof TemplatesPanelUI;
         if (!(component instanceof TemplatesPanelUI)) {
             return;

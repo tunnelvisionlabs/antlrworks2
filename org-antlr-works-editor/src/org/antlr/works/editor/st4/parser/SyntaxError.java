@@ -1,6 +1,6 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -27,17 +27,40 @@
  */
 package org.antlr.works.editor.st4.parser;
 
-import java.util.Collection;
-import org.antlr.works.editor.st4.StringTemplateEditorKit;
-import org.netbeans.api.editor.mimelookup.MimeRegistration;
-import org.netbeans.modules.parsing.api.Snapshot;
-import org.netbeans.modules.parsing.spi.Parser;
-import org.netbeans.modules.parsing.spi.ParserFactory;
+import org.antlr.runtime.RecognitionException;
+import org.antlr.runtime.Token;
+import org.netbeans.spi.editor.hints.Severity;
 
-@MimeRegistration(mimeType=StringTemplateEditorKit.TEMPLATE_MIME_TYPE, service=ParserFactory.class)
-public class TemplateParserFactory extends ParserFactory {
-    @Override
-    public Parser createParser(Collection<Snapshot> snapshots) {
-        return new TemplateParser();
+/**
+ *
+ * @author Sam Harwell
+ */
+public class SyntaxError {
+    private final Token offendingToken;
+    private final RecognitionException exception;
+    private final String message;
+    private final Severity severity;
+
+    public SyntaxError(Token offendingToken, RecognitionException exception, String message, Severity severity) {
+        this.offendingToken = offendingToken;
+        this.exception = exception;
+        this.message = message;
+        this.severity = severity;
+    }
+
+    public Token getOffendingToken() {
+        return offendingToken;
+    }
+
+    public RecognitionException getException() {
+        return exception;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public Severity getSeverity() {
+        return severity;
     }
 }
