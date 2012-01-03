@@ -46,6 +46,7 @@ import org.antlr.netbeans.editor.commenting.ExtendedUncommentAction;
 import org.antlr.netbeans.editor.commenting.LineCommentFormat;
 import org.antlr.netbeans.editor.commenting.StandardCommenter;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
+import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.netbeans.api.editor.mimelookup.MimeLookup;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.netbeans.api.editor.settings.SimpleValueNames;
@@ -53,9 +54,6 @@ import org.netbeans.editor.BaseAction;
 import org.netbeans.editor.BaseDocument;
 import org.netbeans.lib.editor.util.swing.DocumentUtilities;
 import org.netbeans.modules.editor.NbEditorKit;
-import org.netbeans.modules.parsing.api.Snapshot;
-import org.netbeans.modules.parsing.api.Source;
-import org.netbeans.modules.parsing.impl.Utilities;
 import org.openide.util.ContextAwareAction;
 import org.openide.util.ImageUtilities;
 import org.openide.util.Lookup;
@@ -126,15 +124,6 @@ public class GrammarEditorKit extends NbEditorKit {
         return isLegacyMode(document);
     }
 
-    public static boolean isLegacyMode(Snapshot snapshot) {
-        Document document = snapshot.getSource().getDocument(false);
-        if (document == null) {
-            return false;
-        }
-
-        return isLegacyMode(document);
-    }
-
     public static boolean isLegacyMode(Document document) {
         Boolean mode = (Boolean)document.getProperty(PROP_LEGACY_MODE);
         if (mode == null) {
@@ -183,8 +172,9 @@ public class GrammarEditorKit extends NbEditorKit {
                 boolean current = isLegacyMode(target.getDocument());
                 target.getDocument().putProperty(PROP_LEGACY_MODE, !current);
 
-                Source source = Source.create(target.getDocument());
-                Utilities.revalidate(source);
+                ParserTaskManager taskManager = Lookup.getDefault().lookup(ParserTaskManager.class);
+                // TODO: reschedule all parse tasks
+                //taskManager.schedule();
             }
         }
 
