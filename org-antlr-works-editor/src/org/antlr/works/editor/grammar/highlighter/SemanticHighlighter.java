@@ -265,7 +265,7 @@ public class SemanticHighlighter extends AbstractHighlightsContainer {
                 public Void call() {
                     final SemanticAnalyzerListener listener = new SemanticAnalyzerListener();
                     ParseTreeWalker.DEFAULT.walk(listener, parserData.getData());
-                    ((BaseDocument)document).runAtomicAsUser(new Runnable() {
+                    ((BaseDocument)document).render(new Runnable() {
                         @Override
                         public void run() {
                             container.clear();
