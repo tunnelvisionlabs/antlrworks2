@@ -500,7 +500,7 @@ public abstract class AbstractTokensTaskTaggerSnapshot<TState extends LineStateI
 //        }
     }
 
-    public final @NonNull AbstractTokensTaskTaggerSnapshot translateTo(@NonNull DocumentSnapshot targetSnapshot) {
+    public final @NonNull AbstractTokensTaskTaggerSnapshot<TState> translateTo(@NonNull DocumentSnapshot targetSnapshot) {
         Parameters.notNull("targetSnapshot", targetSnapshot);
         if (targetSnapshot.equals(snapshot)) {
             return this;
@@ -517,7 +517,7 @@ public abstract class AbstractTokensTaskTaggerSnapshot<TState extends LineStateI
         return translateToImpl(targetSnapshot);
     }
 
-    protected abstract AbstractTokensTaskTaggerSnapshot translateToImpl(@NonNull DocumentSnapshot targetSnapshot);
+    protected abstract AbstractTokensTaskTaggerSnapshot<TState> translateToImpl(@NonNull DocumentSnapshot targetSnapshot);
 
     public static class ParseRequest<TState> {
         private final OffsetRegion region;

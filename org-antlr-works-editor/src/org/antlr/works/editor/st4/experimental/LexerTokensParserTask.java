@@ -64,7 +64,7 @@ public class LexerTokensParserTask implements ParserTask {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public void parse(ParserTaskManager taskManager, JTextComponent component, DocumentSnapshot snapshot, Collection<ParserDataDefinition<?>> requestedData, ParserResultHandler results)
         throws InterruptedException, ExecutionException {
 
@@ -87,7 +87,6 @@ public class LexerTokensParserTask implements ParserTask {
                 int requestedVersion = snapshot.getVersion().getVersionNumber();
                 ParserData<Tagger<TokenTag>> previousResult = null;
                 int previousVersion = -1;
-                @SuppressWarnings("unchecked")
                 ParserData<Tagger<TokenTag>>[] values;
                 synchronized (documentCache) {
                     values = documentCache.values().toArray(new ParserData[0]);
