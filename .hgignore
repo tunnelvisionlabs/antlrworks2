@@ -3,3 +3,4 @@ syntax: regexp
 /build$
 ^nbproject/private$
 /nbproject/private$
+^dist$
