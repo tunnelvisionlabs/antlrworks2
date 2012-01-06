@@ -1,6 +1,6 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -29,7 +29,9 @@ package org.antlr.works.editor.grammar.completion;
 
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonToken;
+import org.antlr.v4.runtime.CommonTokenFactory;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.TokenFactory;
 import org.antlr.v4.runtime.TokenSource;
 import org.antlr.v4.runtime.WritableToken;
 
@@ -40,6 +42,8 @@ import org.antlr.v4.runtime.WritableToken;
 public class CodeCompletionTokenSource implements TokenSource {
     private final int caretOffset;
     private final TokenSource source;
+
+    private TokenFactory<?> tokenFactory = CommonTokenFactory.DEFAULT;
 
     private Token caretToken;
 
@@ -96,6 +100,15 @@ public class CodeCompletionTokenSource implements TokenSource {
     @Override
     public String getSourceName() {
         return source.getSourceName();
+    }
+
+    @Override
+    public void setTokenFactory(TokenFactory<?> tokenFactory) {
+        if (tokenFactory == null) {
+            tokenFactory = CommonTokenFactory.DEFAULT;
+        }
+
+        this.tokenFactory = tokenFactory;
     }
 
     private Token emitEOF() {

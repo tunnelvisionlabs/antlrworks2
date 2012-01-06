@@ -1,6 +1,6 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -141,9 +141,9 @@ public class GroupHighlighterLexer extends GroupHighlighterLexerBase {
     }
 
     private boolean handleAcceptPositionForKeyword(String keyword) {
-        if (input.index() > tokenStartCharIndex + keyword.length()) {
+        if (getInputStream().index() > tokenStartCharIndex + keyword.length()) {
             int offset = keyword.length() - 1;
-            getInterpreter().resetAcceptPosition(input, tokenStartCharIndex + offset, tokenStartLine, tokenStartCharPositionInLine + offset);
+            getInterpreter().resetAcceptPosition(getInputStream(), tokenStartCharIndex + offset, tokenStartLine, tokenStartCharPositionInLine + offset);
             return true;
         }
 

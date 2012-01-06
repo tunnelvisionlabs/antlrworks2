@@ -1,6 +1,6 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -32,7 +32,7 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
-import org.antlr.v4.runtime.BaseRecognizer;
+import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.DefaultErrorStrategy;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Token;
@@ -48,13 +48,13 @@ import org.antlr.v4.runtime.misc.IntervalSet;
  *
  * @author Sam Harwell
  */
-public class CodeCompletionErrorStrategy extends DefaultErrorStrategy<Token> {
+public class CodeCompletionErrorStrategy extends DefaultErrorStrategy {
 
     public CodeCompletionErrorStrategy() {
     }
 
     @Override
-    public void reportError(BaseRecognizer<Token> recognizer, RecognitionException e) throws RecognitionException {
+    public void reportError(Parser recognizer, RecognitionException e) throws RecognitionException {
         if (e != null && e.getOffendingToken() != null && e.getOffendingToken().getType() == CaretToken.CARET_TOKEN_TYPE) {
             return;
         }
@@ -63,7 +63,7 @@ public class CodeCompletionErrorStrategy extends DefaultErrorStrategy<Token> {
     }
 
     @Override
-    public void sync(BaseRecognizer<Token> recognizer) {
+    public void sync(Parser recognizer) {
         if (recognizer.getInputStream().LA(1) == CaretToken.CARET_TOKEN_TYPE) {
             return;
         }
@@ -73,7 +73,7 @@ public class CodeCompletionErrorStrategy extends DefaultErrorStrategy<Token> {
 
     /** Consume tokens until one matches the given token set */
     @Override
-    public void consumeUntil(BaseRecognizer<Token> recognizer, IntervalSet set) {
+    public void consumeUntil(Parser recognizer, IntervalSet set) {
         //System.out.println("consumeUntil("+set.toString(getTokenNames())+")");
         int ttype = recognizer.getInputStream().LA(1);
         while (ttype != Token.EOF && ttype != CaretToken.CARET_TOKEN_TYPE && !set.contains(ttype) ) {
@@ -85,7 +85,7 @@ public class CodeCompletionErrorStrategy extends DefaultErrorStrategy<Token> {
     }
 
     @Override
-    public void recover(BaseRecognizer<Token> recognizer, RecognitionException e) {
+    public void recover(Parser recognizer, RecognitionException e) {
         if (recognizer instanceof CodeCompletionGrammarParser
             && recognizer.getInputStream() instanceof TokenStream
             && ((CodeCompletionGrammarParser)recognizer).getInterpreter().getCaretTransitions() != null) {
@@ -109,13 +109,13 @@ public class CodeCompletionErrorStrategy extends DefaultErrorStrategy<Token> {
     }
 
     @Override
-    public Token recoverInline(BaseRecognizer<Token> recognizer) throws RecognitionException {
+    public Token recoverInline(Parser recognizer) throws RecognitionException {
         if (recognizer instanceof CodeCompletionGrammarParser
             && recognizer.getInputStream() instanceof TokenStream
-            && ((TokenStream)recognizer.getInputStream()).LT(1) instanceof CaretToken) {
+            && recognizer.getInputStream().LT(1) instanceof CaretToken) {
 
             CodeCompletionGrammarParser parser = (CodeCompletionGrammarParser)recognizer;
-            CaretToken token = (CaretToken)((TokenStream)recognizer.getInputStream()).LT(1);
+            CaretToken token = (CaretToken)recognizer.getInputStream().LT(1);
 
             CompletionParserATNSimulator interp = parser.getInterpreter();
             int stateNumber = recognizer.getContext().s;
@@ -128,7 +128,7 @@ public class CodeCompletionErrorStrategy extends DefaultErrorStrategy<Token> {
                     ATNState target = transition.target;
                     ATNConfig config = new ATNConfig(target, i + 1, PredictionContext.fromRuleContext(recognizer.getContext()));
                     Set<ATNConfig> closureBusy = new HashSet<ATNConfig>();
-                    interp.closure(config, closure, null, closureBusy, false, true, 0, 0);
+                    interp.closure(config, closure, true, closureBusy, false, true, 0);
                 }
             }
 
@@ -162,7 +162,7 @@ public class CodeCompletionErrorStrategy extends DefaultErrorStrategy<Token> {
                         configTransitions.add(trans);
 
                         Set<ATNConfig> closureBusy = new HashSet<ATNConfig>();
-                        interp.closure(new ATNConfig(c, target), reach, null, closureBusy, false, true, 0, 0);
+                        interp.closure(new ATNConfig(c, target), reach, true, closureBusy, false, true, 0);
                     }
                 }
             }

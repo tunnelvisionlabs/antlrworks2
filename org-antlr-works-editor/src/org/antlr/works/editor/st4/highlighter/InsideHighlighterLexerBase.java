@@ -1,4 +1,4 @@
-// $ANTLR 3.4 InsideHighlighterLexerBase.g 2011-09-24 13:13:46
+// $ANTLR 3.4 InsideHighlighterLexerBase.g 2012-01-06 11:42:50
 
 /*
  * [The "BSD license"]
@@ -796,11 +796,16 @@ public class InsideHighlighterLexerBase extends Lexer {
                 alt5=22;
             }
             else {
-                NoViableAltException nvae =
-                    new NoViableAltException("", 5, 11, input);
+            	int nvaeMark = input.mark();
+            	try {
+            		input.consume();
+            		NoViableAltException nvae =
+            			new NoViableAltException("", 5, 11, input);
 
-                throw nvae;
-
+            		throw nvae;
+            	} finally {
+            		input.rewind(nvaeMark);
+            	}
             }
         }
         else if ( (LA5_0=='&') ) {
@@ -816,11 +821,16 @@ public class InsideHighlighterLexerBase extends Lexer {
                 alt5=22;
             }
             else {
-                NoViableAltException nvae =
-                    new NoViableAltException("", 5, 12, input);
+            	int nvaeMark = input.mark();
+            	try {
+            		input.consume();
+            		NoViableAltException nvae =
+            			new NoViableAltException("", 5, 12, input);
 
-                throw nvae;
-
+            		throw nvae;
+            	} finally {
+            		input.rewind(nvaeMark);
+            	}
             }
         }
         else if ( (LA5_0=='{') ) {
@@ -842,11 +852,16 @@ public class InsideHighlighterLexerBase extends Lexer {
                 alt5=22;
             }
             else {
-                NoViableAltException nvae =
-                    new NoViableAltException("", 5, 15, input);
+            	int nvaeMark = input.mark();
+            	try {
+            		input.consume();
+            		NoViableAltException nvae =
+            			new NoViableAltException("", 5, 15, input);
 
-                throw nvae;
-
+            		throw nvae;
+            	} finally {
+            		input.rewind(nvaeMark);
+            	}
             }
         }
         else if ( ((LA5_0 >= 'A' && LA5_0 <= 'Z')||LA5_0=='_'||(LA5_0 >= 'a' && LA5_0 <= 'z')) ) {
@@ -871,11 +886,16 @@ public class InsideHighlighterLexerBase extends Lexer {
                 alt5=22;
             }
             else {
-                NoViableAltException nvae =
-                    new NoViableAltException("", 5, 19, input);
+            	int nvaeMark = input.mark();
+            	try {
+            		input.consume();
+            		NoViableAltException nvae =
+            			new NoViableAltException("", 5, 19, input);
 
-                throw nvae;
-
+            		throw nvae;
+            	} finally {
+            		input.rewind(nvaeMark);
+            	}
             }
         }
         else if ( ((LA5_0 >= '\u0000' && LA5_0 <= '\b')||(LA5_0 >= '\u000B' && LA5_0 <= '\f')||(LA5_0 >= '\u000E' && LA5_0 <= '\u001F')||(LA5_0 >= '#' && LA5_0 <= '%')||LA5_0=='\''||(LA5_0 >= '*' && LA5_0 <= '+')||LA5_0=='-'||(LA5_0 >= '/' && LA5_0 <= '9')||LA5_0=='<'||(LA5_0 >= '>' && LA5_0 <= '?')||LA5_0=='\\'||LA5_0=='^'||LA5_0=='`'||(LA5_0 >= '~' && LA5_0 <= '\uFFFF')) ) {
@@ -888,19 +908,23 @@ public class InsideHighlighterLexerBase extends Lexer {
                 alt5=22;
             }
             else {
-                NoViableAltException nvae =
-                    new NoViableAltException("", 5, 20, input);
+            	int nvaeMark = input.mark();
+            	try {
+            		input.consume();
+            		NoViableAltException nvae =
+            			new NoViableAltException("", 5, 20, input);
 
-                throw nvae;
-
+            		throw nvae;
+            	} finally {
+            		input.rewind(nvaeMark);
+            	}
             }
         }
         else {
-            NoViableAltException nvae =
-                new NoViableAltException("", 5, 0, input);
+        	NoViableAltException nvae =
+        		new NoViableAltException("", 5, 0, input);
 
-            throw nvae;
-
+        	throw nvae;
         }
         switch (alt5) {
             case 1 :

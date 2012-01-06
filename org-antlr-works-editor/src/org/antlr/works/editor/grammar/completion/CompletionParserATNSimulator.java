@@ -1,6 +1,6 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -85,274 +85,218 @@ public class CompletionParserATNSimulator extends ParserATNSimulator<Token> {
     }
 
     @Override
-    public boolean closure(ATNConfig config, ATNConfigSet configs, DecisionState decState, Set<ATNConfig> closureBusy, boolean collectPredicates, boolean hasMoreContexts, int globalContextCount, int depth) {
-        return super.closure(config, configs, decState, closureBusy, collectPredicates, hasMoreContexts, globalContextCount, depth);
-    }
+    public int execATN(@NonNull SymbolStream<Token> input,
+					   @NonNull DFA dfa,
+					   int startIndex, @NonNull SimulatorState initialState)
+	{
+		if ( debug ) System.out.println("execATN decision "+dfa.decision+" exec LA(1)=="+ getLookaheadName(input));
+		ATN_failover++;
 
-    @Override
-    public int execATN(SymbolStream<Token> input, DFA dfa, int startIndex, ATNConfigSet s0, ParserRuleContext<?> globalContext, boolean useContext, int consumedContextFrames) {
-        if ( debug ) System.out.println("execATN decision "+dfa.decision+" exec LA(1)=="+ getLookaheadName(input));
-        ATN_failover++;
-        ATNConfigSet closure = new ATNConfigSet(!dfa.isContextSensitive, mergeATNConfigs);
+		final ParserRuleContext<?> outerContext = initialState.outerContext;
+		final boolean useContext = initialState.useContext;
 
-        closure.addAll(s0);
+		int t = input.LA(1);
 
-        if ( debug ) System.out.println("start state closure="+closure);
+        DecisionState decState = atn.getDecisionState(dfa.decision);
+		boolean greedy = decState.isGreedy;
+		SimulatorState previous = initialState;
 
-        int t = input.LA(1);
-        if ( t==Token.EOF && prevAccept!=null ) {
-            // computeStartState must have reached end of rule
-            return prevAccept.alt;
-        }
+		while (true) { // while more work
+            CodeCompletionSimulatorState nextState = computeReachSet(dfa, previous, t, greedy);
+            if (nextState == null) throw noViableAlt(input, outerContext, previous.s0.configs, startIndex);
+            DFAState D = nextState.s0;
+            ATNConfigSet reach = nextState.s0.configs;
 
-        @NonNull DecisionState decState = null;
-        if ( atn.decisionToState.size()>0 ) {
-            decState = atn.decisionToState.get(dfa.decision);
-            if ( debug ) System.out.println("decision state = "+decState);
-        }
+            int predictedAlt = getUniqueAlt(reach);
+            if (predictedAlt != ATN.INVALID_ALT_NUMBER) {
+                D.isAcceptState = true;
+//                D.configs.uniqueAlt = predictedAlt;
+                D.prediction = predictedAlt;
 
-        prevAccept = null;
-        prevAcceptIndex = -1;
-        ATNConfigSet reach = new ATNConfigSet(!dfa.isContextSensitive, mergeATNConfigs);
-        LinkedHashMap<ATNConfig, List<Transition>> transitions = null;
-
-        RuleContext remainingGlobalContext = getRemainingContext(globalContext, consumedContextFrames);
-
-        do { // while more work
-            if ( debug ) System.out.println("in reach starting closure: " + closure);
-
-//            if (useContext) {
-//
-//                for (ATNConfig c : closure) {
-//                    IntervalSet following = c.state.atn.nextTokens(c.state);
-//                    if (following.contains(Token.EPSILON)) {
-//
-//                    }
-//                }
-//            }
-
-            List<ATNConfig> closureConfigs = new ArrayList<ATNConfig>(closure);
-            List<Integer> contextElements = null;
-            boolean stepIntoGlobal;
-            do {
-                stepIntoGlobal = false;
-                boolean hasMoreContext = !useContext || remainingGlobalContext != null;
-                int ncl = closureConfigs.size();
-                stateReachLoop:
-                for (int ci=0; ci<ncl; ci++) { // TODO: foreach
-                    ATNConfig c = closureConfigs.get(ci);
-                    if ( debug ) System.out.println("testing "+getTokenName(t)+" at "+c.toString());
-
-                    List<Transition> configTransitions = null;
-
-                    int n = c.state.getNumberOfTransitions();
-                    for (int ti=0; ti<n; ti++) {               // for each transition
-                        Transition trans = c.state.transition(ti);
-                        ATNState target = getReachableTarget(trans, t);
-                        if ( target!=null ) {
-                            if (t == CaretToken.CARET_TOKEN_TYPE) {
-                                if (transitions == null) {
-                                    transitions = new LinkedHashMap<ATNConfig, List<Transition>>();
-                                }
-
-                                if (configTransitions == null) {
-                                    configTransitions = new ArrayList<Transition>();
-                                    transitions.put(c, configTransitions);
-                                }
-
-                                configTransitions.add(trans);
-                            }
-
-                            Set<ATNConfig> closureBusy = new HashSet<ATNConfig>();
-                            final boolean collectPredicates = false;
-                            stepIntoGlobal |= closure(new ATNConfig(c, target), reach, decState, closureBusy, collectPredicates, hasMoreContext, consumedContextFrames, consumedContextFrames);
-                        }
-                    }
+                if (useContext && always_try_local_context) {
+                    retry_with_context_indicates_no_conflict++;
+                    reportContextSensitivity(dfa, reach, startIndex, input.index());
                 }
-
-                if (useContext && stepIntoGlobal) {
-                    reach.clear();
-
-                    int nextContextElement = remainingGlobalContext.isEmpty() ? PredictionContext.EMPTY_STATE_KEY : remainingGlobalContext.invokingState;
-                    if (contextElements == null) {
-                        contextElements = new ArrayList<Integer>();
-                    }
-
-                    if (remainingGlobalContext.isEmpty()) {
-                        remainingGlobalContext = null;
-                    } else {
-                        remainingGlobalContext = remainingGlobalContext.parent;
-                    }
-
-                    contextElements.add(nextContextElement);
-                    if (nextContextElement != PredictionContext.EMPTY_STATE_KEY) {
-                        for (int i = 0; i < closureConfigs.size(); i++) {
-                            closureConfigs.set(i, closureConfigs.get(i).appendContext(nextContextElement));
-                        }
-                    }
-                }
-            } while (useContext && stepIntoGlobal);
-
-            // resolve ambig in DFAState for reach
-            IntervalSet ambigAlts = getAmbiguousAlts(reach);
-            if ( ambigAlts!=null ) {
-                if ( debug ) {
-                    int i = -1;
-                    if ( outerContext!=null && outerContext.s>=0 ) {
-                        i = atn.states.get(outerContext.s).ruleIndex;
-                    }
-                    String rname = getRuleName(i);
-                    System.out.println("AMBIG dec "+dfa.decision+" in "+rname+" for alt "+ambigAlts+" upon "+
-                                    getInputString(input, startIndex));
-                    System.out.println("REACH="+reach);
-                }
-
-                // can we resolve with predicates?
-                SemanticContext[] altToPred =
-                    getPredsForAmbigAlts(decState, ambigAlts, reach);
-                if ( altToPred!=null ) {
-                    // We need at least n-1 predicates for n ambiguous alts
-                    if ( tooFewPredicates(altToPred) ) {
-                        reportInsufficientPredicates(startIndex, input.index(),
-                                                    ambigAlts, altToPred, reach);
-                    }
-                    List<DFAState.PredPrediction> predPredictions =
-                        getPredicatePredictions(ambigAlts, altToPred);
-
-                    if ( buildDFA ) {
-                        DFAState accept = addDFAEdge(dfa, closure, t, contextElements, reach);
-                        makeAcceptState(accept, predPredictions);
-                    }
-                    // rewind input so pred's LT(i) calls make sense
-                    input.seek(startIndex);
-                    int uniqueAlt = evalSemanticContext(predPredictions);
-                    if ( uniqueAlt==ATN.INVALID_ALT_NUMBER ) {
-                        // no true pred and/or no uncovered alt
-                        // to fall back on. must announce parsing error.
-                        throw noViableAlt(input, outerContext, closure, startIndex);
-                    }
-                    return uniqueAlt;
-                }
-
-                dfa.conflictSet = reach.clone(); // at least one DFA state is ambiguous
-                if ( !userWantsCtxSensitive ) reportConflict(startIndex, input.index(), ambigAlts, reach);
-
-                if (userWantsCtxSensitive && !useContext && !stepIntoGlobal) {
-                    for (ATNConfig config : reach) {
-                        if (config.reachesIntoOuterContext > 0) {
-                            stepIntoGlobal = true;
-                            break;
-                        }
-                    }
-                }
-
-                if ( !userWantsCtxSensitive || useContext || !stepIntoGlobal ) {
-                    // resolve ambiguity
-                    if ( decState!=null && decState.isGreedy ) {
-                        // if greedy, resolve in favor of alt coming first
-                        resolveToMinAlt(reach, ambigAlts);
-                    }
-                    else {
-                        // if nongreedy loop, always pick exit branch to match
-                        // what follows instead of re-entering loop
-                        resolveNongreedyToExitBranch(reach, ambigAlts);
-                    }
-                }
-                else {
-                    DFAState from = addDFAState(dfa, closure);
-                    if (from != null) {
-                        addDFAEdge(from, t, RETRY_WITH_CONTEXT);
-                    }
-
-                    input.seek(startIndex);
-                    dfa.isContextSensitive = true;
-                    return predictATN(dfa, input, outerContext, true);
-                }
-            }
-
-            // if reach predicts single alt, can stop
-
-            int uniqueAlt = getUniqueAlt(reach);
-            if ( uniqueAlt!=ATN.INVALID_ALT_NUMBER ) {
-                if ( debug ) System.out.println("PREDICT alt "+uniqueAlt+
-                                                " decision "+dfa.decision+
-                                                " at index "+input.index());
-                if ( !buildDFA ) return uniqueAlt;
-                // edge from closure-t->reach now
-
-                DFAState accept = addDFAEdge(dfa, closure, t, contextElements, reach);
-                // now check to see if we have a validating predicate.
-                // We know that it's validating because there is only
-                // one predicted alternative
-                IntervalSet uniqueAltSet = new IntervalSet();
-                uniqueAltSet.add(uniqueAlt);
-                SemanticContext[] altToPred =
-                    getPredsForAmbigAlts(decState, uniqueAltSet, reach);
-                // altToPred[uniqueAlt] is now our validating predicate (if any)
-                if ( altToPred!=null ) {
-                    // we have a validating predicate; test it
-                    // Update DFA so reach becomes accept state with predicate
-                    List<DFAState.PredPrediction> predPredictions =
-                        getPredicatePredictions(uniqueAltSet, altToPred);
-                    makeAcceptState(accept, predPredictions);
-                    // rewind input so pred's LT(i) calls make sense
-                    input.seek(startIndex);
-                    boolean validated = altToPred[uniqueAlt].eval(parser, outerContext);
-                    if ( debug || dfa_debug ) {
-                        System.out.println("eval alt "+uniqueAlt+" pred "+
-                                            altToPred[uniqueAlt]+"="+ validated);
-                    }
-                    if ( !validated ) {
-                        throw noViableAlt(input, outerContext, closure, startIndex);
-                    }
-                    return uniqueAlt;
-                }
-                makeAcceptState(accept, uniqueAlt);
-                return uniqueAlt;
             }
             else if (t == CaretToken.CARET_TOKEN_TYPE) {
 //                        LOGGER.warning("The current implementation does not support multiple ambiguous alternatives."); //NOI18N
-                caretTransitions = transitions;
+                caretTransitions = nextState.caretTransitions;
                 caretToken = (CaretToken)input.LT(1);
-                break;
+                throw noViableAlt(input, outerContext, nextState.s0.configs, startIndex);
             }
+            else {
+				D.configs.conflictingAlts = getAmbiguousAlts(reach);
+				if ( D.configs.conflictingAlts!=null ) {
+					if ( greedy ) {
+						D.isAcceptState = true;
+						D.prediction = predictedAlt = resolveToMinAlt(D, D.configs.conflictingAlts);
 
-            if ( decState!=null && !decState.isGreedy ) {
-                // if we reached end of rule via exit branch, we matched
-                int exitAlt = 2;
-                ATNConfig cstop = configWithAltAtStopState(reach, exitAlt);
-                if ( cstop!=null ) {
-                    if ( debug ) System.out.println("nongreedy at stop state for exit branch");
-                    prevAccept = cstop;
-                    prevAcceptIndex = input.index();
-                    break;
+						int k = input.index() - startIndex + 1; // how much input we used
+//						System.out.println("used k="+k);
+						if ( k == 1 || // SLL(1) == LL(1)
+							 !userWantsCtxSensitive ||
+							 !D.configs.getDipsIntoOuterContext() )
+						{
+							if ( !D.configs.hasSemanticContext() ) {
+								reportAmbiguity(dfa, D, startIndex, input.index(), D.configs.conflictingAlts, D.configs);
+							}
+						}
+						else {
+							if ( debug ) System.out.println("RETRY with outerContext="+outerContext);
+
+							reportAttemptingFullContext(dfa, reach, startIndex, input.index());
+							input.seek(startIndex);
+							dfa.setContextSensitive(true);
+							return predictATN(dfa, input, outerContext, true);
+						}
+					}
+					else {
+						// upon ambiguity for nongreedy, default to exit branch to avoid inf loop
+						// this handles case where we find ambiguity that stops DFA construction
+						// before a config hits rule stop state. Was leaving prediction blank.
+						int exitAlt = 2;
+						D.isAcceptState = true; // when ambig or ctx sens or nongreedy or .* loop hitting rule stop
+						D.prediction = predictedAlt = exitAlt;
+					}
+				}
+			}
+
+			if ( !greedy ) {
+				int exitAlt = 2;
+				if ( predictedAlt != ATN.INVALID_ALT_NUMBER && configWithAltAtStopState(reach, 1) ) {
+					if ( debug ) System.out.println("nongreedy loop but unique alt "+D.configs.getUniqueAlt()+" at "+reach);
+					// reaches end via .* means nothing after.
+					D.isAcceptState = true;
+					D.prediction = predictedAlt = exitAlt;
+				}
+				else {// if we reached end of rule via exit branch and decision nongreedy, we matched
+					if ( configWithAltAtStopState(reach, exitAlt) ) {
+						if ( debug ) System.out.println("nongreedy at stop state for exit branch");
+						D.isAcceptState = true;
+						D.prediction = predictedAlt = exitAlt;
+					}
+				}
+			}
+
+			if ( D.isAcceptState && D.configs.hasSemanticContext() ) {
+				int nalts = decState.getNumberOfTransitions();
+				List<DFAState.PredPrediction> predPredictions =
+					predicateDFAState(D, D.configs, outerContext, nalts);
+				IntervalSet conflictingAlts = getConflictingAltsFromConfigSet(D.configs);
+				if ( D.predicates.size() < conflictingAlts.size() ) {
+					reportInsufficientPredicates(dfa, startIndex, input.index(),
+												 conflictingAlts,
+												 decState,
+												 getPredsForAmbigAlts(conflictingAlts, D.configs, nalts),
+												 D.configs,
+												 false);
+				}
+				input.seek(startIndex);
+				predictedAlt = evalSemanticContext(predPredictions, outerContext);
+				if ( predictedAlt!=ATN.INVALID_ALT_NUMBER ) {
+					return predictedAlt;
+				}
+				throw noViableAlt(input, outerContext, D.configs, startIndex);
+			}
+
+			if ( D.isAcceptState ) return predictedAlt;
+
+			previous = nextState;
+			input.consume();
+			t = input.LA(1);
+		}
+	}
+
+    @Override
+	public boolean closure(@NonNull ATNConfig config,
+						   @NonNull ATNConfigSet configs,
+						   boolean greedy,
+						   @NonNull Set<ATNConfig> closureBusy,
+						   boolean collectPredicates,
+						   boolean hasMoreContexts,
+						   int depth)
+	{
+        return super.closure(config, configs, greedy, closureBusy, collectPredicates, hasMoreContexts, depth);
+    }
+
+    @Override
+    protected CodeCompletionSimulatorState computeReachSet(DFA dfa, SimulatorState previous, int t, boolean greedy) {
+		final boolean useContext = previous.useContext;
+		RuleContext remainingGlobalContext = previous.remainingOuterContext;
+		List<ATNConfig> closureConfigs = new ArrayList<ATNConfig>(previous.s0.configs);
+		List<Integer> contextElements = null;
+		ATNConfigSet reach = new ATNConfigSet(!useContext, mergeATNConfigs);
+        LinkedHashMap<ATNConfig, List<Transition>> transitions = null;
+        boolean stepIntoGlobal;
+        do {
+            stepIntoGlobal = false;
+            boolean hasMoreContext = !useContext || remainingGlobalContext != null;
+            int ncl = closureConfigs.size();
+            stateReachLoop:
+            for (int ci=0; ci<ncl; ci++) { // TODO: foreach
+                ATNConfig c = closureConfigs.get(ci);
+                if ( debug ) System.out.println("testing "+getTokenName(t)+" at "+c.toString());
+
+                List<Transition> configTransitions = null;
+
+                int n = c.state.getNumberOfTransitions();
+                for (int ti=0; ti<n; ti++) {               // for each transition
+                    Transition trans = c.state.transition(ti);
+                    ATNState target = getReachableTarget(trans, t);
+                    if ( target!=null ) {
+                        if (t == CaretToken.CARET_TOKEN_TYPE) {
+                            if (transitions == null) {
+                                transitions = new LinkedHashMap<ATNConfig, List<Transition>>();
+                            }
+
+                            if (configTransitions == null) {
+                                configTransitions = new ArrayList<Transition>();
+                                transitions.put(c, configTransitions);
+                            }
+
+                            configTransitions.add(trans);
+                        }
+
+                        Set<ATNConfig> closureBusy = new HashSet<ATNConfig>(); //new ATNConfigSet(mergeATNConfigs);
+                        final boolean collectPredicates = false;
+                        stepIntoGlobal |= closure(new ATNConfig(c, target), reach, greedy, closureBusy, collectPredicates, hasMoreContext, 0);
+                    }
                 }
             }
 
-            if ( reach.isEmpty() ) {
-                break;
+            if (previous.useContext && stepIntoGlobal) {
+                reach.clear();
+
+                int nextContextElement = remainingGlobalContext.isEmpty() ? PredictionContext.EMPTY_STATE_KEY : remainingGlobalContext.invokingState;
+                if (contextElements == null) {
+                    contextElements = new ArrayList<Integer>();
+                }
+
+                if (remainingGlobalContext.isEmpty()) {
+                    remainingGlobalContext = null;
+                } else {
+                    remainingGlobalContext = remainingGlobalContext.parent;
+                }
+
+                contextElements.add(nextContextElement);
+                if (nextContextElement != PredictionContext.EMPTY_STATE_KEY) {
+                    for (int i = 0; i < closureConfigs.size(); i++) {
+                        closureConfigs.set(i, closureConfigs.get(i).appendContext(nextContextElement));
+                    }
+                }
             }
+        } while (useContext && stepIntoGlobal);
 
-            // If we matched t anywhere, need to consume and add closer-t->reach DFA edge
-            // else error if no previous accept
-            input.consume();
-            if ( buildDFA ) addDFAEdge(dfa, closure, t, contextElements, reach);
-            t = input.LA(1);
-
-            // swap to avoid reallocating space
-            ATNConfigSet tmp = reach;
-            reach = closure;
-            closure = tmp;
-            reach.clear(); // TODO: THIS MIGHT BE SLOW! kills each element; realloc might be faster
-        } while ( true );
-
-        if ( prevAccept==null ) {
-//			System.out.println("no viable token at input "+ getLookaheadName(input) +", index "+input.index());
-            throw noViableAlt(input, outerContext, closure, startIndex);
+        if (reach.isEmpty()) {
+            return null;
         }
 
-        if ( debug ) System.out.println("PREDICT " + prevAccept + " index " + prevAccept.alt);
-        return prevAccept.alt;
+        DFAState dfaState = null;
+        if (previous.s0 != null) {
+            dfaState = addDFAEdge(dfa, previous.s0.configs, t, contextElements, reach);
+        }
+
+        return new CodeCompletionSimulatorState(previous.outerContext, dfaState, useContext, (ParserRuleContext<?>)remainingGlobalContext, transitions);
     }
 
     private static final List<Integer> WORDLIKE_TOKEN_TYPES =
@@ -419,22 +363,5 @@ public class CompletionParserATNSimulator extends ParserATNSimulator<Token> {
         }
 
         return super.getReachableTarget(trans, ttype);
-    }
-
-    public ParserRuleContext<Token> interpret(int ruleIndex) {
-        ParserRuleContext<Token> localctx = new GrammarParser.prequelConstructContext(parser.getContext(), 4);
-        parser.enterRule(localctx, ruleIndex);
-        try {
-            ATNState atnstate = this.atn.ruleToStartState[ruleIndex];
-            throw new UnsupportedOperationException("Not implemented yet.");
-        } finally {
-            parser.exitRule(ruleIndex);
-        }
-        //return localctx;
-    }
-
-    private String getRuleName(int index) {
-        if ( parser!=null && index>=0 ) return parser.getRuleNames()[index];
-        return "<rule "+index+">";
     }
 }

@@ -1,6 +1,6 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -74,16 +74,16 @@ public class TemplateLexer extends TemplateLexerBase {
     public Token emit() {
         switch (type) {
         case LBRACE:
-            if (input.index() > tokenStartCharIndex + 1) {
-                getInterpreter().resetAcceptPosition(input, tokenStartCharIndex, tokenStartLine, tokenStartCharPositionInLine);
+            if (getInputStream().index() > tokenStartCharIndex + 1) {
+                getInterpreter().resetAcceptPosition(getInputStream(), tokenStartCharIndex, tokenStartLine, tokenStartCharPositionInLine);
                 pushMode(AnonymousTemplateParameters);
             }
             break;
 
         case DELIMITERS:
-            if (type == DELIMITERS && input.index() > tokenStartCharIndex + "delimiters".length()) {
+            if (type == DELIMITERS && getInputStream().index() > tokenStartCharIndex + "delimiters".length()) {
                 int offset = "delimiters".length() - 1;
-                getInterpreter().resetAcceptPosition(input, tokenStartCharIndex + offset, tokenStartLine, tokenStartCharPositionInLine + offset);
+                getInterpreter().resetAcceptPosition(getInputStream(), tokenStartCharIndex + offset, tokenStartLine, tokenStartCharPositionInLine + offset);
                 pushMode(DelimitersOpenSpec);
             }
             break;

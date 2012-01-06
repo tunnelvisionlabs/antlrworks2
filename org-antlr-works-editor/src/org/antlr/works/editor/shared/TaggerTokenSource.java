@@ -1,6 +1,6 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -37,11 +37,11 @@ import org.antlr.netbeans.editor.text.DocumentSnapshotLine;
 import org.antlr.netbeans.editor.text.NormalizedSnapshotPositionRegionCollection;
 import org.antlr.netbeans.editor.text.SnapshotPositionRegion;
 import org.antlr.v4.runtime.CharStream;
-import org.antlr.v4.runtime.CommonToken;
+import org.antlr.v4.runtime.CommonTokenFactory;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.TokenFactory;
 import org.antlr.v4.runtime.TokenSource;
 import org.netbeans.api.annotations.common.NonNull;
-
 
 /**
  *
@@ -57,6 +57,7 @@ public class TaggerTokenSource implements TokenSource {
     private CharStream input;
     private int line = -1;
     private int charPositionInLine = -1;
+    private TokenFactory<?> tokenFactory = CommonTokenFactory.DEFAULT;
 
     public TaggerTokenSource(@NonNull Tagger<TokenTag> tagger, DocumentSnapshot snapshot) {
         this(tagger, new SnapshotPositionRegion(snapshot, 0, snapshot.length()));
@@ -79,7 +80,7 @@ public class TaggerTokenSource implements TokenSource {
         if (tagIterator.hasNext()) {
             previousTag = tagIterator.next().getTag();
         } else {
-            previousTag = new TokenTag(new CommonToken(Token.EOF));
+            previousTag = new TokenTag(tokenFactory.create(Token.EOF, null));
         }
 
         line = -1;
@@ -135,4 +136,12 @@ public class TaggerTokenSource implements TokenSource {
         return snapshot.getVersionedDocument().getFileObject().getName();
     }
 
+    @Override
+    public void setTokenFactory(TokenFactory<?> tokenFactory) {
+        if (tokenFactory == null) {
+            tokenFactory = CommonTokenFactory.DEFAULT;
+        }
+
+        this.tokenFactory = tokenFactory;
+    }
 }
