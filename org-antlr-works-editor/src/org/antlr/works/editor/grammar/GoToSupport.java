@@ -1,6 +1,6 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -28,36 +28,25 @@
 package org.antlr.works.editor.grammar;
 
 import java.awt.event.ActionEvent;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Queue;
-import java.util.Set;
+import java.util.Collection;
 import javax.swing.Action;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.StyledDocument;
-import org.antlr.netbeans.editor.DocumentLine;
-import org.antlr.netbeans.editor.DocumentPoint;
 import org.antlr.netbeans.editor.DocumentSpan;
-import org.antlr.netbeans.editor.highlighting.ANTLRHighlighterBase;
-import org.antlr.netbeans.editor.highlighting.Highlight;
-import org.antlr.netbeans.editor.highlighting.HighlightsList;
 import org.antlr.netbeans.editor.navigation.Description;
 import org.antlr.netbeans.editor.navigation.actions.OpenAction;
-import org.antlr.runtime.CommonToken;
-import org.antlr.runtime.Token;
-import org.antlr.works.editor.grammar.highlighter.ANTLRHighlighter;
-import org.antlr.works.editor.grammar.highlighter.ActionHighlighterLexer;
-import org.antlr.works.editor.grammar.highlighter.GrammarHighlighterLexer;
-import org.antlr.works.editor.grammar.navigation.GrammarNode;
-import org.antlr.works.editor.grammar.navigation.GrammarRulesPanel;
-import org.antlr.works.editor.grammar.navigation.GrammarRulesPanelUI;
-import org.netbeans.spi.editor.highlighting.HighlightsSequence;
-import org.openide.explorer.ExplorerManager;
+import org.antlr.netbeans.editor.text.VersionedDocument;
+import org.antlr.netbeans.editor.text.VersionedDocumentUtilities;
+import org.antlr.netbeans.parsing.spi.ParserTaskManager;
+import org.antlr.v4.runtime.Token;
+import org.antlr.works.editor.grammar.completion.GrammarCompletionProvider;
+import org.antlr.works.editor.grammar.experimental.GrammarLexer;
+import org.antlr.works.editor.grammar.experimental.GrammarParser;
 import org.openide.filesystems.FileObject;
 import org.openide.loaders.DataObject;
-import org.openide.nodes.Node;
+import org.openide.util.Exceptions;
+import org.openide.util.Lookup;
 import org.openide.util.Parameters;
 
 /**
@@ -75,12 +64,29 @@ public class GoToSupport {
     }
 
     public static String getGoToElementToolTip(StyledDocument document, int offset, boolean goToSource, String key) {
-        DocumentSpan span = getIdentifierSpan(document, offset);
-        if (span == null) {
+        Token token = GrammarCompletionProvider.getGrammarContext(document, offset);
+        if (token == null) {
             return "";
         }
 
-        String text = span.getText();
+        switch (token.getType()) {
+        case GrammarParser.RULE_REF:
+        case GrammarParser.TOKEN_REF:
+        case GrammarParser.ACTION_REFERENCE:
+            break;
+
+        case GrammarLexer.ARG_ACTION_WORD:
+            if (token.getText().charAt(0) != '$') {
+                return "";
+            }
+
+            break;
+
+        default:
+            return "";
+        }
+
+        String text = token.getText();
         if (text.length() == 0) {
             return "";
         }
@@ -95,40 +101,31 @@ public class GoToSupport {
     }
 
     public static void goTo(StyledDocument document, int offset, boolean goToSource) {
-        GrammarRulesPanelUI ui = GrammarRulesPanel.findGrammarRulesPanelUI();
-        if (ui == null) {
+        Token token = GrammarCompletionProvider.getGrammarContext(document, offset);
+        if (token == null) {
             return;
         }
 
-        DocumentSpan span = getIdentifierSpan(document, offset);
-        if (span == null) {
+        String ruleName;
+        switch (token.getType()) {
+        case GrammarParser.RULE_REF:
+        case GrammarParser.TOKEN_REF:
+            ruleName = token.getText();
+            break;
+            
+        default:
             return;
         }
 
-        // try to find the name in the navigator
-        ExplorerManager explorerManager = ui.getExplorerManager();
-        if (explorerManager == null) {
-            return;
-        }
+        ParserTaskManager taskManager = Lookup.getDefault().lookup(ParserTaskManager.class);
+        VersionedDocument versionedDocument = VersionedDocumentUtilities.getVersionedDocument(document);
+        Collection<Description> rules = GrammarCompletionProvider.getRulesFromGrammar(taskManager, versionedDocument.getCurrentSnapshot());
 
-        Node rootContext = explorerManager.getRootContext();
-        if (!(rootContext instanceof GrammarNode)) {
-            return;
-        }
-
-        String text = span.getText();
         Description target = null;
-        Queue<Description> workList = new ArrayDeque<Description>();
-        workList.add(((GrammarNode)rootContext).getDescription());
-        while (!workList.isEmpty()) {
-            Description description = workList.remove();
-            if (description.getName() != null && description.getName().equals(text)) {
-                target = description;
+        for (Description rule : rules) {
+            if (rule.getName() != null && rule.getName().equals(ruleName)) {
+                target = rule;
                 break;
-            }
-
-            if (description.getChildren() != null) {
-                workList.addAll(description.getChildren());
             }
         }
 
@@ -143,108 +140,28 @@ public class GoToSupport {
     public static DocumentSpan getIdentifierSpan(StyledDocument document, int offset) {
         Parameters.notNull("document", document);
 
-        if (getFileObject(document) == null) {
-            //do nothing if FO is not attached to the document - the goto would not work anyway:
+        Token token = GrammarCompletionProvider.getGrammarContext(document, offset);
+        if (token == null) {
             return null;
         }
 
-        DocumentPoint point;
+        switch (token.getType()) {
+        case GrammarParser.RULE_REF:
+        case GrammarParser.TOKEN_REF:
+        case GrammarParser.ACTION_REFERENCE:
+        case GrammarParser.ARG_ACTION_WORD:
+            break;
+
+        default:
+            return null;
+        }
+
         try {
-            point = new DocumentPoint(document, offset);
+            return new DocumentSpan(document, token.getStartIndex(), token.getStopIndex() + 1);
         } catch (BadLocationException ex) {
+            Exceptions.printStackTrace(ex);
             return null;
         }
-
-        DocumentLine line = point.getContainingLine();
-        List<Token> tokens = getTokens(document, line.getExtent());
-        if (tokens == null) {
-            return null;
-        }
-
-        for (Token token : tokens) {
-            if (!(token instanceof CommonToken)) {
-                continue;
-            }
-
-            CommonToken commonToken = (CommonToken)token;
-            DocumentSpan span;
-            try {
-                span = new DocumentSpan(document, commonToken.getStartIndex(), commonToken.getStopIndex() + 1);
-            } catch (BadLocationException ex) {
-                throw new IllegalStateException("The highlights sequence should not contain invalid positions.", ex);
-            }
-
-            if (!span.contains(point)) {
-                continue;
-            }
-
-            switch (token.getType()) {
-            case GrammarHighlighterLexer.ParserRule:
-            case GrammarHighlighterLexer.LexerRule:
-            case GrammarHighlighterLexer.IDENTIFIER:
-            case GrammarHighlighterLexer.REFERENCE:
-            case ActionHighlighterLexer.ACTION_REFERENCE:
-                Set<String> keywords = GrammarEditorKit.isLegacyMode(document) ? ANTLRHighlighter.getLegacyKeywords() : ANTLRHighlighter.getKeywords();
-                if (keywords.contains(token.getText())) {
-                    return null;
-                }
-
-                return span;
-
-            default:
-                return null;
-            }
-        }
-
-        return null;
-    }
-
-    public static HighlightsSequence getHighlights(StyledDocument document, DocumentSpan span) {
-        Parameters.notNull("document", document);
-        Parameters.notNull("span", span);
-
-        List<Highlight> highlights = new ArrayList<Highlight>();
-        if (!getHighlights(document, span, highlights, null)) {
-            return null;
-        }
-
-        return new HighlightsList(highlights);
-    }
-
-    public static List<Token> getTokens(StyledDocument document, DocumentSpan span) {
-        Parameters.notNull("document", document);
-        Parameters.notNull("span", span);
-
-        List<Token> tokens = new ArrayList<Token>();
-        if (!getHighlights(document, span, null, tokens)) {
-            return null;
-        }
-
-        return tokens;
-    }
-
-    public static boolean getHighlights(StyledDocument document, DocumentSpan span, List<Highlight> highlights, List<Token> tokens) {
-        Parameters.notNull("document", document);
-        Parameters.notNull("span", span);
-
-        ANTLRHighlighterBase<?> highlighter = getHighlighter(document);
-        if (highlighter == null) {
-            return false;
-        }
-
-        highlighter.getHighlights(span.getStart().getOffset(), span.getEnd().getOffset(), highlights, tokens, false, false);
-        return true;
-    }
-
-    public static ANTLRHighlighterBase<?> getHighlighter(StyledDocument document) {
-        Parameters.notNull("document", document);
-
-        Object object = document.getProperty(ANTLRHighlighter.DOCUMENT_PROPERTY);
-        if (!(object instanceof ANTLRHighlighterBase)) {
-            return null;
-        }
-
-        return (ANTLRHighlighterBase<?>)object;
     }
 
 }
