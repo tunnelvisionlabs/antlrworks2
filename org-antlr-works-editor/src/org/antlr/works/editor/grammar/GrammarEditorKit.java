@@ -31,6 +31,7 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.concurrent.TimeUnit;
 import java.util.prefs.Preferences;
 import javax.swing.Action;
 import javax.swing.Icon;
@@ -46,7 +47,9 @@ import org.antlr.netbeans.editor.commenting.ExtendedUncommentAction;
 import org.antlr.netbeans.editor.commenting.LineCommentFormat;
 import org.antlr.netbeans.editor.commenting.StandardCommenter;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
+import org.antlr.netbeans.editor.text.VersionedDocumentUtilities;
 import org.antlr.netbeans.parsing.spi.ParserTaskManager;
+import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
 import org.netbeans.api.editor.mimelookup.MimeLookup;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.netbeans.api.editor.settings.SimpleValueNames;
@@ -173,8 +176,7 @@ public class GrammarEditorKit extends NbEditorKit {
                 target.getDocument().putProperty(PROP_LEGACY_MODE, !current);
 
                 ParserTaskManager taskManager = Lookup.getDefault().lookup(ParserTaskManager.class);
-                // TODO: reschedule all parse tasks
-                //taskManager.schedule();
+                taskManager.reschedule(VersionedDocumentUtilities.getVersionedDocument(target.getDocument()), null, 50, TimeUnit.MILLISECONDS, ParserTaskScheduler.CONTENT_SENSITIVE_TASK_SCHEDULER);
             }
         }
 
