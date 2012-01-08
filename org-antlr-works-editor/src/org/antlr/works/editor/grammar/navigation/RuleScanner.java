@@ -1,6 +1,6 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -28,7 +28,6 @@
 package org.antlr.works.editor.grammar.navigation;
 
 import org.antlr.netbeans.editor.navigation.Description;
-import org.antlr.netbeans.editor.navigation.NavigatorPanelUI;
 import org.antlr.works.editor.grammar.parser.CompiledModel;
 import org.openide.util.NbBundle;
 
@@ -43,18 +42,10 @@ import org.openide.util.NbBundle;
 public abstract class RuleScanner {
 
     public Description scan(CompiledModel model) {
-        GrammarRulesPanelUI ui = GrammarRulesPanel.findGrammarRulesPanelUI();
-        if (ui == null) {
-            return null;
-        }
-
-        GrammarNode.GrammarNodeDescription rootDescription = scan(ui, model);
+        GrammarNode.GrammarNodeDescription rootDescription = scanImpl(model);
         return rootDescription;
-//        if (rootDescription != null) {
-//            ui.refresh(rootDescription);
-//        }
     }
 
-    protected abstract GrammarNode.GrammarNodeDescription scan(NavigatorPanelUI ui, CompiledModel model);
+    protected abstract GrammarNode.GrammarNodeDescription scanImpl(CompiledModel model);
 
 }

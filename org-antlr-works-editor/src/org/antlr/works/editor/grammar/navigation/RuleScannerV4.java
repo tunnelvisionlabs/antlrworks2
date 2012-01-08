@@ -31,7 +31,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import org.antlr.netbeans.editor.navigation.Description;
-import org.antlr.netbeans.editor.navigation.NavigatorPanelUI;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.tree.CommonTree;
@@ -52,7 +51,7 @@ import org.openide.util.Exceptions;
 public class RuleScannerV4 extends RuleScanner {
 
     @Override
-    public GrammarNode.GrammarNodeDescription scan(NavigatorPanelUI ui, CompiledModel baseModel) {
+    public GrammarNode.GrammarNodeDescription scanImpl(CompiledModel baseModel) {
         try {
             CompiledModelV4 model = (CompiledModelV4)baseModel;
 
@@ -74,10 +73,10 @@ public class RuleScannerV4 extends RuleScanner {
             lexerRulesRootDescription.setChildren(new HashSet<Description>());
 
             for (CompiledFileModelV4 importedParseResult : model.getImportedGrammarResults()) {
-                processParseResult(null, importedParseResult, ui, rootDescription, parserRulesRootDescription, lexerRulesRootDescription);
+                processParseResult(null, importedParseResult, parserRulesRootDescription, lexerRulesRootDescription);
             }
 
-            processParseResult(model.getSnapshot(), model.getResult(), ui, rootDescription, parserRulesRootDescription, lexerRulesRootDescription);
+            processParseResult(model.getSnapshot(), model.getResult(), parserRulesRootDescription, lexerRulesRootDescription);
 
             if (!parserRulesRootDescription.getChildren().isEmpty()) {
                 rootDescription.getChildren().add(parserRulesRootDescription);
@@ -96,8 +95,6 @@ public class RuleScannerV4 extends RuleScanner {
 
     private void processParseResult(DocumentSnapshot snapshot,
                                     CompiledFileModelV4 result,
-                                    NavigatorPanelUI ui,
-                                    GrammarNode.GrammarNodeDescription rootDescription,
                                     GrammarNode.GrammarNodeDescription parserRulesRootDescription,
                                     GrammarNode.GrammarNodeDescription lexerRulesRootDescription) {
 

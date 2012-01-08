@@ -1,6 +1,6 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -31,7 +31,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import org.antlr.grammar.v3.ANTLRParser;
 import org.antlr.netbeans.editor.navigation.Description;
-import org.antlr.netbeans.editor.navigation.NavigatorPanelUI;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.tree.CommonTree;
@@ -49,7 +48,7 @@ import org.openide.util.Exceptions;
 public class RuleScannerV3 extends RuleScanner {
 
     @Override
-    public GrammarNode.GrammarNodeDescription scan(NavigatorPanelUI ui, CompiledModel baseModel) {
+    public GrammarNode.GrammarNodeDescription scanImpl(CompiledModel baseModel) {
 
         try {
             CompiledModelV3 model = (CompiledModelV3)baseModel;
@@ -77,10 +76,10 @@ public class RuleScannerV3 extends RuleScanner {
             lexerRulesRootDescription.setChildren(new HashSet<Description>());
 
             for (CompiledFileModelV3 importedParseResult : model.getImportedGrammarResults()) {
-                processParseResult(null, importedParseResult, ui, rootDescription, parserRulesRootDescription, lexerRulesRootDescription);
+                processParseResult(null, importedParseResult, parserRulesRootDescription, lexerRulesRootDescription);
             }
 
-            processParseResult(model.getSnapshot(), model.getResult(), ui, rootDescription, parserRulesRootDescription, lexerRulesRootDescription);
+            processParseResult(model.getSnapshot(), model.getResult(), parserRulesRootDescription, lexerRulesRootDescription);
 
             if (!parserRulesRootDescription.getChildren().isEmpty()) {
                 rootDescription.getChildren().add(parserRulesRootDescription);
@@ -100,8 +99,6 @@ public class RuleScannerV3 extends RuleScanner {
 
     private void processParseResult(DocumentSnapshot snapshot,
                                     CompiledFileModelV3 result,
-                                    NavigatorPanelUI ui,
-                                    GrammarNode.GrammarNodeDescription rootDescription,
                                     GrammarNode.GrammarNodeDescription parserRulesRootDescription,
                                     GrammarNode.GrammarNodeDescription lexerRulesRootDescription) {
 
