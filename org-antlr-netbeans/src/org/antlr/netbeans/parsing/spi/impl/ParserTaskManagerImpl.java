@@ -43,6 +43,8 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
@@ -57,14 +59,12 @@ import org.antlr.netbeans.parsing.spi.ParserTask;
 import org.antlr.netbeans.parsing.spi.ParserTaskDefinition;
 import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.netbeans.parsing.spi.ParserTaskProvider;
-import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;
 import org.netbeans.api.editor.mimelookup.MimeLookup;
 import org.netbeans.editor.BaseDocument;
 import org.netbeans.lib.editor.util.ListenerList;
 import org.openide.util.Exceptions;
-import org.openide.util.Lookup;
 import org.openide.util.Parameters;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -74,8 +74,14 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service=ParserTaskManager.class)
 public class ParserTaskManagerImpl implements ParserTaskManager {
+    // -J-Dorg.antlr.netbeans.parsing.spi.impl.ParserTaskManagerImpl.level=FINE
+    private static final Logger LOGGER = Logger.getLogger(ParserTaskManagerImpl.class.getName());
+
     private static final Long DEFAULT_DELAY = 500L;
     private static final TimeUnit DEFAULT_TIMEUNIT = TimeUnit.MILLISECONDS;
+
+    private static final int HIGH_THREAD_PRIORITY_VALUE = Thread.NORM_PRIORITY;
+    private static final int LOW_THREAD_PRIORITY_VALUE = Thread.NORM_PRIORITY - 2;
 
     private final ListenerList<ParserDataListener<Object>> globalListeners = new ListenerList<ParserDataListener<Object>>();
 
@@ -93,10 +99,10 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
         rejectionHandler = new RejectionHandler();
 
         int highPriorityPoolSize = 2;
-        highPriorityExecutor = new ScheduledThreadPoolExecutor(highPriorityPoolSize, new ParserThreadFactory(Thread.NORM_PRIORITY), rejectionHandler);
+        highPriorityExecutor = new ScheduledThreadPoolExecutor(highPriorityPoolSize, new ParserThreadFactory(HIGH_THREAD_PRIORITY_VALUE), rejectionHandler);
 
         int lowPriorityPoolSize = Math.max(2, Runtime.getRuntime().availableProcessors());
-        lowPriorityExecutor = new ScheduledThreadPoolExecutor(lowPriorityPoolSize, new ParserThreadFactory(Thread.NORM_PRIORITY - 2), rejectionHandler);
+        lowPriorityExecutor = new ScheduledThreadPoolExecutor(lowPriorityPoolSize, new ParserThreadFactory(LOW_THREAD_PRIORITY_VALUE), rejectionHandler);
     }
 
     @Override
@@ -430,6 +436,7 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
 
     private static class ParserThreadFactory implements ThreadFactory {
         private final int priority;
+        private int threadCount;
 
         public ParserThreadFactory(int priority) {
             if (priority < Thread.MIN_PRIORITY || priority > Thread.MAX_PRIORITY) {
@@ -443,6 +450,11 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
         public Thread newThread(Runnable r) {
             Thread thread = new ParserThread(r);
             thread.setPriority(priority);
+
+            String priorityName = priority >= HIGH_THREAD_PRIORITY_VALUE ? "Foreground" : "Background";
+            String name = String.format("Parse (%s) #%d", priorityName, ++threadCount);
+            thread.setName(name);
+
             return thread;
         }
     }
@@ -473,6 +485,12 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
 
             ParserTaskProvider provider = getTaskProvider(snapshot.getVersionedDocument(), data);
             final ParserTask task = provider.createTask(snapshot.getVersionedDocument());
+
+            if (LOGGER.isLoggable(Level.FINE)) {
+                String threadName = Thread.currentThread().getName();
+                String messageFormat = "{0}: Updating data \"{1}\" with task \"{2}\" for {3}#{4}";
+                LOGGER.log(Level.FINE, messageFormat, new Object[] { threadName, data.getName(), task.getDefinition().getName(), snapshot.getVersionedDocument().getFileObject().getPath(), snapshot.getVersion().getVersionNumber() });
+            }
 
             ResultAggregator handler = new ResultAggregator();
             task.parse(ParserTaskManagerImpl.this, component, snapshot, Collections.<ParserDataDefinition<?>>singleton(data), handler);
@@ -513,6 +531,18 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
         @SuppressWarnings("unchecked")
         public Collection<ParserData<?>> call() throws Exception {
             final ParserTask task = provider.createTask(snapshot.getVersionedDocument());
+
+            if (LOGGER.isLoggable(Level.FINE)) {
+                String messageFormat = "{0}: Updating task \"{1}\" for {2}#{3}";
+                Object[] args =
+                    {
+                        Thread.currentThread().getName(),
+                        task.getDefinition().getName(),
+                        snapshot.getVersionedDocument().getFileObject().getPath(),
+                        snapshot.getVersion().getVersionNumber()
+                    };
+                LOGGER.log(Level.FINE, messageFormat, args);
+            }
 
             ResultAggregator handler = new ResultAggregator();
             task.parse(ParserTaskManagerImpl.this, component, snapshot, provider.getDefinition().getOutputs(), handler);

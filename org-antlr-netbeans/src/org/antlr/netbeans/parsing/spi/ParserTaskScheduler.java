@@ -35,6 +35,8 @@ import java.util.Set;
 import java.util.WeakHashMap;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.text.JTextComponent;
 import org.antlr.netbeans.editor.text.VersionedDocument;
 import org.antlr.netbeans.parsing.spi.impl.CurrentDocumentParserTaskScheduler;
@@ -42,7 +44,6 @@ import org.antlr.netbeans.parsing.spi.impl.CursorSensitiveParserTaskScheduler;
 import org.antlr.netbeans.parsing.spi.impl.DataInputParserTaskScheduler;
 import org.antlr.netbeans.parsing.spi.impl.DocumentContentParserTaskScheduler;
 import org.antlr.netbeans.parsing.spi.impl.SelectedNodesParserTaskScheduler;
-import org.netbeans.api.annotations.common.NullAllowed;
 import org.netbeans.api.editor.mimelookup.MimeLookup;
 import org.openide.util.Lookup;
 
@@ -51,6 +52,8 @@ import org.openide.util.Lookup;
  * @author Sam Harwell
  */
 public abstract class ParserTaskScheduler {
+    // -J-Dorg.antlr.netbeans.parsing.spi.ParserTaskScheduler.level=FINE
+    private static final Logger LOGGER = Logger.getLogger(ParserTaskScheduler.class.getName());
 
     public static final Class<? extends ParserTaskScheduler> CONTENT_SENSITIVE_TASK_SCHEDULER =
         DocumentContentParserTaskScheduler.class;
@@ -123,9 +126,15 @@ public abstract class ParserTaskScheduler {
             }
         }
 
-        Collection<ScheduledFuture<ParserData<?>>> futures = getTaskManager().scheduleData(document, component, currentScheduledData, delay, timeUnit);
-        synchronized (existing) {
-            existing.addAll(futures);
+        if (!currentScheduledData.isEmpty()) {
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.log(Level.FINE, "Rescheduling {0} data, document={1}, delay={2}{3}, data={4}", new Object[] { getClass().getSimpleName(), document.getFileObject().getPath(), delay, getTimeUnitDisplay(timeUnit), currentScheduledData });
+            }
+
+            Collection<ScheduledFuture<ParserData<?>>> futures = getTaskManager().scheduleData(document, component, currentScheduledData, delay, timeUnit);
+            synchronized (existing) {
+                existing.addAll(futures);
+            }
         }
     }
 
@@ -168,9 +177,15 @@ public abstract class ParserTaskScheduler {
             }
         }
 
-        Collection<ScheduledFuture<Collection<ParserData<?>>>> futures = getTaskManager().schedule(document, component, currentScheduledProviders, delay, timeUnit);
-        synchronized (existing) {
-            existing.addAll(futures);
+        if (!currentScheduledProviders.isEmpty()) {
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.log(Level.FINE, "Rescheduling {0} tasks, document={1}, delay={2}{3}, data={4}", new Object[] { getClass().getSimpleName(), document.getFileObject().getPath(), delay, getTimeUnitDisplay(timeUnit), currentScheduledProviders });
+            }
+
+            Collection<ScheduledFuture<Collection<ParserData<?>>>> futures = getTaskManager().schedule(document, component, currentScheduledProviders, delay, timeUnit);
+            synchronized (existing) {
+                existing.addAll(futures);
+            }
         }
     }
     
@@ -183,5 +198,22 @@ public abstract class ParserTaskScheduler {
     }
 
     protected void initializeImpl() {
+    }
+
+    private static String getTimeUnitDisplay(TimeUnit timeUnit) {
+        switch (timeUnit) {
+        case MICROSECONDS:
+            return "usec";
+        case MILLISECONDS:
+            return "ms";
+        case MINUTES:
+            return "min";
+        case SECONDS:
+            return "sec";
+        case NANOSECONDS:
+            return "ns";
+        default:
+            return timeUnit.name().toLowerCase();
+        }
     }
 }
