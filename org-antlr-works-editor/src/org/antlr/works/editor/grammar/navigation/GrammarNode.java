@@ -51,6 +51,13 @@ import org.antlr.netbeans.editor.navigation.NavigatorPanelUI;
 import org.openide.util.ImageUtilities;
 
 public class GrammarNode extends NavigatorNode {
+    public static Image PARSER_IMAGE;
+    public static Image LEXER_IMAGE;
+
+    static {
+        PARSER_IMAGE = ImageUtilities.loadImage("org/antlr/works/editor/grammar/navigation/resources/parsericon.png");
+        LEXER_IMAGE = ImageUtilities.loadImage("org/antlr/works/editor/grammar/navigation/resources/lexericon.png");
+    }
 
     public GrammarNode(NavigatorPanelUI ui, Description description) {
         super(ui, description, GrammarNodeFactory.INSTANCE);
@@ -82,9 +89,9 @@ public class GrammarNode extends NavigatorNode {
         if (name == null) {
             return super.getIcon(type);
         } else if (Character.isLowerCase(name.charAt(0))) {
-            return ImageUtilities.loadImage("org/antlr/works/editor/grammar/navigation/resources/parsericon.png");
+            return PARSER_IMAGE;
         } else {
-            return ImageUtilities.loadImage("org/antlr/works/editor/grammar/navigation/resources/lexericon.png");
+            return LEXER_IMAGE;
         }
     }
 
