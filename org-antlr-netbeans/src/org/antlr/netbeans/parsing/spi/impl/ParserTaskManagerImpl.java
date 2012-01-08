@@ -59,12 +59,15 @@ import org.antlr.netbeans.parsing.spi.ParserTask;
 import org.antlr.netbeans.parsing.spi.ParserTaskDefinition;
 import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.netbeans.parsing.spi.ParserTaskProvider;
+import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;
 import org.netbeans.api.editor.mimelookup.MimeLookup;
+import org.netbeans.api.editor.mimelookup.MimePath;
 import org.netbeans.editor.BaseDocument;
 import org.netbeans.lib.editor.util.ListenerList;
 import org.openide.util.Exceptions;
+import org.openide.util.Lookup;
 import org.openide.util.Parameters;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -182,6 +185,57 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
 //        }
 //
 //        return data.toArray(new ParserData<?>[0]);
+    }
+
+    @Override
+    public void reschedule(VersionedDocument document, Class<? extends ParserTaskScheduler> schedulerClass) {
+        reschedule(document, null, schedulerClass);
+    }
+
+    @Override
+    public void reschedule(VersionedDocument document, JTextComponent component, Class<? extends ParserTaskScheduler> schedulerClass) {
+        Collection<? extends ParserTaskScheduler> schedulers = Lookup.getDefault().lookupAll(ParserTaskScheduler.class);
+        ParserTaskScheduler scheduler = null;
+        for (ParserTaskScheduler i : schedulers) {
+            if (i.getClass() == schedulerClass) {
+                scheduler = i;
+                break;
+            }
+        }
+
+        if (scheduler != null) {
+            Collection<? extends ParserDataDefinition> data = MimeLookup.getLookup(document.getMimeType()).lookupAll(ParserDataDefinition.class);
+            for (ParserDataDefinition definition : data) {
+                if (definition.getScheduler() == schedulerClass && definition.isCacheable()) {
+                    document.getDocument().putProperty(definition, null);
+                }
+            }
+
+            scheduler.schedule(document, component);
+        }
+    }
+
+    @Override
+    public void reschedule(VersionedDocument document, JTextComponent component, long delay, TimeUnit timeUnit, Class<? extends ParserTaskScheduler> schedulerClass) {
+        Collection<? extends ParserTaskScheduler> schedulers = Lookup.getDefault().lookupAll(ParserTaskScheduler.class);
+        ParserTaskScheduler scheduler = null;
+        for (ParserTaskScheduler i : schedulers) {
+            if (i.getClass() == schedulerClass) {
+                scheduler = i;
+                break;
+            }
+        }
+
+        if (scheduler != null) {
+            Collection<? extends ParserDataDefinition> data = MimeLookup.getLookup(document.getMimeType()).lookupAll(ParserDataDefinition.class);
+            for (ParserDataDefinition definition : data) {
+                if (definition.getScheduler() == schedulerClass && definition.isCacheable()) {
+                    document.getDocument().putProperty(definition, null);
+                }
+            }
+
+            scheduler.schedule(document, component, delay, timeUnit);
+        }
     }
 
     @Override

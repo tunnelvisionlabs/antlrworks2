@@ -86,15 +86,15 @@ public abstract class ParserTaskScheduler {
         initializeImpl();
     }
 
-    protected void schedule(VersionedDocument document) {
+    public void schedule(VersionedDocument document) {
         schedule(document, (JTextComponent)null);
     }
 
-    protected void schedule(VersionedDocument document, JTextComponent component) {
+    public void schedule(VersionedDocument document, JTextComponent component) {
         schedule(document, component, getParseDelayMilliseconds(), TimeUnit.MILLISECONDS);
     }
 
-    protected void schedule(VersionedDocument document, JTextComponent component, int delay, TimeUnit timeUnit) {
+    public void schedule(VersionedDocument document, JTextComponent component, long delay, TimeUnit timeUnit) {
         if (document == null) {
             return;
         }
@@ -146,7 +146,7 @@ public abstract class ParserTaskScheduler {
         schedule(document, component, tasks, getParseDelayMilliseconds(), TimeUnit.MILLISECONDS);
     }
 
-    protected void schedule(VersionedDocument document, JTextComponent component, Collection<? extends ParserTaskProvider> taskProviders, int delay, TimeUnit timeUnit) {
+    protected void schedule(VersionedDocument document, JTextComponent component, Collection<? extends ParserTaskProvider> taskProviders, long delay, TimeUnit timeUnit) {
         if (document == null) {
             return;
         }

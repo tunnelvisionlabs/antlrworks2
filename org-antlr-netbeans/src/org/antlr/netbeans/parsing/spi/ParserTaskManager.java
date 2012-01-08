@@ -94,6 +94,12 @@ public interface ParserTaskManager {
 
     Collection<ScheduledFuture<Collection<ParserData<?>>>> schedule(@NonNull VersionedDocument document, @NullAllowed JTextComponent component, @NonNull Collection<ParserTaskProvider> data, long delay, @NonNull TimeUnit timeUnit);
 
+    void reschedule(@NonNull VersionedDocument document, @NonNull Class<? extends ParserTaskScheduler> scheduler);
+
+    void reschedule(@NonNull VersionedDocument document, @NullAllowed JTextComponent component, @NonNull Class<? extends ParserTaskScheduler> scheduler);
+
+    void reschedule(@NonNull VersionedDocument document, @NullAllowed JTextComponent component, long delay, @NonNull TimeUnit timeUnit, @NonNull Class<? extends ParserTaskScheduler> scheduler);
+
     @NonNull <T> ScheduledFuture<T> scheduleHighPriority(@NonNull Callable<T> callable);
 
     @NonNull <T> ScheduledFuture<T> scheduleLowPriority(@NonNull Callable<T> callable);
