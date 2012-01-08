@@ -1,6 +1,6 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,6 @@ import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
 import org.antlr.netbeans.editor.text.VersionedDocument;
 import org.antlr.netbeans.editor.text.VersionedDocumentUtilities;
-import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
 import org.netbeans.api.editor.EditorRegistry;
 import org.openide.filesystems.FileObject;
@@ -69,16 +68,19 @@ public abstract class CurrentEditorParserTaskScheduler extends ParserTaskSchedul
                 }
 
                 currentEditor = editor;
-                if (currentEditor != null) {
-                    Document document = currentEditor.getDocument();
-                    VersionedDocument versionedDocument = VersionedDocumentUtilities.getVersionedDocument(document);
-                    FileObject fileObject = versionedDocument.getFileObject();
-                    if (fileObject == null) {
-                        return;
+                try {
+                    if (currentEditor != null) {
+                        Document document = currentEditor.getDocument();
+                        VersionedDocument versionedDocument = VersionedDocumentUtilities.getVersionedDocument(document);
+                            FileObject fileObject = versionedDocument.getFileObject();
+                            if (fileObject == null) {
+                                return;
+                            }
                     }
-                }
 
-                setEditor(currentEditor);
+                    setEditor(currentEditor);
+                } catch (UnsupportedOperationException ex) {
+                }
             } else if (evt.getPropertyName().equals(EditorRegistry.LAST_FOCUSED_REMOVED_PROPERTY)) {
                 currentEditor = null;
                 setEditor(null);
