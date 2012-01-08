@@ -106,7 +106,7 @@ public abstract class AbstractTokensTaskTaggerSnapshot<TState extends LineStateI
 
                 /* processChange */
                 int oldStartLine = source.findLineNumber(oldOffset);
-                int oldEndLine = source.findLineNumber(oldOffset + oldLength - 1);
+                int oldEndLine = oldLength == 0 ? oldStartLine : source.findLineNumber(oldOffset + oldLength - 1);
                 if (lineCountDelta < 0) {
                     lineStates.subList(oldStartLine, oldStartLine + Math.abs(lineCountDelta)).clear();
                 } else if (lineCountDelta > 0) {
@@ -126,7 +126,7 @@ public abstract class AbstractTokensTaskTaggerSnapshot<TState extends LineStateI
                     lastChangedLine += lineCountDelta;
                 }
 
-                for (int j = oldStartLine; j <= oldEndLine; j++) {
+                for (int j = oldStartLine; j <= oldEndLine + lineCountDelta; j++) {
                     TState state = lineStates.get(i);
                     lineStates.set(j, state.createDirtyState());
                 }
