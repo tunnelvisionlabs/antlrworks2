@@ -42,23 +42,24 @@ import org.antlr.v4.runtime.misc.*;
 @SuppressWarnings({"all", "warnings", "unchecked", "unused"})
 public class GrammarHighlighterLexerBase extends Lexer {
 	public static final int
-		LEXER=3, PARSER=4, CATCH=5, FINALLY=6, GRAMMAR=7, PRIVATE=8, PROTECTED=9, 
-		PUBLIC=10, RETURNS=11, THROWS=12, IMPORT=13, FRAGMENT=14, TOKENS=15, OPTIONS=16, 
-		MODE=17, LOCALS=18, TREE=19, SCOPE=20, OPEN_ELEMENT_OPTION=21, CLOSE_ELEMENT_OPTION=22, 
-		AMPERSAND=23, COMMA=24, QUESTION=25, TREE_BEGIN=26, LPAREN=27, RPAREN=28, 
-		COLON=29, STAR=30, PLUS=31, ASSIGN=32, PLUS_ASSIGN=33, IMPLIES=34, REWRITE=35, 
-		SEMI=36, ROOT=37, BANG=38, OR=39, WILDCARD=40, ETC=41, RANGE=42, NOT=43, 
-		LBRACK=44, RBRACK=45, LCURLY=46, RCURLY=47, DOLLAR=48, LABEL=49, IDENTIFIER=50, 
-		INT=51, DIRECTIVE=52, REFERENCE=53, WS=54, NEWLINE=55, COMMENT=56, ML_COMMENT=57, 
-		CHAR_LITERAL=58, STRING_LITERAL=59, ANYCHAR=60, BlockComment_NEWLINE=61, 
-		CONTINUE_ML_COMMENT=62, END_ML_COMMENT=63, ML_COMMENT_STAR=64, BlockComment_ANYCHAR=65, 
-		ArgAction_NEWLINE=66, ArgAction_RBRACK=67, ArgAction_TEXT=68, ArgAction_CHAR_LITERAL=69, 
-		ArgAction_STRING_LITERAL=70, ArgAction_ESCAPE=71, ArgAction_REFERENCE=72, 
-		ArgAction_SPECIAL=73, ArgAction_ANYCHAR=74, NonActionBrace_NEWLINE=75, 
-		NonActionBrace_WS=76, NonActionBrace_LCURLY=77, Action_NEWLINE=78, Action_COMMENT=79, 
-		Action_ML_COMMENT=80, Action_LCURLY=81, Action_RCURLY=82, Action_TEXT=83, 
-		Action_CHAR_LITERAL=84, Action_STRING_LITERAL=85, Action_ESCAPE=86, Action_REFERENCE=87, 
-		Action_SPECIAL=88, Action_ANYCHAR=89;
+		InvalidGrammarOption=3, ValidGrammarOption=4, LEXER=5, PARSER=6, CATCH=7, 
+		FINALLY=8, GRAMMAR=9, PRIVATE=10, PROTECTED=11, PUBLIC=12, RETURNS=13, 
+		THROWS=14, IMPORT=15, FRAGMENT=16, TOKENS=17, OPTIONS=18, MODE=19, LOCALS=20, 
+		TREE=21, SCOPE=22, OPEN_ELEMENT_OPTION=23, CLOSE_ELEMENT_OPTION=24, AMPERSAND=25, 
+		COMMA=26, QUESTION=27, TREE_BEGIN=28, LPAREN=29, RPAREN=30, COLON=31, 
+		STAR=32, PLUS=33, ASSIGN=34, PLUS_ASSIGN=35, IMPLIES=36, REWRITE=37, SEMI=38, 
+		ROOT=39, BANG=40, OR=41, WILDCARD=42, ETC=43, RANGE=44, NOT=45, LBRACK=46, 
+		RBRACK=47, LCURLY=48, RCURLY=49, DOLLAR=50, LABEL=51, IDENTIFIER=52, INT=53, 
+		DIRECTIVE=54, REFERENCE=55, WS=56, NEWLINE=57, COMMENT=58, ML_COMMENT=59, 
+		CHAR_LITERAL=60, STRING_LITERAL=61, ANYCHAR=62, BlockComment_NEWLINE=63, 
+		CONTINUE_ML_COMMENT=64, END_ML_COMMENT=65, ML_COMMENT_STAR=66, BlockComment_ANYCHAR=67, 
+		ArgAction_NEWLINE=68, ArgAction_RBRACK=69, ArgAction_TEXT=70, ArgAction_CHAR_LITERAL=71, 
+		ArgAction_STRING_LITERAL=72, ArgAction_ESCAPE=73, ArgAction_REFERENCE=74, 
+		ArgAction_SPECIAL=75, ArgAction_ANYCHAR=76, NonActionBrace_NEWLINE=77, 
+		NonActionBrace_WS=78, NonActionBrace_LCURLY=79, Action_NEWLINE=80, Action_COMMENT=81, 
+		Action_ML_COMMENT=82, Action_LCURLY=83, Action_RCURLY=84, Action_TEXT=85, 
+		Action_CHAR_LITERAL=86, Action_STRING_LITERAL=87, Action_ESCAPE=88, Action_REFERENCE=89, 
+		Action_SPECIAL=90, Action_ANYCHAR=91;
 	// Lexer modes
 	public static final int BlockComment = 1;
 	public static final int ArgAction = 2;
@@ -67,19 +68,20 @@ public class GrammarHighlighterLexerBase extends Lexer {
 
 	public static final String[] tokenNames = {
 		"<INVALID>", "<INVALID>", "<INVALID>",
-		"lexer", "parser", "catch", "finally", "grammar", "private", "protected", 
-		"public", "returns", "throws", "import", "fragment", "TOKENS", "OPTIONS", 
-		"mode", "locals", "tree", "scope", "<", ">", "@", ",", "?", "^(", "(", 
-		")", ":", "STAR", "+", "=", "+=", "=>", "->", ";", "^", "!", "|", ".", 
-		"...", "..", "~", "[", "RBRACK", "LCURLY", "RCURLY", "$", "LABEL", "IDENTIFIER", 
-		"INT", "DIRECTIVE", "REFERENCE", "WS", "NEWLINE", "COMMENT", "ML_COMMENT", 
-		"CHAR_LITERAL", "STRING_LITERAL", "ANYCHAR", "BlockComment_NEWLINE", "CONTINUE_ML_COMMENT", 
-		"*/", "*", "BlockComment_ANYCHAR", "ArgAction_NEWLINE", "]", "ArgAction_TEXT", 
-		"ArgAction_CHAR_LITERAL", "ArgAction_STRING_LITERAL", "ArgAction_ESCAPE", 
-		"ArgAction_REFERENCE", "ArgAction_SPECIAL", "ArgAction_ANYCHAR", "NonActionBrace_NEWLINE", 
-		"NonActionBrace_WS", "NonActionBrace_LCURLY", "Action_NEWLINE", "Action_COMMENT", 
-		"/*", "{", "}", "Action_TEXT", "Action_CHAR_LITERAL", "Action_STRING_LITERAL", 
-		"Action_ESCAPE", "Action_REFERENCE", "Action_SPECIAL", "Action_ANYCHAR"
+		"InvalidGrammarOption", "ValidGrammarOption", "lexer", "parser", "catch", 
+		"finally", "grammar", "private", "protected", "public", "returns", "throws", 
+		"import", "fragment", "TOKENS", "OPTIONS", "mode", "locals", "tree", "scope", 
+		"<", ">", "@", ",", "?", "^(", "(", ")", ":", "STAR", "+", "=", "+=", 
+		"=>", "->", ";", "^", "!", "|", ".", "...", "..", "~", "[", "RBRACK", 
+		"LCURLY", "RCURLY", "$", "LABEL", "IDENTIFIER", "INT", "DIRECTIVE", "REFERENCE", 
+		"WS", "NEWLINE", "COMMENT", "ML_COMMENT", "CHAR_LITERAL", "STRING_LITERAL", 
+		"ANYCHAR", "BlockComment_NEWLINE", "CONTINUE_ML_COMMENT", "*/", "*", "BlockComment_ANYCHAR", 
+		"ArgAction_NEWLINE", "]", "ArgAction_TEXT", "ArgAction_CHAR_LITERAL", 
+		"ArgAction_STRING_LITERAL", "ArgAction_ESCAPE", "ArgAction_REFERENCE", 
+		"ArgAction_SPECIAL", "ArgAction_ANYCHAR", "NonActionBrace_NEWLINE", "NonActionBrace_WS", 
+		"NonActionBrace_LCURLY", "Action_NEWLINE", "Action_COMMENT", "/*", "{", 
+		"}", "Action_TEXT", "Action_CHAR_LITERAL", "Action_STRING_LITERAL", "Action_ESCAPE", 
+		"Action_REFERENCE", "Action_SPECIAL", "Action_ANYCHAR"
 	};
 	public static final String[] ruleNames = {
 		"LEXER", "PARSER", "CATCH", "FINALLY", "GRAMMAR", "PRIVATE", "PROTECTED", 
@@ -284,7 +286,7 @@ public class GrammarHighlighterLexerBase extends Lexer {
 	}
 
 	public static final String _serializedATN =
-		"\2Y\u028c\6\uffff\6\uffff\6\uffff\6\uffff\6\uffff\2\0\7\0\2\1\7\1\2\2"+
+		"\2[\u028c\6\uffff\6\uffff\6\uffff\6\uffff\6\uffff\2\0\7\0\2\1\7\1\2\2"+
 		"\7\2\2\3\7\3\2\4\7\4\2\5\7\5\2\6\7\6\2\7\7\7\2\b\7\b\2\t\7\t\2\n\7\n\2"+
 		"\13\7\13\2\f\7\f\2\r\7\r\2\16\7\16\2\17\7\17\2\20\7\20\2\21\7\21\2\22"+
 		"\7\22\2\23\7\23\2\24\7\24\2\25\7\25\2\26\7\26\2\27\7\27\2\30\7\30\2\31"+
@@ -319,32 +321,32 @@ public class GrammarHighlighterLexerBase extends Lexer {
 		"L\0\1L\1M\0\1M\1N\1N\1N\1N\0\5N\bN\nN\fN\u024f\tN\1O\1O\1O\1O\1P\0\1P"+
 		"\1Q\0\1Q\1R\0\4R\bR\13R\fR\u025e\1S\1S\1T\1T\1U\0\1U\0\1U\0\1U\0\1U\0"+
 		"\1U\0\1U\0\1U\0\1U\0\1U\0\1U\0\1U\0\1U\0\1U\0\1U\1U\3U\bU\1V\1V\1W\0\1"+
-		"W\1X\0\1XY\5\3\uffff\7\4\uffff\t\5\uffff\13\6\uffff\r\7\uffff\17\b\uffff"+
-		"\21\t\uffff\23\n\uffff\25\13\uffff\27\f\uffff\31\r\uffff\33\16\uffff\35"+
-		"\17\0\37\20\1!\21\uffff#\22\uffff%\23\uffff\'\24\uffff)\25\uffff+\26\uffff"+
-		"-\27\uffff/\30\uffff\61\31\uffff\63\32\uffff\65\33\uffff\67\34\uffff9"+
-		"\35\uffff;\36\uffff=\37\uffff? \uffffA!\uffffC\"\uffffE#\uffffG$\uffff"+
-		"I%\uffffK&\uffffM\'\uffffO(\uffffQ)\uffffS*\uffffU+\uffffW,\uffffY-\uffff"+
-		"[.\2]/\uffff_\60\uffffa\61\uffffc\62\uffffe\63\uffffg\64\uffffi\65\uffff"+
-		"k\66\uffffm\67\uffffo8\uffffq9\3s:\uffffu;\uffffw\0\uffffy\0\uffff{<\uffff"+
-		"}=\4\177>\5\u0081?\6\u0083@\7\u0085A\b\u0087B\t\u0089C\n\u008bD\uffff"+
-		"\u008dE\uffff\u008fF\uffff\u0091G\uffff\u0093H\uffff\u0095I\13\u0097J"+
-		"\f\u0099K\r\u009bL\16\u009dM\17\u009fN\20\u00a1O\uffff\u00a3P\21\u00a5"+
-		"Q\22\u00a7R\23\u00a9S\uffff\u00abT\uffff\u00adU\uffff\u00afV\uffff\u00b1"+
-		"W\uffff\u00b3X\24\u00b5Y\25\5\0\1\2\3\4\r\3AZ__az\4\609AZ__az\2\t\t  "+
-		"\2\n\n\r\r\4\n\n\r\r\'\'\\\\\4\n\n\r\r\"\"\\\\\3\t\n\r\r  \3\n\n\r\r*"+
-		"*\t\n\n\r\r\"\"$$\'\'//\\\\{{}}\3$$//\\\\\2\n\n\r\r\t\n\n\r\r\"\"$$\'"+
-		"\'//\\\\{{}}\3$$//\\\\\u025d\0\5\1\0\0\0\0\7\1\0\0\0\0\t\1\0\0\0\0\13"+
-		"\1\0\0\0\0\r\1\0\0\0\0\17\1\0\0\0\0\21\1\0\0\0\0\23\1\0\0\0\0\25\1\0\0"+
-		"\0\0\27\1\0\0\0\0\31\1\0\0\0\0\33\1\0\0\0\0\35\1\0\0\0\0\37\1\0\0\0\0"+
-		"!\1\0\0\0\0#\1\0\0\0\0%\1\0\0\0\0\'\1\0\0\0\0)\1\0\0\0\0+\1\0\0\0\0-\1"+
-		"\0\0\0\0/\1\0\0\0\0\61\1\0\0\0\0\63\1\0\0\0\0\65\1\0\0\0\0\67\1\0\0\0"+
-		"\09\1\0\0\0\0;\1\0\0\0\0=\1\0\0\0\0?\1\0\0\0\0A\1\0\0\0\0C\1\0\0\0\0E"+
-		"\1\0\0\0\0G\1\0\0\0\0I\1\0\0\0\0K\1\0\0\0\0M\1\0\0\0\0O\1\0\0\0\0Q\1\0"+
-		"\0\0\0S\1\0\0\0\0U\1\0\0\0\0W\1\0\0\0\0Y\1\0\0\0\0[\1\0\0\0\0]\1\0\0\0"+
-		"\0_\1\0\0\0\0a\1\0\0\0\0c\1\0\0\0\0e\1\0\0\0\0g\1\0\0\0\0i\1\0\0\0\0k"+
-		"\1\0\0\0\0m\1\0\0\0\0o\1\0\0\0\0q\1\0\0\0\0s\1\0\0\0\0u\1\0\0\0\0{\1\0"+
-		"\0\0\1}\1\0\0\0\1\177\1\0\0\0\1\u0081\1\0\0\0\1\u0083\1\0\0\0\1\u0085"+
+		"W\1X\0\1XY\5\5\uffff\7\6\uffff\t\7\uffff\13\b\uffff\r\t\uffff\17\n\uffff"+
+		"\21\13\uffff\23\f\uffff\25\r\uffff\27\16\uffff\31\17\uffff\33\20\uffff"+
+		"\35\21\0\37\22\1!\23\uffff#\24\uffff%\25\uffff\'\26\uffff)\27\uffff+\30"+
+		"\uffff-\31\uffff/\32\uffff\61\33\uffff\63\34\uffff\65\35\uffff\67\36\uffff"+
+		"9\37\uffff; \uffff=!\uffff?\"\uffffA#\uffffC$\uffffE%\uffffG&\uffffI\'"+
+		"\uffffK(\uffffM)\uffffO*\uffffQ+\uffffS,\uffffU-\uffffW.\uffffY/\uffff"+
+		"[\60\2]\61\uffff_\62\uffffa\63\uffffc\64\uffffe\65\uffffg\66\uffffi\67"+
+		"\uffffk8\uffffm9\uffffo:\uffffq;\3s<\uffffu=\uffffw\0\uffffy\0\uffff{"+
+		">\uffff}?\4\177@\5\u0081A\6\u0083B\7\u0085C\b\u0087D\t\u0089E\n\u008b"+
+		"F\uffff\u008dG\uffff\u008fH\uffff\u0091I\uffff\u0093J\uffff\u0095K\13"+
+		"\u0097L\f\u0099M\r\u009bN\16\u009dO\17\u009fP\20\u00a1Q\uffff\u00a3R\21"+
+		"\u00a5S\22\u00a7T\23\u00a9U\uffff\u00abV\uffff\u00adW\uffff\u00afX\uffff"+
+		"\u00b1Y\uffff\u00b3Z\24\u00b5[\25\5\0\1\2\3\4\r\3AZ__az\4\609AZ__az\2"+
+		"\t\t  \2\n\n\r\r\4\n\n\r\r\'\'\\\\\4\n\n\r\r\"\"\\\\\3\t\n\r\r  \3\n\n"+
+		"\r\r**\t\n\n\r\r\"\"$$\'\'//\\\\{{}}\3$$//\\\\\2\n\n\r\r\t\n\n\r\r\"\""+
+		"$$\'\'//\\\\{{}}\3$$//\\\\\u025d\0\5\1\0\0\0\0\7\1\0\0\0\0\t\1\0\0\0\0"+
+		"\13\1\0\0\0\0\r\1\0\0\0\0\17\1\0\0\0\0\21\1\0\0\0\0\23\1\0\0\0\0\25\1"+
+		"\0\0\0\0\27\1\0\0\0\0\31\1\0\0\0\0\33\1\0\0\0\0\35\1\0\0\0\0\37\1\0\0"+
+		"\0\0!\1\0\0\0\0#\1\0\0\0\0%\1\0\0\0\0\'\1\0\0\0\0)\1\0\0\0\0+\1\0\0\0"+
+		"\0-\1\0\0\0\0/\1\0\0\0\0\61\1\0\0\0\0\63\1\0\0\0\0\65\1\0\0\0\0\67\1\0"+
+		"\0\0\09\1\0\0\0\0;\1\0\0\0\0=\1\0\0\0\0?\1\0\0\0\0A\1\0\0\0\0C\1\0\0\0"+
+		"\0E\1\0\0\0\0G\1\0\0\0\0I\1\0\0\0\0K\1\0\0\0\0M\1\0\0\0\0O\1\0\0\0\0Q"+
+		"\1\0\0\0\0S\1\0\0\0\0U\1\0\0\0\0W\1\0\0\0\0Y\1\0\0\0\0[\1\0\0\0\0]\1\0"+
+		"\0\0\0_\1\0\0\0\0a\1\0\0\0\0c\1\0\0\0\0e\1\0\0\0\0g\1\0\0\0\0i\1\0\0\0"+
+		"\0k\1\0\0\0\0m\1\0\0\0\0o\1\0\0\0\0q\1\0\0\0\0s\1\0\0\0\0u\1\0\0\0\0{"+
+		"\1\0\0\0\1}\1\0\0\0\1\177\1\0\0\0\1\u0081\1\0\0\0\1\u0083\1\0\0\0\1\u0085"+
 		"\1\0\0\0\2\u0087\1\0\0\0\2\u0089\1\0\0\0\2\u008b\1\0\0\0\2\u008d\1\0\0"+
 		"\0\2\u008f\1\0\0\0\2\u0091\1\0\0\0\2\u0093\1\0\0\0\2\u0095\1\0\0\0\2\u0097"+
 		"\1\0\0\0\3\u0099\1\0\0\0\3\u009b\1\0\0\0\3\u009d\1\0\0\0\4\u009f\1\0\0"+

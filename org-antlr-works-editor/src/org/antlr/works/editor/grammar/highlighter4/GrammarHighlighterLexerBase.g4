@@ -65,6 +65,11 @@ protected int getMultilineCommentType() {
 }
 }
 
+tokens {
+    InvalidGrammarOption;
+    ValidGrammarOption;
+}
+
 LEXER       : 'lexer';
 PARSER      : 'parser';
 CATCH       : 'catch';

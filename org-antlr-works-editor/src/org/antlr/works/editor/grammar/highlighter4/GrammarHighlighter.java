@@ -72,7 +72,7 @@ public class GrammarHighlighter extends ANTLRHighlighterBaseV4<GrammarHighlighte
 
     private boolean legacyMode;
 
-    private GrammarHighlighterLexerWrapper lexer;
+    private GrammarHighlighterLexerWrapper lexerWrapper;
 
     @SuppressWarnings("LeakingThisInConstructor")
     public GrammarHighlighter(final StyledDocument document) {
@@ -129,13 +129,13 @@ public class GrammarHighlighter extends ANTLRHighlighterBaseV4<GrammarHighlighte
 
     @Override
     protected TokenSourceWithStateV4<GrammarHighlighterLexerState> createLexer(CharStream input, GrammarHighlighterLexerState startState) {
-        if (lexer == null) {
-            lexer = new GrammarHighlighterLexerWrapper(input, startState);
+        if (lexerWrapper == null) {
+            lexerWrapper = new GrammarHighlighterLexerWrapper(input, startState);
         } else {
-            lexer.setState(input, startState);
+            lexerWrapper.setState(input, startState);
         }
 
-        return lexer;
+        return lexerWrapper;
     }
 
     @Override
@@ -161,15 +161,15 @@ public class GrammarHighlighter extends ANTLRHighlighterBaseV4<GrammarHighlighte
         // v4 only keywords
         case GrammarHighlighterLexer.MODE:
         case GrammarHighlighterLexer.LOCALS:
-            return !legacyMode ? keywordAttributes : getIdentifierAttributes(token.getText());
+            return !legacyMode ? keywordAttributes : getIdentifierAttributes(lexerWrapper.getLexer(), token.getText());
 
         // v3 only keywords
         case GrammarHighlighterLexer.TREE:
         case GrammarHighlighterLexer.SCOPE:
-            return legacyMode ? keywordAttributes : getIdentifierAttributes(token.getText());
+            return legacyMode ? keywordAttributes : getIdentifierAttributes(lexerWrapper.getLexer(), token.getText());
 
         case GrammarHighlighterLexer.IDENTIFIER:
-            return getIdentifierAttributes(token.getText());
+            return getIdentifierAttributes(lexerWrapper.getLexer(), token.getText());
 
         case GrammarHighlighterLexer.LABEL:
             return symbolDefinitionAttributes;
@@ -215,12 +215,22 @@ public class GrammarHighlighter extends ANTLRHighlighterBaseV4<GrammarHighlighte
         case GrammarHighlighterLexer.Action_REFERENCE:
             return actionSymbolReferenceAttributes;
 
+        case GrammarHighlighterLexer.ValidGrammarOption:
+            return validOptionAttributes;
+
+        case GrammarHighlighterLexer.InvalidGrammarOption:
+            return invalidOptionAttributes;
+
         default:
             return null;
         }
     }
 
-    private AttributeSet getIdentifierAttributes(String text) {
+    private AttributeSet getIdentifierAttributes(GrammarHighlighterLexer lexer, String text) {
+        if (lexer.isInOptions()) {
+            return identifierAttributes;
+        }
+
         if (Character.isLowerCase(text.charAt(0))) {
             return parserRuleAttributes;
         } else {

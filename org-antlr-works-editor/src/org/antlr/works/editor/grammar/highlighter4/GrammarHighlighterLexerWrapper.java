@@ -44,13 +44,16 @@ public class GrammarHighlighterLexerWrapper implements TokenSourceWithStateV4<Gr
     private static final Map<GrammarHighlighterLexerState, GrammarHighlighterLexerState> sharedStates =
         new HashMap<GrammarHighlighterLexerState, GrammarHighlighterLexerState>();
 
-    private TokenFactory<?> tokenFactory = CommonTokenFactory.DEFAULT;
     private final GrammarHighlighterLexer grammarLexer;
 
     @SuppressWarnings("OverridableMethodCallInConstructor")
     public GrammarHighlighterLexerWrapper(CharStream input, GrammarHighlighterLexerState state) {
         this.grammarLexer = new GrammarHighlighterLexer(input);
         setState(input, state);
+    }
+
+    public GrammarHighlighterLexer getLexer() {
+        return grammarLexer;
     }
 
     @Override
@@ -66,7 +69,7 @@ public class GrammarHighlighterLexerWrapper implements TokenSourceWithStateV4<Gr
     @Override
     public GrammarHighlighterLexerState getState() {
         if (grammarLexer.modeStack == null) {
-            return getCachedState(grammarLexer.mode, null);
+            return getCachedState(grammarLexer.isInOptions(), grammarLexer.isInTokens(), grammarLexer.mode, null);
         }
 
         int[] modes = new int[grammarLexer.modeStack.size()];
@@ -75,11 +78,11 @@ public class GrammarHighlighterLexerWrapper implements TokenSourceWithStateV4<Gr
             modes[index++] = mode;
         }
 
-        return getCachedState(grammarLexer.mode, modes);
+        return getCachedState(grammarLexer.isInOptions(), grammarLexer.isInTokens(), grammarLexer.mode, modes);
     }
 
-    private static GrammarHighlighterLexerState getCachedState(int mode, int[] modeStack) {
-        GrammarHighlighterLexerState state = new GrammarHighlighterLexerState(mode, modeStack);
+    private static GrammarHighlighterLexerState getCachedState(boolean inOptions, boolean inTokens, int mode, int[] modeStack) {
+        GrammarHighlighterLexerState state = new GrammarHighlighterLexerState(inOptions, inTokens, mode, modeStack);
 
         synchronized (sharedStates) {
             GrammarHighlighterLexerState cached = sharedStates.get(state);
@@ -94,6 +97,8 @@ public class GrammarHighlighterLexerWrapper implements TokenSourceWithStateV4<Gr
     public void setState(CharStream input, GrammarHighlighterLexerState state) {
         grammarLexer.setInputStream(input);
         grammarLexer.mode = state.getMode();
+        grammarLexer.setInOptions(state.isInOptions());
+        grammarLexer.setInTokens(state.isInTokens());
         if (state.getModeStack() != null && state.getModeStack().length > 0) {
             if (grammarLexer.modeStack == null) {
                 grammarLexer.modeStack = new ArrayDeque<Integer>();
@@ -140,10 +145,6 @@ public class GrammarHighlighterLexerWrapper implements TokenSourceWithStateV4<Gr
 
     @Override
     public void setTokenFactory(TokenFactory<?> tokenFactory) {
-        if (tokenFactory == null) {
-            tokenFactory = CommonTokenFactory.DEFAULT;
-        }
-
-        this.tokenFactory = tokenFactory;
+        grammarLexer.setTokenFactory(tokenFactory);
     }
 }

@@ -38,10 +38,28 @@ import org.antlr.v4.runtime.atn.LexerATNSimulator;
  * @author Sam Harwell
  */
 public class GrammarHighlighterLexer extends GrammarHighlighterLexerBase {
+    private boolean inOptions;
+    private boolean inTokens;
 
     public GrammarHighlighterLexer(CharStream input) {
         super(input);
         _interp = new GrammarHighlighterATNSimulator(this, _ATN);
+    }
+
+    public boolean isInOptions() {
+        return inOptions;
+    }
+
+    public void setInOptions(boolean inOptions) {
+        this.inOptions = inOptions;
+    }
+
+    public boolean isInTokens() {
+        return inTokens;
+    }
+
+    public void setInTokens(boolean inTokens) {
+        this.inTokens = inTokens;
     }
 
     @Override
@@ -49,14 +67,27 @@ public class GrammarHighlighterLexer extends GrammarHighlighterLexerBase {
         switch (type) {
         case TOKENS:
             handleAcceptPositionForKeyword("tokens");
+            setInTokens(true);
             break;
 
         case OPTIONS:
             handleAcceptPositionForKeyword("options");
+            setInOptions(true);
             break;
 
         case LABEL:
             handleAcceptPositionForIdentifier();
+            if (isInOptions()) {
+                type = ValidGrammarOption;
+            } else if (isInTokens()) {
+                type = IDENTIFIER;
+            }
+
+            break;
+
+        case RCURLY:
+            setInTokens(false);
+            setInOptions(false);
             break;
 
         default:

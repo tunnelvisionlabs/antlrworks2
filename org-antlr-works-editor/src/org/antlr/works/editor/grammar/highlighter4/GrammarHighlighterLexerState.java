@@ -40,16 +40,36 @@ public class GrammarHighlighterLexerState implements LineStateInfo<GrammarHighli
     public static final GrammarHighlighterLexerState DIRTY = new GrammarHighlighterLexerState();
     public static final GrammarHighlighterLexerState MULTILINE = new GrammarHighlighterLexerState();
 
+    private final boolean inOptions;
+    private final boolean inTokens;
     private final int mode;
     private final int[] modeStack;
 
     private GrammarHighlighterLexerState() {
-        this(Lexer.DEFAULT_MODE, null);
+        this(false, false, Lexer.DEFAULT_MODE, null);
     }
 
-    public GrammarHighlighterLexerState(int mode, int[] modeStack) {
+    public GrammarHighlighterLexerState(boolean inOptions, boolean inTokens, int mode, int[] modeStack) {
+        this.inOptions = inOptions;
+        this.inTokens = inTokens;
         this.mode = mode;
         this.modeStack = modeStack;
+    }
+
+    public boolean isInOptions() {
+        if (getIsDirty() || getIsMultiLineToken()) {
+            throw new UnsupportedOperationException();
+        }
+
+        return inOptions;
+    }
+
+    public boolean isInTokens() {
+        if (getIsDirty() || getIsMultiLineToken()) {
+            throw new UnsupportedOperationException();
+        }
+
+        return inTokens;
     }
 
     public int getMode() {
@@ -97,6 +117,8 @@ public class GrammarHighlighterLexerState implements LineStateInfo<GrammarHighli
 
         return this.getIsDirty() == other.getIsDirty()
             && this.getIsMultiLineToken() == other.getIsMultiLineToken()
+            && this.isInOptions() == other.isInOptions()
+            && this.isInTokens() == other.isInTokens()
             && this.getMode() == other.getMode()
             && Arrays.equals(this.getModeStack(), other.getModeStack());
     }
@@ -104,6 +126,8 @@ public class GrammarHighlighterLexerState implements LineStateInfo<GrammarHighli
     @Override
     public int hashCode() {
         int hash = 5;
+        hash = 31 * hash + (this.inOptions ? 1 : 0);
+        hash = 31 * hash + (this.inTokens ? 1 : 0);
         hash = 31 * hash + this.mode;
         hash = 31 * hash + Arrays.hashCode(this.modeStack);
         return hash;
