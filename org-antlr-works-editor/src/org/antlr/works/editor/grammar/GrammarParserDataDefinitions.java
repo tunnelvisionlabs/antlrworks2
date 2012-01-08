@@ -101,199 +101,70 @@ public class GrammarParserDataDefinitions {
         return NAVIGATOR_ROOT;
     }
 
-    private static final class CompiledModelDataDefinition implements ParserDataDefinition<CompiledModel> {
+    private static final class CompiledModelDataDefinition extends ParserDataDefinition<CompiledModel> {
 
-        @Override
+        public CompiledModelDataDefinition() {
+            super("Grammar Compiled Model", CompiledModel.class, false, true, ParserTaskScheduler.CONTENT_SENSITIVE_TASK_SCHEDULER);
+        }
+
+    }
+
+    private static final class ReferenceAnchorPointsDataDefinition extends ParserDataDefinition<List<Anchor>> {
+
         @SuppressWarnings("unchecked")
-        public Class<CompiledModel> getDataType() {
-            return CompiledModel.class;
-        }
-
-        @Override
-        public boolean isComponentSpecific() {
-            return false;
-        }
-
-        @Override
-        public boolean isCacheable() {
-            return true;
-        }
-
-        @Override
-        public Class<? extends ParserTaskScheduler> getScheduler() {
-            return ParserTaskScheduler.CONTENT_SENSITIVE_TASK_SCHEDULER;
+        public ReferenceAnchorPointsDataDefinition() {
+            super("Grammar Reference Anchor Points", (Class<List<Anchor>>)(Object)List.class, false, true, ParserTaskScheduler.CONTENT_SENSITIVE_TASK_SCHEDULER);
         }
 
     }
 
-    private static final class ReferenceAnchorPointsDataDefinition implements ParserDataDefinition<List<Anchor>> {
+    private static final class ReferenceParseTreeDataDefinition extends ParserDataDefinition<ParserRuleContext<Token>> {
 
-        @Override
         @SuppressWarnings("unchecked")
-        public Class<List<Anchor>> getDataType() {
-            return (Class<List<Anchor>>)(Object)List.class;
-        }
-
-        @Override
-        public boolean isComponentSpecific() {
-            return false;
-        }
-
-        @Override
-        public boolean isCacheable() {
-            return true;
-        }
-
-        @Override
-        public Class<? extends ParserTaskScheduler> getScheduler() {
-            return ParserTaskScheduler.CONTENT_SENSITIVE_TASK_SCHEDULER;
+        public ReferenceParseTreeDataDefinition() {
+            super("Grammar Reference Parse Tree", (Class<ParserRuleContext<Token>>)(Object)ParserRuleContext.class, false, true, ParserTaskScheduler.CONTENT_SENSITIVE_TASK_SCHEDULER);
         }
 
     }
 
-    private static final class ReferenceParseTreeDataDefinition implements ParserDataDefinition<ParserRuleContext<Token>> {
+    private static final class DynamicAnchorPointsDataDefinition extends ParserDataDefinition<List<Anchor>> {
 
-        @Override
         @SuppressWarnings("unchecked")
-        public Class<ParserRuleContext<Token>> getDataType() {
-            return (Class<ParserRuleContext<Token>>)(Object)ParserRuleContext.class;
-        }
-
-        @Override
-        public boolean isComponentSpecific() {
-            return false;
-        }
-
-        @Override
-        public boolean isCacheable() {
-            return true;
-        }
-
-        @Override
-        public Class<? extends ParserTaskScheduler> getScheduler() {
-            return ParserTaskScheduler.CONTENT_SENSITIVE_TASK_SCHEDULER;
+        public DynamicAnchorPointsDataDefinition() {
+            super("Grammar Dynamic Anchor Points", (Class<List<Anchor>>)(Object)List.class, false, true, ParserTaskScheduler.EDITOR_SENSITIVE_TASK_SCHEDULER);
         }
 
     }
 
-    private static final class DynamicAnchorPointsDataDefinition implements ParserDataDefinition<List<Anchor>> {
+    private static final class LexerTokensDataDefinition extends ParserDataDefinition<Tagger<TokenTag>> {
 
-        @Override
         @SuppressWarnings("unchecked")
-        public Class<List<Anchor>> getDataType() {
-            return (Class<List<Anchor>>)(Object)List.class;
-        }
-
-        @Override
-        public boolean isComponentSpecific() {
-            return false;
-        }
-
-        @Override
-        public boolean isCacheable() {
-            return true;
-        }
-
-        @Override
-        public Class<? extends ParserTaskScheduler> getScheduler() {
-            return ParserTaskScheduler.EDITOR_SENSITIVE_TASK_SCHEDULER;
-        }
-    }
-
-    private static final class LexerTokensDataDefinition implements ParserDataDefinition<Tagger<TokenTag>> {
-
-        @Override
-        @SuppressWarnings("unchecked")
-        public Class<Tagger<TokenTag>> getDataType() {
-            return (Class<Tagger<TokenTag>>)(Object)Tagger.class;
-        }
-
-        @Override
-        public boolean isComponentSpecific() {
-            return false;
-        }
-
-        @Override
-        public boolean isCacheable() {
-            return true;
-        }
-
-        @Override
-        public Class<? extends ParserTaskScheduler> getScheduler() {
-            return ParserTaskScheduler.CONTENT_SENSITIVE_TASK_SCHEDULER;
+        public LexerTokensDataDefinition() {
+            super("Grammar Lexer Tokens", (Class<Tagger<TokenTag>>)(Object)Tagger.class, false, true, ParserTaskScheduler.CONTENT_SENSITIVE_TASK_SCHEDULER);
         }
 
     }
 
-    private static final class CurrentRuleContextDataDefinition implements ParserDataDefinition<CurrentRuleContextData> {
+    private static final class CurrentRuleContextDataDefinition extends ParserDataDefinition<CurrentRuleContextData> {
 
-        @Override
-        @SuppressWarnings("unchecked")
-        public Class<CurrentRuleContextData> getDataType() {
-            return CurrentRuleContextData.class;
-        }
-
-        @Override
-        public boolean isComponentSpecific() {
-            return true;
-        }
-
-        @Override
-        public boolean isCacheable() {
-            return false;
-        }
-
-        @Override
-        public Class<? extends ParserTaskScheduler> getScheduler() {
-            return ParserTaskScheduler.CURSOR_SENSITIVE_TASK_SCHEDULER;
+        public CurrentRuleContextDataDefinition() {
+            super("Grammar Current Rule Context", CurrentRuleContextData.class, true, false, ParserTaskScheduler.CURSOR_SENSITIVE_TASK_SCHEDULER);
         }
 
     }
 
-    private static final class FileModelDataDefinition implements ParserDataDefinition<FileModel> {
+    private static final class FileModelDataDefinition extends ParserDataDefinition<FileModel> {
 
-        @Override
-        public Class<FileModel> getDataType() {
-            return FileModel.class;
-        }
-
-        @Override
-        public boolean isComponentSpecific() {
-            return false;
-        }
-
-        @Override
-        public boolean isCacheable() {
-            return true;
-        }
-
-        @Override
-        public Class<? extends ParserTaskScheduler> getScheduler() {
-            return ParserTaskScheduler.CONTENT_SENSITIVE_TASK_SCHEDULER;
+        public FileModelDataDefinition() {
+            super("Grammar File Model", FileModel.class, false, true, ParserTaskScheduler.CONTENT_SENSITIVE_TASK_SCHEDULER);
         }
 
     }
 
-    private static final class NavigatorRootDataDefinition implements ParserDataDefinition<Description> {
+    private static final class NavigatorRootDataDefinition extends ParserDataDefinition<Description> {
 
-        @Override
-        public Class<Description> getDataType() {
-            return Description.class;
-        }
-
-        @Override
-        public boolean isComponentSpecific() {
-            return false;
-        }
-
-        @Override
-        public boolean isCacheable() {
-            return true;
-        }
-
-        @Override
-        public Class<? extends ParserTaskScheduler> getScheduler() {
-            return ParserTaskScheduler.CONTENT_SENSITIVE_TASK_SCHEDULER;
+        public NavigatorRootDataDefinition() {
+            super("Grammar Navigator Root", Description.class, false, true, ParserTaskScheduler.CONTENT_SENSITIVE_TASK_SCHEDULER);
         }
 
     }

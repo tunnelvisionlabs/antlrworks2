@@ -104,9 +104,7 @@ public class NavigatorUpdateParserTask implements ParserTask {
         ui.refresh(root, selectedRule);
     }
 
-    private static final class Definition implements ParserTaskDefinition {
-        public static final Definition INSTANCE = new Definition();
-
+    private static final class Definition extends ParserTaskDefinition {
         private static final Collection<ParserDataDefinition<?>> INPUTS =
             Arrays.<ParserDataDefinition<?>>asList(
                 TemplateParserDataDefinitions.NAVIGATOR_ROOT,
@@ -115,19 +113,10 @@ public class NavigatorUpdateParserTask implements ParserTask {
         private static final Collection<ParserDataDefinition<?>> OUTPUTS =
             Collections.<ParserDataDefinition<?>>emptyList();
 
-        @Override
-        public Collection<ParserDataDefinition<?>> getInputs() {
-            return INPUTS;
-        }
+        public static final Definition INSTANCE = new Definition();
 
-        @Override
-        public Collection<ParserDataDefinition<?>> getOutputs() {
-            return OUTPUTS;
-        }
-
-        @Override
-        public Class<? extends ParserTaskScheduler> getScheduler() {
-            return ParserTaskScheduler.INPUT_SENSITIVE_TASK_SCHEDULER;
+        public Definition() {
+            super("StringTemplate Navigator Update", INPUTS, OUTPUTS, ParserTaskScheduler.INPUT_SENSITIVE_TASK_SCHEDULER);
         }
     }
 

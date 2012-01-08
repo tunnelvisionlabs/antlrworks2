@@ -123,27 +123,16 @@ public class LexerTokensParserTask implements ParserTask {
         }
     }
 
-    private static final class Definition implements ParserTaskDefinition {
-        public static final Definition INSTANCE = new Definition();
-
+    private static final class Definition extends ParserTaskDefinition {
         private static final Collection<ParserDataDefinition<?>> INPUTS =
             Collections.<ParserDataDefinition<?>>emptyList();
         private static final Collection<ParserDataDefinition<?>> OUTPUTS =
             Collections.<ParserDataDefinition<?>>singletonList(GrammarParserDataDefinitions.LEXER_TOKENS);
 
-        @Override
-        public Collection<ParserDataDefinition<?>> getInputs() {
-            return INPUTS;
-        }
+        public static final Definition INSTANCE = new Definition();
 
-        @Override
-        public Collection<ParserDataDefinition<?>> getOutputs() {
-            return OUTPUTS;
-        }
-
-        @Override
-        public Class<? extends ParserTaskScheduler> getScheduler() {
-            return ParserTaskScheduler.CONTENT_SENSITIVE_TASK_SCHEDULER;
+        public Definition() {
+            super("Grammar Lexer Tokens", INPUTS, OUTPUTS, ParserTaskScheduler.CONTENT_SENSITIVE_TASK_SCHEDULER);
         }
     }
 

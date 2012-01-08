@@ -28,16 +28,58 @@
 package org.antlr.netbeans.parsing.spi;
 
 import java.util.Collection;
+import org.netbeans.api.annotations.common.CheckForNull;
+import org.netbeans.api.annotations.common.NonNull;
+import org.netbeans.api.annotations.common.NullAllowed;
+import org.openide.util.Parameters;
 
 /**
  *
  * @author Sam Harwell
  */
-public interface ParserTaskDefinition {
+public class ParserTaskDefinition {
+    @NonNull
+    private final String name;
+    @NonNull
+    private final Collection<ParserDataDefinition<?>> inputs;
+    @NonNull
+    private final Collection<ParserDataDefinition<?>> outputs;
+    @NullAllowed
+    private final Class<? extends ParserTaskScheduler> scheduler;
 
-    Collection<ParserDataDefinition<?>> getInputs();
+    public ParserTaskDefinition(@NonNull String name, @NonNull Collection<ParserDataDefinition<?>> inputs, @NonNull Collection<ParserDataDefinition<?>> outputs, @NullAllowed Class<? extends ParserTaskScheduler> scheduler) {
+        Parameters.notNull("name", name);
+        Parameters.notNull("inputs", inputs);
+        Parameters.notNull("outputs", outputs);
 
-    Collection<ParserDataDefinition<?>> getOutputs();
+        this.name = name;
+        this.inputs = inputs;
+        this.outputs = outputs;
+        this.scheduler = scheduler;
+    }
 
-    Class<? extends ParserTaskScheduler> getScheduler();
+    @NonNull
+    public String getName() {
+        return name;
+    }
+
+    @NonNull
+    public Collection<ParserDataDefinition<?>> getInputs() {
+        return inputs;
+    }
+
+    @NonNull
+    public Collection<ParserDataDefinition<?>> getOutputs() {
+        return outputs;
+    }
+
+    @CheckForNull
+    public Class<? extends ParserTaskScheduler> getScheduler() {
+        return scheduler;
+    }
+
+    @Override
+    public String toString() {
+        return "Task:" + getName();
+    }
 }
