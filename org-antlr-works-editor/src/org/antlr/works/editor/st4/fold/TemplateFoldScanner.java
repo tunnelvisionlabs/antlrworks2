@@ -177,7 +177,7 @@ public class TemplateFoldScanner {
                 continue;
             }
 
-            SnapshotPositionRegion region = new SnapshotPositionRegion(snapshot, OffsetRegion.fromBounds(sourceInterval.a, sourceInterval.b));
+            SnapshotPositionRegion region = new SnapshotPositionRegion(snapshot, OffsetRegion.fromBounds(sourceInterval.a, sourceInterval.b + 1));
             FoldInfo info = new FoldInfo(region, "...");
             folds.add(info);
         }
