@@ -127,13 +127,19 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
                 this.jScrollPane1.validate();
                 this.diagram.getRule().updatePositions();
             } catch (NullPointerException ex) {
-                if (jScrollPane1 != null) {
-                    this.jScrollPane1.setViewportView(null);
-                }
-
-                this.diagram = null;
+                clearDiagram();
+            } catch (IllegalArgumentException ex) {
+                clearDiagram();
             }
         }
+    }
+
+    private void clearDiagram() {
+        if (jScrollPane1 != null) {
+            this.jScrollPane1.setViewportView(null);
+        }
+
+        this.diagram = null;
     }
 
     private static boolean isSameSnapshot(DocumentSnapshot a, DocumentSnapshot b) {
