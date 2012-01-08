@@ -96,12 +96,14 @@ public class SyntaxErrorsHighlightingParserTask implements ParserTask {
                 // first try to get the specific location from a token
                 if (offendingToken != null) {
                     int startOffset = offendingToken.getStartIndex();
-                    int endOffsetInclusive = offendingToken.getStopIndex();
-                    if (startOffset < 0 || endOffsetInclusive < 0) {
+                    int endOffset = offendingToken.getStopIndex() + 1;
+                    if (startOffset < 0 || endOffset < startOffset) {
                         continue;
                     }
 
-                    OffsetRegion offsetRegion = OffsetRegion.fromBounds(startOffset, endOffsetInclusive + 1);
+                    startOffset = Math.min(startOffset, snapshot.length());
+                    endOffset = Math.min(endOffset, snapshot.length());
+                    OffsetRegion offsetRegion = OffsetRegion.fromBounds(startOffset, endOffset);
                     TrackingPositionRegion trackingRegion = snapshot.createTrackingRegion(offsetRegion, TrackingPositionRegion.Bias.Forward);
                     SnapshotPositionRegion region = trackingRegion.getRegion(latestSnapshot);
 
