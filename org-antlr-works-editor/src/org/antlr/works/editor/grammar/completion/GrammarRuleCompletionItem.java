@@ -1,6 +1,6 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -29,7 +29,6 @@ package org.antlr.works.editor.grammar.completion;
 
 import javax.swing.ImageIcon;
 import org.antlr.netbeans.editor.navigation.Description;
-import org.antlr.netbeans.editor.navigation.NavigatorPanelUI;
 import org.antlr.works.editor.grammar.navigation.GrammarNode;
 
 /**
@@ -37,14 +36,19 @@ import org.antlr.works.editor.grammar.navigation.GrammarNode;
  * @author Sam Harwell
  */
 public class GrammarRuleCompletionItem extends GrammarCompletionItem {
+    private static final ImageIcon PARSER_ICON;
+    private static final ImageIcon LEXER_ICON;
 
-    private final NavigatorPanelUI ui;
     private final Description rule;
 
     private String leftText;
 
-    public GrammarRuleCompletionItem(NavigatorPanelUI ui, Description rule) {
-        this.ui = ui;
+    static {
+        PARSER_ICON = new ImageIcon(GrammarNode.PARSER_IMAGE);
+        LEXER_ICON = new ImageIcon(GrammarNode.LEXER_IMAGE);
+    }
+
+    public GrammarRuleCompletionItem(Description rule) {
         this.rule = rule;
     }
 
@@ -65,7 +69,12 @@ public class GrammarRuleCompletionItem extends GrammarCompletionItem {
 
     @Override
     protected ImageIcon getIcon() {
-        return new ImageIcon(new GrammarNode(ui, rule).getIcon(0));
+        String name = rule.getName();
+        if (Character.isLowerCase(name.charAt(0))) {
+            return PARSER_ICON;
+        } else {
+            return LEXER_ICON;
+        }
     }
 
     @Override

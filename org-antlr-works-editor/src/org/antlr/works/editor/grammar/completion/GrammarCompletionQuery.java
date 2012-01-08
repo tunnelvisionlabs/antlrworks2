@@ -1,6 +1,6 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -37,7 +37,6 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Queue;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -87,9 +86,6 @@ import org.antlr.works.editor.grammar.experimental.GrammarParser;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.actionExpressionContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.actionScopeExpressionContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParserAnchorListener;
-import org.antlr.works.editor.grammar.navigation.GrammarNode;
-import org.antlr.works.editor.grammar.navigation.GrammarRulesPanel;
-import org.antlr.works.editor.grammar.navigation.GrammarRulesPanelUI;
 import org.antlr.works.editor.shared.TaggerTokenSource;
 import org.antlr.works.editor.shared.completion.Anchor;
 import org.netbeans.api.editor.completion.Completion;
@@ -99,8 +95,6 @@ import org.netbeans.spi.editor.completion.CompletionItem;
 import org.netbeans.spi.editor.completion.CompletionProvider;
 import org.netbeans.spi.editor.completion.CompletionResultSet;
 import org.netbeans.spi.editor.completion.support.AsyncCompletionQuery;
-import org.openide.explorer.ExplorerManager;
-import org.openide.nodes.Node;
 import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
@@ -409,6 +403,8 @@ public final class GrammarCompletionQuery extends AsyncCompletionQuery {
             if (taskManager == null) {
                 return;
             }
+
+            Collection<Description> rules = null;
 
             List<Anchor> anchors;
             Future<ParserData<List<Anchor>>> result =
@@ -743,31 +739,13 @@ public final class GrammarCompletionQuery extends AsyncCompletionQuery {
 
                                     if (grammarType != GrammarParser.LEXER) {
                                         // Add rules from the grammar
-                                        GrammarRulesPanelUI ui = GrammarRulesPanel.findGrammarRulesPanelUI();
-                                        ExplorerManager explorerManager = (ui != null) ? ui.getExplorerManager() : null;
-                                        Node rootContext = (explorerManager != null) ? explorerManager.getRootContext() : null;
-                                        if (ui != null) {
-                                            List<Description> rules = new ArrayList<Description>();
-                                            Queue<Description> workList = new ArrayDeque<Description>();
-                                            if (rootContext instanceof GrammarNode) {
-                                                workList.add(((GrammarNode)rootContext).getDescription());
-                                            }
+                                        if (rules == null) {
+                                            rules = GrammarCompletionProvider.getRulesFromGrammar(taskManager, snapshot);
+                                        }
 
-                                            while (!workList.isEmpty()) {
-                                                Description description = workList.remove();
-                                                if (description.getOffset() > 0) {
-                                                    rules.add(description);
-                                                }
-
-                                                if (description.getChildren() != null) {
-                                                    workList.addAll(description.getChildren());
-                                                }
-                                            }
-
-                                            for (Description rule : rules) {
-                                                if (Character.isLowerCase(rule.getName().charAt(0))) {
-                                                    results.add(new ActionReferenceCompletionItem(rule.getName(), false));
-                                                }
+                                        for (Description rule : rules) {
+                                            if (Character.isLowerCase(rule.getName().charAt(0))) {
+                                                results.add(new ActionReferenceCompletionItem(rule.getName(), false));
                                             }
                                         }
                                     }
@@ -833,31 +811,13 @@ public final class GrammarCompletionQuery extends AsyncCompletionQuery {
                 boolean tokenReferencesOnly = grammarType == GrammarParser.LEXER || definiteInRewrite;
 
                 // Add rules from the grammar
-                GrammarRulesPanelUI ui = GrammarRulesPanel.findGrammarRulesPanelUI();
-                ExplorerManager explorerManager = (ui != null) ? ui.getExplorerManager() : null;
-                Node rootContext = (explorerManager != null) ? explorerManager.getRootContext() : null;
-                if (ui != null) {
-                    List<Description> rules = new ArrayList<Description>();
-                    Queue<Description> workList = new ArrayDeque<Description>();
-                    if (rootContext instanceof GrammarNode) {
-                        workList.add(((GrammarNode)rootContext).getDescription());
-                    }
+                if (rules == null) {
+                    rules = GrammarCompletionProvider.getRulesFromGrammar(taskManager, snapshot);
+                }
 
-                    while (!workList.isEmpty()) {
-                        Description description = workList.remove();
-                        if (description.getOffset() > 0) {
-                            rules.add(description);
-                        }
-
-                        if (description.getChildren() != null) {
-                            workList.addAll(description.getChildren());
-                        }
-                    }
-
-                    for (Description rule : rules) {
-                        if (!tokenReferencesOnly || Character.isUpperCase(rule.getName().charAt(0))) {
-                            results.add(new GrammarRuleCompletionItem(ui, rule));
-                        }
+                for (Description rule : rules) {
+                    if (!tokenReferencesOnly || Character.isUpperCase(rule.getName().charAt(0))) {
+                        results.add(new GrammarRuleCompletionItem(rule));
                     }
                 }
             }

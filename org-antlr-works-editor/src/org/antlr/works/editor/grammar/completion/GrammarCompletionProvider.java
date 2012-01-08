@@ -1,6 +1,6 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -27,7 +27,13 @@
  */
 package org.antlr.works.editor.grammar.completion;
 
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.EnumSet;
+import java.util.List;
+import java.util.Queue;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.logging.Logger;
@@ -36,6 +42,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
 import org.antlr.netbeans.editor.classification.TokenTag;
+import org.antlr.netbeans.editor.navigation.Description;
 import org.antlr.netbeans.editor.tagging.TaggedPositionRegion;
 import org.antlr.netbeans.editor.tagging.Tagger;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
@@ -146,11 +153,15 @@ public class GrammarCompletionProvider implements CompletionProvider {
         return grammarCompletionSelectors;
     }
 
-    /*package*/ static Token getGrammarContext(JTextComponent component, int offset) {
-        Document document = component.getDocument();
+    public static Token getGrammarContext(JTextComponent component, int offset) {
+        return getGrammarContext(component.getDocument(), offset);
+    }
+
+    public static Token getGrammarContext(Document document, int offset) {
         if (document instanceof AbstractDocument) {
             ((AbstractDocument)document).readLock();
         }
+
         try {
 //            try {
                 ParserTaskManager taskManager = Lookup.getDefault().lookup(ParserTaskManager.class);
@@ -244,5 +255,38 @@ public class GrammarCompletionProvider implements CompletionProvider {
         default:
             return token.getChannel() == Lexer.DEFAULT_TOKEN_CHANNEL;
         }
+    }
+
+    public static Collection<Description> getRulesFromGrammar(ParserTaskManager taskManager, DocumentSnapshot snapshot) {
+        Description rootDescription = null;
+        Future<ParserData<Description>> futureNavigatorRootData = taskManager.getData(snapshot, GrammarParserDataDefinitions.NAVIGATOR_ROOT, EnumSet.of(ParserDataOptions.SYNCHRONOUS));
+        try {
+            rootDescription = futureNavigatorRootData.get().getData();
+        } catch (InterruptedException ex) {
+            Exceptions.printStackTrace(ex);
+        } catch (ExecutionException ex) {
+            Exceptions.printStackTrace(ex);
+        }
+
+        if (rootDescription != null) {
+            List<Description> rules = new ArrayList<Description>();
+            Queue<Description> workList = new ArrayDeque<Description>();
+            workList.add(rootDescription);
+
+            while (!workList.isEmpty()) {
+                Description description = workList.remove();
+                if (description.getOffset() > 0) {
+                    rules.add(description);
+                }
+
+                if (description.getChildren() != null) {
+                    workList.addAll(description.getChildren());
+                }
+            }
+
+            return rules;
+        }
+
+        return Collections.emptyList();
     }
 }
