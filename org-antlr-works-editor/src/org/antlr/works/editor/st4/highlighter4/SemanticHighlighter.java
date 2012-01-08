@@ -1,6 +1,6 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -27,34 +27,18 @@
  */
 package org.antlr.works.editor.st4.highlighter4;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.Callable;
 import javax.swing.text.AttributeSet;
-import javax.swing.text.Document;
-import javax.swing.text.JTextComponent;
 import javax.swing.text.StyledDocument;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
-import org.antlr.netbeans.editor.text.OffsetRegion;
-import org.antlr.netbeans.editor.text.SnapshotPositionRegion;
-import org.antlr.netbeans.editor.text.TrackingPositionRegion;
-import org.antlr.netbeans.editor.text.TrackingPositionRegion.Bias;
-import org.antlr.netbeans.editor.text.VersionedDocument;
-import org.antlr.netbeans.editor.text.VersionedDocumentUtilities;
-import org.antlr.netbeans.parsing.spi.ParserData;
-import org.antlr.netbeans.parsing.spi.ParserDataEvent;
-import org.antlr.netbeans.parsing.spi.ParserDataListener;
-import org.antlr.netbeans.parsing.spi.ParserTaskManager;
-import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
-import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import org.antlr.works.editor.shared.AbstractParseTreeSemanticHighlighter;
+import org.antlr.works.editor.shared.AbstractSemanticHighlighter;
 import org.antlr.works.editor.st4.StringTemplateEditorKit;
 import org.antlr.works.editor.st4.TemplateParserDataDefinitions;
 import org.antlr.works.editor.st4.experimental.BlankTemplateParserListener;
@@ -68,35 +52,19 @@ import org.antlr.works.editor.st4.experimental.TemplateParser.optionContext;
 import org.antlr.works.editor.st4.experimental.TemplateParser.primaryContext;
 import org.antlr.works.editor.st4.experimental.TemplateParser.templateDefContext;
 import org.netbeans.api.annotations.common.NonNull;
-import org.netbeans.api.editor.EditorRegistry;
 import org.netbeans.api.editor.mimelookup.MimeLookup;
 import org.netbeans.api.editor.mimelookup.MimePath;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.netbeans.api.editor.settings.FontColorSettings;
-import org.netbeans.editor.BaseDocument;
-import org.netbeans.spi.editor.highlighting.HighlightsChangeEvent;
-import org.netbeans.spi.editor.highlighting.HighlightsChangeListener;
-import org.netbeans.spi.editor.highlighting.HighlightsLayer;
 import org.netbeans.spi.editor.highlighting.HighlightsLayerFactory;
-import org.netbeans.spi.editor.highlighting.HighlightsSequence;
-import org.netbeans.spi.editor.highlighting.ZOrder;
-import org.netbeans.spi.editor.highlighting.support.AbstractHighlightsContainer;
 import org.netbeans.spi.editor.highlighting.support.OffsetsBag;
 import org.openide.util.Lookup;
-import org.openide.util.Parameters;
 
 /**
  *
  * @author Sam Harwell
  */
-public class SemanticHighlighter extends AbstractHighlightsContainer {
-
-    private final StyledDocument document;
-    private final ParserTaskManager taskManager;
-    private final VersionedDocument versionedDocument;
-    private final DataListener dataListener;
-    private final EditorRegistryListener editorRegistryListener;
-    private final OffsetsBag container;
+public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<SemanticHighlighter.SemanticAnalyzerListener> {
 
     private final AttributeSet templateDeclarationAttributes;
     private final AttributeSet templateUseAttributes;
@@ -109,22 +77,8 @@ public class SemanticHighlighter extends AbstractHighlightsContainer {
     private final AttributeSet attributeUseAttributes;
     private final AttributeSet expressionOptionAttributes;
 
-    private final Set<JTextComponent> components = new HashSet<JTextComponent>();
-
     private SemanticHighlighter(@NonNull StyledDocument document) {
-        Parameters.notNull("document", document);
-        this.document = document;
-        this.taskManager = Lookup.getDefault().lookup(ParserTaskManager.class);
-        this.versionedDocument = VersionedDocumentUtilities.getVersionedDocument(document);
-        this.dataListener = new DataListener();
-        this.editorRegistryListener = new EditorRegistryListener();
-        this.container = new OffsetsBag(document, true);
-        this.container.addHighlightsChangeListener(new HighlightsChangeListener() {
-            @Override
-            public void highlightChanged(HighlightsChangeEvent event) {
-                fireHighlightsChange(event.getStartOffset(), event.getEndOffset());
-            }
-        });
+        super(document, TemplateParserDataDefinitions.REFERENCE_PARSE_TREE);
 
         Lookup lookup = MimeLookup.getLookup(MimePath.parse(StringTemplateEditorKit.TEMPLATE_MIME_TYPE));
         FontColorSettings settings = lookup.lookup(FontColorSettings.class);
@@ -140,58 +94,40 @@ public class SemanticHighlighter extends AbstractHighlightsContainer {
         this.expressionOptionAttributes = getFontAndColors(settings, "expressionOption");
     }
 
-    private static AttributeSet getFontAndColors(FontColorSettings settings, String category) {
-        AttributeSet attributes = settings.getTokenFontColors(category);
-        return attributes;
+    @Override
+    protected SemanticAnalyzerListener createListener() {
+        return new SemanticAnalyzerListener();
     }
 
     @Override
-    public HighlightsSequence getHighlights(int startOffset, int endOffset) {
-        return container.getHighlights(startOffset, endOffset);
-    }
-
-    private void initialize() {
-    }
-
-    private void addComponent(JTextComponent component) {
-        components.add(component);
-        if (components.size() == 1) {
-            taskManager.addDataListener(TemplateParserDataDefinitions.REFERENCE_PARSE_TREE, dataListener);
-            EditorRegistry.addPropertyChangeListener(editorRegistryListener);
-        }
-    }
-
-    private void removeComponent(JTextComponent component) {
-        if (components.remove(component) && components.isEmpty()) {
-            taskManager.removeDataListener(TemplateParserDataDefinitions.REFERENCE_PARSE_TREE, dataListener);
-            EditorRegistry.removePropertyChangeListener(editorRegistryListener);
-        }
+    protected void updateHighlights(OffsetsBag container, DocumentSnapshot sourceSnapshot, DocumentSnapshot currentSnapshot, SemanticAnalyzerListener listener) {
+        addHighlights(container, sourceSnapshot, currentSnapshot, listener.getTemplateDeclarations(), templateDeclarationAttributes);
+        addHighlights(container, sourceSnapshot, currentSnapshot, listener.getTemplateUses(), templateUseAttributes);
+        addHighlights(container, sourceSnapshot, currentSnapshot, listener.getRegionDeclarations(), regionDeclarationAttributes);
+        addHighlights(container, sourceSnapshot, currentSnapshot, listener.getRegionUses(), regionUseAttributes);
+        addHighlights(container, sourceSnapshot, currentSnapshot, listener.getDictionaryDeclarations(), dictionaryDeclarationAttributes);
+        addHighlights(container, sourceSnapshot, currentSnapshot, listener.getDictionaryUses(), dictionaryUseAttributes);
+        addHighlights(container, sourceSnapshot, currentSnapshot, listener.getParameterDeclarations(), parameterDeclarationAttributes);
+        addHighlights(container, sourceSnapshot, currentSnapshot, listener.getParameterUses(), parameterUseAttributes);
+        addHighlights(container, sourceSnapshot, currentSnapshot, listener.getAttributeUses(), attributeUseAttributes);
+        addHighlights(container, sourceSnapshot, currentSnapshot, listener.getOptions(), expressionOptionAttributes);
     }
 
     @MimeRegistration(mimeType=StringTemplateEditorKit.TEMPLATE_MIME_TYPE, service=HighlightsLayerFactory.class)
-    public static class LayerFactory implements HighlightsLayerFactory {
+    public static class LayerFactory extends AbstractLayerFactory {
+
+        public LayerFactory() {
+            super(SemanticHighlighter.class);
+        }
 
         @Override
-        public HighlightsLayer[] createLayers(Context context) {
-            Document document = context.getDocument();
-            if (!(document instanceof StyledDocument)) {
-                return new HighlightsLayer[0];
-            }
-
-            SemanticHighlighter highlighter = (SemanticHighlighter)document.getProperty(SemanticHighlighter.class);
-            if (highlighter == null) {
-                highlighter = new SemanticHighlighter((StyledDocument)document);
-                highlighter.initialize();
-                document.putProperty(SemanticHighlighter.class, highlighter);
-            }
-
-            highlighter.addComponent(context.getComponent());
-            return new HighlightsLayer[] { HighlightsLayer.create(SemanticHighlighter.class.getName(), ZOrder.SYNTAX_RACK.forPosition(3), true, highlighter) };
+        protected AbstractSemanticHighlighter<?> createHighlighter(Context context) {
+            return new SemanticHighlighter((StyledDocument)context.getDocument());
         }
 
     }
 
-    private static class SemanticAnalyzerListener extends BlankTemplateParserListener {
+    public static class SemanticAnalyzerListener extends BlankTemplateParserListener {
         private final Deque<Integer> memberContext = new ArrayDeque<Integer>();
         private final Deque<Set<String>> parameters = new ArrayDeque<Set<String>>();
 
@@ -349,72 +285,6 @@ public class SemanticHighlighter extends AbstractHighlightsContainer {
         @Override
         public void exitRule(groupContext ctx) {
         }
-    }
-
-    private class DataListener implements ParserDataListener<ParserRuleContext<Token>> {
-
-        @Override
-        public void dataChanged(ParserDataEvent<? extends ParserRuleContext<Token>> event) {
-            final ParserData<? extends ParserRuleContext<Token>> parserData = event.getData();
-            if (parserData == null) {
-                return;
-            }
-
-            final DocumentSnapshot snapshot = parserData.getSnapshot();
-            if (snapshot == null || !versionedDocument.equals(snapshot.getVersionedDocument())) {
-                return;
-            }
-
-            taskManager.scheduleHighPriority(new Callable<Void>() {
-                @Override
-                public Void call() {
-                    final SemanticAnalyzerListener listener = new SemanticAnalyzerListener();
-                    ParseTreeWalker.DEFAULT.walk(listener, parserData.getData());
-                    ((BaseDocument)document).render(new Runnable() {
-                        @Override
-                        public void run() {
-                            container.clear();
-                            DocumentSnapshot currentSnapshot = snapshot.getVersionedDocument().getCurrentSnapshot();
-                            addHighlights(container, snapshot, currentSnapshot, listener.getTemplateDeclarations(), templateDeclarationAttributes);
-                            addHighlights(container, snapshot, currentSnapshot, listener.getTemplateUses(), templateUseAttributes);
-                            addHighlights(container, snapshot, currentSnapshot, listener.getRegionDeclarations(), regionDeclarationAttributes);
-                            addHighlights(container, snapshot, currentSnapshot, listener.getRegionUses(), regionUseAttributes);
-                            addHighlights(container, snapshot, currentSnapshot, listener.getDictionaryDeclarations(), dictionaryDeclarationAttributes);
-                            addHighlights(container, snapshot, currentSnapshot, listener.getDictionaryUses(), dictionaryUseAttributes);
-                            addHighlights(container, snapshot, currentSnapshot, listener.getParameterDeclarations(), parameterDeclarationAttributes);
-                            addHighlights(container, snapshot, currentSnapshot, listener.getParameterUses(), parameterUseAttributes);
-                            addHighlights(container, snapshot, currentSnapshot, listener.getAttributeUses(), attributeUseAttributes);
-                            addHighlights(container, snapshot, currentSnapshot, listener.getOptions(), expressionOptionAttributes);
-                        }
-                    });
-
-                    return null;
-                }
-            });
-        }
-
-        private void addHighlights(OffsetsBag container, DocumentSnapshot sourceSnapshot, DocumentSnapshot currentSnapshot, Collection<Token> tokens, AttributeSet attributes) {
-            for (Token token : tokens) {
-                TrackingPositionRegion trackingRegion = sourceSnapshot.createTrackingRegion(OffsetRegion.fromBounds(token.getStartIndex(), token.getStopIndex() + 1), Bias.Forward);
-                SnapshotPositionRegion region = trackingRegion.getRegion(currentSnapshot);
-                container.addHighlight(region.getStart().getOffset(), region.getEnd().getOffset(), attributes);
-            }
-        }
-
-    }
-
-    private class EditorRegistryListener implements PropertyChangeListener {
-
-        @Override
-        public void propertyChange(PropertyChangeEvent evt) {
-            if (evt.getPropertyName().equals(EditorRegistry.COMPONENT_REMOVED_PROPERTY)) {
-                Object component = evt.getOldValue();
-                if (component instanceof JTextComponent) {
-                    removeComponent((JTextComponent)component);
-                }
-            }
-        }
-
     }
 
 }
