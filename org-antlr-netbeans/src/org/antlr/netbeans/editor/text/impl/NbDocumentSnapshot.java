@@ -268,9 +268,9 @@ public class NbDocumentSnapshot implements DocumentSnapshot {
             int startLine = data.getBlockLineFromPosition(startBlock, start);
             int startColumn = start - data.getLineStart(startBlock, data.getBlockLineOffsets().get(startBlock) + startLine);
 
-            int endBlock = data.getBlockFromPosition(end - 1);
-            int endLine = data.getBlockLineFromPosition(endBlock, end - 1);
-            int endColumn = (end - 1) - data.getLineStart(endBlock, data.getBlockLineOffsets().get(endBlock) + endLine);
+            int endBlock = end == start ? startBlock : data.getBlockFromPosition(end - 1);
+            int endLine = end == start ? startLine : data.getBlockLineFromPosition(endBlock, end - 1);
+            int endColumn = end == start ? startColumn : (end - 1) - data.getLineStart(endBlock, data.getBlockLineOffsets().get(endBlock) + endLine);
 
             for (int block = startBlock; block <= endBlock; block++) {
                 List<String> blockData = data.getLineData().get(block);
