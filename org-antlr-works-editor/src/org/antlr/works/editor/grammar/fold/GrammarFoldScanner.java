@@ -194,7 +194,7 @@ public abstract class GrammarFoldScanner {
                 return this;
             }
 
-            TrackingPositionRegion trackingRegion = snapshot.createTrackingRegion(region.getRegion(), TrackingPositionRegion.Bias.Exclusive);
+            TrackingPositionRegion trackingRegion = region.getSnapshot().createTrackingRegion(region.getRegion(), TrackingPositionRegion.Bias.Exclusive);
             return new FoldInfo(trackingRegion.getRegion(snapshot), blockHint);
         }
     }
