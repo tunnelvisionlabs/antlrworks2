@@ -152,6 +152,16 @@ public class NbDocumentSnapshot implements DocumentSnapshot {
         return subSequence(0, length()).toString();
     }
 
+    @Override
+    public String toString() {
+        String content = "???";
+        return String.format("version: %d lines: %d length: %d\n content: %s",
+                             getVersion().getVersionNumber(),
+                             getLineCount(),
+                             length(),
+                             content);
+    }
+
     private static final class LineIterable implements Iterable<DocumentSnapshotLine> {
 
         @NonNull
