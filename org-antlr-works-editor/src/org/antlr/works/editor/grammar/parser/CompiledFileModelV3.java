@@ -1,6 +1,6 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -30,6 +30,7 @@ package org.antlr.works.editor.grammar.parser;
 import java.util.List;
 import org.antlr.grammar.v3.ANTLRParser;
 import org.antlr.runtime.CommonToken;
+import org.antlr.works.editor.shared.parser.SyntaxError;
 import org.openide.filesystems.FileObject;
 
 /**

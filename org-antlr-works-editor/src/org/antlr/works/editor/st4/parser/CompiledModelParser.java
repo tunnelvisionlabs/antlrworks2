@@ -46,6 +46,7 @@ import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.CommonTreeAdaptor;
 import org.antlr.runtime.tree.TreeAdaptor;
+import org.antlr.works.editor.shared.parser.SyntaxError;
 import org.antlr.works.editor.st4.TemplateParserDataDefinitions;
 import org.netbeans.api.annotations.common.NonNull;
 import org.openide.filesystems.FileObject;
@@ -98,7 +99,7 @@ public class CompiledModelParser {
 
             GroupLexer lexer = new GroupLexer(input);
             CommonTokenStream tokens = new CommonTokenStream(lexer);
-            GroupParserWrapper parser = new GroupParserWrapper(tokens);
+            GroupParserWrapper parser = new GroupParserWrapper(tokens, snapshot);
             TemplateGroupWrapper group = new TemplateGroupWrapper('<', '>');
             try {
                 parser.group(group, "/");

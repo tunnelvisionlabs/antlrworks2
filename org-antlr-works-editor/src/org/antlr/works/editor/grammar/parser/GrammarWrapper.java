@@ -1,6 +1,6 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.antlr.Tool;
 import org.antlr.grammar.v3.ANTLRParser;
+import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.Token;
@@ -51,16 +52,20 @@ import org.openide.util.Exceptions;
 public class GrammarWrapper extends Grammar {
     
     private final List<CompiledFileModelV3> imported = new ArrayList<CompiledFileModelV3>();
+    private final DocumentSnapshot snapshot;
 
-    public GrammarWrapper() {
+    public GrammarWrapper(DocumentSnapshot snapshot) {
+        this.snapshot = snapshot;
     }
 
-    public GrammarWrapper(Tool tool) {
+    public GrammarWrapper(Tool tool, DocumentSnapshot snapshot) {
         super(tool);
+        this.snapshot = snapshot;
     }
 
-    public GrammarWrapper(Tool tool, String fileName, CompositeGrammar composite) {
+    public GrammarWrapper(Tool tool, String fileName, CompositeGrammar composite, DocumentSnapshot snapshot) {
         super(tool, fileName, composite);
+        this.snapshot = snapshot;
     }
 
     public List<CompiledFileModelV3> getImportedGrammarResults() {
@@ -98,7 +103,7 @@ public class GrammarWrapper extends Grammar {
             ANTLRStringStream input = new ANTLRStringStream(text);
             ANTLRErrorProvidingLexer lexer = new ANTLRErrorProvidingLexer(input);
             ANTLRParserTokenStream tokenStream = new ANTLRParserTokenStream(lexer);
-            ANTLRErrorProvidingParser parser = new ANTLRErrorProvidingParser(tokenStream);
+            ANTLRErrorProvidingParser parser = new ANTLRErrorProvidingParser(tokenStream, snapshot);
 
             lexer.setParser(parser);
             tokenStream.setParser(parser);
@@ -109,7 +114,7 @@ public class GrammarWrapper extends Grammar {
             tokens = tokenList.toArray(tokens);
 
             try {
-                GrammarWrapper g = new GrammarWrapper(this.tool, fullName, this.composite);
+                GrammarWrapper g = new GrammarWrapper(this.tool, fullName, this.composite, this.snapshot);
                 g.setFileName(fullName); // work around a bug in Grammar.setName that results in a NPE
                 ANTLRParser.grammar__return result = parser.grammar_(g);
                 imported.add(new CompiledFileModelV3(parser, g, result, fileObject, tokens));

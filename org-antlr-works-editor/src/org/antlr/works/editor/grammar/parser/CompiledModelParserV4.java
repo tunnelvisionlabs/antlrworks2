@@ -1,6 +1,6 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -47,6 +47,8 @@ import org.antlr.v4.tool.Grammar;
 import org.antlr.v4.tool.GrammarSemanticsMessage;
 import org.antlr.v4.tool.GrammarSyntaxMessage;
 import org.antlr.v4.tool.ast.GrammarRootAST;
+import org.antlr.works.editor.shared.parser.AntlrSyntaxErrorV3;
+import org.antlr.works.editor.shared.parser.SyntaxError;
 import org.netbeans.spi.editor.hints.Severity;
 import org.openide.util.Parameters;
 import org.stringtemplate.v4.ST;
@@ -64,7 +66,7 @@ public class CompiledModelParserV4 extends CompiledModelParser {
     private CompiledFileModelV4 lastResult;
 
     @Override
-    protected CompiledModelV4 parseImpl(ParserTaskManager taskManager, JTextComponent component, DocumentSnapshot snapshot)
+    protected CompiledModelV4 parseImpl(ParserTaskManager taskManager, JTextComponent component, final DocumentSnapshot snapshot)
         throws InterruptedException, ExecutionException {
 
         Parameters.notNull("snapshot", snapshot);
@@ -106,7 +108,7 @@ public class CompiledModelParserV4 extends CompiledModelParser {
 
                     ST messageTemplate = tool.errMgr.getMessageTemplate(antlrm);
                     String outputMessage = messageTemplate.render();
-                    syntaxErrors.add(new SyntaxError(offendingToken, e, outputMessage, Severity.ERROR));
+                    syntaxErrors.add(new AntlrSyntaxErrorV3(snapshot, offendingToken, e, outputMessage, Severity.ERROR));
                 }
 
                 @Override
@@ -126,7 +128,7 @@ public class CompiledModelParserV4 extends CompiledModelParser {
 
                     ST messageTemplate = tool.errMgr.getMessageTemplate(antlrm);
                     String outputMessage = messageTemplate.render();
-                    syntaxErrors.add(new SyntaxError(offendingToken, e, outputMessage, Severity.WARNING));
+                    syntaxErrors.add(new AntlrSyntaxErrorV3(snapshot, offendingToken, e, outputMessage, Severity.WARNING));
                 }
             });
 

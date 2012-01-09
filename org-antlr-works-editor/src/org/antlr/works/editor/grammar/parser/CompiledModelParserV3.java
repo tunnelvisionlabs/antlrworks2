@@ -1,6 +1,6 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -65,17 +65,17 @@ public class CompiledModelParserV3 extends CompiledModelParser {
         ANTLRStringStream input = new ANTLRStringStream(snapshot.getText().toString());
         ANTLRErrorProvidingLexer lexer = new ANTLRErrorProvidingLexer(input);
         ANTLRParserTokenStream tokenStream = new ANTLRParserTokenStream(lexer);
-        ANTLRErrorProvidingParser parser = new ANTLRErrorProvidingParser(tokenStream);
+        ANTLRErrorProvidingParser parser = new ANTLRErrorProvidingParser(tokenStream, snapshot);
 
         lexer.setParser(parser);
         tokenStream.setParser(parser);
         parser.setTreeAdaptor(new ANTLRErrorProvidingParser.grammar_Adaptor(parser));
 
         try {
-            ErrorManager.setErrorListener(new ANTLRErrorProvidingParser.ErrorListener());
+            ErrorManager.setErrorListener(new ANTLRErrorProvidingParser.ErrorListener(snapshot));
             Tool tool = new Tool();
             tool.setLibDirectory(new File(snapshot.getVersionedDocument().getFileObject().getPath()).getParent());
-            GrammarWrapper g = new GrammarWrapper(tool);
+            GrammarWrapper g = new GrammarWrapper(tool, snapshot);
             g.setFileName(""); // work around a bug in Grammar.setName that results in a NPE
             ANTLRParser.grammar__return result = parser.grammar_(g);
 

@@ -51,6 +51,7 @@ import org.antlr.netbeans.parsing.spi.ParserTaskProvider;
 import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.RecognitionException;
+import org.antlr.works.editor.shared.parser.SyntaxError;
 import org.antlr.works.editor.st4.StringTemplateEditorKit;
 import org.antlr.works.editor.st4.TemplateParserDataDefinitions;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
@@ -85,44 +86,21 @@ public class SyntaxErrorsHighlightingParserTask implements ParserTask {
             Document document = model.getSnapshot().getVersionedDocument().getDocument();
             List<ErrorDescription> errors = new ArrayList<ErrorDescription>();
             for (SyntaxError syntaxError : syntaxErrors) {
-                CommonToken offendingToken = syntaxError.getOffendingToken() instanceof CommonToken ? (CommonToken)syntaxError.getOffendingToken() : null;
-                RecognitionException exception = syntaxError.getException();
-                String message = syntaxError.getMessage();
-
-                if (offendingToken == null && exception != null && exception.token instanceof CommonToken) {
-                    offendingToken = (CommonToken)exception.token;
-                }
-
-                // first try to get the specific location from a token
-                if (offendingToken != null) {
-                    int startOffset = offendingToken.getStartIndex();
-                    int endOffset = offendingToken.getStopIndex() + 1;
-                    if (startOffset < 0 || endOffset < startOffset) {
-                        continue;
-                    }
-
-                    startOffset = Math.min(startOffset, snapshot.length());
-                    endOffset = Math.min(endOffset, snapshot.length());
-                    OffsetRegion offsetRegion = OffsetRegion.fromBounds(startOffset, endOffset);
-                    TrackingPositionRegion trackingRegion = snapshot.createTrackingRegion(offsetRegion, TrackingPositionRegion.Bias.Forward);
-                    SnapshotPositionRegion region = trackingRegion.getRegion(latestSnapshot);
-
-                    try {
-                        ErrorDescription errorDescription = ErrorDescriptionFactory.createErrorDescription(syntaxError.getSeverity(), message, document, document.createPosition(region.getStart().getOffset()), document.createPosition(region.getEnd().getOffset()));
-                        errors.add(errorDescription);
-                        continue;
-                    } catch (BadLocationException ex) {
-                        Exceptions.printStackTrace(ex);
-                    }
-                }
-
-                int line = exception != null ? exception.line : -1;
-                if (line <= 0) {
+                SnapshotPositionRegion location = syntaxError.getLocation();
+                if (location == null) {
                     continue;
                 }
 
-                ErrorDescription errorDescription = ErrorDescriptionFactory.createErrorDescription(syntaxError.getSeverity(), message, document, line);
-                errors.add(errorDescription);
+                TrackingPositionRegion trackingRegion = snapshot.createTrackingRegion(location.getRegion(), TrackingPositionRegion.Bias.Forward);
+                SnapshotPositionRegion region = trackingRegion.getRegion(latestSnapshot);
+
+                String message = syntaxError.getMessage();
+                try {
+                    ErrorDescription errorDescription = ErrorDescriptionFactory.createErrorDescription(syntaxError.getSeverity(), message, document, document.createPosition(region.getStart().getOffset()), document.createPosition(region.getEnd().getOffset()));
+                    errors.add(errorDescription);
+                } catch (BadLocationException ex) {
+                    Exceptions.printStackTrace(ex);
+                }
             }
 
             HintsController.setErrors(document, "stringtemplate-syntax", errors);

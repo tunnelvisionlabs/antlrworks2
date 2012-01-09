@@ -1,6 +1,6 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -29,16 +29,26 @@ package org.antlr.works.editor.st4.parser;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.TokenStream;
+import org.antlr.works.editor.shared.parser.AntlrSyntaxErrorV3;
+import org.antlr.works.editor.shared.parser.SyntaxError;
+import org.netbeans.spi.editor.hints.Severity;
 import org.stringtemplate.v4.compiler.GroupParser;
 
+/**
+ *
+ * @author Sam Harwell
+ */
 public class GroupParserWrapper extends GroupParser {
 
     private final List<SyntaxError> syntaxErrors = new ArrayList<SyntaxError>();
+    private final DocumentSnapshot snapshot;
 
-    public GroupParserWrapper(TokenStream input) {
+    public GroupParserWrapper(TokenStream input, DocumentSnapshot snapshot) {
         super(input);
+        this.snapshot = snapshot;
     }
 
     public List<SyntaxError> getSyntaxErrors() {
@@ -49,27 +59,9 @@ public class GroupParserWrapper extends GroupParser {
     public void displayRecognitionError(String[] tokenNames, RecognitionException e) {
         //String header = getErrorHeader(e);
         String message = getErrorMessage(e, tokenNames);
-        syntaxErrors.add(new SyntaxError(e, message));
+        syntaxErrors.add(new AntlrSyntaxErrorV3(snapshot, e.token, e, message, Severity.ERROR));
 
         super.displayRecognitionError(tokenNames, e);
     }
-
-    public static class SyntaxError {
-        private final RecognitionException exception;
-        private final String message;
-
-        public SyntaxError(RecognitionException exception, String message) {
-            this.exception = exception;
-            this.message = message;
-        }
-
-        public RecognitionException getException() {
-            return exception;
-        }
-
-        public String getMessage() {
-            return message;
-        }
-    }
-    
+   
 }

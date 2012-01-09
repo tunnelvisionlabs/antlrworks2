@@ -1,6 +1,6 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -30,6 +30,7 @@ package org.antlr.works.editor.grammar.parser;
 import java.util.ArrayList;
 import java.util.List;
 import org.antlr.grammar.v3.ANTLRParser;
+import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.runtime.IntStream;
 import org.antlr.runtime.MismatchedTokenException;
 import org.antlr.runtime.MissingTokenException;
@@ -46,14 +47,22 @@ import org.antlr.tool.GrammarAST;
 import org.antlr.tool.GrammarSyntaxMessage;
 import org.antlr.tool.Message;
 import org.antlr.tool.ToolMessage;
+import org.antlr.works.editor.shared.parser.AntlrSyntaxErrorV3;
+import org.antlr.works.editor.shared.parser.SyntaxError;
 import org.netbeans.spi.editor.hints.Severity;
 
+/**
+ *
+ * @author Sam Harwell
+ */
 public class ANTLRErrorProvidingParser extends ANTLRParser {
     
     private final List<SyntaxError> syntaxErrors = new ArrayList<SyntaxError>();
+    private final DocumentSnapshot snapshot;
 
-    public ANTLRErrorProvidingParser(TokenStream input) {
+    public ANTLRErrorProvidingParser(TokenStream input, DocumentSnapshot snapshot) {
         super(input);
+        this.snapshot = snapshot;
     }
 
     public List<SyntaxError> getSyntaxErrors() {
@@ -68,12 +77,17 @@ public class ANTLRErrorProvidingParser extends ANTLRParser {
     public void displayRecognitionError(String[] tokenNames, RecognitionException e) {
         //String header = getErrorHeader(e);
         String message = getErrorMessage(e, tokenNames);
-        syntaxErrors.add(new SyntaxError(e != null ? e.token : null, e, message, Severity.ERROR));
+        syntaxErrors.add(new AntlrSyntaxErrorV3(snapshot, e != null ? e.token : null, e, message, Severity.ERROR));
 
         super.displayRecognitionError(tokenNames, e);
     }
 
     public static final class ErrorListener implements ANTLRErrorListener {
+        private final DocumentSnapshot snapshot;
+
+        public ErrorListener(DocumentSnapshot snapshot) {
+            this.snapshot = snapshot;
+        }
 
         @Override
         public void info(String string) {
@@ -95,7 +109,7 @@ public class ANTLRErrorProvidingParser extends ANTLRParser {
                 if (parser == null)
                     return;
 
-                parser.syntaxErrors.add(new SyntaxError(syntaxMessage.offendingToken, syntaxMessage.exception, msg.toString(), Severity.ERROR));
+                parser.syntaxErrors.add(new AntlrSyntaxErrorV3(snapshot, syntaxMessage.offendingToken, syntaxMessage.exception, msg.toString(), Severity.ERROR));
             }
         }
 

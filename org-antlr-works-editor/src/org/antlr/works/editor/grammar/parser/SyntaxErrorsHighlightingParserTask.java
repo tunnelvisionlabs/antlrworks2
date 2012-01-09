@@ -1,6 +1,6 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -37,7 +37,6 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
-import org.antlr.netbeans.editor.text.OffsetRegion;
 import org.antlr.netbeans.editor.text.SnapshotPositionRegion;
 import org.antlr.netbeans.editor.text.TrackingPositionRegion;
 import org.antlr.netbeans.editor.text.VersionedDocument;
@@ -49,10 +48,9 @@ import org.antlr.netbeans.parsing.spi.ParserTaskDefinition;
 import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.netbeans.parsing.spi.ParserTaskProvider;
 import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
-import org.antlr.runtime.CommonToken;
-import org.antlr.runtime.RecognitionException;
 import org.antlr.works.editor.grammar.GrammarEditorKit;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
+import org.antlr.works.editor.shared.parser.SyntaxError;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.netbeans.spi.editor.hints.ErrorDescription;
 import org.netbeans.spi.editor.hints.ErrorDescriptionFactory;
@@ -85,44 +83,21 @@ public class SyntaxErrorsHighlightingParserTask implements ParserTask {
             Document document = model.getSnapshot().getVersionedDocument().getDocument();
             List<ErrorDescription> errors = new ArrayList<ErrorDescription>();
             for (SyntaxError syntaxError : syntaxErrors) {
-                CommonToken offendingToken = syntaxError.getOffendingToken() instanceof CommonToken ? (CommonToken)syntaxError.getOffendingToken() : null;
-                RecognitionException exception = syntaxError.getException();
-                String message = syntaxError.getMessage();
-
-                if (offendingToken == null && exception != null && exception.token instanceof CommonToken) {
-                    offendingToken = (CommonToken)exception.token;
-                }
-
-                // first try to get the specific location from a token
-                if (offendingToken != null) {
-                    int startOffset = offendingToken.getStartIndex();
-                    int endOffset = offendingToken.getStopIndex() + 1;
-                    if (startOffset < 0 || endOffset < startOffset) {
-                        continue;
-                    }
-
-                    startOffset = Math.min(startOffset, snapshot.length());
-                    endOffset = Math.min(endOffset, snapshot.length());
-                    OffsetRegion offsetRegion = OffsetRegion.fromBounds(startOffset, endOffset);
-                    TrackingPositionRegion trackingRegion = snapshot.createTrackingRegion(offsetRegion, TrackingPositionRegion.Bias.Forward);
-                    SnapshotPositionRegion region = trackingRegion.getRegion(latestSnapshot);
-
-                    try {
-                        ErrorDescription errorDescription = ErrorDescriptionFactory.createErrorDescription(syntaxError.getSeverity(), message, document, document.createPosition(region.getStart().getOffset()), document.createPosition(region.getEnd().getOffset()));
-                        errors.add(errorDescription);
-                        continue;
-                    } catch (BadLocationException ex) {
-                        Exceptions.printStackTrace(ex);
-                    }
-                }
-
-                int line = exception != null ? exception.line : -1;
-                if (line <= 0) {
+                SnapshotPositionRegion location = syntaxError.getLocation();
+                if (location == null) {
                     continue;
                 }
 
-                ErrorDescription errorDescription = ErrorDescriptionFactory.createErrorDescription(syntaxError.getSeverity(), message, document, line);
-                errors.add(errorDescription);
+                TrackingPositionRegion trackingRegion = snapshot.createTrackingRegion(location.getRegion(), TrackingPositionRegion.Bias.Forward);
+                SnapshotPositionRegion region = trackingRegion.getRegion(latestSnapshot);
+
+                String message = syntaxError.getMessage();
+                try {
+                    ErrorDescription errorDescription = ErrorDescriptionFactory.createErrorDescription(syntaxError.getSeverity(), message, document, document.createPosition(region.getStart().getOffset()), document.createPosition(region.getEnd().getOffset()));
+                    errors.add(errorDescription);
+                } catch (BadLocationException ex) {
+                    Exceptions.printStackTrace(ex);
+                }
             }
 
             HintsController.setErrors(document, "antlr3-syntax", errors);

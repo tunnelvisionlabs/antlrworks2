@@ -25,10 +25,9 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.antlr.works.editor.st4.parser;
+package org.antlr.works.editor.shared.parser;
 
-import org.antlr.runtime.RecognitionException;
-import org.antlr.runtime.Token;
+import org.antlr.netbeans.editor.text.SnapshotPositionRegion;
 import org.netbeans.spi.editor.hints.Severity;
 
 /**
@@ -36,24 +35,18 @@ import org.netbeans.spi.editor.hints.Severity;
  * @author Sam Harwell
  */
 public class SyntaxError {
-    private final Token offendingToken;
-    private final RecognitionException exception;
+    private final SnapshotPositionRegion location;
     private final String message;
     private final Severity severity;
 
-    public SyntaxError(Token offendingToken, RecognitionException exception, String message, Severity severity) {
-        this.offendingToken = offendingToken;
-        this.exception = exception;
+    public SyntaxError(SnapshotPositionRegion location, String message, Severity severity) {
+        this.location = location;
         this.message = message;
         this.severity = severity;
     }
 
-    public Token getOffendingToken() {
-        return offendingToken;
-    }
-
-    public RecognitionException getException() {
-        return exception;
+    public SnapshotPositionRegion getLocation() {
+        return location;
     }
 
     public String getMessage() {
