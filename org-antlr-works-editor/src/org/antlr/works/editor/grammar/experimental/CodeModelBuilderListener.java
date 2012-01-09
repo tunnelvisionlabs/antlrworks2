@@ -176,7 +176,7 @@ public class CodeModelBuilderListener extends BlankGrammarParserListener {
             String type = getText(context.type);
             Token name = context.name;
             SnapshotPositionRegion nameSpan = getSpan(context.name);
-            ParameterModel parameter = new ParameterModel(nameSpan, typeSpan, name.getText(), type);
+            ParameterModel parameter = new ParameterModel(nameSpan, typeSpan, name != null ? name.getText() : "?", type);
             models.add(parameter);
         }
     }
