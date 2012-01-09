@@ -1,6 +1,6 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -32,6 +32,7 @@ import java.util.List;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.netbeans.editor.text.OffsetRegion;
 import org.antlr.netbeans.editor.text.SnapshotPositionRegion;
+import org.antlr.netbeans.parsing.spi.ParserData;
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.Token;
 import org.antlr.v4.parse.ANTLRParser;
@@ -40,16 +41,17 @@ import org.antlr.v4.tool.ast.GrammarAST;
 import org.antlr.v4.tool.ast.GrammarRootAST;
 import org.antlr.works.editor.grammar.parser.CompiledModel;
 import org.antlr.works.editor.grammar.parser.CompiledModelV4;
+import org.antlr.works.editor.shared.fold.AbstractFoldScanner;
 
 /**
  *
  * @author Sam Harwell
  */
-public class GrammarFoldScannerV4 extends GrammarFoldScanner {
+public class GrammarFoldScannerV4 extends AbstractFoldScanner<CompiledModel> {
 
     @Override
-    protected List<FoldInfo> calculateFolds(CompiledModel baseResult) {
-        CompiledModelV4 result4 = (CompiledModelV4)baseResult;
+    protected List<FoldInfo> calculateFolds(ParserData<CompiledModel> baseResult) {
+        CompiledModelV4 result4 = (CompiledModelV4)baseResult.getData();
         DocumentSnapshot snapshot = result4.getSnapshot();
 
         final List<FoldInfo> folds = new ArrayList<FoldInfo>();

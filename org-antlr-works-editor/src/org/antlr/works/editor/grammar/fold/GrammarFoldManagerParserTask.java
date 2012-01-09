@@ -1,6 +1,6 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -46,6 +46,7 @@ import org.antlr.works.editor.grammar.GrammarEditorKit;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
 import org.antlr.works.editor.grammar.parser.CompiledModel;
 import org.antlr.works.editor.grammar.parser.CompiledModelV3;
+import org.antlr.works.editor.shared.fold.AbstractFoldScanner;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 
 /**
@@ -54,8 +55,8 @@ import org.netbeans.api.editor.mimelookup.MimeRegistration;
  */
 public class GrammarFoldManagerParserTask implements ParserTask {
 
-    private final GrammarFoldScanner v3 = new GrammarFoldScannerV3();
-    private final GrammarFoldScanner v4 = new GrammarFoldScannerV4();
+    private final AbstractFoldScanner<CompiledModel> v3 = new GrammarFoldScannerV3();
+    private final AbstractFoldScanner<CompiledModel> v4 = new GrammarFoldScannerV4();
 
     @Override
     public ParserTaskDefinition getDefinition() {
@@ -69,12 +70,11 @@ public class GrammarFoldManagerParserTask implements ParserTask {
 
         Future<ParserData<CompiledModel>> futureData = taskManager.getData(snapshot, component, GrammarParserDataDefinitions.COMPILED_MODEL);
         ParserData<CompiledModel> parserData = futureData.get();
-        CompiledModel model = parserData.getData();
-        GrammarFoldScanner scanner = getScanner(model);
-        scanner.run(model);
+        AbstractFoldScanner<CompiledModel> scanner = getScanner(parserData.getData());
+        scanner.run(parserData);
     }
 
-    private GrammarFoldScanner getScanner(CompiledModel model) {
+    private AbstractFoldScanner<CompiledModel> getScanner(CompiledModel model) {
         if (model instanceof CompiledModelV3) {
             return v3;
         } else {

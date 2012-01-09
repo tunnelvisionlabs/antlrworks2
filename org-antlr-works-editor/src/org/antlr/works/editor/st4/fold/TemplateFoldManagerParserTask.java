@@ -42,6 +42,7 @@ import org.antlr.netbeans.parsing.spi.ParserTaskDefinition;
 import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.netbeans.parsing.spi.ParserTaskProvider;
 import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
+import org.antlr.works.editor.shared.fold.AbstractFoldScanner;
 import org.antlr.works.editor.st4.StringTemplateEditorKit;
 import org.antlr.works.editor.st4.TemplateParserDataDefinitions;
 import org.antlr.works.editor.st4.parser.CompiledModel;
@@ -67,12 +68,11 @@ public class TemplateFoldManagerParserTask implements ParserTask {
 
         Future<ParserData<CompiledModel>> futureData = taskManager.getData(snapshot, component, TemplateParserDataDefinitions.COMPILED_MODEL);
         ParserData<CompiledModel> parserData = futureData.get();
-        CompiledModel model = parserData.getData();
-        TemplateFoldScanner scanner = getScanner(model);
-        scanner.run(model);
+        AbstractFoldScanner<CompiledModel> scanner = getScanner();
+        scanner.run(parserData);
     }
 
-    private TemplateFoldScanner getScanner(CompiledModel model) {
+    private TemplateFoldScanner getScanner() {
         return templateFoldScanner;
     }
 

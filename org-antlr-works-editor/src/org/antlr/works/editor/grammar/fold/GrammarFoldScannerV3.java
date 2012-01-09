@@ -1,6 +1,6 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -33,21 +33,23 @@ import org.antlr.grammar.v3.ANTLRParser;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.netbeans.editor.text.OffsetRegion;
 import org.antlr.netbeans.editor.text.SnapshotPositionRegion;
+import org.antlr.netbeans.parsing.spi.ParserData;
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.works.editor.grammar.parser.CompiledModel;
 import org.antlr.works.editor.grammar.parser.CompiledModelV3;
+import org.antlr.works.editor.shared.fold.AbstractFoldScanner;
 
 /**
  *
  * @author Sam Harwell
  */
-public class GrammarFoldScannerV3 extends GrammarFoldScanner {
+public class GrammarFoldScannerV3 extends AbstractFoldScanner<CompiledModel> {
 
     @Override
-    protected List<FoldInfo> calculateFolds(CompiledModel baseResult) {
-        CompiledModelV3 result3 = (CompiledModelV3)baseResult;
+    protected List<FoldInfo> calculateFolds(ParserData<CompiledModel> baseResult) {
+        CompiledModelV3 result3 = (CompiledModelV3)baseResult.getData();
         DocumentSnapshot snapshot = result3.getSnapshot();
 
         final List<FoldInfo> folds = new ArrayList<FoldInfo>();

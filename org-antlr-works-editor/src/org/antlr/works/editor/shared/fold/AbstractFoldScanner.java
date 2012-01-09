@@ -25,7 +25,7 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.antlr.works.editor.grammar.fold;
+package org.antlr.works.editor.shared.fold;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -38,7 +38,7 @@ import org.antlr.netbeans.editor.text.OffsetRegion;
 import org.antlr.netbeans.editor.text.SnapshotPositionRegion;
 import org.antlr.netbeans.editor.text.TrackingPositionRegion;
 import org.antlr.netbeans.editor.text.VersionedDocument;
-import org.antlr.works.editor.grammar.parser.CompiledModel;
+import org.antlr.netbeans.parsing.spi.ParserData;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.editor.fold.Fold;
 import org.netbeans.api.editor.fold.FoldType;
@@ -51,19 +51,19 @@ import org.openide.util.Exceptions;
  *
  * @author Sam Harwell
  */
-public abstract class GrammarFoldScanner {
+public abstract class AbstractFoldScanner<SemanticData> {
 
     @SuppressWarnings("fallthrough")
-    public void run(CompiledModel result) {
-        final VersionedDocument versionedDocument = result.getSnapshot().getVersionedDocument();
+    public void run(ParserData<SemanticData> parseResult) {
+        final VersionedDocument versionedDocument = parseResult.getSnapshot().getVersionedDocument();
         final FileObject fileObject = versionedDocument.getFileObject();
-        final GrammarFoldManager foldManager = GrammarFoldManager.getFoldManager(fileObject);
+        final AbstractFoldManager foldManager = AbstractFoldManager.getFoldManager(fileObject);
         if (foldManager == null) {
             return;
         }
 
         // calculate the folds
-        final List<FoldInfo> folds = calculateFolds(result);
+        final List<FoldInfo> folds = calculateFolds(parseResult);
 
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -78,8 +78,8 @@ public abstract class GrammarFoldScanner {
                 try{
                     FoldHierarchyTransaction transaction = operation.openTransaction();
                     synchronized (foldManager.currentFolds) {
-                        Collections.sort(foldManager.currentFolds, FoldComparator.INSTANCE);
-                        Collections.sort(folds, FoldInfoComparator.INSTANCE);
+                        Collections.sort(foldManager.currentFolds, FoldComparator.DEFAULT);
+                        Collections.sort(folds, FoldInfoComparator.DEFAULT);
 
                         List<Fold> foldsToKeep = new ArrayList<Fold>();
                         List<Fold> foldsToRemove = new ArrayList<Fold>();
@@ -92,7 +92,7 @@ public abstract class GrammarFoldScanner {
                             SnapshotPositionRegion existingRegion = new SnapshotPositionRegion(currentSnapshot, OffsetRegion.fromBounds(existingFold.getStartOffset(), existingFold.getEndOffset()));
                             FoldInfo existing = new FoldInfo(existingRegion, existingFold.getDescription());
                             FoldInfo next = folds.get(j);
-                            int compared = FoldInfoComparator.INSTANCE.compare(existing, next);
+                            int compared = FoldInfoComparator.DEFAULT.compare(existing, next);
                             if (compared == 0) {
                                 foldsToKeep.add(foldManager.currentFolds.get(i));
                                 i++;
@@ -142,11 +142,19 @@ public abstract class GrammarFoldScanner {
         });
     }
 
-    protected abstract List<FoldInfo> calculateFolds(CompiledModel result);
+    protected abstract List<FoldInfo> calculateFolds(ParserData<SemanticData> parseResult);
 
-    private static class FoldComparator implements Comparator<Fold> {
+    protected Comparator<Fold> getFoldComparator() {
+        return FoldComparator.DEFAULT;
+    }
 
-        public static final FoldComparator INSTANCE = new FoldComparator();
+    protected Comparator<FoldInfo> getFoldInfoComparator() {
+        return FoldInfoComparator.DEFAULT;
+    }
+
+    protected static class FoldComparator implements Comparator<Fold> {
+
+        public static final FoldComparator DEFAULT = new FoldComparator();
 
         @Override
         public int compare(Fold o1, Fold o2) {
@@ -161,9 +169,9 @@ public abstract class GrammarFoldScanner {
 
     }
 
-    private static class FoldInfoComparator implements Comparator<FoldInfo> {
+    protected static class FoldInfoComparator implements Comparator<FoldInfo> {
 
-        public static final FoldInfoComparator INSTANCE = new FoldInfoComparator();
+        public static final FoldInfoComparator DEFAULT = new FoldInfoComparator();
 
         @Override
         public int compare(FoldInfo o1, FoldInfo o2) {
@@ -183,10 +191,22 @@ public abstract class GrammarFoldScanner {
         private final String blockHint;
         private final String preview;
 
-        protected FoldInfo(@NonNull SnapshotPositionRegion region, @NonNull String blockHint) {
+        public FoldInfo(@NonNull SnapshotPositionRegion region, @NonNull String blockHint) {
             this.region = region;
             this.blockHint = blockHint;
             this.preview = region.getText();
+        }
+
+        public SnapshotPositionRegion getRegion() {
+            return region;
+        }
+
+        public String getBlockHint() {
+            return blockHint;
+        }
+
+        public String getPreview() {
+            return preview;
         }
 
         protected FoldInfo translateTo(@NonNull DocumentSnapshot snapshot) {

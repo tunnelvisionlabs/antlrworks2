@@ -1,6 +1,6 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -27,100 +27,24 @@
  */
 package org.antlr.works.editor.st4.fold;
 
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.WeakHashMap;
 import java.util.prefs.Preferences;
-import javax.swing.event.DocumentEvent;
-import javax.swing.text.Document;
+import org.antlr.works.editor.shared.fold.AbstractFoldManager;
 import org.antlr.works.editor.st4.StringTemplateEditorKit;
-import org.netbeans.api.editor.fold.Fold;
 import org.netbeans.api.editor.mimelookup.MimeLookup;
-import org.netbeans.spi.editor.fold.FoldHierarchyTransaction;
-import org.netbeans.spi.editor.fold.FoldManager;
 import org.netbeans.spi.editor.fold.FoldOperation;
-import org.openide.filesystems.FileObject;
-import org.openide.loaders.DataObject;
-import org.openide.loaders.DataObjectNotFoundException;
-import org.openide.util.Exceptions;
 
 /**
  *
  * @author Sam Harwell
  */
-public class TemplateFoldManager implements FoldManager {
-    private static final Map<DataObject, TemplateFoldManager> managers =
-        new WeakHashMap<DataObject, TemplateFoldManager>();
-
-    private FoldOperation operation;
-    final ArrayList<Fold> currentFolds = new ArrayList<Fold>();
-
-    public static TemplateFoldManager getFoldManager(FileObject file) {
-        try {
-            DataObject dataObject = DataObject.find(file);
-            synchronized (managers) {
-                TemplateFoldManager manager = managers.get(dataObject);
-                return manager;
-            }
-        } catch (DataObjectNotFoundException ex) {
-            Exceptions.printStackTrace(ex);
-            return null;
-        }
-    }
-
-    public FoldOperation getOperation() {
-        return operation;
-    }
+public class TemplateFoldManager extends AbstractFoldManager {
 
     @Override
     public void init(FoldOperation operation) {
-        this.operation = operation;
-
-        Document document = operation.getHierarchy().getComponent().getDocument();
-        Object dataObject = document.getProperty(Document.StreamDescriptionProperty);
-        if (dataObject instanceof DataObject) {
-            synchronized (managers) {
-                managers.put((DataObject)dataObject, this);
-            }
-        }
+        super.init(operation);
 
         Preferences preferences = MimeLookup.getLookup(StringTemplateEditorKit.TEMPLATE_MIME_TYPE).lookup(Preferences.class);
         //foldImportsPreset = prefs.getBoolean(SimpleValueNames.CODE_FOLDING_COLLAPSE_IMPORT, foldImportsPreset);
     }
 
-    @Override
-    public void initFolds(FoldHierarchyTransaction transaction) {
-    }
-
-    @Override
-    public void insertUpdate(DocumentEvent evt, FoldHierarchyTransaction transaction) {
-    }
-
-    @Override
-    public void removeUpdate(DocumentEvent evt, FoldHierarchyTransaction transaction) {
-    }
-
-    @Override
-    public void changedUpdate(DocumentEvent evt, FoldHierarchyTransaction transaction) {
-    }
-
-    @Override
-    public void removeEmptyNotify(Fold emptyFold) {
-        removeDamagedNotify(emptyFold);
-    }
-
-    @Override
-    public void removeDamagedNotify(Fold damagedFold) {
-        currentFolds.remove(damagedFold);
-    }
-
-    @Override
-    public void expandNotify(Fold expandedFold) {
-    }
-
-    @Override
-    public void release() {
-        operation = null;
-        currentFolds.clear();
-    }
 }
