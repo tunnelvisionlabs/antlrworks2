@@ -52,7 +52,7 @@ public class CompiledModelParserV3 extends CompiledModelParser {
     private CompiledFileModelV3 lastResult;
 
     @Override
-    public CompiledModelV3 parseImpl(ParserTaskManager taskManager, JTextComponent component, DocumentSnapshot snapshot)
+    protected CompiledModelV3 parseImpl(ParserTaskManager taskManager, JTextComponent component, DocumentSnapshot snapshot)
         throws InterruptedException, ExecutionException {
         Parameters.notNull("snapshot", snapshot);
 
