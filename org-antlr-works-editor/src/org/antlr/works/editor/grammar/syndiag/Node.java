@@ -1,7 +1,7 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Terence Parr
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Terence Parr
+ *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -51,6 +51,10 @@ import org.netbeans.modules.editor.NbEditorUtilities;
 import org.openide.text.Line;
 import org.openide.util.Parameters;
 
+/**
+ *
+ * @author Sam Harwell
+ */
 public class Node extends JComponent implements Element {
 
     private final String label;
@@ -75,6 +79,10 @@ public class Node extends JComponent implements Element {
         Dimension size = getLabelSize();
         setPreferredSize(size);
         enableEvents(AWTEvent.MOUSE_EVENT_MASK);
+    }
+
+    public String getLabel() {
+        return label;
     }
 
     protected static String getCategory(String label) {
@@ -113,7 +121,7 @@ public class Node extends JComponent implements Element {
             g.setColor(getForeground());
             int x = labelPaddingX;
             int y = labelPaddingY + m.getAscent();
-            g.drawString(label, x, y);
+            paintLabel(g, x, y);
         } finally {
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, prevAaHint);
             g2.setColor(previousColor);
@@ -146,6 +154,10 @@ public class Node extends JComponent implements Element {
 
             e.consume();
         }
+    }
+
+    protected void paintLabel(Graphics g, int x, int y) {
+        g.drawString(getLabel(), x, y);
     }
 
     protected final Dimension getLabelSize() {

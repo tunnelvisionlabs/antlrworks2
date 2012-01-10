@@ -1,7 +1,7 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Terence Parr
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Terence Parr
+ *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -68,6 +68,8 @@ import org.openide.windows.WindowManager;
 
 /**
  * Top component which displays something.
+ *
+ * @author Sam Harwell
  */
 @ConvertAsProperties(dtd = "-//org.antlr.works.editor.grammar.syndiag//SyntaxDiagram//EN",
                      autostore = false)
@@ -375,16 +377,21 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
                 }
             } else if (range) {
                 String label = "???";
+                Terminal terminal = null;
                 GrammarParser.rangeContext rangeContext = (GrammarParser.rangeContext)ctx.children.get(0);
                 if (rangeContext.children != null && rangeContext.children.size() == 3) {
                     Token start = (Token)((ParseTree.TerminalNode<?>)rangeContext.children.get(0)).getSymbol();
                     Token end = (Token)((ParseTree.TerminalNode<?>)rangeContext.children.get(2)).getSymbol();
                     if (start != null && end != null) {
-                        label = String.format("%s..%s", start.getText(), end.getText());
+                        terminal = new RangeTerminal(start.getText(), end.getText(), sourceSpan);
                     }
                 }
 
-                nodes.peek().add(new Terminal(label, sourceSpan));
+                if (terminal == null) {
+                    terminal = new Terminal(label, sourceSpan);
+                }
+
+                nodes.peek().add(terminal);
             } else if (notset) {
                 nodes.peek().add(new Terminal("~(...)", sourceSpan));
             } else {
