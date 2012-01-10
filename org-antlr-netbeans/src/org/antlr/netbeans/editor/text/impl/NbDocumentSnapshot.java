@@ -1,6 +1,6 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -261,6 +261,10 @@ public class NbDocumentSnapshot implements DocumentSnapshot {
 
         @Override
         public String toString() {
+            if (length() == 0) {
+                return "";
+            }
+
             StringBuilder builder = new StringBuilder(length());
             LineTextCache data = snapshot.textVersion.getLineData();
 
