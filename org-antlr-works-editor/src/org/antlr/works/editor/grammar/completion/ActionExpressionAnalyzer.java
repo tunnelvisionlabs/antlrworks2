@@ -1,6 +1,6 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -38,6 +38,8 @@ import org.antlr.works.editor.grammar.codemodel.RuleModel;
 import org.antlr.works.editor.grammar.experimental.BlankGrammarParserListener;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.actionExpressionContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.actionScopeExpressionContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.lexerRuleContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.parserRuleContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.ruleContext;
 import org.netbeans.api.annotations.common.NonNull;
 import org.openide.util.Parameters;
@@ -105,8 +107,17 @@ public class ActionExpressionAnalyzer extends BlankGrammarParserListener {
         }
     }
 
+    private Token getName(ruleContext rule) {
+        if (rule.getChild(0) instanceof parserRuleContext) {
+            return ((parserRuleContext)rule.getChild(0)).name;
+        } else if (rule.getChild(0) instanceof lexerRuleContext) {
+            return ((lexerRuleContext)rule.getChild(0)).name;
+        } else {
+            return null;
+        }
+    }
     private RuleModel getReferencedRule(ruleContext enclosingRule, Token reference, boolean followLabels) {
-        String enclosingRuleName = enclosingRule.name.start.getText();
+        String enclosingRuleName = getName(enclosingRule).getText();
         RuleModel ruleModel = fileModel.getRule(enclosingRuleName);
         RuleModel referencedRule = null;
 

@@ -44,7 +44,6 @@ import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.ParseTree.TerminalNode;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
 import org.antlr.works.editor.grammar.experimental.BlankGrammarParserListener;
@@ -54,9 +53,13 @@ import org.antlr.works.editor.grammar.experimental.GrammarParser.altListContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.alternativeContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.atomContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.ebnfSuffixContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.rewriteContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.lexerAltContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.lexerAltListContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.lexerAtomContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.lexerBlockContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.lexerRuleContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.parserRuleContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.ruleAltListContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.ruleContext;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
@@ -252,8 +255,7 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
         private final Deque<JComponent> nodes = new ArrayDeque<JComponent>();
 
         private Rule rule;
-        private boolean inRewrite;
-        private atomContext outermostAtom;
+        private ParserRuleContext<Token> outermostAtom;
 
         public SyntaxBuilderListener(int grammarType, DocumentSnapshot snapshot) {
             Parameters.notNull("snapshot", snapshot);
@@ -270,15 +272,30 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
          */
 
         @Override
-        public void enterRule(ruleContext ctx) {
+        public void enterRule(parserRuleContext ctx) {
             @SuppressWarnings("LocalVariableHidesMemberVariable")
-            Rule rule = new Rule(ctx.name.start.getText());
+            Rule rule = new Rule(ctx.name.getText());
             this.rule = rule;
             nodes.push(rule);
         }
 
         @Override
-        public void exitRule(ruleContext ctx) {
+        public void exitRule(parserRuleContext ctx) {
+            assert nodes.size() == 1;
+            this.rule = (Rule)nodes.pop();
+//            this.rule.setupElements();
+        }
+
+        @Override
+        public void enterRule(lexerRuleContext ctx) {
+            @SuppressWarnings("LocalVariableHidesMemberVariable")
+            Rule rule = new Rule(ctx.name.getText());
+            this.rule = rule;
+            nodes.push(rule);
+        }
+
+        @Override
+        public void exitRule(lexerRuleContext ctx) {
             assert nodes.size() == 1;
             this.rule = (Rule)nodes.pop();
 //            this.rule.setupElements();
@@ -299,12 +316,32 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
         }
 
         @Override
+        public void enterRule(lexerAltListContext ctx) {
+            enterBlock();
+        }
+
+        @Override
+        public void enterRule(lexerBlockContext ctx) {
+            enterBlock();
+        }
+
+        @Override
         public void exitRule(ruleAltListContext ctx) {
             exitBlock();
         }
 
         @Override
         public void exitRule(altListContext ctx) {
+            exitBlock();
+        }
+
+        @Override
+        public void exitRule(lexerAltListContext ctx) {
+            exitBlock();
+        }
+
+        @Override
+        public void exitRule(lexerBlockContext ctx) {
             exitBlock();
         }
 
@@ -318,32 +355,40 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
         }
 
         @Override
+        public void enterRule(lexerAltContext ctx) {
+            enterAlternative();
+        }
+
+        @Override
         public void exitRule(alternativeContext ctx) {
+            exitAlternative();
+        }
+
+        @Override
+        public void exitRule(lexerAltContext ctx) {
             exitAlternative();
         }
 
         /*
          * Don't want the body of the rewrite(s) in the syntax diagram
+         * TODO: handle special actions and label sections similarly
          */
-
-        @Override
-        public void enterRule(rewriteContext ctx) {
-            assert !inRewrite;
-            inRewrite = true;
-        }
-
-        @Override
-        public void exitRule(rewriteContext ctx) {
-            assert inRewrite;
-            inRewrite = false;
-        }
 
         /*
          * Actual elements (atoms only for a test)
          */
 
         @Override
+        public void enterRule(lexerAtomContext ctx) {
+            enterAtom(ctx);
+        }
+
+        @Override
         public void enterRule(atomContext ctx) {
+            enterAtom(ctx);
+        }
+
+        public void enterAtom(ParserRuleContext<Token> ctx) {
             if (outermostAtom != null) {
                 return;
             }
@@ -400,6 +445,13 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
         }
 
         @Override
+        public void exitRule(lexerAtomContext ctx) {
+            if (outermostAtom == ctx) {
+                outermostAtom = null;
+            }
+        }
+
+        @Override
         public void exitRule(atomContext ctx) {
             if (outermostAtom == ctx) {
                 outermostAtom = null;
@@ -412,10 +464,6 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
 
         @Override
         public void enterRule(ebnfSuffixContext ctx) {
-            if (inRewrite) {
-                return;
-            }
-
             Block block;
 
             switch (ctx.start.getType()) {

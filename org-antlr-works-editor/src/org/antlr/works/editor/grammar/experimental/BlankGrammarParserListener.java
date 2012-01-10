@@ -28,9 +28,6 @@
 */
 package org.antlr.works.editor.grammar.experimental;
 
-//import org.antlr.v4.tool.*;
-//import org.antlr.v4.tool.ast.*;
-
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
@@ -99,14 +96,17 @@ public class BlankGrammarParserListener implements GrammarParserListener {
 	@Override public void enterRule(GrammarParser.actionScopeNameContext ctx) { }
 	@Override public void exitRule(GrammarParser.actionScopeNameContext ctx) { }
 
-	@Override public void enterRule(GrammarParser.mode_Context ctx) { }
-	@Override public void exitRule(GrammarParser.mode_Context ctx) { }
+	@Override public void enterRule(GrammarParser.modeSpecContext ctx) { }
+	@Override public void exitRule(GrammarParser.modeSpecContext ctx) { }
 
 	@Override public void enterRule(GrammarParser.rulesContext ctx) { }
 	@Override public void exitRule(GrammarParser.rulesContext ctx) { }
 
 	@Override public void enterRule(GrammarParser.ruleContext ctx) { }
 	@Override public void exitRule(GrammarParser.ruleContext ctx) { }
+
+	@Override public void enterRule(GrammarParser.parserRuleContext ctx) { }
+	@Override public void exitRule(GrammarParser.parserRuleContext ctx) { }
 
 	@Override public void enterRule(GrammarParser.exceptionGroupContext ctx) { }
 	@Override public void exitRule(GrammarParser.exceptionGroupContext ctx) { }
@@ -129,8 +129,8 @@ public class BlankGrammarParserListener implements GrammarParserListener {
 	@Override public void enterRule(GrammarParser.throwsSpecContext ctx) { }
 	@Override public void exitRule(GrammarParser.throwsSpecContext ctx) { }
 
-	@Override public void enterRule(GrammarParser.locals_Context ctx) { }
-	@Override public void exitRule(GrammarParser.locals_Context ctx) { }
+	@Override public void enterRule(GrammarParser.localsSpecContext ctx) { }
+	@Override public void exitRule(GrammarParser.localsSpecContext ctx) { }
 
 	@Override public void enterRule(GrammarParser.ruleActionContext ctx) { }
 	@Override public void exitRule(GrammarParser.ruleActionContext ctx) { }
@@ -150,6 +150,39 @@ public class BlankGrammarParserListener implements GrammarParserListener {
 	@Override public void enterRule(GrammarParser.labeledAltContext ctx) { }
 	@Override public void exitRule(GrammarParser.labeledAltContext ctx) { }
 
+	@Override public void enterRule(GrammarParser.lexerRuleContext ctx) { }
+	@Override public void exitRule(GrammarParser.lexerRuleContext ctx) { }
+
+	@Override public void enterRule(GrammarParser.lexerRuleBlockContext ctx) { }
+	@Override public void exitRule(GrammarParser.lexerRuleBlockContext ctx) { }
+
+	@Override public void enterRule(GrammarParser.lexerAltListContext ctx) { }
+	@Override public void exitRule(GrammarParser.lexerAltListContext ctx) { }
+
+	@Override public void enterRule(GrammarParser.lexerAltContext ctx) { }
+	@Override public void exitRule(GrammarParser.lexerAltContext ctx) { }
+
+	@Override public void enterRule(GrammarParser.lexerElementsContext ctx) { }
+	@Override public void exitRule(GrammarParser.lexerElementsContext ctx) { }
+
+	@Override public void enterRule(GrammarParser.lexerElementContext ctx) { }
+	@Override public void exitRule(GrammarParser.lexerElementContext ctx) { }
+
+	@Override public void enterRule(GrammarParser.labeledLexerElementContext ctx) { }
+	@Override public void exitRule(GrammarParser.labeledLexerElementContext ctx) { }
+
+	@Override public void enterRule(GrammarParser.lexerBlockContext ctx) { }
+	@Override public void exitRule(GrammarParser.lexerBlockContext ctx) { }
+
+	@Override public void enterRule(GrammarParser.lexerActionsContext ctx) { }
+	@Override public void exitRule(GrammarParser.lexerActionsContext ctx) { }
+
+	@Override public void enterRule(GrammarParser.lexerActionContext ctx) { }
+	@Override public void exitRule(GrammarParser.lexerActionContext ctx) { }
+
+	@Override public void enterRule(GrammarParser.lexerActionExprContext ctx) { }
+	@Override public void exitRule(GrammarParser.lexerActionExprContext ctx) { }
+
 	@Override public void enterRule(GrammarParser.altListContext ctx) { }
 	@Override public void exitRule(GrammarParser.altListContext ctx) { }
 
@@ -165,9 +198,6 @@ public class BlankGrammarParserListener implements GrammarParserListener {
 	@Override public void enterRule(GrammarParser.labeledElementContext ctx) { }
 	@Override public void exitRule(GrammarParser.labeledElementContext ctx) { }
 
-	@Override public void enterRule(GrammarParser.treeSpecContext ctx) { }
-	@Override public void exitRule(GrammarParser.treeSpecContext ctx) { }
-
 	@Override public void enterRule(GrammarParser.ebnfContext ctx) { }
 	@Override public void exitRule(GrammarParser.ebnfContext ctx) { }
 
@@ -176,6 +206,9 @@ public class BlankGrammarParserListener implements GrammarParserListener {
 
 	@Override public void enterRule(GrammarParser.ebnfSuffixContext ctx) { }
 	@Override public void exitRule(GrammarParser.ebnfSuffixContext ctx) { }
+
+	@Override public void enterRule(GrammarParser.lexerAtomContext ctx) { }
+	@Override public void exitRule(GrammarParser.lexerAtomContext ctx) { }
 
 	@Override public void enterRule(GrammarParser.atomContext ctx) { }
 	@Override public void exitRule(GrammarParser.atomContext ctx) { }
@@ -207,68 +240,11 @@ public class BlankGrammarParserListener implements GrammarParserListener {
 	@Override public void enterRule(GrammarParser.elementOptionContext ctx) { }
 	@Override public void exitRule(GrammarParser.elementOptionContext ctx) { }
 
-	@Override public void enterRule(GrammarParser.rewriteContext ctx) { }
-	@Override public void exitRule(GrammarParser.rewriteContext ctx) { }
-
-	@Override public void enterRule(GrammarParser.predicatedRewriteContext ctx) { }
-	@Override public void exitRule(GrammarParser.predicatedRewriteContext ctx) { }
-
-	@Override public void enterRule(GrammarParser.nakedRewriteContext ctx) { }
-	@Override public void exitRule(GrammarParser.nakedRewriteContext ctx) { }
-
-	@Override public void enterRule(GrammarParser.rewriteAltContext ctx) { }
-	@Override public void exitRule(GrammarParser.rewriteAltContext ctx) { }
-
-	@Override public void enterRule(GrammarParser.rewriteTreeAltContext ctx) { }
-	@Override public void exitRule(GrammarParser.rewriteTreeAltContext ctx) { }
-
-	@Override public void enterRule(GrammarParser.rewriteTreeElementContext ctx) { }
-	@Override public void exitRule(GrammarParser.rewriteTreeElementContext ctx) { }
-
-	@Override public void enterRule(GrammarParser.rewriteTreeAtomContext ctx) { }
-	@Override public void exitRule(GrammarParser.rewriteTreeAtomContext ctx) { }
-
-	@Override public void enterRule(GrammarParser.rewriteTreeEbnfContext ctx) { }
-	@Override public void exitRule(GrammarParser.rewriteTreeEbnfContext ctx) { }
-
-	@Override public void enterRule(GrammarParser.rewriteEbnfSuffixContext ctx) { }
-	@Override public void exitRule(GrammarParser.rewriteEbnfSuffixContext ctx) { }
-
-	@Override public void enterRule(GrammarParser.rewriteTreeContext ctx) { }
-	@Override public void exitRule(GrammarParser.rewriteTreeContext ctx) { }
-
-	@Override public void enterRule(GrammarParser.rewriteTemplateContext ctx) { }
-	@Override public void exitRule(GrammarParser.rewriteTemplateContext ctx) { }
-
-	@Override public void enterRule(GrammarParser.rewriteTemplateRefContext ctx) { }
-	@Override public void exitRule(GrammarParser.rewriteTemplateRefContext ctx) { }
-
-	@Override public void enterRule(GrammarParser.rewriteIndirectTemplateHeadContext ctx) { }
-	@Override public void exitRule(GrammarParser.rewriteIndirectTemplateHeadContext ctx) { }
-
-	@Override public void enterRule(GrammarParser.rewriteTemplateArgsContext ctx) { }
-	@Override public void exitRule(GrammarParser.rewriteTemplateArgsContext ctx) { }
-
-	@Override public void enterRule(GrammarParser.rewriteTemplateArgContext ctx) { }
-	@Override public void exitRule(GrammarParser.rewriteTemplateArgContext ctx) { }
-
 	@Override public void enterRule(GrammarParser.idContext ctx) { }
 	@Override public void exitRule(GrammarParser.idContext ctx) { }
 
 	@Override public void enterRule(GrammarParser.qidContext ctx) { }
 	@Override public void exitRule(GrammarParser.qidContext ctx) { }
-
-	@Override public void enterRule(GrammarParser.alternativeEntryContext ctx) { }
-	@Override public void exitRule(GrammarParser.alternativeEntryContext ctx) { }
-
-	@Override public void enterRule(GrammarParser.elementEntryContext ctx) { }
-	@Override public void exitRule(GrammarParser.elementEntryContext ctx) { }
-
-	@Override public void enterRule(GrammarParser.ruleEntryContext ctx) { }
-	@Override public void exitRule(GrammarParser.ruleEntryContext ctx) { }
-
-	@Override public void enterRule(GrammarParser.blockEntryContext ctx) { }
-	@Override public void exitRule(GrammarParser.blockEntryContext ctx) { }
 
 	@Override public void enterEveryRule(ParserRuleContext<Token> ctx) { }
 	@Override public void exitEveryRule(ParserRuleContext<Token> ctx) { }

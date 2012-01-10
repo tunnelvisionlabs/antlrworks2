@@ -1,6 +1,6 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -48,7 +48,6 @@ public class LabelAnalyzer extends BlankGrammarParserListener {
 
     private Token enclosingRuleName;
     private boolean caretReached;
-    private boolean inRewrite;
     private boolean inAction;
 
     public LabelAnalyzer(RuleContext finalContext) {
@@ -75,10 +74,6 @@ public class LabelAnalyzer extends BlankGrammarParserListener {
         return caretReached;
     }
 
-    public final boolean isInRewrite() {
-        return inRewrite;
-    }
-
     public final boolean isInAction() {
         return inAction;
     }
@@ -89,9 +84,16 @@ public class LabelAnalyzer extends BlankGrammarParserListener {
     }
 
     @Override
-    public void enterRule(GrammarParser.ruleContext ctx) {
+    public void enterRule(GrammarParser.parserRuleContext ctx) {
         if (ctx.name != null) {
-            enclosingRuleName = ctx.name.start;
+            enclosingRuleName = ctx.name;
+        }
+    }
+
+    @Override
+    public void enterRule(GrammarParser.lexerRuleContext ctx) {
+        if (ctx.name != null) {
+            enclosingRuleName = ctx.name;
         }
     }
 
@@ -111,10 +113,6 @@ public class LabelAnalyzer extends BlankGrammarParserListener {
             return;
         }
 
-        if (isInRewrite()) {
-            return;
-        }
-
         if (!labels.containsKey(ctx.start.getText())) {
             labels.put(ctx.start.getText(), ctx.start);
         }
@@ -123,10 +121,6 @@ public class LabelAnalyzer extends BlankGrammarParserListener {
     @Override
     public void enterRule(GrammarParser.terminalContext ctx) {
         if (isCaretReached()) {
-            return;
-        }
-
-        if (isInRewrite()) {
             return;
         }
 
@@ -147,10 +141,6 @@ public class LabelAnalyzer extends BlankGrammarParserListener {
             return;
         }
 
-        if (isInRewrite()) {
-            return;
-        }
-
         if (isLabeledContext(ctx)) {
             return;
         }
@@ -160,26 +150,6 @@ public class LabelAnalyzer extends BlankGrammarParserListener {
                 unlabeledElements.put(ctx.start.getText(), ctx.start);
             }
         }
-    }
-
-    @Override
-    public void enterRule(GrammarParser.rewriteContext ctx) {
-        if (isCaretReached()) {
-            return;
-        }
-
-        inRewrite = true;
-    }
-
-    @Override
-    public void exitRule(GrammarParser.rewriteContext ctx) {
-        checkCaretReached(ctx);
-
-        if (isCaretReached()) {
-            return;
-        }
-
-        inRewrite = false;
     }
 
     @Override

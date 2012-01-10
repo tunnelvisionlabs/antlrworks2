@@ -34,7 +34,6 @@ import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.dfa.DFAState;
 import org.antlr.v4.runtime.misc.IntervalSet;
 import org.antlr.works.editor.grammar.experimental.GrammarLexer;
-import org.antlr.works.editor.grammar.experimental.GrammarParser;
 import org.netbeans.api.annotations.common.NonNull;
 import org.openide.util.Parameters;
 
@@ -304,12 +303,10 @@ public class CompletionParserATNSimulator extends ParserATNSimulator<Token> {
             // keywords
             add(GrammarLexer.OPTIONS);
             add(GrammarLexer.TOKENS);
-            add(GrammarLexer.SCOPE);
             add(GrammarLexer.IMPORT);
             add(GrammarLexer.FRAGMENT);
             add(GrammarLexer.LEXER);
             add(GrammarLexer.PARSER);
-            add(GrammarLexer.TREE);
             add(GrammarLexer.GRAMMAR);
             add(GrammarLexer.PROTECTED);
             add(GrammarLexer.PUBLIC);
@@ -324,6 +321,7 @@ public class CompletionParserATNSimulator extends ParserATNSimulator<Token> {
             // atoms
             add(GrammarLexer.RULE_REF);
             add(GrammarLexer.TOKEN_REF);
+            add(GrammarLexer.ID);
             // special
             add(GrammarLexer.ARG_ACTION_WORD);
             add(GrammarLexer.ACTION_REFERENCE);

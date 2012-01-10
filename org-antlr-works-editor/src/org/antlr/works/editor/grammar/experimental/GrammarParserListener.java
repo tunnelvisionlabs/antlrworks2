@@ -28,9 +28,6 @@
 */
 package org.antlr.works.editor.grammar.experimental;
 
-//import org.antlr.v4.tool.*;
-//import org.antlr.v4.tool.ast.*;
-
 import org.antlr.v4.runtime.tree.*;
 import org.antlr.v4.runtime.Token;
 
@@ -98,14 +95,17 @@ public interface GrammarParserListener extends ParseTreeListener<Token> {
 	void enterRule(GrammarParser.actionScopeNameContext ctx);
 	void exitRule(GrammarParser.actionScopeNameContext ctx);
 
-	void enterRule(GrammarParser.mode_Context ctx);
-	void exitRule(GrammarParser.mode_Context ctx);
+	void enterRule(GrammarParser.modeSpecContext ctx);
+	void exitRule(GrammarParser.modeSpecContext ctx);
 
 	void enterRule(GrammarParser.rulesContext ctx);
 	void exitRule(GrammarParser.rulesContext ctx);
 
 	void enterRule(GrammarParser.ruleContext ctx);
 	void exitRule(GrammarParser.ruleContext ctx);
+
+	void enterRule(GrammarParser.parserRuleContext ctx);
+	void exitRule(GrammarParser.parserRuleContext ctx);
 
 	void enterRule(GrammarParser.exceptionGroupContext ctx);
 	void exitRule(GrammarParser.exceptionGroupContext ctx);
@@ -128,8 +128,8 @@ public interface GrammarParserListener extends ParseTreeListener<Token> {
 	void enterRule(GrammarParser.throwsSpecContext ctx);
 	void exitRule(GrammarParser.throwsSpecContext ctx);
 
-	void enterRule(GrammarParser.locals_Context ctx);
-	void exitRule(GrammarParser.locals_Context ctx);
+	void enterRule(GrammarParser.localsSpecContext ctx);
+	void exitRule(GrammarParser.localsSpecContext ctx);
 
 	void enterRule(GrammarParser.ruleActionContext ctx);
 	void exitRule(GrammarParser.ruleActionContext ctx);
@@ -149,6 +149,39 @@ public interface GrammarParserListener extends ParseTreeListener<Token> {
 	void enterRule(GrammarParser.labeledAltContext ctx);
 	void exitRule(GrammarParser.labeledAltContext ctx);
 
+	void enterRule(GrammarParser.lexerRuleContext ctx);
+	void exitRule(GrammarParser.lexerRuleContext ctx);
+
+	void enterRule(GrammarParser.lexerRuleBlockContext ctx);
+	void exitRule(GrammarParser.lexerRuleBlockContext ctx);
+
+	void enterRule(GrammarParser.lexerAltListContext ctx);
+	void exitRule(GrammarParser.lexerAltListContext ctx);
+
+	void enterRule(GrammarParser.lexerAltContext ctx);
+	void exitRule(GrammarParser.lexerAltContext ctx);
+
+	void enterRule(GrammarParser.lexerElementsContext ctx);
+	void exitRule(GrammarParser.lexerElementsContext ctx);
+
+	void enterRule(GrammarParser.lexerElementContext ctx);
+	void exitRule(GrammarParser.lexerElementContext ctx);
+
+	void enterRule(GrammarParser.labeledLexerElementContext ctx);
+	void exitRule(GrammarParser.labeledLexerElementContext ctx);
+
+	void enterRule(GrammarParser.lexerBlockContext ctx);
+	void exitRule(GrammarParser.lexerBlockContext ctx);
+
+	void enterRule(GrammarParser.lexerActionsContext ctx);
+	void exitRule(GrammarParser.lexerActionsContext ctx);
+
+	void enterRule(GrammarParser.lexerActionContext ctx);
+	void exitRule(GrammarParser.lexerActionContext ctx);
+
+	void enterRule(GrammarParser.lexerActionExprContext ctx);
+	void exitRule(GrammarParser.lexerActionExprContext ctx);
+
 	void enterRule(GrammarParser.altListContext ctx);
 	void exitRule(GrammarParser.altListContext ctx);
 
@@ -164,9 +197,6 @@ public interface GrammarParserListener extends ParseTreeListener<Token> {
 	void enterRule(GrammarParser.labeledElementContext ctx);
 	void exitRule(GrammarParser.labeledElementContext ctx);
 
-	void enterRule(GrammarParser.treeSpecContext ctx);
-	void exitRule(GrammarParser.treeSpecContext ctx);
-
 	void enterRule(GrammarParser.ebnfContext ctx);
 	void exitRule(GrammarParser.ebnfContext ctx);
 
@@ -175,6 +205,9 @@ public interface GrammarParserListener extends ParseTreeListener<Token> {
 
 	void enterRule(GrammarParser.ebnfSuffixContext ctx);
 	void exitRule(GrammarParser.ebnfSuffixContext ctx);
+
+	void enterRule(GrammarParser.lexerAtomContext ctx);
+	void exitRule(GrammarParser.lexerAtomContext ctx);
 
 	void enterRule(GrammarParser.atomContext ctx);
 	void exitRule(GrammarParser.atomContext ctx);
@@ -206,66 +239,9 @@ public interface GrammarParserListener extends ParseTreeListener<Token> {
 	void enterRule(GrammarParser.elementOptionContext ctx);
 	void exitRule(GrammarParser.elementOptionContext ctx);
 
-	void enterRule(GrammarParser.rewriteContext ctx);
-	void exitRule(GrammarParser.rewriteContext ctx);
-
-	void enterRule(GrammarParser.predicatedRewriteContext ctx);
-	void exitRule(GrammarParser.predicatedRewriteContext ctx);
-
-	void enterRule(GrammarParser.nakedRewriteContext ctx);
-	void exitRule(GrammarParser.nakedRewriteContext ctx);
-
-	void enterRule(GrammarParser.rewriteAltContext ctx);
-	void exitRule(GrammarParser.rewriteAltContext ctx);
-
-	void enterRule(GrammarParser.rewriteTreeAltContext ctx);
-	void exitRule(GrammarParser.rewriteTreeAltContext ctx);
-
-	void enterRule(GrammarParser.rewriteTreeElementContext ctx);
-	void exitRule(GrammarParser.rewriteTreeElementContext ctx);
-
-	void enterRule(GrammarParser.rewriteTreeAtomContext ctx);
-	void exitRule(GrammarParser.rewriteTreeAtomContext ctx);
-
-	void enterRule(GrammarParser.rewriteTreeEbnfContext ctx);
-	void exitRule(GrammarParser.rewriteTreeEbnfContext ctx);
-
-	void enterRule(GrammarParser.rewriteEbnfSuffixContext ctx);
-	void exitRule(GrammarParser.rewriteEbnfSuffixContext ctx);
-
-	void enterRule(GrammarParser.rewriteTreeContext ctx);
-	void exitRule(GrammarParser.rewriteTreeContext ctx);
-
-	void enterRule(GrammarParser.rewriteTemplateContext ctx);
-	void exitRule(GrammarParser.rewriteTemplateContext ctx);
-
-	void enterRule(GrammarParser.rewriteTemplateRefContext ctx);
-	void exitRule(GrammarParser.rewriteTemplateRefContext ctx);
-
-	void enterRule(GrammarParser.rewriteIndirectTemplateHeadContext ctx);
-	void exitRule(GrammarParser.rewriteIndirectTemplateHeadContext ctx);
-
-	void enterRule(GrammarParser.rewriteTemplateArgsContext ctx);
-	void exitRule(GrammarParser.rewriteTemplateArgsContext ctx);
-
-	void enterRule(GrammarParser.rewriteTemplateArgContext ctx);
-	void exitRule(GrammarParser.rewriteTemplateArgContext ctx);
-
 	void enterRule(GrammarParser.idContext ctx);
 	void exitRule(GrammarParser.idContext ctx);
 
 	void enterRule(GrammarParser.qidContext ctx);
 	void exitRule(GrammarParser.qidContext ctx);
-
-	void enterRule(GrammarParser.alternativeEntryContext ctx);
-	void exitRule(GrammarParser.alternativeEntryContext ctx);
-
-	void enterRule(GrammarParser.elementEntryContext ctx);
-	void exitRule(GrammarParser.elementEntryContext ctx);
-
-	void enterRule(GrammarParser.ruleEntryContext ctx);
-	void exitRule(GrammarParser.ruleEntryContext ctx);
-
-	void enterRule(GrammarParser.blockEntryContext ctx);
-	void exitRule(GrammarParser.blockEntryContext ctx);
 }

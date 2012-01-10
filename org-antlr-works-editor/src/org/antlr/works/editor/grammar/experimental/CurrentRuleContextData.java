@@ -1,6 +1,6 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -28,6 +28,9 @@
 package org.antlr.works.editor.grammar.experimental;
 
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
+import org.antlr.v4.runtime.Token;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.lexerRuleContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.parserRuleContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.ruleContext;
 
 /**
@@ -62,10 +65,17 @@ public final class CurrentRuleContextData {
             return null;
         }
 
-        if (context.name == null || context.name.start == null) {
+        Token nameToken = null;
+        if (context.getChild(0) instanceof parserRuleContext) {
+            nameToken = ((parserRuleContext)context.getChild(0)).name;
+        } else if (context.getChild(0) instanceof lexerRuleContext) {
+            nameToken = ((lexerRuleContext)context.getChild(0)).name;
+        }
+
+        if (nameToken == null) {
             return null;
         }
 
-        return context.name.start.getText();
+        return nameToken.getText();
     }
 }

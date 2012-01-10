@@ -393,8 +393,6 @@ public final class GrammarCompletionQuery extends AsyncCompletionQuery {
 
             boolean possibleInAction;
             boolean definiteInAction;
-            boolean possibleInRewrite;
-            boolean definiteInRewrite = false;
             Map<RuleContext, CaretReachedException> parseTrees = null;
             CaretToken caretToken = null;
             int grammarType = -1;
@@ -486,7 +484,7 @@ public final class GrammarCompletionQuery extends AsyncCompletionQuery {
 
                     boolean hasActionConfig = false;
                     boolean hasNonActionConfig = false;
-                    boolean hasRewriteConfig = false;
+                    final boolean hasRewriteConfig = false;
                     boolean hasNonRewriteConfig = false;
 
                     if (parseTrees != null) {
@@ -510,7 +508,7 @@ public final class GrammarCompletionQuery extends AsyncCompletionQuery {
                             Deque<Integer> stateWorkList = new ArrayDeque<Integer>();
                             for (ATNConfig c : transitions.keySet()) {
                                 boolean currentActionConfig = false;
-                                boolean currentRewriteConfig = false;
+                                final boolean currentRewriteConfig = false;
                                 visited.clear();
                                 workList.clear();
                                 stateWorkList.clear();
@@ -531,8 +529,6 @@ public final class GrammarCompletionQuery extends AsyncCompletionQuery {
                                     int ruleIndex = parser.getATN().states.get(state).ruleIndex;
                                     if (ruleIndex == GrammarParser.RULE_actionBlock) {
                                         currentActionConfig = true;
-                                    } else if (ruleIndex == GrammarParser.RULE_rewrite) {
-                                        currentRewriteConfig = true;
                                     }
 
                                     if (currentActionConfig && currentRewriteConfig) {
@@ -542,7 +538,6 @@ public final class GrammarCompletionQuery extends AsyncCompletionQuery {
 
                                 hasActionConfig |= currentActionConfig;
                                 hasNonActionConfig |= !currentActionConfig;
-                                hasRewriteConfig |= currentRewriteConfig;
                                 hasNonRewriteConfig |= !currentRewriteConfig;
 
                                 for (Transition t : transitions.get(c)) {
@@ -574,12 +569,10 @@ public final class GrammarCompletionQuery extends AsyncCompletionQuery {
                         IntervalSet remainingKeywords = new IntervalSet();
                         remainingKeywords.add(GrammarLexer.OPTIONS);
                         remainingKeywords.add(GrammarLexer.TOKENS);
-                        remainingKeywords.add(GrammarLexer.SCOPE);
                         remainingKeywords.add(GrammarLexer.IMPORT);
                         remainingKeywords.add(GrammarLexer.FRAGMENT);
                         remainingKeywords.add(GrammarLexer.LEXER);
                         remainingKeywords.add(GrammarLexer.PARSER);
-                        remainingKeywords.add(GrammarLexer.TREE);
                         remainingKeywords.add(GrammarLexer.GRAMMAR);
                         remainingKeywords.add(GrammarLexer.PROTECTED);
                         remainingKeywords.add(GrammarLexer.PUBLIC);
@@ -693,8 +686,6 @@ public final class GrammarCompletionQuery extends AsyncCompletionQuery {
 
                             possibleInAction = labelAnalyzer.isInAction() || hasActionConfig;
                             definiteInAction = labelAnalyzer.isInAction() || (hasActionConfig && !hasNonActionConfig);
-                            possibleInRewrite = labelAnalyzer.isInRewrite() || hasRewriteConfig;
-                            definiteInRewrite = labelAnalyzer.isInRewrite() || (hasRewriteConfig && !hasNonRewriteConfig);
                             possibleKeyword |= !definiteInAction;
                             possibleDeclaration &= !definiteInAction;
                             possibleReference &= !definiteInAction;
@@ -710,7 +701,7 @@ public final class GrammarCompletionQuery extends AsyncCompletionQuery {
                                 }
                             }
 
-                            if (!inExpression && (possibleInAction || possibleInRewrite)) {
+                            if (!inExpression && possibleInAction) {
                                 if (!definiteInAction && labelAnalyzer.getEnclosingRuleName() != null) {
                                     CompletionItem item = new EnclosingRuleCompletionItem(labelAnalyzer.getEnclosingRuleName().getText());
                                     intermediateResults.put(item.getInsertPrefix().toString(), item);
@@ -719,13 +710,6 @@ public final class GrammarCompletionQuery extends AsyncCompletionQuery {
                                 for (Token label : labelAnalyzer.getLabels()) {
                                     CompletionItem item = new RewriteReferenceCompletionItem(label.getText(), true);
                                     intermediateResults.put(item.getInsertPrefix().toString(), item);
-                                }
-
-                                if (possibleInRewrite) {
-                                    for (Token implicit : labelAnalyzer.getUnlabeledElements()) {
-                                        CompletionItem item = new ActionReferenceCompletionItem(implicit.getText(), false);
-                                        intermediateResults.put(item.getInsertPrefix().toString(), item);
-                                    }
                                 }
 
                                 if (possibleInAction && !inExpression) {
@@ -767,15 +751,7 @@ public final class GrammarCompletionQuery extends AsyncCompletionQuery {
                                         intermediateResults.put("$text", new KeywordCompletionItem("$text"));
                                         intermediateResults.put("$start", new KeywordCompletionItem("$start"));
                                         intermediateResults.put("$stop", new KeywordCompletionItem("$stop"));
-                                        intermediateResults.put("$tree", new KeywordCompletionItem("$tree"));
-                                        intermediateResults.put("$st", new KeywordCompletionItem("$st"));
-                                        break;
-
-                                    case GrammarParser.TREE:
-                                        intermediateResults.put("$text", new KeywordCompletionItem("$text"));
-                                        intermediateResults.put("$start", new KeywordCompletionItem("$start"));
-                                        intermediateResults.put("$tree", new KeywordCompletionItem("$tree"));
-                                        intermediateResults.put("$st", new KeywordCompletionItem("$st"));
+                                        intermediateResults.put("$ctx", new KeywordCompletionItem("$ctx"));
                                         break;
 
                                     default:
@@ -789,8 +765,7 @@ public final class GrammarCompletionQuery extends AsyncCompletionQuery {
                                         intermediateResults.put("$start", new KeywordCompletionItem("$start"));
                                         intermediateResults.put("$stop", new KeywordCompletionItem("$stop"));
                                         intermediateResults.put("$int", new KeywordCompletionItem("$int"));
-                                        intermediateResults.put("$tree", new KeywordCompletionItem("$tree"));
-                                        intermediateResults.put("$st", new KeywordCompletionItem("$st"));
+                                        intermediateResults.put("$ctx", new KeywordCompletionItem("$ctx"));
                                         break;
                                     }
                                 }
@@ -808,7 +783,7 @@ public final class GrammarCompletionQuery extends AsyncCompletionQuery {
             }
 
             if (possibleReference) {
-                boolean tokenReferencesOnly = grammarType == GrammarParser.LEXER || definiteInRewrite;
+                boolean tokenReferencesOnly = grammarType == GrammarParser.LEXER;
 
                 // Add rules from the grammar
                 if (rules == null) {

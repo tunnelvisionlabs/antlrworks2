@@ -1,6 +1,6 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -44,8 +44,9 @@ import org.antlr.works.editor.grammar.codemodel.RuleModel;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.argActionParameterContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.grammarSpecContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.labeledElementContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.locals_Context;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.ruleContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.lexerRuleContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.localsSpecContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.parserRuleContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.ruleReturnsContext;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;
@@ -87,7 +88,7 @@ public class CodeModelBuilderListener extends BlankGrammarParserListener {
     }
 
     @Override
-    public void enterRule(ruleContext ctx) {
+    public void enterRule(parserRuleContext ctx) {
         labelUses = new HashMap<String, Collection<SnapshotPositionRegion>>();
         parameters = new ArrayList<ParameterModel>();
         returnValues = new ArrayList<ParameterModel>();
@@ -99,8 +100,31 @@ public class CodeModelBuilderListener extends BlankGrammarParserListener {
     }
 
     @Override
-    public void exitRule(ruleContext ctx) {
-        Token name = ctx.name.start;
+    public void exitRule(parserRuleContext ctx) {
+        Token name = ctx.name;
+        SnapshotPositionRegion nameSpan = getSpan(ctx.name);
+        SnapshotPositionRegion ruleSpan = getSpan(ctx);
+
+        Collection<LabelModel> labels = new ArrayList<LabelModel>();
+        for (Map.Entry<String, Collection<SnapshotPositionRegion>> labelUsage : labelUses.entrySet()) {
+            labels.add(new LabelModel(labelUsage.getKey(), labelUsage.getValue()));
+        }
+
+        RuleModel ruleModel = new RuleModel(ruleSpan, nameSpan, name.getText(), parameters, returnValues, locals, labels);
+        rules.add(ruleModel);
+    }
+
+    @Override
+    public void enterRule(lexerRuleContext ctx) {
+        labelUses = new HashMap<String, Collection<SnapshotPositionRegion>>();
+        parameters = new ArrayList<ParameterModel>();
+        returnValues = new ArrayList<ParameterModel>();
+        locals = new ArrayList<ParameterModel>();
+    }
+
+    @Override
+    public void exitRule(lexerRuleContext ctx) {
+        Token name = ctx.name;
         SnapshotPositionRegion nameSpan = getSpan(ctx.name);
         SnapshotPositionRegion ruleSpan = getSpan(ctx);
 
@@ -121,7 +145,7 @@ public class CodeModelBuilderListener extends BlankGrammarParserListener {
     }
 
     @Override
-    public void enterRule(locals_Context ctx) {
+    public void enterRule(localsSpecContext ctx) {
         if (ctx.values != null) {
             handleParameters(ctx.values.parameters_list, locals);
         }

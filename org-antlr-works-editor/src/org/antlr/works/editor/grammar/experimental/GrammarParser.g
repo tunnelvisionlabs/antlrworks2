@@ -64,8 +64,6 @@ tokens {
     RULEMODIFIERS;
     RULEACTIONS;
     BLOCK;
-    REWRITE_BLOCK;
-    REWRITE_SEQ;
     OPTIONAL;
     CLOSURE;
     POSITIVE_CLOSURE;
@@ -90,12 +88,11 @@ tokens {
     //
     LIST;
     ELEMENT_OPTIONS;      // TOKEN<options>
-    ST_RESULT;			  // distinguish between ST and tree rewrites
     RESULT;
-    ALT_REWRITE;		  // indicate ALT is rewritten
-    
-    DOWN_TOKEN;			  // AST node representing DOWN node in tree parser code gen
-    UP_TOKEN;
+
+    // lexer action stuff
+    LEXER_ALT_ACTION;
+    LEXER_ACTION_CALL; // ID(foo)
 }
 
 // Include the copyright in this source and also the generated source
@@ -129,29 +126,12 @@ tokens {
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 package org.antlr.works.editor.grammar.experimental;
-
-//import org.antlr.v4.tool.*;
-//import org.antlr.v4.tool.ast.*;
-}
-
-@members {
-//Stack paraphrases = new Stack();
-/** Affects tree construction; no SET collapsing if AST (ID|INT) would hide them from rewrite.
- *  Could use for just AST ops, but we can't see -> until after building sets.
-boolean buildAST;
- */
 }
 
 // The main entry point for parsing a V3 grammar from top to toe. This is
 // the method call from whence to obtain the AST for the parse.
 //
 grammarSpec
-//@after {
-//GrammarAST options = (GrammarAST)$tree.getFirstChildWithType(ANTLRParser.OPTIONS);
-//if ( options!=null ) {
-//	Grammar.setNodeOptions($tree, options);
-//}
-//}
     :
       // The grammar itself can have a documenation comment, which is the
       // first terminal in the file.
@@ -174,7 +154,7 @@ grammarSpec
 // constrained by some arbitrary order of declarations that nobody
 // can remember. In the next phase of the parse, we verify that these
 // constructs are valid, not repeated and so on.
-      /*sync*/ ( prequelConstruct /*sync*/ )*
+      ( prequelConstruct )*
 
 	  // We should now see at least one ANTLR EBNF style rule
 	  // declaration. If the rules are missing we will let the
@@ -182,42 +162,22 @@ grammarSpec
 	  //
 	  rules
 
-	  mode_*
+	  modeSpec*
 
       // And we force ANTLR to process everything it finds in the input
       // stream by specifying hte need to match End Of File before the
       // parse is complete.
       //
       EOF
-
-      // Having parsed everything in the file and accumulated the relevant
-      // subtrees, we can now rewrite everything into the main AST form
-      // that our tree walkers are expecting.
-      //
-
-      //-> ^(grammarType       // The grammar type is our root AST node
-      //       id              // We need to identify the grammar of course
-      //       DOC_COMMENT?    // We may or may not have a global documentation comment for the file
-      //       prequelConstruct* // The set of declarations we accumulated
-      //       rules           // And of course, we need the set of rules we discovered
-      //       mode*
-      //   )
 	;
 
 grammarType
-//@after {
-//	if ( $t!=null ) ((GrammarRootAST)$tree).grammarType = $t.type;
-//	else ((GrammarRootAST)$tree).grammarType=COMBINED;
-//}
-    :	(	t=LEXER g=GRAMMAR  //-> GRAMMAR<GrammarRootAST>[$g, "LEXER_GRAMMAR"]
+    :	(	t=LEXER g=GRAMMAR
 		| // A standalone parser specification
-		  	t=PARSER g=GRAMMAR //-> GRAMMAR<GrammarRootAST>[$g, "PARSER_GRAMMAR"]
-
-		| // A standalone tree parser specification
-		  	t=TREE g=GRAMMAR   //-> GRAMMAR<GrammarRootAST>[$g, "TREE_GRAMMAR"]
+		  	t=PARSER g=GRAMMAR
 
 		// A combined lexer and parser specification
-		| 	g=GRAMMAR          //-> GRAMMAR<GrammarRootAST>[$g, "COMBINED_GRAMMAR"]
+		| 	g=GRAMMAR
 		)
     ;
 
@@ -248,18 +208,11 @@ prequelConstruct
 
 // A list of options that affect analysis and/or code generation
 optionsSpec
-	:	OPTIONS (option SEMI)* RBRACE //-> ^(OPTIONS[$OPTIONS, "OPTIONS"] option+)
+	:	OPTIONS (option SEMI)* RBRACE
     ;
 
 option
     :   id ASSIGN/*^*/ optionValue
-/*
-    	{
-    	if ( $id.text.equals("output") ) {
-    		if ( $optionValue.text.equals("AST") ) buildAST = true;
-    	}
-    	}
-    	*/
     ;
 
 // ------------
@@ -290,13 +243,13 @@ optionValue
 // A list of grammars to which this grammar will delegate certain
 // parts of the parsing sequence - a set of imported grammars
 delegateGrammars
-	: IMPORT delegateGrammar (COMMA delegateGrammar)* SEMI //-> ^(IMPORT delegateGrammar+)
+	: IMPORT delegateGrammar (COMMA delegateGrammar)* SEMI
 	;
 
 // A possibly named grammar file that should be imported to this gramamr
 // and delgated to for the rules it specifies
 delegateGrammar
-    :   id ASSIGN/*^*/ id
+    :   id ASSIGN id
     |   id
     ;
 
@@ -307,13 +260,13 @@ delegateGrammar
  *  {tree} parser.
  */
 tokensSpec
-	: TOKENS tokenSpec+ RBRACE //-> ^(TOKENS tokenSpec+)
+	: TOKENS tokenSpec+ RBRACE
 	;
 
 tokenSpec
 	:	id
-		(	ASSIGN STRING_LITERAL	//-> ^(ASSIGN id STRING_LITERAL<TerminalAST>)
-		|							//-> id
+		(	ASSIGN STRING_LITERAL
+		|
 		)
 		SEMI
 	|	RULE_REF // INVALID! (an error alt)
@@ -407,7 +360,7 @@ ignored
 // sections, they are just passed on to the language target.
 /** Match stuff like @parser::members {int i;} */
 action
-	:	AT (actionScopeName COLONCOLON)? id actionBlock //-> ^(AT actionScopeName? id ACTION<ActionAST>)
+	:	AT (actionScopeName COLONCOLON)? id actionBlock
 	;
 
 /** Sometimes the scope names will collide with keywords; allow them as
@@ -415,32 +368,22 @@ action
  */
 actionScopeName
 	:	id
-	|	LEXER	//-> ID[$LEXER]
-    |   PARSER	//-> ID[$PARSER]
+	|	LEXER
+    |   PARSER
 	;
 
-mode_:	MODE id SEMI /*sync*/ (rule /*sync*/)+  /*-> ^(MODE id rule+)*/ ;
-
-rules
-    :	/*sync*/ (rule /*sync*/)*
-      // Rewrite with an enclosing node as this is good for counting
-      // the number of rules and an easy marker for the walker to detect
-      // that there are no rules.
-      //->^(RULES rule*)
+modeSpec
+    :	MODE id SEMI rule+
     ;
 
-//sync
-//@init {
-//	BitSet followSet = computeErrorRecoverySet();
-//	if ( input.LA(1)!=Token.EOF && !followSet.member(input.LA(1)) ) {
-//		reportError(new NoViableAltException("",0,0,input));
-//       	beginResync();
-//       	consumeUntil(input, followSet);
-//       	endResync();
-//	}
-//}
-//	:
-//	;
+rules
+    :	(rule)*
+    ;
+
+rule
+    :   parserRule
+    |   lexerRule
+    ;
 
 // The specification of an EBNF rule in ANTLR style, with all the
 // rule level parameters, declarations, actions, rewrite specs and so
@@ -451,15 +394,7 @@ rules
 // verification of the AST determine if things are repeated or if a
 // particular functional element is not valid in the context of the
 // grammar type, such as using returns in lexer rules and so on.
-rule
-//@init { paraphrases.push("matching a rule"); }
-//@after {
-//	paraphrases.pop();
-//	GrammarAST options = (GrammarAST)$tree.getFirstChildWithType(ANTLRParser.OPTIONS);
-//	if ( options!=null ) {
-//		Grammar.setNodeOptions($tree, options);
-//	}
-//}
+parserRule
     : // A rule may start with an optional documentation comment
       DOC_COMMENT?
 
@@ -473,7 +408,7 @@ rule
 	  // parser or lexer rules, the semantic verification phase will
 	  // reject any rules that make no sense, such as lexer rules in
 	  // a pure parser or tree parser.
-	  name=id
+	  name=RULE_REF
 
 	  // Immediately following the rulename, there may be a specification
 	  // of input parameters for the rule. We do not do anything with the
@@ -487,7 +422,7 @@ rule
 
 	  throwsSpec?
 
-	  locals_?
+	  localsSpec?
 
 	  // Now, before the rule specification itself, which is introduced
 	  // with a COLON, we may have zero or more configuration sections.
@@ -513,10 +448,6 @@ rule
       SEMI
 
       exceptionGroup
-
-      //-> ^( RULE<RuleAST> id DOC_COMMENT? ruleModifiers? ARG_ACTION<ActionAST>?
-      //		ruleReturns? throwsSpec? locals? rulePrequels? ruleBlock exceptionGroup*
-      //	  )
     ;
 
 // Many language targets support exceptions and the rule will
@@ -532,19 +463,15 @@ exceptionGroup
 // Specifies a handler for a particular type of exception
 // thrown by a rule
 exceptionHandler
-	: CATCH argActionBlock actionBlock //-> ^(CATCH ARG_ACTION<ActionAST> ACTION<ActionAST>)
+	: CATCH argActionBlock actionBlock
 	;
 
-// Specifies a block of code to run after the rule and any
-// expcetion blocks have exceuted.
 finallyClause
-	: FINALLY actionBlock //-> ^(FINALLY ACTION<ActionAST>)
+	: FINALLY actionBlock
 	;
 
 rulePrequels
-//@init { paraphrases.push("matching rule preamble"); }
-//@after { paraphrases.pop(); }
-	:	/*sync*/ (rulePrequel /*sync*/)* //-> rulePrequel*
+	:	(rulePrequel)*
 	;
 
 // An individual rule level configuration as referenced by the ruleActions
@@ -562,7 +489,7 @@ rulePrequel
 // as a single lexical action element, to be processed later.
 //
 ruleReturns
-	: RETURNS/*^*/ values=argActionParameters/*<ActionAST>*/
+	: RETURNS values=argActionParameters
 	;
 
 // --------------
@@ -577,11 +504,13 @@ ruleReturns
 // them.
 //
 throwsSpec
-    : THROWS qid (COMMA qid)* //-> ^(THROWS qid+)
+    : THROWS qid (COMMA qid)*
     ;
 
 // locals [Cat x, float g]
-locals_ : LOCALS/*^*/ values=argActionParameters/*<ActionAST>*/ ;
+localsSpec
+    :   LOCALS values=argActionParameters
+    ;
 
 // @ Sections are generally target language specific things
 // such as local variable declarations, code to run before the
@@ -593,7 +522,7 @@ locals_ : LOCALS/*^*/ values=argActionParameters/*<ActionAST>*/ ;
 //
 /** Match stuff like @init {int i;} */
 ruleAction
-	:	AT id actionBlock //-> ^(AT id ACTION<ActionAST>)
+	:	AT id actionBlock
 	;
 
 // A set of access modifiers that may be applied to rule declarations
@@ -602,7 +531,7 @@ ruleAction
 // semantic pass will throw out invalid combinations.
 //
 ruleModifiers
-    : ruleModifier+ //-> ^(RULEMODIFIERS ruleModifier+)
+    : ruleModifier+
     ;
 
 // An individual access modifier for a rule. The 'fragment' modifier
@@ -625,145 +554,118 @@ ruleModifier
 // use a separate rule so that the BLOCK node has start and stop
 // boundaries set correctly by rule post processing of rewrites.
 ruleBlock
-//@init {Token colon = input.LT(-1);}
-    :	ruleAltList //-> ^(BLOCK<BlockAST>[colon,"BLOCK"] ruleAltList)
+    :	ruleAltList
     ;
-  //  catch [ResyncToEndOfRuleBlock e] {
-  //  	// just resyncing; ignore error
-		//retval.tree = (GrammarAST)adaptor.errorNode(input, retval.start, input.LT(-1), null);
-  //  }
 
 ruleAltList
-	:	labeledAlt (OR labeledAlt)* //-> labeledAlt+
+	:	labeledAlt (OR labeledAlt)*
 	;
 	
 labeledAlt
-	:	alternative (POUND id /*{((AltAST)$alternative.tree).altLabel=$id.tree;}*/)?
-		//-> alternative
+	:	alternative (POUND id)?
 	;
-	
+
+lexerRule
+    : DOC_COMMENT? FRAGMENT?
+	  name=TOKEN_REF COLON lexerRuleBlock SEMI
+	;
+
+lexerRuleBlock
+    :	lexerAltList
+    ;
+
+lexerAltList
+	:	lexerAlt (OR lexerAlt)*
+	;
+
+lexerAlt
+	:	lexerElements
+		(	lexerActions
+		|
+		)
+	;
+
+lexerElements
+    :	lexerElement+
+    ;
+
+lexerElement
+	:	labeledLexerElement
+		(	ebnfSuffix
+		|
+		)
+	|	lexerAtom
+		(	ebnfSuffix
+		|
+		)
+	|	lexerBlock
+		(	ebnfSuffix
+		|
+		)
+	|	actionBlock QUESTION? // actions only allowed at end of outer alt actually,
+                              // but preds can be anywhere
+	;
+
+labeledLexerElement
+	:	id (ass=ASSIGN|ass=PLUS_ASSIGN)
+		(	lexerAtom
+		|	block
+		)
+	;
+
+lexerBlock
+ 	:	LPAREN lexerAltList RPAREN
+    ;
+
+// channel=HIDDEN, skip, more, mode(INSIDE), push(INSIDE), pop
+lexerActions
+	:	RARROW lexerAction (COMMA lexerAction)*
+	;
+
+lexerAction
+	:	id LPAREN lexerActionExpr RPAREN
+    |   id
+	;
+
+lexerActionExpr
+	:	ID
+	|	INT
+	;
+
 altList
-    :	alternative (OR alternative)* //-> alternative+
+    :	alternative (OR alternative)*
     ;
 
 // An individual alt with an optional rewrite clause for the
 // elements of the alt.
 alternative
-//@init { paraphrases.push("matching alternative"); }
-//@after { paraphrases.pop(); }
     :	elements
-    	(	rewrite //-> ^(ALT_REWRITE elements rewrite)
-    	|			//-> elements
-    	)
-    |	rewrite		//-> ^(ALT_REWRITE ^(ALT<AltAST> EPSILON) rewrite) // empty alt with rewrite
-    |				//-> ^(ALT<AltAST> EPSILON) // empty alt
+    |			// empty alt
     ;
 
 elements
-    : e+=element+ //-> ^(ALT<AltAST> $e+)
+    : e+=element+
     ;
 
 element
-//@init {
-//	paraphrases.push("looking for rule element");
-//	int m = input.mark();
-//}
-//@after { paraphrases.pop(); }
 	:	labeledElement
-		(	ebnfSuffix	//-> ^( ebnfSuffix ^(BLOCK<BlockAST>[$labeledElement.start,"BLOCK"] ^(ALT<AltAST> labeledElement ) ))
-		|				//-> labeledElement
+		(	ebnfSuffix
+		|
 		)
 	|	atom
-		(	ebnfSuffix	//-> ^( ebnfSuffix ^(BLOCK<BlockAST>[$atom.start,"BLOCK"] ^(ALT<AltAST> atom) ) )
-		|				//-> atom
+		(	ebnfSuffix
+		|
 		)
 	|	ebnf
-	|   actionBlock QUESTION? /*<ActionAST>*/ // SEMPRED is actionBlock followed by QUESTION
-	//|   SEMPRED //-> SEMPRED<PredAST>
-	|   treeSpec
-		(	ebnfSuffix	//-> ^( ebnfSuffix ^(BLOCK<BlockAST>[$treeSpec.start,"BLOCK"] ^(ALT<AltAST> treeSpec ) ) )
-		|				//-> treeSpec
-		)
+	|   actionBlock QUESTION? // SEMPRED is actionBlock followed by QUESTION
 	;
- //   catch [RecognitionException re] {
- //   	retval.tree = (GrammarAST)adaptor.errorNode(input, retval.start, input.LT(-1), re);
- //   	int ttype = input.get(input.range()).getType();
-	//    // look for anything that really belongs at the start of the rule minus the initial ID
- //   	if ( ttype==COLON || ttype==RETURNS || ttype==CATCH || ttype==FINALLY || ttype==AT ) {
-	//		RecognitionException missingSemi =
-	//			new v4ParserException("unterminated rule (missing ';') detected at '"+
-	//								  input.LT(1).getText()+" "+input.LT(2).getText()+"'", input);
-	//		reportError(missingSemi);
-	//		if ( ttype==CATCH || ttype==FINALLY ) {
-	//			input.seek(input.range()); // ignore what's before rule trailer stuff
-	//		}
-	//		if ( ttype==RETURNS || ttype==AT ) { // scan back looking for ID of rule header
-	//			int p = input.index();
-	//			Token t = input.get(p);
-	//			while ( t.getType()!=RULE_REF && t.getType()!=TOKEN_REF ) {
-	//				p--;
-	//				t = input.get(p);
-	//			}
-	//			input.seek(p);
-	//		}
-	//		throw new ResyncToEndOfRuleBlock(); // make sure it goes back to rule block level to recover
-	//	}
- //       reportError(re);
- //       recover(input,re);
-	//}
 
 labeledElement
 	:	label=id (ass=ASSIGN|ass=PLUS_ASSIGN)
-		(	atom						//-> ^($ass id atom)
-		|	block (op=ROOT|op=BANG)?	//-> {$op!=null}? ^($ass id ^($op block))
-										//->				^($ass id block)
-/*
-		|	{buildAST}? blockSet
-			{
-			RecognitionException e =
-				new v4ParserException("can't  '"+
-									  input.LT(1).getText()+" "+input.LT(2).getText()+"'", input);
-			reportError(missingSemi);
-			}
-*/
+		(	atom
+		|	block
 		)
 	;
-
-// Tree specifying alt
-// Tree grammars need to have alts that describe a tree structure they
-// will walk of course. Alts for trees therefore start with ^( XXX, which
-// says we will see a root node of XXX then DOWN etc
-treeSpec
-//@after {
-//	GrammarAST down = new DownAST(DOWN_TOKEN, $begin);
-//	GrammarAST up = new UpAST(UP_TOKEN, $begin);
-//	int i = 1; // skip root element
-//	GrammarAST p = (GrammarAST)$tree.getChild(i);
-//	while ( p.getType()==ACTION || p.getType()==SEMPRED ) {
-//		i++;
-//		p = (GrammarAST)$tree.getChild(i);
-//	}
-//	$tree.insertChild(i, down); // ADD DOWN
-//	i = $tree.getChildCount()-1;
-//	p = (GrammarAST)$tree.getChild(i);
-//	while ( p.getType()==ACTION || p.getType()==SEMPRED ) {
-//		i--;
-//		p = (GrammarAST)$tree.getChild(i);
-//	}
-//	if ( i+1 >= $tree.getChildCount() ) $tree.addChild(up);
-//   	else $tree.insertChild(i+1, up); // ADD UP
-//}
-    : begin=TREE_BEGIN
-         // Only a subset of elements are allowed to be a root node. However
-         // we allow any element to appear here and reject silly ones later
-         // when we walk the AST.
-         root=element
-         // After the tree root we get the usual suspects,
-         // all members of the element set.
-         (kids+=element)+
-      RPAREN
-      //-> ^( TREE_BEGIN<TreePatternAST> $root $kids+ )
-    ;
 
 // A block of gramamr structure optionally followed by standard EBNF
 // notation, or ANTLR specific notation. I.E. ? + ^ and so on
@@ -771,8 +673,8 @@ ebnf
     : block
       // And now we see if we have any of the optional suffixs and rewrite
       // the AST for this rule accordingly
-      (	blockSuffix	//-> ^(blockSuffix block)
-      |				//-> block
+      (	blockSuffix
+      |
       )
     ;
 
@@ -780,56 +682,44 @@ ebnf
 // sense only to ANTLR, in the context of a grammar block.
 blockSuffix
     : ebnfSuffix // Standard EBNF
-
-	  // ANTLR Specific Suffixes
-    | ROOT
-//    | IMPLIES   // We will change this to syn/sem pred in the next phase
-    | BANG
     ;
 
 ebnfSuffix
-	:	QUESTION	//-> OPTIONAL<OptionalBlockAST>[$start]
-  	|	STAR 		//-> CLOSURE<StarBlockAST>[$start]
-   	|	PLUS	 	//-> POSITIVE_CLOSURE<PlusBlockAST>[$start]
+	:	QUESTION
+  	|	STAR
+   	|	PLUS
 	;
 
-atom
-//@after {
-//	if ( $tree.getType()==DOT ) {
-//		GrammarAST options = (GrammarAST)$tree.getFirstChildWithType(ANTLRParser.OPTIONS);
-//		if ( options!=null ) {
-//			Grammar.setNodeOptions($tree, options);
-//		}
-//	}
-//}
-	:	// Qualified reference delegate.rule. This must be
-	    // lexically contiguous (no spaces either side of the DOT)
-	    // otherwise it is two references with a wildcard in between
-	    // and not a qualified reference.
-	    /*
-	    {
-	    	input.LT(1).getCharPositionInLine()+input.LT(1).getText().length()==
-	        input.LT(2).getCharPositionInLine() &&
-	        input.LT(2).getCharPositionInLine()+1==input.LT(3).getCharPositionInLine()
-	    }?
-	    id DOT ruleref -> ^(DOT id ruleref)
-	    
-    |
-    	*/
-        range (ROOT/*^*/ | BANG/*^*/)? // Range x..y - only valid in lexers
-	|	terminal (ROOT/*^*/ | BANG/*^*/)?
-    |   ruleref
-    |	notSet   (ROOT/*^*/|BANG/*^*/)?
+lexerAtom
+	:	range
+	|	terminal
+    |   RULE_REF
+    |	notSet
+    |	argActionBlock
 	|   // Wildcard '.' means any character in a lexer, any
 		// token in parser and any node or subtree in a tree parser
 		// Because the terminal rule is allowed to be the node
 		// specification for the start of a tree rule, we must
 		// later check that wildcard was not used for that.
-	    DOT elementOptions?	(astop=ROOT|astop=BANG)?
-	    //-> {astop!=null}?	^($astop ^(WILDCARD<TerminalAST>[$DOT] elementOptions?))
-	    //-> 					^(WILDCARD<TerminalAST>[$DOT] elementOptions?)
+	    DOT elementOptions?
+	;
+
+atom
+	:	// Qualified reference delegate.rule. This must be
+	    // lexically contiguous (no spaces either side of the DOT)
+	    // otherwise it is two references with a wildcard in between
+	    // and not a qualified reference.
+        range // Range x..y - only valid in lexers
+	|	terminal
+    |   ruleref
+    |	notSet
+	|   // Wildcard '.' means any character in a lexer, any
+		// token in parser and any node or subtree in a tree parser
+		// Because the terminal rule is allowed to be the node
+		// specification for the start of a tree rule, we must
+		// later check that wildcard was not used for that.
+	    DOT elementOptions?
     ;
-    //catch [RecognitionException re] { throw re; } // pass upwards to element
 
 // --------------------
 // Inverted element set
@@ -837,31 +727,17 @@ atom
 // A set of characters (in a lexer) or terminal tokens, if a parser,
 // that are then used to create the inverse set of them.
 notSet
-    : NOT setElement	//-> ^(NOT<NotAST>[$NOT] ^(SET<SetAST>[$setElement.start,"SET"] setElement))
-    | NOT blockSet		//-> ^(NOT<NotAST>[$NOT] blockSet)
+    : NOT setElement
+    | NOT blockSet
     ;
 
 blockSet
-//@init {
-//	Token t;
-//	boolean ebnf = false;
-//}
     :	LPAREN setElement (OR setElement)* RPAREN
-/*		{
-		t = input.LT(1);
-		ebnf = t!=null && (t.getType()==QUESTION || t.getType()==STAR || t.getType()==PLUS);
-	    }
-	    */
-		//-> ^(BLOCK<BlockAST>[$LPAREN,"BLOCK"] ^(ALT setElement)+ )
-/*
-		-> {ebnf}?	^(BLOCK<BlockAST>[$LPAREN,"BLOCK"] ^(ALT ^(SET[$LPAREN,"SET"] setElement+ )))
-		-> 			^(SET[$LPAREN,"SET"] setElement+ )
-*/
     ;
 
 setElement
-	:	TOKEN_REF<TerminalAST>
-	|	STRING_LITERAL<TerminalAST>
+	:	TOKEN_REF
+	|	STRING_LITERAL
 	|	range
 	;
 
@@ -873,17 +749,10 @@ setElement
 // of options, which apply only to that block.
 //
 block
-//@after {
-//GrammarAST options = (GrammarAST)$tree.getFirstChildWithType(ANTLRParser.OPTIONS);
-//if ( options!=null ) {
-//	Grammar.setNodeOptions($tree, options);
-//}
-//}
  	:	LPAREN
         ( optionsSpec? ra+=ruleAction* COLON )?
         altList
 		RPAREN
-      //-> ^(BLOCK<BlockAST>[$LPAREN,"BLOCK"] optionsSpec? $ra* altList )
     ;
 
 // ----------------
@@ -894,11 +763,7 @@ block
 //
 ruleref
     :	RULE_REF argActionBlock?
-		(	(op=ROOT|op=BANG)	//-> ^($op ^(RULE_REF ARG_ACTION<ActionAST>?))
-		|						//-> ^(RULE_REF ARG_ACTION<ActionAST>?)
-		)
     ;
-    //catch [RecognitionException re] { throw re; } // pass upwards to element
 
 // ---------------
 // Character Range
@@ -910,24 +775,18 @@ ruleref
 // error about any abuse of the .. operator.
 //
 range
-    : STRING_LITERAL<TerminalAST> RANGE<RangeAST>/*^*/ STRING_LITERAL<TerminalAST>
+    : STRING_LITERAL RANGE STRING_LITERAL
     ;
 
 terminal
-//@after {
-//GrammarAST options = (GrammarAST)$tree.getFirstChildWithType(ANTLRParser.ELEMENT_OPTIONS);
-//if ( options!=null ) {
-//	Grammar.setNodeOptions($tree, options);
-//}
-//}
-    :   TOKEN_REF elementOptions?		//-> ^(TOKEN_REF<TerminalAST> elementOptions?)
-	|   STRING_LITERAL elementOptions?	//-> ^(STRING_LITERAL<TerminalAST> elementOptions?)
+    :   TOKEN_REF elementOptions?
+	|   STRING_LITERAL elementOptions?
 	;
 
 // Terminals may be adorned with certain options when
 // reference in the grammar: TOK<,,,>
 elementOptions
-    : LT elementOption (COMMA elementOption)* GT //-> ^(ELEMENT_OPTIONS[$LT,"ELEMENT_OPTIONS"] elementOption+)
+    : LT elementOption (COMMA elementOption)* GT
     ;
 
 // WHen used with elements we can specify what the tree node type can
@@ -937,160 +796,19 @@ elementOption
       qid
 
     | // This format indicates option assignment
-      id ASSIGN/*^*/ (qid | STRING_LITERAL<TerminalAST>)
+      id ASSIGN (qid | STRING_LITERAL)
     ;
-
-rewrite
-	:	predicatedRewrite* nakedRewrite //-> predicatedRewrite* nakedRewrite
-	;
-
-predicatedRewrite
-	:	RARROW SEMPRED rewriteAlt
-		//-> {$rewriteAlt.isTemplate}? ^(ST_RESULT[$RARROW] SEMPRED<PredAST> rewriteAlt)
-		//-> ^(RESULT[$RARROW] SEMPRED<PredAST> rewriteAlt)
-	;
-
-nakedRewrite
-	:	RARROW rewriteAlt //-> {$rewriteAlt.isTemplate}? ^(ST_RESULT[$RARROW] rewriteAlt)
-	 					  //-> ^(RESULT[$RARROW] rewriteAlt)
-	;
-
-// distinguish between ST and tree rewrites; for ETC/EPSILON and trees,
-// rule altAndRewrite makes REWRITE root. for ST, we use ST_REWRITE
-rewriteAlt returns [boolean isTemplate]
-//options {backtrack=true;}
-    : // If we are not building templates, then we must be
-      // building ASTs or have rewrites in a grammar that does not
-      // have output=AST; options. If that is the case, we will issue
-      // errors/warnings in the next phase, so we just eat them here
-      rewriteTreeAlt
-
-	| // try to parse a template rewrite
-      rewriteTemplate /*{$isTemplate=true;}*/ // must be 2nd so "ACTION ..." matches as tree rewrite
-
-    | ETC
-
-    | /* empty rewrite */ //-> EPSILON
-    ;
-
-rewriteTreeAlt
-    :	rewriteTreeElement+ //-> ^(REWRITE_SEQ rewriteTreeElement+)
-    ;
-
-rewriteTreeElement
-	:	rewriteTreeAtom ebnfSuffix?
-	//|	rewriteTreeAtom ebnfSuffix //-> ^( ebnfSuffix ^(REWRITE_BLOCK ^(REWRITE_SEQ rewriteTreeAtom)) )
-	|   rewriteTree
-		(	ebnfSuffix
-			//-> ^(ebnfSuffix ^(REWRITE_BLOCK ^(REWRITE_SEQ rewriteTree)) )
-		|	//-> rewriteTree
-		)
-	|   rewriteTreeEbnf
-	;
-
-rewriteTreeAtom
-//@after {
-//GrammarAST options = (GrammarAST)$tree.getFirstChildWithType(ANTLRParser.OPTIONS);
-//if ( options!=null ) {
-//	Grammar.setNodeOptions($tree, options);
-//}
-//}
-    :   TOKEN_REF elementOptions? argActionBlock? //-> ^(TOKEN_REF<TerminalAST> elementOptions? ARG_ACTION<ActionAST>?) // for imaginary nodes
-    |   RULE_REF
-	|   STRING_LITERAL elementOptions?		  //-> ^(STRING_LITERAL<TerminalAST> elementOptions?)
-	|   DOLLAR id //-> LABEL[$DOLLAR,$id.text] // reference to a label in a rewrite rule
-	|	actionBlock/*<ActionAST>*/
-	;
-
-rewriteTreeEbnf
-//@init {
-//    Token firstToken = input.LT(1);
-//}
-//@after {
-//	$rewriteTreeEbnf.tree.getToken().setLine(firstToken.getLine());
-//	$rewriteTreeEbnf.tree.getToken().setCharPositionInLine(firstToken.getCharPositionInLine());
-//}
-	:	lp=LPAREN rewriteTreeAlt RPAREN rewriteEbnfSuffix
-		//-> ^(rewriteEbnfSuffix ^(REWRITE_BLOCK[$lp,"REWRITE_BLOCK"] rewriteTreeAlt))
-	;
-
-rewriteEbnfSuffix
-	:	QUESTION	//-> OPTIONAL[$start]
-  	|	STAR 		//-> CLOSURE[$start]
-	;
-
-rewriteTree
-	:	TREE_BEGIN rewriteTreeAtom rewriteTreeElement* RPAREN
-		//-> ^(TREE_BEGIN rewriteTreeAtom rewriteTreeElement* )
-	;
-
-/** Build a tree for a template rewrite:
-      ^(TEMPLATE (ID|ACTION) ^(ARGLIST ^(ARG ID ACTION) ...) )
-    ID can be "template" keyword.  If first child is ACTION then it's
-    an indirect template ref
-
-    -> foo(a={...}, b={...})
-    -> ({string-e})(a={...}, b={...})  // e evaluates to template name
-    -> {%{$ID.text}} // create literal template from string (done in ActionTranslator)
-	-> {st-expr} // st-expr evaluates to ST
- */
-rewriteTemplate
-	:   // -> template(a={...},...) "..."    inline template
-		TEMPLATE LPAREN rewriteTemplateArgs RPAREN
-		( str=DOUBLE_QUOTE_STRING_LITERAL | str=DOUBLE_ANGLE_STRING_LITERAL )
-		//-> ^(TEMPLATE[$TEMPLATE,"TEMPLATE"] rewriteTemplateArgs? $str)
-
-	|	// -> foo(a={...}, ...)
-		rewriteTemplateRef
-
-	|	// -> ({expr})(a={...}, ...)
-		rewriteIndirectTemplateHead
-
-	|	// -> {...}
-		actionBlock/*<ActionAST>*/
-	;
-
-/** -> foo(a={...}, ...) */
-rewriteTemplateRef
-	:	id LPAREN rewriteTemplateArgs RPAREN
-		//-> ^(TEMPLATE[$LPAREN,"TEMPLATE"] id rewriteTemplateArgs?)
-	;
-
-/** -> ({expr})(a={...}, ...) */
-rewriteIndirectTemplateHead
-	:	lp=LPAREN actionBlock RPAREN LPAREN rewriteTemplateArgs RPAREN
-		//-> ^(TEMPLATE[$lp,"TEMPLATE"] ACTION<ActionAST> rewriteTemplateArgs?)
-	;
-
-rewriteTemplateArgs
-	:	rewriteTemplateArg (COMMA rewriteTemplateArg)*
-		//-> ^(ARGLIST rewriteTemplateArg+)
-	|
-	;
-
-rewriteTemplateArg
-	:   id ASSIGN actionBlock //-> ^(ARG[$ASSIGN] id ACTION<ActionAST>)
-	;
 
 // The name of the grammar, and indeed some other grammar elements may
 // come through to the parser looking like a rule reference or a token
 // reference, hence this rule is used to pick up whichever it is and rewrite
 // it as a generic ID token.
 id
-//@init { paraphrases.push("looking for an identifier"); }
-//@after { paraphrases.pop(); }
-    : RULE_REF  //->ID[$RULE_REF]
-    | TOKEN_REF //->ID[$TOKEN_REF]
-    | TEMPLATE  //->ID[$TEMPLATE] // keyword
+    : RULE_REF
+    | TOKEN_REF
+    | TEMPLATE // keyword
     ;
 
 qid
-//@init { paraphrases.push("looking for a qualified identifier"); }
-//@after { paraphrases.pop(); }
-	:	id (DOT id)* //-> ID[$qid.start, $text]
+	:	id (DOT id)*
 	;
-
-alternativeEntry : alternative EOF ; // allow gunit to call alternative and see EOF afterwards
-elementEntry : element EOF ;
-ruleEntry : rule EOF ;
-blockEntry : block EOF ;

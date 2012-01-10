@@ -40,7 +40,7 @@ import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
 import org.antlr.works.editor.grammar.experimental.BlankGrammarParserListener;
 import org.antlr.works.editor.grammar.experimental.GrammarParser;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.argActionParameterContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.locals_Context;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.localsSpecContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.ruleContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.ruleReturnsContext;
 import org.antlr.works.editor.shared.AbstractParseTreeSemanticHighlighter;
@@ -129,7 +129,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
                     returnValueDeclarations.add(ctx.name);
                     break;
 
-                case GrammarParser.RULE_locals_:
+                case GrammarParser.RULE_localsSpec:
                     localsDeclarations.add(ctx.name);
                     break;
 
@@ -164,14 +164,14 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
         }
 
         @Override
-        public void enterRule(locals_Context ctx) {
-            memberContext.push(GrammarParser.RULE_locals_);
+        public void enterRule(localsSpecContext ctx) {
+            memberContext.push(GrammarParser.RULE_localsSpec);
         }
 
         @Override
-        public void exitRule(locals_Context ctx) {
+        public void exitRule(localsSpecContext ctx) {
             int context = memberContext.pop();
-            assert context == GrammarParser.RULE_locals_;
+            assert context == GrammarParser.RULE_localsSpec;
         }
     }
 
