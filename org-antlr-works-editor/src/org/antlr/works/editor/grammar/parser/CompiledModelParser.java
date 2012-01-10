@@ -38,6 +38,7 @@ import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;
+import org.openide.util.Exceptions;
 
 /**
  *
@@ -55,6 +56,7 @@ public abstract class CompiledModelParser {
                 results.addResult(data);
             }
         } catch (ExecutionException ex) {
+            Exceptions.printStackTrace(ex);
         }
     }
 
