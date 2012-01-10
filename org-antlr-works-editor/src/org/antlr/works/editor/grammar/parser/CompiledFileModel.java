@@ -42,7 +42,9 @@ import org.openide.util.Parameters;
  */
 public abstract class CompiledFileModel {
 
+    @NonNull
     private final FileObject fileObject;
+    @NullAllowed
     private final CommonToken[] tokens;
 
     public CompiledFileModel(@NonNull FileObject fileObject, @NullAllowed CommonToken[] tokens) {
@@ -60,6 +62,7 @@ public abstract class CompiledFileModel {
         return tokens;
     }
 
+    @NonNull
     public abstract List<? extends SyntaxError> getSyntaxErrors();
 
 }

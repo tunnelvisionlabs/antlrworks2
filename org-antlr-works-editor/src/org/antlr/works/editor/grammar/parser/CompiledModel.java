@@ -1,6 +1,6 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -28,6 +28,7 @@
 package org.antlr.works.editor.grammar.parser;
 
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
+import org.netbeans.api.annotations.common.NonNull;
 import org.openide.util.Parameters;
 
 /**
@@ -36,20 +37,25 @@ import org.openide.util.Parameters;
  */
 public abstract class CompiledModel {
 
+    @NonNull
     private final DocumentSnapshot snapshot;
+    @NonNull
     private final CompiledFileModel result;
 
-    public CompiledModel(DocumentSnapshot snapshot, CompiledFileModel result) {
+    public CompiledModel(@NonNull DocumentSnapshot snapshot, @NonNull CompiledFileModel result) {
+        Parameters.notNull("snapshot", snapshot);
         Parameters.notNull("result", result);
 
         this.snapshot = snapshot;
         this.result = result;
     }
 
+    @NonNull
     public DocumentSnapshot getSnapshot() {
         return snapshot;
     }
 
+    @NonNull
     public CompiledFileModel getResult() {
         return result;
     }

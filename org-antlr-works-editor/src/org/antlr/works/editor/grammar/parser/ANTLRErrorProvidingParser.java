@@ -49,6 +49,7 @@ import org.antlr.tool.Message;
 import org.antlr.tool.ToolMessage;
 import org.antlr.works.editor.shared.parser.AntlrSyntaxErrorV3;
 import org.antlr.works.editor.shared.parser.SyntaxError;
+import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.spi.editor.hints.Severity;
 
 /**
@@ -65,6 +66,7 @@ public class ANTLRErrorProvidingParser extends ANTLRParser {
         this.snapshot = snapshot;
     }
 
+    @NonNull
     public List<SyntaxError> getSyntaxErrors() {
         return syntaxErrors;
     }
