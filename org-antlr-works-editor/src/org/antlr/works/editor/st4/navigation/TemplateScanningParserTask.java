@@ -68,12 +68,16 @@ public class TemplateScanningParserTask implements ParserTask {
 
         if (requestedData.contains(TemplateParserDataDefinitions.NAVIGATOR_ROOT)) {
             Future<ParserData<CompiledModel>> futureData = taskManager.getData(snapshot, component, TemplateParserDataDefinitions.COMPILED_MODEL);
-            ParserData<CompiledModel> parserData = futureData.get();
-            CompiledModel model = parserData.getData();
-            TemplateScanner scanner = getScanner(model);
-            Description description = scanner.scan(model);
-            BaseParserData<Description> data = new BaseParserData<Description>(TemplateParserDataDefinitions.NAVIGATOR_ROOT, snapshot, description);
-            results.addResult(data);
+            ParserData<CompiledModel> parserData = futureData != null ? futureData.get() : null;
+            CompiledModel model = parserData != null ? parserData.getData() : null;
+            if (model != null) {
+                TemplateScanner scanner = getScanner(model);
+                Description description = scanner.scan(model);
+                if (description != null) {
+                    BaseParserData<Description> data = new BaseParserData<Description>(TemplateParserDataDefinitions.NAVIGATOR_ROOT, snapshot, description);
+                    results.addResult(data);
+                }
+            }
         }
     }
 

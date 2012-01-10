@@ -1,6 +1,6 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -71,12 +71,16 @@ public class RuleScanningParserTask implements ParserTask {
 
         if (requestedData.contains(GrammarParserDataDefinitions.NAVIGATOR_ROOT)) {
             Future<ParserData<CompiledModel>> futureData = taskManager.getData(snapshot, component, GrammarParserDataDefinitions.COMPILED_MODEL);
-            ParserData<CompiledModel> parserData = futureData.get();
-            CompiledModel model = parserData.getData();
-            RuleScanner scanner = getScanner(model);
-            Description description = scanner.scan(model);
-            BaseParserData<Description> data = new BaseParserData<Description>(GrammarParserDataDefinitions.NAVIGATOR_ROOT, snapshot, description);
-            results.addResult(data);
+            ParserData<CompiledModel> parserData = futureData != null ? futureData.get() : null;
+            CompiledModel model = parserData != null ? parserData.getData() : null;
+            if (model != null) {
+                RuleScanner scanner = getScanner(model);
+                Description description = scanner.scan(model);
+                if (description != null) {
+                    BaseParserData<Description> data = new BaseParserData<Description>(GrammarParserDataDefinitions.NAVIGATOR_ROOT, snapshot, description);
+                    results.addResult(data);
+                }
+            }
         }
     }
 
