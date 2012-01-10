@@ -41,7 +41,10 @@ import org.antlr.netbeans.parsing.spi.ParserData;
 import org.antlr.netbeans.parsing.spi.ParserDataEvent;
 import org.antlr.netbeans.parsing.spi.ParserDataListener;
 import org.antlr.netbeans.parsing.spi.ParserTaskManager;
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.ParseTree.TerminalNode;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
 import org.antlr.works.editor.grammar.experimental.BlankGrammarParserListener;
@@ -352,9 +355,12 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
             }
 
             boolean wildcard = ctx.start.getType() == GrammarParser.DOT;
-            boolean reference = ctx.children != null && !ctx.children.isEmpty()
+            boolean hasChild = ctx.children != null && !ctx.children.isEmpty();
+            boolean reference = hasChild
                 && (ctx.children.get(0) instanceof GrammarParser.terminalContext
                 || ctx.children.get(0) instanceof GrammarParser.rulerefContext);
+            boolean range = hasChild && ctx.children.get(0) instanceof GrammarParser.rangeContext;
+            boolean notset = hasChild && ctx.children.get(0) instanceof GrammarParser.notSetContext;
 
             if (wildcard || reference) {
                 String text = ctx.start.getText();
@@ -367,6 +373,20 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
                 } else {
                     nodes.peek().add(new Terminal(text, sourceSpan));
                 }
+            } else if (range) {
+                String label = "???";
+                GrammarParser.rangeContext rangeContext = (GrammarParser.rangeContext)ctx.children.get(0);
+                if (rangeContext.children != null && rangeContext.children.size() == 3) {
+                    Token start = (Token)((ParseTree.TerminalNode<?>)rangeContext.children.get(0)).getSymbol();
+                    Token end = (Token)((ParseTree.TerminalNode<?>)rangeContext.children.get(2)).getSymbol();
+                    if (start != null && end != null) {
+                        label = String.format("%s..%s", start.getText(), end.getText());
+                    }
+                }
+
+                nodes.peek().add(new Terminal(label, sourceSpan));
+            } else if (notset) {
+                nodes.peek().add(new Terminal("~(...)", sourceSpan));
             } else {
                 nodes.peek().add(new Terminal("???", sourceSpan));
             }
