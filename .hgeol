@@ -1,0 +1,13 @@
+[repository]
+native=LF
+
+[patterns]
+**.java = native
+**.g = native
+**.g4 = native
+**.stg = native
+**.st = native
+**.text = native
+**.xml = native
+**.properties = native
+**.mf = native
