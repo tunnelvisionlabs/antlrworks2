@@ -5,6 +5,7 @@ native=LF
 **.java = native
 **.g = native
 **.g4 = native
+**.tokens = native
 **.stg = native
 **.st = native
 **.text = native
