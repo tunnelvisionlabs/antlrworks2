@@ -346,7 +346,7 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
         }
 
         /*
-         * alternative is fairly straightforward
+         * alternative (parser) and lexerAlt (lexer) are fairly straightforward
          */
 
         @Override
@@ -370,8 +370,7 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
         }
 
         /*
-         * Don't want the body of the rewrite(s) in the syntax diagram
-         * TODO: handle special actions and label sections similarly
+         * TODO: handle special actions and label sections similarly (was rewrites)
          */
 
         /*
