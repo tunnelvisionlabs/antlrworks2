@@ -2490,7 +2490,7 @@ public class GrammarParser extends Parser {
 			switch ( getInterpreter().adaptivePredict(_input,58,_ctx) ) {
 				case 1:
 					{
-					setState(697); match(POUND);
+					setState(697); match(RARROW);
 					setState(699); id();
 					}
 					break;
@@ -4566,7 +4566,7 @@ public class GrammarParser extends Parser {
 		"\u02a8\u02a6\1\0\0\0\u02a9G\1\0\0\0\u02aa\u02ab\3J%\0\u02abI\1\0\0\0\u02ac"+
 		"\u02b4\3L&\0\u02ae\u02b0\5+\0\0\u02b0\u02b3\3L&\0\u02b2\u02ae\1\0\0\0"+
 		"\u02b3\u02b6\1\0\0\0\u02b4\u02b2\1\0\0\0\u02b4\u02b5\1\0\0\0\u02b5K\1"+
-		"\0\0\0\u02b6\u02b4\1\0\0\0\u02b7\u02bd\3f\63\0\u02b9\u02bb\5\61\0\0\u02bb"+
+		"\0\0\0\u02b6\u02b4\1\0\0\0\u02b7\u02bd\3f\63\0\u02b9\u02bb\5#\0\0\u02bb"+
 		"\u02be\3\u008aE\0\u02bd\u02b9\1\0\0\0\u02bd\u02be\1\0\0\0\u02beM\1\0\0"+
 		"\0\u02bf\u02c2\5\5\0\0\u02c1\u02bf\1\0\0\0\u02c1\u02c2\1\0\0\0\u02c2\u02c5"+
 		"\1\0\0\0\u02c3\u02c6\5\17\0\0\u02c5\u02c3\1\0\0\0\u02c5\u02c6\1\0\0\0"+
