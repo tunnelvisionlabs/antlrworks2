@@ -100,8 +100,9 @@ public class CompletionParserATNSimulator extends ParserATNSimulator<Token> {
 		boolean greedy = decState.isGreedy;
 		SimulatorState previous = initialState;
 
+        PredictionContextCache contextCache = new PredictionContextCache(dfa.isContextSensitive());
 		while (true) { // while more work
-            CodeCompletionSimulatorState nextState = computeReachSet(dfa, previous, t, greedy);
+            CodeCompletionSimulatorState nextState = computeReachSet(dfa, previous, t, greedy, contextCache);
             if (nextState == null) throw noViableAlt(input, outerContext, previous.s0.configs, startIndex);
             DFAState D = nextState.s0;
             ATNConfigSet reach = nextState.s0.configs;
@@ -111,6 +112,19 @@ public class CompletionParserATNSimulator extends ParserATNSimulator<Token> {
                 D.isAcceptState = true;
 //                D.configs.uniqueAlt = predictedAlt;
                 D.prediction = predictedAlt;
+
+                if (optimize_ll1
+                    && input.index() == startIndex
+                    && nextState.outerContext == nextState.remainingOuterContext
+                    && dfa.decision != 0
+                    && greedy
+                    && !D.configs.hasSemanticContext())
+                {
+                    if (t >= 0 && t <= Short.MAX_VALUE) {
+                        int key = (dfa.decision << 16) + t;
+                        LL1Table.put(key, predictedAlt);
+                    }
+                }
 
                 if (useContext && always_try_local_context) {
                     retry_with_context_indicates_no_conflict++;
@@ -141,9 +155,31 @@ public class CompletionParserATNSimulator extends ParserATNSimulator<Token> {
 							}
 						}
 						else {
-							if ( debug ) System.out.println("RETRY with outerContext="+outerContext);
+                            int ambigIndex = input.index();
 
-							reportAttemptingFullContext(dfa, reach, startIndex, input.index());
+                            if ( D.isAcceptState && D.configs.hasSemanticContext() ) {
+                                int nalts = decState.getNumberOfTransitions();
+                                List<DFAState.PredPrediction> predPredictions =
+                                    predicateDFAState(D, D.configs, outerContext, nalts);
+                                IntervalSet conflictingAlts = getConflictingAltsFromConfigSet(D.configs);
+                                if ( D.predicates.size() < conflictingAlts.size() ) {
+                                    reportInsufficientPredicates(dfa, startIndex, ambigIndex,
+                                                                    conflictingAlts,
+                                                                    decState,
+                                                                    getPredsForAmbigAlts(conflictingAlts, D.configs, nalts),
+                                                                    D.configs,
+                                                                    false);
+                                }
+                                input.seek(startIndex);
+                                predictedAlt = evalSemanticContext(predPredictions, outerContext, true);
+                                if ( predictedAlt!=ATN.INVALID_ALT_NUMBER ) {
+                                    return predictedAlt;
+                                }
+                            }
+
+                            if ( debug ) System.out.println("RETRY with outerContext="+outerContext);
+
+                            reportAttemptingFullContext(dfa, reach, startIndex, ambigIndex);
 							input.seek(startIndex);
 							dfa.setContextSensitive(true);
 							return predictATN(dfa, input, outerContext, true);
@@ -191,7 +227,7 @@ public class CompletionParserATNSimulator extends ParserATNSimulator<Token> {
 												 false);
 				}
 				input.seek(startIndex);
-				predictedAlt = evalSemanticContext(predPredictions, outerContext);
+                predictedAlt = evalSemanticContext(predPredictions, outerContext, false);
 				if ( predictedAlt!=ATN.INVALID_ALT_NUMBER ) {
 					return predictedAlt;
 				}
@@ -207,19 +243,12 @@ public class CompletionParserATNSimulator extends ParserATNSimulator<Token> {
 	}
 
     @Override
-	public boolean closure(@NonNull ATNConfig config,
-						   @NonNull ATNConfigSet configs,
-						   boolean greedy,
-						   @NonNull Set<ATNConfig> closureBusy,
-						   boolean collectPredicates,
-						   boolean hasMoreContexts,
-						   int depth)
-	{
-        return super.closure(config, configs, greedy, closureBusy, collectPredicates, hasMoreContexts, depth);
+    protected boolean closure(ATNConfigSet configs, ATNConfigSet reach, PredictionContextCache contextCache, boolean contextSensitiveDfa, boolean greedy, boolean collectPredicates, boolean hasMoreContext) {
+        return super.closure(configs, reach, contextCache, contextSensitiveDfa, greedy, collectPredicates, hasMoreContext);
     }
 
     @Override
-    protected CodeCompletionSimulatorState computeReachSet(DFA dfa, SimulatorState previous, int t, boolean greedy) {
+    protected CodeCompletionSimulatorState computeReachSet(DFA dfa, SimulatorState previous, int t, boolean greedy, PredictionContextCache contextCache) {
 		final boolean useContext = previous.useContext;
 		RuleContext remainingGlobalContext = previous.remainingOuterContext;
 		List<ATNConfig> closureConfigs = new ArrayList<ATNConfig>(previous.s0.configs);
@@ -228,10 +257,9 @@ public class CompletionParserATNSimulator extends ParserATNSimulator<Token> {
         LinkedHashMap<ATNConfig, List<Transition>> transitions = null;
         boolean stepIntoGlobal;
         do {
-            stepIntoGlobal = false;
             boolean hasMoreContext = !useContext || remainingGlobalContext != null;
+            ATNConfigSet reachIntermediate = new ATNConfigSet(!useContext, mergeATNConfigs);
             int ncl = closureConfigs.size();
-            stateReachLoop:
             for (int ci=0; ci<ncl; ci++) { // TODO: foreach
                 ATNConfig c = closureConfigs.get(ci);
                 if ( debug ) System.out.println("testing "+getTokenName(t)+" at "+c.toString());
@@ -256,12 +284,13 @@ public class CompletionParserATNSimulator extends ParserATNSimulator<Token> {
                             configTransitions.add(trans);
                         }
 
-                        Set<ATNConfig> closureBusy = new HashSet<ATNConfig>(); //new ATNConfigSet(mergeATNConfigs);
-                        final boolean collectPredicates = false;
-                        stepIntoGlobal |= closure(new ATNConfig(c, target), reach, greedy, closureBusy, collectPredicates, hasMoreContext, 0);
+                        reachIntermediate.add(new ATNConfig(c, target));
                     }
                 }
             }
+
+            final boolean collectPredicates = false;
+            stepIntoGlobal = closure(reachIntermediate, reach, contextCache, dfa.isContextSensitive(), greedy, collectPredicates, hasMoreContext);
 
             if (previous.useContext && stepIntoGlobal) {
                 reach.clear();

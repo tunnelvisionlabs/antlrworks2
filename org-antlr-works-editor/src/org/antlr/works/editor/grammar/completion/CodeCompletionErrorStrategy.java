@@ -28,12 +28,10 @@
 package org.antlr.works.editor.grammar.completion;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Set;
-import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.DefaultErrorStrategy;
+import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenStream;
@@ -41,6 +39,7 @@ import org.antlr.v4.runtime.atn.ATNConfig;
 import org.antlr.v4.runtime.atn.ATNConfigSet;
 import org.antlr.v4.runtime.atn.ATNState;
 import org.antlr.v4.runtime.atn.PredictionContext;
+import org.antlr.v4.runtime.atn.PredictionContextCache;
 import org.antlr.v4.runtime.atn.Transition;
 import org.antlr.v4.runtime.misc.IntervalSet;
 
@@ -121,24 +120,25 @@ public class CodeCompletionErrorStrategy extends DefaultErrorStrategy {
             int stateNumber = recognizer.getContext().s;
             ATNState state = interp.atn.states.get(stateNumber);
 
+            PredictionContext context = PredictionContext.fromRuleContext(recognizer.getContext());
+            ATNConfigSet intermediate = new ATNConfigSet(true, true);
             ATNConfigSet closure = new ATNConfigSet(true, true);
             for (int i = 0; i < state.getNumberOfTransitions(); i++) {
                 Transition transition = state.transition(i);
                 if (transition.isEpsilon()) {
                     ATNState target = transition.target;
-                    ATNConfig config = new ATNConfig(target, i + 1, PredictionContext.fromRuleContext(recognizer.getContext()));
-                    Set<ATNConfig> closureBusy = new HashSet<ATNConfig>();
-                    interp.closure(config, closure, true, closureBusy, false, true, 0);
+                    ATNConfig config = new ATNConfig(target, i + 1, context);
+                    intermediate.add(config);
                 }
             }
+
+            interp.closure(intermediate, closure, PredictionContextCache.UNCACHED_LOCAL, false, true, false, true);
 
             if (!state.onlyHasEpsilonTransitions()) {
                 closure.add(new ATNConfig(state, 1, PredictionContext.fromRuleContext(recognizer.getContext())));
             }
 
-            ATNConfigSet reach = new ATNConfigSet(true, true);
             LinkedHashMap<ATNConfig, List<Transition>> transitions = null;
-
             int ncl = closure.size();
             for (int ci = 0; ci < ncl; ci++) { // TODO: foreach
                 ATNConfig c = closure.get(ci);
@@ -160,9 +160,6 @@ public class CodeCompletionErrorStrategy extends DefaultErrorStrategy {
                         }
 
                         configTransitions.add(trans);
-
-                        Set<ATNConfig> closureBusy = new HashSet<ATNConfig>();
-                        interp.closure(new ATNConfig(c, target), reach, true, closureBusy, false, true, 0);
                     }
                 }
             }
