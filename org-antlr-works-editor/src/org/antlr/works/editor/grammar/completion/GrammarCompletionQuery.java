@@ -247,7 +247,9 @@ public final class GrammarCompletionQuery extends AsyncCompletionQuery {
                 }
             }
         } catch (Exception ex) {
-            Exceptions.printStackTrace(ex);
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.log(Level.FINE, "An exception occurred while processing a completion query.", ex);
+            }
         } finally {
             resultSet.finish();
         }

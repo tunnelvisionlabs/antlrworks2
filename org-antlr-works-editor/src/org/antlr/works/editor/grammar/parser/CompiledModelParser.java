@@ -46,7 +46,7 @@ import org.netbeans.api.annotations.common.NullAllowed;
  * @author Sam Harwell
  */
 public abstract class CompiledModelParser {
-    // -J-Dorg.antlr.works.editor.grammar.parser.CompiledModelParser.level=WARNING
+    // -J-Dorg.antlr.works.editor.grammar.parser.CompiledModelParser.level=FINE
     private static final Logger LOGGER = Logger.getLogger(CompiledModelParser.class.getName());
 
     public void parse(ParserTaskManager taskManager, JTextComponent component, DocumentSnapshot snapshot, Collection<ParserDataDefinition<?>> requestedData, ParserResultHandler results)
@@ -59,8 +59,8 @@ public abstract class CompiledModelParser {
                 results.addResult(data);
             }
         } catch (ExecutionException ex) {
-            if (LOGGER.isLoggable(Level.WARNING)) {
-                LOGGER.log(Level.WARNING, "An error occurred while parsing.", ex);
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.log(Level.FINE, "An error occurred while parsing.", ex);
             }
         }
     }

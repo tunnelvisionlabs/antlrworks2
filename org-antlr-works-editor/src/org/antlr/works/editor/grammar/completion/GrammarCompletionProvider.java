@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.BadLocationException;
@@ -261,11 +262,18 @@ public class GrammarCompletionProvider implements CompletionProvider {
         Description rootDescription = null;
         Future<ParserData<Description>> futureNavigatorRootData = taskManager.getData(snapshot, GrammarParserDataDefinitions.NAVIGATOR_ROOT, EnumSet.of(ParserDataOptions.SYNCHRONOUS));
         try {
-            rootDescription = futureNavigatorRootData.get().getData();
+            ParserData<Description> data = futureNavigatorRootData.get();
+            if (data != null) {
+                rootDescription = data.getData();
+            }
         } catch (InterruptedException ex) {
-            Exceptions.printStackTrace(ex);
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.log(Level.FINE, "An exception occurred while parsing navigator data.", ex);
+            }
         } catch (ExecutionException ex) {
-            Exceptions.printStackTrace(ex);
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.log(Level.FINE, "An exception occurred while parsing navigator data.", ex);
+            }
         }
 
         if (rootDescription != null) {

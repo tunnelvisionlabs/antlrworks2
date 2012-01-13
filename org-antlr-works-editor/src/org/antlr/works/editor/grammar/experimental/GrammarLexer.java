@@ -144,7 +144,7 @@ public class GrammarLexer extends Lexer {
 	public void ID_action(ParserRuleContext<?> _localctx, int actionIndex) {
 		switch ( actionIndex ) {
 			case 4 : 
-							if ( Character.isUpperCase(getText().charAt(0)) ) type =  TOKEN_REF;
+							if ( Character.isUpperCase(getInputStream().substring(tokenStartCharIndex, tokenStartCharIndex).charAt(0)) ) type =  TOKEN_REF;
 							else type =  RULE_REF;
 							 break;
 		}
