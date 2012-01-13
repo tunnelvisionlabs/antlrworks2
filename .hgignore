@@ -2,5 +2,7 @@ syntax: regexp
 ^build$
 /build$
 ^nbproject/private$
+^nbproject/genfiles\.properties$
 /nbproject/private$
+/nbproject/genfiles\.properties$
 ^dist$
