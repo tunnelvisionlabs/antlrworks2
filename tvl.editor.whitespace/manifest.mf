@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module: org.tvl.netbeans.editor.whitespace
+OpenIDE-Module-Localizing-Bundle: org/tvl/netbeans/editor/whitespace/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0
+
