@@ -50,7 +50,6 @@ import org.antlr.works.editor.shared.parser.SyntaxError;
 import org.antlr.works.editor.st4.TemplateParserDataDefinitions;
 import org.netbeans.api.annotations.common.NonNull;
 import org.openide.filesystems.FileObject;
-import org.openide.util.Exceptions;
 import org.openide.util.Parameters;
 import org.stringtemplate.v4.compiler.CompiledST;
 import org.stringtemplate.v4.compiler.GroupLexer;
@@ -70,10 +69,16 @@ public class CompiledModelParser {
     public void parse(ParserTaskManager taskManager, JTextComponent component, DocumentSnapshot snapshot, Collection<ParserDataDefinition<?>> requestedData, ParserResultHandler results)
         throws InterruptedException, ExecutionException {
 
-        if (requestedData.contains(TemplateParserDataDefinitions.COMPILED_MODEL)) {
-            CompiledModel result = parseImpl(taskManager, component, snapshot);
-            BaseParserData<CompiledModel> data = new BaseParserData<CompiledModel>(TemplateParserDataDefinitions.COMPILED_MODEL, snapshot, result);
-            results.addResult(data);
+        try {
+            if (requestedData.contains(TemplateParserDataDefinitions.COMPILED_MODEL)) {
+                CompiledModel result = parseImpl(taskManager, component, snapshot);
+                BaseParserData<CompiledModel> data = new BaseParserData<CompiledModel>(TemplateParserDataDefinitions.COMPILED_MODEL, snapshot, result);
+                results.addResult(data);
+            }
+        } catch (ExecutionException ex) {
+            if (LOGGER.isLoggable(Level.WARNING)) {
+                LOGGER.log(Level.WARNING, "An error occurred while parsing.", ex);
+            }
         }
     }
 
@@ -109,7 +114,9 @@ public class CompiledModelParser {
                 CommonToken[] groupTokens = (CommonToken[])tokens.getTokens().toArray(new CommonToken[0]);
                 return new CompiledModel(snapshot, new CompiledFileModel(parser, returnScope, syntaxErrors, fileObject, groupTokens));
             } catch (RecognitionException ex) {
-                Exceptions.printStackTrace(ex);
+                if (LOGGER.isLoggable(Level.WARNING)) {
+                    LOGGER.log(Level.WARNING, "A recognition exception occurred while parsing.", ex);
+                }
                 return null;
             }
         } catch (Exception ex) {

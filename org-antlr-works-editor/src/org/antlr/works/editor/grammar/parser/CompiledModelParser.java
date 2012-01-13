@@ -29,6 +29,8 @@ package org.antlr.works.editor.grammar.parser;
 
 import java.util.Collection;
 import java.util.concurrent.ExecutionException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.text.JTextComponent;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.netbeans.parsing.spi.BaseParserData;
@@ -38,13 +40,14 @@ import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;
-import org.openide.util.Exceptions;
 
 /**
  *
  * @author Sam Harwell
  */
 public abstract class CompiledModelParser {
+    // -J-Dorg.antlr.works.editor.grammar.parser.CompiledModelParser.level=WARNING
+    private static final Logger LOGGER = Logger.getLogger(CompiledModelParser.class.getName());
 
     public void parse(ParserTaskManager taskManager, JTextComponent component, DocumentSnapshot snapshot, Collection<ParserDataDefinition<?>> requestedData, ParserResultHandler results)
         throws InterruptedException, ExecutionException {
@@ -56,7 +59,9 @@ public abstract class CompiledModelParser {
                 results.addResult(data);
             }
         } catch (ExecutionException ex) {
-            Exceptions.printStackTrace(ex);
+            if (LOGGER.isLoggable(Level.WARNING)) {
+                LOGGER.log(Level.WARNING, "An error occurred while parsing.", ex);
+            }
         }
     }
 
