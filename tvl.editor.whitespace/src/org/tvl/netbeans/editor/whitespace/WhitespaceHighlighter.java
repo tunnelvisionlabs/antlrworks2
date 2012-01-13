@@ -146,6 +146,7 @@ public class WhitespaceHighlighter extends AbstractHighlightsContainer {
         private final int startOffset;
         private final int endOffset;
         private final AttributeSet attributes;
+        private final boolean includesEof;
 
         private int currentOffset;
         private int currentBlockOffset;
@@ -168,7 +169,9 @@ public class WhitespaceHighlighter extends AbstractHighlightsContainer {
 
             this.document = document;
             this.startOffset = startOffset;
-            this.endOffset = Math.min(endOffset, document.getLength());
+            int documentLength = document.getLength();
+            this.endOffset = Math.min(endOffset, documentLength);
+            this.includesEof = endOffset >= documentLength;
             this.attributes = attributes;
 
             this.currentOffset = startOffset;
@@ -186,8 +189,10 @@ public class WhitespaceHighlighter extends AbstractHighlightsContainer {
             boolean inWhitespace = false;
             boolean newline = false;
 
+            int effectiveEndOffset = endOffset + (includesEof ? 1 : 0);
+
             searchLoop:
-            while (currentOffset < endOffset) {
+            while (currentOffset < effectiveEndOffset) {
                 int offsetInBlock = currentOffset - currentBlockOffset;
                 while (offsetInBlock >= currentBlock.length()) {
                     int previousBlockEnd = currentBlockOffset + currentBlock.length();
@@ -247,10 +252,12 @@ public class WhitespaceHighlighter extends AbstractHighlightsContainer {
         public AttributeSet getAttributes() {
             return currentNewline ? newlineAttributes : attributes;
         }
-        
+
         private boolean nextBlock() {
+            int effectiveEndOffset = endOffset + (includesEof ? 1 : 0);
+
             int blockStart = currentBlockOffset + currentBlock.length();
-            int blockEnd = Math.min(endOffset, blockStart + BLOCK_SIZE);
+            int blockEnd = Math.min(effectiveEndOffset, blockStart + BLOCK_SIZE);
 
             if (blockEnd == blockStart) {
                 currentBlock = "";
@@ -260,7 +267,19 @@ public class WhitespaceHighlighter extends AbstractHighlightsContainer {
             }
 
             try {
-                currentBlock = document.getText(blockStart, blockEnd - blockStart);
+                int boundedEnd = Math.min(blockEnd, endOffset);
+                if (boundedEnd == blockStart) {
+                    currentBlock = "";
+                } else {
+                    currentBlock = document.getText(blockStart, boundedEnd - blockStart);
+                }
+
+                if (boundedEnd < blockEnd) {
+                    assert blockEnd == boundedEnd + 1;
+                    assert blockEnd == effectiveEndOffset;
+                    currentBlock += "\n";
+                }
+
                 currentBlockOffset = blockStart;
                 return true;
             } catch (BadLocationException ex) {
