@@ -538,6 +538,13 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
             }
 
             ParserTaskProvider provider = getTaskProvider(snapshot.getVersionedDocument(), data);
+            if (provider == null) {
+                LOGGER.log(Level.WARNING, "No provider found for parser data \"{0}\".", data.getName());
+            } else if (LOGGER.isLoggable(Level.FINE)) {
+                Object[] args = { provider.getDefinition().getName(), data.getName() };
+                LOGGER.log(Level.FINE, "Using provider \"{0}\" for data \"{1}\".", args);
+            }
+
             final ParserTask task = provider.createTask(snapshot.getVersionedDocument());
 
             if (LOGGER.isLoggable(Level.FINE)) {
