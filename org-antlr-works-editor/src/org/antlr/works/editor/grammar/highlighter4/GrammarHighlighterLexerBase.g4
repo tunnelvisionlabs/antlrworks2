@@ -154,7 +154,7 @@ RCURLY:	'}'	;
 DOLLAR : '$' ;
 
 LABEL
-    :   IDENTIFIER IGNORED '='
+    :   IDENTIFIER IGNORED '+'? '='
     ;
 
 IDENTIFIER
