@@ -50,6 +50,7 @@ import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 import org.antlr.works.editor.st4.StringTemplateEditorKit;
 import org.netbeans.spi.navigator.NavigatorPanel;
+import org.netbeans.spi.navigator.NavigatorPanel.Registration;
 import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
@@ -60,6 +61,7 @@ import org.openide.util.lookup.Lookups;
     "LBL_templates=Templates",
     "HINT_templates=Templates"
 })
+@Registration(mimeType = "text/x-stringtemplate4", position = 100, displayName = "#LBL_templates")
 public class TemplatesPanel implements NavigatorPanel {
     private static final RequestProcessor RequestProcessor = new RequestProcessor(TemplatesPanel.class.getName(), 1);
 
@@ -142,13 +144,12 @@ public class TemplatesPanel implements NavigatorPanel {
         }
 
         NavigatorPanel panel = panels.iterator().next();
-        assert panel instanceof TemplatesPanel;
-        if (!(panel instanceof TemplatesPanel)) {
+        assert panel != null;
+        if (panel == null) {
             return;
         }
 
-        TemplatesPanel templatesPanel = (TemplatesPanel)panel;
-        JComponent component = templatesPanel.getComponent();
+        JComponent component = panel.getComponent();
         assert component == null || component instanceof TemplatesPanelUI;
         if (!(component instanceof TemplatesPanelUI)) {
             return;

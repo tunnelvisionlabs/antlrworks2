@@ -139,22 +139,6 @@
             </folder>
         </folder>
     </folder>
-    <folder name="Navigator">
-        <folder name="Panels">
-            <folder name="text">
-                <folder name="x-antlr3">
-                    <file name="org-antlr-works-editor-grammar-navigation-GrammarRulesPanel.instance">
-                        <attr name="position" intvalue="100"/>
-                    </file>
-                </folder>
-                <folder name="x-stringtemplate4">
-                    <file name="org-antlr-works-editor-st4-navigation-TemplatesPanel.instance">
-                        <attr name="position" intvalue="100" />
-                    </file>
-                </folder>
-            </folder>
-        </folder>
-    </folder>
     <folder name="Loaders">
         <folder name="text">
             <folder name="x-antlr3">

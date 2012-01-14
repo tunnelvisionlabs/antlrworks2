@@ -50,6 +50,7 @@ import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 import org.antlr.works.editor.grammar.GrammarEditorKit;
 import org.netbeans.spi.navigator.NavigatorPanel;
+import org.netbeans.spi.navigator.NavigatorPanel.Registration;
 import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
@@ -60,6 +61,7 @@ import org.openide.util.lookup.Lookups;
     "LBL_rules=Rules",
     "HINT_rules=Rules"
 })
+@Registration(mimeType = "text/x-antlr3", position = 100, displayName = "#LBL_rules")
 public class GrammarRulesPanel implements NavigatorPanel {
     private static final RequestProcessor RequestProcessor = new RequestProcessor(GrammarRulesPanel.class.getName(), 1);
 
@@ -142,13 +144,12 @@ public class GrammarRulesPanel implements NavigatorPanel {
         }
 
         NavigatorPanel panel = panels.iterator().next();
-        assert panel instanceof GrammarRulesPanel;
-        if (!(panel instanceof GrammarRulesPanel)) {
+        assert panel != null;
+        if (panel == null) {
             return;
         }
 
-        GrammarRulesPanel grammarRulesPanel = (GrammarRulesPanel)panel;
-        JComponent component = grammarRulesPanel.getComponent();
+        JComponent component = panel.getComponent();
         assert component == null || component instanceof GrammarRulesPanelUI;
         if (!(component instanceof GrammarRulesPanelUI)) {
             return;
