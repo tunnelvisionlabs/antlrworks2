@@ -76,8 +76,8 @@ public class CompiledModelParser {
                 results.addResult(data);
             }
         } catch (ExecutionException ex) {
-            if (LOGGER.isLoggable(Level.WARNING)) {
-                LOGGER.log(Level.WARNING, "An error occurred while parsing.", ex);
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.log(Level.FINE, "An error occurred while parsing.", ex);
             }
         }
     }
@@ -114,8 +114,8 @@ public class CompiledModelParser {
                 CommonToken[] groupTokens = (CommonToken[])tokens.getTokens().toArray(new CommonToken[0]);
                 return new CompiledModel(snapshot, new CompiledFileModel(parser, returnScope, syntaxErrors, fileObject, groupTokens));
             } catch (RecognitionException ex) {
-                if (LOGGER.isLoggable(Level.WARNING)) {
-                    LOGGER.log(Level.WARNING, "A recognition exception occurred while parsing.", ex);
+                if (LOGGER.isLoggable(Level.FINE)) {
+                    LOGGER.log(Level.FINE, "A recognition exception occurred while parsing.", ex);
                 }
                 return null;
             }
