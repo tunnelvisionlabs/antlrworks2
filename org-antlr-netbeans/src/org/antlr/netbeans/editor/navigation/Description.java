@@ -81,6 +81,10 @@ public class Description {
         return name;
     }
 
+    public String getSortText() {
+        return getName();
+    }
+
     public String getHtmlHeader() {
         if (htmlHeader != null) {
             return htmlHeader;
@@ -177,8 +181,8 @@ public class Description {
             }
         }
 
-        int alphaCompare(Description d1, Description d2) {
-            return d1.name.compareTo(d2.name);
+        private int alphaCompare(Description d1, Description d2) {
+            return d1.getSortText().compareTo(d2.getSortText());
         }
     }
 }
