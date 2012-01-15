@@ -39,6 +39,7 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.editor.BaseDocument;
 import org.netbeans.spi.editor.highlighting.support.OffsetsBag;
+import org.openide.util.Exceptions;
 
 /**
  *
@@ -60,7 +61,14 @@ public abstract class AbstractParseTreeSemanticHighlighter<Listener extends Pars
             @Override
             public Void call() {
                 final Listener listener = createListener();
-                ParseTreeWalker.DEFAULT.walk(listener, parserData.getData());
+
+                try {
+                    ParseTreeWalker.DEFAULT.walk(listener, parserData.getData());
+                } catch (RuntimeException ex) {
+                    Exceptions.printStackTrace(ex);
+                    throw ex;
+                }
+
                 ((BaseDocument)getDocument()).render(new Runnable() {
                     @Override
                     public void run() {
