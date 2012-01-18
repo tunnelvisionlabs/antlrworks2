@@ -27,6 +27,10 @@
  */
 package org.antlr.works.editor.st4.experimental;
 
+import java.lang.ref.Reference;
+import java.lang.ref.SoftReference;
+import java.util.Map;
+import java.util.WeakHashMap;
 import org.antlr.netbeans.editor.highlighting.TokenSourceWithStateV4;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.v4.runtime.CharStream;
@@ -39,6 +43,7 @@ import org.netbeans.api.annotations.common.NonNull;
  * @author Sam Harwell
  */
 class TemplateTokensTaskTaggerSnapshot extends AbstractTokensTaskTaggerSnapshot<SimpleLexerState> {
+    private final Map<Thread, Reference<TemplateLexerWrapper>> lexerCache = new WeakHashMap<Thread, Reference<TemplateLexerWrapper>>();
 
     public TemplateTokensTaskTaggerSnapshot(@NonNull DocumentSnapshot snapshot) {
         super(snapshot);
@@ -55,9 +60,19 @@ class TemplateTokensTaskTaggerSnapshot extends AbstractTokensTaskTaggerSnapshot<
 
     @Override
     protected TokenSourceWithStateV4<SimpleLexerState> createLexer(CharStream input, SimpleLexerState startState) {
-        TemplateLexerWrapper lexer = new TemplateLexerWrapper(input);
-        startState.apply(lexer);
-        return lexer;
+        synchronized (lexerCache) {
+            Reference<TemplateLexerWrapper> ref = lexerCache.get(Thread.currentThread());
+            TemplateLexerWrapper lexer = ref != null ? ref.get() : null;
+            if (lexer == null) {
+                lexer = new TemplateLexerWrapper(input);
+                lexerCache.put(Thread.currentThread(), new SoftReference<TemplateLexerWrapper>(lexer));
+            } else {
+                lexer.setInputStream(input);
+            }
+
+            startState.apply(lexer);
+            return lexer;
+        }
     }
 
     @Override
