@@ -204,8 +204,9 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
         }
 
         if (scheduler != null) {
+            @SuppressWarnings("rawtypes")
             Collection<? extends ParserDataDefinition> data = MimeLookup.getLookup(document.getMimeType()).lookupAll(ParserDataDefinition.class);
-            for (ParserDataDefinition definition : data) {
+            for (ParserDataDefinition<?> definition : data) {
                 if (definition.getScheduler() == schedulerClass && definition.isCacheable()) {
                     document.getDocument().putProperty(definition, null);
                 }
@@ -227,8 +228,9 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
         }
 
         if (scheduler != null) {
+            @SuppressWarnings("rawtypes")
             Collection<? extends ParserDataDefinition> data = MimeLookup.getLookup(document.getMimeType()).lookupAll(ParserDataDefinition.class);
-            for (ParserDataDefinition definition : data) {
+            for (ParserDataDefinition<?> definition : data) {
                 if (definition.getScheduler() == schedulerClass && definition.isCacheable()) {
                     document.getDocument().putProperty(definition, null);
                 }
