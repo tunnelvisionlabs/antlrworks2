@@ -38,7 +38,7 @@ public class CodeCompletionGrammarParser extends GrammarParser {
 
     public CodeCompletionGrammarParser(TokenStream input) {
         super(input);
-        _interp = new CompletionParserATNSimulator(_ATN);
+        _interp = new CompletionParserATNSimulator(this, _ATN);
     }
 
     @Override

@@ -27,9 +27,31 @@
  */
 package org.antlr.works.editor.grammar.completion;
 
-import java.util.*;
-import org.antlr.v4.runtime.*;
-import org.antlr.v4.runtime.atn.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import org.antlr.v4.runtime.Parser;
+import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.RuleContext;
+import org.antlr.v4.runtime.SymbolStream;
+import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.atn.ATN;
+import org.antlr.v4.runtime.atn.ATNConfig;
+import org.antlr.v4.runtime.atn.ATNConfigSet;
+import org.antlr.v4.runtime.atn.ATNState;
+import org.antlr.v4.runtime.atn.AtomTransition;
+import org.antlr.v4.runtime.atn.DecisionState;
+import org.antlr.v4.runtime.atn.NotSetTransition;
+import org.antlr.v4.runtime.atn.ParserATNSimulator;
+import org.antlr.v4.runtime.atn.PredictionContext;
+import org.antlr.v4.runtime.atn.PredictionContextCache;
+import org.antlr.v4.runtime.atn.RangeTransition;
+import org.antlr.v4.runtime.atn.SetTransition;
+import org.antlr.v4.runtime.atn.SimulatorState;
+import org.antlr.v4.runtime.atn.Transition;
+import org.antlr.v4.runtime.atn.WildcardTransition;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.dfa.DFAState;
 import org.antlr.v4.runtime.misc.IntervalSet;
@@ -49,8 +71,9 @@ public class CompletionParserATNSimulator extends ParserATNSimulator<Token> {
     private List<MultipleDecisionData> decisionPoints;
     private List<Integer> selections;
 
-    public CompletionParserATNSimulator(ATN atn) {
-        super(atn);
+    public CompletionParserATNSimulator(@NonNull Parser parser, ATN atn) {
+        super(parser, atn);
+        Parameters.notNull("parser", parser);
         disable_global_context = true;
     }
 
@@ -161,19 +184,21 @@ public class CompletionParserATNSimulator extends ParserATNSimulator<Token> {
                                 int nalts = decState.getNumberOfTransitions();
                                 List<DFAState.PredPrediction> predPredictions =
                                     predicateDFAState(D, D.configs, outerContext, nalts);
-                                IntervalSet conflictingAlts = getConflictingAltsFromConfigSet(D.configs);
-                                if ( D.predicates.size() < conflictingAlts.size() ) {
-                                    reportInsufficientPredicates(dfa, startIndex, ambigIndex,
-                                                                    conflictingAlts,
-                                                                    decState,
-                                                                    getPredsForAmbigAlts(conflictingAlts, D.configs, nalts),
-                                                                    D.configs,
-                                                                    false);
-                                }
-                                input.seek(startIndex);
-                                predictedAlt = evalSemanticContext(predPredictions, outerContext, true);
-                                if ( predictedAlt!=ATN.INVALID_ALT_NUMBER ) {
-                                    return predictedAlt;
+                                if (predPredictions != null) {
+                                    IntervalSet conflictingAlts = getConflictingAltsFromConfigSet(D.configs);
+                                    if ( D.predicates.size() < conflictingAlts.size() ) {
+                                        reportInsufficientPredicates(dfa, startIndex, ambigIndex,
+                                                                        conflictingAlts,
+                                                                        decState,
+                                                                        getPredsForAmbigAlts(conflictingAlts, D.configs, nalts),
+                                                                        D.configs,
+                                                                        false);
+                                    }
+                                    input.seek(startIndex);
+                                    predictedAlt = evalSemanticContext(predPredictions, outerContext, true);
+                                    if ( predictedAlt!=ATN.INVALID_ALT_NUMBER ) {
+                                        return predictedAlt;
+                                    }
                                 }
                             }
 
@@ -217,21 +242,28 @@ public class CompletionParserATNSimulator extends ParserATNSimulator<Token> {
 				int nalts = decState.getNumberOfTransitions();
 				List<DFAState.PredPrediction> predPredictions =
 					predicateDFAState(D, D.configs, outerContext, nalts);
-				IntervalSet conflictingAlts = getConflictingAltsFromConfigSet(D.configs);
-				if ( D.predicates.size() < conflictingAlts.size() ) {
-					reportInsufficientPredicates(dfa, startIndex, input.index(),
-												 conflictingAlts,
-												 decState,
-												 getPredsForAmbigAlts(conflictingAlts, D.configs, nalts),
-												 D.configs,
-												 false);
-				}
-				input.seek(startIndex);
-                predictedAlt = evalSemanticContext(predPredictions, outerContext, false);
-				if ( predictedAlt!=ATN.INVALID_ALT_NUMBER ) {
-					return predictedAlt;
-				}
-				throw noViableAlt(input, outerContext, D.configs, startIndex);
+                if (predPredictions != null) {
+                    IntervalSet conflictingAlts = getConflictingAltsFromConfigSet(D.configs);
+                    if ( D.predicates.size() < conflictingAlts.size() ) {
+                        reportInsufficientPredicates(dfa, startIndex, input.index(),
+                                                    conflictingAlts,
+                                                    decState,
+                                                    getPredsForAmbigAlts(conflictingAlts, D.configs, nalts),
+                                                    D.configs,
+                                                    false);
+                    }
+                    input.seek(startIndex);
+                    predictedAlt = evalSemanticContext(predPredictions, outerContext, false);
+                    if ( predictedAlt!=ATN.INVALID_ALT_NUMBER ) {
+                        return predictedAlt;
+                    }
+                }
+
+                if (D.prediction == ATN.INVALID_ALT_NUMBER) {
+                    throw noViableAlt(input, outerContext, D.configs, startIndex);
+                }
+
+                predictedAlt = D.prediction;
 			}
 
 			if ( D.isAcceptState ) return predictedAlt;
