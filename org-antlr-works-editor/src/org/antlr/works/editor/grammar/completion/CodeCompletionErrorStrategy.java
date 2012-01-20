@@ -86,7 +86,6 @@ public class CodeCompletionErrorStrategy extends DefaultErrorStrategy {
     @Override
     public void recover(Parser recognizer, RecognitionException e) {
         if (recognizer instanceof CodeCompletionGrammarParser
-            && recognizer.getInputStream() instanceof TokenStream
             && ((CodeCompletionGrammarParser)recognizer).getInterpreter().getCaretTransitions() != null) {
 
 //                    int stateNumber = recognizer.getContext().s;
@@ -110,7 +109,6 @@ public class CodeCompletionErrorStrategy extends DefaultErrorStrategy {
     @Override
     public Token recoverInline(Parser recognizer) throws RecognitionException {
         if (recognizer instanceof CodeCompletionGrammarParser
-            && recognizer.getInputStream() instanceof TokenStream
             && recognizer.getInputStream().LT(1) instanceof CaretToken) {
 
             CodeCompletionGrammarParser parser = (CodeCompletionGrammarParser)recognizer;
@@ -169,4 +167,25 @@ public class CodeCompletionErrorStrategy extends DefaultErrorStrategy {
 
         return super.recoverInline(recognizer);
     }
+
+    @Override
+    public boolean singleTokenInsertion(Parser recognizer) {
+        if (recognizer.getInputStream().LA(1) == CaretToken.CARET_TOKEN_TYPE) {
+            return false;
+        }
+
+        return false;
+//        return super.singleTokenInsertion(recognizer);
+    }
+
+    @Override
+    public Token singleTokenDeletion(Parser recognizer) {
+        if (recognizer.getInputStream().LA(1) == CaretToken.CARET_TOKEN_TYPE) {
+            return null;
+        }
+
+        return null;
+//        return super.singleTokenDeletion(recognizer);
+    }
+
 }
