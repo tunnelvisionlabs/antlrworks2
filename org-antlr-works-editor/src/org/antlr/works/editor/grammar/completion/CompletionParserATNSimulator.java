@@ -90,6 +90,7 @@ public class CompletionParserATNSimulator extends ParserATNSimulator<Token> {
         Parameters.notNull("selections", selections);
         this.decisionPoints = decisionPoints;
         this.selections = selections;
+        this.caretTransitions = null;
     }
 
     @Override
