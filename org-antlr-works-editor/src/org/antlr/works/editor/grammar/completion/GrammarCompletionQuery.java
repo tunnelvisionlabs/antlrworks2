@@ -891,7 +891,7 @@ public final class GrammarCompletionQuery extends AsyncCompletionQuery {
 
                 boolean decisionAtCaret = (nvae != null && nvae.startToken instanceof CaretToken)
                     || parser.getInputStream().LT(1) instanceof CaretToken;
-                if (!decisionAtCaret && ex.getTransitions() != null) {
+                if (ex.getCause() != null && ex.getTransitions() != null) {
                     IntervalSet alts = new IntervalSet();
                     for (ATNConfig c : ex.getTransitions().keySet()) {
                         alts.add(c.alt);
