@@ -83,7 +83,7 @@ public abstract class GrammarCompletionItem implements CompletionItem {
 
     @Override
     public final void defaultAction(JTextComponent component) {
-        throw new UnsupportedOperationException("This functionality is handled by GrammarCompletionController."); //NOI18N
+        throw new UnsupportedOperationException(String.format("This functionality is handled by %s.", GrammarCompletionController.class.getSimpleName())); //NOI18N
     }
 
     public void defaultAction(@NonNull JTextComponent component, @NonNull GrammarCompletionController controller, boolean isSelected) {
@@ -122,7 +122,7 @@ public abstract class GrammarCompletionItem implements CompletionItem {
 
     @Override
     public final void processKeyEvent(KeyEvent evt) {
-        throw new UnsupportedOperationException("This functionality is handled by GrammarCompletionController."); //NOI18N
+        throw new UnsupportedOperationException(String.format("This functionality is handled by %s.", GrammarCompletionController.class.getSimpleName())); //NOI18N
     }
 
     public void processKeyEvent(KeyEvent evt, GrammarCompletionController controller, boolean isSelected) {
@@ -146,7 +146,7 @@ public abstract class GrammarCompletionItem implements CompletionItem {
 
     @Override
     public final void render(Graphics g, Font defaultFont, Color defaultColor, Color backgroundColor, int width, int height, boolean selected) {
-        throw new UnsupportedOperationException("This functionality is handled by GrammarCompletionController."); //NOI18N
+        throw new UnsupportedOperationException(String.format("This functionality is handled by %s.", GrammarCompletionController.class.getSimpleName())); //NOI18N
     }
 
     public void render(CompletionController controller, Graphics g, Font defaultFont, Color foregroundColor, Color backgroundColor, Color selectedForegroundColor, Color selectedBackgroundColor, int width, int height, boolean isBestMatch, boolean isSelected) {
@@ -165,7 +165,7 @@ public abstract class GrammarCompletionItem implements CompletionItem {
 
     @Override
     public final boolean instantSubstitution(JTextComponent component) {
-        throw new UnsupportedOperationException("This functionality is handled by GrammarCompletionController.");
+        throw new UnsupportedOperationException(String.format("This functionality is handled by %s.", GrammarCompletionController.class.getSimpleName())); //NOI18N
     }
 
     public boolean instantSubstitution(@NonNull JTextComponent component, @NonNull GrammarCompletionController controller) {
