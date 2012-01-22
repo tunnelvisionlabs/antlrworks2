@@ -94,6 +94,16 @@ public class CompletionParserATNSimulator extends ParserATNSimulator<Token> {
     }
 
     @Override
+    protected void addDFAEdge(DFAState p, int t, DFAState q) {
+        // working around a bug in ParserATNSimulator
+        if (q == ERROR) {
+            return;
+        }
+
+        super.addDFAEdge(p, t, q);
+    }
+
+    @Override
     public int adaptivePredict(SymbolStream<Token> input, int decision, ParserRuleContext<?> outerContext) {
         if (decisionPoints != null) {
             int index = input.index();

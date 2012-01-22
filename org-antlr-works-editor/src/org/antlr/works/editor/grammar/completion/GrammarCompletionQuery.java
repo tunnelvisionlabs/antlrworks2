@@ -871,6 +871,10 @@ public final class GrammarCompletionQuery extends AsyncCompletionQuery {
                 parseTree = parser.rules();
                 results.put(parseTree, null);
             } catch (CaretReachedException ex) {
+                if (ex.getTransitions() == null) {
+                    return;
+                }
+
                 for (parseTree = ex.getFinalContext(); parseTree.getParent() != null; parseTree = (RuleContext)parseTree.getParent()) {
                     // intentionally blank
                 }
@@ -879,41 +883,24 @@ public final class GrammarCompletionQuery extends AsyncCompletionQuery {
                     return;
                 }
 
-                Token offendingToken = ex.getCause() != null ? ex.getCause().getOffendingToken() : parser.getInputStream().LT(1);
-                Token startToken = null;
-                NoViableAltException nvae = null;
-                if (ex.getCause() instanceof NoViableAltException) {
-                    nvae = (NoViableAltException)ex.getCause();
-                    startToken = nvae.startToken;
-                //} else if (ex.getCause() instanceof InputMismatchException) {
-                //    InputMismatchException ime = (InputMismatchException)ex.getCause();
-                }
-
-                boolean decisionAtCaret = (nvae != null && nvae.startToken instanceof CaretToken)
-                    || parser.getInputStream().LT(1) instanceof CaretToken;
-                if (ex.getCause() != null && ex.getTransitions() != null) {
+                if (ex.getCause() != null) {
                     IntervalSet alts = new IntervalSet();
                     for (ATNConfig c : ex.getTransitions().keySet()) {
                         alts.add(c.alt);
                     }
 
-                    if (alts.size() > 1) {
-                        MultipleDecisionData decisionData = new MultipleDecisionData();
-                        decisionData.inputIndex = parser.getInputStream().index();
-                        decisionData.decision = 0;
-                        if (ex.getCause() != null) {
-                            ATNState state = parser.getATN().states.get(((ParserRuleContext<?>)ex.getCause().getCtx()).s);
-                            if (state instanceof DecisionState) {
-                                decisionData.decision = ((DecisionState)state).decision;
-                            }
+                    MultipleDecisionData decisionData = new MultipleDecisionData();
+                    decisionData.inputIndex = parser.getInputStream().index();
+                    decisionData.decision = 0;
+                    if (ex.getCause() != null) {
+                        ATNState state = parser.getATN().states.get(((ParserRuleContext<?>)ex.getCause().getCtx()).s);
+                        if (state instanceof DecisionState) {
+                            decisionData.decision = ((DecisionState)state).decision;
                         }
-                        decisionData.alternatives = alts.toArray();
-                        potentialAlternatives.add(decisionData);
-                        currentPath.add(-1);
                     }
-                    else if (alts.size() == 1) {
-                        results.put(parseTree, ex);
-                    }
+                    decisionData.alternatives = alts.toArray();
+                    potentialAlternatives.add(decisionData);
+                    currentPath.add(-1);
                 }
                 else {
                     results.put(parseTree, ex);

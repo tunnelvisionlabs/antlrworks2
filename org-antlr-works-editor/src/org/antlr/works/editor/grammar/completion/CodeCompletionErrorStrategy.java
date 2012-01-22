@@ -67,6 +67,11 @@ public class CodeCompletionErrorStrategy extends DefaultErrorStrategy {
             return;
         }
 
+        // TODO: incorporate error recovery as a fallback option if no trees match correctly
+        if (true) {
+            return;
+        }
+
         super.sync(recognizer);
     }
 
@@ -103,7 +108,9 @@ public class CodeCompletionErrorStrategy extends DefaultErrorStrategy {
             throw new CaretReachedException(parser.getContext(), token, interpreter.getCaretTransitions(), e);
         }
 
-        super.recover(recognizer, e);
+        // TODO: incorporate error recovery as a fallback option if no trees match correctly
+        throw e;
+        //super.recover(recognizer, e);
     }
 
     @Override
@@ -133,7 +140,9 @@ public class CodeCompletionErrorStrategy extends DefaultErrorStrategy {
             interp.closure(intermediate, closure, PredictionContextCache.UNCACHED_LOCAL, false, true, false, true);
 
             if (!state.onlyHasEpsilonTransitions()) {
-                closure.add(new ATNConfig(state, 1, PredictionContext.fromRuleContext(recognizer.getContext())));
+                for (int i = 0; i < state.getNumberOfTransitions(); i++) {
+                    closure.add(new ATNConfig(state, 1, PredictionContext.fromRuleContext(recognizer.getContext())));
+                }
             }
 
             LinkedHashMap<ATNConfig, List<Transition>> transitions = null;
@@ -160,6 +169,17 @@ public class CodeCompletionErrorStrategy extends DefaultErrorStrategy {
                         configTransitions.add(trans);
                     }
                 }
+            }
+
+            /*
+             * This should be null if the intended token is not "wordlike", and
+             * should be a single transition from the current state.
+             */
+            if (transitions != null) {
+                assert transitions.size() == 1;
+                assert transitions.values().iterator().next().size() == 1;
+                assert state.getNumberOfTransitions() == 1;
+                assert transitions.values().iterator().next().get(0) == state.transition(0);
             }
 
             throw new CaretReachedException(parser.getContext(), token, transitions, null);
