@@ -76,6 +76,8 @@ public class CompletionMatchEvaluator {
     }
 
     public int getMatchStrength(@NonNull CompletionItem completionItem) {
+        Parameters.notNull("completionItem", completionItem);
+
         CompletionMatchResult exact = isExactMatch(completionItem);
         CompletionMatchResult prefix = isPrefixMatch(completionItem);
         CompletionMatchResult substring = isSubstringMatch(completionItem);
@@ -140,6 +142,8 @@ public class CompletionMatchEvaluator {
     }
 
     protected @NonNull CompletionMatchResult isExactMatch(@NonNull CompletionItem completionItem) {
+        Parameters.notNull("completionItem", completionItem);
+
         if (evaluatedText.isEmpty()) {
             return CompletionMatchResult.None;
         }
@@ -158,6 +162,8 @@ public class CompletionMatchEvaluator {
     }
 
     protected @NonNull CompletionMatchResult isPrefixMatch(@NonNull CompletionItem completionItem) {
+        Parameters.notNull("completionItem", completionItem);
+
         if (evaluatedText.isEmpty()) {
             return CompletionMatchResult.MatchCaseSensitive;
         }
@@ -176,6 +182,8 @@ public class CompletionMatchEvaluator {
     }
 
     public @NonNull CompletionMatchResult isSubstringMatch(@NonNull CompletionItem completionItem) {
+        Parameters.notNull("completionItem", completionItem);
+
         if (evaluatedText.isEmpty()) {
             return CompletionMatchResult.MatchCaseSensitive;
         }
@@ -194,6 +202,8 @@ public class CompletionMatchEvaluator {
     }
 
     public @NonNull CompletionMatchResult isWordBoundaryMatch(@NonNull CompletionItem completionItem) {
+        Parameters.notNull("completionItem", completionItem);
+
         if (evaluatedText.isEmpty() || caseSensitiveWordMatch == null || caseInsensitiveWordMatch == null) {
             return CompletionMatchResult.None;
         }
@@ -211,10 +221,14 @@ public class CompletionMatchEvaluator {
     }
 
     public @NonNull CompletionMatchResult isValidMatch(@NonNull CompletionItem completionItem) {
+        Parameters.notNull("completionItem", completionItem);
+
         return completionItem.getSortPriority() < 0 ? CompletionMatchResult.Match : CompletionMatchResult.None;
     }
 
     public int getRecentlyUsed(@NonNull CompletionItem completionItem) {
+        Parameters.notNull("completionItem", completionItem);
+
         return GrammarCompletionController.getRecentCompletionWeight(completionItem.getInsertPrefix().toString(), recentCompletionsCollator);
     }
 }

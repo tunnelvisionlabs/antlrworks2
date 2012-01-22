@@ -1,6 +1,6 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -29,6 +29,8 @@ package org.antlr.works.editor.grammar.completion;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import org.netbeans.api.annotations.common.NonNull;
+import org.openide.util.Parameters;
 
 /**
  *
@@ -61,7 +63,8 @@ public class KeywordCompletionItem extends GrammarCompletionItem {
     private final String keyword;
     private String leftText;
 
-    public KeywordCompletionItem(String keyword) {
+    public KeywordCompletionItem(@NonNull String keyword) {
+        Parameters.notNull("keyword", keyword);
         this.keyword = keyword;
     }
 
