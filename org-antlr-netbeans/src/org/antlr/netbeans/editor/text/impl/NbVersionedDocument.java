@@ -37,6 +37,7 @@ import org.antlr.netbeans.editor.text.VersionedDocument;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.editor.BaseDocument;
 import org.netbeans.lib.editor.util.swing.DocumentUtilities;
+import org.netbeans.modules.editor.NbEditorUtilities;
 import org.openide.filesystems.FileObject;
 import org.openide.loaders.DataObject;
 import org.openide.util.Exceptions;
@@ -82,14 +83,7 @@ public class NbVersionedDocument implements VersionedDocument {
 
     @Override
     public FileObject getFileObject() {
-        Object property = document.getProperty(Document.StreamDescriptionProperty);
-        if (property instanceof FileObject) {
-            return (FileObject)property;
-        } else if (property instanceof DataObject) {
-            return ((DataObject)property).getPrimaryFile();
-        }
-
-        throw new UnsupportedOperationException("Couldn't get the document's FileObject.");
+        return NbEditorUtilities.getFileObject(document);
     }
 
     private @NonNull NbDocumentVersion applyChanges() {
