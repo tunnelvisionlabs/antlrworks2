@@ -1,6 +1,6 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -52,7 +52,7 @@ public class GrammarParserDataDefinitions {
     public static final ParserDataDefinition<ParserRuleContext<Token>> REFERENCE_PARSE_TREE = new ReferenceParseTreeDataDefinition();
 
     public static final ParserDataDefinition<List<Anchor>> DYNAMIC_ANCHOR_POINTS = new DynamicAnchorPointsDataDefinition();
-    public static final ParserDataDefinition<Tagger<TokenTag>> LEXER_TOKENS = new LexerTokensDataDefinition();
+    public static final ParserDataDefinition<Tagger<TokenTag<Token>>> LEXER_TOKENS = new LexerTokensDataDefinition();
     public static final ParserDataDefinition<CurrentRuleContextData> CURRENT_RULE_CONTEXT = new CurrentRuleContextDataDefinition();
     public static final ParserDataDefinition<FileModel> FILE_MODEL = new FileModelDataDefinition();
 
@@ -82,7 +82,7 @@ public class GrammarParserDataDefinitions {
     }
 
     @MimeRegistration(mimeType=GrammarEditorKit.GRAMMAR_MIME_TYPE, service=ParserDataDefinition.class)
-    public static ParserDataDefinition<Tagger<TokenTag>> getLexerTokensDataDefinition() {
+    public static ParserDataDefinition<Tagger<TokenTag<Token>>> getLexerTokensDataDefinition() {
         return LEXER_TOKENS;
     }
 
@@ -136,11 +136,11 @@ public class GrammarParserDataDefinitions {
 
     }
 
-    private static final class LexerTokensDataDefinition extends ParserDataDefinition<Tagger<TokenTag>> {
+    private static final class LexerTokensDataDefinition extends ParserDataDefinition<Tagger<TokenTag<Token>>> {
 
         @SuppressWarnings("unchecked")
         public LexerTokensDataDefinition() {
-            super("Grammar Lexer Tokens", (Class<Tagger<TokenTag>>)(Object)Tagger.class, false, true, ParserTaskScheduler.CONTENT_SENSITIVE_TASK_SCHEDULER);
+            super("Grammar Lexer Tokens", (Class<Tagger<TokenTag<Token>>>)(Object)Tagger.class, false, true, ParserTaskScheduler.CONTENT_SENSITIVE_TASK_SCHEDULER);
         }
 
     }

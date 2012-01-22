@@ -49,21 +49,21 @@ import org.netbeans.api.annotations.common.NonNull;
  */
 public class TaggerTokenSource implements TokenSource {
     private final DocumentSnapshot snapshot;
-    private final Tagger<TokenTag> tagger;
+    private final Tagger<TokenTag<Token>> tagger;
     private final SnapshotPositionRegion region;
-    private final Iterable<TaggedPositionRegion<TokenTag>> tags;
-    private final Iterator<TaggedPositionRegion<TokenTag>> tagIterator;
-    private TokenTag previousTag;
+    private final Iterable<TaggedPositionRegion<TokenTag<Token>>> tags;
+    private final Iterator<TaggedPositionRegion<TokenTag<Token>>> tagIterator;
+    private TokenTag<Token> previousTag;
     private CharStream input;
     private int line = -1;
     private int charPositionInLine = -1;
     private TokenFactory<?> tokenFactory = CommonTokenFactory.DEFAULT;
 
-    public TaggerTokenSource(@NonNull Tagger<TokenTag> tagger, DocumentSnapshot snapshot) {
+    public TaggerTokenSource(@NonNull Tagger<TokenTag<Token>> tagger, DocumentSnapshot snapshot) {
         this(tagger, new SnapshotPositionRegion(snapshot, 0, snapshot.length()));
     }
 
-    public TaggerTokenSource(@NonNull Tagger<TokenTag> tagger, @NonNull SnapshotPositionRegion region) {
+    public TaggerTokenSource(@NonNull Tagger<TokenTag<Token>> tagger, @NonNull SnapshotPositionRegion region) {
         this.snapshot = region.getSnapshot();
         this.tagger = tagger;
         this.region = region;
@@ -80,7 +80,7 @@ public class TaggerTokenSource implements TokenSource {
         if (tagIterator.hasNext()) {
             previousTag = tagIterator.next().getTag();
         } else {
-            previousTag = new TokenTag(tokenFactory.create(Token.EOF, null));
+            previousTag = new TokenTag<Token>(tokenFactory.create(Token.EOF, null));
         }
 
         line = -1;

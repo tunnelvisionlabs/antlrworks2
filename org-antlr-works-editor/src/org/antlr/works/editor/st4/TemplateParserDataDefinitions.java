@@ -52,7 +52,7 @@ public class TemplateParserDataDefinitions {
     public static final ParserDataDefinition<ParserRuleContext<Token>> REFERENCE_PARSE_TREE = new ReferenceParseTreeDataDefinition();
 
     public static final ParserDataDefinition<List<Anchor>> DYNAMIC_ANCHOR_POINTS = new DynamicAnchorPointsDataDefinition();
-    public static final ParserDataDefinition<Tagger<TokenTag>> LEXER_TOKENS = new LexerTokensDataDefinition();
+    public static final ParserDataDefinition<Tagger<TokenTag<Token>>> LEXER_TOKENS = new LexerTokensDataDefinition();
     public static final ParserDataDefinition<CurrentTemplateContextData> CURRENT_TEMPLATE_CONTEXT = new CurrentTemplateContextDataDefinition();
     public static final ParserDataDefinition<FileModel> FILE_MODEL = new FileModelDataDefinition();
 
@@ -82,7 +82,7 @@ public class TemplateParserDataDefinitions {
     }
 
     @MimeRegistration(mimeType=StringTemplateEditorKit.TEMPLATE_MIME_TYPE, service=ParserDataDefinition.class)
-    public static ParserDataDefinition<Tagger<TokenTag>> getLexerTokensDataDefinition() {
+    public static ParserDataDefinition<Tagger<TokenTag<Token>>> getLexerTokensDataDefinition() {
         return LEXER_TOKENS;
     }
 
@@ -136,11 +136,11 @@ public class TemplateParserDataDefinitions {
 
     }
 
-    private static final class LexerTokensDataDefinition extends ParserDataDefinition<Tagger<TokenTag>> {
+    private static final class LexerTokensDataDefinition extends ParserDataDefinition<Tagger<TokenTag<Token>>> {
 
         @SuppressWarnings("unchecked")
         public LexerTokensDataDefinition() {
-            super("StringTemplate Lexer Tokens", (Class<Tagger<TokenTag>>)(Object)Tagger.class, false, true, ParserTaskScheduler.CONTENT_SENSITIVE_TASK_SCHEDULER);
+            super("StringTemplate Lexer Tokens", (Class<Tagger<TokenTag<Token>>>)(Object)Tagger.class, false, true, ParserTaskScheduler.CONTENT_SENSITIVE_TASK_SCHEDULER);
         }
 
     }

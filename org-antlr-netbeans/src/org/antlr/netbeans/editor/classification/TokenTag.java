@@ -1,6 +1,6 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -28,17 +28,18 @@
 package org.antlr.netbeans.editor.classification;
 
 import org.antlr.netbeans.editor.tagging.Tag;
-import org.antlr.v4.runtime.Token;
 import org.netbeans.api.annotations.common.NonNull;
+import org.openide.util.Parameters;
 
 /**
  *
  * @author Sam Harwell
  */
-public class TokenTag implements Tag {
+public class TokenTag<Token> implements Tag {
     private final Token token;
 
     public TokenTag(@NonNull Token token) {
+        Parameters.notNull("token", token);
         this.token = token;
     }
 

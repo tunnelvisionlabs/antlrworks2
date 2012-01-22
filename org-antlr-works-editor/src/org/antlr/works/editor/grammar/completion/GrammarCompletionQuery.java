@@ -447,8 +447,8 @@ public final class GrammarCompletionQuery extends AsyncCompletionQuery {
                 }
 
                 if (previous != null) {
-                    Future<ParserData<Tagger<TokenTag>>> futureTokensData = taskManager.getData(snapshot, GrammarParserDataDefinitions.LEXER_TOKENS, EnumSet.of(ParserDataOptions.SYNCHRONOUS));
-                    Tagger<TokenTag> tagger = null;
+                    Future<ParserData<Tagger<TokenTag<Token>>>> futureTokensData = taskManager.getData(snapshot, GrammarParserDataDefinitions.LEXER_TOKENS, EnumSet.of(ParserDataOptions.SYNCHRONOUS));
+                    Tagger<TokenTag<Token>> tagger = null;
                     try {
                         tagger = futureTokensData.get().getData();
                     } catch (InterruptedException ex) {

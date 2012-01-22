@@ -1,6 +1,6 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -31,15 +31,16 @@ import org.antlr.netbeans.editor.classification.TokenTag;
 import org.antlr.netbeans.editor.tagging.AbstractTagger;
 import org.antlr.netbeans.editor.tagging.TaggedPositionRegion;
 import org.antlr.netbeans.editor.text.NormalizedSnapshotPositionRegionCollection;
+import org.antlr.v4.runtime.Token;
 
 /**
  *
  * @author Sam Harwell
  */
-public class GrammarTokensTaskTagger extends AbstractTagger<TokenTag> {
+public class GrammarTokensTaskTagger extends AbstractTagger<TokenTag<Token>> {
 
     @Override
-    public Iterable<TaggedPositionRegion<TokenTag>> getTags(NormalizedSnapshotPositionRegionCollection regions) {
+    public Iterable<TaggedPositionRegion<TokenTag<Token>>> getTags(NormalizedSnapshotPositionRegionCollection regions) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

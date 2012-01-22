@@ -1,6 +1,6 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -55,7 +55,7 @@ import org.openide.util.Parameters;
  *
  * @author Sam Harwell
  */
-public abstract class AbstractTokensTaskTaggerSnapshot<TState extends LineStateInfo<TState>> extends AbstractTagger<TokenTag> {
+public abstract class AbstractTokensTaskTaggerSnapshot<TState extends LineStateInfo<TState>> extends AbstractTagger<TokenTag<Token>> {
 
     @NonNull
     private final DocumentSnapshot snapshot;
@@ -172,7 +172,7 @@ public abstract class AbstractTokensTaskTaggerSnapshot<TState extends LineStateI
     }
 
     @Override
-    public Iterable<TaggedPositionRegion<TokenTag>> getTags(NormalizedSnapshotPositionRegionCollection regions) {
+    public Iterable<TaggedPositionRegion<TokenTag<Token>>> getTags(NormalizedSnapshotPositionRegionCollection regions) {
         Parameters.notNull("regions", regions);
         if (regions.isEmpty()) {
             return Collections.emptyList();
@@ -189,8 +189,8 @@ public abstract class AbstractTokensTaskTaggerSnapshot<TState extends LineStateI
         return getHighlights(startOffset, endOffset);
     }
 
-    public List<TaggedPositionRegion<TokenTag>> getHighlights(int startOffset, int endOffset) {
-        List<TaggedPositionRegion<TokenTag>> tags = new ArrayList<TaggedPositionRegion<TokenTag>>();
+    public List<TaggedPositionRegion<TokenTag<Token>>> getHighlights(int startOffset, int endOffset) {
+        List<TaggedPositionRegion<TokenTag<Token>>> tags = new ArrayList<TaggedPositionRegion<TokenTag<Token>>>();
         boolean updateOffsets = true;
 
         if (endOffset == Integer.MAX_VALUE) {
@@ -334,7 +334,7 @@ public abstract class AbstractTokensTaskTaggerSnapshot<TState extends LineStateI
                     continue;
                 }
 
-                Collection<TaggedPositionRegion<TokenTag>> tokenClassificationSpans = getTagsForToken(token);
+                Collection<TaggedPositionRegion<TokenTag<Token>>> tokenClassificationSpans = getTagsForToken(token);
                 if (tokenClassificationSpans != null) {
                     tags.addAll(tokenClassificationSpans);
                 }
@@ -474,17 +474,17 @@ public abstract class AbstractTokensTaskTaggerSnapshot<TState extends LineStateI
 
     protected abstract TokenSourceWithStateV4<TState> createLexer(CharStream input, TState startState);
 
-    protected Collection<TaggedPositionRegion<TokenTag>> getTagsForToken(Token token) {
-        TokenTag tag = highlightToken(token);
+    protected Collection<TaggedPositionRegion<TokenTag<Token>>> getTagsForToken(Token token) {
+        TokenTag<Token> tag = highlightToken(token);
         if (tag != null) {
-            return Collections.<TaggedPositionRegion<TokenTag>>singleton(new BaseTaggedPositionRegion<TokenTag>(new SnapshotPositionRegion(snapshot, OffsetRegion.fromBounds(token.getStartIndex(), token.getStopIndex() + 1)), tag));
+            return Collections.<TaggedPositionRegion<TokenTag<Token>>>singleton(new BaseTaggedPositionRegion<TokenTag<Token>>(new SnapshotPositionRegion(snapshot, OffsetRegion.fromBounds(token.getStartIndex(), token.getStopIndex() + 1)), tag));
         }
 
         return Collections.emptyList();
     }
 
-    protected TokenTag highlightToken(Token token) {
-        return new TokenTag(token);
+    protected TokenTag<Token> highlightToken(Token token) {
+        return new TokenTag<Token>(token);
     }
 
     public void forceRehighlightLines(int startLine, int endLineInclusive) {

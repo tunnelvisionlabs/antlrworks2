@@ -1,6 +1,6 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -45,6 +45,7 @@ import org.antlr.netbeans.parsing.spi.ParserTaskDefinition;
 import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.netbeans.parsing.spi.ParserTaskProvider;
 import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
+import org.antlr.v4.runtime.Token;
 import org.antlr.works.editor.st4.StringTemplateEditorKit;
 import org.antlr.works.editor.st4.TemplateParserDataDefinitions;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
@@ -55,8 +56,8 @@ import org.netbeans.api.editor.mimelookup.MimeRegistration;
  */
 public class LexerTokensParserTask implements ParserTask {
 
-    private static final WeakHashMap<VersionedDocument, WeakHashMap<DocumentSnapshot, ParserData<Tagger<TokenTag>>>> cache =
-        new WeakHashMap<VersionedDocument, WeakHashMap<DocumentSnapshot, ParserData<Tagger<TokenTag>>>>();
+    private static final WeakHashMap<VersionedDocument, WeakHashMap<DocumentSnapshot, ParserData<Tagger<TokenTag<Token>>>>> cache =
+        new WeakHashMap<VersionedDocument, WeakHashMap<DocumentSnapshot, ParserData<Tagger<TokenTag<Token>>>>>();
 
     @Override
     public ParserTaskDefinition getDefinition() {
@@ -69,30 +70,30 @@ public class LexerTokensParserTask implements ParserTask {
         throws InterruptedException, ExecutionException {
 
         if (requestedData.contains(TemplateParserDataDefinitions.LEXER_TOKENS)) {
-            WeakHashMap<DocumentSnapshot, ParserData<Tagger<TokenTag>>> documentCache;
+            WeakHashMap<DocumentSnapshot, ParserData<Tagger<TokenTag<Token>>>> documentCache;
             synchronized (cache) {
                 documentCache = cache.get(snapshot.getVersionedDocument());
                 if (documentCache == null) {
-                    documentCache = new WeakHashMap<DocumentSnapshot, ParserData<Tagger<TokenTag>>>();
+                    documentCache = new WeakHashMap<DocumentSnapshot, ParserData<Tagger<TokenTag<Token>>>>();
                     cache.put(snapshot.getVersionedDocument(), documentCache);
                 }
             }
             
-            ParserData<Tagger<TokenTag>> result;
+            ParserData<Tagger<TokenTag<Token>>> result;
             synchronized (documentCache) {
                 result = documentCache.get(snapshot);
             }
 
             if (result == null) {
                 int requestedVersion = snapshot.getVersion().getVersionNumber();
-                ParserData<Tagger<TokenTag>> previousResult = null;
+                ParserData<Tagger<TokenTag<Token>>> previousResult = null;
                 int previousVersion = -1;
-                ParserData<Tagger<TokenTag>>[] values;
+                ParserData<Tagger<TokenTag<Token>>>[] values;
                 synchronized (documentCache) {
                     values = documentCache.values().toArray(new ParserData[0]);
                 }
 
-                for (ParserData<Tagger<TokenTag>> data : values) {
+                for (ParserData<Tagger<TokenTag<Token>>> data : values) {
                     int dataVersion = data.getSnapshot().getVersion().getVersionNumber();
                     if (dataVersion > previousVersion && dataVersion < requestedVersion) {
                         previousResult = data;
@@ -102,15 +103,15 @@ public class LexerTokensParserTask implements ParserTask {
                 
                 if (previousResult != null) {
                     TemplateTokensTaskTaggerSnapshot previousTagger = (TemplateTokensTaskTaggerSnapshot)previousResult.getData();
-                    result = new BaseParserData<Tagger<TokenTag>>(TemplateParserDataDefinitions.LEXER_TOKENS, snapshot, previousTagger.translateTo(snapshot));
+                    result = new BaseParserData<Tagger<TokenTag<Token>>>(TemplateParserDataDefinitions.LEXER_TOKENS, snapshot, previousTagger.translateTo(snapshot));
                 } else {
                     TemplateTokensTaskTaggerSnapshot tagger = new TemplateTokensTaskTaggerSnapshot(snapshot);
                     tagger.initialize();
-                    result = new BaseParserData<Tagger<TokenTag>>(TemplateParserDataDefinitions.LEXER_TOKENS, snapshot, tagger);
+                    result = new BaseParserData<Tagger<TokenTag<Token>>>(TemplateParserDataDefinitions.LEXER_TOKENS, snapshot, tagger);
                 }
 
                 synchronized (documentCache) {
-                    ParserData<Tagger<TokenTag>> updatedResult = documentCache.get(snapshot);
+                    ParserData<Tagger<TokenTag<Token>>> updatedResult = documentCache.get(snapshot);
                     if (updatedResult != null) {
                         result = updatedResult;
                     } else {

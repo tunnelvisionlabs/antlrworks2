@@ -167,8 +167,8 @@ public class GrammarCompletionProvider implements CompletionProvider {
 //            try {
                 ParserTaskManager taskManager = Lookup.getDefault().lookup(ParserTaskManager.class);
                 DocumentSnapshot snapshot = VersionedDocumentUtilities.getVersionedDocument(document).getCurrentSnapshot();
-                Future<ParserData<Tagger<TokenTag>>> futureTokensData = taskManager.getData(snapshot, GrammarParserDataDefinitions.LEXER_TOKENS, EnumSet.of(ParserDataOptions.SYNCHRONOUS));
-                Tagger<TokenTag> tagger;
+                Future<ParserData<Tagger<TokenTag<Token>>>> futureTokensData = taskManager.getData(snapshot, GrammarParserDataDefinitions.LEXER_TOKENS, EnumSet.of(ParserDataOptions.SYNCHRONOUS));
+                Tagger<TokenTag<Token>> tagger;
                 try {
                     tagger = futureTokensData.get().getData();
                 } catch (InterruptedException ex) {
@@ -181,7 +181,7 @@ public class GrammarCompletionProvider implements CompletionProvider {
 
                 // get the token(s) at the cursor position, with affinity both directions
                 OffsetRegion region = OffsetRegion.fromBounds(Math.max(0, offset - 1), Math.min(snapshot.length(), offset + 1));
-                Iterable<TaggedPositionRegion<TokenTag>> tags = tagger.getTags(new NormalizedSnapshotPositionRegionCollection(new SnapshotPositionRegion(snapshot, region)));
+                Iterable<TaggedPositionRegion<TokenTag<Token>>> tags = tagger.getTags(new NormalizedSnapshotPositionRegionCollection(new SnapshotPositionRegion(snapshot, region)));
 
                 // TODO: cache tokens
 //                ANTLRStringStream input = new ANTLRStringStream(document.getText(0, document.getLength()));
@@ -194,7 +194,7 @@ public class GrammarCompletionProvider implements CompletionProvider {
 //                        break;
 //                    }
 //                }
-                for (TaggedPositionRegion<TokenTag> taggedRegion : tags) {
+                for (TaggedPositionRegion<TokenTag<Token>> taggedRegion : tags) {
                     if (taggedRegion.getTag().getToken().getChannel() != Lexer.DEFAULT_TOKEN_CHANNEL) {
                         continue;
                     }
@@ -207,7 +207,7 @@ public class GrammarCompletionProvider implements CompletionProvider {
 
                 if (token == null) {
                     // try again without skipping off-channel tokens
-                    for (TaggedPositionRegion<TokenTag> taggedRegion : tags) {
+                    for (TaggedPositionRegion<TokenTag<Token>> taggedRegion : tags) {
                         token = taggedRegion.getTag().getToken();
                         if (token.getStartIndex() <= offset && token.getStopIndex() >= offset) {
                             break;

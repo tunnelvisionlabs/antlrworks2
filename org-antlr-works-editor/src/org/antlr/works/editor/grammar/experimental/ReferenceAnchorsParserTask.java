@@ -1,6 +1,6 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -88,8 +88,8 @@ public class ReferenceAnchorsParserTask implements ParserTask {
             return;
         }
 
-        Future<ParserData<Tagger<TokenTag>>> futureTokensData = taskManager.getData(snapshot, GrammarParserDataDefinitions.LEXER_TOKENS);
-        Tagger<TokenTag> tagger = futureTokensData.get().getData();
+        Future<ParserData<Tagger<TokenTag<Token>>>> futureTokensData = taskManager.getData(snapshot, GrammarParserDataDefinitions.LEXER_TOKENS);
+        Tagger<TokenTag<Token>> tagger = futureTokensData.get().getData();
         TaggerTokenSource tokenSource = new TaggerTokenSource(tagger, snapshot);
 //        DocumentSnapshotCharStream input = new DocumentSnapshotCharStream(snapshot);
 //        input.setSourceName((String)document.getDocument().getProperty(Document.TitleProperty));
