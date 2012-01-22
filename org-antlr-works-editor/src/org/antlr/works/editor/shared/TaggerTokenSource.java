@@ -28,7 +28,6 @@
 package org.antlr.works.editor.shared;
 
 import java.util.Iterator;
-import org.antlr.netbeans.editor.classification.DocumentSnapshotCharStream;
 import org.antlr.netbeans.editor.classification.TokenTag;
 import org.antlr.netbeans.editor.tagging.TaggedPositionRegion;
 import org.antlr.netbeans.editor.tagging.Tagger;
@@ -41,6 +40,7 @@ import org.antlr.v4.runtime.CommonTokenFactory;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenFactory;
 import org.antlr.v4.runtime.TokenSource;
+import org.antlr.works.editor.antlr4.classification.DocumentSnapshotCharStream;
 import org.netbeans.api.annotations.common.NonNull;
 
 /**

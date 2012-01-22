@@ -1,6 +1,6 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -32,19 +32,23 @@ import java.util.Collection;
 import java.util.List;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.StyledDocument;
-import org.antlr.netbeans.editor.highlighting.ANTLRHighlighterBase;
-import org.antlr.netbeans.editor.highlighting.DocumentCharStream;
 import org.antlr.netbeans.editor.highlighting.Highlight;
-import org.antlr.netbeans.editor.highlighting.TokenSourceWithState;
 import org.antlr.netbeans.editor.text.OffsetRegion;
 import org.antlr.runtime.CharStream;
 import org.antlr.runtime.CommonToken;
+import org.antlr.works.editor.antlr3.highlighting.ANTLRHighlighterBase;
+import org.antlr.works.editor.antlr3.highlighting.DocumentCharStream;
+import org.antlr.works.editor.antlr3.highlighting.TokenSourceWithState;
 import org.antlr.works.editor.st4.StringTemplateEditorKit;
 import org.netbeans.api.editor.mimelookup.MimeLookup;
 import org.netbeans.api.editor.mimelookup.MimePath;
 import org.netbeans.api.editor.settings.FontColorSettings;
 import org.openide.util.Lookup;
 
+/**
+ *
+ * @author Sam Harwell
+ */
 public class TemplateHighlighter extends ANTLRHighlighterBase<TemplateHighlighterLexerState> {
     private static final List<String> keywords =
         new ArrayList<String>()

@@ -1,6 +1,6 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -29,10 +29,14 @@ package org.antlr.works.editor.grammar.highlighter;
 
 import java.util.HashSet;
 import java.util.Set;
-import org.antlr.netbeans.editor.highlighting.TokenSourceWithState;
 import org.antlr.runtime.CharStream;
 import org.antlr.runtime.Token;
+import org.antlr.works.editor.antlr3.highlighting.TokenSourceWithState;
 
+/**
+ *
+ * @author Sam Harwell
+ */
 public class ANTLRHighlighterLexer implements TokenSourceWithState<ANTLRHighlighterState> {
     private CharStream input;
     private GrammarHighlighterLexer grammarLexer;

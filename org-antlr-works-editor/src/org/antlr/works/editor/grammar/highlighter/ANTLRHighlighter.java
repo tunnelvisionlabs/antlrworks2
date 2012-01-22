@@ -1,6 +1,6 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -34,10 +34,10 @@ import java.util.HashSet;
 import java.util.Set;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.StyledDocument;
-import org.antlr.netbeans.editor.highlighting.ANTLRHighlighterBase;
-import org.antlr.netbeans.editor.highlighting.TokenSourceWithState;
 import org.antlr.runtime.CharStream;
 import org.antlr.runtime.CommonToken;
+import org.antlr.works.editor.antlr3.highlighting.ANTLRHighlighterBase;
+import org.antlr.works.editor.antlr3.highlighting.TokenSourceWithState;
 import org.antlr.works.editor.grammar.GrammarEditorKit;
 import org.netbeans.api.editor.mimelookup.MimeLookup;
 import org.netbeans.api.editor.mimelookup.MimePath;
@@ -46,6 +46,10 @@ import org.netbeans.lib.editor.util.swing.DocumentUtilities;
 import org.openide.text.NbDocument;
 import org.openide.util.Lookup;
 
+/**
+ *
+ * @author Sam Harwell
+ */
 public class ANTLRHighlighter extends ANTLRHighlighterBase<ANTLRHighlighterState> {
     public static final String DOCUMENT_PROPERTY = "grammar-highlighter";
 
