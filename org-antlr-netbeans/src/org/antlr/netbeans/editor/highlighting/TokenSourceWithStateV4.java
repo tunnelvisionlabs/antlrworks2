@@ -32,8 +32,10 @@ import org.antlr.v4.runtime.TokenSource;
 
 /**
  *
+ * @deprecated Moved to the ANTLR 4 extensions module
  * @author Sam Harwell
  */
+@Deprecated
 public interface TokenSourceWithStateV4<T> extends TokenSource {
     public CharStream getCharStream();
 

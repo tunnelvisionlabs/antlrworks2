@@ -30,6 +30,12 @@ package org.antlr.netbeans.editor.highlighting;
 import org.antlr.runtime.CharStream;
 import org.antlr.runtime.TokenSource;
 
+/**
+ *
+ * @deprecated Moved to the ANTLR 3 extensions module
+ * @author Sam Harwell
+ */
+@Deprecated
 public interface TokenSourceWithState<T> extends TokenSource {
     public CharStream getCharStream();
     

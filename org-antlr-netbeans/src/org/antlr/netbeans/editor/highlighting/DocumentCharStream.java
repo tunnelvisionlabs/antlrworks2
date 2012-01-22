@@ -36,6 +36,12 @@ import org.antlr.runtime.CharStream;
 import org.antlr.runtime.Token;
 import org.openide.text.NbDocument;
 
+/**
+ *
+ * @deprecated Moved to the ANTLR 3 extensions module
+ * @author Sam Harwell
+ */
+@Deprecated
 public class DocumentCharStream implements CharStream {
     private boolean explicitCache;
     

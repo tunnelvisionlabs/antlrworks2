@@ -36,8 +36,10 @@ import org.openide.util.Parameters;
 
 /**
  *
+ * @deprecated Moved to the ANTLR 4 extensions module
  * @author Sam Harwell
  */
+@Deprecated
 public class DocumentSnapshotCharStream implements CharStream {
 
     // input info

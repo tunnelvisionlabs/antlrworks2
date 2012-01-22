@@ -36,8 +36,10 @@ import org.openide.text.NbDocument;
 
 /**
  *
+ * @deprecated Moved to the ANTLR 4 extensions module
  * @author Sam Harwell
  */
+@Deprecated
 public class DocumentCharStreamV4 implements CharStream {
     private boolean explicitCache;
 

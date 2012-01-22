@@ -50,8 +50,10 @@ import org.openide.util.Parameters;
 
 /**
  *
+ * @deprecated Moved to the ANTLR 4 extensions module
  * @author Sam Harwell
  */
+@Deprecated
 public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState>> extends AbstractHighlightsContainer {
     private static final boolean FULL_CHECKS = false;
     private static final boolean FIX_HIGHLIGHTER_UPDATE_BUG = false;
