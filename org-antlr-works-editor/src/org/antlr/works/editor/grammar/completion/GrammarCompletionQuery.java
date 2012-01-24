@@ -657,7 +657,7 @@ public final class GrammarCompletionQuery extends AsyncCompletionQuery {
                             }
 
                             if (fileModel == null && !fileModelDataFailed) {
-                                Future<ParserData<FileModel>> futureFileModelData = taskManager.getData(snapshot, GrammarParserDataDefinitions.FILE_MODEL, EnumSet.of(ParserDataOptions.SYNCHRONOUS));
+                                Future<ParserData<FileModel>> futureFileModelData = taskManager.getData(snapshot, GrammarParserDataDefinitions.FILE_MODEL, EnumSet.of(ParserDataOptions.ALLOW_STALE, ParserDataOptions.SYNCHRONOUS));
                                 try {
                                     fileModel = futureFileModelData.get().getData();
                                 } catch (InterruptedException ex) {
