@@ -115,6 +115,8 @@ public final class GrammarCompletionQuery extends AsyncCompletionQuery {
     private static final int ADDITIONAL_IMPORTED_ITEMS = 1;
     private static final int ADDITIONAL_MEMBER_ITEMS = 2;
 
+    private static final ParserCache parserCache = new ParserCache();
+
     /** ^[\\$A-Za-z_][A-Za-z0-9_]*$ */
     /*package*/ static final Pattern WORD_PATTERN = Pattern.compile("^[\\$A-Za-z_][A-Za-z0-9_]*$");
 
@@ -474,311 +476,315 @@ public final class GrammarCompletionQuery extends AsyncCompletionQuery {
                     TokenSource tokenSource = new CodeCompletionTokenSource(caretOffset, taggerTokenSource);
                     CommonTokenStream tokens = new CommonTokenStream(tokenSource);
 
-                    CodeCompletionGrammarParser parser = new CodeCompletionGrammarParser(tokens);
-                    parser.setBuildParseTree(true);
-                    parser.setErrorHandler(new CodeCompletionErrorStrategy());
+                    CodeCompletionGrammarParser parser = parserCache.getParser(tokens);
+                    try {
+                        parser.setBuildParseTree(true);
+                        parser.setErrorHandler(new CodeCompletionErrorStrategy());
 
-                    switch (previous.getRule()) {
-                    case GrammarParser.RULE_rule:
-                        parseTrees = getParseTrees(parser);
-                        break;
+                        switch (previous.getRule()) {
+                        case GrammarParser.RULE_rule:
+                            parseTrees = getParseTrees(parser);
+                            break;
 
-                    default:
-                        parseTrees = null;
-                        break;
-                    }
-
-                    boolean hasActionConfig = false;
-                    boolean hasNonActionConfig = false;
-                    final boolean hasRewriteConfig = false;
-                    boolean hasNonRewriteConfig = false;
-
-                    if (parseTrees != null) {
-                        possibleDeclaration = false;
-                        possibleReference = false;
-
-                        declarationOrReferenceLoop:
-                        for (Map.Entry<RuleContext, CaretReachedException> entry : parseTrees.entrySet()) {
-                            CaretReachedException ex = entry.getValue();
-                            if (ex == null || ex.getTransitions() == null) {
-                                continue;
-                            }
-
-                            if (ex.getCaretToken() != null) {
-                                caretToken = ex.getCaretToken();
-                            }
-
-                            Map<ATNConfig, List<Transition>> transitions = entry.getValue().getTransitions();
-                            IdentityHashMap<PredictionContext, PredictionContext> visited = new IdentityHashMap<PredictionContext, PredictionContext>();
-                            Deque<PredictionContext> workList = new ArrayDeque<PredictionContext>();
-                            Deque<Integer> stateWorkList = new ArrayDeque<Integer>();
-                            for (ATNConfig c : transitions.keySet()) {
-                                boolean currentActionConfig = false;
-                                final boolean currentRewriteConfig = false;
-                                visited.clear();
-                                workList.clear();
-                                stateWorkList.clear();
-                                workList.add(c.context);
-                                stateWorkList.add(c.state.stateNumber);
-                                while (!workList.isEmpty()) {
-                                    PredictionContext context = workList.poll();
-                                    int state = stateWorkList.poll();
-                                    if (visited.put(context, context) != null) {
-                                        continue;
-                                    }
-
-                                    for (int i = 0; i < context.invokingStates.length; i++) {
-                                        workList.add(context.parents[i]);
-                                        stateWorkList.add(context.invokingStates[i]);
-                                    }
-
-                                    int ruleIndex = parser.getATN().states.get(state).ruleIndex;
-                                    if (ruleIndex == GrammarParser.RULE_actionBlock) {
-                                        currentActionConfig = true;
-                                    }
-
-                                    if (currentActionConfig && currentRewriteConfig) {
-                                        break;
-                                    }
-                                }
-
-                                hasActionConfig |= currentActionConfig;
-                                hasNonActionConfig |= !currentActionConfig;
-                                hasNonRewriteConfig |= !currentRewriteConfig;
-
-                                for (Transition t : transitions.get(c)) {
-                                    int ruleIndex = t.target.ruleIndex;
-                                    if (ruleIndex == GrammarParser.RULE_id) {
-                                        possibleDeclaration = true;
-                                    } else if (ruleIndex == GrammarParser.RULE_ruleref
-                                        || ruleIndex == GrammarParser.RULE_terminal) {
-                                        possibleReference = true;
-                                    }
-
-                                    if (possibleDeclaration && possibleReference) {
-                                        break;
-                                    }
-                                }
-
-                                if (hasActionConfig && hasNonActionConfig && hasRewriteConfig && hasNonRewriteConfig) {
-                                    break declarationOrReferenceLoop;
-                                }
-                            }
-                        }
-                    }
-
-                    Map<String, CompletionItem> intermediateResults = new HashMap<String, CompletionItem>();
-                    if (parseTrees != null) {
-                        /*
-                         * KEYWORD ANALYSIS
-                         */
-                        IntervalSet remainingKeywords = new IntervalSet();
-                        remainingKeywords.add(GrammarLexer.OPTIONS);
-                        remainingKeywords.add(GrammarLexer.TOKENS);
-                        remainingKeywords.add(GrammarLexer.IMPORT);
-                        remainingKeywords.add(GrammarLexer.FRAGMENT);
-                        remainingKeywords.add(GrammarLexer.LEXER);
-                        remainingKeywords.add(GrammarLexer.PARSER);
-                        remainingKeywords.add(GrammarLexer.GRAMMAR);
-                        remainingKeywords.add(GrammarLexer.PROTECTED);
-                        remainingKeywords.add(GrammarLexer.PUBLIC);
-                        remainingKeywords.add(GrammarLexer.PRIVATE);
-                        remainingKeywords.add(GrammarLexer.RETURNS);
-                        remainingKeywords.add(GrammarLexer.LOCALS);
-                        remainingKeywords.add(GrammarLexer.THROWS);
-                        remainingKeywords.add(GrammarLexer.CATCH);
-                        remainingKeywords.add(GrammarLexer.FINALLY);
-                        remainingKeywords.add(GrammarLexer.TEMPLATE);
-                        remainingKeywords.add(GrammarLexer.MODE);
-
-                        for (Map.Entry<RuleContext, CaretReachedException> entry : parseTrees.entrySet()) {
-                            CaretReachedException caretReachedException = entry.getValue();
-                            if (caretReachedException == null || caretReachedException.getTransitions() == null) {
-                                continue;
-                            }
-
-                            Map<ATNConfig, List<Transition>> transitions = caretReachedException.getTransitions();
-                            for (List<Transition> transitionList : transitions.values()) {
-                                for (Transition transition : transitionList) {
-                                    if (transition.isEpsilon() || transition instanceof WildcardTransition || transition instanceof NotSetTransition) {
-                                        continue;
-                                    }
-
-                                    IntervalSet label = transition.label();
-                                    if (label == null) {
-                                        continue;
-                                    }
-
-                                    for (int keyword : remainingKeywords.toArray()) {
-                                        if (label.contains(keyword)) {
-                                            remainingKeywords.remove(keyword);
-                                            KeywordCompletionItem item = new KeywordCompletionItem(GrammarLexer.tokenNames[keyword].toLowerCase());
-                                            intermediateResults.put(item.getInsertPrefix().toString(), item);
-                                        }
-                                    }
-                                }
-                            }
+                        default:
+                            parseTrees = null;
+                            break;
                         }
 
-                        /*
-                         * EXPRESSION ANALYSIS
-                         */
-                        FileModel fileModel = null;
-                        boolean fileModelDataFailed = false;
-                        boolean inExpression = false;
+                        boolean hasActionConfig = false;
+                        boolean hasNonActionConfig = false;
+                        final boolean hasRewriteConfig = false;
+                        boolean hasNonRewriteConfig = false;
 
-                        for (Map.Entry<RuleContext, CaretReachedException> entry : parseTrees.entrySet()) {
-                            RuleContext finalContext = entry.getValue() != null ? entry.getValue().getFinalContext() : null;
-                            if (finalContext == null) {
-                                continue;
-                            }
+                        if (parseTrees != null) {
+                            possibleDeclaration = false;
+                            possibleReference = false;
 
-                            ParseTree expressionRoot = null;
-                            if (finalContext instanceof actionScopeExpressionContext
-                                || finalContext instanceof actionExpressionContext) {
-                                expressionRoot = finalContext;
-                            }
-
-                            for (Tree tree : Trees.getAncestors(finalContext)) {
-                                if (tree instanceof actionScopeExpressionContext
-                                    || tree instanceof actionExpressionContext) {
-                                    expressionRoot = (ParseTree)tree;
-                                }
-                            }
-
-                            if (expressionRoot == null) {
-                                continue;
-                            } else if (expressionRoot instanceof actionScopeExpressionContext) {
-                                if (((actionScopeExpressionContext)expressionRoot).op == null) {
+                            declarationOrReferenceLoop:
+                            for (Map.Entry<RuleContext, CaretReachedException> entry : parseTrees.entrySet()) {
+                                CaretReachedException ex = entry.getValue();
+                                if (ex == null || ex.getTransitions() == null) {
                                     continue;
                                 }
-                            } else if (expressionRoot instanceof actionExpressionContext) {
-                                if (((actionExpressionContext)expressionRoot).op == null) {
-                                    continue;
+
+                                if (ex.getCaretToken() != null) {
+                                    caretToken = ex.getCaretToken();
                                 }
-                            }
 
-                            if (fileModel == null && !fileModelDataFailed) {
-                                Future<ParserData<FileModel>> futureFileModelData = taskManager.getData(snapshot, GrammarParserDataDefinitions.FILE_MODEL, EnumSet.of(ParserDataOptions.ALLOW_STALE, ParserDataOptions.SYNCHRONOUS));
-                                try {
-                                    fileModel = futureFileModelData.get().getData();
-                                } catch (InterruptedException ex) {
-                                    Exceptions.printStackTrace(ex);
-                                    fileModelDataFailed = true;
-                                } catch (ExecutionException ex) {
-                                    Exceptions.printStackTrace(ex);
-                                    fileModelDataFailed = true;
+                                Map<ATNConfig, List<Transition>> transitions = entry.getValue().getTransitions();
+                                IdentityHashMap<PredictionContext, PredictionContext> visited = new IdentityHashMap<PredictionContext, PredictionContext>();
+                                Deque<PredictionContext> workList = new ArrayDeque<PredictionContext>();
+                                Deque<Integer> stateWorkList = new ArrayDeque<Integer>();
+                                for (ATNConfig c : transitions.keySet()) {
+                                    boolean currentActionConfig = false;
+                                    final boolean currentRewriteConfig = false;
+                                    visited.clear();
+                                    workList.clear();
+                                    stateWorkList.clear();
+                                    workList.add(c.context);
+                                    stateWorkList.add(c.state.stateNumber);
+                                    while (!workList.isEmpty()) {
+                                        PredictionContext context = workList.poll();
+                                        int state = stateWorkList.poll();
+                                        if (visited.put(context, context) != null) {
+                                            continue;
+                                        }
+
+                                        for (int i = 0; i < context.invokingStates.length; i++) {
+                                            workList.add(context.parents[i]);
+                                            stateWorkList.add(context.invokingStates[i]);
+                                        }
+
+                                        int ruleIndex = parser.getATN().states.get(state).ruleIndex;
+                                        if (ruleIndex == GrammarParser.RULE_actionBlock) {
+                                            currentActionConfig = true;
+                                        }
+
+                                        if (currentActionConfig && currentRewriteConfig) {
+                                            break;
+                                        }
+                                    }
+
+                                    hasActionConfig |= currentActionConfig;
+                                    hasNonActionConfig |= !currentActionConfig;
+                                    hasNonRewriteConfig |= !currentRewriteConfig;
+
+                                    for (Transition t : transitions.get(c)) {
+                                        int ruleIndex = t.target.ruleIndex;
+                                        if (ruleIndex == GrammarParser.RULE_id) {
+                                            possibleDeclaration = true;
+                                        } else if (ruleIndex == GrammarParser.RULE_ruleref
+                                            || ruleIndex == GrammarParser.RULE_terminal) {
+                                            possibleReference = true;
+                                        }
+
+                                        if (possibleDeclaration && possibleReference) {
+                                            break;
+                                        }
+                                    }
+
+                                    if (hasActionConfig && hasNonActionConfig && hasRewriteConfig && hasNonRewriteConfig) {
+                                        break declarationOrReferenceLoop;
+                                    }
                                 }
-                            }
-
-                            if (fileModel == null) {
-                                continue;
-                            }
-
-                            inExpression = true;
-                            ActionExpressionAnalyzer expressionAnalyzer = new ActionExpressionAnalyzer(fileModel, finalContext);
-                            ParseTreeWalker.DEFAULT.walk(expressionAnalyzer, expressionRoot);
-                            for (AttributeModel member : expressionAnalyzer.getMembers()) {
-                                CompletionItem item = new MemberCompletionItem(member);
-                                intermediateResults.put(item.getInsertPrefix().toString(), item);
                             }
                         }
 
-                        for (Map.Entry<RuleContext, CaretReachedException> entry : parseTrees.entrySet()) {
-                            ParseTree parseTree = entry.getKey();
-                            RuleContext finalContext = entry.getValue() != null ? entry.getValue().getFinalContext() : null;
-                            LabelAnalyzer labelAnalyzer = new LabelAnalyzer(finalContext);
-                            ParseTreeWalker.DEFAULT.walk(labelAnalyzer, parseTree);
+                        Map<String, CompletionItem> intermediateResults = new HashMap<String, CompletionItem>();
+                        if (parseTrees != null) {
+                            /*
+                            * KEYWORD ANALYSIS
+                            */
+                            IntervalSet remainingKeywords = new IntervalSet();
+                            remainingKeywords.add(GrammarLexer.OPTIONS);
+                            remainingKeywords.add(GrammarLexer.TOKENS);
+                            remainingKeywords.add(GrammarLexer.IMPORT);
+                            remainingKeywords.add(GrammarLexer.FRAGMENT);
+                            remainingKeywords.add(GrammarLexer.LEXER);
+                            remainingKeywords.add(GrammarLexer.PARSER);
+                            remainingKeywords.add(GrammarLexer.GRAMMAR);
+                            remainingKeywords.add(GrammarLexer.PROTECTED);
+                            remainingKeywords.add(GrammarLexer.PUBLIC);
+                            remainingKeywords.add(GrammarLexer.PRIVATE);
+                            remainingKeywords.add(GrammarLexer.RETURNS);
+                            remainingKeywords.add(GrammarLexer.LOCALS);
+                            remainingKeywords.add(GrammarLexer.THROWS);
+                            remainingKeywords.add(GrammarLexer.CATCH);
+                            remainingKeywords.add(GrammarLexer.FINALLY);
+                            remainingKeywords.add(GrammarLexer.TEMPLATE);
+                            remainingKeywords.add(GrammarLexer.MODE);
 
-                            possibleInAction = labelAnalyzer.isInAction() || hasActionConfig;
-                            definiteInAction = labelAnalyzer.isInAction() || (hasActionConfig && !hasNonActionConfig);
-                            possibleKeyword |= !definiteInAction;
-                            possibleDeclaration &= !definiteInAction;
-                            possibleReference &= !definiteInAction;
-
-                            if (grammarType == GrammarParser.COMBINED) {
-                                Token enclosingRule = labelAnalyzer.getEnclosingRuleName();
-                                if (enclosingRule != null) {
-                                    if (enclosingRule.getType() == GrammarParser.RULE_REF) {
-                                        grammarType = GrammarParser.PARSER;
-                                    } else {
-                                        grammarType = GrammarParser.LEXER;
-                                    }
-                                }
-                            }
-
-                            if (!inExpression && possibleInAction) {
-                                if (!definiteInAction && labelAnalyzer.getEnclosingRuleName() != null) {
-                                    CompletionItem item = new EnclosingRuleCompletionItem(labelAnalyzer.getEnclosingRuleName().getText());
-                                    intermediateResults.put(item.getInsertPrefix().toString(), item);
-                                }
-
-                                for (Token label : labelAnalyzer.getLabels()) {
-                                    CompletionItem item = new RewriteReferenceCompletionItem(label.getText(), true);
-                                    intermediateResults.put(item.getInsertPrefix().toString(), item);
+                            for (Map.Entry<RuleContext, CaretReachedException> entry : parseTrees.entrySet()) {
+                                CaretReachedException caretReachedException = entry.getValue();
+                                if (caretReachedException == null || caretReachedException.getTransitions() == null) {
+                                    continue;
                                 }
 
-                                if (possibleInAction && !inExpression) {
-                                    for (Token implicit : labelAnalyzer.getUnlabeledElements()) {
-                                        // only add implicit tokens here. all implicit rule references will be added separately
-                                        if (Character.isUpperCase(implicit.getText().charAt(0))) {
-                                            CompletionItem item = new ActionReferenceCompletionItem(implicit.getText(), false);
-                                            intermediateResults.put(item.getInsertPrefix().toString(), item);
-                                        }
-                                    }
-
-                                    if (grammarType != GrammarParser.LEXER) {
-                                        // Add rules from the grammar
-                                        if (rules == null) {
-                                            rules = GrammarCompletionProvider.getRulesFromGrammar(taskManager, snapshot);
+                                Map<ATNConfig, List<Transition>> transitions = caretReachedException.getTransitions();
+                                for (List<Transition> transitionList : transitions.values()) {
+                                    for (Transition transition : transitionList) {
+                                        if (transition.isEpsilon() || transition instanceof WildcardTransition || transition instanceof NotSetTransition) {
+                                            continue;
                                         }
 
-                                        for (Description rule : rules) {
-                                            if (Character.isLowerCase(rule.getName().charAt(0))) {
-                                                results.add(new ActionReferenceCompletionItem(rule.getName(), false));
+                                        IntervalSet label = transition.label();
+                                        if (label == null) {
+                                            continue;
+                                        }
+
+                                        for (int keyword : remainingKeywords.toArray()) {
+                                            if (label.contains(keyword)) {
+                                                remainingKeywords.remove(keyword);
+                                                KeywordCompletionItem item = new KeywordCompletionItem(GrammarLexer.tokenNames[keyword].toLowerCase());
+                                                intermediateResults.put(item.getInsertPrefix().toString(), item);
                                             }
                                         }
                                     }
+                                }
+                            }
 
-                                    switch (grammarType) {
-                                    case GrammarParser.LEXER:
-                                        intermediateResults.put("$text", new KeywordCompletionItem("$text"));
-                                        intermediateResults.put("$type", new KeywordCompletionItem("$type"));
-                                        intermediateResults.put("$line", new KeywordCompletionItem("$line"));
-                                        intermediateResults.put("$index", new KeywordCompletionItem("$index"));
-                                        intermediateResults.put("$pos", new KeywordCompletionItem("$pos"));
-                                        intermediateResults.put("$channel", new KeywordCompletionItem("$channel"));
-                                        intermediateResults.put("$start", new KeywordCompletionItem("$start"));
-                                        intermediateResults.put("$stop", new KeywordCompletionItem("$stop"));
-                                        intermediateResults.put("$int", new KeywordCompletionItem("$int"));
-                                        break;
+                            /*
+                            * EXPRESSION ANALYSIS
+                            */
+                            FileModel fileModel = null;
+                            boolean fileModelDataFailed = false;
+                            boolean inExpression = false;
 
-                                    case GrammarParser.PARSER:
-                                        intermediateResults.put("$text", new KeywordCompletionItem("$text"));
-                                        intermediateResults.put("$start", new KeywordCompletionItem("$start"));
-                                        intermediateResults.put("$stop", new KeywordCompletionItem("$stop"));
-                                        intermediateResults.put("$ctx", new KeywordCompletionItem("$ctx"));
-                                        break;
+                            for (Map.Entry<RuleContext, CaretReachedException> entry : parseTrees.entrySet()) {
+                                RuleContext finalContext = entry.getValue() != null ? entry.getValue().getFinalContext() : null;
+                                if (finalContext == null) {
+                                    continue;
+                                }
 
-                                    default:
-                                        // if we're unsure about the type, include all possibilities to make sure we're covered
-                                        intermediateResults.put("$text", new KeywordCompletionItem("$text"));
-                                        intermediateResults.put("$type", new KeywordCompletionItem("$type"));
-                                        intermediateResults.put("$line", new KeywordCompletionItem("$line"));
-                                        intermediateResults.put("$index", new KeywordCompletionItem("$index"));
-                                        intermediateResults.put("$pos", new KeywordCompletionItem("$pos"));
-                                        intermediateResults.put("$channel", new KeywordCompletionItem("$channel"));
-                                        intermediateResults.put("$start", new KeywordCompletionItem("$start"));
-                                        intermediateResults.put("$stop", new KeywordCompletionItem("$stop"));
-                                        intermediateResults.put("$int", new KeywordCompletionItem("$int"));
-                                        intermediateResults.put("$ctx", new KeywordCompletionItem("$ctx"));
-                                        break;
+                                ParseTree expressionRoot = null;
+                                if (finalContext instanceof actionScopeExpressionContext
+                                    || finalContext instanceof actionExpressionContext) {
+                                    expressionRoot = finalContext;
+                                }
+
+                                for (Tree tree : Trees.getAncestors(finalContext)) {
+                                    if (tree instanceof actionScopeExpressionContext
+                                        || tree instanceof actionExpressionContext) {
+                                        expressionRoot = (ParseTree)tree;
+                                    }
+                                }
+
+                                if (expressionRoot == null) {
+                                    continue;
+                                } else if (expressionRoot instanceof actionScopeExpressionContext) {
+                                    if (((actionScopeExpressionContext)expressionRoot).op == null) {
+                                        continue;
+                                    }
+                                } else if (expressionRoot instanceof actionExpressionContext) {
+                                    if (((actionExpressionContext)expressionRoot).op == null) {
+                                        continue;
+                                    }
+                                }
+
+                                if (fileModel == null && !fileModelDataFailed) {
+                                    Future<ParserData<FileModel>> futureFileModelData = taskManager.getData(snapshot, GrammarParserDataDefinitions.FILE_MODEL, EnumSet.of(ParserDataOptions.ALLOW_STALE, ParserDataOptions.SYNCHRONOUS));
+                                    try {
+                                        fileModel = futureFileModelData.get().getData();
+                                    } catch (InterruptedException ex) {
+                                        Exceptions.printStackTrace(ex);
+                                        fileModelDataFailed = true;
+                                    } catch (ExecutionException ex) {
+                                        Exceptions.printStackTrace(ex);
+                                        fileModelDataFailed = true;
+                                    }
+                                }
+
+                                if (fileModel == null) {
+                                    continue;
+                                }
+
+                                inExpression = true;
+                                ActionExpressionAnalyzer expressionAnalyzer = new ActionExpressionAnalyzer(fileModel, finalContext);
+                                ParseTreeWalker.DEFAULT.walk(expressionAnalyzer, expressionRoot);
+                                for (AttributeModel member : expressionAnalyzer.getMembers()) {
+                                    CompletionItem item = new MemberCompletionItem(member);
+                                    intermediateResults.put(item.getInsertPrefix().toString(), item);
+                                }
+                            }
+
+                            for (Map.Entry<RuleContext, CaretReachedException> entry : parseTrees.entrySet()) {
+                                ParseTree parseTree = entry.getKey();
+                                RuleContext finalContext = entry.getValue() != null ? entry.getValue().getFinalContext() : null;
+                                LabelAnalyzer labelAnalyzer = new LabelAnalyzer(finalContext);
+                                ParseTreeWalker.DEFAULT.walk(labelAnalyzer, parseTree);
+
+                                possibleInAction = labelAnalyzer.isInAction() || hasActionConfig;
+                                definiteInAction = labelAnalyzer.isInAction() || (hasActionConfig && !hasNonActionConfig);
+                                possibleKeyword |= !definiteInAction;
+                                possibleDeclaration &= !definiteInAction;
+                                possibleReference &= !definiteInAction;
+
+                                if (grammarType == GrammarParser.COMBINED) {
+                                    Token enclosingRule = labelAnalyzer.getEnclosingRuleName();
+                                    if (enclosingRule != null) {
+                                        if (enclosingRule.getType() == GrammarParser.RULE_REF) {
+                                            grammarType = GrammarParser.PARSER;
+                                        } else {
+                                            grammarType = GrammarParser.LEXER;
+                                        }
+                                    }
+                                }
+
+                                if (!inExpression && possibleInAction) {
+                                    if (!definiteInAction && labelAnalyzer.getEnclosingRuleName() != null) {
+                                        CompletionItem item = new EnclosingRuleCompletionItem(labelAnalyzer.getEnclosingRuleName().getText());
+                                        intermediateResults.put(item.getInsertPrefix().toString(), item);
+                                    }
+
+                                    for (Token label : labelAnalyzer.getLabels()) {
+                                        CompletionItem item = new RewriteReferenceCompletionItem(label.getText(), true);
+                                        intermediateResults.put(item.getInsertPrefix().toString(), item);
+                                    }
+
+                                    if (possibleInAction && !inExpression) {
+                                        for (Token implicit : labelAnalyzer.getUnlabeledElements()) {
+                                            // only add implicit tokens here. all implicit rule references will be added separately
+                                            if (Character.isUpperCase(implicit.getText().charAt(0))) {
+                                                CompletionItem item = new ActionReferenceCompletionItem(implicit.getText(), false);
+                                                intermediateResults.put(item.getInsertPrefix().toString(), item);
+                                            }
+                                        }
+
+                                        if (grammarType != GrammarParser.LEXER) {
+                                            // Add rules from the grammar
+                                            if (rules == null) {
+                                                rules = GrammarCompletionProvider.getRulesFromGrammar(taskManager, snapshot);
+                                            }
+
+                                            for (Description rule : rules) {
+                                                if (Character.isLowerCase(rule.getName().charAt(0))) {
+                                                    results.add(new ActionReferenceCompletionItem(rule.getName(), false));
+                                                }
+                                            }
+                                        }
+
+                                        switch (grammarType) {
+                                        case GrammarParser.LEXER:
+                                            intermediateResults.put("$text", new KeywordCompletionItem("$text"));
+                                            intermediateResults.put("$type", new KeywordCompletionItem("$type"));
+                                            intermediateResults.put("$line", new KeywordCompletionItem("$line"));
+                                            intermediateResults.put("$index", new KeywordCompletionItem("$index"));
+                                            intermediateResults.put("$pos", new KeywordCompletionItem("$pos"));
+                                            intermediateResults.put("$channel", new KeywordCompletionItem("$channel"));
+                                            intermediateResults.put("$start", new KeywordCompletionItem("$start"));
+                                            intermediateResults.put("$stop", new KeywordCompletionItem("$stop"));
+                                            intermediateResults.put("$int", new KeywordCompletionItem("$int"));
+                                            break;
+
+                                        case GrammarParser.PARSER:
+                                            intermediateResults.put("$text", new KeywordCompletionItem("$text"));
+                                            intermediateResults.put("$start", new KeywordCompletionItem("$start"));
+                                            intermediateResults.put("$stop", new KeywordCompletionItem("$stop"));
+                                            intermediateResults.put("$ctx", new KeywordCompletionItem("$ctx"));
+                                            break;
+
+                                        default:
+                                            // if we're unsure about the type, include all possibilities to make sure we're covered
+                                            intermediateResults.put("$text", new KeywordCompletionItem("$text"));
+                                            intermediateResults.put("$type", new KeywordCompletionItem("$type"));
+                                            intermediateResults.put("$line", new KeywordCompletionItem("$line"));
+                                            intermediateResults.put("$index", new KeywordCompletionItem("$index"));
+                                            intermediateResults.put("$pos", new KeywordCompletionItem("$pos"));
+                                            intermediateResults.put("$channel", new KeywordCompletionItem("$channel"));
+                                            intermediateResults.put("$start", new KeywordCompletionItem("$start"));
+                                            intermediateResults.put("$stop", new KeywordCompletionItem("$stop"));
+                                            intermediateResults.put("$int", new KeywordCompletionItem("$int"));
+                                            intermediateResults.put("$ctx", new KeywordCompletionItem("$ctx"));
+                                            break;
+                                        }
                                     }
                                 }
                             }
-                        }
 
-                        results.addAll(intermediateResults.values());
+                            results.addAll(intermediateResults.values());
+                        }
+                    } finally {
+                        parserCache.putParser(parser);
                     }
                 }
             }
