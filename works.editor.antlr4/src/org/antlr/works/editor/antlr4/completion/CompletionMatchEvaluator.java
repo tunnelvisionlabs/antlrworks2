@@ -40,15 +40,15 @@ import org.openide.util.Parameters;
  * @author Sam Harwell
  */
 public class CompletionMatchEvaluator {
-    protected static final int EXACT_CASE_SENSITIVE = 0x0800;
-    protected static final int EXACT = 0x0400;
-    protected static final int PREFIX_CASE_SENSITIVE = 0x0200;
-    protected static final int PREFIX = 0x0100;
-    protected static final int SUBSTRING = 0x0080;
-    protected static final int WORD = 0x0040;
-    protected static final int VALID = 0x0020;
-    protected static final int RECENTLY_USED_MASK = 0x001E;
-    protected static final int CASE_SENSITIVE = 0x0001;
+    public static final int EXACT_CASE_SENSITIVE = 0x0800;
+    public static final int EXACT = 0x0400;
+    public static final int PREFIX_CASE_SENSITIVE = 0x0200;
+    public static final int PREFIX = 0x0100;
+    public static final int SUBSTRING = 0x0080;
+    public static final int WORD = 0x0040;
+    public static final int VALID = 0x0020;
+    public static final int RECENTLY_USED_MASK = 0x001E;
+    public static final int CASE_SENSITIVE = 0x0001;
 
     private static final Collator recentCompletionsCollator;
 
