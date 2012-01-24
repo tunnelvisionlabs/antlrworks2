@@ -32,7 +32,6 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleContext;
@@ -286,7 +285,7 @@ public abstract class AbstractCompletionParserATNSimulator extends ParserATNSimu
 	}
 
     @Override
-    protected boolean closure(ATNConfigSet configs, ATNConfigSet reach, PredictionContextCache contextCache, boolean contextSensitiveDfa, boolean greedy, boolean collectPredicates, boolean hasMoreContext) {
+    public boolean closure(ATNConfigSet configs, ATNConfigSet reach, PredictionContextCache contextCache, boolean contextSensitiveDfa, boolean greedy, boolean collectPredicates, boolean hasMoreContext) {
         return super.closure(configs, reach, contextCache, contextSensitiveDfa, greedy, collectPredicates, hasMoreContext);
     }
 
