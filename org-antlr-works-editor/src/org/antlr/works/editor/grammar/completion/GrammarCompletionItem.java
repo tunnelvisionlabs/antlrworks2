@@ -137,6 +137,10 @@ public abstract class GrammarCompletionItem implements CompletionItem {
         } else if (evt.getID() == KeyEvent.KEY_PRESSED && evt.getKeyCode() == KeyEvent.VK_ENTER && evt.isAltDown()) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
+
+        if (evt.getID() == KeyEvent.KEY_TYPED && !Character.isJavaIdentifierPart(evt.getKeyChar())) {
+            Completion.get().hideCompletion();
+        }
     }
 
     @Override
