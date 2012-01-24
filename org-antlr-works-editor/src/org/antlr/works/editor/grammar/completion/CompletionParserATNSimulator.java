@@ -55,6 +55,7 @@ import org.antlr.v4.runtime.atn.WildcardTransition;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.dfa.DFAState;
 import org.antlr.v4.runtime.misc.IntervalSet;
+import org.antlr.works.editor.antlr4.completion.CaretToken;
 import org.antlr.works.editor.antlr4.completion.MultipleDecisionData;
 import org.antlr.works.editor.grammar.experimental.GrammarLexer;
 import org.netbeans.api.annotations.common.NonNull;

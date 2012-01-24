@@ -34,6 +34,7 @@ import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenFactory;
 import org.antlr.v4.runtime.TokenSource;
 import org.antlr.v4.runtime.WritableToken;
+import org.antlr.works.editor.antlr4.completion.CaretToken;
 
 /**
  *

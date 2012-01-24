@@ -34,7 +34,6 @@ import org.antlr.v4.runtime.DefaultErrorStrategy;
 import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Token;
-import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.atn.ATNConfig;
 import org.antlr.v4.runtime.atn.ATNConfigSet;
 import org.antlr.v4.runtime.atn.ATNState;
@@ -42,6 +41,8 @@ import org.antlr.v4.runtime.atn.PredictionContext;
 import org.antlr.v4.runtime.atn.PredictionContextCache;
 import org.antlr.v4.runtime.atn.Transition;
 import org.antlr.v4.runtime.misc.IntervalSet;
+import org.antlr.works.editor.antlr4.completion.CaretReachedException;
+import org.antlr.works.editor.antlr4.completion.CaretToken;
 
 /**
  *

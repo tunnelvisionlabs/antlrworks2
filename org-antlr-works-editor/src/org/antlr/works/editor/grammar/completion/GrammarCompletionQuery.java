@@ -79,6 +79,8 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.Tree;
 import org.antlr.v4.runtime.tree.Trees;
+import org.antlr.works.editor.antlr4.completion.CaretReachedException;
+import org.antlr.works.editor.antlr4.completion.CaretToken;
 import org.antlr.works.editor.antlr4.completion.MultipleDecisionData;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
 import org.antlr.works.editor.grammar.codemodel.AttributeModel;
