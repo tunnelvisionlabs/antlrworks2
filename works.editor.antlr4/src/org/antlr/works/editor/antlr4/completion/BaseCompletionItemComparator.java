@@ -40,11 +40,11 @@ import org.netbeans.spi.editor.completion.CompletionItemComparator;
  */
 public class BaseCompletionItemComparator extends CompletionItemComparator {
     @NonNull
-    protected static final Comparator<CompletionItem> PRIORITY_COMPARATOR =
+    public static final Comparator<CompletionItem> PRIORITY_COMPARATOR =
         new BaseCompletionItemComparator(new PriorityComparator(), new ItemTextComparator());
 
     @NonNull
-    protected static final Comparator<CompletionItem> TEXT_COMPARATOR =
+    public static final Comparator<CompletionItem> TEXT_COMPARATOR =
         new BaseCompletionItemComparator(new ItemTextComparator(), new PriorityComparator());
 
     public BaseCompletionItemComparator(@NonNull Comparator<CompletionItem> primaryComparator,

@@ -44,6 +44,7 @@ import javax.swing.text.JTextComponent;
 import org.antlr.netbeans.editor.text.TrackingPositionRegion;
 import org.antlr.netbeans.editor.text.VersionedDocument;
 import org.antlr.netbeans.editor.text.VersionedDocumentUtilities;
+import org.antlr.works.editor.antlr4.completion.BaseCompletionItemComparator;
 import org.antlr.works.editor.antlr4.completion.CompletionMatchEvaluator;
 import org.netbeans.api.annotations.common.CheckForNull;
 import org.netbeans.api.annotations.common.NonNull;
@@ -249,11 +250,11 @@ public class GrammarCompletionController implements CompletionController {
 
     protected @NonNull Comparator<CompletionItem> getComparator(int sortType) {
         if (sortType == CompletionResultSet.PRIORITY_SORT_TYPE) {
-            return GrammarCompletionItemComparator.PRIORITY_COMPARATOR;
+            return BaseCompletionItemComparator.PRIORITY_COMPARATOR;
         }
 
         if (sortType == CompletionResultSet.TEXT_SORT_TYPE) {
-            return GrammarCompletionItemComparator.TEXT_COMPARATOR;
+            return BaseCompletionItemComparator.TEXT_COMPARATOR;
         }
 
         throw new IllegalArgumentException("Invalid sort type.");
