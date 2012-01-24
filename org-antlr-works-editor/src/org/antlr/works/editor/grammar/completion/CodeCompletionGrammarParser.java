@@ -1,6 +1,6 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -28,13 +28,14 @@
 package org.antlr.works.editor.grammar.completion;
 
 import org.antlr.v4.runtime.TokenStream;
+import org.antlr.works.editor.antlr4.completion.CodeCompletionParser;
 import org.antlr.works.editor.grammar.experimental.GrammarParser;
 
 /**
  *
  * @author Sam Harwell
  */
-public class CodeCompletionGrammarParser extends GrammarParser {
+public class CodeCompletionGrammarParser extends GrammarParser implements CodeCompletionParser {
 
     public CodeCompletionGrammarParser(TokenStream input) {
         super(input);
