@@ -56,6 +56,8 @@ import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.atn.ATNConfig;
 import org.antlr.v4.runtime.atn.ATNState;
 import org.antlr.v4.runtime.atn.DecisionState;
+import org.antlr.v4.runtime.atn.StarLoopEntryState;
+import org.antlr.v4.runtime.atn.StarLoopbackState;
 import org.antlr.v4.runtime.misc.IntervalSet;
 import org.netbeans.api.editor.completion.Completion;
 import org.netbeans.editor.BaseDocument;
@@ -414,8 +416,18 @@ public abstract class AbstractCompletionQuery extends AsyncCompletionQuery {
                     decisionData.decision = 0;
                     if (ex.getCause() != null) {
                         ATNState state = parser.getATN().states.get(((ParserRuleContext<?>)ex.getCause().getCtx()).s);
+                        if (state instanceof StarLoopbackState) {
+                            assert state.getNumberOfTransitions() == 1 && state.onlyHasEpsilonTransitions();
+                            assert state.transition(0).target instanceof StarLoopEntryState;
+                            state = state.transition(0).target;
+                        }
+
                         if (state instanceof DecisionState) {
                             decisionData.decision = ((DecisionState)state).decision;
+                        } else {
+                            LOGGER.log(Level.FINE, "No decision number found for state {0}.", state.stateNumber);
+                            // continuing is likely to never terminate
+                            return;
                         }
                     }
                     decisionData.alternatives = alts.toArray();

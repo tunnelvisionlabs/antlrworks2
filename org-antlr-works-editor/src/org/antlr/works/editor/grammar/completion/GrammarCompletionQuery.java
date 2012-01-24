@@ -72,6 +72,9 @@ import org.antlr.v4.runtime.atn.ATNState;
 import org.antlr.v4.runtime.atn.DecisionState;
 import org.antlr.v4.runtime.atn.NotSetTransition;
 import org.antlr.v4.runtime.atn.PredictionContext;
+import org.antlr.v4.runtime.atn.StarBlockStartState;
+import org.antlr.v4.runtime.atn.StarLoopEntryState;
+import org.antlr.v4.runtime.atn.StarLoopbackState;
 import org.antlr.v4.runtime.atn.Transition;
 import org.antlr.v4.runtime.atn.WildcardTransition;
 import org.antlr.v4.runtime.misc.IntervalSet;
@@ -901,8 +904,18 @@ public final class GrammarCompletionQuery extends AsyncCompletionQuery {
                     decisionData.decision = 0;
                     if (ex.getCause() != null) {
                         ATNState state = parser.getATN().states.get(((ParserRuleContext<?>)ex.getCause().getCtx()).s);
+                        if (state instanceof StarLoopbackState) {
+                            assert state.getNumberOfTransitions() == 1 && state.onlyHasEpsilonTransitions();
+                            assert state.transition(0).target instanceof StarLoopEntryState;
+                            state = state.transition(0).target;
+                        }
+
                         if (state instanceof DecisionState) {
                             decisionData.decision = ((DecisionState)state).decision;
+                        } else {
+                            LOGGER.log(Level.FINE, "No decision number found for state {0}.", state.stateNumber);
+                            // continuing is likely to never terminate
+                            return;
                         }
                     }
                     decisionData.alternatives = alts.toArray();
