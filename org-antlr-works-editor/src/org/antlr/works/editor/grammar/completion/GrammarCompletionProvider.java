@@ -38,34 +38,23 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.text.AbstractDocument;
-import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
-import org.antlr.netbeans.editor.classification.TokenTag;
 import org.antlr.netbeans.editor.navigation.Description;
-import org.antlr.netbeans.editor.tagging.TaggedPositionRegion;
-import org.antlr.netbeans.editor.tagging.Tagger;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
-import org.antlr.netbeans.editor.text.NormalizedSnapshotPositionRegionCollection;
-import org.antlr.netbeans.editor.text.OffsetRegion;
-import org.antlr.netbeans.editor.text.SnapshotPositionRegion;
-import org.antlr.netbeans.editor.text.VersionedDocumentUtilities;
 import org.antlr.netbeans.parsing.spi.ParserData;
 import org.antlr.netbeans.parsing.spi.ParserDataOptions;
 import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.Token;
+import org.antlr.works.editor.antlr4.completion.AbstractCompletionProvider;
+import org.antlr.works.editor.grammar.GoToSupport;
 import org.antlr.works.editor.grammar.GrammarEditorKit;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
 import org.antlr.works.editor.grammar.experimental.GrammarLexer;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
-import org.netbeans.editor.Utilities;
 import org.netbeans.spi.editor.completion.CompletionProvider;
-import org.netbeans.spi.editor.completion.CompletionTask;
-import org.netbeans.spi.editor.completion.support.AsyncCompletionTask;
-import org.openide.util.Exceptions;
-import org.openide.util.Lookup;
+import org.netbeans.spi.editor.completion.support.AsyncCompletionQuery;
 import org.openide.util.NbBundle;
 
 /**
@@ -77,162 +66,58 @@ import org.openide.util.NbBundle;
     "GCP-imported-items=",
     "GCP-instance-members="
 })
-public class GrammarCompletionProvider implements CompletionProvider {
+public class GrammarCompletionProvider extends AbstractCompletionProvider {
     // -J-Dorg.antlr.works.editor.grammar.GrammarCompletionProvider.level=FINE
     private static final Logger LOGGER = Logger.getLogger(GrammarCompletionProvider.class.getName());
-
-    public static final int AUTO_QUERY_TYPE = 0x00010000;
 
     private static String grammarCompletionAutoPopupTriggers = "$";
     private static String grammarCompletionSelectors = "";
 
     @Override
-    public int getAutoQueryTypes(JTextComponent component, String typedText) {
-        if (typedText == null || typedText.length() != 1) {
-            return 0;
-        }
-
-        boolean triggered = getGrammarCompletionAutoPopupTriggers().indexOf(typedText.charAt(0)) >= 0;
-        if (triggered || (autoPopupOnGrammarIdentifierPart() && GrammarCompletionQuery.isGrammarIdentifierPart(typedText))) {
-            int offset = component.getSelectionStart() - 1;
-            Token contextToken = getGrammarContext(component, offset);
-            if (contextToken == null) {
-                return 0;
-            }
-
-            if (!triggered) {
-                // the caret must be at the end of the identifier. note that the
-                // offset is already 1 position before the caret, so no need to
-                // add 1 to contextToken.getStopIndex().
-                if (offset != contextToken.getStopIndex()) {
-                    return 0;
-                }
-
-                // only trigger for the first character of the identifier
-                if (contextToken.getStopIndex() > contextToken.getStartIndex()) {
-                    return 0;
-                }
-            }
-
-            boolean allowInStrings = false;
-            boolean allowInActions = triggered;
-            if (isGrammarContext(contextToken, offset, allowInStrings, allowInActions)) {
-                return COMPLETION_QUERY_TYPE | AUTO_QUERY_TYPE;
-            }
-        }
-
-        return 0;
+    protected AsyncCompletionQuery createCompletionQuery(int queryType, int caretOffset, boolean extend) {
+        return new GrammarCompletionQuery(this, queryType, caretOffset, true, extend);
     }
 
     @Override
-    public CompletionTask createTask(int queryType, JTextComponent component) {
-        if ((queryType & COMPLETION_QUERY_TYPE) != 0 || (queryType & TOOLTIP_QUERY_TYPE) != 0 || (queryType & DOCUMENTATION_QUERY_TYPE) != 0) {
-            int caretOffset = component.getSelectionStart();
-            boolean extend = false;
-            try {
-                int[] identifier = Utilities.getIdentifierBlock(component, caretOffset);
-                extend = identifier != null && caretOffset > identifier[0] && caretOffset <= identifier[1];
-            } catch (BadLocationException ex) {
-                Exceptions.printStackTrace(ex);
-            }
-
-            return new AsyncCompletionTask(new GrammarCompletionQuery(queryType, caretOffset, true, extend), component);
-        }
-
-        return null;
-    }
-
-    public static boolean autoPopupOnGrammarIdentifierPart() {
+    public boolean autoPopupOnIdentifierPart() {
         return true;
     }
 
-    public static String getGrammarCompletionAutoPopupTriggers() {
+    @Override
+    public String getCompletionAutoPopupTriggers() {
         return grammarCompletionAutoPopupTriggers;
     }
 
-    public static String getGrammarCompletionSelectors() {
+    @Override
+    public String getCompletionSelectors() {
         return grammarCompletionSelectors;
     }
 
-    public static Token getGrammarContext(JTextComponent component, int offset) {
-        return getGrammarContext(component.getDocument(), offset);
+    @Override
+    public boolean isIdentifierPart(String text) {
+        return GrammarCompletionQuery.isGrammarIdentifierPart(text);
     }
 
-    public static Token getGrammarContext(Document document, int offset) {
-        if (document instanceof AbstractDocument) {
-            ((AbstractDocument)document).readLock();
-        }
-
-        try {
-//            try {
-                ParserTaskManager taskManager = Lookup.getDefault().lookup(ParserTaskManager.class);
-                DocumentSnapshot snapshot = VersionedDocumentUtilities.getVersionedDocument(document).getCurrentSnapshot();
-                Future<ParserData<Tagger<TokenTag<Token>>>> futureTokensData = taskManager.getData(snapshot, GrammarParserDataDefinitions.LEXER_TOKENS, EnumSet.of(ParserDataOptions.SYNCHRONOUS));
-                Tagger<TokenTag<Token>> tagger;
-                try {
-                    tagger = futureTokensData.get().getData();
-                } catch (InterruptedException ex) {
-                    Exceptions.printStackTrace(ex);
-                    return null;
-                } catch (ExecutionException ex) {
-                    Exceptions.printStackTrace(ex);
-                    return null;
-                }
-
-                // get the token(s) at the cursor position, with affinity both directions
-                OffsetRegion region = OffsetRegion.fromBounds(Math.max(0, offset - 1), Math.min(snapshot.length(), offset + 1));
-                Iterable<TaggedPositionRegion<TokenTag<Token>>> tags = tagger.getTags(new NormalizedSnapshotPositionRegionCollection(new SnapshotPositionRegion(snapshot, region)));
-
-                // TODO: cache tokens
-//                ANTLRStringStream input = new ANTLRStringStream(document.getText(0, document.getLength()));
-//                GrammarLexer lexer = new GrammarLexer(input);
-//                CommonTokenStream tokenStream = new CommonTokenStream(lexer);
-                Token token = null;
-//                for (token = tokenStream.LT(1); token != null && token.getType() != Token.EOF; token = tokenStream.LT(1)) {
-//                    tokenStream.consume();
-//                    if (token.getStartIndex() <= offset && token.getStopIndex() >= offset) {
-//                        break;
-//                    }
-//                }
-                for (TaggedPositionRegion<TokenTag<Token>> taggedRegion : tags) {
-                    if (taggedRegion.getTag().getToken().getChannel() != Lexer.DEFAULT_TOKEN_CHANNEL) {
-                        continue;
-                    }
-
-                    token = taggedRegion.getTag().getToken();
-                    if (token.getStartIndex() <= offset && token.getStopIndex() >= offset) {
-                        break;
-                    }
-                }
-
-                if (token == null) {
-                    // try again without skipping off-channel tokens
-                    for (TaggedPositionRegion<TokenTag<Token>> taggedRegion : tags) {
-                        token = taggedRegion.getTag().getToken();
-                        if (token.getStartIndex() <= offset && token.getStopIndex() >= offset) {
-                            break;
-                        }
-                    }
-                }
-
-                return token;
-                //List<Token> tokens;
-//            } catch (BadLocationException ex) {
-//                Exceptions.printStackTrace(ex);
-//                return false;
-//            }
-        } finally {
-            if (document instanceof AbstractDocument) {
-                ((AbstractDocument)document).readUnlock();
-            }
-        }
+    @Override
+    public Token getContext(Document document, int offset) {
+        return GoToSupport.getContext(document, offset);
     }
 
-    /*package*/ static boolean isGrammarContext(JTextComponent component, int offset, boolean allowInStrings, boolean allowInActions) {
-        return isGrammarContext(getGrammarContext(component, offset), offset, allowInStrings, allowInActions);
+    @Override
+    public boolean isContext(JTextComponent component, int offset, int queryType) {
+        return isContext(getContext(component, offset), offset, true, true);
     }
 
-    /*package*/ static boolean isGrammarContext(Token token, int offset, boolean allowInStrings, boolean allowInActions) {
+    public boolean isContext(JTextComponent component, int offset, boolean allowInStrings, boolean allowInActions) {
+        return isContext(getContext(component, offset), offset, allowInStrings, allowInActions);
+    }
+
+    @Override
+    public boolean isContext(Token token, int offset, int queryType) {
+        return isContext(token, offset, true, true);
+    }
+
+    /*package*/ boolean isContext(Token token, int offset, boolean allowInStrings, boolean allowInActions) {
         if (token == null) {
             return false;
         }

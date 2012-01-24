@@ -1,6 +1,6 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -28,6 +28,7 @@
 package org.antlr.works.editor.grammar.completion;
 
 import javax.swing.text.JTextComponent;
+import org.antlr.works.editor.antlr4.completion.BaseCompletionController;
 import org.antlr.works.editor.grammar.GrammarEditorKit;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.netbeans.spi.editor.completion.CompletionController;
@@ -43,7 +44,7 @@ public class GrammarCompletionControllerProvider implements CompletionController
 
     @Override
     public CompletionController createController(JTextComponent component, CompletionTask task, int queryType) {
-        return new GrammarCompletionController(component, task, queryType);
+        return new BaseCompletionController(component, task, queryType);
     }
 
 }

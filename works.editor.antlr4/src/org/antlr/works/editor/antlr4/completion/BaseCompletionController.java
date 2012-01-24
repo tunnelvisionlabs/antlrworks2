@@ -108,7 +108,7 @@ public class BaseCompletionController implements CompletionController {
         return getComponent().getDocument();
     }
 
-    AbstractCompletionQuery getQuery() {
+    protected AbstractCompletionQuery getQuery() {
         return query;
     }
 

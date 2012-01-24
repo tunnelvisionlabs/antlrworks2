@@ -35,17 +35,11 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
-import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Pattern;
-import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
-import javax.swing.text.JTextComponent;
 import org.antlr.netbeans.editor.classification.TokenTag;
 import org.antlr.netbeans.editor.navigation.Description;
 import org.antlr.netbeans.editor.tagging.Tagger;
@@ -61,19 +55,12 @@ import org.antlr.netbeans.parsing.spi.ParserData;
 import org.antlr.netbeans.parsing.spi.ParserDataOptions;
 import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.FailedPredicateException;
-import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenSource;
 import org.antlr.v4.runtime.atn.ATNConfig;
-import org.antlr.v4.runtime.atn.ATNState;
-import org.antlr.v4.runtime.atn.DecisionState;
 import org.antlr.v4.runtime.atn.NotSetTransition;
 import org.antlr.v4.runtime.atn.PredictionContext;
-import org.antlr.v4.runtime.atn.StarLoopEntryState;
-import org.antlr.v4.runtime.atn.StarLoopbackState;
 import org.antlr.v4.runtime.atn.Transition;
 import org.antlr.v4.runtime.atn.WildcardTransition;
 import org.antlr.v4.runtime.misc.IntervalSet;
@@ -81,10 +68,12 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.Tree;
 import org.antlr.v4.runtime.tree.Trees;
+import org.antlr.works.editor.antlr4.completion.AbstractCompletionQuery;
 import org.antlr.works.editor.antlr4.completion.CaretReachedException;
 import org.antlr.works.editor.antlr4.completion.CaretToken;
 import org.antlr.works.editor.antlr4.completion.CodeCompletionErrorStrategy;
-import org.antlr.works.editor.antlr4.completion.MultipleDecisionData;
+import org.antlr.works.editor.antlr4.completion.CodeCompletionParser;
+import org.antlr.works.editor.antlr4.completion.CodeCompletionTokenSource;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
 import org.antlr.works.editor.grammar.codemodel.AttributeModel;
 import org.antlr.works.editor.grammar.codemodel.FileModel;
@@ -95,254 +84,41 @@ import org.antlr.works.editor.grammar.experimental.GrammarParser.actionScopeExpr
 import org.antlr.works.editor.grammar.experimental.GrammarParserAnchorListener;
 import org.antlr.works.editor.shared.TaggerTokenSource;
 import org.antlr.works.editor.shared.completion.Anchor;
-import org.netbeans.api.editor.completion.Completion;
 import org.netbeans.editor.BaseDocument;
-import org.netbeans.spi.editor.completion.CompletionDocumentation;
 import org.netbeans.spi.editor.completion.CompletionItem;
-import org.netbeans.spi.editor.completion.CompletionProvider;
 import org.netbeans.spi.editor.completion.CompletionResultSet;
-import org.netbeans.spi.editor.completion.support.AsyncCompletionQuery;
 import org.openide.util.Exceptions;
-import org.openide.util.Lookup;
-import org.openide.util.NbBundle;
 
 /**
  *
  * @author Sam Harwell
  */
-public final class GrammarCompletionQuery extends AsyncCompletionQuery {
+public final class GrammarCompletionQuery extends AbstractCompletionQuery {
     // -J-Dorg.antlr.works.editor.grammar.GrammarCompletionQuery.level=FINE
     private static final Logger LOGGER = Logger.getLogger(GrammarCompletionQuery.class.getName());
 
-    private static final int NO_ADDITIONAL_ITEMS = 0;
-    private static final int ADDITIONAL_IMPORTED_ITEMS = 1;
-    private static final int ADDITIONAL_MEMBER_ITEMS = 2;
-
     private static final ParserCache parserCache = new ParserCache();
 
-    /** ^[\\$A-Za-z_][A-Za-z0-9_]*$ */
-    /*package*/ static final Pattern WORD_PATTERN = Pattern.compile("^[\\$A-Za-z_][A-Za-z0-9_]*$");
-
-    private static final String EMPTY = "";
-
-    private final int queryType;
-    private final boolean hasTask;
-    private final boolean extend;
-    private int caretOffset;
-
-    private JTextComponent component;
-    private CompletionToolTip toolTip;
-
-    private List<CompletionItem> results;
-    private boolean possibleDeclaration;
     private boolean possibleReference;
     private boolean possibleKeyword;
 
-    private CompletionDocumentation documentation;
-    private String filterPrefix;
-    private byte hasAdditionalItems;
-    private TrackingPositionRegion applicableTo;
-    private int toolTipOffset;
-
-    /*package*/ GrammarCompletionQuery(int queryType, int caretOffset, boolean hasTask, boolean extend) {
-        this.queryType = queryType;
-        this.caretOffset = caretOffset;
-        this.hasTask = hasTask;
-        this.extend = extend;
-    }
-
-    public TrackingPositionRegion getApplicableTo() {
-        return applicableTo;
-    }
-
-    public boolean isExtend() {
-        return extend;
-    }
-
-    public boolean isExplicitQuery() {
-        return (queryType & GrammarCompletionProvider.AUTO_QUERY_TYPE) == 0;
+    /*package*/ GrammarCompletionQuery(GrammarCompletionProvider completionProvider, int queryType, int caretOffset, boolean hasTask, boolean extend) {
+        super(completionProvider, queryType, caretOffset, hasTask, extend);
     }
 
     @Override
-    protected void preQueryUpdate(JTextComponent component) {
-        if (applicableTo != null) {
-            int newCaretOffset = component.getSelectionStart();
-            Document document = component.getDocument();
-            VersionedDocument textBuffer = VersionedDocumentUtilities.getVersionedDocument(document);
-            DocumentSnapshot textSnapshot = textBuffer.getCurrentSnapshot();
-            SnapshotPositionRegion span = applicableTo.getRegion(textSnapshot);
-            if (span.contains(newCaretOffset)) {
-                String text = span.getText();
-                if (text.isEmpty() || WORD_PATTERN.matcher(text).matches()) {
-                    return;
-                }
-            }
-
-            Completion.get().hideCompletion();
-        }
+    public GrammarCompletionProvider getCompletionProvider() {
+        return (GrammarCompletionProvider)super.getCompletionProvider();
     }
 
     @Override
-    protected void prepareQuery(JTextComponent component) {
-        this.component = component;
-        if ((queryType & CompletionProvider.TOOLTIP_QUERY_TYPE) == CompletionProvider.TOOLTIP_QUERY_TYPE) {
-            this.toolTip = new CompletionToolTip(component);
-        }
-    }
-
-    private ParserTaskManager getParserTaskManager() {
-        return Lookup.getDefault().lookup(ParserTaskManager.class);
+    protected boolean isQueryContext(CompletionResultSet resultSet, Document doc, int caretOffset) {
+        return getCompletionProvider().isContext(getComponent(), caretOffset, true, true);
     }
 
     @Override
-    @NbBundle.Messages({
-        "scanning_in_progress=Scanning in progress..."
-    })
-    protected void query(CompletionResultSet resultSet, Document doc, int caretOffset) {
-        try {
-            this.caretOffset = caretOffset;
-            if ((queryType & CompletionProvider.TOOLTIP_QUERY_TYPE) == CompletionProvider.TOOLTIP_QUERY_TYPE || GrammarCompletionProvider.isGrammarContext(component, caretOffset, true, true)) {
-                results = null;
-                documentation = null;
-                if (toolTip != null) {
-                    toolTip.clearData();
-                }
-
-                applicableTo = null;
-                if ((queryType & CompletionProvider.DOCUMENTATION_QUERY_TYPE) == CompletionProvider.DOCUMENTATION_QUERY_TYPE) {
-                    throw new UnsupportedOperationException("Not implemented yet.");
-                }
-
-//                    VersionedDocument buffer = VersionedDocumentUtilities.getVersionedDocument(doc);
-//                    if (buffer != null) {
-//                        final DocumentSnapshot snapshot = buffer.getCurrentSnapshot();
-//                        final ParserDataDefinition<?> definition = null;
-//                        final EnumSet<ParserDataOptions> options = EnumSet.noneOf(ParserDataOptions.class);
-//                        Callable<Void> task = getTask();
-//                        Future<Void> data = getParserTaskManager().scheduleHighPriority(task);
-//                    }
-
-                Future<Void> value = getParserTaskManager().scheduleHighPriority(getTask((BaseDocument)doc));
-                if (value != null) {
-                    if (!value.isDone()) {
-                        component.putClientProperty("completion-active", Boolean.FALSE);
-                        resultSet.setWaitText(Bundle.scanning_in_progress());
-                        value.get();
-                    }
-
-                    if ((queryType & CompletionProvider.COMPLETION_QUERY_TYPE) != 0) {
-                        if (results != null) {
-                            resultSet.addAllItems(results);
-                        }
-
-                        resultSet.setHasAdditionalItems(hasAdditionalItems != NO_ADDITIONAL_ITEMS);
-                        if (hasAdditionalItems == ADDITIONAL_IMPORTED_ITEMS) {
-                            resultSet.setHasAdditionalItemsText(Bundle.GCP_imported_items());
-                        } else if (hasAdditionalItems == ADDITIONAL_MEMBER_ITEMS) {
-                            resultSet.setHasAdditionalItemsText(Bundle.GCP_instance_members());
-                        }
-                    } else if ((queryType & CompletionProvider.TOOLTIP_QUERY_TYPE) == CompletionProvider.TOOLTIP_QUERY_TYPE) {
-                        if (toolTip != null && toolTip.hasData()) {
-                            resultSet.setToolTip(toolTip);
-                        }
-                    } else if ((queryType & CompletionProvider.DOCUMENTATION_QUERY_TYPE) == CompletionProvider.DOCUMENTATION_QUERY_TYPE) {
-                        throw new UnsupportedOperationException("Not implemented yet.");
-                    }
-
-                    if (applicableTo != null) {
-                        VersionedDocument textBuffer = VersionedDocumentUtilities.getVersionedDocument(doc);
-                        resultSet.setAnchorOffset(applicableTo.getStartPosition(textBuffer.getCurrentSnapshot()).getOffset());
-                    }
-                }
-            }
-        } catch (Exception ex) {
-            if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.log(Level.FINE, "An exception occurred while processing a completion query.", ex);
-            }
-        } finally {
-            resultSet.finish();
-        }
-    }
-
-    @Override
-    protected boolean canFilter(JTextComponent component) {
-        filterPrefix = null;
-        int newOffset = component.getSelectionStart();
-        if ((queryType & CompletionProvider.COMPLETION_QUERY_TYPE) != 0) {
-            if (applicableTo != null) {
-                VersionedDocument textBuffer = VersionedDocumentUtilities.getVersionedDocument(component.getDocument());
-                DocumentSnapshot snapshot = textBuffer.getCurrentSnapshot();
-                SnapshotPositionRegion applicableSpan = getApplicableTo().getRegion(snapshot);
-                int caretPosition = component.getCaretPosition();
-                // can't use SnapshotPositionRegion.contains because we need to use an inclusive check at the end of the span
-                if (applicableSpan.getStart().getOffset() <= caretPosition && applicableSpan.getEnd().getOffset() >= caretPosition) {
-                    OffsetRegion filterSpan = OffsetRegion.fromBounds(applicableSpan.getStart().getOffset(), component.getCaretPosition());
-                    filterPrefix = snapshot.subSequence(filterSpan.getStart(), filterSpan.getEnd()).toString();
-                    if (!filterPrefix.isEmpty() && !WORD_PATTERN.matcher(filterPrefix).matches()) {
-                        filterPrefix = null;
-                    }
-                }
-
-                return true;
-            }
-        } else if ((queryType & CompletionProvider.RESERVED_QUERY_MASK) == CompletionProvider.TOOLTIP_QUERY_TYPE) {
-            try {
-                if (newOffset == caretOffset) {
-                    filterPrefix = EMPTY;
-                } else if (newOffset - caretOffset > 0) {
-                    filterPrefix = component.getDocument().getText(caretOffset, newOffset - caretOffset);
-                } else if (newOffset - caretOffset < 0) {
-                    filterPrefix = newOffset > toolTipOffset ? component.getDocument().getText(newOffset, caretOffset - newOffset) : null;
-                }
-            } catch (BadLocationException e) {
-            }
-
-            return (filterPrefix != null && filterPrefix.indexOf(',') == -1 && filterPrefix.indexOf('(') == -1 && filterPrefix.indexOf(')') == -1);
-        }
-
-        return false;
-    }
-
-    @Override
-    protected void filter(CompletionResultSet resultSet) {
-        try {
-            if ((queryType & CompletionProvider.COMPLETION_QUERY_TYPE) != 0) {
-                if (results != null) {
-                    if (filterPrefix != null) {
-                        Collection<? extends CompletionItem> filtered = getFilteredData(results, filterPrefix);
-                        resultSet.addAllItems(filtered);
-                        if (possibleDeclaration && !isExplicitQuery() && getApplicableTo() != null) {
-                            VersionedDocument textBuffer = VersionedDocumentUtilities.getVersionedDocument(component.getDocument());
-                            DocumentSnapshot snapshot = textBuffer.getCurrentSnapshot();
-                            SnapshotPositionRegion applicableSpan = getApplicableTo().getRegion(snapshot);
-                            if (applicableSpan.getLength() > 0) {
-                                resultSet.addItem(new DeclarationCompletionItem(component.getDocument(), getApplicableTo()));
-                            }
-                        }
-
-                        resultSet.setHasAdditionalItems(hasAdditionalItems > 0);
-                    } else {
-                        Completion.get().hideDocumentation();
-                        Completion.get().hideCompletion();
-                    }
-                }
-            } else if ((queryType & CompletionProvider.RESERVED_QUERY_MASK) == CompletionProvider.TOOLTIP_QUERY_TYPE) {
-                resultSet.setToolTip(toolTip != null ? toolTip : null);
-            }
-
-            if (applicableTo != null) {
-                VersionedDocument textBuffer = VersionedDocumentUtilities.getVersionedDocument(component.getDocument());
-                resultSet.setAnchorOffset(applicableTo.getStartPosition(textBuffer.getCurrentSnapshot()).getOffset());
-            }
-        } catch (Exception ex) {
-            Exceptions.printStackTrace(ex);
-        }
-
-        resultSet.finish();
-    }
-
-    private Task getTask(BaseDocument document) {
-        return new Task(document);
+    protected Task getTask(BaseDocument document) {
+        return new TaskImpl(document);
     }
 
     /*package*/ static boolean isGrammarIdentifierPart(String typedText) {
@@ -355,40 +131,19 @@ public final class GrammarCompletionQuery extends AsyncCompletionQuery {
         return true;
     }
 
-    private Collection<? extends CompletionItem> getFilteredData(List<CompletionItem> data, String prefix) {
-        if (prefix.length() == 0) {
-            return data;
-        }
-
-        Pattern prefixBoundaryPattern = GrammarCompletionController.getPrefixBoundaryPattern(prefix, false);
-        String lowercasePrefix = prefix.toLowerCase(Locale.getDefault());
-        List<CompletionItem> result = new ArrayList<CompletionItem>();
-        for (CompletionItem item : data) {
-            String insertPrefix = item.getInsertPrefix().toString();
-            if (insertPrefix.toLowerCase(Locale.getDefault()).contains(lowercasePrefix)) {
-                result.add(item);
-            } else if (prefixBoundaryPattern != null && prefixBoundaryPattern.matcher(insertPrefix).matches()) {
-                result.add(item);
-            }
-        }
-
-        return result;
+    @Override
+    protected CompletionItem createDeclarationCompletionItem(Document document, TrackingPositionRegion applicableTo) {
+        return new DeclarationCompletionItem(document, applicableTo);
     }
 
-    private class Task implements Callable<Void> {
-        private final BaseDocument document;
+    private class TaskImpl extends Task {
 
-        public Task(BaseDocument document) {
-            this.document = document;
+        public TaskImpl(BaseDocument document) {
+            super(document);
         }
 
         @Override
-        public Void call() {
-            runImpl(document);
-            return null;
-        }
-
-        private void runImpl(BaseDocument document) {
+        protected void runImpl(BaseDocument document) {
             results = new ArrayList<CompletionItem>();
             possibleDeclaration = true;
             possibleReference = true;
@@ -441,9 +196,9 @@ public final class GrammarCompletionQuery extends AsyncCompletionQuery {
                         continue;
                     }
 
-                    if (anchor.getSpan().getStartPosition(snapshot).getOffset() <= caretOffset) {
+                    if (anchor.getSpan().getStartPosition(snapshot).getOffset() <= getCaretOffset()) {
                         previous = anchor;
-                        if (anchor.getSpan().getEndPosition(snapshot).getOffset() > caretOffset) {
+                        if (anchor.getSpan().getEndPosition(snapshot).getOffset() > getCaretOffset()) {
                             enclosing = anchor;
                         }
                     } else {
@@ -463,7 +218,7 @@ public final class GrammarCompletionQuery extends AsyncCompletionQuery {
                         Exceptions.printStackTrace(ex);
                     }
 
-                    int regionEnd = Math.min(snapshot.length(), caretOffset + 1);
+                    int regionEnd = Math.min(snapshot.length(), getCaretOffset() + 1);
                     OffsetRegion region;
                     if (enclosing != null) {
                         region = OffsetRegion.fromBounds(enclosing.getSpan().getStartPosition(snapshot).getOffset(), regionEnd);
@@ -476,7 +231,7 @@ public final class GrammarCompletionQuery extends AsyncCompletionQuery {
 //                        CharStream input = new DocumentSnapshotCharStream(snapshot);
 //                        input.seek(enclosing.getSpan().getStartPosition(snapshot).getOffset());
 //                        GrammarLexer lexer = new GrammarLexer(input);
-                    TokenSource tokenSource = new CodeCompletionTokenSource(caretOffset, taggerTokenSource);
+                    TokenSource tokenSource = new CodeCompletionTokenSource(getCaretOffset(), taggerTokenSource);
                     CommonTokenStream tokens = new CommonTokenStream(tokenSource);
 
                     CodeCompletionGrammarParser parser = parserCache.getParser(tokens);
@@ -816,118 +571,33 @@ public final class GrammarCompletionQuery extends AsyncCompletionQuery {
             if (caretToken != null && caretToken.getOriginalToken() != null && caretToken.getOriginalToken().getChannel() == Token.DEFAULT_CHANNEL) {
                 applicableToSpan = OffsetRegion.fromBounds(caretToken.getStartIndex(), caretToken.getStopIndex() + 1);
             } else {
-                SnapshotPositionRegion identifier = DocumentTextUtilities.getIdentifierBlock(new SnapshotPosition(snapshot, caretOffset));
+                SnapshotPositionRegion identifier = DocumentTextUtilities.getIdentifierBlock(new SnapshotPosition(snapshot, getCaretOffset()));
                 if (identifier != null) {
                     applicableToSpan = identifier.getRegion();
                 } else {
-                    applicableToSpan = OffsetRegion.fromBounds(caretOffset, caretOffset);
+                    applicableToSpan = OffsetRegion.fromBounds(getCaretOffset(), getCaretOffset());
                 }
             }
 
-            if (!isExtend() && applicableToSpan.contains(caretOffset)) {
-                applicableToSpan = OffsetRegion.fromBounds(applicableToSpan.getStart(), caretOffset);
+            if (!isExtend() && applicableToSpan.contains(getCaretOffset())) {
+                applicableToSpan = OffsetRegion.fromBounds(applicableToSpan.getStart(), getCaretOffset());
             }
 
             if (!applicableToSpan.isEmpty()) {
                 // make sure this is a word
                 String applicableText = snapshot.subSequence(applicableToSpan.getStart(), applicableToSpan.getEnd()).toString();
                 if (!WORD_PATTERN.matcher(applicableText).matches()) {
-                    applicableToSpan = OffsetRegion.fromBounds(caretOffset, caretOffset);
+                    applicableToSpan = OffsetRegion.fromBounds(getCaretOffset(), getCaretOffset());
                 }
             }
 
             applicableTo = snapshot.createTrackingRegion(applicableToSpan, TrackingPositionRegion.Bias.Inclusive);
         }
 
-        private Map<RuleContext, CaretReachedException> getParseTrees(CodeCompletionGrammarParser parser) {
-            List<MultipleDecisionData> potentialAlternatives = new ArrayList<MultipleDecisionData>();
-            List<Integer> currentPath = new ArrayList<Integer>();
-            Map<RuleContext, CaretReachedException> results = new IdentityHashMap<RuleContext, CaretReachedException>();
-            while (true) {
-                tryParse(parser, potentialAlternatives, currentPath, results);
-                if (!incrementCurrentPath(potentialAlternatives, currentPath)) {
-                    break;
-                }
-            }
-
-            if (LOGGER.isLoggable(Level.FINE)) {
-                for (Map.Entry<RuleContext, CaretReachedException> entry : results.entrySet()) {
-                    LOGGER.log(Level.FINE, entry.getKey().toStringTree(parser));
-                }
-            }
-
-            return results;
+        @Override
+        protected RuleContext parseImpl(CodeCompletionParser parser) {
+            return ((CodeCompletionGrammarParser)parser).rules();
         }
 
-        private boolean incrementCurrentPath(List<MultipleDecisionData> potentialAlternatives, List<Integer> currentPath) {
-            for (int i = currentPath.size() - 1; i >= 0; i--) {
-                if (currentPath.get(i) < potentialAlternatives.get(i).alternatives.length - 1) {
-                    currentPath.set(i, currentPath.get(i) + 1);
-                    return true;
-                }
-
-                potentialAlternatives.remove(i);
-                currentPath.remove(i);
-            }
-
-            return false;
-        }
-
-        private void tryParse(CodeCompletionGrammarParser parser, List<MultipleDecisionData> potentialAlternatives, List<Integer> currentPath, Map<RuleContext, CaretReachedException> results) {
-            RuleContext parseTree;
-            try {
-                parser.getTokenStream().seek(0);
-                parser.getInterpreter().setFixedDecisions(potentialAlternatives, currentPath);
-                parseTree = parser.rules();
-                results.put(parseTree, null);
-            } catch (CaretReachedException ex) {
-                if (ex.getTransitions() == null) {
-                    return;
-                }
-
-                for (parseTree = ex.getFinalContext(); parseTree.getParent() != null; parseTree = (RuleContext)parseTree.getParent()) {
-                    // intentionally blank
-                }
-
-                if (ex.getCause() instanceof FailedPredicateException) {
-                    return;
-                }
-
-                if (ex.getCause() != null) {
-                    IntervalSet alts = new IntervalSet();
-                    for (ATNConfig c : ex.getTransitions().keySet()) {
-                        alts.add(c.alt);
-                    }
-
-                    MultipleDecisionData decisionData = new MultipleDecisionData();
-                    decisionData.inputIndex = parser.getInputStream().index();
-                    decisionData.decision = 0;
-                    if (ex.getCause() != null) {
-                        ATNState state = parser.getATN().states.get(((ParserRuleContext<?>)ex.getCause().getCtx()).s);
-                        if (state instanceof StarLoopbackState) {
-                            assert state.getNumberOfTransitions() == 1 && state.onlyHasEpsilonTransitions();
-                            assert state.transition(0).target instanceof StarLoopEntryState;
-                            state = state.transition(0).target;
-                        }
-
-                        if (state instanceof DecisionState) {
-                            decisionData.decision = ((DecisionState)state).decision;
-                        } else {
-                            LOGGER.log(Level.FINE, "No decision number found for state {0}.", state.stateNumber);
-                            // continuing is likely to never terminate
-                            return;
-                        }
-                    }
-                    decisionData.alternatives = alts.toArray();
-                    potentialAlternatives.add(decisionData);
-                    currentPath.add(-1);
-                }
-                else {
-                    results.put(parseTree, ex);
-                }
-            } catch (RecognitionException ex) {
-                // not a viable path
-            }
-        }
     }
 }

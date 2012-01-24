@@ -83,7 +83,7 @@ public abstract class AbstractCompletionQuery extends AsyncCompletionQuery {
     private static final int ADDITIONAL_MEMBER_ITEMS = 2;
 
     /** ^[\\$A-Za-z_][A-Za-z0-9_]*$ */
-    /*package*/ static final Pattern WORD_PATTERN = Pattern.compile("^[\\$A-Za-z_][A-Za-z0-9_]*$");
+    protected static final Pattern WORD_PATTERN = Pattern.compile("^[\\$A-Za-z_][A-Za-z0-9_]*$");
 
     private static final String EMPTY = "";
 
@@ -96,15 +96,13 @@ public abstract class AbstractCompletionQuery extends AsyncCompletionQuery {
     private JTextComponent component;
     private CompletionToolTip toolTip;
 
-    private List<CompletionItem> results;
-    private boolean possibleDeclaration;
-    private boolean possibleReference;
-    private boolean possibleKeyword;
+    protected List<CompletionItem> results;
+    protected boolean possibleDeclaration;
 
     private CompletionDocumentation documentation;
     private String filterPrefix;
     private byte hasAdditionalItems;
-    private TrackingPositionRegion applicableTo;
+    protected TrackingPositionRegion applicableTo;
     private int toolTipOffset;
 
     protected AbstractCompletionQuery(AbstractCompletionProvider completionProvider, int queryType, int caretOffset, boolean hasTask, boolean extend) {
@@ -125,6 +123,10 @@ public abstract class AbstractCompletionQuery extends AsyncCompletionQuery {
 
     public boolean isExtend() {
         return extend;
+    }
+
+    public int getCaretOffset() {
+        return caretOffset;
     }
 
     public JTextComponent getComponent() {
@@ -166,7 +168,7 @@ public abstract class AbstractCompletionQuery extends AsyncCompletionQuery {
         }
     }
 
-    private ParserTaskManager getParserTaskManager() {
+    protected ParserTaskManager getParserTaskManager() {
         return Lookup.getDefault().lookup(ParserTaskManager.class);
     }
 

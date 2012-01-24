@@ -47,7 +47,7 @@ public class CodeCompletionTokenSource implements TokenSource {
 
     private Token caretToken;
 
-    protected CodeCompletionTokenSource(int caretOffset, TokenSource source) {
+    public CodeCompletionTokenSource(int caretOffset, TokenSource source) {
         this.caretOffset = caretOffset;
         this.source = source;
     }
