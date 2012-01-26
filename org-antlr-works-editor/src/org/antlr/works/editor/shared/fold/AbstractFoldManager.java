@@ -33,6 +33,7 @@ import java.util.WeakHashMap;
 import javax.swing.event.DocumentEvent;
 import javax.swing.text.Document;
 import org.netbeans.api.editor.fold.Fold;
+import org.netbeans.modules.editor.NbEditorUtilities;
 import org.netbeans.spi.editor.fold.FoldHierarchyTransaction;
 import org.netbeans.spi.editor.fold.FoldManager;
 import org.netbeans.spi.editor.fold.FoldOperation;
@@ -73,9 +74,8 @@ public class AbstractFoldManager implements FoldManager {
     public void init(FoldOperation operation) {
         this.operation = operation;
 
-        Document document = operation.getHierarchy().getComponent().getDocument();
-        Object dataObject = document.getProperty(Document.StreamDescriptionProperty);
-        if (dataObject instanceof DataObject) {
+        DataObject dataObject = NbEditorUtilities.getDataObject(operation.getHierarchy().getComponent().getDocument());
+        if (dataObject != null) {
             synchronized (managers) {
                 managers.put((DataObject)dataObject, this);
             }
