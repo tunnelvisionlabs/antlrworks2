@@ -1,6 +1,6 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -63,7 +63,6 @@ import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;
 import org.netbeans.api.editor.mimelookup.MimeLookup;
-import org.netbeans.api.editor.mimelookup.MimePath;
 import org.netbeans.editor.BaseDocument;
 import org.netbeans.lib.editor.util.ListenerList;
 import org.openide.util.Exceptions;
@@ -246,7 +245,7 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
     }
 
     @Override
-    public Collection<ScheduledFuture<ParserData<?>>> scheduleData(VersionedDocument document, Collection<ParserDataDefinition<?>> data) {
+    public Map<ParserDataDefinition<?>, ScheduledFuture<ParserData<?>>> scheduleData(VersionedDocument document, Collection<ParserDataDefinition<?>> data) {
         return scheduleData(document, null, data);
     }
 
@@ -256,7 +255,7 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
     }
 
     @Override
-    public Collection<ScheduledFuture<ParserData<?>>> scheduleData(VersionedDocument document, @NonNull Collection<ParserDataDefinition<?>> data, long delay, TimeUnit timeUnit) {
+    public Map<ParserDataDefinition<?>, ScheduledFuture<ParserData<?>>> scheduleData(VersionedDocument document, @NonNull Collection<ParserDataDefinition<?>> data, long delay, TimeUnit timeUnit) {
         return scheduleData(document, null, data, delay, timeUnit);
     }
 
@@ -266,7 +265,7 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
     }
 
     @Override
-    public Collection<ScheduledFuture<ParserData<?>>> scheduleData(VersionedDocument document, JTextComponent component, Collection<ParserDataDefinition<?>> data) {
+    public Map<ParserDataDefinition<?>, ScheduledFuture<ParserData<?>>> scheduleData(VersionedDocument document, JTextComponent component, Collection<ParserDataDefinition<?>> data) {
         return scheduleData(document, component, data, DEFAULT_DELAY, DEFAULT_TIMEUNIT);
     }
 
@@ -278,14 +277,14 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
 
     @Override
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public Collection<ScheduledFuture<ParserData<?>>> scheduleData(VersionedDocument document, JTextComponent component, @NonNull Collection<ParserDataDefinition<?>> data, long delay, TimeUnit timeUnit) {
+    public Map<ParserDataDefinition<?>, ScheduledFuture<ParserData<?>>> scheduleData(VersionedDocument document, JTextComponent component, @NonNull Collection<ParserDataDefinition<?>> data, long delay, TimeUnit timeUnit) {
         if (data.isEmpty()) {
-            return Collections.emptyList();
+            return Collections.emptyMap();
         }
 
-        List<ScheduledFuture<ParserData<?>>> futures = new ArrayList<ScheduledFuture<ParserData<?>>>();
+        Map<ParserDataDefinition<?>, ScheduledFuture<ParserData<?>>> futures = new HashMap<ParserDataDefinition<?>, ScheduledFuture<ParserData<?>>>();
         for (ParserDataDefinition dataDefinition : data) {
-            futures.add((ScheduledFuture<ParserData<?>>)scheduleData(document, component, dataDefinition, delay, timeUnit));
+            futures.put(dataDefinition, (ScheduledFuture<ParserData<?>>)scheduleData(document, component, dataDefinition, delay, timeUnit));
         }
 
         return futures;
@@ -297,7 +296,7 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
     }
 
     @Override
-    public Collection<ScheduledFuture<Collection<ParserData<?>>>> schedule(@NonNull VersionedDocument document, @NonNull Collection<ParserTaskProvider> providers) {
+    public Map<ParserTaskProvider, ScheduledFuture<Collection<ParserData<?>>>> schedule(@NonNull VersionedDocument document, @NonNull Collection<ParserTaskProvider> providers) {
         return schedule(document, null, providers);
     }
 
@@ -307,7 +306,7 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
     }
 
     @Override
-    public Collection<ScheduledFuture<Collection<ParserData<?>>>> schedule(@NonNull VersionedDocument document, @NonNull Collection<ParserTaskProvider> providers, long delay, @NonNull TimeUnit timeUnit) {
+    public Map<ParserTaskProvider, ScheduledFuture<Collection<ParserData<?>>>> schedule(@NonNull VersionedDocument document, @NonNull Collection<ParserTaskProvider> providers, long delay, @NonNull TimeUnit timeUnit) {
         return schedule(document, null, providers, delay, timeUnit);
     }
 
@@ -317,7 +316,7 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
     }
 
     @Override
-    public Collection<ScheduledFuture<Collection<ParserData<?>>>> schedule(@NonNull VersionedDocument document, @NullAllowed JTextComponent component, @NonNull Collection<ParserTaskProvider> providers) {
+    public Map<ParserTaskProvider, ScheduledFuture<Collection<ParserData<?>>>> schedule(@NonNull VersionedDocument document, @NullAllowed JTextComponent component, @NonNull Collection<ParserTaskProvider> providers) {
         return schedule(document, component, providers, DEFAULT_DELAY, DEFAULT_TIMEUNIT);
     }
 
@@ -328,14 +327,14 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
     }
 
     @Override
-    public Collection<ScheduledFuture<Collection<ParserData<?>>>> schedule(@NonNull VersionedDocument document, @NullAllowed JTextComponent component, @NonNull Collection<ParserTaskProvider> providers, long delay, @NonNull TimeUnit timeUnit) {
+    public Map<ParserTaskProvider, ScheduledFuture<Collection<ParserData<?>>>> schedule(@NonNull VersionedDocument document, @NullAllowed JTextComponent component, @NonNull Collection<ParserTaskProvider> providers, long delay, @NonNull TimeUnit timeUnit) {
         if (providers.isEmpty()) {
-            return Collections.emptyList();
+            return Collections.emptyMap();
         }
 
-        Collection<ScheduledFuture<Collection<ParserData<?>>>> result = new ArrayList<ScheduledFuture<Collection<ParserData<?>>>>();
+        Map<ParserTaskProvider, ScheduledFuture<Collection<ParserData<?>>>> result = new HashMap<ParserTaskProvider, ScheduledFuture<Collection<ParserData<?>>>>();
         for (ParserTaskProvider provider : providers) {
-            result.add(schedule(document, component, provider, delay, timeUnit));
+            result.put(provider, schedule(document, component, provider, delay, timeUnit));
         }
 
         return result;

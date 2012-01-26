@@ -1,6 +1,6 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -29,6 +29,7 @@ package org.antlr.netbeans.parsing.spi;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -70,11 +71,11 @@ public abstract class ParserTaskScheduler {
     public static final Class<? extends ParserTaskScheduler> INPUT_SENSITIVE_TASK_SCHEDULER =
         DataInputParserTaskScheduler.class;
 
-    private final Map<VersionedDocument, Collection<ScheduledFuture<ParserData<?>>>> scheduledDocumentDataTasks =
-        new WeakHashMap<VersionedDocument, Collection<ScheduledFuture<ParserData<?>>>>();
+    private final Map<VersionedDocument, Map<ParserDataDefinition<?>, ScheduledFuture<ParserData<?>>>> scheduledDocumentDataTasks =
+        new WeakHashMap<VersionedDocument, Map<ParserDataDefinition<?>, ScheduledFuture<ParserData<?>>>>();
 
-    private final Map<VersionedDocument, Collection<ScheduledFuture<Collection<ParserData<?>>>>> scheduledDocumentTasks =
-        new WeakHashMap<VersionedDocument, Collection<ScheduledFuture<Collection<ParserData<?>>>>>();
+    private final Map<VersionedDocument, Map<ParserTaskProvider, ScheduledFuture<Collection<ParserData<?>>>>> scheduledDocumentTasks =
+        new WeakHashMap<VersionedDocument, Map<ParserTaskProvider, ScheduledFuture<Collection<ParserData<?>>>>>();
 
     private boolean initialized;
 
@@ -99,23 +100,6 @@ public abstract class ParserTaskScheduler {
             return;
         }
 
-        Collection<ScheduledFuture<ParserData<?>>> existing;
-        synchronized(scheduledDocumentDataTasks) {
-            existing = scheduledDocumentDataTasks.get(document);
-            if (existing == null) {
-                existing = new ArrayList<ScheduledFuture<ParserData<?>>>();
-                scheduledDocumentDataTasks.put(document, existing);
-            }
-        }
-
-        synchronized (existing) {
-            for (ScheduledFuture<ParserData<?>> future : existing) {
-                future.cancel(false);
-            }
-
-            existing.clear();
-        }
-
         // Schedule data updates
         @SuppressWarnings("unchecked")
         Collection<? extends ParserDataDefinition<?>> mimeData = (Collection<? extends ParserDataDefinition<?>>)MimeLookup.getLookup(document.getMimeType()).lookupAll(ParserDataDefinition.class);
@@ -127,13 +111,31 @@ public abstract class ParserTaskScheduler {
         }
 
         if (!currentScheduledData.isEmpty()) {
+            Map<ParserDataDefinition<?>, ScheduledFuture<ParserData<?>>> existing;
+            synchronized(scheduledDocumentDataTasks) {
+                existing = scheduledDocumentDataTasks.get(document);
+                if (existing == null) {
+                    existing = new HashMap<ParserDataDefinition<?>, ScheduledFuture<ParserData<?>>>();
+                    scheduledDocumentDataTasks.put(document, existing);
+                }
+            }
+
+            synchronized (existing) {
+                for (ParserDataDefinition<?> definition : currentScheduledData) {
+                    ScheduledFuture<?> previous = existing.remove(definition);
+                    if (previous != null) {
+                        previous.cancel(false);
+                    }
+                }
+            }
+
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.log(Level.FINE, "Rescheduling {0} data, document={1}, delay={2}{3}, data={4}", new Object[] { getClass().getSimpleName(), document.getFileObject().getPath(), delay, getTimeUnitDisplay(timeUnit), currentScheduledData });
             }
 
-            Collection<ScheduledFuture<ParserData<?>>> futures = getTaskManager().scheduleData(document, component, currentScheduledData, delay, timeUnit);
+            Map<ParserDataDefinition<?>, ScheduledFuture<ParserData<?>>> futures = getTaskManager().scheduleData(document, component, currentScheduledData, delay, timeUnit);
             synchronized (existing) {
-                existing.addAll(futures);
+                existing.putAll(futures);
             }
         }
     }
@@ -151,23 +153,6 @@ public abstract class ParserTaskScheduler {
             return;
         }
 
-        Collection<ScheduledFuture<Collection<ParserData<?>>>> existing;
-        synchronized(scheduledDocumentTasks) {
-            existing = scheduledDocumentTasks.get(document);
-            if (existing == null) {
-                existing = new ArrayList<ScheduledFuture<Collection<ParserData<?>>>>();
-                scheduledDocumentTasks.put(document, existing);
-            }
-        }
-
-        synchronized (existing) {
-            for (ScheduledFuture<Collection<ParserData<?>>> future : existing) {
-                future.cancel(false);
-            }
-
-            existing.clear();
-        }
-
         // Schedule task updates
         Set<ParserTaskProvider> currentScheduledProviders = new HashSet<ParserTaskProvider>();
         providerLoop:
@@ -178,17 +163,35 @@ public abstract class ParserTaskScheduler {
         }
 
         if (!currentScheduledProviders.isEmpty()) {
+            Map<ParserTaskProvider, ScheduledFuture<Collection<ParserData<?>>>> existing;
+            synchronized(scheduledDocumentTasks) {
+                existing = scheduledDocumentTasks.get(document);
+                if (existing == null) {
+                    existing = new HashMap<ParserTaskProvider, ScheduledFuture<Collection<ParserData<?>>>>();
+                    scheduledDocumentTasks.put(document, existing);
+                }
+            }
+
+            synchronized (existing) {
+                for (ParserTaskProvider provider : currentScheduledProviders) {
+                    ScheduledFuture<?> previous = existing.remove(provider);
+                    if (previous != null) {
+                        previous.cancel(false);
+                    }
+                }
+            }
+
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.log(Level.FINE, "Rescheduling {0} tasks, document={1}, delay={2}{3}, data={4}", new Object[] { getClass().getSimpleName(), document.getFileObject().getPath(), delay, getTimeUnitDisplay(timeUnit), currentScheduledProviders });
             }
 
-            Collection<ScheduledFuture<Collection<ParserData<?>>>> futures = getTaskManager().schedule(document, component, currentScheduledProviders, delay, timeUnit);
+            Map<ParserTaskProvider, ScheduledFuture<Collection<ParserData<?>>>> futures = getTaskManager().schedule(document, component, currentScheduledProviders, delay, timeUnit);
             synchronized (existing) {
-                existing.addAll(futures);
+                existing.putAll(futures);
             }
         }
     }
-    
+
     protected int getParseDelayMilliseconds() {
         return 500;
     }
