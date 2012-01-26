@@ -37,13 +37,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.concurrent.Callable;
+import java.util.concurrent.Delayed;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.RejectedExecutionHandler;
+import java.util.concurrent.RunnableScheduledFuture;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.text.Document;
@@ -104,10 +108,10 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
         rejectionHandler = new RejectionHandler();
 
         int highPriorityPoolSize = 2;
-        highPriorityExecutor = new ScheduledThreadPoolExecutor(highPriorityPoolSize, new ParserThreadFactory(HIGH_THREAD_PRIORITY_VALUE), rejectionHandler);
+        highPriorityExecutor = new PriorityInsertionScheduledThreadPoolExecutor(highPriorityPoolSize, new ParserThreadFactory(HIGH_THREAD_PRIORITY_VALUE), rejectionHandler);
 
         int lowPriorityPoolSize = Math.max(2, Runtime.getRuntime().availableProcessors());
-        lowPriorityExecutor = new ScheduledThreadPoolExecutor(lowPriorityPoolSize, new ParserThreadFactory(LOW_THREAD_PRIORITY_VALUE), rejectionHandler);
+        lowPriorityExecutor = new PriorityInsertionScheduledThreadPoolExecutor(lowPriorityPoolSize, new ParserThreadFactory(LOW_THREAD_PRIORITY_VALUE), rejectionHandler);
     }
 
     @Override
@@ -703,4 +707,117 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
             return results;
         }
     }
+
+    private static class PriorityInsertionScheduledThreadPoolExecutor extends ScheduledThreadPoolExecutor {
+
+        public PriorityInsertionScheduledThreadPoolExecutor(int corePoolSize, ThreadFactory threadFactory, RejectedExecutionHandler handler) {
+            super(corePoolSize, threadFactory, handler);
+        }
+
+        @Override
+        protected <V> RunnableScheduledFuture<V> decorateTask(Callable<V> callable, RunnableScheduledFuture<V> task) {
+            int priority = PRIORITY_INITIAL;
+            if (task.getDelay(DEFAULT_TIMEUNIT) <= 0) {
+                priority += PRIORITY_IMMEDIATE_OFFSET;
+            }
+
+            if (callable instanceof UpdateCallable<?>) {
+                UpdateCallable<?> updateCallable = (UpdateCallable<?>)callable;
+                if (updateCallable.document.getDocument() != null) {
+                    priority += PRIORITY_FOREGROUND_OFFSET;
+                }
+            }
+
+            return new PriorityInsertionRunnableScheduledFuture<V>(task, priority);
+        }
+
+        @Override
+        protected <V> RunnableScheduledFuture<V> decorateTask(Runnable runnable, RunnableScheduledFuture<V> task) {
+            int priority = PRIORITY_INITIAL;
+            if (task.getDelay(DEFAULT_TIMEUNIT) <= 0) {
+                priority += PRIORITY_IMMEDIATE_OFFSET;
+            }
+
+            if (runnable instanceof UpdateCallable<?>) {
+                UpdateCallable<?> updateCallable = (UpdateCallable<?>)runnable;
+                if (updateCallable.document.getDocument() != null) {
+                    priority += PRIORITY_FOREGROUND_OFFSET;
+                }
+            }
+
+            return new PriorityInsertionRunnableScheduledFuture<V>(task, priority);
+        }
+
+    }
+
+    private static final int PRIORITY_INITIAL = 2;
+    private static final int PRIORITY_IMMEDIATE_OFFSET = -1;
+    private static final int PRIORITY_FOREGROUND_OFFSET = -2;
+
+    private static class PriorityInsertionRunnableScheduledFuture<V> implements RunnableScheduledFuture<V> {
+        private final RunnableScheduledFuture<V> wrappedTask;
+        private final int priority;
+
+        public PriorityInsertionRunnableScheduledFuture(@NonNull RunnableScheduledFuture<V> wrappedTask, int priority) {
+            Parameters.notNull("wrappedTask", wrappedTask);
+            this.wrappedTask = wrappedTask;
+            this.priority = priority;
+        }
+
+        @Override
+        public boolean isPeriodic() {
+            return wrappedTask.isPeriodic();
+        }
+
+        @Override
+        public void run() {
+            wrappedTask.run();
+        }
+
+        @Override
+        public boolean cancel(boolean mayInterruptIfRunning) {
+            return wrappedTask.cancel(mayInterruptIfRunning);
+        }
+
+        @Override
+        public boolean isCancelled() {
+            return wrappedTask.isCancelled();
+        }
+
+        @Override
+        public boolean isDone() {
+            return wrappedTask.isDone();
+        }
+
+        @Override
+        public V get() throws InterruptedException, ExecutionException {
+            return wrappedTask.get();
+        }
+
+        @Override
+        public V get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
+            return wrappedTask.get(timeout, unit);
+        }
+
+        @Override
+        public long getDelay(TimeUnit unit) {
+            return wrappedTask.getDelay(unit);
+        }
+
+        @Override
+        public int compareTo(Delayed o) {
+            if (o instanceof PriorityInsertionRunnableScheduledFuture<?>) {
+                PriorityInsertionRunnableScheduledFuture<?> other = (PriorityInsertionRunnableScheduledFuture<?>)o;
+                if (this.priority != other.priority) {
+                    return this.priority - other.priority;
+                }
+
+                return wrappedTask.compareTo(((PriorityInsertionRunnableScheduledFuture<?>)o).wrappedTask);
+            }
+
+            return -1;
+        }
+
+    }
+
 }
