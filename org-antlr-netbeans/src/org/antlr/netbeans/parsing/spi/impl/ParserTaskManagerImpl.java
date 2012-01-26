@@ -35,6 +35,7 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.WeakHashMap;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.concurrent.RejectedExecutionHandler;
@@ -63,7 +64,6 @@ import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;
 import org.netbeans.api.editor.mimelookup.MimeLookup;
-import org.netbeans.editor.BaseDocument;
 import org.netbeans.lib.editor.util.ListenerList;
 import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
@@ -92,6 +92,9 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
 
     private final Map<String, Collection<? extends ParserTaskProvider>> taskProviders =
         new HashMap<String, Collection<? extends ParserTaskProvider>>();
+
+    private final Map<VersionedDocument, Map<ParserDataDefinition<?>, ParserData<?>>> properties =
+        new WeakHashMap<VersionedDocument, Map<ParserDataDefinition<?>, ParserData<?>>>();
 
     private final RejectionHandler rejectionHandler;
     private final ScheduledThreadPoolExecutor highPriorityExecutor;
@@ -144,7 +147,7 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
         Parameters.notNull("options", options);
 
         @SuppressWarnings("unchecked")
-        ParserData<T> cachedData = (ParserData<T>)snapshot.getVersionedDocument().getDocument().getProperty(definition);
+        ParserData<T> cachedData = getCachedData(snapshot.getVersionedDocument(), definition);
         boolean useCached = options.contains(ParserDataOptions.NO_UPDATE);
         if (!useCached && cachedData != null) {
             if (options.contains(ParserDataOptions.ALLOW_STALE)) {
@@ -207,7 +210,7 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
             Collection<? extends ParserDataDefinition> data = MimeLookup.getLookup(document.getMimeType()).lookupAll(ParserDataDefinition.class);
             for (ParserDataDefinition<?> definition : data) {
                 if (definition.getScheduler() == schedulerClass && definition.isCacheable()) {
-                    document.getDocument().putProperty(definition, null);
+                    updateCachedData(document, definition, null);
                 }
             }
 
@@ -231,7 +234,7 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
             Collection<? extends ParserDataDefinition> data = MimeLookup.getLookup(document.getMimeType()).lookupAll(ParserDataDefinition.class);
             for (ParserDataDefinition<?> definition : data) {
                 if (definition.getScheduler() == schedulerClass && definition.isCacheable()) {
-                    document.getDocument().putProperty(definition, null);
+                    updateCachedData(document, definition, null);
                 }
             }
 
@@ -271,7 +274,7 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
 
     @Override
     public <T> ScheduledFuture<ParserData<T>> scheduleData(VersionedDocument document, JTextComponent component, ParserDataDefinition<T> data, long delay, TimeUnit timeUnit) {
-        Callable<ParserData<T>> callable = createCallable(document.getCurrentSnapshot(), component, data);
+        Callable<ParserData<T>> callable = createCallable(document, component, data);
         return lowPriorityExecutor.schedule(callable, delay, timeUnit);
     }
 
@@ -322,7 +325,7 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
 
     @Override
     public ScheduledFuture<Collection<ParserData<?>>> schedule(@NonNull VersionedDocument document, @NullAllowed JTextComponent component, @NonNull ParserTaskProvider provider, long delay, @NonNull TimeUnit timeUnit) {
-        Callable<Collection<ParserData<?>>> callable = createCallable(document.getCurrentSnapshot(), component, provider);
+        Callable<Collection<ParserData<?>>> callable = createCallable(document, component, provider);
         return lowPriorityExecutor.schedule(callable, delay, timeUnit);
     }
 
@@ -410,13 +413,23 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
         return Thread.currentThread() instanceof ParserThread;
     }
 
+    private <T> Callable<ParserData<T>> createCallable(VersionedDocument document, JTextComponent component, ParserDataDefinition<T> data) {
+        Callable<ParserData<T>> callable = new UpdateDataCallable<T>(this, document, component, data);
+        return callable;
+    }
+
     private <T> Callable<ParserData<T>> createCallable(DocumentSnapshot snapshot, JTextComponent component, ParserDataDefinition<T> data) {
-        Callable<ParserData<T>> callable = new UpdateDataCallable<T>(snapshot, component, data);
+        Callable<ParserData<T>> callable = new UpdateDataCallable<T>(this, snapshot, component, data);
+        return callable;
+    }
+
+    private Callable<Collection<ParserData<?>>> createCallable(VersionedDocument document, JTextComponent component, ParserTaskProvider provider) {
+        Callable<Collection<ParserData<?>>> callable = new UpdateTaskCallable(this, document, component, provider);
         return callable;
     }
 
     private Callable<Collection<ParserData<?>>> createCallable(DocumentSnapshot snapshot, JTextComponent component, ParserTaskProvider provider) {
-        Callable<Collection<ParserData<?>>> callable = new UpdateTaskCallable(snapshot, component, provider);
+        Callable<Collection<ParserData<?>>> callable = new UpdateTaskCallable(this, snapshot, component, provider);
         return callable;
     }
 
@@ -459,8 +472,7 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
     }
 
     private Collection<? extends ParserTaskProvider> getTaskProviders(VersionedDocument versionedDocument) {
-        Document document = versionedDocument.getDocument();
-        String mimeType = (String)document.getProperty(BaseDocument.MIME_TYPE_PROP);
+        String mimeType = versionedDocument.getMimeType();
         synchronized (taskProviders) {
             Collection<? extends ParserTaskProvider> providers = taskProviders.get(mimeType);
             if (providers == null) {
@@ -470,6 +482,42 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
 
             return providers;
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    private synchronized <T> ParserData<T> getCachedData(VersionedDocument versionedDocument, ParserDataDefinition<T> definition) {
+        Document document = versionedDocument.getDocument();
+        if (document != null) {
+            Object cachedData = document.getProperty(definition);
+            if (cachedData instanceof ParserData<?>) {
+                return (ParserData<T>)cachedData;
+            }
+
+            return null;
+        }
+
+        Map<ParserDataDefinition<?>, ParserData<?>> documentProperties = properties.get(versionedDocument);
+        if (documentProperties != null) {
+            return (ParserData<T>)documentProperties.get(definition);
+        }
+
+        return null;
+    }
+
+    private synchronized void updateCachedData(VersionedDocument versionedDocument, ParserDataDefinition<?> definition, ParserData<?> data) {
+        Document document = versionedDocument.getDocument();
+        if (document != null) {
+            document.putProperty(definition, data);
+            return;
+        }
+
+        Map<ParserDataDefinition<?>, ParserData<?>> documentProperties = properties.get(versionedDocument);
+        if (documentProperties == null) {
+            documentProperties = new HashMap<ParserDataDefinition<?>, ParserData<?>>();
+            properties.put(versionedDocument, documentProperties);
+        }
+
+        documentProperties.put(definition, data);
     }
 
     private static class RejectionHandler implements RejectedExecutionHandler {
@@ -514,31 +562,53 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
         }
     }
 
-    private class UpdateDataCallable<T> implements Callable<ParserData<T>> {
-        private final DocumentSnapshot snapshot;
-        private final JTextComponent component;
-        private final ParserDataDefinition<T> data;
+    private static abstract class UpdateCallable<Result> implements Callable<Result> {
+        protected final ParserTaskManagerImpl outer;
+        protected final VersionedDocument document;
+        protected final DocumentSnapshot snapshot;
+        protected final JTextComponent component;
 
-        public UpdateDataCallable(DocumentSnapshot snapshot, JTextComponent component, ParserDataDefinition<T> data) {
+        protected UpdateCallable(ParserTaskManagerImpl outer, VersionedDocument document, JTextComponent component) {
+            this.outer = outer;
+            this.document = document;
+            this.snapshot = null;
+            this.component = component;
+        }
+
+        protected UpdateCallable(ParserTaskManagerImpl outer, DocumentSnapshot snapshot, JTextComponent component) {
+            this.outer = outer;
+            this.document = snapshot.getVersionedDocument();
             this.snapshot = snapshot;
             this.component = component;
+        }
+    }
+
+    private static class UpdateDataCallable<T> extends UpdateCallable<ParserData<T>> {
+        private final ParserDataDefinition<T> data;
+
+        public UpdateDataCallable(ParserTaskManagerImpl outer, VersionedDocument document, JTextComponent component, ParserDataDefinition<T> data) {
+            super(outer, document, component);
+            this.data = data;
+        }
+
+        public UpdateDataCallable(ParserTaskManagerImpl outer, DocumentSnapshot snapshot, JTextComponent component, ParserDataDefinition<T> data) {
+            super(outer, snapshot, component);
             this.data = data;
         }
 
         @Override
         @SuppressWarnings("unchecked")
         public ParserData<T> call() throws Exception {
+            DocumentSnapshot parseSnapshot = snapshot != null ? snapshot : document.getCurrentSnapshot();
+
             if (data.isCacheable()) {
-                Document document = snapshot.getVersionedDocument().getDocument();
-                if (document != null) {
-                    ParserData<T> cachedData = (ParserData<T>)document.getProperty(data);
-                    if (cachedData != null && cachedData.getSnapshot().equals(snapshot)) {
-                        return cachedData;
-                    }
+                ParserData<T> cachedData = outer.getCachedData(document, data);
+                if (cachedData != null && cachedData.getSnapshot().equals(parseSnapshot)) {
+                    return cachedData;
                 }
             }
 
-            ParserTaskProvider provider = getTaskProvider(snapshot.getVersionedDocument(), data);
+            ParserTaskProvider provider = outer.getTaskProvider(document, data);
             if (provider == null) {
                 LOGGER.log(Level.WARNING, "No provider found for parser data \"{0}\".", data.getName());
             } else if (LOGGER.isLoggable(Level.FINE)) {
@@ -546,26 +616,23 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
                 LOGGER.log(Level.FINE, "Using provider \"{0}\" for data \"{1}\".", args);
             }
 
-            final ParserTask task = provider.createTask(snapshot.getVersionedDocument());
+            final ParserTask task = provider.createTask(document);
 
             if (LOGGER.isLoggable(Level.FINE)) {
                 String threadName = Thread.currentThread().getName();
                 String messageFormat = "{0}: Updating data \"{1}\" with task \"{2}\" for {3}#{4}";
-                LOGGER.log(Level.FINE, messageFormat, new Object[] { threadName, data.getName(), task.getDefinition().getName(), snapshot.getVersionedDocument().getFileObject().getPath(), snapshot.getVersion().getVersionNumber() });
+                LOGGER.log(Level.FINE, messageFormat, new Object[] { threadName, data.getName(), task.getDefinition().getName(), document.getFileObject().getPath(), parseSnapshot.getVersion().getVersionNumber() });
             }
 
             ResultAggregator handler = new ResultAggregator();
-            task.parse(ParserTaskManagerImpl.this, component, snapshot, Collections.<ParserDataDefinition<?>>singleton(data), handler);
+            task.parse(outer, component, parseSnapshot, Collections.<ParserDataDefinition<?>>singleton(data), handler);
 
-            Document document = snapshot.getVersionedDocument().getDocument();
-            if (document != null) {
-                for (ParserData<?> result : handler.getResults()) {
-                    if (result.getDefinition().isCacheable()) {
-                        document.putProperty(result.getDefinition(), result);
-                    }
-
-                    fireDataChanged((ParserDataDefinition)result.getDefinition(), result);
+            for (ParserData<?> result : handler.getResults()) {
+                if (result.getDefinition().isCacheable()) {
+                    outer.updateCachedData(document, result.getDefinition(), result);
                 }
+
+                outer.fireDataChanged((ParserDataDefinition)result.getDefinition(), result);
             }
 
             for (ParserData<?> result : handler.getResults()) {
@@ -578,21 +645,24 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
         }
     }
 
-    private class UpdateTaskCallable implements Callable<Collection<ParserData<?>>> {
-        private final DocumentSnapshot snapshot;
-        private final JTextComponent component;
+    private static class UpdateTaskCallable extends UpdateCallable<Collection<ParserData<?>>> {
         private final ParserTaskProvider provider;
 
-        public UpdateTaskCallable(DocumentSnapshot snapshot, JTextComponent component, ParserTaskProvider provider) {
-            this.snapshot = snapshot;
-            this.component = component;
+        public UpdateTaskCallable(ParserTaskManagerImpl outer, VersionedDocument document, JTextComponent component, ParserTaskProvider provider) {
+            super(outer, document, component);
+            this.provider = provider;
+        }
+
+        public UpdateTaskCallable(ParserTaskManagerImpl outer, DocumentSnapshot snapshot, JTextComponent component, ParserTaskProvider provider) {
+            super(outer, snapshot, component);
             this.provider = provider;
         }
 
         @Override
         @SuppressWarnings("unchecked")
         public Collection<ParserData<?>> call() throws Exception {
-            final ParserTask task = provider.createTask(snapshot.getVersionedDocument());
+            final ParserTask task = provider.createTask(document);
+            DocumentSnapshot parseSnapshot = snapshot != null ? snapshot : document.getCurrentSnapshot();
 
             if (LOGGER.isLoggable(Level.FINE)) {
                 String messageFormat = "{0}: Updating task \"{1}\" for {2}#{3}";
@@ -600,24 +670,21 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
                     {
                         Thread.currentThread().getName(),
                         task.getDefinition().getName(),
-                        snapshot.getVersionedDocument().getFileObject().getPath(),
-                        snapshot.getVersion().getVersionNumber()
+                        document.getFileObject().getPath(),
+                        parseSnapshot.getVersion().getVersionNumber()
                     };
                 LOGGER.log(Level.FINE, messageFormat, args);
             }
 
             ResultAggregator handler = new ResultAggregator();
-            task.parse(ParserTaskManagerImpl.this, component, snapshot, provider.getDefinition().getOutputs(), handler);
+            task.parse(outer, component, parseSnapshot, provider.getDefinition().getOutputs(), handler);
 
-            Document document = snapshot.getVersionedDocument().getDocument();
-            if (document != null) {
-                for (ParserData<?> result : handler.getResults()) {
-                    if (result.getDefinition().isCacheable()) {
-                        document.putProperty(result.getDefinition(), result);
-                    }
-
-                    fireDataChanged((ParserDataDefinition)result.getDefinition(), result);
+            for (ParserData<?> result : handler.getResults()) {
+                if (result.getDefinition().isCacheable()) {
+                    outer.updateCachedData(document, result.getDefinition(), result);
                 }
+
+                outer.fireDataChanged((ParserDataDefinition)result.getDefinition(), result);
             }
 
             return handler.getResults();
