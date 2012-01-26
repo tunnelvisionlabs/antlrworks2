@@ -42,6 +42,7 @@ public class CompletionParserATNSimulator extends AbstractCompletionParserATNSim
 
     public CompletionParserATNSimulator(@NonNull Parser parser, ATN atn) {
         super(parser, atn);
+        disable_global_context = true;
     }
 
     private static final IntervalSet WORDLIKE_TOKEN_TYPES =

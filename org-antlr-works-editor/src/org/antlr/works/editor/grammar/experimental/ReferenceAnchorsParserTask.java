@@ -93,6 +93,7 @@ public class ReferenceAnchorsParserTask implements ParserTask {
             GrammarParser parser = ref != null ? ref.get() : null;
             if (parser == null) {
                 parser = new GrammarParser(input);
+                parser.getInterpreter().disable_global_context = true;
                 parserCache.put(Thread.currentThread(), new SoftReference<GrammarParser>(parser));
             } else {
                 parser.setTokenStream(input);

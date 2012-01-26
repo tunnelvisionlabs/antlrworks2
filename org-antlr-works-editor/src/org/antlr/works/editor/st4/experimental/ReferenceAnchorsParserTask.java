@@ -93,6 +93,7 @@ public class ReferenceAnchorsParserTask implements ParserTask {
             TemplateParser parser = ref != null ? ref.get() : null;
             if (parser == null) {
                 parser = new TemplateParser(input);
+                parser.getInterpreter().disable_global_context = true;
                 parserCache.put(Thread.currentThread(), new SoftReference<TemplateParser>(parser));
             } else {
                 parser.setTokenStream(input);
@@ -114,7 +115,7 @@ public class ReferenceAnchorsParserTask implements ParserTask {
 //        GrammarLexer lexer = new GrammarLexer(input);
         InterruptableTokenStream tokenStream = new InterruptableTokenStream(tokenSource);
         ParserRuleContext<Token> parseResult;
-        TemplateParser parser = new TemplateParser(tokenStream);
+        TemplateParser parser = createParser(tokenStream);
         try {
             parser.setErrorHandler(new BailErrorStrategy());
             parseResult = parser.group();

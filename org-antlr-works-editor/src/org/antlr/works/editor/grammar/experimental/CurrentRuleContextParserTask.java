@@ -115,6 +115,7 @@ public class CurrentRuleContextParserTask implements ParserTask {
                 GrammarLexer lexer = new GrammarLexer(input);
                 CommonTokenStream tokens = new TaskTokenStream(lexer);
                 GrammarParser parser = new GrammarParser(tokens);
+                parser.getInterpreter().disable_global_context = true;
                 parser.setBuildParseTree(true);
                 ruleContext = parser.rule();
             }
