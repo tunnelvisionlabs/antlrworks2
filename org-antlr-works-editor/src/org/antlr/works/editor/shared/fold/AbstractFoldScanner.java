@@ -89,8 +89,16 @@ public abstract class AbstractFoldScanner<SemanticData> {
                         int j = 0;
                         while (i < foldManager.currentFolds.size() && j < folds.size()) {
                             Fold existingFold = foldManager.currentFolds.get(i);
-                            SnapshotPositionRegion existingRegion = new SnapshotPositionRegion(currentSnapshot, OffsetRegion.fromBounds(existingFold.getStartOffset(), existingFold.getEndOffset()));
-                            FoldInfo existing = new FoldInfo(existingRegion, existingFold.getDescription());
+                            FoldInfo existing;
+                            Object extraInfo = operation.getExtraInfo(existingFold);
+                            if (extraInfo instanceof FoldInfo) {
+                                existing = (FoldInfo)extraInfo;
+                                existing = existing.translateTo(currentSnapshot);
+                            } else {
+                                SnapshotPositionRegion existingRegion = new SnapshotPositionRegion(currentSnapshot, OffsetRegion.fromBounds(existingFold.getStartOffset(), existingFold.getEndOffset()));
+                                existing = new FoldInfo(existingRegion, existingFold.getDescription());
+                            }
+
                             FoldInfo next = folds.get(j);
                             int compared = FoldInfoComparator.DEFAULT.compare(existing, next);
                             if (compared == 0) {
