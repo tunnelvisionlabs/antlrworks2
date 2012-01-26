@@ -71,7 +71,7 @@ public final class SnapshotPosition implements Comparable<SnapshotPosition> {
 
     @Override
     public int compareTo(@NonNull SnapshotPosition other) {
-        return difference(other);
+        return offset < other.offset ? -1 : (offset > other.offset ? 1 : 0);
     }
 
     public @NonNull SnapshotPosition add(int offset) {
