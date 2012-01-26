@@ -43,7 +43,7 @@ import org.netbeans.api.annotations.common.NonNull;
  * @author Sam Harwell
  */
 class GrammarTokensTaskTaggerSnapshot extends AbstractTokensTaskTaggerSnapshot<SimpleLexerState> {
-    private final Map<Thread, Reference<GrammarLexerWrapper>> lexerCache = new WeakHashMap<Thread, Reference<GrammarLexerWrapper>>();
+    private static final Map<Thread, Reference<GrammarLexerWrapper>> lexerCache = new WeakHashMap<Thread, Reference<GrammarLexerWrapper>>();
 
     public GrammarTokensTaskTaggerSnapshot(@NonNull DocumentSnapshot snapshot) {
         super(snapshot);

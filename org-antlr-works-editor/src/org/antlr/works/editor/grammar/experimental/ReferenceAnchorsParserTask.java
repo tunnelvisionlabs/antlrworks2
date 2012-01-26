@@ -27,10 +27,14 @@
  */
 package org.antlr.works.editor.grammar.experimental;
 
+import java.lang.ref.Reference;
+import java.lang.ref.SoftReference;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.WeakHashMap;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -52,6 +56,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenSource;
+import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.works.editor.grammar.GrammarEditorKit;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
@@ -65,6 +70,8 @@ import org.netbeans.api.editor.mimelookup.MimeRegistration;
  * @author Sam Harwell
  */
 public class ReferenceAnchorsParserTask implements ParserTask {
+    private static final Map<Thread, Reference<GrammarParser>> parserCache =
+        new WeakHashMap<Thread, Reference<GrammarParser>>();
 
     private final VersionedDocument document;
 
@@ -75,6 +82,22 @@ public class ReferenceAnchorsParserTask implements ParserTask {
     @Override
     public ParserTaskDefinition getDefinition() {
         return Definition.INSTANCE;
+    }
+
+    protected GrammarParser createParser(TokenStream input) {
+        synchronized (parserCache) {
+            Reference<GrammarParser> ref = parserCache.get(Thread.currentThread());
+            GrammarParser parser = ref != null ? ref.get() : null;
+            if (parser == null) {
+                parser = new GrammarParser(input);
+                parserCache.put(Thread.currentThread(), new SoftReference<GrammarParser>(parser));
+            } else {
+                parser.setTokenStream(input);
+            }
+
+            parser.setBuildParseTree(true);
+            return parser;
+        }
     }
 
     @Override
@@ -95,8 +118,7 @@ public class ReferenceAnchorsParserTask implements ParserTask {
 //        input.setSourceName((String)document.getDocument().getProperty(Document.TitleProperty));
 //        GrammarLexer lexer = new GrammarLexer(input);
         InterruptableTokenStream tokenStream = new InterruptableTokenStream(tokenSource);
-        GrammarParser parser = new GrammarParser(tokenStream);
-        parser.setBuildParseTree(true);
+        GrammarParser parser = createParser(tokenStream);
         GrammarParser.grammarSpecContext parseResult = parser.grammarSpec();
 
         ParserData<ParserRuleContext<Token>> parseTreeResult = new BaseParserData<ParserRuleContext<Token>>(GrammarParserDataDefinitions.REFERENCE_PARSE_TREE, snapshot, parseResult);

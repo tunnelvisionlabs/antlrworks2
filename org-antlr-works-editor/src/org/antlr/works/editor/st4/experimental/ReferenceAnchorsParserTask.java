@@ -27,10 +27,14 @@
  */
 package org.antlr.works.editor.st4.experimental;
 
+import java.lang.ref.Reference;
+import java.lang.ref.SoftReference;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.WeakHashMap;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -52,6 +56,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenSource;
+import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.works.editor.shared.TaggerTokenSource;
 import org.antlr.works.editor.shared.completion.Anchor;
@@ -65,6 +70,8 @@ import org.netbeans.api.editor.mimelookup.MimeRegistration;
  * @author Sam Harwell
  */
 public class ReferenceAnchorsParserTask implements ParserTask {
+    private static final Map<Thread, Reference<TemplateParser>> parserCache =
+        new WeakHashMap<Thread, Reference<TemplateParser>>();
 
     private final VersionedDocument document;
 
@@ -77,6 +84,22 @@ public class ReferenceAnchorsParserTask implements ParserTask {
         return Definition.INSTANCE;
     }
 
+    protected TemplateParser createParser(TokenStream input) {
+        synchronized (parserCache) {
+            Reference<TemplateParser> ref = parserCache.get(Thread.currentThread());
+            TemplateParser parser = ref != null ? ref.get() : null;
+            if (parser == null) {
+                parser = new TemplateParser(input);
+                parserCache.put(Thread.currentThread(), new SoftReference<TemplateParser>(parser));
+            } else {
+                parser.setTokenStream(input);
+            }
+
+            parser.setBuildParseTree(true);
+            return parser;
+        }
+    }
+
     @Override
     public void parse(ParserTaskManager taskManager, JTextComponent component, DocumentSnapshot snapshot, Collection<ParserDataDefinition<?>> requestedData, ParserResultHandler results) throws InterruptedException, ExecutionException {
         Future<ParserData<Tagger<TokenTag<Token>>>> futureTokensData = taskManager.getData(snapshot, TemplateParserDataDefinitions.LEXER_TOKENS);
@@ -87,7 +110,6 @@ public class ReferenceAnchorsParserTask implements ParserTask {
 //        GrammarLexer lexer = new GrammarLexer(input);
         InterruptableTokenStream tokenStream = new InterruptableTokenStream(tokenSource);
         TemplateParser parser = new TemplateParser(tokenStream);
-        parser.setBuildParseTree(true);
         ParserRuleContext<Token> parseResult = parser.group();
 
         ParserData<ParserRuleContext<Token>> parseTreeResult = new BaseParserData<ParserRuleContext<Token>>(TemplateParserDataDefinitions.REFERENCE_PARSE_TREE, snapshot, parseResult);

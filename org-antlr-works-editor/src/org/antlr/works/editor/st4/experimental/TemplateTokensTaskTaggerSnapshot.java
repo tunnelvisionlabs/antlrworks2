@@ -43,7 +43,7 @@ import org.netbeans.api.annotations.common.NonNull;
  * @author Sam Harwell
  */
 class TemplateTokensTaskTaggerSnapshot extends AbstractTokensTaskTaggerSnapshot<SimpleLexerState> {
-    private final Map<Thread, Reference<TemplateLexerWrapper>> lexerCache = new WeakHashMap<Thread, Reference<TemplateLexerWrapper>>();
+    private static final Map<Thread, Reference<TemplateLexerWrapper>> lexerCache = new WeakHashMap<Thread, Reference<TemplateLexerWrapper>>();
 
     public TemplateTokensTaskTaggerSnapshot(@NonNull DocumentSnapshot snapshot) {
         super(snapshot);
