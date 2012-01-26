@@ -94,7 +94,7 @@ public class TemplateScanningParserTask implements ParserTask {
         public static final Definition INSTANCE = new Definition();
 
         public Definition() {
-            super("StringTemplate Template Scanner", INPUTS, OUTPUTS, ParserTaskScheduler.CONTENT_SENSITIVE_TASK_SCHEDULER);
+            super("StringTemplate Template Scanner", INPUTS, OUTPUTS, ParserTaskScheduler.INPUT_SENSITIVE_TASK_SCHEDULER);
         }
     }
 

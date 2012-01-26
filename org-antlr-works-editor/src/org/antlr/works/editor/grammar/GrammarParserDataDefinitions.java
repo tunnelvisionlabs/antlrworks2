@@ -164,7 +164,7 @@ public class GrammarParserDataDefinitions {
     private static final class NavigatorRootDataDefinition extends ParserDataDefinition<Description> {
 
         public NavigatorRootDataDefinition() {
-            super("Grammar Navigator Root", Description.class, false, true, ParserTaskScheduler.CONTENT_SENSITIVE_TASK_SCHEDULER);
+            super("Grammar Navigator Root", Description.class, false, true, ParserTaskScheduler.INPUT_SENSITIVE_TASK_SCHEDULER);
         }
 
     }

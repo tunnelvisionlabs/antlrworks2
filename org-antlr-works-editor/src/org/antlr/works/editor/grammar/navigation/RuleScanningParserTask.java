@@ -101,7 +101,7 @@ public class RuleScanningParserTask implements ParserTask {
         public static final Definition INSTANCE = new Definition();
 
         public Definition() {
-            super("Grammar Rule Scanning", INPUTS, OUTPUTS, ParserTaskScheduler.CONTENT_SENSITIVE_TASK_SCHEDULER);
+            super("Grammar Rule Scanning", INPUTS, OUTPUTS, ParserTaskScheduler.INPUT_SENSITIVE_TASK_SCHEDULER);
         }
     }
 
