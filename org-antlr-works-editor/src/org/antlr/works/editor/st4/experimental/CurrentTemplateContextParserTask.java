@@ -114,11 +114,13 @@ public class CurrentTemplateContextParserTask implements ParserTask {
                 input.seek(enclosing.getSpan().getStartPosition(snapshot).getOffset());
                 TemplateLexer lexer = new TemplateLexer(input);
                 CommonTokenStream tokens = new TaskTokenStream(lexer);
-                TemplateParser parser = new TemplateParser(tokens);
-                parser.getInterpreter().disable_global_context = true;
-                parser.setBuildParseTree(true);
-
-                ruleContext = parser.group();
+                TemplateParser parser = TemplateParserCache.DEFAULT.getParser(tokens);
+                try {
+                    parser.setBuildParseTree(true);
+                    ruleContext = parser.group();
+                } finally {
+                    TemplateParserCache.DEFAULT.putParser(parser);
+                }
             }
         }
 
