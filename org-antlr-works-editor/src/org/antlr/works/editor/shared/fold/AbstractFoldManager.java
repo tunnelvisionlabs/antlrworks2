@@ -77,7 +77,7 @@ public class AbstractFoldManager implements FoldManager {
         DataObject dataObject = NbEditorUtilities.getDataObject(operation.getHierarchy().getComponent().getDocument());
         if (dataObject != null) {
             synchronized (managers) {
-                managers.put((DataObject)dataObject, this);
+                managers.put(dataObject, this);
             }
         }
 
