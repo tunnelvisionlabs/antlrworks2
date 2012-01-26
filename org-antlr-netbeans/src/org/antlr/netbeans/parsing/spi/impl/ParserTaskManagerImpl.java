@@ -110,7 +110,7 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
         int highPriorityPoolSize = 2;
         highPriorityExecutor = new PriorityInsertionScheduledThreadPoolExecutor(highPriorityPoolSize, new ParserThreadFactory(HIGH_THREAD_PRIORITY_VALUE), rejectionHandler);
 
-        int lowPriorityPoolSize = Math.max(2, Runtime.getRuntime().availableProcessors());
+        int lowPriorityPoolSize = 2;//Math.max(2, Runtime.getRuntime().availableProcessors());
         lowPriorityExecutor = new PriorityInsertionScheduledThreadPoolExecutor(lowPriorityPoolSize, new ParserThreadFactory(LOW_THREAD_PRIORITY_VALUE), rejectionHandler);
     }
 
