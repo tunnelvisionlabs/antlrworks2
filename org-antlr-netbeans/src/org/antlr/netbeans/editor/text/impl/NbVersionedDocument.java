@@ -1,6 +1,6 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -27,19 +27,21 @@
  */
 package org.antlr.netbeans.editor.text.impl;
 
+import java.io.IOException;
+import java.lang.ref.Reference;
+import java.lang.ref.SoftReference;
 import java.lang.ref.WeakReference;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.netbeans.editor.text.VersionedDocument;
 import org.netbeans.api.annotations.common.NonNull;
+import org.netbeans.api.annotations.common.NullAllowed;
 import org.netbeans.editor.BaseDocument;
 import org.netbeans.lib.editor.util.swing.DocumentUtilities;
 import org.netbeans.modules.editor.NbEditorUtilities;
 import org.openide.filesystems.FileObject;
-import org.openide.loaders.DataObject;
 import org.openide.util.Exceptions;
 import org.openide.util.Parameters;
 
@@ -51,12 +53,14 @@ public class NbVersionedDocument implements VersionedDocument {
 
     private static final WeakReference<NbDocumentVersion> NullVersion = new WeakReference<NbDocumentVersion>(null);
 
-    @NonNull
+    @NullAllowed
     private final BaseDocument document;
+    @NullAllowed
+    private final FileObject fileObject;
 
     @NonNull
     private NbNormalizedDocumentChangeCollection pendingChanges = new NbNormalizedDocumentChangeCollection();
-    private WeakReference<NbDocumentVersion> latestVersion = NullVersion;
+    private Reference<NbDocumentVersion> latestVersion = NullVersion;
     private int latestVersionNumber = 0;
 
     public NbVersionedDocument(@NonNull BaseDocument document) {
@@ -64,6 +68,14 @@ public class NbVersionedDocument implements VersionedDocument {
 
         this.document = document;
         this.document.addDocumentListener(new Listener());
+        this.fileObject = null;
+    }
+
+    public NbVersionedDocument(@NonNull FileObject fileObject) {
+        Parameters.notNull("fileObject", fileObject);
+
+        this.document = null;
+        this.fileObject = fileObject;
     }
 
     @Override
@@ -78,15 +90,47 @@ public class NbVersionedDocument implements VersionedDocument {
 
     @Override
     public String getMimeType() {
-        return (String)document.getProperty(BaseDocument.MIME_TYPE_PROP);
+        if (fileObject != null) {
+            return fileObject.getMIMEType();
+        }
+
+        assert document != null;
+        return DocumentUtilities.getMimeType(document);
     }
 
     @Override
     public FileObject getFileObject() {
+        if (fileObject != null) {
+            return fileObject;
+        }
+
+        assert document != null;
         return NbEditorUtilities.getFileObject(document);
     }
 
     private @NonNull NbDocumentVersion applyChanges() {
+        if (document == null) {
+            assert fileObject != null;
+            assert pendingChanges.isEmpty();
+
+            NbDocumentVersion version = latestVersion.get();
+            if (version != null) {
+                return version;
+            }
+
+            try {
+                version = new NbDocumentVersion(this, latestVersionNumber + 1, new LineTextCache(fileObject.asText()));
+                latestVersion = new SoftReference<NbDocumentVersion>(version);
+                latestVersionNumber = version.getVersionNumber();
+                pendingChanges = new NbNormalizedDocumentChangeCollection();
+                return version;
+            } catch (IOException ex) {
+                Exceptions.printStackTrace(ex);
+                throw new UnsupportedOperationException(ex);
+            }
+        }
+
+        assert document != null;
         document.readLock();
         try {
             NbDocumentVersion version = latestVersion.get();

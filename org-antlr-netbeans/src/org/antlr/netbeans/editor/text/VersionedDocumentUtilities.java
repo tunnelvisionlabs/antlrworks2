@@ -1,6 +1,6 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -46,7 +46,8 @@ public class VersionedDocumentUtilities {
     }
 
     public static @NonNull VersionedDocument getVersionedDocument(@NonNull FileObject fileObject) {
-        throw new UnsupportedOperationException("Not implemented yet.");
+        Parameters.notNull("fileObject", fileObject);
+        return new NbVersionedDocument(fileObject);
     }
 
     public static @NonNull VersionedDocument getVersionedDocument(@NonNull Document document) {
