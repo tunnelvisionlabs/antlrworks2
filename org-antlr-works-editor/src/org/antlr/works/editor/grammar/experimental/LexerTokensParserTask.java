@@ -56,8 +56,7 @@ import org.netbeans.api.editor.mimelookup.MimeRegistration;
  */
 public class LexerTokensParserTask implements ParserTask {
 
-    private static final WeakHashMap<VersionedDocument, WeakHashMap<DocumentSnapshot, ParserData<Tagger<TokenTag<Token>>>>> cache =
-        new WeakHashMap<VersionedDocument, WeakHashMap<DocumentSnapshot, ParserData<Tagger<TokenTag<Token>>>>>();
+    private static final String DOCUMENT_CACHE_KEY = LexerTokensParserTask.class.getName() + "-snapshot-data";
 
     @Override
     public ParserTaskDefinition getDefinition() {
@@ -70,13 +69,12 @@ public class LexerTokensParserTask implements ParserTask {
         throws InterruptedException, ExecutionException {
 
         if (requestedData.contains(GrammarParserDataDefinitions.LEXER_TOKENS)) {
-            WeakHashMap<DocumentSnapshot, ParserData<Tagger<TokenTag<Token>>>> documentCache;
-            synchronized (cache) {
-                documentCache = cache.get(snapshot.getVersionedDocument());
-                if (documentCache == null) {
-                    documentCache = new WeakHashMap<DocumentSnapshot, ParserData<Tagger<TokenTag<Token>>>>();
-                    cache.put(snapshot.getVersionedDocument(), documentCache);
-                }
+            WeakHashMap<DocumentSnapshot, ParserData<Tagger<TokenTag<Token>>>> documentCache =
+                (WeakHashMap<DocumentSnapshot, ParserData<Tagger<TokenTag<Token>>>>)snapshot.getVersionedDocument().getProperty(DOCUMENT_CACHE_KEY);
+
+            if (documentCache == null) {
+                documentCache = new WeakHashMap<DocumentSnapshot, ParserData<Tagger<TokenTag<Token>>>>();
+                snapshot.getVersionedDocument().putProperty(DOCUMENT_CACHE_KEY, documentCache);
             }
             
             ParserData<Tagger<TokenTag<Token>>> result;

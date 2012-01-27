@@ -45,4 +45,9 @@ public interface VersionedDocument {
     public @NonNull FileObject getFileObject();
 
     public @NonNull String getMimeType();
+
+    public @CheckForNull Object getProperty(Object key);
+
+    public @CheckForNull Object putProperty(Object key, Object value);
+
 }

@@ -31,6 +31,8 @@ import java.io.IOException;
 import java.lang.ref.Reference;
 import java.lang.ref.SoftReference;
 import java.lang.ref.WeakReference;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
@@ -57,6 +59,9 @@ public class NbVersionedDocument implements VersionedDocument {
     private final BaseDocument document;
     @NullAllowed
     private final FileObject fileObject;
+
+    @NonNull
+    private final Map<Object, Object> properties = new HashMap<Object, Object>();
 
     @NonNull
     private NbNormalizedDocumentChangeCollection pendingChanges = new NbNormalizedDocumentChangeCollection();
@@ -106,6 +111,16 @@ public class NbVersionedDocument implements VersionedDocument {
 
         assert document != null;
         return NbEditorUtilities.getFileObject(document);
+    }
+
+    @Override
+    public Object getProperty(Object key) {
+        return properties.get(key);
+    }
+
+    @Override
+    public Object putProperty(Object key, Object value) {
+        return properties.put(key, value);
     }
 
     private @NonNull NbDocumentVersion applyChanges() {

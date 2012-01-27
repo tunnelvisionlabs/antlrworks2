@@ -35,7 +35,6 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.WeakHashMap;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Delayed;
 import java.util.concurrent.ExecutionException;
@@ -97,8 +96,7 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
     private final Map<String, Collection<? extends ParserTaskProvider>> taskProviders =
         new HashMap<String, Collection<? extends ParserTaskProvider>>();
 
-    private final Map<VersionedDocument, Map<ParserDataDefinition<?>, ParserData<?>>> properties =
-        new WeakHashMap<VersionedDocument, Map<ParserDataDefinition<?>, ParserData<?>>>();
+    private static final String DOCUMENT_PROPERTIES_KEY = ParserTaskManagerImpl.class.getName() + "-properties";
 
     private final RejectionHandler rejectionHandler;
     private final ScheduledThreadPoolExecutor highPriorityExecutor;
@@ -500,7 +498,7 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
             return null;
         }
 
-        Map<ParserDataDefinition<?>, ParserData<?>> documentProperties = properties.get(versionedDocument);
+        Map<ParserDataDefinition<?>, ParserData<?>> documentProperties = (Map<ParserDataDefinition<?>, ParserData<?>>)versionedDocument.getProperty(DOCUMENT_PROPERTIES_KEY);
         if (documentProperties != null) {
             return (ParserData<T>)documentProperties.get(definition);
         }
@@ -515,10 +513,11 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
             return;
         }
 
-        Map<ParserDataDefinition<?>, ParserData<?>> documentProperties = properties.get(versionedDocument);
+        @SuppressWarnings("unchecked")
+        Map<ParserDataDefinition<?>, ParserData<?>> documentProperties = (Map<ParserDataDefinition<?>, ParserData<?>>)versionedDocument.getProperty(DOCUMENT_PROPERTIES_KEY);
         if (documentProperties == null) {
             documentProperties = new HashMap<ParserDataDefinition<?>, ParserData<?>>();
-            properties.put(versionedDocument, documentProperties);
+            versionedDocument.putProperty(DOCUMENT_PROPERTIES_KEY, documentProperties);
         }
 
         documentProperties.put(definition, data);
