@@ -38,6 +38,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.text.Document;
 import org.antlr.netbeans.editor.classification.TokenTag;
@@ -94,7 +95,7 @@ import org.openide.util.Exceptions;
  * @author Sam Harwell
  */
 public final class GrammarCompletionQuery extends AbstractCompletionQuery {
-    // -J-Dorg.antlr.works.editor.grammar.GrammarCompletionQuery.level=FINE
+    // -J-Dorg.antlr.works.editor.grammar.completion.GrammarCompletionQuery.level=FINE
     private static final Logger LOGGER = Logger.getLogger(GrammarCompletionQuery.class.getName());
 
     private static final ParserCache parserCache = new ParserCache();
@@ -224,6 +225,10 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
                         region = OffsetRegion.fromBounds(enclosing.getSpan().getStartPosition(snapshot).getOffset(), regionEnd);
                     } else {
                         region = OffsetRegion.fromBounds(previous.getSpan().getEndPosition(snapshot).getOffset(), regionEnd);
+                    }
+
+                    if (LOGGER.isLoggable(Level.FINE)) {
+                        LOGGER.log(Level.FINE, "Code completion from anchor region: {0}.", region);
                     }
 
                     TaggerTokenSource taggerTokenSource = new TaggerTokenSource(tagger, new SnapshotPositionRegion(snapshot, region));
