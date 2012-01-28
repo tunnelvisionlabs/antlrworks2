@@ -204,7 +204,9 @@ public abstract class AbstractCompletionQuery extends AsyncCompletionQuery {
                             resultSet.addAllItems(results);
                         }
 
+                        handleDeclarationItem(resultSet);
                         resultSet.setHasAdditionalItems(hasAdditionalItems != NO_ADDITIONAL_ITEMS);
+
                         if (hasAdditionalItems == ADDITIONAL_IMPORTED_ITEMS) {
                             resultSet.setHasAdditionalItemsText(Bundle.GCP_imported_items());
                         } else if (hasAdditionalItems == ADDITIONAL_MEMBER_ITEMS) {
@@ -284,15 +286,7 @@ public abstract class AbstractCompletionQuery extends AsyncCompletionQuery {
                     if (filterPrefix != null) {
                         Collection<? extends CompletionItem> filtered = getFilteredData(results, filterPrefix);
                         resultSet.addAllItems(filtered);
-                        if (possibleDeclaration && !isExplicitQuery() && getApplicableTo() != null) {
-                            VersionedDocument textBuffer = VersionedDocumentUtilities.getVersionedDocument(component.getDocument());
-                            DocumentSnapshot snapshot = textBuffer.getCurrentSnapshot();
-                            SnapshotPositionRegion applicableSpan = getApplicableTo().getRegion(snapshot);
-                            if (applicableSpan.getLength() > 0) {
-                                resultSet.addItem(createDeclarationCompletionItem(component.getDocument(), getApplicableTo()));
-                            }
-                        }
-
+                        handleDeclarationItem(resultSet);
                         resultSet.setHasAdditionalItems(hasAdditionalItems > 0);
                     } else {
                         Completion.get().hideDocumentation();
@@ -312,6 +306,17 @@ public abstract class AbstractCompletionQuery extends AsyncCompletionQuery {
         }
 
         resultSet.finish();
+    }
+
+    protected void handleDeclarationItem(CompletionResultSet resultSet) {
+        if (possibleDeclaration && !isExplicitQuery() && getApplicableTo() != null) {
+            VersionedDocument textBuffer = VersionedDocumentUtilities.getVersionedDocument(component.getDocument());
+            DocumentSnapshot snapshot = textBuffer.getCurrentSnapshot();
+            SnapshotPositionRegion applicableSpan = getApplicableTo().getRegion(snapshot);
+            if (applicableSpan.getLength() > 0) {
+                resultSet.addItem(createDeclarationCompletionItem(component.getDocument(), getApplicableTo()));
+            }
+        }
     }
 
     protected abstract CompletionItem createDeclarationCompletionItem(Document document, TrackingPositionRegion applicableTo);
