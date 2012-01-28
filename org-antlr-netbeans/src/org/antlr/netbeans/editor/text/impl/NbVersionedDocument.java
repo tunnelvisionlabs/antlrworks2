@@ -115,12 +115,16 @@ public class NbVersionedDocument implements VersionedDocument {
 
     @Override
     public Object getProperty(Object key) {
-        return properties.get(key);
+        synchronized (properties) {
+            return properties.get(key);
+        }
     }
 
     @Override
     public Object putProperty(Object key, Object value) {
-        return properties.put(key, value);
+        synchronized (properties) {
+            return properties.put(key, value);
+        }
     }
 
     private @NonNull NbDocumentVersion applyChanges() {
@@ -148,26 +152,28 @@ public class NbVersionedDocument implements VersionedDocument {
         assert document != null;
         document.readLock();
         try {
-            NbDocumentVersion version = latestVersion.get();
-            if (pendingChanges.isEmpty() && version != null) {
+            synchronized (this) {
+                NbDocumentVersion version = latestVersion.get();
+                if (pendingChanges.isEmpty() && version != null) {
+                    return version;
+                }
+
+                if (version == null) {
+                    try {
+                        version = new NbDocumentVersion(this, latestVersionNumber + 1, new LineTextCache(document.getText(0, document.getLength())));
+                    } catch (BadLocationException ex) {
+                        Exceptions.printStackTrace(ex);
+                        throw new IllegalStateException("Shouldn't be reachable.", ex);
+                    }
+                } else if (true) {
+                    version = version.translate(pendingChanges);
+                }
+
+                latestVersion = new WeakReference<NbDocumentVersion>(version);
+                latestVersionNumber = version.getVersionNumber();
+                pendingChanges = new NbNormalizedDocumentChangeCollection();
                 return version;
             }
-
-            if (version == null) {
-                try {
-                    version = new NbDocumentVersion(this, latestVersionNumber + 1, new LineTextCache(document.getText(0, document.getLength())));
-                } catch (BadLocationException ex) {
-                    Exceptions.printStackTrace(ex);
-                    throw new IllegalStateException("Shouldn't be reachable.", ex);
-                }
-            } else if (true) {
-                version = version.translate(pendingChanges);
-            }
-
-            latestVersion = new WeakReference<NbDocumentVersion>(version);
-            latestVersionNumber = version.getVersionNumber();
-            pendingChanges = new NbNormalizedDocumentChangeCollection();
-            return version;
         } finally {
             document.readUnlock();
         }
