@@ -38,7 +38,7 @@ import java.util.List;
 import java.util.Iterator;
 import java.util.ArrayList;
 
-@SuppressWarnings({"all", "warnings", "unchecked", "unused"})
+@SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class GrammarParser extends Parser {
 	public static final int
 		DOLLAR=44, PROTECTED=19, LT=36, ACTION_COLON=81, STAR=40, NESTED_ACTION=70, 

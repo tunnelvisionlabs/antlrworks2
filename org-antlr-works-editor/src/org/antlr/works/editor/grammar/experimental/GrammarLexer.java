@@ -9,7 +9,7 @@ import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.misc.*;
 
-@SuppressWarnings({"all", "warnings", "unchecked", "unused"})
+@SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class GrammarLexer extends Lexer {
 	public static final int
 		TOKEN_REF=3, RULE_REF=4, DOC_COMMENT=5, BLOCK_COMMENT=6, LINE_COMMENT=7, 

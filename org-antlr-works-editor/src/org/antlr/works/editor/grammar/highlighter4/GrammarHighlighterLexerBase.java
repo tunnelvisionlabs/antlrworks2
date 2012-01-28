@@ -39,7 +39,7 @@ import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.misc.*;
 
-@SuppressWarnings({"all", "warnings", "unchecked", "unused"})
+@SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class GrammarHighlighterLexerBase extends Lexer {
 	public static final int
 		InvalidGrammarOption=3, ValidGrammarOption=4, LEXER=5, PARSER=6, CATCH=7, 

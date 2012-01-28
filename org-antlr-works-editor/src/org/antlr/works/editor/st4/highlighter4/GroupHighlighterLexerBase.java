@@ -11,7 +11,7 @@ import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.misc.*;
 
-@SuppressWarnings({"all", "warnings", "unchecked", "unused"})
+@SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class GroupHighlighterLexerBase extends Lexer {
 	public static final int
 		OPEN_DELIMITER=3, CLOSE_DELIMITER=4, LPAREN=5, RPAREN=6, COMMA=7, DOT=8, 

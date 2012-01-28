@@ -38,7 +38,7 @@ import java.util.List;
 import java.util.Iterator;
 import java.util.ArrayList;
 
-@SuppressWarnings({"all", "warnings", "unchecked", "unused"})
+@SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class TemplateParser extends Parser {
 	public static final int
 		StringTemplate_NEWLINE=101, BigStringLineTemplate_PERCENT=70, EQUALS=12, 
