@@ -25,7 +25,7 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.antlr.works.editor.shared;
+package org.antlr.works.editor.antlr4.classification;
 
 import java.util.Iterator;
 import org.antlr.netbeans.editor.classification.TokenTag;
@@ -40,15 +40,12 @@ import org.antlr.v4.runtime.CommonTokenFactory;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenFactory;
 import org.antlr.v4.runtime.TokenSource;
-import org.antlr.works.editor.antlr4.classification.DocumentSnapshotCharStream;
 import org.netbeans.api.annotations.common.NonNull;
 
 /**
  *
- * @deprecated
  * @author Sam Harwell
  */
-@Deprecated
 public class TaggerTokenSource implements TokenSource {
     private final DocumentSnapshot snapshot;
     private final Tagger<TokenTag<Token>> tagger;

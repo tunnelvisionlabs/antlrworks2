@@ -25,7 +25,7 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.antlr.works.editor.shared;
+package org.antlr.works.editor.antlr4.semantics;
 
 import java.util.concurrent.Callable;
 import javax.swing.text.StyledDocument;
@@ -43,10 +43,8 @@ import org.openide.util.Exceptions;
 
 /**
  *
- * @deprecated
  * @author Sam Harwell
  */
-@Deprecated
 public abstract class AbstractParseTreeSemanticHighlighter<Listener extends ParseTreeListener<Token>> extends AbstractSemanticHighlighter<ParserRuleContext<Token>> {
 
     protected AbstractParseTreeSemanticHighlighter(@NonNull StyledDocument document, ParserDataDefinition<ParserRuleContext<Token>> semanticDataDefinition) {

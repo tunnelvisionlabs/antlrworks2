@@ -25,6 +25,15 @@
                     </run-dependency>
                 </dependency>
                 <dependency>
+                    <code-name-base>org.netbeans.modules.editor.fold</code-name-base>
+                    <build-prerequisite/>
+                    <compile-dependency/>
+                    <run-dependency>
+                        <release-version>1</release-version>
+                        <specification-version>1.28.0.25</specification-version>
+                    </run-dependency>
+                </dependency>
+                <dependency>
                     <code-name-base>org.netbeans.modules.editor.lib</code-name-base>
                     <build-prerequisite/>
                     <compile-dependency/>
@@ -76,6 +85,15 @@
                     <run-dependency>
                         <release-version>1</release-version>
                         <specification-version>1.45</specification-version>
+                    </run-dependency>
+                </dependency>
+                <dependency>
+                    <code-name-base>org.netbeans.spi.editor.hints</code-name-base>
+                    <build-prerequisite/>
+                    <compile-dependency/>
+                    <run-dependency>
+                        <release-version>0</release-version>
+                        <specification-version>1.21.0.7.25</specification-version>
                     </run-dependency>
                 </dependency>
                 <dependency>
@@ -171,10 +189,12 @@
                 <package>org.antlr.netbeans.editor</package>
                 <package>org.antlr.netbeans.editor.classification</package>
                 <package>org.antlr.netbeans.editor.commenting</package>
+                <package>org.antlr.netbeans.editor.completion</package>
                 <package>org.antlr.netbeans.editor.fold</package>
                 <package>org.antlr.netbeans.editor.highlighting</package>
                 <package>org.antlr.netbeans.editor.navigation</package>
                 <package>org.antlr.netbeans.editor.navigation.actions</package>
+                <package>org.antlr.netbeans.editor.parsing</package>
                 <package>org.antlr.netbeans.editor.tagging</package>
                 <package>org.antlr.netbeans.editor.text</package>
                 <package>org.antlr.netbeans.parsing.spi</package>

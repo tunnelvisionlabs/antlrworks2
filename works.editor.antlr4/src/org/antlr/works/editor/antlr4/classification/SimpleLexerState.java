@@ -1,6 +1,6 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -25,7 +25,7 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.antlr.works.editor.shared;
+package org.antlr.works.editor.antlr4.classification;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -39,10 +39,8 @@ import org.netbeans.api.annotations.common.NullAllowed;
 
 /**
  *
- * @deprecated
  * @author Sam Harwell
  */
-@Deprecated
 public class SimpleLexerState implements LineStateInfo<SimpleLexerState> {
     @NonNull
     public static final SimpleLexerState INITIAL = new SimpleLexerState();

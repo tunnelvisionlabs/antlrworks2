@@ -49,6 +49,15 @@
                     </run-dependency>
                 </dependency>
                 <dependency>
+                    <code-name-base>org.netbeans.spi.editor.hints</code-name-base>
+                    <build-prerequisite/>
+                    <compile-dependency/>
+                    <run-dependency>
+                        <release-version>0</release-version>
+                        <specification-version>1.21.0.7.25</specification-version>
+                    </run-dependency>
+                </dependency>
+                <dependency>
                     <code-name-base>org.openide.text</code-name-base>
                     <build-prerequisite/>
                     <compile-dependency/>
@@ -67,6 +76,7 @@
             </module-dependencies>
             <public-packages>
                 <package>org.antlr.works.editor.antlr3.highlighting</package>
+                <package>org.antlr.works.editor.antlr3.parsing</package>
             </public-packages>
         </data>
     </configuration>

@@ -25,13 +25,12 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.antlr.works.editor.shared.fold;
+package org.antlr.netbeans.editor.fold;
 
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.WeakHashMap;
 import javax.swing.event.DocumentEvent;
-import javax.swing.text.Document;
 import org.netbeans.api.editor.fold.Fold;
 import org.netbeans.modules.editor.NbEditorUtilities;
 import org.netbeans.spi.editor.fold.FoldHierarchyTransaction;
@@ -44,10 +43,8 @@ import org.openide.util.Exceptions;
 
 /**
  *
- * @deprecated
  * @author Sam Harwell
  */
-@Deprecated
 public class AbstractFoldManager implements FoldManager {
     private static final Map<DataObject, AbstractFoldManager> managers =
         new WeakHashMap<DataObject, AbstractFoldManager>();

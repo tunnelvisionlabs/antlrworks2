@@ -25,7 +25,7 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.antlr.works.editor.shared.fold;
+package org.antlr.netbeans.editor.fold;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -49,10 +49,8 @@ import org.openide.util.Exceptions;
 
 /**
  *
- * @deprecated
  * @author Sam Harwell
  */
-@Deprecated
 public abstract class AbstractFoldScanner<SemanticData> {
 
     @SuppressWarnings("fallthrough")

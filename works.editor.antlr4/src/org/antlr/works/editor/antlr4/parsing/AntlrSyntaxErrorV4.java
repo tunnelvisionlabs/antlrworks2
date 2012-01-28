@@ -25,30 +25,27 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.antlr.works.editor.shared.parser;
+package org.antlr.works.editor.antlr4.parsing;
 
+import org.antlr.netbeans.editor.parsing.SyntaxError;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
-import org.antlr.netbeans.editor.text.DocumentSnapshotLine;
 import org.antlr.netbeans.editor.text.OffsetRegion;
 import org.antlr.netbeans.editor.text.SnapshotPositionRegion;
-import org.antlr.runtime.CommonToken;
-import org.antlr.runtime.RecognitionException;
-import org.antlr.runtime.Token;
+import org.antlr.v4.runtime.RecognitionException;
+import org.antlr.v4.runtime.Token;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.spi.editor.hints.Severity;
 import org.openide.util.Parameters;
 
 /**
  *
- * @deprecated
  * @author Sam Harwell
  */
-@Deprecated
-public class AntlrSyntaxErrorV3 extends SyntaxError {
+public class AntlrSyntaxErrorV4 extends SyntaxError {
     private final Token offendingToken;
     private final RecognitionException exception;
 
-    public AntlrSyntaxErrorV3(@NonNull DocumentSnapshot snapshot, Token offendingToken, RecognitionException exception, String message, Severity severity) {
+    public AntlrSyntaxErrorV4(@NonNull DocumentSnapshot snapshot, Token offendingToken, RecognitionException exception, String message, Severity severity) {
         super(getLocationFromToken(snapshot, offendingToken, exception), message, severity);
         this.offendingToken = offendingToken;
         this.exception = exception;
@@ -57,11 +54,9 @@ public class AntlrSyntaxErrorV3 extends SyntaxError {
     private static SnapshotPositionRegion getLocationFromToken(@NonNull DocumentSnapshot snapshot, Token offendingToken, RecognitionException exception) {
         Parameters.notNull("snapshot", snapshot);
 
-        CommonToken token = offendingToken instanceof CommonToken ? (CommonToken)offendingToken : null;
-
         if (offendingToken != null) {
-            int startOffset = token.getStartIndex();
-            int endOffset = token.getStopIndex() + 1;
+            int startOffset = offendingToken.getStartIndex();
+            int endOffset = offendingToken.getStopIndex() + 1;
             if (startOffset < 0 || endOffset < startOffset) {
                 return new SnapshotPositionRegion(snapshot, 0, 0);
             }
@@ -72,13 +67,7 @@ public class AntlrSyntaxErrorV3 extends SyntaxError {
             return new SnapshotPositionRegion(snapshot, offsetRegion);
         }
 
-        int line = exception != null ? exception.line : -1;
-        if (line <= 0) {
-            return new SnapshotPositionRegion(snapshot, 0, 0);
-        }
-
-        DocumentSnapshotLine snapshotLine = snapshot.findLineFromLineNumber(line);
-        return snapshotLine.getRegion();
+        return new SnapshotPositionRegion(snapshot, 0, 0);
     }
 
     public Token getOffendingToken() {

@@ -38,8 +38,10 @@ import org.openide.util.Parameters;
 
 /**
  *
+ * @deprecated
  * @author Sam Harwell
  */
+@Deprecated
 public class AntlrSyntaxErrorV4 extends SyntaxError {
     private final Token offendingToken;
     private final RecognitionException exception;

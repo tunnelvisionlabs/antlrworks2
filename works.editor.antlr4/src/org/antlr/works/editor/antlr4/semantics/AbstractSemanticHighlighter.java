@@ -25,7 +25,7 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.antlr.works.editor.shared;
+package org.antlr.works.editor.antlr4.semantics;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -66,10 +66,8 @@ import org.openide.util.Parameters;
 
 /**
  *
- * @deprecated
  * @author Sam Harwell
  */
-@Deprecated
 public abstract class AbstractSemanticHighlighter<SemanticData> extends AbstractHighlightsContainer {
     private final StyledDocument document;
     private final ParserDataDefinition<SemanticData> semanticDataDefinition;

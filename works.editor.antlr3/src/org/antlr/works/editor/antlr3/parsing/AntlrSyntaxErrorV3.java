@@ -25,8 +25,9 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.antlr.works.editor.shared.parser;
+package org.antlr.works.editor.antlr3.parsing;
 
+import org.antlr.netbeans.editor.parsing.SyntaxError;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.netbeans.editor.text.DocumentSnapshotLine;
 import org.antlr.netbeans.editor.text.OffsetRegion;
@@ -40,10 +41,8 @@ import org.openide.util.Parameters;
 
 /**
  *
- * @deprecated
  * @author Sam Harwell
  */
-@Deprecated
 public class AntlrSyntaxErrorV3 extends SyntaxError {
     private final Token offendingToken;
     private final RecognitionException exception;

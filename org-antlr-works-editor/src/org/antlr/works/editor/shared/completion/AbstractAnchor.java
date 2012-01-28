@@ -34,8 +34,10 @@ import org.openide.util.Parameters;
 
 /**
  *
+ * @deprecated
  * @author Sam Harwell
  */
+@Deprecated
 public abstract class AbstractAnchor implements Anchor {
     private final TrackingPositionRegion span;
     private final int rule;

@@ -31,8 +31,10 @@ import org.antlr.netbeans.editor.text.TrackingPositionRegion;
 
 /**
  *
+ * @deprecated
  * @author Sam Harwell
  */
+@Deprecated
 public interface Anchor {
 
     public TrackingPositionRegion getSpan();
