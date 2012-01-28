@@ -29,13 +29,13 @@ package org.antlr.works.editor.st4;
 
 import java.util.List;
 import org.antlr.netbeans.editor.classification.TokenTag;
+import org.antlr.netbeans.editor.completion.Anchor;
 import org.antlr.netbeans.editor.navigation.Description;
 import org.antlr.netbeans.editor.tagging.Tagger;
 import org.antlr.netbeans.parsing.spi.ParserDataDefinition;
 import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
-import org.antlr.works.editor.shared.completion.Anchor;
 import org.antlr.works.editor.st4.codemodel.FileModel;
 import org.antlr.works.editor.st4.experimental.CurrentTemplateContextData;
 import org.antlr.works.editor.st4.parser.CompiledModel;

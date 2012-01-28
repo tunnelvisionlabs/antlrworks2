@@ -30,12 +30,12 @@ package org.antlr.works.editor.grammar.parser;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import org.antlr.netbeans.editor.parsing.SyntaxError;
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.Lexer;
 import org.antlr.v4.tool.Grammar;
 import org.antlr.v4.tool.ast.GrammarRootAST;
-import org.antlr.works.editor.shared.parser.SyntaxError;
 import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileUtil;
 

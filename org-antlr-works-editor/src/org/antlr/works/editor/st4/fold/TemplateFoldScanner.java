@@ -29,13 +29,13 @@ package org.antlr.works.editor.st4.fold;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.antlr.netbeans.editor.fold.AbstractFoldScanner;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.netbeans.editor.text.OffsetRegion;
 import org.antlr.netbeans.editor.text.SnapshotPositionRegion;
 import org.antlr.netbeans.parsing.spi.ParserData;
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.tree.CommonTree;
-import org.antlr.works.editor.shared.fold.AbstractFoldScanner;
 import org.antlr.works.editor.st4.parser.CompiledFileModel;
 import org.antlr.works.editor.st4.parser.CompiledModel;
 import org.antlr.works.editor.st4.parser.TemplateGroupRuleReturnScope;

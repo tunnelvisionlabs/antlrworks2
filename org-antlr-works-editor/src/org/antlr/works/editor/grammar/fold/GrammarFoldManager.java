@@ -28,8 +28,8 @@
 package org.antlr.works.editor.grammar.fold;
 
 import java.util.prefs.Preferences;
+import org.antlr.netbeans.editor.fold.AbstractFoldManager;
 import org.antlr.works.editor.grammar.GrammarEditorKit;
-import org.antlr.works.editor.shared.fold.AbstractFoldManager;
 import org.netbeans.api.editor.mimelookup.MimeLookup;
 import org.netbeans.spi.editor.fold.FoldOperation;
 

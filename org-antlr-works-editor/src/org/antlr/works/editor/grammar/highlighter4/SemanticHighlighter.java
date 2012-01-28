@@ -35,6 +35,8 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.StyledDocument;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.v4.runtime.Token;
+import org.antlr.works.editor.antlr4.semantics.AbstractParseTreeSemanticHighlighter;
+import org.antlr.works.editor.antlr4.semantics.AbstractSemanticHighlighter;
 import org.antlr.works.editor.grammar.GrammarEditorKit;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
 import org.antlr.works.editor.grammar.experimental.BlankGrammarParserListener;
@@ -43,9 +45,6 @@ import org.antlr.works.editor.grammar.experimental.GrammarParser.argActionParame
 import org.antlr.works.editor.grammar.experimental.GrammarParser.localsSpecContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.ruleContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.ruleReturnsContext;
-import org.antlr.works.editor.shared.AbstractParseTreeSemanticHighlighter;
-import org.antlr.works.editor.shared.AbstractSemanticHighlighter;
-import org.antlr.works.editor.shared.AbstractSemanticHighlighter.AbstractLayerFactory;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.editor.mimelookup.MimeLookup;
 import org.netbeans.api.editor.mimelookup.MimePath;

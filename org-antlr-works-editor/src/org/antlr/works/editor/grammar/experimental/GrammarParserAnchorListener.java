@@ -1,6 +1,6 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -33,13 +33,13 @@ import java.util.List;
 import java.util.Stack;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.atomic.AtomicBoolean;
+import org.antlr.netbeans.editor.completion.AbstractAnchor;
+import org.antlr.netbeans.editor.completion.Anchor;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.netbeans.editor.text.TrackingPositionRegion;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.grammarTypeContext;
-import org.antlr.works.editor.shared.completion.AbstractAnchor;
-import org.antlr.works.editor.shared.completion.Anchor;
 import org.netbeans.api.annotations.common.NonNull;
 import org.openide.util.Parameters;
 

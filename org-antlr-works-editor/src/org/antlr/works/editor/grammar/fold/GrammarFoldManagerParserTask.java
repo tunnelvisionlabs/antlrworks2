@@ -32,6 +32,7 @@ import java.util.Collections;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import javax.swing.text.JTextComponent;
+import org.antlr.netbeans.editor.fold.AbstractFoldScanner;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.netbeans.editor.text.VersionedDocument;
 import org.antlr.netbeans.parsing.spi.ParserData;
@@ -46,7 +47,6 @@ import org.antlr.works.editor.grammar.GrammarEditorKit;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
 import org.antlr.works.editor.grammar.parser.CompiledModel;
 import org.antlr.works.editor.grammar.parser.CompiledModelV3;
-import org.antlr.works.editor.shared.fold.AbstractFoldScanner;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 
 /**

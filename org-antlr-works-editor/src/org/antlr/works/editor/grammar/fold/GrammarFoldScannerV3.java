@@ -30,6 +30,7 @@ package org.antlr.works.editor.grammar.fold;
 import java.util.ArrayList;
 import java.util.List;
 import org.antlr.grammar.v3.ANTLRParser;
+import org.antlr.netbeans.editor.fold.AbstractFoldScanner;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.netbeans.editor.text.OffsetRegion;
 import org.antlr.netbeans.editor.text.SnapshotPositionRegion;
@@ -39,7 +40,6 @@ import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.works.editor.grammar.parser.CompiledModel;
 import org.antlr.works.editor.grammar.parser.CompiledModelV3;
-import org.antlr.works.editor.shared.fold.AbstractFoldScanner;
 
 /**
  *

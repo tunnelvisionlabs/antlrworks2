@@ -29,11 +29,11 @@ package org.antlr.works.editor.st4.parser;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.antlr.netbeans.editor.parsing.SyntaxError;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.TokenStream;
-import org.antlr.works.editor.shared.parser.AntlrSyntaxErrorV3;
-import org.antlr.works.editor.shared.parser.SyntaxError;
+import org.antlr.works.editor.antlr3.parsing.AntlrSyntaxErrorV3;
 import org.netbeans.spi.editor.hints.Severity;
 import org.stringtemplate.v4.compiler.GroupParser;
 

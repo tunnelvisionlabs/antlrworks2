@@ -28,7 +28,7 @@
 package org.antlr.works.editor.st4.fold;
 
 import java.util.prefs.Preferences;
-import org.antlr.works.editor.shared.fold.AbstractFoldManager;
+import org.antlr.netbeans.editor.fold.AbstractFoldManager;
 import org.antlr.works.editor.st4.StringTemplateEditorKit;
 import org.netbeans.api.editor.mimelookup.MimeLookup;
 import org.netbeans.spi.editor.fold.FoldOperation;

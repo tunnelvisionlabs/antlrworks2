@@ -33,9 +33,9 @@ import java.util.Map;
 import java.util.WeakHashMap;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.v4.runtime.CharStream;
+import org.antlr.works.editor.antlr4.classification.AbstractTokensTaskTaggerSnapshot;
+import org.antlr.works.editor.antlr4.classification.SimpleLexerState;
 import org.antlr.works.editor.antlr4.highlighting.TokenSourceWithStateV4;
-import org.antlr.works.editor.shared.AbstractTokensTaskTaggerSnapshot;
-import org.antlr.works.editor.shared.SimpleLexerState;
 import org.netbeans.api.annotations.common.NonNull;
 
 /**

@@ -30,6 +30,7 @@ package org.antlr.works.editor.grammar.parser;
 import java.util.ArrayList;
 import java.util.List;
 import org.antlr.grammar.v3.ANTLRParser;
+import org.antlr.netbeans.editor.parsing.SyntaxError;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.runtime.IntStream;
 import org.antlr.runtime.MismatchedTokenException;
@@ -47,8 +48,7 @@ import org.antlr.tool.GrammarAST;
 import org.antlr.tool.GrammarSyntaxMessage;
 import org.antlr.tool.Message;
 import org.antlr.tool.ToolMessage;
-import org.antlr.works.editor.shared.parser.AntlrSyntaxErrorV3;
-import org.antlr.works.editor.shared.parser.SyntaxError;
+import org.antlr.works.editor.antlr3.parsing.AntlrSyntaxErrorV3;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.spi.editor.hints.Severity;
 

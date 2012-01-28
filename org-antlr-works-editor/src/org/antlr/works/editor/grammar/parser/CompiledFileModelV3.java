@@ -29,8 +29,8 @@ package org.antlr.works.editor.grammar.parser;
 
 import java.util.List;
 import org.antlr.grammar.v3.ANTLRParser;
+import org.antlr.netbeans.editor.parsing.SyntaxError;
 import org.antlr.runtime.CommonToken;
-import org.antlr.works.editor.shared.parser.SyntaxError;
 import org.netbeans.api.annotations.common.CheckForNull;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;
