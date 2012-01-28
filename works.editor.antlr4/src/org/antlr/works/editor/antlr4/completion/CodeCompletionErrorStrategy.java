@@ -122,8 +122,8 @@ public class CodeCompletionErrorStrategy extends DefaultErrorStrategy {
             ATNState state = interp.atn.states.get(stateNumber);
 
             PredictionContext context = PredictionContext.fromRuleContext(recognizer.getContext());
-            ATNConfigSet intermediate = new ATNConfigSet(true, true);
-            ATNConfigSet closure = new ATNConfigSet(true, true);
+            ATNConfigSet intermediate = new ATNConfigSet(true);
+            ATNConfigSet closure = new ATNConfigSet(true);
             for (int i = 0; i < state.getNumberOfTransitions(); i++) {
                 Transition transition = state.transition(i);
                 if (transition.isEpsilon()) {
