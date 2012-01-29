@@ -150,8 +150,9 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
         @SuppressWarnings("unchecked")
         ParserData<T> cachedData = getCachedData(snapshot.getVersionedDocument(), definition);
         boolean useCached = options.contains(ParserDataOptions.NO_UPDATE);
+        boolean allowStale = options.contains(ParserDataOptions.ALLOW_STALE);
         if (!useCached && cachedData != null) {
-            if (options.contains(ParserDataOptions.ALLOW_STALE)) {
+            if (allowStale) {
                 useCached = true;
             } else if (cachedData.getSnapshot().equals(snapshot)) {
                 useCached = true;
@@ -159,6 +160,10 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
         }
 
         if (useCached) {
+            if (!allowStale && cachedData != null && !cachedData.getSnapshot().equals(snapshot)) {
+                cachedData = null;
+            }
+
             return new CompletedFuture<ParserData<T>>(cachedData, null);
         }
 

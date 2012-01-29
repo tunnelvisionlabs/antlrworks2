@@ -40,9 +40,9 @@ public enum ParserDataOptions {
     ALLOW_STALE,
 
     /**
-     * When used with {@link #ALLOW_STALE}, {@link ParserTaskManager#getData} will
-     * return <code>null</code> instead of updating the data if no stale data is
-     * available.
+     * Returns <code>null</code> instead of updating the data if the data is not
+     * already cached. When used with {@link #ALLOW_STALE}, {@link ParserTaskManager#getData}
+     * will return cached data from an earlier snapshot if available.
      */
     NO_UPDATE,
 
