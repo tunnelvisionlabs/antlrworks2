@@ -31,10 +31,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
-import javax.swing.text.JTextComponent;
 import org.antlr.netbeans.editor.fold.AbstractFoldScanner;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.netbeans.editor.text.VersionedDocument;
+import org.antlr.netbeans.parsing.spi.ParseContext;
 import org.antlr.netbeans.parsing.spi.ParserData;
 import org.antlr.netbeans.parsing.spi.ParserDataDefinition;
 import org.antlr.netbeans.parsing.spi.ParserResultHandler;
@@ -57,6 +57,7 @@ public class GrammarFoldManagerParserTask implements ParserTask {
 
     private final AbstractFoldScanner<CompiledModel> v3 = new GrammarFoldScannerV3();
     private final AbstractFoldScanner<CompiledModel> v4 = new GrammarFoldScannerV4();
+    private final Object lock = new Object();
 
     @Override
     public ParserTaskDefinition getDefinition() {
@@ -65,13 +66,15 @@ public class GrammarFoldManagerParserTask implements ParserTask {
 
     @Override
     @SuppressWarnings("unchecked")
-    public void parse(ParserTaskManager taskManager, JTextComponent component, DocumentSnapshot snapshot, Collection<ParserDataDefinition<?>> requestedData, ParserResultHandler results)
+    public void parse(ParserTaskManager taskManager, ParseContext context, DocumentSnapshot snapshot, Collection<ParserDataDefinition<?>> requestedData, ParserResultHandler results)
         throws InterruptedException, ExecutionException {
 
-        Future<ParserData<CompiledModel>> futureData = taskManager.getData(snapshot, component, GrammarParserDataDefinitions.COMPILED_MODEL);
+        Future<ParserData<CompiledModel>> futureData = taskManager.getData(snapshot, context.getComponent(), GrammarParserDataDefinitions.COMPILED_MODEL);
         ParserData<CompiledModel> parserData = futureData.get();
         AbstractFoldScanner<CompiledModel> scanner = getScanner(parserData.getData());
-        scanner.run(parserData);
+        synchronized (lock) {
+            scanner.run(parserData);
+        }
     }
 
     private AbstractFoldScanner<CompiledModel> getScanner(CompiledModel model) {

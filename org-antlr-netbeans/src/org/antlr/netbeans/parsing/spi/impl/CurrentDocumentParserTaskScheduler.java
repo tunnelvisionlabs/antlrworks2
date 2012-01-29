@@ -1,6 +1,6 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -31,6 +31,7 @@ import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
 import org.antlr.netbeans.editor.text.VersionedDocument;
 import org.antlr.netbeans.editor.text.VersionedDocumentUtilities;
+import org.antlr.netbeans.parsing.spi.ParseContext;
 import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -59,13 +60,13 @@ public class CurrentDocumentParserTaskScheduler extends CurrentEditorParserTaskS
                 return;
             }
 
+            currentDocument = document;
             versionedDocument = VersionedDocumentUtilities.getVersionedDocument(document);
-            schedule(versionedDocument, editor);
-        } else {
-            currentDocument = null;
-            versionedDocument = null;
-            schedule((VersionedDocument)null, (JTextComponent)null);
+            schedule(createParseContext(versionedDocument, editor));
         }
     }
 
+    protected ParseContext createParseContext(VersionedDocument versionedDocument, JTextComponent editor) {
+        return new ParseContext(this, versionedDocument, editor);
+    }
 }

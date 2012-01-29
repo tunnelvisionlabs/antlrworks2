@@ -33,6 +33,7 @@ import java.util.concurrent.ExecutionException;
 import javax.swing.text.JTextComponent;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.netbeans.editor.text.VersionedDocument;
+import org.antlr.netbeans.parsing.spi.ParseContext;
 import org.antlr.netbeans.parsing.spi.ParserDataDefinition;
 import org.antlr.netbeans.parsing.spi.ParserResultHandler;
 import org.antlr.netbeans.parsing.spi.ParserTask;
@@ -51,7 +52,7 @@ import org.netbeans.api.editor.mimelookup.MimeRegistration;
  */
 public class CompiledModelParserTask implements ParserTask {
 
-    private final CompiledModelParser v3 = new CompiledModelParser();
+    private final CompiledModelParser parser = new CompiledModelParser();
 
     @Override
     public ParserTaskDefinition getDefinition() {
@@ -59,14 +60,14 @@ public class CompiledModelParserTask implements ParserTask {
     }
 
     @Override
-    public void parse(ParserTaskManager taskManager, JTextComponent component, DocumentSnapshot snapshot, Collection<ParserDataDefinition<?>> requestedData, ParserResultHandler results)
+    public void parse(ParserTaskManager taskManager, ParseContext context, DocumentSnapshot snapshot, Collection<ParserDataDefinition<?>> requestedData, ParserResultHandler results)
         throws InterruptedException, ExecutionException {
 
-        getParser(snapshot).parse(taskManager, component, snapshot, requestedData, results);
+        getParser(snapshot).parse(taskManager, context, snapshot, requestedData, results);
     }
 
     private CompiledModelParser getParser(@NonNull DocumentSnapshot snapshot) {
-        return v3;
+        return parser;
     }
 
     private static final class Definition extends ParserTaskDefinition {

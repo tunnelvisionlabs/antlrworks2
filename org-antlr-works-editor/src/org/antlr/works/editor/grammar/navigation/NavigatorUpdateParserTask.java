@@ -1,6 +1,6 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -39,6 +39,7 @@ import org.antlr.netbeans.editor.navigation.Description;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.netbeans.editor.text.VersionedDocument;
 import org.antlr.netbeans.editor.text.VersionedDocumentUtilities;
+import org.antlr.netbeans.parsing.spi.ParseContext;
 import org.antlr.netbeans.parsing.spi.ParserData;
 import org.antlr.netbeans.parsing.spi.ParserDataDefinition;
 import org.antlr.netbeans.parsing.spi.ParserDataOptions;
@@ -61,6 +62,9 @@ import org.netbeans.api.editor.mimelookup.MimeRegistration;
 public class NavigatorUpdateParserTask implements ParserTask {
     private static final NavigatorUpdateParserTask INSTANCE = new NavigatorUpdateParserTask();
 
+    // since the task is a singleton, this lock is shared
+    private final Object lock = new Object();
+
     private NavigatorUpdateParserTask() {
     }
 
@@ -71,37 +75,39 @@ public class NavigatorUpdateParserTask implements ParserTask {
 
     @Override
     @SuppressWarnings("unchecked")
-    public void parse(ParserTaskManager taskManager, JTextComponent component, DocumentSnapshot snapshot, Collection<ParserDataDefinition<?>> requestedData, ParserResultHandler results)
+    public void parse(ParserTaskManager taskManager, ParseContext parseContext, DocumentSnapshot snapshot, Collection<ParserDataDefinition<?>> requestedData, ParserResultHandler results)
         throws InterruptedException, ExecutionException {
 
-        JTextComponent currentComponent = EditorRegistry.lastFocusedComponent();
-        if (currentComponent == null) {
-            return;
+        synchronized (lock) {
+            JTextComponent currentComponent = EditorRegistry.lastFocusedComponent();
+            if (currentComponent == null) {
+                return;
+            }
+
+            Document document = currentComponent.getDocument();
+            if (document == null || !VersionedDocumentUtilities.getVersionedDocument(document).equals(snapshot.getVersionedDocument())) {
+                return;
+            }
+
+            Future<ParserData<Description>> futureData = taskManager.getData(snapshot, GrammarParserDataDefinitions.NAVIGATOR_ROOT, EnumSet.of(ParserDataOptions.NO_UPDATE));
+            ParserData<Description> parserData = futureData.get();
+            if (parserData == null) {
+                return;
+            }
+
+            Description root = parserData.getData();
+
+            Future<ParserData<CurrentRuleContextData>> futureContextData = taskManager.getData(snapshot, GrammarParserDataDefinitions.CURRENT_RULE_CONTEXT);
+            ParserData<CurrentRuleContextData> parserContextData = futureContextData.get();
+            CurrentRuleContextData context = null;
+            if (parserContextData != null) {
+                context = parserContextData.getData();
+            }
+
+            String selectedRule = context != null ? context.getRuleName() : null;
+            GrammarRulesPanelUI ui = GrammarRulesPanel.findGrammarRulesPanelUI();
+            ui.refresh(root, selectedRule);
         }
-
-        Document document = currentComponent.getDocument();
-        if (document == null || !VersionedDocumentUtilities.getVersionedDocument(document).equals(snapshot.getVersionedDocument())) {
-            return;
-        }
-
-        Future<ParserData<Description>> futureData = taskManager.getData(snapshot, GrammarParserDataDefinitions.NAVIGATOR_ROOT, EnumSet.of(ParserDataOptions.NO_UPDATE));
-        ParserData<Description> parserData = futureData.get();
-        if (parserData == null) {
-            return;
-        }
-
-        Description root = parserData.getData();
-
-        Future<ParserData<CurrentRuleContextData>> futureContextData = taskManager.getData(snapshot, GrammarParserDataDefinitions.CURRENT_RULE_CONTEXT);
-        ParserData<CurrentRuleContextData> parserContextData = futureContextData.get();
-        CurrentRuleContextData context = null;
-        if (parserContextData != null) {
-            context = parserContextData.getData();
-        }
-
-        String selectedRule = context != null ? context.getRuleName() : null;
-        GrammarRulesPanelUI ui = GrammarRulesPanel.findGrammarRulesPanelUI();
-        ui.refresh(root, selectedRule);
     }
 
     private static final class Definition extends ParserTaskDefinition {

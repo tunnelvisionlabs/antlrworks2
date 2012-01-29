@@ -33,11 +33,11 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
-import javax.swing.text.JTextComponent;
 import org.antlr.netbeans.editor.completion.Anchor;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.netbeans.editor.text.VersionedDocument;
 import org.antlr.netbeans.parsing.spi.BaseParserData;
+import org.antlr.netbeans.parsing.spi.ParseContext;
 import org.antlr.netbeans.parsing.spi.ParserData;
 import org.antlr.netbeans.parsing.spi.ParserDataDefinition;
 import org.antlr.netbeans.parsing.spi.ParserDataOptions;
@@ -56,10 +56,8 @@ import org.netbeans.api.editor.mimelookup.MimeRegistration;
  * @author Sam Harwell
  */
 public class DynamicAnchorsParserTask implements ParserTask {
-    private final VersionedDocument document;
 
-    private DynamicAnchorsParserTask(VersionedDocument document) {
-        this.document = document;
+    private DynamicAnchorsParserTask() {
     }
 
     @Override
@@ -68,10 +66,10 @@ public class DynamicAnchorsParserTask implements ParserTask {
     }
 
     @Override
-    public void parse(ParserTaskManager taskManager, JTextComponent component, DocumentSnapshot snapshot, Collection<ParserDataDefinition<?>> requestedData, ParserResultHandler results)
+    public void parse(ParserTaskManager taskManager, ParseContext context, DocumentSnapshot snapshot, Collection<ParserDataDefinition<?>> requestedData, ParserResultHandler results)
         throws InterruptedException, ExecutionException {
         Future<ParserData<List<Anchor>>> futureReferenceData = taskManager.getData(snapshot, TemplateParserDataDefinitions.REFERENCE_ANCHOR_POINTS, EnumSet.of(ParserDataOptions.ALLOW_STALE, ParserDataOptions.SYNCHRONOUS));
-        BaseParserData<List<Anchor>> result = new BaseParserData<List<Anchor>>(TemplateParserDataDefinitions.DYNAMIC_ANCHOR_POINTS, snapshot, futureReferenceData.get().getData());
+        BaseParserData<List<Anchor>> result = new BaseParserData<List<Anchor>>(context, TemplateParserDataDefinitions.DYNAMIC_ANCHOR_POINTS, snapshot, futureReferenceData.get().getData());
         results.addResult(result);
     }
 
@@ -98,7 +96,7 @@ public class DynamicAnchorsParserTask implements ParserTask {
 
         @Override
         public ParserTask createTask(VersionedDocument document) {
-            return new DynamicAnchorsParserTask(document);
+            return new DynamicAnchorsParserTask();
         }
 
     }

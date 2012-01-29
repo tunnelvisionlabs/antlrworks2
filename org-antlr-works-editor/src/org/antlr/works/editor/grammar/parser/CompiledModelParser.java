@@ -31,15 +31,14 @@ import java.util.Collection;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.text.JTextComponent;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.netbeans.parsing.spi.BaseParserData;
+import org.antlr.netbeans.parsing.spi.ParseContext;
 import org.antlr.netbeans.parsing.spi.ParserDataDefinition;
 import org.antlr.netbeans.parsing.spi.ParserResultHandler;
 import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
 import org.netbeans.api.annotations.common.NonNull;
-import org.netbeans.api.annotations.common.NullAllowed;
 
 /**
  *
@@ -49,13 +48,13 @@ public abstract class CompiledModelParser {
     // -J-Dorg.antlr.works.editor.grammar.parser.CompiledModelParser.level=FINE
     private static final Logger LOGGER = Logger.getLogger(CompiledModelParser.class.getName());
 
-    public void parse(ParserTaskManager taskManager, JTextComponent component, DocumentSnapshot snapshot, Collection<ParserDataDefinition<?>> requestedData, ParserResultHandler results)
+    public void parse(ParserTaskManager taskManager, ParseContext context, DocumentSnapshot snapshot, Collection<ParserDataDefinition<?>> requestedData, ParserResultHandler results)
         throws InterruptedException, ExecutionException {
 
         try {
             if (requestedData.contains(GrammarParserDataDefinitions.COMPILED_MODEL)) {
-                CompiledModel result = parseImpl(taskManager, component, snapshot);
-                BaseParserData<CompiledModel> data = new BaseParserData<CompiledModel>(GrammarParserDataDefinitions.COMPILED_MODEL, snapshot, result);
+                CompiledModel result = parseImpl(taskManager, context, snapshot);
+                BaseParserData<CompiledModel> data = new BaseParserData<CompiledModel>(context, GrammarParserDataDefinitions.COMPILED_MODEL, snapshot, result);
                 results.addResult(data);
             }
         } catch (ExecutionException ex) {
@@ -65,7 +64,7 @@ public abstract class CompiledModelParser {
         }
     }
 
-    protected abstract CompiledModel parseImpl(@NonNull ParserTaskManager taskManager, @NullAllowed JTextComponent component, @NonNull DocumentSnapshot snapshot)
+    protected abstract CompiledModel parseImpl(@NonNull ParserTaskManager taskManager, @NonNull ParseContext context, @NonNull DocumentSnapshot snapshot)
         throws InterruptedException, ExecutionException;
 
 }

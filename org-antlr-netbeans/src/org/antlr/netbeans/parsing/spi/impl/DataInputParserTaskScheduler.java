@@ -1,6 +1,6 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -32,6 +32,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.antlr.netbeans.parsing.spi.ParseContext;
 import org.antlr.netbeans.parsing.spi.ParserDataDefinition;
 import org.antlr.netbeans.parsing.spi.ParserDataEvent;
 import org.antlr.netbeans.parsing.spi.ParserDataListener;
@@ -91,7 +92,8 @@ public class DataInputParserTaskScheduler extends ParserTaskScheduler {
                 }
             }
 
-            schedule(event.getData().getSnapshot().getVersionedDocument(), null, tasks);
+            ParseContext context = new ParseContext(DataInputParserTaskScheduler.this, event.getData().getSnapshot());
+            schedule(context, tasks);
         }
 
     }

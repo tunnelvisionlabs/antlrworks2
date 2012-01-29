@@ -1,6 +1,6 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -37,7 +37,9 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
+import org.antlr.netbeans.editor.text.VersionedDocument;
 import org.antlr.netbeans.editor.text.VersionedDocumentUtilities;
+import org.antlr.netbeans.parsing.spi.ParseContext;
 import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
 import org.netbeans.api.editor.EditorRegistry;
 import org.openide.util.lookup.ServiceProvider;
@@ -80,7 +82,9 @@ public class DocumentContentParserTaskScheduler extends ParserTaskScheduler {
                         components = new HashSet<JTextComponent>();
                         documents.put(document, components);
                         document.addDocumentListener(documentListener);
-                        schedule(VersionedDocumentUtilities.getVersionedDocument(document));
+                        VersionedDocument versionedDocument = VersionedDocumentUtilities.getVersionedDocument(document);
+                        ParseContext context = new ParseContext(DocumentContentParserTaskScheduler.this, versionedDocument);
+                        schedule(context);
                     }
                 }
 
@@ -110,17 +114,23 @@ public class DocumentContentParserTaskScheduler extends ParserTaskScheduler {
 
         @Override
         public void insertUpdate(DocumentEvent e) {
-            schedule(VersionedDocumentUtilities.getVersionedDocument(e.getDocument()));
+            VersionedDocument document = VersionedDocumentUtilities.getVersionedDocument(e.getDocument());
+            ParseContext context = new ParseContext(DocumentContentParserTaskScheduler.this, document);
+            schedule(context);
         }
 
         @Override
         public void removeUpdate(DocumentEvent e) {
-            schedule(VersionedDocumentUtilities.getVersionedDocument(e.getDocument()));
+            VersionedDocument document = VersionedDocumentUtilities.getVersionedDocument(e.getDocument());
+            ParseContext context = new ParseContext(DocumentContentParserTaskScheduler.this, document);
+            schedule(context);
         }
 
         @Override
         public void changedUpdate(DocumentEvent e) {
-            schedule(VersionedDocumentUtilities.getVersionedDocument(e.getDocument()));
+            VersionedDocument document = VersionedDocumentUtilities.getVersionedDocument(e.getDocument());
+            ParseContext context = new ParseContext(DocumentContentParserTaskScheduler.this, document);
+            schedule(context);
         }
 
     }

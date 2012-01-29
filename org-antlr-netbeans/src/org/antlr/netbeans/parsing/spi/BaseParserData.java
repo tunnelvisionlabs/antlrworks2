@@ -1,6 +1,6 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -30,6 +30,7 @@ package org.antlr.netbeans.parsing.spi;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;
+import org.openide.util.Parameters;
 
 /**
  *
@@ -37,16 +38,28 @@ import org.netbeans.api.annotations.common.NullAllowed;
  */
 public class BaseParserData<T> implements ParserData<T> {
     @NonNull
+    private final ParseContext context;
+    @NonNull
     private final ParserDataDefinition<T> definition;
     @NonNull
     private final DocumentSnapshot snapshot;
     @NullAllowed
     private final T data;
 
-    public BaseParserData(@NonNull ParserDataDefinition<T> definition, @NonNull DocumentSnapshot snapshot, @NullAllowed T data) {
+    public BaseParserData(@NonNull ParseContext context, @NonNull ParserDataDefinition<T> definition, @NonNull DocumentSnapshot snapshot, @NullAllowed T data) {
+        Parameters.notNull("context", context);
+        Parameters.notNull("definition", definition);
+        Parameters.notNull("snapshot", snapshot);
+
+        this.context = context;
         this.definition = definition;
         this.snapshot = snapshot;
         this.data = data;
+    }
+
+    @Override
+    public ParseContext getContext() {
+        return context;
     }
 
     @Override

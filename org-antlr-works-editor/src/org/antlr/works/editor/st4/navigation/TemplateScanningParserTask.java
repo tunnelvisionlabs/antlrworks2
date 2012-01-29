@@ -29,15 +29,17 @@ package org.antlr.works.editor.st4.navigation;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
-import javax.swing.text.JTextComponent;
 import org.antlr.netbeans.editor.navigation.Description;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.netbeans.editor.text.VersionedDocument;
 import org.antlr.netbeans.parsing.spi.BaseParserData;
+import org.antlr.netbeans.parsing.spi.ParseContext;
 import org.antlr.netbeans.parsing.spi.ParserData;
 import org.antlr.netbeans.parsing.spi.ParserDataDefinition;
+import org.antlr.netbeans.parsing.spi.ParserDataOptions;
 import org.antlr.netbeans.parsing.spi.ParserResultHandler;
 import org.antlr.netbeans.parsing.spi.ParserTask;
 import org.antlr.netbeans.parsing.spi.ParserTaskDefinition;
@@ -55,6 +57,7 @@ import org.netbeans.api.editor.mimelookup.MimeRegistration;
  */
 public class TemplateScanningParserTask implements ParserTask {
     private final TemplateScanner templateScanner = new TemplateScanner();
+    private final Object lock = new Object();
 
     @Override
     public ParserTaskDefinition getDefinition() {
@@ -63,19 +66,27 @@ public class TemplateScanningParserTask implements ParserTask {
 
     @Override
     @SuppressWarnings("unchecked")
-    public void parse(ParserTaskManager taskManager, JTextComponent component, DocumentSnapshot snapshot, Collection<ParserDataDefinition<?>> requestedData, ParserResultHandler results)
+    public void parse(ParserTaskManager taskManager, ParseContext context, DocumentSnapshot snapshot, Collection<ParserDataDefinition<?>> requestedData, ParserResultHandler results)
         throws InterruptedException, ExecutionException {
 
         if (requestedData.contains(TemplateParserDataDefinitions.NAVIGATOR_ROOT)) {
-            Future<ParserData<CompiledModel>> futureData = taskManager.getData(snapshot, component, TemplateParserDataDefinitions.COMPILED_MODEL);
-            ParserData<CompiledModel> parserData = futureData != null ? futureData.get() : null;
-            CompiledModel model = parserData != null ? parserData.getData() : null;
-            if (model != null) {
-                TemplateScanner scanner = getScanner(model);
-                Description description = scanner.scan(model);
-                if (description != null) {
-                    BaseParserData<Description> data = new BaseParserData<Description>(TemplateParserDataDefinitions.NAVIGATOR_ROOT, snapshot, description);
+            synchronized (lock) {
+                ParserData<Description> data = taskManager.getData(snapshot, TemplateParserDataDefinitions.NAVIGATOR_ROOT, EnumSet.of(ParserDataOptions.NO_UPDATE)).get();
+                if (data != null) {
                     results.addResult(data);
+                    return;
+                }
+
+                Future<ParserData<CompiledModel>> futureData = taskManager.getData(snapshot, context.getComponent(), TemplateParserDataDefinitions.COMPILED_MODEL);
+                ParserData<CompiledModel> parserData = futureData != null ? futureData.get() : null;
+                CompiledModel model = parserData != null ? parserData.getData() : null;
+                if (model != null) {
+                    TemplateScanner scanner = getScanner(model);
+                    Description description = scanner.scan(model);
+                    if (description != null) {
+                        data = new BaseParserData<Description>(context, TemplateParserDataDefinitions.NAVIGATOR_ROOT, snapshot, description);
+                        results.addResult(data);
+                    }
                 }
             }
         }

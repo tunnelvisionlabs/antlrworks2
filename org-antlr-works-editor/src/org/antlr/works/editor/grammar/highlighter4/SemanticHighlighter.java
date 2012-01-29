@@ -34,6 +34,8 @@ import java.util.List;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.StyledDocument;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
+import org.antlr.netbeans.parsing.spi.ParserData;
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.works.editor.antlr4.semantics.AbstractParseTreeSemanticHighlighter;
 import org.antlr.works.editor.antlr4.semantics.AbstractSemanticHighlighter;
@@ -75,7 +77,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
     }
 
     @Override
-    protected SemanticAnalyzerListener createListener() {
+    protected SemanticAnalyzerListener createListener(ParserData<? extends ParserRuleContext<Token>> parserData) {
         return new SemanticAnalyzerListener();
     }
 

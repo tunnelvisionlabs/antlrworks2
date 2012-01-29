@@ -63,37 +63,21 @@ public interface ParserTaskManager {
 
     @NonNull Future<ParserData<?>>[] getData(@NonNull DocumentSnapshot snapshot, @NullAllowed JTextComponent component, @NonNull Collection<ParserDataDefinition<?>> definitions, @NonNull EnumSet<ParserDataOptions> options);
 
-    <T> ScheduledFuture<ParserData<T>> scheduleData(@NonNull VersionedDocument document, @NonNull ParserDataDefinition<T> data);
+    <T> ScheduledFuture<ParserData<T>> scheduleData(@NonNull ParseContext context, @NonNull ParserDataDefinition<T> data);
 
-    Map<ParserDataDefinition<?>, ScheduledFuture<ParserData<?>>> scheduleData(@NonNull VersionedDocument document, @NonNull Collection<ParserDataDefinition<?>> data);
+    Map<ParserDataDefinition<?>, ScheduledFuture<ParserData<?>>> scheduleData(@NonNull ParseContext context, @NonNull Collection<ParserDataDefinition<?>> data);
 
-    <T> ScheduledFuture<ParserData<T>> scheduleData(@NonNull VersionedDocument document, @NonNull ParserDataDefinition<T> data, long delay, @NonNull TimeUnit timeUnit);
+    <T> ScheduledFuture<ParserData<T>> scheduleData(@NonNull ParseContext context, @NonNull ParserDataDefinition<T> data, long delay, @NonNull TimeUnit timeUnit);
 
-    Map<ParserDataDefinition<?>, ScheduledFuture<ParserData<?>>> scheduleData(@NonNull VersionedDocument document, @NonNull Collection<ParserDataDefinition<?>> data, long delay, @NonNull TimeUnit timeUnit);
+    Map<ParserDataDefinition<?>, ScheduledFuture<ParserData<?>>> scheduleData(@NonNull ParseContext context, @NonNull Collection<ParserDataDefinition<?>> data, long delay, @NonNull TimeUnit timeUnit);
 
-    <T> ScheduledFuture<ParserData<T>> scheduleData(@NonNull VersionedDocument document, @NullAllowed JTextComponent component, @NonNull ParserDataDefinition<T> data);
+    ScheduledFuture<Collection<ParserData<?>>> scheduleTask(@NonNull ParseContext context, @NonNull ParserTaskProvider data);
 
-    Map<ParserDataDefinition<?>, ScheduledFuture<ParserData<?>>> scheduleData(@NonNull VersionedDocument document, @NullAllowed JTextComponent component, @NonNull Collection<ParserDataDefinition<?>> data);
+    Map<ParserTaskProvider, ScheduledFuture<Collection<ParserData<?>>>> scheduleTask(@NonNull ParseContext context, @NonNull Collection<ParserTaskProvider> data);
 
-    <T> ScheduledFuture<ParserData<T>> scheduleData(@NonNull VersionedDocument document, @NullAllowed JTextComponent component, @NonNull ParserDataDefinition<T> data, long delay, @NonNull TimeUnit timeUnit);
+    ScheduledFuture<Collection<ParserData<?>>> scheduleTask(@NonNull ParseContext context, @NonNull ParserTaskProvider data, long delay, @NonNull TimeUnit timeUnit);
 
-    Map<ParserDataDefinition<?>, ScheduledFuture<ParserData<?>>> scheduleData(@NonNull VersionedDocument document, @NullAllowed JTextComponent component, @NonNull Collection<ParserDataDefinition<?>> data, long delay, @NonNull TimeUnit timeUnit);
-
-    ScheduledFuture<Collection<ParserData<?>>> schedule(@NonNull VersionedDocument document, @NonNull ParserTaskProvider data);
-
-    Map<ParserTaskProvider, ScheduledFuture<Collection<ParserData<?>>>> schedule(@NonNull VersionedDocument document, @NonNull Collection<ParserTaskProvider> data);
-
-    ScheduledFuture<Collection<ParserData<?>>> schedule(@NonNull VersionedDocument document, @NonNull ParserTaskProvider data, long delay, @NonNull TimeUnit timeUnit);
-
-    Map<ParserTaskProvider, ScheduledFuture<Collection<ParserData<?>>>> schedule(@NonNull VersionedDocument document, @NonNull Collection<ParserTaskProvider> data, long delay, @NonNull TimeUnit timeUnit);
-
-    ScheduledFuture<Collection<ParserData<?>>> schedule(@NonNull VersionedDocument document, @NullAllowed JTextComponent component, @NonNull ParserTaskProvider data);
-
-    Map<ParserTaskProvider, ScheduledFuture<Collection<ParserData<?>>>> schedule(@NonNull VersionedDocument document, @NullAllowed JTextComponent component, @NonNull Collection<ParserTaskProvider> data);
-
-    ScheduledFuture<Collection<ParserData<?>>> schedule(@NonNull VersionedDocument document, @NullAllowed JTextComponent component, @NonNull ParserTaskProvider data, long delay, @NonNull TimeUnit timeUnit);
-
-    Map<ParserTaskProvider, ScheduledFuture<Collection<ParserData<?>>>> schedule(@NonNull VersionedDocument document, @NullAllowed JTextComponent component, @NonNull Collection<ParserTaskProvider> data, long delay, @NonNull TimeUnit timeUnit);
+    Map<ParserTaskProvider, ScheduledFuture<Collection<ParserData<?>>>> scheduleTask(@NonNull ParseContext context, @NonNull Collection<ParserTaskProvider> data, long delay, @NonNull TimeUnit timeUnit);
 
     void reschedule(@NonNull VersionedDocument document, @NonNull Class<? extends ParserTaskScheduler> scheduler);
 

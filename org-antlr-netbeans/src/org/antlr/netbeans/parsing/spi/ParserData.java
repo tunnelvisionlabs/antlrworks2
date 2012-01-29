@@ -1,6 +1,6 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -36,6 +36,8 @@ import org.netbeans.api.annotations.common.NonNull;
  * @author Sam Harwell
  */
 public interface ParserData<T> {
+
+    @NonNull ParseContext getContext();
 
     @NonNull ParserDataDefinition<T> getDefinition();
 

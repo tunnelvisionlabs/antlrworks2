@@ -30,6 +30,7 @@ package org.antlr.works.editor.grammar.experimental;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
@@ -41,8 +42,10 @@ import org.antlr.netbeans.editor.tagging.Tagger;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.netbeans.editor.text.VersionedDocument;
 import org.antlr.netbeans.parsing.spi.BaseParserData;
+import org.antlr.netbeans.parsing.spi.ParseContext;
 import org.antlr.netbeans.parsing.spi.ParserData;
 import org.antlr.netbeans.parsing.spi.ParserDataDefinition;
+import org.antlr.netbeans.parsing.spi.ParserDataOptions;
 import org.antlr.netbeans.parsing.spi.ParserResultHandler;
 import org.antlr.netbeans.parsing.spi.ParserTask;
 import org.antlr.netbeans.parsing.spi.ParserTaskDefinition;
@@ -71,6 +74,8 @@ public class ReferenceAnchorsParserTask implements ParserTask {
 
     private final VersionedDocument document;
 
+    private final Object lock = new Object();
+
     private ReferenceAnchorsParserTask(VersionedDocument document) {
         this.document = document;
     }
@@ -81,57 +86,69 @@ public class ReferenceAnchorsParserTask implements ParserTask {
     }
 
     @Override
-    public void parse(ParserTaskManager taskManager, JTextComponent component, DocumentSnapshot snapshot, Collection<ParserDataDefinition<?>> requestedData, ParserResultHandler results)
+    public void parse(ParserTaskManager taskManager, ParseContext context, DocumentSnapshot snapshot, Collection<ParserDataDefinition<?>> requestedData, ParserResultHandler results)
         throws InterruptedException, ExecutionException {
 
         boolean legacyMode = GrammarEditorKit.isLegacyMode(document.getDocument());
         if (legacyMode) {
-            ParserData<List<Anchor>> emptyResult = new BaseParserData<List<Anchor>>(GrammarParserDataDefinitions.REFERENCE_ANCHOR_POINTS, snapshot, null);
+            ParserData<List<Anchor>> emptyResult = new BaseParserData<List<Anchor>>(context, GrammarParserDataDefinitions.REFERENCE_ANCHOR_POINTS, snapshot, null);
             results.addResult(emptyResult);
             return;
         }
 
-        Future<ParserData<Tagger<TokenTag<Token>>>> futureTokensData = taskManager.getData(snapshot, GrammarParserDataDefinitions.LEXER_TOKENS);
-        Tagger<TokenTag<Token>> tagger = futureTokensData.get().getData();
-        TaggerTokenSource tokenSource = new TaggerTokenSource(tagger, snapshot);
-//        DocumentSnapshotCharStream input = new DocumentSnapshotCharStream(snapshot);
-//        input.setSourceName((String)document.getDocument().getProperty(Document.TitleProperty));
-//        GrammarLexer lexer = new GrammarLexer(input);
-        InterruptableTokenStream tokenStream = new InterruptableTokenStream(tokenSource);
-        ParserRuleContext<Token> parseResult;
-        GrammarParser parser = GrammarParserCache.DEFAULT.getParser(tokenStream);
-        try {
-            parser.setBuildParseTree(true);
-            parser.setErrorHandler(new BailErrorStrategy());
-            parseResult = parser.grammarSpec();
-        } catch (RuntimeException ex) {
-            if (ex.getClass() == RuntimeException.class && ex.getCause() instanceof RecognitionException) {
-                // retry with default error handler
-                tokenStream.reset();
-                parser.setTokenStream(tokenStream);
-                parser.setErrorHandler(new DefaultErrorStrategy());
-                parseResult = parser.grammarSpec();
-            } else {
-                throw ex;
+        synchronized (lock) {
+            ParserData<ParserRuleContext<Token>> parseTreeResult = taskManager.getData(snapshot, GrammarParserDataDefinitions.REFERENCE_PARSE_TREE, EnumSet.of(ParserDataOptions.NO_UPDATE)).get();
+            ParserData<List<Anchor>> anchorPointsResult = taskManager.getData(snapshot, GrammarParserDataDefinitions.REFERENCE_ANCHOR_POINTS, EnumSet.of(ParserDataOptions.NO_UPDATE)).get();
+            ParserData<FileModel> fileModelResult = taskManager.getData(snapshot, GrammarParserDataDefinitions.FILE_MODEL, EnumSet.of(ParserDataOptions.NO_UPDATE)).get();
+            if (parseTreeResult == null || anchorPointsResult == null || fileModelResult == null) {
+                Future<ParserData<Tagger<TokenTag<Token>>>> futureTokensData = taskManager.getData(snapshot, GrammarParserDataDefinitions.LEXER_TOKENS);
+                Tagger<TokenTag<Token>> tagger = futureTokensData.get().getData();
+                TaggerTokenSource tokenSource = new TaggerTokenSource(tagger, snapshot);
+        //        DocumentSnapshotCharStream input = new DocumentSnapshotCharStream(snapshot);
+        //        input.setSourceName((String)document.getDocument().getProperty(Document.TitleProperty));
+        //        GrammarLexer lexer = new GrammarLexer(input);
+                InterruptableTokenStream tokenStream = new InterruptableTokenStream(tokenSource);
+                ParserRuleContext<Token> parseResult;
+                GrammarParser parser = GrammarParserCache.DEFAULT.getParser(tokenStream);
+                try {
+                    parser.setBuildParseTree(true);
+                    parser.setErrorHandler(new BailErrorStrategy());
+                    parseResult = parser.grammarSpec();
+                } catch (RuntimeException ex) {
+                    if (ex.getClass() == RuntimeException.class && ex.getCause() instanceof RecognitionException) {
+                        // retry with default error handler
+                        tokenStream.reset();
+                        parser.setTokenStream(tokenStream);
+                        parser.setErrorHandler(new DefaultErrorStrategy());
+                        parseResult = parser.grammarSpec();
+                    } else {
+                        throw ex;
+                    }
+                } finally {
+                    GrammarParserCache.DEFAULT.putParser(parser);
+                }
+
+                parseTreeResult = new BaseParserData<ParserRuleContext<Token>>(context, GrammarParserDataDefinitions.REFERENCE_PARSE_TREE, snapshot, parseResult);
+
+                if (anchorPointsResult == null && snapshot.getVersionedDocument().getDocument() != null) {
+                    GrammarParserAnchorListener listener = new GrammarParserAnchorListener(snapshot);
+                    ParseTreeWalker.DEFAULT.walk(listener, parseResult);
+                    anchorPointsResult = new BaseParserData<List<Anchor>>(context, GrammarParserDataDefinitions.REFERENCE_ANCHOR_POINTS, snapshot, listener.getAnchors());
+                }
+
+                if (fileModelResult == null) {
+                    CodeModelBuilderListener codeModelBuilderListener = new CodeModelBuilderListener(snapshot, tokenStream);
+                    ParseTreeWalker.DEFAULT.walk(codeModelBuilderListener, parseResult);
+                    fileModelResult = new BaseParserData<FileModel>(context, GrammarParserDataDefinitions.FILE_MODEL, snapshot, codeModelBuilderListener.getFileModel());
+                }
             }
-        } finally {
-            GrammarParserCache.DEFAULT.putParser(parser);
+
+            results.addResult(parseTreeResult);
+            results.addResult(fileModelResult);
+            if (anchorPointsResult != null) {
+                results.addResult(anchorPointsResult);
+            }
         }
-
-        ParserData<ParserRuleContext<Token>> parseTreeResult = new BaseParserData<ParserRuleContext<Token>>(GrammarParserDataDefinitions.REFERENCE_PARSE_TREE, snapshot, parseResult);
-        results.addResult(parseTreeResult);
-
-        if (snapshot.getVersionedDocument().getDocument() != null) {
-            GrammarParserAnchorListener listener = new GrammarParserAnchorListener(snapshot);
-            ParseTreeWalker.DEFAULT.walk(listener, parseResult);
-            ParserData<List<Anchor>> result = new BaseParserData<List<Anchor>>(GrammarParserDataDefinitions.REFERENCE_ANCHOR_POINTS, snapshot, listener.getAnchors());
-            results.addResult(result);
-        }
-
-        CodeModelBuilderListener codeModelBuilderListener = new CodeModelBuilderListener(snapshot, tokenStream);
-        ParseTreeWalker.DEFAULT.walk(codeModelBuilderListener, parseResult);
-        ParserData<FileModel> fileModelResult = new BaseParserData<FileModel>(GrammarParserDataDefinitions.FILE_MODEL, snapshot, codeModelBuilderListener.getFileModel());
-        results.addResult(fileModelResult);
     }
 
     private static class InterruptableTokenStream extends CommonTokenStream {

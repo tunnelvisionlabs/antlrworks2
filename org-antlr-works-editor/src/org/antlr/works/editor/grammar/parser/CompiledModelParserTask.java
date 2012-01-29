@@ -1,6 +1,6 @@
 /*
  * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -30,9 +30,9 @@ package org.antlr.works.editor.grammar.parser;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.concurrent.ExecutionException;
-import javax.swing.text.JTextComponent;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.netbeans.editor.text.VersionedDocument;
+import org.antlr.netbeans.parsing.spi.ParseContext;
 import org.antlr.netbeans.parsing.spi.ParserDataDefinition;
 import org.antlr.netbeans.parsing.spi.ParserResultHandler;
 import org.antlr.netbeans.parsing.spi.ParserTask;
@@ -60,10 +60,10 @@ public class CompiledModelParserTask implements ParserTask {
     }
 
     @Override
-    public void parse(ParserTaskManager taskManager, JTextComponent component, DocumentSnapshot snapshot, Collection<ParserDataDefinition<?>> requestedData, ParserResultHandler results)
+    public void parse(ParserTaskManager taskManager, ParseContext context, DocumentSnapshot snapshot, Collection<ParserDataDefinition<?>> requestedData, ParserResultHandler results)
         throws InterruptedException, ExecutionException {
 
-        getParser(snapshot).parse(taskManager, component, snapshot, requestedData, results);
+        getParser(snapshot).parse(taskManager, context, snapshot, requestedData, results);
     }
 
     private CompiledModelParser getParser(@NonNull DocumentSnapshot snapshot) {

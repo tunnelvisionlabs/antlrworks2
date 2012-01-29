@@ -32,6 +32,7 @@ import java.beans.PropertyChangeListener;
 import java.util.concurrent.Callable;
 import org.antlr.netbeans.editor.text.VersionedDocument;
 import org.antlr.netbeans.editor.text.VersionedDocumentUtilities;
+import org.antlr.netbeans.parsing.spi.ParseContext;
 import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
 import org.netbeans.modules.editor.settings.storage.api.EditorSettings;
@@ -73,7 +74,8 @@ public class SelectedNodesParserTaskScheduler extends ParserTaskScheduler {
                     if (fileObject.isValid() && EditorSettings.getDefault().getAllMimeTypes().contains(fileObject.getMIMEType())) {
                         versionedDocument = VersionedDocumentUtilities.getVersionedDocument(fileObject);
                         if (versionedDocument != null) {
-                            schedule(versionedDocument);
+                            ParseContext context = new ParseContext(SelectedNodesParserTaskScheduler.this, versionedDocument);
+                            schedule(context);
                             return null;
                         }
                     }

@@ -25,22 +25,53 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.antlr.netbeans.parsing.spi;
+package org.antlr.netbeans.parsing.spi.impl;
 
-import java.util.Collection;
 import java.util.concurrent.ExecutionException;
-import org.antlr.netbeans.editor.text.DocumentSnapshot;
-import org.netbeans.api.annotations.common.NonNull;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 /**
  *
  * @author Sam Harwell
  */
-public interface ParserTask {
+public class CompletedFuture<T> implements Future<T> {
+    private final T result;
+    private final Throwable ex;
 
-    @NonNull ParserTaskDefinition getDefinition();
+    public CompletedFuture(T result, Throwable ex) {
+        this.result = result;
+        this.ex = ex;
+    }
 
-    void parse(@NonNull ParserTaskManager taskManager, @NonNull ParseContext context, @NonNull DocumentSnapshot snapshot, @NonNull Collection<ParserDataDefinition<?>> requestedData, @NonNull ParserResultHandler results)
-        throws InterruptedException, ExecutionException;
+    @Override
+    public boolean cancel(boolean mayInterruptIfRunning) {
+        return false;
+    }
+
+    @Override
+    public boolean isCancelled() {
+        return false;
+    }
+
+    @Override
+    public boolean isDone() {
+        return true;
+    }
+
+    @Override
+    public T get() throws InterruptedException, ExecutionException {
+        if (ex != null) {
+            throw new ExecutionException(ex);
+        }
+
+        return result;
+    }
+
+    @Override
+    public T get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
+        return get();
+    }
 
 }

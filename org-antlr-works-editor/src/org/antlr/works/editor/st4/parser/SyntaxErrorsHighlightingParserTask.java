@@ -41,6 +41,7 @@ import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.netbeans.editor.text.SnapshotPositionRegion;
 import org.antlr.netbeans.editor.text.TrackingPositionRegion;
 import org.antlr.netbeans.editor.text.VersionedDocument;
+import org.antlr.netbeans.parsing.spi.ParseContext;
 import org.antlr.netbeans.parsing.spi.ParserData;
 import org.antlr.netbeans.parsing.spi.ParserDataDefinition;
 import org.antlr.netbeans.parsing.spi.ParserResultHandler;
@@ -70,10 +71,10 @@ public class SyntaxErrorsHighlightingParserTask implements ParserTask {
 
     @Override
     @SuppressWarnings("unchecked")
-    public void parse(ParserTaskManager taskManager, JTextComponent component, DocumentSnapshot snapshot, Collection<ParserDataDefinition<?>> requestedData, ParserResultHandler results)
+    public void parse(ParserTaskManager taskManager, ParseContext context, DocumentSnapshot snapshot, Collection<ParserDataDefinition<?>> requestedData, ParserResultHandler results)
         throws InterruptedException, ExecutionException {
 
-        Future<ParserData<CompiledModel>> futureData = taskManager.getData(snapshot, component, TemplateParserDataDefinitions.COMPILED_MODEL);
+        Future<ParserData<CompiledModel>> futureData = taskManager.getData(snapshot, context.getComponent(), TemplateParserDataDefinitions.COMPILED_MODEL);
         ParserData<CompiledModel> parserData = futureData.get();
         CompiledModel model = parserData.getData();
         DocumentSnapshot latestSnapshot = snapshot.getVersionedDocument().getCurrentSnapshot();

@@ -33,9 +33,9 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.text.JTextComponent;
 import org.antlr.netbeans.editor.parsing.SyntaxError;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
+import org.antlr.netbeans.parsing.spi.ParseContext;
 import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.CommonTokenStream;
@@ -65,51 +65,56 @@ public class CompiledModelParserV4 extends CompiledModelParser {
     private final Object lock = new Object();
     private DocumentSnapshot lastSnapshot;
     private CompiledFileModelV4 lastResult;
+    private Throwable lastException;
 
     @Override
-    protected CompiledModelV4 parseImpl(ParserTaskManager taskManager, JTextComponent component, final DocumentSnapshot snapshot)
+    protected CompiledModelV4 parseImpl(ParserTaskManager taskManager, ParseContext context, final DocumentSnapshot snapshot)
         throws InterruptedException, ExecutionException {
 
         Parameters.notNull("snapshot", snapshot);
 
         synchronized (lock) {
             if (snapshot.equals(lastSnapshot)) {
+                if (lastException != null) {
+                    throw new ExecutionException("An unexpected error occurred.", lastException);
+                }
+
                 return new CompiledModelV4(snapshot, lastResult);
             }
-        }
 
-        if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.log(Level.FINE, "Reparsing snapshot {0}", new Object[] { snapshot });
-        }
-
-        try {
-            final List<SyntaxError> syntaxErrors = new ArrayList<SyntaxError>();
-            final Tool tool = new Tool();
-            tool.addListener(new ErrorListener(snapshot, tool, syntaxErrors));
-            tool.libDirectory = new File(snapshot.getVersionedDocument().getFileObject().getPath()).getParent();
-            GrammarRootAST root = tool.loadFromString(snapshot.getText().toString());
-            Grammar grammar = null;
-            if (root != null) {
-                grammar = tool.createGrammar(root);
-                grammar.fileName = snapshot.getVersionedDocument().getFileObject().getNameExt();
-                grammar.loadImportedGrammars();
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.log(Level.FINE, "Reparsing snapshot {0}", new Object[] { snapshot });
             }
 
-            CommonTokenStream tokenStream = (CommonTokenStream)root.tokens;
-            @SuppressWarnings("unchecked")
-            List<CommonToken> tokenList = tokenStream.getTokens();
-            CommonToken[] tokens = tokenList.toArray(new CommonToken[0]);
+            try {
+                final List<SyntaxError> syntaxErrors = new ArrayList<SyntaxError>();
+                final Tool tool = new Tool();
+                tool.addListener(new ErrorListener(snapshot, tool, syntaxErrors));
+                tool.libDirectory = new File(snapshot.getVersionedDocument().getFileObject().getPath()).getParent();
+                GrammarRootAST root = tool.loadFromString(snapshot.getText().toString());
+                Grammar grammar = null;
+                if (root != null) {
+                    grammar = tool.createGrammar(root);
+                    grammar.fileName = snapshot.getVersionedDocument().getFileObject().getNameExt();
+                    grammar.loadImportedGrammars();
+                }
 
-            CompiledFileModelV4 currentResult = new CompiledFileModelV4(grammar, root, syntaxErrors, snapshot.getVersionedDocument().getFileObject(), tokens);
+                CommonTokenStream tokenStream = (CommonTokenStream)root.tokens;
+                @SuppressWarnings("unchecked")
+                List<CommonToken> tokenList = tokenStream.getTokens();
+                CommonToken[] tokens = tokenList.toArray(new CommonToken[0]);
 
-            synchronized (lock) {
+                CompiledFileModelV4 currentResult = new CompiledFileModelV4(grammar, root, syntaxErrors, snapshot.getVersionedDocument().getFileObject(), tokens);
                 lastSnapshot = snapshot;
                 lastResult = currentResult;
+                lastException = null;
+                return new CompiledModelV4(snapshot, currentResult);
+            } catch (Exception ex) {
+                lastSnapshot = snapshot;
+                lastResult = null;
+                lastException = ex;
+                throw new ExecutionException("An unexpected error occurred.", ex);
             }
-
-            return new CompiledModelV4(snapshot, currentResult);
-        } catch (Exception ex) {
-            throw new ExecutionException("An unexpected error occurred.", ex);
         }
     }
 

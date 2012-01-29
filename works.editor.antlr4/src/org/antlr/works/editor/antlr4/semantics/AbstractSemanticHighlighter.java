@@ -33,9 +33,12 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.Callable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
+import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyledDocument;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.netbeans.editor.text.OffsetRegion;
@@ -69,6 +72,8 @@ import org.openide.util.Parameters;
  * @author Sam Harwell
  */
 public abstract class AbstractSemanticHighlighter<SemanticData> extends AbstractHighlightsContainer {
+    private static final Logger LOGGER = Logger.getLogger(AbstractSemanticHighlighter.class.getName());
+
     private final StyledDocument document;
     private final ParserDataDefinition<SemanticData> semanticDataDefinition;
     private final ParserTaskManager taskManager;
@@ -116,6 +121,11 @@ public abstract class AbstractSemanticHighlighter<SemanticData> extends Abstract
 
     protected static AttributeSet getFontAndColors(FontColorSettings settings, String category) {
         AttributeSet attributes = settings.getTokenFontColors(category);
+        if (attributes == null) {
+            LOGGER.log(Level.WARNING, "No font attributes found for category {0}.", category);
+            return SimpleAttributeSet.EMPTY;
+        }
+
         return attributes;
     }
 
@@ -200,7 +210,10 @@ public abstract class AbstractSemanticHighlighter<SemanticData> extends Abstract
                 return;
             }
 
-            taskManager.scheduleHighPriority(createAnalyzerTask(parserData));
+            Callable<Void> task = createAnalyzerTask(parserData);
+            if (task != null) {
+                taskManager.scheduleHighPriority(task);
+            }
         }
 
     }

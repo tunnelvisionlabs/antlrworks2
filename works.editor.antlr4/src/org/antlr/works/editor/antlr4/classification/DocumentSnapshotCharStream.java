@@ -132,6 +132,11 @@ public class DocumentSnapshotCharStream implements CharStream {
             }
         }
 
+        // HACK: special handling due to Lexer passing invalid indexes.
+        if (stop >= size()) {
+            stop = size() - 1;
+        }
+
         return getSnapshot().subSequence(start, stop + 1).toString();
     }
 

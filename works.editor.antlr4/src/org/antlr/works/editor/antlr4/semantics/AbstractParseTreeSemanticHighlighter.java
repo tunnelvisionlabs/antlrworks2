@@ -51,16 +51,19 @@ public abstract class AbstractParseTreeSemanticHighlighter<Listener extends Pars
         super(document, semanticDataDefinition);
     }
 
-    protected abstract Listener createListener();
+    protected abstract Listener createListener(@NonNull ParserData<? extends ParserRuleContext<Token>> parserData);
 
     protected abstract void updateHighlights(OffsetsBag container, DocumentSnapshot sourceSnapshot, DocumentSnapshot currentSnapshot, Listener listener);
 
     @Override
-    protected Callable<Void> createAnalyzerTask(final ParserData<? extends ParserRuleContext<Token>> parserData) {
+    protected Callable<Void> createAnalyzerTask(@NonNull final ParserData<? extends ParserRuleContext<Token>> parserData) {
         return new Callable<Void>() {
             @Override
             public Void call() {
-                final Listener listener = createListener();
+                final Listener listener = createListener(parserData);
+                if (listener == null) {
+                    return null;
+                }
 
                 try {
                     ParseTreeWalker.DEFAULT.walk(listener, parserData.getData());

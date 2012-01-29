@@ -33,11 +33,11 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
-import javax.swing.text.JTextComponent;
 import org.antlr.netbeans.editor.completion.Anchor;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.netbeans.editor.text.VersionedDocument;
 import org.antlr.netbeans.parsing.spi.BaseParserData;
+import org.antlr.netbeans.parsing.spi.ParseContext;
 import org.antlr.netbeans.parsing.spi.ParserData;
 import org.antlr.netbeans.parsing.spi.ParserDataDefinition;
 import org.antlr.netbeans.parsing.spi.ParserDataOptions;
@@ -60,10 +60,8 @@ import org.netbeans.api.editor.mimelookup.MimeRegistration;
  * @author Sam Harwell
  */
 public class CurrentTemplateContextParserTask implements ParserTask {
-    private final VersionedDocument document;
 
-    private CurrentTemplateContextParserTask(VersionedDocument document) {
-        this.document = document;
+    private CurrentTemplateContextParserTask() {
     }
 
     @Override
@@ -72,14 +70,14 @@ public class CurrentTemplateContextParserTask implements ParserTask {
     }
 
     @Override
-    public void parse(ParserTaskManager taskManager, JTextComponent component, DocumentSnapshot snapshot, Collection<ParserDataDefinition<?>> requestedData, ParserResultHandler results)
+    public void parse(ParserTaskManager taskManager, ParseContext context, DocumentSnapshot snapshot, Collection<ParserDataDefinition<?>> requestedData, ParserResultHandler results)
         throws InterruptedException, ExecutionException {
 
-        if (component == null) {
+        if (context.getPosition() == null) {
             return;
         }
 
-        int caretOffset = component.getCaretPosition();
+        int caretOffset = context.getPosition().getOffset();
 
         Future<ParserData<List<Anchor>>> result =
             taskManager.getData(snapshot, TemplateParserDataDefinitions.DYNAMIC_ANCHOR_POINTS, EnumSet.of(ParserDataOptions.SYNCHRONOUS));
@@ -125,7 +123,7 @@ public class CurrentTemplateContextParserTask implements ParserTask {
         }
 
         CurrentTemplateContextData data = new CurrentTemplateContextData(snapshot, ruleContext);
-        results.addResult(new BaseParserData<CurrentTemplateContextData>(TemplateParserDataDefinitions.CURRENT_TEMPLATE_CONTEXT, snapshot, data));
+        results.addResult(new BaseParserData<CurrentTemplateContextData>(context, TemplateParserDataDefinitions.CURRENT_TEMPLATE_CONTEXT, snapshot, data));
     }
 
     private class TaskTokenStream extends CommonTokenStream {
@@ -169,7 +167,7 @@ public class CurrentTemplateContextParserTask implements ParserTask {
 
         @Override
         public ParserTask createTask(VersionedDocument document) {
-            return new CurrentTemplateContextParserTask(document);
+            return new CurrentTemplateContextParserTask();
         }
 
     }
