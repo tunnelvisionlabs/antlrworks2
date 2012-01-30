@@ -198,6 +198,7 @@
                 <package>org.antlr.netbeans.editor.tagging</package>
                 <package>org.antlr.netbeans.editor.text</package>
                 <package>org.antlr.netbeans.parsing.spi</package>
+                <package>org.antlr.netbeans.semantics</package>
             </public-packages>
         </data>
     </configuration>
