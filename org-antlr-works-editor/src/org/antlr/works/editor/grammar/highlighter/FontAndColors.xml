@@ -39,4 +39,7 @@
     <fontcolor name="astoperator">
         <font style="bold" />
     </fontcolor>
+
+    <!--mark occurrences:-->
+    <fontcolor name="markOccurrences" bgColor="ECEBA3"/>
 </fontscolors>
