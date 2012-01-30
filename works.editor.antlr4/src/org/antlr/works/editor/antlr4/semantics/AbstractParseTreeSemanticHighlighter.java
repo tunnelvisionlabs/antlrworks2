@@ -28,6 +28,7 @@
 package org.antlr.works.editor.antlr4.semantics;
 
 import java.util.concurrent.Callable;
+import javax.swing.SwingUtilities;
 import javax.swing.text.StyledDocument;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.netbeans.parsing.spi.ParserData;
@@ -72,14 +73,22 @@ public abstract class AbstractParseTreeSemanticHighlighter<Listener extends Pars
                     throw ex;
                 }
 
-                ((BaseDocument)getDocument()).render(new Runnable() {
+                SwingUtilities.invokeLater(new Runnable() {
+
                     @Override
                     public void run() {
-                        getContainer().clear();
-                        DocumentSnapshot sourceSnapshot = parserData.getSnapshot();
-                        DocumentSnapshot currentSnapshot = sourceSnapshot.getVersionedDocument().getCurrentSnapshot();
-                        updateHighlights(getContainer(), sourceSnapshot, currentSnapshot, listener);
+                        ((BaseDocument)getDocument()).render(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                DocumentSnapshot sourceSnapshot = parserData.getSnapshot();
+                                DocumentSnapshot currentSnapshot = sourceSnapshot.getVersionedDocument().getCurrentSnapshot();
+                                updateHighlights(getContainer(), sourceSnapshot, currentSnapshot, listener);
+                            }
+
+                        });
                     }
+
                 });
 
                 return null;

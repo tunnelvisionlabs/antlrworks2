@@ -103,6 +103,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
 
     @Override
     protected void updateHighlights(OffsetsBag container, DocumentSnapshot sourceSnapshot, DocumentSnapshot currentSnapshot, SemanticAnalyzerListener listener) {
+        container.clear();
         addHighlights(container, sourceSnapshot, currentSnapshot, listener.getTemplateDeclarations(), templateDeclarationAttributes);
         addHighlights(container, sourceSnapshot, currentSnapshot, listener.getTemplateUses(), templateUseAttributes);
         addHighlights(container, sourceSnapshot, currentSnapshot, listener.getRegionDeclarations(), regionDeclarationAttributes);
