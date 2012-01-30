@@ -34,6 +34,7 @@ import java.util.concurrent.Future;
 import org.antlr.netbeans.editor.fold.AbstractFoldScanner;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.netbeans.editor.text.VersionedDocument;
+import org.antlr.netbeans.parsing.spi.DocumentParserTaskProvider;
 import org.antlr.netbeans.parsing.spi.ParseContext;
 import org.antlr.netbeans.parsing.spi.ParserData;
 import org.antlr.netbeans.parsing.spi.ParserDataDefinition;
@@ -98,7 +99,7 @@ public class GrammarFoldManagerParserTask implements ParserTask {
     }
 
     @MimeRegistration(mimeType=GrammarEditorKit.GRAMMAR_MIME_TYPE, service=ParserTaskProvider.class)
-    public static final class Provider implements ParserTaskProvider {
+    public static final class Provider extends DocumentParserTaskProvider {
 
         @Override
         public ParserTaskDefinition getDefinition() {
@@ -106,7 +107,7 @@ public class GrammarFoldManagerParserTask implements ParserTask {
         }
 
         @Override
-        public ParserTask createTask(VersionedDocument document) {
+        public ParserTask createTaskImpl(VersionedDocument document) {
             return new GrammarFoldManagerParserTask();
         }
 
