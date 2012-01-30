@@ -102,8 +102,8 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
     }
 
     @Override
-    protected void updateHighlights(OffsetsBag container, DocumentSnapshot sourceSnapshot, DocumentSnapshot currentSnapshot, SemanticAnalyzerListener listener) {
-        container.clear();
+    protected void updateHighlights(OffsetsBag targetContainer, DocumentSnapshot sourceSnapshot, DocumentSnapshot currentSnapshot, SemanticAnalyzerListener listener) {
+        OffsetsBag container = new OffsetsBag(currentSnapshot.getVersionedDocument().getDocument());
         addHighlights(container, sourceSnapshot, currentSnapshot, listener.getTemplateDeclarations(), templateDeclarationAttributes);
         addHighlights(container, sourceSnapshot, currentSnapshot, listener.getTemplateUses(), templateUseAttributes);
         addHighlights(container, sourceSnapshot, currentSnapshot, listener.getRegionDeclarations(), regionDeclarationAttributes);
@@ -114,6 +114,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
         addHighlights(container, sourceSnapshot, currentSnapshot, listener.getParameterUses(), parameterUseAttributes);
         addHighlights(container, sourceSnapshot, currentSnapshot, listener.getAttributeUses(), attributeUseAttributes);
         addHighlights(container, sourceSnapshot, currentSnapshot, listener.getOptions(), expressionOptionAttributes);
+        targetContainer.setHighlights(container);
     }
 
     @MimeRegistration(mimeType=StringTemplateEditorKit.TEMPLATE_MIME_TYPE, service=HighlightsLayerFactory.class)
