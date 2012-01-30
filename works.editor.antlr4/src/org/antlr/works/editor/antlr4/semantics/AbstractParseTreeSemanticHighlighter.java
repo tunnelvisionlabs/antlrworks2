@@ -33,8 +33,8 @@ import javax.swing.text.StyledDocument;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.netbeans.parsing.spi.ParserData;
 import org.antlr.netbeans.parsing.spi.ParserDataDefinition;
-import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.netbeans.api.annotations.common.NonNull;
@@ -46,18 +46,24 @@ import org.openide.util.Exceptions;
  *
  * @author Sam Harwell
  */
-public abstract class AbstractParseTreeSemanticHighlighter<Listener extends ParseTreeListener<Token>> extends AbstractSemanticHighlighter<ParserRuleContext<Token>> {
+public abstract class AbstractParseTreeSemanticHighlighter<Listener extends ParseTreeListener<Token>, Data> extends AbstractSemanticHighlighter<Data> {
 
-    protected AbstractParseTreeSemanticHighlighter(@NonNull StyledDocument document, ParserDataDefinition<ParserRuleContext<Token>> semanticDataDefinition) {
+    protected AbstractParseTreeSemanticHighlighter(@NonNull StyledDocument document, ParserDataDefinition<Data> semanticDataDefinition) {
         super(document, semanticDataDefinition);
     }
 
-    protected abstract Listener createListener(@NonNull ParserData<? extends ParserRuleContext<Token>> parserData);
+    protected abstract Listener createListener(@NonNull ParserData<? extends Data> parserData);
+
+    protected abstract ParseTree getParseTree(@NonNull final ParserData<? extends Data> parserData);
 
     protected abstract void updateHighlights(OffsetsBag container, DocumentSnapshot sourceSnapshot, DocumentSnapshot currentSnapshot, Listener listener);
 
+    protected ParseTreeWalker getParseTreeWalker(@NonNull final ParserData<? extends Data> parserData) {
+        return ParseTreeWalker.DEFAULT;
+    }
+
     @Override
-    protected Callable<Void> createAnalyzerTask(@NonNull final ParserData<? extends ParserRuleContext<Token>> parserData) {
+    protected Callable<Void> createAnalyzerTask(@NonNull final ParserData<? extends Data> parserData) {
         return new Callable<Void>() {
             @Override
             public Void call() {
@@ -67,7 +73,7 @@ public abstract class AbstractParseTreeSemanticHighlighter<Listener extends Pars
                 }
 
                 try {
-                    ParseTreeWalker.DEFAULT.walk(listener, parserData.getData());
+                    ParseTreeWalker.DEFAULT.walk(listener, getParseTree(parserData));
                 } catch (RuntimeException ex) {
                     Exceptions.printStackTrace(ex);
                     throw ex;
@@ -95,4 +101,5 @@ public abstract class AbstractParseTreeSemanticHighlighter<Listener extends Pars
             }
         };
     }
+
 }

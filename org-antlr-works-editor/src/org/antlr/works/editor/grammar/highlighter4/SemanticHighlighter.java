@@ -37,6 +37,7 @@ import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.netbeans.parsing.spi.ParserData;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.works.editor.antlr4.semantics.AbstractParseTreeSemanticHighlighter;
 import org.antlr.works.editor.antlr4.semantics.AbstractSemanticHighlighter;
 import org.antlr.works.editor.grammar.GrammarEditorKit;
@@ -60,7 +61,7 @@ import org.openide.util.Lookup;
  *
  * @author Sam Harwell
  */
-public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<SemanticHighlighter.SemanticAnalyzerListener> {
+public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<SemanticHighlighter.SemanticAnalyzerListener, ParserRuleContext<Token>> {
 
     private final AttributeSet parameterDeclarationAttributes;
     private final AttributeSet returnValueDeclarationAttributes;
@@ -79,6 +80,11 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
     @Override
     protected SemanticAnalyzerListener createListener(ParserData<? extends ParserRuleContext<Token>> parserData) {
         return new SemanticAnalyzerListener();
+    }
+
+    @Override
+    protected ParseTree getParseTree(ParserData<? extends ParserRuleContext<Token>> parserData) {
+        return parserData.getData();
     }
 
     @Override
