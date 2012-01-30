@@ -612,14 +612,10 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
                 LOGGER.log(Level.FINE, messageFormat, new Object[] { threadName, data.getName(), task.getDefinition().getName(), document.getFileObject().getPath(), snapshot.getVersion().getVersionNumber() });
             }
 
-            ResultAggregator handler = new ResultAggregator();
+            ResultAggregator handler = new ResultAggregator(outer, document);
             task.parse(outer, context, snapshot, Collections.<ParserDataDefinition<?>>singleton(data), handler);
 
             for (ParserData<?> result : handler.getResults()) {
-                if (result.getDefinition().isCacheable()) {
-                    outer.updateCachedData(document, result.getDefinition(), result);
-                }
-
                 outer.fireDataChanged((ParserDataDefinition)result.getDefinition(), result);
             }
 
@@ -663,14 +659,10 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
                 LOGGER.log(Level.FINE, messageFormat, args);
             }
 
-            ResultAggregator handler = new ResultAggregator();
+            ResultAggregator handler = new ResultAggregator(outer, document);
             task.parse(outer, context, snapshot, provider.getDefinition().getOutputs(), handler);
 
             for (ParserData<?> result : handler.getResults()) {
-                if (result.getDefinition().isCacheable()) {
-                    outer.updateCachedData(document, result.getDefinition(), result);
-                }
-
                 outer.fireDataChanged((ParserDataDefinition)result.getDefinition(), result);
             }
 
@@ -680,10 +672,23 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
 
     private static class ResultAggregator implements ParserResultHandler {
         private final List<ParserData<?>> results = new ArrayList<ParserData<?>>();
+        private final ParserTaskManagerImpl outer;
+        private final VersionedDocument document;
+
+        public ResultAggregator(@NonNull ParserTaskManagerImpl outer, @NonNull VersionedDocument document) {
+            Parameters.notNull("outer", outer);
+            Parameters.notNull("document", document);
+            this.document = document;
+            this.outer = outer;
+        }
 
         @Override
-        public <T> void addResult(ParserData<T> result) {
+        public <T> void addResult(@NonNull ParserData<T> result) {
+            Parameters.notNull("result", result);
             results.add(result);
+            if (result.getDefinition().isCacheable()) {
+                outer.updateCachedData(document, result.getDefinition(), result);
+            }
         }
 
         public List<ParserData<?>> getResults() {
