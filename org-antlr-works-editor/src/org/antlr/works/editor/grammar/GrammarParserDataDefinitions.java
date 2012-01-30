@@ -39,6 +39,7 @@ import org.antlr.v4.runtime.Token;
 import org.antlr.works.editor.grammar.codemodel.FileModel;
 import org.antlr.works.editor.grammar.experimental.CurrentRuleContextData;
 import org.antlr.works.editor.grammar.parser.CompiledModel;
+import org.antlr.works.editor.grammar.semantics.GrammarAnnotatedParseTree;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 
 /**
@@ -50,6 +51,7 @@ public class GrammarParserDataDefinitions {
 
     public static final ParserDataDefinition<List<Anchor>> REFERENCE_ANCHOR_POINTS = new ReferenceAnchorPointsDataDefinition();
     public static final ParserDataDefinition<ParserRuleContext<Token>> REFERENCE_PARSE_TREE = new ReferenceParseTreeDataDefinition();
+    public static final ParserDataDefinition<GrammarAnnotatedParseTree> ANNOTATED_PARSE_TREE = new AnnotatedParseTreeDataDefinition();
 
     public static final ParserDataDefinition<List<Anchor>> DYNAMIC_ANCHOR_POINTS = new DynamicAnchorPointsDataDefinition();
     public static final ParserDataDefinition<Tagger<TokenTag<Token>>> LEXER_TOKENS = new LexerTokensDataDefinition();
@@ -74,6 +76,11 @@ public class GrammarParserDataDefinitions {
     @MimeRegistration(mimeType=GrammarEditorKit.GRAMMAR_MIME_TYPE, service=ParserDataDefinition.class)
     public static ParserDataDefinition<ParserRuleContext<Token>> getReferenceParseTreeDataDefinition() {
         return REFERENCE_PARSE_TREE;
+    }
+
+    @MimeRegistration(mimeType=GrammarEditorKit.GRAMMAR_MIME_TYPE, service=ParserDataDefinition.class)
+    public static ParserDataDefinition<GrammarAnnotatedParseTree> getAnnotatedParseTreeDataDefinition() {
+        return ANNOTATED_PARSE_TREE;
     }
 
     @MimeRegistration(mimeType=GrammarEditorKit.GRAMMAR_MIME_TYPE, service=ParserDataDefinition.class)
@@ -123,6 +130,14 @@ public class GrammarParserDataDefinitions {
         @SuppressWarnings("unchecked")
         public ReferenceParseTreeDataDefinition() {
             super("Grammar Reference Parse Tree", (Class<ParserRuleContext<Token>>)(Object)ParserRuleContext.class, false, true, ParserTaskScheduler.CONTENT_SENSITIVE_TASK_SCHEDULER);
+        }
+
+    }
+
+    private static final class AnnotatedParseTreeDataDefinition extends ParserDataDefinition<GrammarAnnotatedParseTree> {
+
+        public AnnotatedParseTreeDataDefinition() {
+            super("Grammar Annotated Parse Tree", GrammarAnnotatedParseTree.class, false, true, ParserTaskScheduler.CONTENT_SENSITIVE_TASK_SCHEDULER);
         }
 
     }
