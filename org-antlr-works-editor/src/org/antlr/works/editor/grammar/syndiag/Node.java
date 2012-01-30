@@ -31,6 +31,7 @@ package org.antlr.works.editor.grammar.syndiag;
 import java.awt.AWTEvent;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -47,6 +48,7 @@ import org.antlr.netbeans.editor.text.SnapshotPosition;
 import org.antlr.netbeans.editor.text.SnapshotPositionRegion;
 import org.antlr.netbeans.editor.text.TrackingPosition;
 import org.antlr.netbeans.editor.text.VersionedDocument;
+import org.netbeans.api.editor.settings.FontColorNames;
 import org.netbeans.modules.editor.NbEditorUtilities;
 import org.openide.text.Line;
 import org.openide.util.Parameters;
@@ -71,10 +73,35 @@ public class Node extends JComponent implements Element {
         this.labelPaddingY = labelPaddingY;
         this.arcSize = arcSize;
 
+        AttributeSet defaultAttributes = Diagram.lookupAttributes(FontColorNames.DEFAULT_COLORING);
+
+        Color foreground = (Color)attributes.getAttribute(StyleConstants.Foreground);
+        if (foreground == null) {
+            foreground = (Color)defaultAttributes.getAttribute(StyleConstants.Foreground);
+        }
+
+        if (foreground != null) {
+            this.setForeground(foreground);
+        }
+
         StyleContext context = new StyleContext();
-        this.setForeground((Color)attributes.getAttribute(StyleConstants.Foreground));
-        this.setFont(context.getFont(attributes));
-        this.setBackground((Color)attributes.getAttribute(StyleConstants.Background));
+        Font font = context.getFont(attributes);
+        if (font == null) {
+            font = context.getFont(defaultAttributes);
+        }
+
+        if (font != null) {
+            this.setFont(font);
+        }
+
+        Color background = (Color)attributes.getAttribute(StyleConstants.Background);
+        if (background == null) {
+            background = (Color)defaultAttributes.getAttribute(StyleConstants.Background);
+        }
+
+        if (background != null) {
+            this.setBackground(background);
+        }
 
         Dimension size = getLabelSize();
         setPreferredSize(size);
