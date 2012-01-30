@@ -33,6 +33,8 @@ import java.awt.FlowLayout;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Path2D;
+import java.lang.ref.Reference;
+import java.lang.ref.WeakReference;
 import javax.swing.JPanel;
 import javax.swing.text.AttributeSet;
 import org.antlr.works.editor.grammar.GrammarEditorKit;
@@ -48,6 +50,7 @@ import org.openide.util.Parameters;
  */
 public class Diagram extends JPanel {
     private final Rule rule;
+    private static Reference<FontColorSettings> weakSettings = new WeakReference<FontColorSettings>(null);
 
     public Diagram(Rule rule) {
         Parameters.notNull("rule", rule);
@@ -82,8 +85,13 @@ public class Diagram extends JPanel {
 
     protected static AttributeSet lookupAttributes(String category) {
         Parameters.notNull("category", category);
-        Lookup lookup = MimeLookup.getLookup(MimePath.parse(GrammarEditorKit.GRAMMAR_MIME_TYPE));
-        FontColorSettings settings = lookup.lookup(FontColorSettings.class);
+        FontColorSettings settings = weakSettings.get();
+        if (settings == null) {
+            Lookup lookup = MimeLookup.getLookup(MimePath.parse(GrammarEditorKit.GRAMMAR_MIME_TYPE));
+            settings = lookup.lookup(FontColorSettings.class);
+            weakSettings = new WeakReference<FontColorSettings>(settings);
+        }
+
         return settings.getTokenFontColors(category);
     }
 }
