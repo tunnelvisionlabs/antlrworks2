@@ -313,7 +313,7 @@ public abstract class AbstractTokensTaskTaggerSnapshot<TState extends LineStateI
                             /* update the span's end position or the line state change won't be reflected
                              * in the editor
                              */
-                            int endPosition = line < snapshot.getLineCount() - 2 ? snapshot.findLineFromOffset(line + 2).getStart().getOffset() : snapshot.length();
+                            int endPosition = line < snapshot.getLineCount() - 2 ? snapshot.findLineFromLineNumber(line + 2).getStart().getOffset() : snapshot.length();
                             if (endPosition > extendedSpan.getEnd())
                             {
                                 spanExtended = true;
@@ -323,12 +323,12 @@ public abstract class AbstractTokensTaskTaggerSnapshot<TState extends LineStateI
                     }
                 }
 
-                previousToken = token;
-                previousTokenEndsLine = tokenEndsLine;
-
                 if (token.getStartIndex() >= span.getEnd()) {
                     break;
                 }
+
+                previousToken = token;
+                previousTokenEndsLine = tokenEndsLine;
 
                 if (token.getStopIndex() < requestedSpan.getStart()) {
                     continue;
@@ -346,7 +346,7 @@ public abstract class AbstractTokensTaskTaggerSnapshot<TState extends LineStateI
         }
 
         if (updateOffsets && extendMultiLineSpanToLine > 0) {
-            int endPosition = extendMultiLineSpanToLine < snapshot.getLineCount() - 1 ? snapshot.findLineFromOffset(extendMultiLineSpanToLine + 1).getStart().getOffset() : snapshot.length();
+            int endPosition = extendMultiLineSpanToLine < snapshot.getLineCount() - 1 ? snapshot.findLineFromLineNumber(extendMultiLineSpanToLine + 1).getStart().getOffset() : snapshot.length();
             if (endPosition > extendedSpan.getEnd()) {
                 spanExtended = true;
                 extendedSpan = OffsetRegion.fromBounds(extendedSpan.getStart(), endPosition);
@@ -386,7 +386,7 @@ public abstract class AbstractTokensTaskTaggerSnapshot<TState extends LineStateI
         int end = span.getEnd();
 
         if (firstDirtyLine != null) {
-            int firstDirtyLineOffset = snapshot.findLineFromOffset(firstDirtyLine).getStart().getOffset();
+            int firstDirtyLineOffset = snapshot.findLineFromLineNumber(firstDirtyLine).getStart().getOffset();
             start = Math.min(start, firstDirtyLineOffset);
         }
 
@@ -406,7 +406,7 @@ public abstract class AbstractTokensTaskTaggerSnapshot<TState extends LineStateI
             state = getStartState();
         }
 
-        start = snapshot.findLineFromOffset(startLine).getStart().getOffset();
+        start = snapshot.findLineFromLineNumber(startLine).getStart().getOffset();
         int length = end - start;
         ParseRequest<TState> request = new ParseRequest<TState>(new OffsetRegion(start, length), state);
         return request;
