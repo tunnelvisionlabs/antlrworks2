@@ -49,10 +49,12 @@ import org.antlr.netbeans.editor.text.VersionedDocument;
 import org.antlr.netbeans.editor.text.VersionedDocumentUtilities;
 import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.v4.runtime.FailedPredicateException;
+import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.RuleContext;
+import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.atn.ATNConfig;
 import org.antlr.v4.runtime.atn.ATNState;
 import org.antlr.v4.runtime.atn.DecisionState;
@@ -364,7 +366,9 @@ public abstract class AbstractCompletionQuery extends AsyncCompletionQuery {
             List<MultipleDecisionData> potentialAlternatives = new ArrayList<MultipleDecisionData>();
             List<Integer> currentPath = new ArrayList<Integer>();
             Map<RuleContext, CaretReachedException> results = new IdentityHashMap<RuleContext, CaretReachedException>();
+            int initialToken = parser.getTokenStream().index();
             while (true) {
+                parser.getTokenStream().seek(initialToken);
                 tryParse(parser, potentialAlternatives, currentPath, results);
                 if (!incrementCurrentPath(potentialAlternatives, currentPath)) {
                     break;
@@ -397,7 +401,6 @@ public abstract class AbstractCompletionQuery extends AsyncCompletionQuery {
         protected void tryParse(CodeCompletionParser parser, List<MultipleDecisionData> potentialAlternatives, List<Integer> currentPath, Map<RuleContext, CaretReachedException> results) {
             RuleContext parseTree;
             try {
-                parser.getTokenStream().seek(0);
                 parser.getInterpreter().setFixedDecisions(potentialAlternatives, currentPath);
                 parseTree = parseImpl(parser);
                 results.put(parseTree, null);
