@@ -28,41 +28,26 @@
 package org.antlr.netbeans.editor.fold;
 
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.WeakHashMap;
 import javax.swing.event.DocumentEvent;
+import javax.swing.text.Document;
+import org.antlr.netbeans.editor.text.VersionedDocument;
+import org.antlr.netbeans.editor.text.VersionedDocumentUtilities;
 import org.netbeans.api.editor.fold.Fold;
-import org.netbeans.modules.editor.NbEditorUtilities;
 import org.netbeans.spi.editor.fold.FoldHierarchyTransaction;
 import org.netbeans.spi.editor.fold.FoldManager;
 import org.netbeans.spi.editor.fold.FoldOperation;
-import org.openide.filesystems.FileObject;
-import org.openide.loaders.DataObject;
-import org.openide.loaders.DataObjectNotFoundException;
-import org.openide.util.Exceptions;
 
 /**
  *
  * @author Sam Harwell
  */
 public class AbstractFoldManager implements FoldManager {
-    private static final Map<DataObject, AbstractFoldManager> managers =
-        new WeakHashMap<DataObject, AbstractFoldManager>();
 
     private FoldOperation operation;
     final ArrayList<Fold> currentFolds = new ArrayList<Fold>();
 
-    public static AbstractFoldManager getFoldManager(FileObject file) {
-        try {
-            DataObject dataObject = DataObject.find(file);
-            synchronized (managers) {
-                AbstractFoldManager manager = managers.get(dataObject);
-                return manager;
-            }
-        } catch (DataObjectNotFoundException ex) {
-            Exceptions.printStackTrace(ex);
-            return null;
-        }
+    public static AbstractFoldManager getFoldManager(VersionedDocument document) {
+        return (AbstractFoldManager)document.getProperty(AbstractFoldManager.class);
     }
 
     public FoldOperation getOperation() {
@@ -72,14 +57,9 @@ public class AbstractFoldManager implements FoldManager {
     @Override
     public void init(FoldOperation operation) {
         this.operation = operation;
-
-        DataObject dataObject = NbEditorUtilities.getDataObject(operation.getHierarchy().getComponent().getDocument());
-        if (dataObject != null) {
-            synchronized (managers) {
-                managers.put(dataObject, this);
-            }
-        }
-
+        Document document = operation.getHierarchy().getComponent().getDocument();
+        VersionedDocument versionedDocument = VersionedDocumentUtilities.getVersionedDocument(document);
+        versionedDocument.putProperty(AbstractFoldManager.class, this);
     }
 
     @Override

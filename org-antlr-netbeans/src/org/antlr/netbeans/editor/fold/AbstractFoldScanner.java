@@ -44,7 +44,6 @@ import org.netbeans.api.editor.fold.Fold;
 import org.netbeans.api.editor.fold.FoldType;
 import org.netbeans.spi.editor.fold.FoldHierarchyTransaction;
 import org.netbeans.spi.editor.fold.FoldOperation;
-import org.openide.filesystems.FileObject;
 import org.openide.util.Exceptions;
 
 /**
@@ -56,8 +55,12 @@ public abstract class AbstractFoldScanner<SemanticData> {
     @SuppressWarnings("fallthrough")
     public void run(ParserData<SemanticData> parseResult) {
         final VersionedDocument versionedDocument = parseResult.getSnapshot().getVersionedDocument();
-        final FileObject fileObject = versionedDocument.getFileObject();
-        final AbstractFoldManager foldManager = AbstractFoldManager.getFoldManager(fileObject);
+        if (versionedDocument.getDocument() == null) {
+            // no need to calculate folds for unopened documents
+            return;
+        }
+
+        final AbstractFoldManager foldManager = AbstractFoldManager.getFoldManager(versionedDocument);
         if (foldManager == null) {
             return;
         }
