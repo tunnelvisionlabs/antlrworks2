@@ -86,17 +86,22 @@ public class SemanticAnalyzerParserTask implements ParserTask {
                 ParserRuleContext<Token> referenceParseTree = null;
                 try {
                     Future<ParserData<ParserRuleContext<Token>>> futureRefParseTreeData = getTaskManager().getData(snapshot, GrammarParserDataDefinitions.REFERENCE_PARSE_TREE);
-                    referenceParseTree = futureRefParseTreeData.get().getData();
+                    ParserData<ParserRuleContext<Token>> refParseTreeData = futureRefParseTreeData != null ? futureRefParseTreeData.get() : null;
+                    referenceParseTree = refParseTreeData != null ? refParseTreeData.getData() : null;
                 } catch (InterruptedException ex) {
                     Exceptions.printStackTrace(ex);
                 } catch (ExecutionException ex) {
                     Exceptions.printStackTrace(ex);
                 }
 
-                GrammarAnnotatedParseTree annotatedParseTree = new GrammarAnnotatedParseTree(referenceParseTree);
-                SemanticAnalyzerListener listener = new SemanticAnalyzerListener(annotatedParseTree.getTreeDecorator(), annotatedParseTree.getTokenDecorator());
-                ParseTreeWalker.DEFAULT.walk(listener, referenceParseTree);
-                parseTreeResult = new BaseParserData<GrammarAnnotatedParseTree>(context, GrammarParserDataDefinitions.ANNOTATED_PARSE_TREE, snapshot, annotatedParseTree);
+                if (referenceParseTree != null) {
+                    GrammarAnnotatedParseTree annotatedParseTree = new GrammarAnnotatedParseTree(referenceParseTree);
+                    SemanticAnalyzerListener listener = new SemanticAnalyzerListener(annotatedParseTree.getTreeDecorator(), annotatedParseTree.getTokenDecorator());
+                    ParseTreeWalker.DEFAULT.walk(listener, referenceParseTree);
+                } else {
+                    parseTreeResult = new BaseParserData<GrammarAnnotatedParseTree>(context, GrammarParserDataDefinitions.ANNOTATED_PARSE_TREE, snapshot, null);
+                }
+
                 results.addResult(parseTreeResult);
             }
         }

@@ -125,12 +125,20 @@ public class MarkOccurrencesHighlighter extends AbstractSemanticHighlighter<Curr
         try {
             Future<ParserData<FileModel>> futureFileModelData = getTaskManager().getData(parserData.getSnapshot(), GrammarParserDataDefinitions.FILE_MODEL);
             Future<ParserData<GrammarAnnotatedParseTree>> futureAnnotatedParseTreeData = getTaskManager().getData(parserData.getSnapshot(), GrammarParserDataDefinitions.ANNOTATED_PARSE_TREE);
-            fileModel = futureFileModelData.get().getData();
-            annotatedParseTree = futureAnnotatedParseTreeData.get().getData();
+
+            ParserData<FileModel> annotatedFileModelData = futureFileModelData != null ? futureFileModelData.get() : null;
+            fileModel = annotatedFileModelData != null ? annotatedFileModelData.getData() : null;
+
+            ParserData<GrammarAnnotatedParseTree> annotatedParseTreeData = futureAnnotatedParseTreeData != null ? futureAnnotatedParseTreeData.get() : null;
+            annotatedParseTree = annotatedParseTreeData != null ? annotatedParseTreeData.getData() : null;
         } catch (InterruptedException ex) {
             Exceptions.printStackTrace(ex);
         } catch (ExecutionException ex) {
             Exceptions.printStackTrace(ex);
+        }
+
+        if (fileModel == null || annotatedParseTree == null) {
+            return null;
         }
 
         return new MarkOccurrencesListener(fileModel, annotatedParseTree, parserData.getContext().getPosition());
