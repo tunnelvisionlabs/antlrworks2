@@ -55,6 +55,7 @@ import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.netbeans.spi.editor.hints.ErrorDescription;
 import org.netbeans.spi.editor.hints.ErrorDescriptionFactory;
 import org.netbeans.spi.editor.hints.HintsController;
+import org.openide.filesystems.FileObject;
 import org.openide.util.Exceptions;
 
 /**
@@ -93,14 +94,24 @@ public class SyntaxErrorsHighlightingParserTask implements ParserTask {
 
                 String message = syntaxError.getMessage();
                 try {
-                    ErrorDescription errorDescription = ErrorDescriptionFactory.createErrorDescription(syntaxError.getSeverity(), message, document, document.createPosition(region.getStart().getOffset()), document.createPosition(region.getEnd().getOffset()));
+                    ErrorDescription errorDescription;
+                    if (document != null) {
+                        errorDescription = ErrorDescriptionFactory.createErrorDescription(syntaxError.getSeverity(), message, document, document.createPosition(region.getStart().getOffset()), document.createPosition(region.getEnd().getOffset()));
+                    } else {
+                        FileObject file = context.getDocument().getFileObject();
+                        errorDescription = ErrorDescriptionFactory.createErrorDescription(syntaxError.getSeverity(), message, file, region.getStart().getOffset(), region.getEnd().getOffset());
+                    }
                     errors.add(errorDescription);
                 } catch (BadLocationException ex) {
                     Exceptions.printStackTrace(ex);
                 }
             }
 
-            HintsController.setErrors(document, "antlr3-syntax", errors);
+            if (document != null) {
+                HintsController.setErrors(document, "antlr3-syntax", errors);
+            } else {
+                HintsController.setErrors(context.getDocument().getFileObject(), "antlr3-syntax", errors);
+            }
         } catch (RuntimeException ex) {
             Exceptions.printStackTrace(ex);
         }
