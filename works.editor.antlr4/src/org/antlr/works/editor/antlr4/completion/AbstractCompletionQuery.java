@@ -56,6 +56,8 @@ import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.atn.ATNConfig;
 import org.antlr.v4.runtime.atn.ATNState;
 import org.antlr.v4.runtime.atn.DecisionState;
+import org.antlr.v4.runtime.atn.PlusBlockStartState;
+import org.antlr.v4.runtime.atn.PlusLoopbackState;
 import org.antlr.v4.runtime.atn.StarLoopEntryState;
 import org.antlr.v4.runtime.atn.StarLoopbackState;
 import org.antlr.v4.runtime.misc.IntervalSet;
@@ -427,10 +429,17 @@ public abstract class AbstractCompletionQuery extends AsyncCompletionQuery {
                             assert state.getNumberOfTransitions() == 1 && state.onlyHasEpsilonTransitions();
                             assert state.transition(0).target instanceof StarLoopEntryState;
                             state = state.transition(0).target;
+                        } else if (state instanceof PlusBlockStartState && ((PlusBlockStartState)state).decision == -1) {
+                            state = parser.getATN().states.get(state.stateNumber + 2);
+                            assert state instanceof PlusLoopbackState;
+                            assert state.transition(0).target.stateNumber == state.stateNumber - 2;
                         }
 
                         if (state instanceof DecisionState) {
                             decisionData.decision = ((DecisionState)state).decision;
+                            if (decisionData.decision <= 0) {
+                                LOGGER.log(Level.FINE, "No decision number found for state {0}.", state.stateNumber);
+                            }
                         } else {
                             LOGGER.log(Level.FINE, "No decision number found for state {0}.", state.stateNumber);
                             // continuing is likely to never terminate
