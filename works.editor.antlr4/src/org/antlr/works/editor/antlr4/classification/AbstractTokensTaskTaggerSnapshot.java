@@ -166,7 +166,7 @@ public abstract class AbstractTokensTaskTaggerSnapshot<TState extends LineStateI
                 lineStates.add(dirtyState);
             }
 
-            forceRehighlightLines(0, lineCount);
+            forceRehighlightLines(0, lineCount - 1);
         }
     }
 
@@ -488,6 +488,12 @@ public abstract class AbstractTokensTaskTaggerSnapshot<TState extends LineStateI
     }
 
     public void forceRehighlightLines(int startLine, int endLineInclusive) {
+        if (startLine > endLineInclusive) {
+            throw new IllegalArgumentException();
+        } else if (endLineInclusive < 0 || endLineInclusive >= snapshot.getLineCount()) {
+            throw new IllegalArgumentException();
+        }
+
         firstDirtyLine = firstDirtyLine != null ? Math.min(firstDirtyLine, startLine) : startLine;
         lastDirtyLine = lastDirtyLine != null ? Math.max(lastDirtyLine, endLineInclusive) : endLineInclusive;
 
