@@ -110,8 +110,10 @@ public class CodeModelBuilderListener extends BlankGrammarParserListener {
             labels.add(new LabelModel(labelUsage.getKey(), labelUsage.getValue()));
         }
 
-        RuleModel ruleModel = new RuleModel(ruleSpan, nameSpan, name.getText(), parameters, returnValues, locals, labels);
-        rules.add(ruleModel);
+        if (name != null) {
+            RuleModel ruleModel = new RuleModel(ruleSpan, nameSpan, name.getText(), parameters, returnValues, locals, labels);
+            rules.add(ruleModel);
+        }
     }
 
     @Override
