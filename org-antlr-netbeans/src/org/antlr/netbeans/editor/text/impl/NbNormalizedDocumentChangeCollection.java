@@ -105,6 +105,7 @@ final class NbNormalizedDocumentChangeCollection extends AbstractList<DocumentCh
             NbDocumentChange merged = mergeChanges(element, internal.subList(mergeIndex, lastMergeIndex + 1));
             internal.set(mergeIndex, merged);
             internal.subList(mergeIndex + 1, lastMergeIndex + 1).clear();
+            index = mergeIndex;
         } else {
             internal.add(index, adjustOldState(element, internal.subList(0, index)));
         }
