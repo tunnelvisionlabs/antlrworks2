@@ -79,6 +79,7 @@ public class SemanticAnalyzerParserTask implements ParserTask {
                     GrammarAnnotatedParseTree annotatedParseTree = new GrammarAnnotatedParseTree(referenceParseTree);
                     SemanticAnalyzerListener listener = new SemanticAnalyzerListener(annotatedParseTree.getTreeDecorator(), annotatedParseTree.getTokenDecorator());
                     ParseTreeWalker.DEFAULT.walk(listener, referenceParseTree);
+                    parseTreeResult = new BaseParserData<GrammarAnnotatedParseTree>(context, GrammarParserDataDefinitions.ANNOTATED_PARSE_TREE, snapshot, annotatedParseTree);
                 } else {
                     parseTreeResult = new BaseParserData<GrammarAnnotatedParseTree>(context, GrammarParserDataDefinitions.ANNOTATED_PARSE_TREE, snapshot, null);
                 }
