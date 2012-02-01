@@ -1,33 +1,12 @@
-// $ANTLR 3.4 OutsideHighlighterLexerBase.g 2011-09-24 13:13:45
-
+// $ANTLR 3.4 OutsideHighlighterLexerBase.g 2012-01-31 21:39:24
 /*
- * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell, Tunnel Vision Laboratories LLC
  *  All rights reserved.
  *
- *  Redistribution and use in source and binary forms, with or without
- *  modification, are permitted provided that the following conditions
- *  are met:
- *  1. Redistributions of source code must retain the above copyright
- *      notice, this list of conditions and the following disclaimer.
- *  2. Redistributions in binary form must reproduce the above copyright
- *      notice, this list of conditions and the following disclaimer in the
- *      documentation and/or other materials provided with the distribution.
- *  3. The name of the author may not be used to endorse or promote products
- *      derived from this software without specific prior written permission.
- *
- *  THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
- *  IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- *  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
- *  IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
- *  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
- *  NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- *  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
- *  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
- *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *  The source code of this document is proprietary work, and is not licensed for
+ *  distribution. For information about licensing, contact Sam Harwell at:
+ *      sam@tunnelvisionlabs.com
  */
-
 package org.antlr.works.editor.st4.highlighter;
 
 
@@ -111,8 +90,8 @@ public class OutsideHighlighterLexerBase extends Lexer {
         try {
             int _type = COMMA;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // OutsideHighlighterLexerBase.g:88:7: ( ',' )
-            // OutsideHighlighterLexerBase.g:88:9: ','
+            // OutsideHighlighterLexerBase.g:48:7: ( ',' )
+            // OutsideHighlighterLexerBase.g:48:9: ','
             {
             match(','); 
 
@@ -132,8 +111,8 @@ public class OutsideHighlighterLexerBase extends Lexer {
         try {
             int _type = PIPE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // OutsideHighlighterLexerBase.g:89:6: ( '|' )
-            // OutsideHighlighterLexerBase.g:89:8: '|'
+            // OutsideHighlighterLexerBase.g:49:6: ( '|' )
+            // OutsideHighlighterLexerBase.g:49:8: '|'
             {
             match('|'); 
 
@@ -153,10 +132,10 @@ public class OutsideHighlighterLexerBase extends Lexer {
         try {
             int _type = ID;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // OutsideHighlighterLexerBase.g:92:2: ( ( 'a' .. 'z' | 'A' .. 'Z' | '_' )+ )
-            // OutsideHighlighterLexerBase.g:92:4: ( 'a' .. 'z' | 'A' .. 'Z' | '_' )+
+            // OutsideHighlighterLexerBase.g:52:2: ( ( 'a' .. 'z' | 'A' .. 'Z' | '_' )+ )
+            // OutsideHighlighterLexerBase.g:52:4: ( 'a' .. 'z' | 'A' .. 'Z' | '_' )+
             {
-            // OutsideHighlighterLexerBase.g:92:4: ( 'a' .. 'z' | 'A' .. 'Z' | '_' )+
+            // OutsideHighlighterLexerBase.g:52:4: ( 'a' .. 'z' | 'A' .. 'Z' | '_' )+
             int cnt1=0;
             loop1:
             do {
@@ -211,10 +190,10 @@ public class OutsideHighlighterLexerBase extends Lexer {
         try {
             int _type = WS;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // OutsideHighlighterLexerBase.g:96:2: ( ( ' ' | '\\t' )+ )
-            // OutsideHighlighterLexerBase.g:96:4: ( ' ' | '\\t' )+
+            // OutsideHighlighterLexerBase.g:56:2: ( ( ' ' | '\\t' )+ )
+            // OutsideHighlighterLexerBase.g:56:4: ( ' ' | '\\t' )+
             {
-            // OutsideHighlighterLexerBase.g:96:4: ( ' ' | '\\t' )+
+            // OutsideHighlighterLexerBase.g:56:4: ( ' ' | '\\t' )+
             int cnt2=0;
             loop2:
             do {
@@ -269,8 +248,8 @@ public class OutsideHighlighterLexerBase extends Lexer {
         try {
             int _type = COMMENT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // OutsideHighlighterLexerBase.g:106:2: ( LDELIM '!' CONTINUE_COMMENT )
-            // OutsideHighlighterLexerBase.g:106:4: LDELIM '!' CONTINUE_COMMENT
+            // OutsideHighlighterLexerBase.g:66:2: ( LDELIM '!' CONTINUE_COMMENT )
+            // OutsideHighlighterLexerBase.g:66:4: LDELIM '!' CONTINUE_COMMENT
             {
             mLDELIM(); 
 
@@ -296,8 +275,8 @@ public class OutsideHighlighterLexerBase extends Lexer {
     // $ANTLR start "END_COMMENT"
     public final void mEND_COMMENT() throws RecognitionException {
         try {
-            // OutsideHighlighterLexerBase.g:109:22: ()
-            // OutsideHighlighterLexerBase.g:109:24: 
+            // OutsideHighlighterLexerBase.g:69:22: ()
+            // OutsideHighlighterLexerBase.g:69:24: 
             {
             }
 
@@ -312,10 +291,10 @@ public class OutsideHighlighterLexerBase extends Lexer {
     // $ANTLR start "CONTINUE_COMMENT"
     public final void mCONTINUE_COMMENT() throws RecognitionException {
         try {
-            // OutsideHighlighterLexerBase.g:113:2: ( (~ ( '\\r' | '\\n' | '!' ) |{...}? => '!' )* ( '!' RDELIM |) )
-            // OutsideHighlighterLexerBase.g:113:4: (~ ( '\\r' | '\\n' | '!' ) |{...}? => '!' )* ( '!' RDELIM |)
+            // OutsideHighlighterLexerBase.g:73:2: ( (~ ( '\\r' | '\\n' | '!' ) |{...}? => '!' )* ( '!' RDELIM |) )
+            // OutsideHighlighterLexerBase.g:73:4: (~ ( '\\r' | '\\n' | '!' ) |{...}? => '!' )* ( '!' RDELIM |)
             {
-            // OutsideHighlighterLexerBase.g:113:4: (~ ( '\\r' | '\\n' | '!' ) |{...}? => '!' )*
+            // OutsideHighlighterLexerBase.g:73:4: (~ ( '\\r' | '\\n' | '!' ) |{...}? => '!' )*
             loop3:
             do {
                 int alt3=3;
@@ -356,7 +335,7 @@ public class OutsideHighlighterLexerBase extends Lexer {
 
                 switch (alt3) {
             	case 1 :
-            	    // OutsideHighlighterLexerBase.g:113:6: ~ ( '\\r' | '\\n' | '!' )
+            	    // OutsideHighlighterLexerBase.g:73:6: ~ ( '\\r' | '\\n' | '!' )
             	    {
             	    if ( (input.LA(1) >= '\u0000' && input.LA(1) <= '\t')||(input.LA(1) >= '\u000B' && input.LA(1) <= '\f')||(input.LA(1) >= '\u000E' && input.LA(1) <= ' ')||(input.LA(1) >= '\"' && input.LA(1) <= '\uFFFF') ) {
             	        input.consume();
@@ -371,7 +350,7 @@ public class OutsideHighlighterLexerBase extends Lexer {
             	    }
             	    break;
             	case 2 :
-            	    // OutsideHighlighterLexerBase.g:114:5: {...}? => '!'
+            	    // OutsideHighlighterLexerBase.g:74:5: {...}? => '!'
             	    {
             	    if ( !((input.LA(2) != getCloseDelimiter())) ) {
             	        throw new FailedPredicateException(input, "CONTINUE_COMMENT", "input.LA(2) != getCloseDelimiter()");
@@ -388,7 +367,7 @@ public class OutsideHighlighterLexerBase extends Lexer {
             } while (true);
 
 
-            // OutsideHighlighterLexerBase.g:116:3: ( '!' RDELIM |)
+            // OutsideHighlighterLexerBase.g:76:3: ( '!' RDELIM |)
             int alt4=2;
             int LA4_0 = input.LA(1);
 
@@ -400,7 +379,7 @@ public class OutsideHighlighterLexerBase extends Lexer {
             }
             switch (alt4) {
                 case 1 :
-                    // OutsideHighlighterLexerBase.g:116:5: '!' RDELIM
+                    // OutsideHighlighterLexerBase.g:76:5: '!' RDELIM
                     {
                     match('!'); 
 
@@ -412,7 +391,7 @@ public class OutsideHighlighterLexerBase extends Lexer {
                     }
                     break;
                 case 2 :
-                    // OutsideHighlighterLexerBase.g:117:5: 
+                    // OutsideHighlighterLexerBase.g:77:5: 
                     {
                     state.type = CONTINUE_COMMENT;
 
@@ -437,15 +416,15 @@ public class OutsideHighlighterLexerBase extends Lexer {
         try {
             int _type = ESCAPE_TAG;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // OutsideHighlighterLexerBase.g:122:2: ( LDELIM '\\\\' ({...}? => . )* RDELIM )
-            // OutsideHighlighterLexerBase.g:122:4: LDELIM '\\\\' ({...}? => . )* RDELIM
+            // OutsideHighlighterLexerBase.g:82:2: ( LDELIM '\\\\' ({...}? => . )* RDELIM )
+            // OutsideHighlighterLexerBase.g:82:4: LDELIM '\\\\' ({...}? => . )* RDELIM
             {
             mLDELIM(); 
 
 
             match('\\'); 
 
-            // OutsideHighlighterLexerBase.g:122:16: ({...}? => . )*
+            // OutsideHighlighterLexerBase.g:82:16: ({...}? => . )*
             loop5:
             do {
                 int alt5=2;
@@ -467,7 +446,7 @@ public class OutsideHighlighterLexerBase extends Lexer {
 
                 switch (alt5) {
             	case 1 :
-            	    // OutsideHighlighterLexerBase.g:122:17: {...}? => .
+            	    // OutsideHighlighterLexerBase.g:82:17: {...}? => .
             	    {
             	    if ( !((input.LA(1) != EOF && input.LA(1) != getCloseDelimiter())) ) {
             	        throw new FailedPredicateException(input, "ESCAPE_TAG", "input.LA(1) != EOF && input.LA(1) != getCloseDelimiter()");
@@ -505,8 +484,8 @@ public class OutsideHighlighterLexerBase extends Lexer {
             int _channel = DEFAULT_TOKEN_CHANNEL;
             int c;
 
-            // OutsideHighlighterLexerBase.g:126:2: ( '\\\\' c= . )
-            // OutsideHighlighterLexerBase.g:126:4: '\\\\' c= .
+            // OutsideHighlighterLexerBase.g:86:2: ( '\\\\' c= . )
+            // OutsideHighlighterLexerBase.g:86:4: '\\\\' c= .
             {
             match('\\'); 
 
@@ -535,10 +514,10 @@ public class OutsideHighlighterLexerBase extends Lexer {
         try {
             int _type = NEWLINE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // OutsideHighlighterLexerBase.g:134:2: ( ( '\\n' | '\\r' )+ )
-            // OutsideHighlighterLexerBase.g:134:4: ( '\\n' | '\\r' )+
+            // OutsideHighlighterLexerBase.g:94:2: ( ( '\\n' | '\\r' )+ )
+            // OutsideHighlighterLexerBase.g:94:4: ( '\\n' | '\\r' )+
             {
-            // OutsideHighlighterLexerBase.g:134:4: ( '\\n' | '\\r' )+
+            // OutsideHighlighterLexerBase.g:94:4: ( '\\n' | '\\r' )+
             int cnt6=0;
             loop6:
             do {
@@ -593,10 +572,10 @@ public class OutsideHighlighterLexerBase extends Lexer {
         try {
             int _type = TEXT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // OutsideHighlighterLexerBase.g:138:2: ( ({...}? =>~ ( '}' | '\\n' | '\\r' | '\"' | '>' | '\\\\' | '%' | 'a' .. 'z' | 'A' .. 'Z' | '_' | ' ' | '\\t' | '|' ) |{...}? => '}' |{...}? => '\"' |{...}? => '>' |{...}? => '%' )+ )
-            // OutsideHighlighterLexerBase.g:138:4: ({...}? =>~ ( '}' | '\\n' | '\\r' | '\"' | '>' | '\\\\' | '%' | 'a' .. 'z' | 'A' .. 'Z' | '_' | ' ' | '\\t' | '|' ) |{...}? => '}' |{...}? => '\"' |{...}? => '>' |{...}? => '%' )+
+            // OutsideHighlighterLexerBase.g:98:2: ( ({...}? =>~ ( '}' | '\\n' | '\\r' | '\"' | '>' | '\\\\' | '%' | 'a' .. 'z' | 'A' .. 'Z' | '_' | ' ' | '\\t' | '|' ) |{...}? => '}' |{...}? => '\"' |{...}? => '>' |{...}? => '%' )+ )
+            // OutsideHighlighterLexerBase.g:98:4: ({...}? =>~ ( '}' | '\\n' | '\\r' | '\"' | '>' | '\\\\' | '%' | 'a' .. 'z' | 'A' .. 'Z' | '_' | ' ' | '\\t' | '|' ) |{...}? => '}' |{...}? => '\"' |{...}? => '>' |{...}? => '%' )+
             {
-            // OutsideHighlighterLexerBase.g:138:4: ({...}? =>~ ( '}' | '\\n' | '\\r' | '\"' | '>' | '\\\\' | '%' | 'a' .. 'z' | 'A' .. 'Z' | '_' | ' ' | '\\t' | '|' ) |{...}? => '}' |{...}? => '\"' |{...}? => '>' |{...}? => '%' )+
+            // OutsideHighlighterLexerBase.g:98:4: ({...}? =>~ ( '}' | '\\n' | '\\r' | '\"' | '>' | '\\\\' | '%' | 'a' .. 'z' | 'A' .. 'Z' | '_' | ' ' | '\\t' | '|' ) |{...}? => '}' |{...}? => '\"' |{...}? => '>' |{...}? => '%' )+
             int cnt7=0;
             loop7:
             do {
@@ -622,7 +601,7 @@ public class OutsideHighlighterLexerBase extends Lexer {
 
                 switch (alt7) {
             	case 1 :
-            	    // OutsideHighlighterLexerBase.g:138:6: {...}? =>~ ( '}' | '\\n' | '\\r' | '\"' | '>' | '\\\\' | '%' | 'a' .. 'z' | 'A' .. 'Z' | '_' | ' ' | '\\t' | '|' )
+            	    // OutsideHighlighterLexerBase.g:98:6: {...}? =>~ ( '}' | '\\n' | '\\r' | '\"' | '>' | '\\\\' | '%' | 'a' .. 'z' | 'A' .. 'Z' | '_' | ' ' | '\\t' | '|' )
             	    {
             	    if ( !((input.LA(1) != getOpenDelimiter())) ) {
             	        throw new FailedPredicateException(input, "TEXT", "input.LA(1) != getOpenDelimiter()");
@@ -641,7 +620,7 @@ public class OutsideHighlighterLexerBase extends Lexer {
             	    }
             	    break;
             	case 2 :
-            	    // OutsideHighlighterLexerBase.g:139:5: {...}? => '}'
+            	    // OutsideHighlighterLexerBase.g:99:5: {...}? => '}'
             	    {
             	    if ( !((getAnonymousTemplateLevel() == 0)) ) {
             	        throw new FailedPredicateException(input, "TEXT", "getAnonymousTemplateLevel() == 0");
@@ -652,7 +631,7 @@ public class OutsideHighlighterLexerBase extends Lexer {
             	    }
             	    break;
             	case 3 :
-            	    // OutsideHighlighterLexerBase.g:140:5: {...}? => '\"'
+            	    // OutsideHighlighterLexerBase.g:100:5: {...}? => '\"'
             	    {
             	    if ( !((getOutermost() != OutermostTemplate.String)) ) {
             	        throw new FailedPredicateException(input, "TEXT", "getOutermost() != OutermostTemplate.String");
@@ -663,7 +642,7 @@ public class OutsideHighlighterLexerBase extends Lexer {
             	    }
             	    break;
             	case 4 :
-            	    // OutsideHighlighterLexerBase.g:141:5: {...}? => '>'
+            	    // OutsideHighlighterLexerBase.g:101:5: {...}? => '>'
             	    {
             	    if ( !((getOutermost() != OutermostTemplate.BigString || input.LA(2) != '>')) ) {
             	        throw new FailedPredicateException(input, "TEXT", "getOutermost() != OutermostTemplate.BigString || input.LA(2) != '>'");
@@ -674,7 +653,7 @@ public class OutsideHighlighterLexerBase extends Lexer {
             	    }
             	    break;
             	case 5 :
-            	    // OutsideHighlighterLexerBase.g:142:5: {...}? => '%'
+            	    // OutsideHighlighterLexerBase.g:102:5: {...}? => '%'
             	    {
             	    if ( !((getOutermost() != OutermostTemplate.BigStringLine || input.LA(2) != '>')) ) {
             	        throw new FailedPredicateException(input, "TEXT", "getOutermost() != OutermostTemplate.BigStringLine || input.LA(2) != '>'");
@@ -711,8 +690,8 @@ public class OutsideHighlighterLexerBase extends Lexer {
         try {
             int _type = LDELIM;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // OutsideHighlighterLexerBase.g:146:8: ({...}? =>~ '\\\\' )
-            // OutsideHighlighterLexerBase.g:146:10: {...}? =>~ '\\\\'
+            // OutsideHighlighterLexerBase.g:106:8: ({...}? =>~ '\\\\' )
+            // OutsideHighlighterLexerBase.g:106:10: {...}? =>~ '\\\\'
             {
             if ( !((input.LA(1) == getOpenDelimiter())) ) {
                 throw new FailedPredicateException(input, "LDELIM", "input.LA(1) == getOpenDelimiter()");
@@ -742,8 +721,8 @@ public class OutsideHighlighterLexerBase extends Lexer {
     // $ANTLR start "RDELIM"
     public final void mRDELIM() throws RecognitionException {
         try {
-            // OutsideHighlighterLexerBase.g:149:8: ({...}? =>~ '\\\\' )
-            // OutsideHighlighterLexerBase.g:149:10: {...}? =>~ '\\\\'
+            // OutsideHighlighterLexerBase.g:109:8: ({...}? =>~ '\\\\' )
+            // OutsideHighlighterLexerBase.g:109:10: {...}? =>~ '\\\\'
             {
             if ( !((input.LA(1) == getCloseDelimiter())) ) {
                 throw new FailedPredicateException(input, "RDELIM", "input.LA(1) == getCloseDelimiter()");
@@ -1044,6 +1023,7 @@ public class OutsideHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 1 : 
                         int LA8_1 = input.LA(1);
 
@@ -1065,6 +1045,7 @@ public class OutsideHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 2 : 
                         int LA8_2 = input.LA(1);
 
@@ -1084,6 +1065,7 @@ public class OutsideHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 3 : 
                         int LA8_3 = input.LA(1);
 
@@ -1105,6 +1087,7 @@ public class OutsideHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 4 : 
                         int LA8_4 = input.LA(1);
 
@@ -1126,6 +1109,7 @@ public class OutsideHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 5 : 
                         int LA8_5 = input.LA(1);
 
@@ -1147,6 +1131,7 @@ public class OutsideHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 6 : 
                         int LA8_7 = input.LA(1);
 
@@ -1168,6 +1153,7 @@ public class OutsideHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 7 : 
                         int LA8_8 = input.LA(1);
 
@@ -1189,6 +1175,7 @@ public class OutsideHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 8 : 
                         int LA8_9 = input.LA(1);
 
@@ -1210,6 +1197,7 @@ public class OutsideHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 9 : 
                         int LA8_10 = input.LA(1);
 
@@ -1231,6 +1219,7 @@ public class OutsideHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 10 : 
                         int LA8_11 = input.LA(1);
 
@@ -1252,6 +1241,7 @@ public class OutsideHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 11 : 
                         int LA8_12 = input.LA(1);
 
@@ -1271,6 +1261,7 @@ public class OutsideHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 12 : 
                         int LA8_13 = input.LA(1);
 
@@ -1288,6 +1279,7 @@ public class OutsideHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 13 : 
                         int LA8_20 = input.LA(1);
 
@@ -1305,6 +1297,7 @@ public class OutsideHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 14 : 
                         int LA8_23 = input.LA(1);
 
@@ -1322,6 +1315,7 @@ public class OutsideHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 15 : 
                         int LA8_27 = input.LA(1);
 
@@ -1339,6 +1333,7 @@ public class OutsideHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 16 : 
                         int LA8_31 = input.LA(1);
 
@@ -1356,6 +1351,7 @@ public class OutsideHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 17 : 
                         int LA8_35 = input.LA(1);
 
@@ -1373,6 +1369,7 @@ public class OutsideHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 18 : 
                         int LA8_36 = input.LA(1);
 
@@ -1390,6 +1387,7 @@ public class OutsideHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 19 : 
                         int LA8_43 = input.LA(1);
 
@@ -1407,6 +1405,7 @@ public class OutsideHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 20 : 
                         int LA8_44 = input.LA(1);
 
@@ -1424,6 +1423,7 @@ public class OutsideHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 21 : 
                         int LA8_51 = input.LA(1);
 
@@ -1441,6 +1441,7 @@ public class OutsideHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 22 : 
                         int LA8_52 = input.LA(1);
 
@@ -1458,6 +1459,7 @@ public class OutsideHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 23 : 
                         int LA8_59 = input.LA(1);
 
@@ -1475,6 +1477,7 @@ public class OutsideHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 24 : 
                         int LA8_60 = input.LA(1);
 
@@ -1492,6 +1495,7 @@ public class OutsideHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 25 : 
                         int LA8_67 = input.LA(1);
 
@@ -1509,6 +1513,7 @@ public class OutsideHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 26 : 
                         int LA8_68 = input.LA(1);
 

@@ -1,33 +1,12 @@
-// $ANTLR 3.4 GroupHighlighterLexerBase.g 2011-09-24 13:13:45
-
+// $ANTLR 3.4 GroupHighlighterLexerBase.g 2012-01-31 21:39:24
 /*
- * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell, Tunnel Vision Laboratories LLC
  *  All rights reserved.
  *
- *  Redistribution and use in source and binary forms, with or without
- *  modification, are permitted provided that the following conditions
- *  are met:
- *  1. Redistributions of source code must retain the above copyright
- *      notice, this list of conditions and the following disclaimer.
- *  2. Redistributions in binary form must reproduce the above copyright
- *      notice, this list of conditions and the following disclaimer in the
- *      documentation and/or other materials provided with the distribution.
- *  3. The name of the author may not be used to endorse or promote products
- *      derived from this software without specific prior written permission.
- *
- *  THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
- *  IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- *  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
- *  IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
- *  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
- *  NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- *  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
- *  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
- *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *  The source code of this document is proprietary work, and is not licensed for
+ *  distribution. For information about licensing, contact Sam Harwell at:
+ *      sam@tunnelvisionlabs.com
  */
-
 package org.antlr.works.editor.st4.highlighter;
 
 
@@ -86,8 +65,8 @@ public class GroupHighlighterLexerBase extends Lexer {
     // $ANTLR start "PARAMETER_DEFINITION"
     public final void mPARAMETER_DEFINITION() throws RecognitionException {
         try {
-            // GroupHighlighterLexerBase.g:67:31: ()
-            // GroupHighlighterLexerBase.g:67:33: 
+            // GroupHighlighterLexerBase.g:27:31: ()
+            // GroupHighlighterLexerBase.g:27:33: 
             {
             }
 
@@ -104,8 +83,8 @@ public class GroupHighlighterLexerBase extends Lexer {
         try {
             int _type = LPAREN;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GroupHighlighterLexerBase.g:69:8: ( '(' )
-            // GroupHighlighterLexerBase.g:69:10: '('
+            // GroupHighlighterLexerBase.g:29:8: ( '(' )
+            // GroupHighlighterLexerBase.g:29:10: '('
             {
             match('('); 
 
@@ -125,8 +104,8 @@ public class GroupHighlighterLexerBase extends Lexer {
         try {
             int _type = RPAREN;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GroupHighlighterLexerBase.g:70:8: ( ')' )
-            // GroupHighlighterLexerBase.g:70:10: ')'
+            // GroupHighlighterLexerBase.g:30:8: ( ')' )
+            // GroupHighlighterLexerBase.g:30:10: ')'
             {
             match(')'); 
 
@@ -146,8 +125,8 @@ public class GroupHighlighterLexerBase extends Lexer {
         try {
             int _type = COMMA;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GroupHighlighterLexerBase.g:71:7: ( ',' )
-            // GroupHighlighterLexerBase.g:71:9: ','
+            // GroupHighlighterLexerBase.g:31:7: ( ',' )
+            // GroupHighlighterLexerBase.g:31:9: ','
             {
             match(','); 
 
@@ -167,8 +146,8 @@ public class GroupHighlighterLexerBase extends Lexer {
         try {
             int _type = DOT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GroupHighlighterLexerBase.g:72:5: ( '.' )
-            // GroupHighlighterLexerBase.g:72:7: '.'
+            // GroupHighlighterLexerBase.g:32:5: ( '.' )
+            // GroupHighlighterLexerBase.g:32:7: '.'
             {
             match('.'); 
 
@@ -188,8 +167,8 @@ public class GroupHighlighterLexerBase extends Lexer {
         try {
             int _type = COLON;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GroupHighlighterLexerBase.g:73:7: ( ':' )
-            // GroupHighlighterLexerBase.g:73:9: ':'
+            // GroupHighlighterLexerBase.g:33:7: ( ':' )
+            // GroupHighlighterLexerBase.g:33:9: ':'
             {
             match(':'); 
 
@@ -209,8 +188,8 @@ public class GroupHighlighterLexerBase extends Lexer {
         try {
             int _type = DEFINED;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GroupHighlighterLexerBase.g:74:9: ( '::=' )
-            // GroupHighlighterLexerBase.g:74:11: '::='
+            // GroupHighlighterLexerBase.g:34:9: ( '::=' )
+            // GroupHighlighterLexerBase.g:34:11: '::='
             {
             match("::="); 
 
@@ -232,8 +211,8 @@ public class GroupHighlighterLexerBase extends Lexer {
         try {
             int _type = EQUALS;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GroupHighlighterLexerBase.g:75:8: ( '=' )
-            // GroupHighlighterLexerBase.g:75:10: '='
+            // GroupHighlighterLexerBase.g:35:8: ( '=' )
+            // GroupHighlighterLexerBase.g:35:10: '='
             {
             match('='); 
 
@@ -253,8 +232,8 @@ public class GroupHighlighterLexerBase extends Lexer {
         try {
             int _type = AT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GroupHighlighterLexerBase.g:76:4: ( '@' )
-            // GroupHighlighterLexerBase.g:76:6: '@'
+            // GroupHighlighterLexerBase.g:36:4: ( '@' )
+            // GroupHighlighterLexerBase.g:36:6: '@'
             {
             match('@'); 
 
@@ -274,8 +253,8 @@ public class GroupHighlighterLexerBase extends Lexer {
         try {
             int _type = LBRACK;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GroupHighlighterLexerBase.g:77:8: ( '[' )
-            // GroupHighlighterLexerBase.g:77:10: '['
+            // GroupHighlighterLexerBase.g:37:8: ( '[' )
+            // GroupHighlighterLexerBase.g:37:10: '['
             {
             match('['); 
 
@@ -295,8 +274,8 @@ public class GroupHighlighterLexerBase extends Lexer {
         try {
             int _type = RBRACK;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GroupHighlighterLexerBase.g:78:8: ( ']' )
-            // GroupHighlighterLexerBase.g:78:10: ']'
+            // GroupHighlighterLexerBase.g:38:8: ( ']' )
+            // GroupHighlighterLexerBase.g:38:10: ']'
             {
             match(']'); 
 
@@ -316,8 +295,8 @@ public class GroupHighlighterLexerBase extends Lexer {
         try {
             int _type = LBRACE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GroupHighlighterLexerBase.g:79:8: ( '{' )
-            // GroupHighlighterLexerBase.g:79:10: '{'
+            // GroupHighlighterLexerBase.g:39:8: ( '{' )
+            // GroupHighlighterLexerBase.g:39:10: '{'
             {
             match('{'); 
 
@@ -337,8 +316,8 @@ public class GroupHighlighterLexerBase extends Lexer {
         try {
             int _type = RBRACE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GroupHighlighterLexerBase.g:80:8: ( '}' )
-            // GroupHighlighterLexerBase.g:80:10: '}'
+            // GroupHighlighterLexerBase.g:40:8: ( '}' )
+            // GroupHighlighterLexerBase.g:40:10: '}'
             {
             match('}'); 
 
@@ -358,8 +337,8 @@ public class GroupHighlighterLexerBase extends Lexer {
         try {
             int _type = QUOTE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GroupHighlighterLexerBase.g:81:7: ( '\"' )
-            // GroupHighlighterLexerBase.g:81:9: '\"'
+            // GroupHighlighterLexerBase.g:41:7: ( '\"' )
+            // GroupHighlighterLexerBase.g:41:9: '\"'
             {
             match('\"'); 
 
@@ -379,8 +358,8 @@ public class GroupHighlighterLexerBase extends Lexer {
         try {
             int _type = BEGIN_BIGSTRING;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GroupHighlighterLexerBase.g:84:2: ( '<<' )
-            // GroupHighlighterLexerBase.g:84:4: '<<'
+            // GroupHighlighterLexerBase.g:44:2: ( '<<' )
+            // GroupHighlighterLexerBase.g:44:4: '<<'
             {
             match("<<"); 
 
@@ -402,8 +381,8 @@ public class GroupHighlighterLexerBase extends Lexer {
         try {
             int _type = END_BIGSTRING;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GroupHighlighterLexerBase.g:88:2: ( '>>' )
-            // GroupHighlighterLexerBase.g:88:4: '>>'
+            // GroupHighlighterLexerBase.g:48:2: ( '>>' )
+            // GroupHighlighterLexerBase.g:48:4: '>>'
             {
             match(">>"); 
 
@@ -425,8 +404,8 @@ public class GroupHighlighterLexerBase extends Lexer {
         try {
             int _type = BEGIN_BIGSTRINGLINE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GroupHighlighterLexerBase.g:92:2: ( '<%' )
-            // GroupHighlighterLexerBase.g:92:4: '<%'
+            // GroupHighlighterLexerBase.g:52:2: ( '<%' )
+            // GroupHighlighterLexerBase.g:52:4: '<%'
             {
             match("<%"); 
 
@@ -448,8 +427,8 @@ public class GroupHighlighterLexerBase extends Lexer {
         try {
             int _type = END_BIGSTRINGLINE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GroupHighlighterLexerBase.g:96:2: ( '%>' )
-            // GroupHighlighterLexerBase.g:96:4: '%>'
+            // GroupHighlighterLexerBase.g:56:2: ( '%>' )
+            // GroupHighlighterLexerBase.g:56:4: '%>'
             {
             match("%>"); 
 
@@ -471,8 +450,8 @@ public class GroupHighlighterLexerBase extends Lexer {
         try {
             int _type = ID;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GroupHighlighterLexerBase.g:99:4: ( ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '-' | '_' )* )
-            // GroupHighlighterLexerBase.g:99:6: ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '-' | '_' )*
+            // GroupHighlighterLexerBase.g:59:4: ( ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '-' | '_' )* )
+            // GroupHighlighterLexerBase.g:59:6: ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '-' | '_' )*
             {
             if ( (input.LA(1) >= 'A' && input.LA(1) <= 'Z')||input.LA(1)=='_'||(input.LA(1) >= 'a' && input.LA(1) <= 'z') ) {
                 input.consume();
@@ -484,7 +463,7 @@ public class GroupHighlighterLexerBase extends Lexer {
             }
 
 
-            // GroupHighlighterLexerBase.g:99:30: ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '-' | '_' )*
+            // GroupHighlighterLexerBase.g:59:30: ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '-' | '_' )*
             loop1:
             do {
                 int alt1=2;
@@ -532,8 +511,8 @@ public class GroupHighlighterLexerBase extends Lexer {
     // $ANTLR start "LEGACY_DELIMITERS"
     public final void mLEGACY_DELIMITERS() throws RecognitionException {
         try {
-            // GroupHighlighterLexerBase.g:103:19: ()
-            // GroupHighlighterLexerBase.g:103:21: 
+            // GroupHighlighterLexerBase.g:63:19: ()
+            // GroupHighlighterLexerBase.g:63:21: 
             {
             }
 
@@ -550,14 +529,14 @@ public class GroupHighlighterLexerBase extends Lexer {
         try {
             int _type = LINE_COMMENT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GroupHighlighterLexerBase.g:106:2: ( '//' ( options {greedy=true; } : '!delimiters' ( ' ' | '\\t' ) | (~ ( '\\r' | '\\n' ) )* ) )
-            // GroupHighlighterLexerBase.g:106:4: '//' ( options {greedy=true; } : '!delimiters' ( ' ' | '\\t' ) | (~ ( '\\r' | '\\n' ) )* )
+            // GroupHighlighterLexerBase.g:66:2: ( '//' ( options {greedy=true; } : '!delimiters' ( ' ' | '\\t' ) | (~ ( '\\r' | '\\n' ) )* ) )
+            // GroupHighlighterLexerBase.g:66:4: '//' ( options {greedy=true; } : '!delimiters' ( ' ' | '\\t' ) | (~ ( '\\r' | '\\n' ) )* )
             {
             match("//"); 
 
 
 
-            // GroupHighlighterLexerBase.g:107:3: ( options {greedy=true; } : '!delimiters' ( ' ' | '\\t' ) | (~ ( '\\r' | '\\n' ) )* )
+            // GroupHighlighterLexerBase.g:67:3: ( options {greedy=true; } : '!delimiters' ( ' ' | '\\t' ) | (~ ( '\\r' | '\\n' ) )* )
             int alt3=2;
             int LA3_0 = input.LA(1);
 
@@ -646,7 +625,7 @@ public class GroupHighlighterLexerBase extends Lexer {
             }
             switch (alt3) {
                 case 1 :
-                    // GroupHighlighterLexerBase.g:108:5: '!delimiters' ( ' ' | '\\t' )
+                    // GroupHighlighterLexerBase.g:68:5: '!delimiters' ( ' ' | '\\t' )
                     {
                     match("!delimiters"); 
 
@@ -667,9 +646,9 @@ public class GroupHighlighterLexerBase extends Lexer {
                     }
                     break;
                 case 2 :
-                    // GroupHighlighterLexerBase.g:109:5: (~ ( '\\r' | '\\n' ) )*
+                    // GroupHighlighterLexerBase.g:69:5: (~ ( '\\r' | '\\n' ) )*
                     {
-                    // GroupHighlighterLexerBase.g:109:5: (~ ( '\\r' | '\\n' ) )*
+                    // GroupHighlighterLexerBase.g:69:5: (~ ( '\\r' | '\\n' ) )*
                     loop2:
                     do {
                         int alt2=2;
@@ -725,8 +704,8 @@ public class GroupHighlighterLexerBase extends Lexer {
         try {
             int _type = COMMENT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GroupHighlighterLexerBase.g:114:2: ( '/*' CONTINUE_COMMENT )
-            // GroupHighlighterLexerBase.g:114:4: '/*' CONTINUE_COMMENT
+            // GroupHighlighterLexerBase.g:74:2: ( '/*' CONTINUE_COMMENT )
+            // GroupHighlighterLexerBase.g:74:4: '/*' CONTINUE_COMMENT
             {
             match("/*"); 
 
@@ -751,8 +730,8 @@ public class GroupHighlighterLexerBase extends Lexer {
     // $ANTLR start "END_COMMENT"
     public final void mEND_COMMENT() throws RecognitionException {
         try {
-            // GroupHighlighterLexerBase.g:117:22: ()
-            // GroupHighlighterLexerBase.g:117:24: 
+            // GroupHighlighterLexerBase.g:77:22: ()
+            // GroupHighlighterLexerBase.g:77:24: 
             {
             }
 
@@ -767,10 +746,10 @@ public class GroupHighlighterLexerBase extends Lexer {
     // $ANTLR start "CONTINUE_COMMENT"
     public final void mCONTINUE_COMMENT() throws RecognitionException {
         try {
-            // GroupHighlighterLexerBase.g:121:2: ( (~ ( '\\r' | '\\n' | '*' ) |{...}? => '*' )* ( '*/' |) )
-            // GroupHighlighterLexerBase.g:121:4: (~ ( '\\r' | '\\n' | '*' ) |{...}? => '*' )* ( '*/' |)
+            // GroupHighlighterLexerBase.g:81:2: ( (~ ( '\\r' | '\\n' | '*' ) |{...}? => '*' )* ( '*/' |) )
+            // GroupHighlighterLexerBase.g:81:4: (~ ( '\\r' | '\\n' | '*' ) |{...}? => '*' )* ( '*/' |)
             {
-            // GroupHighlighterLexerBase.g:121:4: (~ ( '\\r' | '\\n' | '*' ) |{...}? => '*' )*
+            // GroupHighlighterLexerBase.g:81:4: (~ ( '\\r' | '\\n' | '*' ) |{...}? => '*' )*
             loop4:
             do {
                 int alt4=3;
@@ -802,7 +781,7 @@ public class GroupHighlighterLexerBase extends Lexer {
 
                 switch (alt4) {
             	case 1 :
-            	    // GroupHighlighterLexerBase.g:121:6: ~ ( '\\r' | '\\n' | '*' )
+            	    // GroupHighlighterLexerBase.g:81:6: ~ ( '\\r' | '\\n' | '*' )
             	    {
             	    if ( (input.LA(1) >= '\u0000' && input.LA(1) <= '\t')||(input.LA(1) >= '\u000B' && input.LA(1) <= '\f')||(input.LA(1) >= '\u000E' && input.LA(1) <= ')')||(input.LA(1) >= '+' && input.LA(1) <= '\uFFFF') ) {
             	        input.consume();
@@ -817,7 +796,7 @@ public class GroupHighlighterLexerBase extends Lexer {
             	    }
             	    break;
             	case 2 :
-            	    // GroupHighlighterLexerBase.g:122:5: {...}? => '*'
+            	    // GroupHighlighterLexerBase.g:82:5: {...}? => '*'
             	    {
             	    if ( !((input.LA(2) != '/')) ) {
             	        throw new FailedPredicateException(input, "CONTINUE_COMMENT", "input.LA(2) != '/'");
@@ -834,7 +813,7 @@ public class GroupHighlighterLexerBase extends Lexer {
             } while (true);
 
 
-            // GroupHighlighterLexerBase.g:124:3: ( '*/' |)
+            // GroupHighlighterLexerBase.g:84:3: ( '*/' |)
             int alt5=2;
             int LA5_0 = input.LA(1);
 
@@ -846,7 +825,7 @@ public class GroupHighlighterLexerBase extends Lexer {
             }
             switch (alt5) {
                 case 1 :
-                    // GroupHighlighterLexerBase.g:124:5: '*/'
+                    // GroupHighlighterLexerBase.g:84:5: '*/'
                     {
                     match("*/"); 
 
@@ -857,7 +836,7 @@ public class GroupHighlighterLexerBase extends Lexer {
                     }
                     break;
                 case 2 :
-                    // GroupHighlighterLexerBase.g:125:5: 
+                    // GroupHighlighterLexerBase.g:85:5: 
                     {
                     state.type = CONTINUE_COMMENT;
 
@@ -882,10 +861,10 @@ public class GroupHighlighterLexerBase extends Lexer {
         try {
             int _type = WS;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GroupHighlighterLexerBase.g:130:2: ( ( ' ' | '\\t' )* )
-            // GroupHighlighterLexerBase.g:130:4: ( ' ' | '\\t' )*
+            // GroupHighlighterLexerBase.g:90:2: ( ( ' ' | '\\t' )* )
+            // GroupHighlighterLexerBase.g:90:4: ( ' ' | '\\t' )*
             {
-            // GroupHighlighterLexerBase.g:130:4: ( ' ' | '\\t' )*
+            // GroupHighlighterLexerBase.g:90:4: ( ' ' | '\\t' )*
             loop6:
             do {
                 int alt6=2;
@@ -935,10 +914,10 @@ public class GroupHighlighterLexerBase extends Lexer {
         try {
             int _type = NEWLINE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GroupHighlighterLexerBase.g:134:2: ( ( '\\r' | '\\n' )* )
-            // GroupHighlighterLexerBase.g:134:4: ( '\\r' | '\\n' )*
+            // GroupHighlighterLexerBase.g:94:2: ( ( '\\r' | '\\n' )* )
+            // GroupHighlighterLexerBase.g:94:4: ( '\\r' | '\\n' )*
             {
-            // GroupHighlighterLexerBase.g:134:4: ( '\\r' | '\\n' )*
+            // GroupHighlighterLexerBase.g:94:4: ( '\\r' | '\\n' )*
             loop7:
             do {
                 int alt7=2;
@@ -986,12 +965,12 @@ public class GroupHighlighterLexerBase extends Lexer {
     // $ANTLR start "DELIMITER_SPEC"
     public final void mDELIMITER_SPEC() throws RecognitionException {
         try {
-            // GroupHighlighterLexerBase.g:139:2: ( '\"' (~ ( '\\n' | '\\r' | '\"' ) )* ( '\"' )? )
-            // GroupHighlighterLexerBase.g:139:4: '\"' (~ ( '\\n' | '\\r' | '\"' ) )* ( '\"' )?
+            // GroupHighlighterLexerBase.g:99:2: ( '\"' (~ ( '\\n' | '\\r' | '\"' ) )* ( '\"' )? )
+            // GroupHighlighterLexerBase.g:99:4: '\"' (~ ( '\\n' | '\\r' | '\"' ) )* ( '\"' )?
             {
             match('\"'); 
 
-            // GroupHighlighterLexerBase.g:139:8: (~ ( '\\n' | '\\r' | '\"' ) )*
+            // GroupHighlighterLexerBase.g:99:8: (~ ( '\\n' | '\\r' | '\"' ) )*
             loop8:
             do {
                 int alt8=2;
@@ -1025,7 +1004,7 @@ public class GroupHighlighterLexerBase extends Lexer {
             } while (true);
 
 
-            // GroupHighlighterLexerBase.g:139:30: ( '\"' )?
+            // GroupHighlighterLexerBase.g:99:30: ( '\"' )?
             int alt9=2;
             int LA9_0 = input.LA(1);
 
@@ -1034,7 +1013,7 @@ public class GroupHighlighterLexerBase extends Lexer {
             }
             switch (alt9) {
                 case 1 :
-                    // GroupHighlighterLexerBase.g:139:30: '\"'
+                    // GroupHighlighterLexerBase.g:99:30: '\"'
                     {
                     match('\"'); 
 
@@ -1061,8 +1040,8 @@ public class GroupHighlighterLexerBase extends Lexer {
         try {
             int _type = ANYCHAR;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GroupHighlighterLexerBase.g:144:2: ( . )
-            // GroupHighlighterLexerBase.g:144:4: .
+            // GroupHighlighterLexerBase.g:104:2: ( . )
+            // GroupHighlighterLexerBase.g:104:4: .
             {
             matchAny(); 
 

@@ -1,33 +1,12 @@
-// $ANTLR 3.4 InsideHighlighterLexerBase.g 2012-01-06 11:42:50
-
+// $ANTLR 3.4 InsideHighlighterLexerBase.g 2012-01-31 21:39:24
 /*
- * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell, Tunnel Vision Laboratories LLC
  *  All rights reserved.
  *
- *  Redistribution and use in source and binary forms, with or without
- *  modification, are permitted provided that the following conditions
- *  are met:
- *  1. Redistributions of source code must retain the above copyright
- *      notice, this list of conditions and the following disclaimer.
- *  2. Redistributions in binary form must reproduce the above copyright
- *      notice, this list of conditions and the following disclaimer in the
- *      documentation and/or other materials provided with the distribution.
- *  3. The name of the author may not be used to endorse or promote products
- *      derived from this software without specific prior written permission.
- *
- *  THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
- *  IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- *  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
- *  IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
- *  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
- *  NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- *  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
- *  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
- *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *  The source code of this document is proprietary work, and is not licensed for
+ *  distribution. For information about licensing, contact Sam Harwell at:
+ *      sam@tunnelvisionlabs.com
  */
-
 package org.antlr.works.editor.st4.highlighter;
 
 
@@ -107,8 +86,8 @@ public class InsideHighlighterLexerBase extends Lexer {
         try {
             int _type = DOT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InsideHighlighterLexerBase.g:74:5: ( '.' )
-            // InsideHighlighterLexerBase.g:74:7: '.'
+            // InsideHighlighterLexerBase.g:34:5: ( '.' )
+            // InsideHighlighterLexerBase.g:34:7: '.'
             {
             match('.'); 
 
@@ -128,8 +107,8 @@ public class InsideHighlighterLexerBase extends Lexer {
         try {
             int _type = ELLIPSIS;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InsideHighlighterLexerBase.g:75:10: ( '...' )
-            // InsideHighlighterLexerBase.g:75:12: '...'
+            // InsideHighlighterLexerBase.g:35:10: ( '...' )
+            // InsideHighlighterLexerBase.g:35:12: '...'
             {
             match("..."); 
 
@@ -151,8 +130,8 @@ public class InsideHighlighterLexerBase extends Lexer {
         try {
             int _type = COMMA;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InsideHighlighterLexerBase.g:76:7: ( ',' )
-            // InsideHighlighterLexerBase.g:76:9: ','
+            // InsideHighlighterLexerBase.g:36:7: ( ',' )
+            // InsideHighlighterLexerBase.g:36:9: ','
             {
             match(','); 
 
@@ -172,8 +151,8 @@ public class InsideHighlighterLexerBase extends Lexer {
         try {
             int _type = COLON;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InsideHighlighterLexerBase.g:77:7: ( ':' )
-            // InsideHighlighterLexerBase.g:77:9: ':'
+            // InsideHighlighterLexerBase.g:37:7: ( ':' )
+            // InsideHighlighterLexerBase.g:37:9: ':'
             {
             match(':'); 
 
@@ -193,8 +172,8 @@ public class InsideHighlighterLexerBase extends Lexer {
         try {
             int _type = SEMI;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InsideHighlighterLexerBase.g:78:6: ( ';' )
-            // InsideHighlighterLexerBase.g:78:8: ';'
+            // InsideHighlighterLexerBase.g:38:6: ( ';' )
+            // InsideHighlighterLexerBase.g:38:8: ';'
             {
             match(';'); 
 
@@ -214,8 +193,8 @@ public class InsideHighlighterLexerBase extends Lexer {
         try {
             int _type = LPAREN;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InsideHighlighterLexerBase.g:79:8: ( '(' )
-            // InsideHighlighterLexerBase.g:79:10: '('
+            // InsideHighlighterLexerBase.g:39:8: ( '(' )
+            // InsideHighlighterLexerBase.g:39:10: '('
             {
             match('('); 
 
@@ -235,8 +214,8 @@ public class InsideHighlighterLexerBase extends Lexer {
         try {
             int _type = RPAREN;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InsideHighlighterLexerBase.g:80:8: ( ')' )
-            // InsideHighlighterLexerBase.g:80:10: ')'
+            // InsideHighlighterLexerBase.g:40:8: ( ')' )
+            // InsideHighlighterLexerBase.g:40:10: ')'
             {
             match(')'); 
 
@@ -256,8 +235,8 @@ public class InsideHighlighterLexerBase extends Lexer {
         try {
             int _type = LBRACK;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InsideHighlighterLexerBase.g:81:8: ( '[' )
-            // InsideHighlighterLexerBase.g:81:10: '['
+            // InsideHighlighterLexerBase.g:41:8: ( '[' )
+            // InsideHighlighterLexerBase.g:41:10: '['
             {
             match('['); 
 
@@ -277,8 +256,8 @@ public class InsideHighlighterLexerBase extends Lexer {
         try {
             int _type = RBRACK;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InsideHighlighterLexerBase.g:82:8: ( ']' )
-            // InsideHighlighterLexerBase.g:82:10: ']'
+            // InsideHighlighterLexerBase.g:42:8: ( ']' )
+            // InsideHighlighterLexerBase.g:42:10: ']'
             {
             match(']'); 
 
@@ -298,8 +277,8 @@ public class InsideHighlighterLexerBase extends Lexer {
         try {
             int _type = EQUALS;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InsideHighlighterLexerBase.g:83:8: ( '=' )
-            // InsideHighlighterLexerBase.g:83:10: '='
+            // InsideHighlighterLexerBase.g:43:8: ( '=' )
+            // InsideHighlighterLexerBase.g:43:10: '='
             {
             match('='); 
 
@@ -319,8 +298,8 @@ public class InsideHighlighterLexerBase extends Lexer {
         try {
             int _type = NOT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InsideHighlighterLexerBase.g:84:5: ( '!' )
-            // InsideHighlighterLexerBase.g:84:7: '!'
+            // InsideHighlighterLexerBase.g:44:5: ( '!' )
+            // InsideHighlighterLexerBase.g:44:7: '!'
             {
             match('!'); 
 
@@ -340,8 +319,8 @@ public class InsideHighlighterLexerBase extends Lexer {
         try {
             int _type = OR;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InsideHighlighterLexerBase.g:85:4: ( '||' )
-            // InsideHighlighterLexerBase.g:85:6: '||'
+            // InsideHighlighterLexerBase.g:45:4: ( '||' )
+            // InsideHighlighterLexerBase.g:45:6: '||'
             {
             match("||"); 
 
@@ -363,8 +342,8 @@ public class InsideHighlighterLexerBase extends Lexer {
         try {
             int _type = AND;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InsideHighlighterLexerBase.g:86:5: ( '&&' )
-            // InsideHighlighterLexerBase.g:86:7: '&&'
+            // InsideHighlighterLexerBase.g:46:5: ( '&&' )
+            // InsideHighlighterLexerBase.g:46:7: '&&'
             {
             match("&&"); 
 
@@ -386,8 +365,8 @@ public class InsideHighlighterLexerBase extends Lexer {
         try {
             int _type = LBRACE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InsideHighlighterLexerBase.g:87:8: ( '{' )
-            // InsideHighlighterLexerBase.g:87:10: '{'
+            // InsideHighlighterLexerBase.g:47:8: ( '{' )
+            // InsideHighlighterLexerBase.g:47:10: '{'
             {
             match('{'); 
 
@@ -407,8 +386,8 @@ public class InsideHighlighterLexerBase extends Lexer {
         try {
             int _type = RBRACE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InsideHighlighterLexerBase.g:88:8: ( '}' )
-            // InsideHighlighterLexerBase.g:88:10: '}'
+            // InsideHighlighterLexerBase.g:48:8: ( '}' )
+            // InsideHighlighterLexerBase.g:48:10: '}'
             {
             match('}'); 
 
@@ -428,8 +407,8 @@ public class InsideHighlighterLexerBase extends Lexer {
         try {
             int _type = REGION_REF;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InsideHighlighterLexerBase.g:91:2: ( '@' EXPR_IDENTIFIER )
-            // InsideHighlighterLexerBase.g:91:4: '@' EXPR_IDENTIFIER
+            // InsideHighlighterLexerBase.g:51:2: ( '@' EXPR_IDENTIFIER )
+            // InsideHighlighterLexerBase.g:51:4: '@' EXPR_IDENTIFIER
             {
             match('@'); 
 
@@ -452,8 +431,8 @@ public class InsideHighlighterLexerBase extends Lexer {
         try {
             int _type = EXPR_IDENTIFIER;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InsideHighlighterLexerBase.g:95:2: ( ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' | '/' )* )
-            // InsideHighlighterLexerBase.g:95:4: ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' | '/' )*
+            // InsideHighlighterLexerBase.g:55:2: ( ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' | '/' )* )
+            // InsideHighlighterLexerBase.g:55:4: ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' | '/' )*
             {
             if ( (input.LA(1) >= 'A' && input.LA(1) <= 'Z')||input.LA(1)=='_'||(input.LA(1) >= 'a' && input.LA(1) <= 'z') ) {
                 input.consume();
@@ -465,7 +444,7 @@ public class InsideHighlighterLexerBase extends Lexer {
             }
 
 
-            // InsideHighlighterLexerBase.g:96:3: ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' | '/' )*
+            // InsideHighlighterLexerBase.g:56:3: ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' | '/' )*
             loop1:
             do {
                 int alt1=2;
@@ -515,10 +494,10 @@ public class InsideHighlighterLexerBase extends Lexer {
         try {
             int _type = WS;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InsideHighlighterLexerBase.g:100:2: ( ( ' ' | '\\t' )+ )
-            // InsideHighlighterLexerBase.g:100:4: ( ' ' | '\\t' )+
+            // InsideHighlighterLexerBase.g:60:2: ( ( ' ' | '\\t' )+ )
+            // InsideHighlighterLexerBase.g:60:4: ( ' ' | '\\t' )+
             {
-            // InsideHighlighterLexerBase.g:100:4: ( ' ' | '\\t' )+
+            // InsideHighlighterLexerBase.g:60:4: ( ' ' | '\\t' )+
             int cnt2=0;
             loop2:
             do {
@@ -573,10 +552,10 @@ public class InsideHighlighterLexerBase extends Lexer {
         try {
             int _type = NEWLINE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InsideHighlighterLexerBase.g:104:2: ( ( '\\r' | '\\n' )+ )
-            // InsideHighlighterLexerBase.g:104:4: ( '\\r' | '\\n' )+
+            // InsideHighlighterLexerBase.g:64:2: ( ( '\\r' | '\\n' )+ )
+            // InsideHighlighterLexerBase.g:64:4: ( '\\r' | '\\n' )+
             {
-            // InsideHighlighterLexerBase.g:104:4: ( '\\r' | '\\n' )+
+            // InsideHighlighterLexerBase.g:64:4: ( '\\r' | '\\n' )+
             int cnt3=0;
             loop3:
             do {
@@ -631,12 +610,12 @@ public class InsideHighlighterLexerBase extends Lexer {
         try {
             int _type = STRING;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InsideHighlighterLexerBase.g:108:2: ( '\"' (~ ( '\"' | '\\\\' ) | '\\\\' . )* '\"' )
-            // InsideHighlighterLexerBase.g:108:4: '\"' (~ ( '\"' | '\\\\' ) | '\\\\' . )* '\"'
+            // InsideHighlighterLexerBase.g:68:2: ( '\"' (~ ( '\"' | '\\\\' ) | '\\\\' . )* '\"' )
+            // InsideHighlighterLexerBase.g:68:4: '\"' (~ ( '\"' | '\\\\' ) | '\\\\' . )* '\"'
             {
             match('\"'); 
 
-            // InsideHighlighterLexerBase.g:109:3: (~ ( '\"' | '\\\\' ) | '\\\\' . )*
+            // InsideHighlighterLexerBase.g:69:3: (~ ( '\"' | '\\\\' ) | '\\\\' . )*
             loop4:
             do {
                 int alt4=3;
@@ -652,7 +631,7 @@ public class InsideHighlighterLexerBase extends Lexer {
 
                 switch (alt4) {
             	case 1 :
-            	    // InsideHighlighterLexerBase.g:109:5: ~ ( '\"' | '\\\\' )
+            	    // InsideHighlighterLexerBase.g:69:5: ~ ( '\"' | '\\\\' )
             	    {
             	    if ( (input.LA(1) >= '\u0000' && input.LA(1) <= '!')||(input.LA(1) >= '#' && input.LA(1) <= '[')||(input.LA(1) >= ']' && input.LA(1) <= '\uFFFF') ) {
             	        input.consume();
@@ -667,7 +646,7 @@ public class InsideHighlighterLexerBase extends Lexer {
             	    }
             	    break;
             	case 2 :
-            	    // InsideHighlighterLexerBase.g:110:5: '\\\\' .
+            	    // InsideHighlighterLexerBase.g:70:5: '\\\\' .
             	    {
             	    match('\\'); 
 
@@ -700,8 +679,8 @@ public class InsideHighlighterLexerBase extends Lexer {
         try {
             int _type = RDELIM;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InsideHighlighterLexerBase.g:116:8: ({...}? => . )
-            // InsideHighlighterLexerBase.g:116:10: {...}? => .
+            // InsideHighlighterLexerBase.g:76:8: ({...}? => . )
+            // InsideHighlighterLexerBase.g:76:10: {...}? => .
             {
             if ( !((input.LA(1) == getCloseDelimiter())) ) {
                 throw new FailedPredicateException(input, "RDELIM", "input.LA(1) == getCloseDelimiter()");
@@ -725,8 +704,8 @@ public class InsideHighlighterLexerBase extends Lexer {
         try {
             int _type = ANYCHAR;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InsideHighlighterLexerBase.g:119:2: ( . )
-            // InsideHighlighterLexerBase.g:119:4: .
+            // InsideHighlighterLexerBase.g:79:2: ( . )
+            // InsideHighlighterLexerBase.g:79:4: .
             {
             matchAny(); 
 

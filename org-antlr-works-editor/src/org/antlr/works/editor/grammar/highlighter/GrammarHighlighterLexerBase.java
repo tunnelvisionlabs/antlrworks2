@@ -1,33 +1,12 @@
-// $ANTLR 3.4 GrammarHighlighterLexerBase.g 2011-12-19 20:28:35
-
+// $ANTLR 3.4 GrammarHighlighterLexerBase.g 2012-01-31 21:39:22
 /*
- * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell, Tunnel Vision Laboratories LLC
  *  All rights reserved.
  *
- *  Redistribution and use in source and binary forms, with or without
- *  modification, are permitted provided that the following conditions
- *  are met:
- *  1. Redistributions of source code must retain the above copyright
- *      notice, this list of conditions and the following disclaimer.
- *  2. Redistributions in binary form must reproduce the above copyright
- *      notice, this list of conditions and the following disclaimer in the
- *      documentation and/or other materials provided with the distribution.
- *  3. The name of the author may not be used to endorse or promote products
- *      derived from this software without specific prior written permission.
- *
- *  THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
- *  IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- *  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
- *  IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
- *  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
- *  NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- *  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
- *  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
- *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *  The source code of this document is proprietary work, and is not licensed for
+ *  distribution. For information about licensing, contact Sam Harwell at:
+ *      sam@tunnelvisionlabs.com
  */
-
 package org.antlr.works.editor.grammar.highlighter;
 
 
@@ -114,8 +93,8 @@ public class GrammarHighlighterLexerBase extends Lexer {
     // $ANTLR start "ParserRule"
     public final void mParserRule() throws RecognitionException {
         try {
-            // GrammarHighlighterLexerBase.g:72:21: ()
-            // GrammarHighlighterLexerBase.g:72:23: 
+            // GrammarHighlighterLexerBase.g:32:21: ()
+            // GrammarHighlighterLexerBase.g:32:23: 
             {
             }
 
@@ -130,8 +109,8 @@ public class GrammarHighlighterLexerBase extends Lexer {
     // $ANTLR start "LexerRule"
     public final void mLexerRule() throws RecognitionException {
         try {
-            // GrammarHighlighterLexerBase.g:73:20: ()
-            // GrammarHighlighterLexerBase.g:73:22: 
+            // GrammarHighlighterLexerBase.g:33:20: ()
+            // GrammarHighlighterLexerBase.g:33:22: 
             {
             }
 
@@ -146,8 +125,8 @@ public class GrammarHighlighterLexerBase extends Lexer {
     // $ANTLR start "Keyword"
     public final void mKeyword() throws RecognitionException {
         try {
-            // GrammarHighlighterLexerBase.g:74:18: ()
-            // GrammarHighlighterLexerBase.g:74:20: 
+            // GrammarHighlighterLexerBase.g:34:18: ()
+            // GrammarHighlighterLexerBase.g:34:20: 
             {
             }
 
@@ -162,8 +141,8 @@ public class GrammarHighlighterLexerBase extends Lexer {
     // $ANTLR start "ACTION"
     public final void mACTION() throws RecognitionException {
         try {
-            // GrammarHighlighterLexerBase.g:75:17: ()
-            // GrammarHighlighterLexerBase.g:75:19: 
+            // GrammarHighlighterLexerBase.g:35:17: ()
+            // GrammarHighlighterLexerBase.g:35:19: 
             {
             }
 
@@ -178,8 +157,8 @@ public class GrammarHighlighterLexerBase extends Lexer {
     // $ANTLR start "ARG_ACTION"
     public final void mARG_ACTION() throws RecognitionException {
         try {
-            // GrammarHighlighterLexerBase.g:76:21: ()
-            // GrammarHighlighterLexerBase.g:76:23: 
+            // GrammarHighlighterLexerBase.g:36:21: ()
+            // GrammarHighlighterLexerBase.g:36:23: 
             {
             }
 
@@ -194,8 +173,8 @@ public class GrammarHighlighterLexerBase extends Lexer {
     // $ANTLR start "LABEL"
     public final void mLABEL() throws RecognitionException {
         try {
-            // GrammarHighlighterLexerBase.g:77:16: ()
-            // GrammarHighlighterLexerBase.g:77:18: 
+            // GrammarHighlighterLexerBase.g:37:16: ()
+            // GrammarHighlighterLexerBase.g:37:18: 
             {
             }
 
@@ -210,8 +189,8 @@ public class GrammarHighlighterLexerBase extends Lexer {
     // $ANTLR start "ValidGrammarOption"
     public final void mValidGrammarOption() throws RecognitionException {
         try {
-            // GrammarHighlighterLexerBase.g:79:29: ()
-            // GrammarHighlighterLexerBase.g:79:31: 
+            // GrammarHighlighterLexerBase.g:39:29: ()
+            // GrammarHighlighterLexerBase.g:39:31: 
             {
             }
 
@@ -226,8 +205,8 @@ public class GrammarHighlighterLexerBase extends Lexer {
     // $ANTLR start "InvalidGrammarOption"
     public final void mInvalidGrammarOption() throws RecognitionException {
         try {
-            // GrammarHighlighterLexerBase.g:80:31: ()
-            // GrammarHighlighterLexerBase.g:80:33: 
+            // GrammarHighlighterLexerBase.g:40:31: ()
+            // GrammarHighlighterLexerBase.g:40:33: 
             {
             }
 
@@ -242,8 +221,8 @@ public class GrammarHighlighterLexerBase extends Lexer {
     // $ANTLR start "OptionValue"
     public final void mOptionValue() throws RecognitionException {
         try {
-            // GrammarHighlighterLexerBase.g:81:22: ()
-            // GrammarHighlighterLexerBase.g:81:24: 
+            // GrammarHighlighterLexerBase.g:41:22: ()
+            // GrammarHighlighterLexerBase.g:41:24: 
             {
             }
 
@@ -260,8 +239,8 @@ public class GrammarHighlighterLexerBase extends Lexer {
         try {
             int _type = IDENTIFIER;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GrammarHighlighterLexerBase.g:84:2: ( ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )* )
-            // GrammarHighlighterLexerBase.g:84:4: ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )*
+            // GrammarHighlighterLexerBase.g:44:2: ( ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )* )
+            // GrammarHighlighterLexerBase.g:44:4: ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )*
             {
             if ( (input.LA(1) >= 'A' && input.LA(1) <= 'Z')||input.LA(1)=='_'||(input.LA(1) >= 'a' && input.LA(1) <= 'z') ) {
                 input.consume();
@@ -273,7 +252,7 @@ public class GrammarHighlighterLexerBase extends Lexer {
             }
 
 
-            // GrammarHighlighterLexerBase.g:85:3: ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )*
+            // GrammarHighlighterLexerBase.g:45:3: ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )*
             loop1:
             do {
                 int alt1=2;
@@ -323,8 +302,8 @@ public class GrammarHighlighterLexerBase extends Lexer {
         try {
             int _type = DIRECTIVE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GrammarHighlighterLexerBase.g:89:2: ( '@' IDENTIFIER )
-            // GrammarHighlighterLexerBase.g:89:4: '@' IDENTIFIER
+            // GrammarHighlighterLexerBase.g:49:2: ( '@' IDENTIFIER )
+            // GrammarHighlighterLexerBase.g:49:4: '@' IDENTIFIER
             {
             match('@'); 
 
@@ -347,8 +326,8 @@ public class GrammarHighlighterLexerBase extends Lexer {
         try {
             int _type = REFERENCE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GrammarHighlighterLexerBase.g:93:2: ( '$' IDENTIFIER )
-            // GrammarHighlighterLexerBase.g:93:4: '$' IDENTIFIER
+            // GrammarHighlighterLexerBase.g:53:2: ( '$' IDENTIFIER )
+            // GrammarHighlighterLexerBase.g:53:4: '$' IDENTIFIER
             {
             match('$'); 
 
@@ -371,10 +350,10 @@ public class GrammarHighlighterLexerBase extends Lexer {
         try {
             int _type = WS;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GrammarHighlighterLexerBase.g:97:2: ( ( ' ' | '\\t' )+ )
-            // GrammarHighlighterLexerBase.g:97:4: ( ' ' | '\\t' )+
+            // GrammarHighlighterLexerBase.g:57:2: ( ( ' ' | '\\t' )+ )
+            // GrammarHighlighterLexerBase.g:57:4: ( ' ' | '\\t' )+
             {
-            // GrammarHighlighterLexerBase.g:97:4: ( ' ' | '\\t' )+
+            // GrammarHighlighterLexerBase.g:57:4: ( ' ' | '\\t' )+
             int cnt2=0;
             loop2:
             do {
@@ -429,10 +408,10 @@ public class GrammarHighlighterLexerBase extends Lexer {
         try {
             int _type = NEWLINE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GrammarHighlighterLexerBase.g:103:2: ( ( '\\r' )? '\\n' )
-            // GrammarHighlighterLexerBase.g:103:4: ( '\\r' )? '\\n'
+            // GrammarHighlighterLexerBase.g:63:2: ( ( '\\r' )? '\\n' )
+            // GrammarHighlighterLexerBase.g:63:4: ( '\\r' )? '\\n'
             {
-            // GrammarHighlighterLexerBase.g:103:4: ( '\\r' )?
+            // GrammarHighlighterLexerBase.g:63:4: ( '\\r' )?
             int alt3=2;
             int LA3_0 = input.LA(1);
 
@@ -441,7 +420,7 @@ public class GrammarHighlighterLexerBase extends Lexer {
             }
             switch (alt3) {
                 case 1 :
-                    // GrammarHighlighterLexerBase.g:103:4: '\\r'
+                    // GrammarHighlighterLexerBase.g:63:4: '\\r'
                     {
                     match('\r'); 
 
@@ -469,14 +448,14 @@ public class GrammarHighlighterLexerBase extends Lexer {
         try {
             int _type = COMMENT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GrammarHighlighterLexerBase.g:107:2: ( '//' (~ ( '\\r' | '\\n' ) )* )
-            // GrammarHighlighterLexerBase.g:107:4: '//' (~ ( '\\r' | '\\n' ) )*
+            // GrammarHighlighterLexerBase.g:67:2: ( '//' (~ ( '\\r' | '\\n' ) )* )
+            // GrammarHighlighterLexerBase.g:67:4: '//' (~ ( '\\r' | '\\n' ) )*
             {
             match("//"); 
 
 
 
-            // GrammarHighlighterLexerBase.g:107:9: (~ ( '\\r' | '\\n' ) )*
+            // GrammarHighlighterLexerBase.g:67:9: (~ ( '\\r' | '\\n' ) )*
             loop4:
             do {
                 int alt4=2;
@@ -526,8 +505,8 @@ public class GrammarHighlighterLexerBase extends Lexer {
         try {
             int _type = ML_COMMENT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GrammarHighlighterLexerBase.g:111:2: ( '/*' CONTINUE_COMMENT )
-            // GrammarHighlighterLexerBase.g:111:4: '/*' CONTINUE_COMMENT
+            // GrammarHighlighterLexerBase.g:71:2: ( '/*' CONTINUE_COMMENT )
+            // GrammarHighlighterLexerBase.g:71:4: '/*' CONTINUE_COMMENT
             {
             match("/*"); 
 
@@ -552,8 +531,8 @@ public class GrammarHighlighterLexerBase extends Lexer {
     // $ANTLR start "END_COMMENT"
     public final void mEND_COMMENT() throws RecognitionException {
         try {
-            // GrammarHighlighterLexerBase.g:114:22: ()
-            // GrammarHighlighterLexerBase.g:114:24: 
+            // GrammarHighlighterLexerBase.g:74:22: ()
+            // GrammarHighlighterLexerBase.g:74:24: 
             {
             }
 
@@ -568,10 +547,10 @@ public class GrammarHighlighterLexerBase extends Lexer {
     // $ANTLR start "CONTINUE_COMMENT"
     public final void mCONTINUE_COMMENT() throws RecognitionException {
         try {
-            // GrammarHighlighterLexerBase.g:118:2: ( (~ ( '\\r' | '\\n' | '*' ) |{...}? => '*' )* ( '*/' |) )
-            // GrammarHighlighterLexerBase.g:118:4: (~ ( '\\r' | '\\n' | '*' ) |{...}? => '*' )* ( '*/' |)
+            // GrammarHighlighterLexerBase.g:78:2: ( (~ ( '\\r' | '\\n' | '*' ) |{...}? => '*' )* ( '*/' |) )
+            // GrammarHighlighterLexerBase.g:78:4: (~ ( '\\r' | '\\n' | '*' ) |{...}? => '*' )* ( '*/' |)
             {
-            // GrammarHighlighterLexerBase.g:118:4: (~ ( '\\r' | '\\n' | '*' ) |{...}? => '*' )*
+            // GrammarHighlighterLexerBase.g:78:4: (~ ( '\\r' | '\\n' | '*' ) |{...}? => '*' )*
             loop5:
             do {
                 int alt5=3;
@@ -603,7 +582,7 @@ public class GrammarHighlighterLexerBase extends Lexer {
 
                 switch (alt5) {
             	case 1 :
-            	    // GrammarHighlighterLexerBase.g:118:6: ~ ( '\\r' | '\\n' | '*' )
+            	    // GrammarHighlighterLexerBase.g:78:6: ~ ( '\\r' | '\\n' | '*' )
             	    {
             	    if ( (input.LA(1) >= '\u0000' && input.LA(1) <= '\t')||(input.LA(1) >= '\u000B' && input.LA(1) <= '\f')||(input.LA(1) >= '\u000E' && input.LA(1) <= ')')||(input.LA(1) >= '+' && input.LA(1) <= '\uFFFF') ) {
             	        input.consume();
@@ -618,7 +597,7 @@ public class GrammarHighlighterLexerBase extends Lexer {
             	    }
             	    break;
             	case 2 :
-            	    // GrammarHighlighterLexerBase.g:119:5: {...}? => '*'
+            	    // GrammarHighlighterLexerBase.g:79:5: {...}? => '*'
             	    {
             	    if ( !((input.LA(2) != '/')) ) {
             	        throw new FailedPredicateException(input, "CONTINUE_COMMENT", "input.LA(2) != '/'");
@@ -635,7 +614,7 @@ public class GrammarHighlighterLexerBase extends Lexer {
             } while (true);
 
 
-            // GrammarHighlighterLexerBase.g:121:3: ( '*/' |)
+            // GrammarHighlighterLexerBase.g:81:3: ( '*/' |)
             int alt6=2;
             int LA6_0 = input.LA(1);
 
@@ -647,7 +626,7 @@ public class GrammarHighlighterLexerBase extends Lexer {
             }
             switch (alt6) {
                 case 1 :
-                    // GrammarHighlighterLexerBase.g:121:5: '*/'
+                    // GrammarHighlighterLexerBase.g:81:5: '*/'
                     {
                     match("*/"); 
 
@@ -658,7 +637,7 @@ public class GrammarHighlighterLexerBase extends Lexer {
                     }
                     break;
                 case 2 :
-                    // GrammarHighlighterLexerBase.g:122:5: 
+                    // GrammarHighlighterLexerBase.g:82:5: 
                     {
                     state.type = CONTINUE_COMMENT;
 
@@ -683,12 +662,12 @@ public class GrammarHighlighterLexerBase extends Lexer {
         try {
             int _type = CHAR_LITERAL;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GrammarHighlighterLexerBase.g:127:2: ( '\\'' ( '\\\\' . |~ ( '\\r' | '\\n' | '\\'' | '\\\\' ) )* ( '\\'' )? )
-            // GrammarHighlighterLexerBase.g:127:4: '\\'' ( '\\\\' . |~ ( '\\r' | '\\n' | '\\'' | '\\\\' ) )* ( '\\'' )?
+            // GrammarHighlighterLexerBase.g:87:2: ( '\\'' ( '\\\\' . |~ ( '\\r' | '\\n' | '\\'' | '\\\\' ) )* ( '\\'' )? )
+            // GrammarHighlighterLexerBase.g:87:4: '\\'' ( '\\\\' . |~ ( '\\r' | '\\n' | '\\'' | '\\\\' ) )* ( '\\'' )?
             {
             match('\''); 
 
-            // GrammarHighlighterLexerBase.g:128:3: ( '\\\\' . |~ ( '\\r' | '\\n' | '\\'' | '\\\\' ) )*
+            // GrammarHighlighterLexerBase.g:88:3: ( '\\\\' . |~ ( '\\r' | '\\n' | '\\'' | '\\\\' ) )*
             loop7:
             do {
                 int alt7=3;
@@ -704,7 +683,7 @@ public class GrammarHighlighterLexerBase extends Lexer {
 
                 switch (alt7) {
             	case 1 :
-            	    // GrammarHighlighterLexerBase.g:128:5: '\\\\' .
+            	    // GrammarHighlighterLexerBase.g:88:5: '\\\\' .
             	    {
             	    match('\\'); 
 
@@ -713,7 +692,7 @@ public class GrammarHighlighterLexerBase extends Lexer {
             	    }
             	    break;
             	case 2 :
-            	    // GrammarHighlighterLexerBase.g:129:5: ~ ( '\\r' | '\\n' | '\\'' | '\\\\' )
+            	    // GrammarHighlighterLexerBase.g:89:5: ~ ( '\\r' | '\\n' | '\\'' | '\\\\' )
             	    {
             	    if ( (input.LA(1) >= '\u0000' && input.LA(1) <= '\t')||(input.LA(1) >= '\u000B' && input.LA(1) <= '\f')||(input.LA(1) >= '\u000E' && input.LA(1) <= '&')||(input.LA(1) >= '(' && input.LA(1) <= '[')||(input.LA(1) >= ']' && input.LA(1) <= '\uFFFF') ) {
             	        input.consume();
@@ -734,7 +713,7 @@ public class GrammarHighlighterLexerBase extends Lexer {
             } while (true);
 
 
-            // GrammarHighlighterLexerBase.g:131:3: ( '\\'' )?
+            // GrammarHighlighterLexerBase.g:91:3: ( '\\'' )?
             int alt8=2;
             int LA8_0 = input.LA(1);
 
@@ -743,7 +722,7 @@ public class GrammarHighlighterLexerBase extends Lexer {
             }
             switch (alt8) {
                 case 1 :
-                    // GrammarHighlighterLexerBase.g:131:3: '\\''
+                    // GrammarHighlighterLexerBase.g:91:3: '\\''
                     {
                     match('\''); 
 
@@ -769,12 +748,12 @@ public class GrammarHighlighterLexerBase extends Lexer {
         try {
             int _type = STRING_LITERAL;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GrammarHighlighterLexerBase.g:135:2: ( '\"' ( '\\\\' . |~ ( '\\r' | '\\n' | '\"' | '\\\\' ) )* ( '\"' )? )
-            // GrammarHighlighterLexerBase.g:135:4: '\"' ( '\\\\' . |~ ( '\\r' | '\\n' | '\"' | '\\\\' ) )* ( '\"' )?
+            // GrammarHighlighterLexerBase.g:95:2: ( '\"' ( '\\\\' . |~ ( '\\r' | '\\n' | '\"' | '\\\\' ) )* ( '\"' )? )
+            // GrammarHighlighterLexerBase.g:95:4: '\"' ( '\\\\' . |~ ( '\\r' | '\\n' | '\"' | '\\\\' ) )* ( '\"' )?
             {
             match('\"'); 
 
-            // GrammarHighlighterLexerBase.g:136:3: ( '\\\\' . |~ ( '\\r' | '\\n' | '\"' | '\\\\' ) )*
+            // GrammarHighlighterLexerBase.g:96:3: ( '\\\\' . |~ ( '\\r' | '\\n' | '\"' | '\\\\' ) )*
             loop9:
             do {
                 int alt9=3;
@@ -790,7 +769,7 @@ public class GrammarHighlighterLexerBase extends Lexer {
 
                 switch (alt9) {
             	case 1 :
-            	    // GrammarHighlighterLexerBase.g:136:5: '\\\\' .
+            	    // GrammarHighlighterLexerBase.g:96:5: '\\\\' .
             	    {
             	    match('\\'); 
 
@@ -799,7 +778,7 @@ public class GrammarHighlighterLexerBase extends Lexer {
             	    }
             	    break;
             	case 2 :
-            	    // GrammarHighlighterLexerBase.g:137:5: ~ ( '\\r' | '\\n' | '\"' | '\\\\' )
+            	    // GrammarHighlighterLexerBase.g:97:5: ~ ( '\\r' | '\\n' | '\"' | '\\\\' )
             	    {
             	    if ( (input.LA(1) >= '\u0000' && input.LA(1) <= '\t')||(input.LA(1) >= '\u000B' && input.LA(1) <= '\f')||(input.LA(1) >= '\u000E' && input.LA(1) <= '!')||(input.LA(1) >= '#' && input.LA(1) <= '[')||(input.LA(1) >= ']' && input.LA(1) <= '\uFFFF') ) {
             	        input.consume();
@@ -820,7 +799,7 @@ public class GrammarHighlighterLexerBase extends Lexer {
             } while (true);
 
 
-            // GrammarHighlighterLexerBase.g:139:3: ( '\"' )?
+            // GrammarHighlighterLexerBase.g:99:3: ( '\"' )?
             int alt10=2;
             int LA10_0 = input.LA(1);
 
@@ -829,7 +808,7 @@ public class GrammarHighlighterLexerBase extends Lexer {
             }
             switch (alt10) {
                 case 1 :
-                    // GrammarHighlighterLexerBase.g:139:3: '\"'
+                    // GrammarHighlighterLexerBase.g:99:3: '\"'
                     {
                     match('\"'); 
 
@@ -855,8 +834,8 @@ public class GrammarHighlighterLexerBase extends Lexer {
         try {
             int _type = OPEN_ELEMENT_OPTION;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GrammarHighlighterLexerBase.g:143:2: ( '<' )
-            // GrammarHighlighterLexerBase.g:143:4: '<'
+            // GrammarHighlighterLexerBase.g:103:2: ( '<' )
+            // GrammarHighlighterLexerBase.g:103:4: '<'
             {
             match('<'); 
 
@@ -876,8 +855,8 @@ public class GrammarHighlighterLexerBase extends Lexer {
         try {
             int _type = CLOSE_ELEMENT_OPTION;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GrammarHighlighterLexerBase.g:147:2: ( '>' )
-            // GrammarHighlighterLexerBase.g:147:4: '>'
+            // GrammarHighlighterLexerBase.g:107:2: ( '>' )
+            // GrammarHighlighterLexerBase.g:107:4: '>'
             {
             match('>'); 
 
@@ -897,8 +876,8 @@ public class GrammarHighlighterLexerBase extends Lexer {
         try {
             int _type = AMPERSAND;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GrammarHighlighterLexerBase.g:150:11: ( '@' )
-            // GrammarHighlighterLexerBase.g:150:13: '@'
+            // GrammarHighlighterLexerBase.g:110:11: ( '@' )
+            // GrammarHighlighterLexerBase.g:110:13: '@'
             {
             match('@'); 
 
@@ -918,8 +897,8 @@ public class GrammarHighlighterLexerBase extends Lexer {
         try {
             int _type = COMMA;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GrammarHighlighterLexerBase.g:152:7: ( ',' )
-            // GrammarHighlighterLexerBase.g:152:9: ','
+            // GrammarHighlighterLexerBase.g:112:7: ( ',' )
+            // GrammarHighlighterLexerBase.g:112:9: ','
             {
             match(','); 
 
@@ -939,8 +918,8 @@ public class GrammarHighlighterLexerBase extends Lexer {
         try {
             int _type = QUESTION;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GrammarHighlighterLexerBase.g:154:10: ( '?' )
-            // GrammarHighlighterLexerBase.g:154:12: '?'
+            // GrammarHighlighterLexerBase.g:114:10: ( '?' )
+            // GrammarHighlighterLexerBase.g:114:12: '?'
             {
             match('?'); 
 
@@ -960,8 +939,8 @@ public class GrammarHighlighterLexerBase extends Lexer {
         try {
             int _type = TREE_BEGIN;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GrammarHighlighterLexerBase.g:156:12: ( '^(' )
-            // GrammarHighlighterLexerBase.g:156:14: '^('
+            // GrammarHighlighterLexerBase.g:116:12: ( '^(' )
+            // GrammarHighlighterLexerBase.g:116:14: '^('
             {
             match("^("); 
 
@@ -983,8 +962,8 @@ public class GrammarHighlighterLexerBase extends Lexer {
         try {
             int _type = LPAREN;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GrammarHighlighterLexerBase.g:158:7: ( '(' )
-            // GrammarHighlighterLexerBase.g:158:9: '('
+            // GrammarHighlighterLexerBase.g:118:7: ( '(' )
+            // GrammarHighlighterLexerBase.g:118:9: '('
             {
             match('('); 
 
@@ -1004,8 +983,8 @@ public class GrammarHighlighterLexerBase extends Lexer {
         try {
             int _type = RPAREN;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GrammarHighlighterLexerBase.g:160:7: ( ')' )
-            // GrammarHighlighterLexerBase.g:160:9: ')'
+            // GrammarHighlighterLexerBase.g:120:7: ( ')' )
+            // GrammarHighlighterLexerBase.g:120:9: ')'
             {
             match(')'); 
 
@@ -1025,8 +1004,8 @@ public class GrammarHighlighterLexerBase extends Lexer {
         try {
             int _type = COLON;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GrammarHighlighterLexerBase.g:162:7: ( ':' )
-            // GrammarHighlighterLexerBase.g:162:9: ':'
+            // GrammarHighlighterLexerBase.g:122:7: ( ':' )
+            // GrammarHighlighterLexerBase.g:122:9: ':'
             {
             match(':'); 
 
@@ -1046,8 +1025,8 @@ public class GrammarHighlighterLexerBase extends Lexer {
         try {
             int _type = STAR;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GrammarHighlighterLexerBase.g:164:5: ( '*' )
-            // GrammarHighlighterLexerBase.g:164:7: '*'
+            // GrammarHighlighterLexerBase.g:124:5: ( '*' )
+            // GrammarHighlighterLexerBase.g:124:7: '*'
             {
             match('*'); 
 
@@ -1067,8 +1046,8 @@ public class GrammarHighlighterLexerBase extends Lexer {
         try {
             int _type = PLUS;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GrammarHighlighterLexerBase.g:166:5: ( '+' )
-            // GrammarHighlighterLexerBase.g:166:7: '+'
+            // GrammarHighlighterLexerBase.g:126:5: ( '+' )
+            // GrammarHighlighterLexerBase.g:126:7: '+'
             {
             match('+'); 
 
@@ -1088,8 +1067,8 @@ public class GrammarHighlighterLexerBase extends Lexer {
         try {
             int _type = ASSIGN;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GrammarHighlighterLexerBase.g:168:8: ( '=' )
-            // GrammarHighlighterLexerBase.g:168:10: '='
+            // GrammarHighlighterLexerBase.g:128:8: ( '=' )
+            // GrammarHighlighterLexerBase.g:128:10: '='
             {
             match('='); 
 
@@ -1109,8 +1088,8 @@ public class GrammarHighlighterLexerBase extends Lexer {
         try {
             int _type = PLUS_ASSIGN;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GrammarHighlighterLexerBase.g:170:13: ( '+=' )
-            // GrammarHighlighterLexerBase.g:170:15: '+='
+            // GrammarHighlighterLexerBase.g:130:13: ( '+=' )
+            // GrammarHighlighterLexerBase.g:130:15: '+='
             {
             match("+="); 
 
@@ -1132,8 +1111,8 @@ public class GrammarHighlighterLexerBase extends Lexer {
         try {
             int _type = IMPLIES;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GrammarHighlighterLexerBase.g:172:9: ( '=>' )
-            // GrammarHighlighterLexerBase.g:172:11: '=>'
+            // GrammarHighlighterLexerBase.g:132:9: ( '=>' )
+            // GrammarHighlighterLexerBase.g:132:11: '=>'
             {
             match("=>"); 
 
@@ -1155,8 +1134,8 @@ public class GrammarHighlighterLexerBase extends Lexer {
         try {
             int _type = REWRITE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GrammarHighlighterLexerBase.g:174:9: ( '->' )
-            // GrammarHighlighterLexerBase.g:174:11: '->'
+            // GrammarHighlighterLexerBase.g:134:9: ( '->' )
+            // GrammarHighlighterLexerBase.g:134:11: '->'
             {
             match("->"); 
 
@@ -1178,8 +1157,8 @@ public class GrammarHighlighterLexerBase extends Lexer {
         try {
             int _type = SEMI;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GrammarHighlighterLexerBase.g:176:5: ( ';' )
-            // GrammarHighlighterLexerBase.g:176:7: ';'
+            // GrammarHighlighterLexerBase.g:136:5: ( ';' )
+            // GrammarHighlighterLexerBase.g:136:7: ';'
             {
             match(';'); 
 
@@ -1199,8 +1178,8 @@ public class GrammarHighlighterLexerBase extends Lexer {
         try {
             int _type = ROOT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GrammarHighlighterLexerBase.g:178:6: ( '^' )
-            // GrammarHighlighterLexerBase.g:178:8: '^'
+            // GrammarHighlighterLexerBase.g:138:6: ( '^' )
+            // GrammarHighlighterLexerBase.g:138:8: '^'
             {
             match('^'); 
 
@@ -1220,8 +1199,8 @@ public class GrammarHighlighterLexerBase extends Lexer {
         try {
             int _type = BANG;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GrammarHighlighterLexerBase.g:180:6: ( '!' )
-            // GrammarHighlighterLexerBase.g:180:8: '!'
+            // GrammarHighlighterLexerBase.g:140:6: ( '!' )
+            // GrammarHighlighterLexerBase.g:140:8: '!'
             {
             match('!'); 
 
@@ -1241,8 +1220,8 @@ public class GrammarHighlighterLexerBase extends Lexer {
         try {
             int _type = OR;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GrammarHighlighterLexerBase.g:182:4: ( '|' )
-            // GrammarHighlighterLexerBase.g:182:6: '|'
+            // GrammarHighlighterLexerBase.g:142:4: ( '|' )
+            // GrammarHighlighterLexerBase.g:142:6: '|'
             {
             match('|'); 
 
@@ -1262,8 +1241,8 @@ public class GrammarHighlighterLexerBase extends Lexer {
         try {
             int _type = WILDCARD;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GrammarHighlighterLexerBase.g:184:10: ( '.' )
-            // GrammarHighlighterLexerBase.g:184:12: '.'
+            // GrammarHighlighterLexerBase.g:144:10: ( '.' )
+            // GrammarHighlighterLexerBase.g:144:12: '.'
             {
             match('.'); 
 
@@ -1283,8 +1262,8 @@ public class GrammarHighlighterLexerBase extends Lexer {
         try {
             int _type = ETC;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GrammarHighlighterLexerBase.g:186:5: ( '...' )
-            // GrammarHighlighterLexerBase.g:186:7: '...'
+            // GrammarHighlighterLexerBase.g:146:5: ( '...' )
+            // GrammarHighlighterLexerBase.g:146:7: '...'
             {
             match("..."); 
 
@@ -1306,8 +1285,8 @@ public class GrammarHighlighterLexerBase extends Lexer {
         try {
             int _type = RANGE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GrammarHighlighterLexerBase.g:188:7: ( '..' )
-            // GrammarHighlighterLexerBase.g:188:9: '..'
+            // GrammarHighlighterLexerBase.g:148:7: ( '..' )
+            // GrammarHighlighterLexerBase.g:148:9: '..'
             {
             match(".."); 
 
@@ -1329,8 +1308,8 @@ public class GrammarHighlighterLexerBase extends Lexer {
         try {
             int _type = NOT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GrammarHighlighterLexerBase.g:190:5: ( '~' )
-            // GrammarHighlighterLexerBase.g:190:7: '~'
+            // GrammarHighlighterLexerBase.g:150:5: ( '~' )
+            // GrammarHighlighterLexerBase.g:150:7: '~'
             {
             match('~'); 
 
@@ -1350,8 +1329,8 @@ public class GrammarHighlighterLexerBase extends Lexer {
         try {
             int _type = LBRACK;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GrammarHighlighterLexerBase.g:192:7: ( '[' )
-            // GrammarHighlighterLexerBase.g:192:9: '['
+            // GrammarHighlighterLexerBase.g:152:7: ( '[' )
+            // GrammarHighlighterLexerBase.g:152:9: '['
             {
             match('['); 
 
@@ -1371,8 +1350,8 @@ public class GrammarHighlighterLexerBase extends Lexer {
         try {
             int _type = RBRACK;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GrammarHighlighterLexerBase.g:194:7: ( ']' )
-            // GrammarHighlighterLexerBase.g:194:9: ']'
+            // GrammarHighlighterLexerBase.g:154:7: ( ']' )
+            // GrammarHighlighterLexerBase.g:154:9: ']'
             {
             match(']'); 
 
@@ -1392,8 +1371,8 @@ public class GrammarHighlighterLexerBase extends Lexer {
         try {
             int _type = LCURLY;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GrammarHighlighterLexerBase.g:196:7: ( '{' )
-            // GrammarHighlighterLexerBase.g:196:9: '{'
+            // GrammarHighlighterLexerBase.g:156:7: ( '{' )
+            // GrammarHighlighterLexerBase.g:156:9: '{'
             {
             match('{'); 
 
@@ -1413,8 +1392,8 @@ public class GrammarHighlighterLexerBase extends Lexer {
         try {
             int _type = RCURLY;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GrammarHighlighterLexerBase.g:198:7: ( '}' )
-            // GrammarHighlighterLexerBase.g:198:9: '}'
+            // GrammarHighlighterLexerBase.g:158:7: ( '}' )
+            // GrammarHighlighterLexerBase.g:158:9: '}'
             {
             match('}'); 
 
@@ -1434,8 +1413,8 @@ public class GrammarHighlighterLexerBase extends Lexer {
         try {
             int _type = DOLLAR;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GrammarHighlighterLexerBase.g:200:8: ( '$' )
-            // GrammarHighlighterLexerBase.g:200:10: '$'
+            // GrammarHighlighterLexerBase.g:160:8: ( '$' )
+            // GrammarHighlighterLexerBase.g:160:10: '$'
             {
             match('$'); 
 
@@ -1455,8 +1434,8 @@ public class GrammarHighlighterLexerBase extends Lexer {
         try {
             int _type = ESCAPE_BRACKET;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GrammarHighlighterLexerBase.g:204:2: ( '\\\\]' )
-            // GrammarHighlighterLexerBase.g:204:4: '\\\\]'
+            // GrammarHighlighterLexerBase.g:164:2: ( '\\\\]' )
+            // GrammarHighlighterLexerBase.g:164:4: '\\\\]'
             {
             match("\\]"); 
 
@@ -1478,8 +1457,8 @@ public class GrammarHighlighterLexerBase extends Lexer {
         try {
             int _type = DOUBLE_ANGLE_STRING_LITERAL;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GrammarHighlighterLexerBase.g:208:2: ( '<<' CONTINUE_DOUBLE_ANGLE_STRING_LITERAL )
-            // GrammarHighlighterLexerBase.g:208:4: '<<' CONTINUE_DOUBLE_ANGLE_STRING_LITERAL
+            // GrammarHighlighterLexerBase.g:168:2: ( '<<' CONTINUE_DOUBLE_ANGLE_STRING_LITERAL )
+            // GrammarHighlighterLexerBase.g:168:4: '<<' CONTINUE_DOUBLE_ANGLE_STRING_LITERAL
             {
             match("<<"); 
 
@@ -1504,8 +1483,8 @@ public class GrammarHighlighterLexerBase extends Lexer {
     // $ANTLR start "END_DOUBLE_ANGLE_STRING_LITERAL"
     public final void mEND_DOUBLE_ANGLE_STRING_LITERAL() throws RecognitionException {
         try {
-            // GrammarHighlighterLexerBase.g:211:42: ()
-            // GrammarHighlighterLexerBase.g:211:44: 
+            // GrammarHighlighterLexerBase.g:171:42: ()
+            // GrammarHighlighterLexerBase.g:171:44: 
             {
             }
 
@@ -1520,10 +1499,10 @@ public class GrammarHighlighterLexerBase extends Lexer {
     // $ANTLR start "CONTINUE_DOUBLE_ANGLE_STRING_LITERAL"
     public final void mCONTINUE_DOUBLE_ANGLE_STRING_LITERAL() throws RecognitionException {
         try {
-            // GrammarHighlighterLexerBase.g:215:2: ( (~ ( '\\r' | '\\n' | '>' ) |{...}? => '>' )* ( '>>' |) )
-            // GrammarHighlighterLexerBase.g:215:4: (~ ( '\\r' | '\\n' | '>' ) |{...}? => '>' )* ( '>>' |)
+            // GrammarHighlighterLexerBase.g:175:2: ( (~ ( '\\r' | '\\n' | '>' ) |{...}? => '>' )* ( '>>' |) )
+            // GrammarHighlighterLexerBase.g:175:4: (~ ( '\\r' | '\\n' | '>' ) |{...}? => '>' )* ( '>>' |)
             {
-            // GrammarHighlighterLexerBase.g:215:4: (~ ( '\\r' | '\\n' | '>' ) |{...}? => '>' )*
+            // GrammarHighlighterLexerBase.g:175:4: (~ ( '\\r' | '\\n' | '>' ) |{...}? => '>' )*
             loop11:
             do {
                 int alt11=3;
@@ -1555,7 +1534,7 @@ public class GrammarHighlighterLexerBase extends Lexer {
 
                 switch (alt11) {
             	case 1 :
-            	    // GrammarHighlighterLexerBase.g:215:6: ~ ( '\\r' | '\\n' | '>' )
+            	    // GrammarHighlighterLexerBase.g:175:6: ~ ( '\\r' | '\\n' | '>' )
             	    {
             	    if ( (input.LA(1) >= '\u0000' && input.LA(1) <= '\t')||(input.LA(1) >= '\u000B' && input.LA(1) <= '\f')||(input.LA(1) >= '\u000E' && input.LA(1) <= '=')||(input.LA(1) >= '?' && input.LA(1) <= '\uFFFF') ) {
             	        input.consume();
@@ -1570,7 +1549,7 @@ public class GrammarHighlighterLexerBase extends Lexer {
             	    }
             	    break;
             	case 2 :
-            	    // GrammarHighlighterLexerBase.g:216:5: {...}? => '>'
+            	    // GrammarHighlighterLexerBase.g:176:5: {...}? => '>'
             	    {
             	    if ( !((input.LA(2) != '>')) ) {
             	        throw new FailedPredicateException(input, "CONTINUE_DOUBLE_ANGLE_STRING_LITERAL", "input.LA(2) != '>'");
@@ -1587,7 +1566,7 @@ public class GrammarHighlighterLexerBase extends Lexer {
             } while (true);
 
 
-            // GrammarHighlighterLexerBase.g:218:3: ( '>>' |)
+            // GrammarHighlighterLexerBase.g:178:3: ( '>>' |)
             int alt12=2;
             int LA12_0 = input.LA(1);
 
@@ -1599,7 +1578,7 @@ public class GrammarHighlighterLexerBase extends Lexer {
             }
             switch (alt12) {
                 case 1 :
-                    // GrammarHighlighterLexerBase.g:218:5: '>>'
+                    // GrammarHighlighterLexerBase.g:178:5: '>>'
                     {
                     match(">>"); 
 
@@ -1610,7 +1589,7 @@ public class GrammarHighlighterLexerBase extends Lexer {
                     }
                     break;
                 case 2 :
-                    // GrammarHighlighterLexerBase.g:219:5: 
+                    // GrammarHighlighterLexerBase.g:179:5: 
                     {
                     state.type = CONTINUE_DOUBLE_ANGLE_STRING_LITERAL;
 
@@ -1633,12 +1612,12 @@ public class GrammarHighlighterLexerBase extends Lexer {
     // $ANTLR start "ESC"
     public final void mESC() throws RecognitionException {
         try {
-            // GrammarHighlighterLexerBase.g:225:2: ( '\\\\' ( 'n' | 'r' | 't' | 'b' | 'f' | '\"' | '\\'' | '\\\\' | '>' | 'u' XDIGIT XDIGIT XDIGIT XDIGIT | . ) )
-            // GrammarHighlighterLexerBase.g:225:4: '\\\\' ( 'n' | 'r' | 't' | 'b' | 'f' | '\"' | '\\'' | '\\\\' | '>' | 'u' XDIGIT XDIGIT XDIGIT XDIGIT | . )
+            // GrammarHighlighterLexerBase.g:185:2: ( '\\\\' ( 'n' | 'r' | 't' | 'b' | 'f' | '\"' | '\\'' | '\\\\' | '>' | 'u' XDIGIT XDIGIT XDIGIT XDIGIT | . ) )
+            // GrammarHighlighterLexerBase.g:185:4: '\\\\' ( 'n' | 'r' | 't' | 'b' | 'f' | '\"' | '\\'' | '\\\\' | '>' | 'u' XDIGIT XDIGIT XDIGIT XDIGIT | . )
             {
             match('\\'); 
 
-            // GrammarHighlighterLexerBase.g:226:3: ( 'n' | 'r' | 't' | 'b' | 'f' | '\"' | '\\'' | '\\\\' | '>' | 'u' XDIGIT XDIGIT XDIGIT XDIGIT | . )
+            // GrammarHighlighterLexerBase.g:186:3: ( 'n' | 'r' | 't' | 'b' | 'f' | '\"' | '\\'' | '\\\\' | '>' | 'u' XDIGIT XDIGIT XDIGIT XDIGIT | . )
             int alt13=11;
             int LA13_0 = input.LA(1);
 
@@ -1690,70 +1669,70 @@ public class GrammarHighlighterLexerBase extends Lexer {
             }
             switch (alt13) {
                 case 1 :
-                    // GrammarHighlighterLexerBase.g:226:5: 'n'
+                    // GrammarHighlighterLexerBase.g:186:5: 'n'
                     {
                     match('n'); 
 
                     }
                     break;
                 case 2 :
-                    // GrammarHighlighterLexerBase.g:227:5: 'r'
+                    // GrammarHighlighterLexerBase.g:187:5: 'r'
                     {
                     match('r'); 
 
                     }
                     break;
                 case 3 :
-                    // GrammarHighlighterLexerBase.g:228:5: 't'
+                    // GrammarHighlighterLexerBase.g:188:5: 't'
                     {
                     match('t'); 
 
                     }
                     break;
                 case 4 :
-                    // GrammarHighlighterLexerBase.g:229:5: 'b'
+                    // GrammarHighlighterLexerBase.g:189:5: 'b'
                     {
                     match('b'); 
 
                     }
                     break;
                 case 5 :
-                    // GrammarHighlighterLexerBase.g:230:5: 'f'
+                    // GrammarHighlighterLexerBase.g:190:5: 'f'
                     {
                     match('f'); 
 
                     }
                     break;
                 case 6 :
-                    // GrammarHighlighterLexerBase.g:231:5: '\"'
+                    // GrammarHighlighterLexerBase.g:191:5: '\"'
                     {
                     match('\"'); 
 
                     }
                     break;
                 case 7 :
-                    // GrammarHighlighterLexerBase.g:232:5: '\\''
+                    // GrammarHighlighterLexerBase.g:192:5: '\\''
                     {
                     match('\''); 
 
                     }
                     break;
                 case 8 :
-                    // GrammarHighlighterLexerBase.g:233:5: '\\\\'
+                    // GrammarHighlighterLexerBase.g:193:5: '\\\\'
                     {
                     match('\\'); 
 
                     }
                     break;
                 case 9 :
-                    // GrammarHighlighterLexerBase.g:234:5: '>'
+                    // GrammarHighlighterLexerBase.g:194:5: '>'
                     {
                     match('>'); 
 
                     }
                     break;
                 case 10 :
-                    // GrammarHighlighterLexerBase.g:235:5: 'u' XDIGIT XDIGIT XDIGIT XDIGIT
+                    // GrammarHighlighterLexerBase.g:195:5: 'u' XDIGIT XDIGIT XDIGIT XDIGIT
                     {
                     match('u'); 
 
@@ -1772,7 +1751,7 @@ public class GrammarHighlighterLexerBase extends Lexer {
                     }
                     break;
                 case 11 :
-                    // GrammarHighlighterLexerBase.g:236:5: .
+                    // GrammarHighlighterLexerBase.g:196:5: .
                     {
                     matchAny(); 
 
@@ -1795,7 +1774,7 @@ public class GrammarHighlighterLexerBase extends Lexer {
     // $ANTLR start "XDIGIT"
     public final void mXDIGIT() throws RecognitionException {
         try {
-            // GrammarHighlighterLexerBase.g:242:2: ( '0' .. '9' | 'a' .. 'f' | 'A' .. 'F' )
+            // GrammarHighlighterLexerBase.g:202:2: ( '0' .. '9' | 'a' .. 'f' | 'A' .. 'F' )
             // GrammarHighlighterLexerBase.g:
             {
             if ( (input.LA(1) >= '0' && input.LA(1) <= '9')||(input.LA(1) >= 'A' && input.LA(1) <= 'F')||(input.LA(1) >= 'a' && input.LA(1) <= 'f') ) {
@@ -1823,10 +1802,10 @@ public class GrammarHighlighterLexerBase extends Lexer {
         try {
             int _type = INT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GrammarHighlighterLexerBase.g:248:2: ( ( '0' .. '9' )+ )
-            // GrammarHighlighterLexerBase.g:248:4: ( '0' .. '9' )+
+            // GrammarHighlighterLexerBase.g:208:2: ( ( '0' .. '9' )+ )
+            // GrammarHighlighterLexerBase.g:208:4: ( '0' .. '9' )+
             {
-            // GrammarHighlighterLexerBase.g:248:4: ( '0' .. '9' )+
+            // GrammarHighlighterLexerBase.g:208:4: ( '0' .. '9' )+
             int cnt14=0;
             loop14:
             do {
@@ -1881,8 +1860,8 @@ public class GrammarHighlighterLexerBase extends Lexer {
         try {
             int _type = ANYCHAR;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // GrammarHighlighterLexerBase.g:252:2: ( . )
-            // GrammarHighlighterLexerBase.g:252:4: .
+            // GrammarHighlighterLexerBase.g:212:2: ( . )
+            // GrammarHighlighterLexerBase.g:212:4: .
             {
             matchAny(); 
 

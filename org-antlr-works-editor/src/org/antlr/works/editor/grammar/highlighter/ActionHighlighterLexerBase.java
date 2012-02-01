@@ -1,33 +1,12 @@
-// $ANTLR 3.4 ActionHighlighterLexerBase.g 2011-09-24 13:13:21
-
+// $ANTLR 3.4 ActionHighlighterLexerBase.g 2012-01-31 21:39:22
 /*
- * [The "BSD license"]
- *  Copyright (c) 2011 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell, Tunnel Vision Laboratories LLC
  *  All rights reserved.
  *
- *  Redistribution and use in source and binary forms, with or without
- *  modification, are permitted provided that the following conditions
- *  are met:
- *  1. Redistributions of source code must retain the above copyright
- *      notice, this list of conditions and the following disclaimer.
- *  2. Redistributions in binary form must reproduce the above copyright
- *      notice, this list of conditions and the following disclaimer in the
- *      documentation and/or other materials provided with the distribution.
- *  3. The name of the author may not be used to endorse or promote products
- *      derived from this software without specific prior written permission.
- *
- *  THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
- *  IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- *  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
- *  IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
- *  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
- *  NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- *  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
- *  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
- *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *  The source code of this document is proprietary work, and is not licensed for
+ *  distribution. For information about licensing, contact Sam Harwell at:
+ *      sam@tunnelvisionlabs.com
  */
-
 package org.antlr.works.editor.grammar.highlighter;
 
 
@@ -138,8 +117,8 @@ public class ActionHighlighterLexerBase extends Lexer {
         try {
             int _type = ACTION_REFERENCE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ActionHighlighterLexerBase.g:81:2: ( '$' IDENTIFIER )
-            // ActionHighlighterLexerBase.g:81:4: '$' IDENTIFIER
+            // ActionHighlighterLexerBase.g:41:2: ( '$' IDENTIFIER )
+            // ActionHighlighterLexerBase.g:41:4: '$' IDENTIFIER
             {
             match('$'); 
 
@@ -160,8 +139,8 @@ public class ActionHighlighterLexerBase extends Lexer {
     // $ANTLR start "IDENTIFIER"
     public final void mIDENTIFIER() throws RecognitionException {
         try {
-            // ActionHighlighterLexerBase.g:86:2: ( ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )* )
-            // ActionHighlighterLexerBase.g:86:4: ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )*
+            // ActionHighlighterLexerBase.g:46:2: ( ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )* )
+            // ActionHighlighterLexerBase.g:46:4: ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )*
             {
             if ( (input.LA(1) >= 'A' && input.LA(1) <= 'Z')||input.LA(1)=='_'||(input.LA(1) >= 'a' && input.LA(1) <= 'z') ) {
                 input.consume();
@@ -173,7 +152,7 @@ public class ActionHighlighterLexerBase extends Lexer {
             }
 
 
-            // ActionHighlighterLexerBase.g:87:3: ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )*
+            // ActionHighlighterLexerBase.g:47:3: ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' )*
             loop1:
             do {
                 int alt1=2;
@@ -222,8 +201,8 @@ public class ActionHighlighterLexerBase extends Lexer {
         try {
             int _type = DOLLAR;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ActionHighlighterLexerBase.g:90:8: ( '$' )
-            // ActionHighlighterLexerBase.g:90:10: '$'
+            // ActionHighlighterLexerBase.g:50:8: ( '$' )
+            // ActionHighlighterLexerBase.g:50:10: '$'
             {
             match('$'); 
 
@@ -243,8 +222,8 @@ public class ActionHighlighterLexerBase extends Lexer {
         try {
             int _type = ACTION_CHAR_LITERAL;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ActionHighlighterLexerBase.g:93:2: ( '\\'' CONTINUE_CHAR_LITERAL )
-            // ActionHighlighterLexerBase.g:93:4: '\\'' CONTINUE_CHAR_LITERAL
+            // ActionHighlighterLexerBase.g:53:2: ( '\\'' CONTINUE_CHAR_LITERAL )
+            // ActionHighlighterLexerBase.g:53:4: '\\'' CONTINUE_CHAR_LITERAL
             {
             match('\''); 
 
@@ -267,8 +246,8 @@ public class ActionHighlighterLexerBase extends Lexer {
     // $ANTLR start "END_CHAR_LITERAL"
     public final void mEND_CHAR_LITERAL() throws RecognitionException {
         try {
-            // ActionHighlighterLexerBase.g:96:27: ()
-            // ActionHighlighterLexerBase.g:96:29: 
+            // ActionHighlighterLexerBase.g:56:27: ()
+            // ActionHighlighterLexerBase.g:56:29: 
             {
             }
 
@@ -283,10 +262,10 @@ public class ActionHighlighterLexerBase extends Lexer {
     // $ANTLR start "CONTINUE_CHAR_LITERAL"
     public final void mCONTINUE_CHAR_LITERAL() throws RecognitionException {
         try {
-            // ActionHighlighterLexerBase.g:99:2: ( (~ ( '\\r' | '\\n' | '\\'' | '\\\\' ) | '\\\\' ( options {greedy=true; } : . )? )* ( '\\'' |) )
-            // ActionHighlighterLexerBase.g:99:4: (~ ( '\\r' | '\\n' | '\\'' | '\\\\' ) | '\\\\' ( options {greedy=true; } : . )? )* ( '\\'' |)
+            // ActionHighlighterLexerBase.g:59:2: ( (~ ( '\\r' | '\\n' | '\\'' | '\\\\' ) | '\\\\' ( options {greedy=true; } : . )? )* ( '\\'' |) )
+            // ActionHighlighterLexerBase.g:59:4: (~ ( '\\r' | '\\n' | '\\'' | '\\\\' ) | '\\\\' ( options {greedy=true; } : . )? )* ( '\\'' |)
             {
-            // ActionHighlighterLexerBase.g:99:4: (~ ( '\\r' | '\\n' | '\\'' | '\\\\' ) | '\\\\' ( options {greedy=true; } : . )? )*
+            // ActionHighlighterLexerBase.g:59:4: (~ ( '\\r' | '\\n' | '\\'' | '\\\\' ) | '\\\\' ( options {greedy=true; } : . )? )*
             loop3:
             do {
                 int alt3=3;
@@ -302,7 +281,7 @@ public class ActionHighlighterLexerBase extends Lexer {
 
                 switch (alt3) {
             	case 1 :
-            	    // ActionHighlighterLexerBase.g:99:6: ~ ( '\\r' | '\\n' | '\\'' | '\\\\' )
+            	    // ActionHighlighterLexerBase.g:59:6: ~ ( '\\r' | '\\n' | '\\'' | '\\\\' )
             	    {
             	    if ( (input.LA(1) >= '\u0000' && input.LA(1) <= '\t')||(input.LA(1) >= '\u000B' && input.LA(1) <= '\f')||(input.LA(1) >= '\u000E' && input.LA(1) <= '&')||(input.LA(1) >= '(' && input.LA(1) <= '[')||(input.LA(1) >= ']' && input.LA(1) <= '\uFFFF') ) {
             	        input.consume();
@@ -317,11 +296,11 @@ public class ActionHighlighterLexerBase extends Lexer {
             	    }
             	    break;
             	case 2 :
-            	    // ActionHighlighterLexerBase.g:100:5: '\\\\' ( options {greedy=true; } : . )?
+            	    // ActionHighlighterLexerBase.g:60:5: '\\\\' ( options {greedy=true; } : . )?
             	    {
             	    match('\\'); 
 
-            	    // ActionHighlighterLexerBase.g:100:10: ( options {greedy=true; } : . )?
+            	    // ActionHighlighterLexerBase.g:60:10: ( options {greedy=true; } : . )?
             	    int alt2=2;
             	    int LA2_0 = input.LA(1);
 
@@ -336,7 +315,7 @@ public class ActionHighlighterLexerBase extends Lexer {
             	    }
             	    switch (alt2) {
             	        case 1 :
-            	            // ActionHighlighterLexerBase.g:100:35: .
+            	            // ActionHighlighterLexerBase.g:60:35: .
             	            {
             	            matchAny(); 
 
@@ -355,7 +334,7 @@ public class ActionHighlighterLexerBase extends Lexer {
             } while (true);
 
 
-            // ActionHighlighterLexerBase.g:102:3: ( '\\'' |)
+            // ActionHighlighterLexerBase.g:62:3: ( '\\'' |)
             int alt4=2;
             int LA4_0 = input.LA(1);
 
@@ -367,7 +346,7 @@ public class ActionHighlighterLexerBase extends Lexer {
             }
             switch (alt4) {
                 case 1 :
-                    // ActionHighlighterLexerBase.g:102:5: '\\''
+                    // ActionHighlighterLexerBase.g:62:5: '\\''
                     {
                     match('\''); 
 
@@ -376,7 +355,7 @@ public class ActionHighlighterLexerBase extends Lexer {
                     }
                     break;
                 case 2 :
-                    // ActionHighlighterLexerBase.g:103:5: 
+                    // ActionHighlighterLexerBase.g:63:5: 
                     {
                     state.type = CONTINUE_CHAR_LITERAL;
 
@@ -401,8 +380,8 @@ public class ActionHighlighterLexerBase extends Lexer {
         try {
             int _type = ACTION_STRING_LITERAL;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ActionHighlighterLexerBase.g:108:2: ( '\"' CONTINUE_STRING_LITERAL )
-            // ActionHighlighterLexerBase.g:108:4: '\"' CONTINUE_STRING_LITERAL
+            // ActionHighlighterLexerBase.g:68:2: ( '\"' CONTINUE_STRING_LITERAL )
+            // ActionHighlighterLexerBase.g:68:4: '\"' CONTINUE_STRING_LITERAL
             {
             match('\"'); 
 
@@ -425,8 +404,8 @@ public class ActionHighlighterLexerBase extends Lexer {
     // $ANTLR start "END_STRING_LITERAL"
     public final void mEND_STRING_LITERAL() throws RecognitionException {
         try {
-            // ActionHighlighterLexerBase.g:111:29: ()
-            // ActionHighlighterLexerBase.g:111:31: 
+            // ActionHighlighterLexerBase.g:71:29: ()
+            // ActionHighlighterLexerBase.g:71:31: 
             {
             }
 
@@ -441,10 +420,10 @@ public class ActionHighlighterLexerBase extends Lexer {
     // $ANTLR start "CONTINUE_STRING_LITERAL"
     public final void mCONTINUE_STRING_LITERAL() throws RecognitionException {
         try {
-            // ActionHighlighterLexerBase.g:114:2: ( (~ ( '\\r' | '\\n' | '\"' | '\\\\' ) | '\\\\' ( options {greedy=true; } : . )? )* ( '\"' |) )
-            // ActionHighlighterLexerBase.g:114:4: (~ ( '\\r' | '\\n' | '\"' | '\\\\' ) | '\\\\' ( options {greedy=true; } : . )? )* ( '\"' |)
+            // ActionHighlighterLexerBase.g:74:2: ( (~ ( '\\r' | '\\n' | '\"' | '\\\\' ) | '\\\\' ( options {greedy=true; } : . )? )* ( '\"' |) )
+            // ActionHighlighterLexerBase.g:74:4: (~ ( '\\r' | '\\n' | '\"' | '\\\\' ) | '\\\\' ( options {greedy=true; } : . )? )* ( '\"' |)
             {
-            // ActionHighlighterLexerBase.g:114:4: (~ ( '\\r' | '\\n' | '\"' | '\\\\' ) | '\\\\' ( options {greedy=true; } : . )? )*
+            // ActionHighlighterLexerBase.g:74:4: (~ ( '\\r' | '\\n' | '\"' | '\\\\' ) | '\\\\' ( options {greedy=true; } : . )? )*
             loop6:
             do {
                 int alt6=3;
@@ -460,7 +439,7 @@ public class ActionHighlighterLexerBase extends Lexer {
 
                 switch (alt6) {
             	case 1 :
-            	    // ActionHighlighterLexerBase.g:114:6: ~ ( '\\r' | '\\n' | '\"' | '\\\\' )
+            	    // ActionHighlighterLexerBase.g:74:6: ~ ( '\\r' | '\\n' | '\"' | '\\\\' )
             	    {
             	    if ( (input.LA(1) >= '\u0000' && input.LA(1) <= '\t')||(input.LA(1) >= '\u000B' && input.LA(1) <= '\f')||(input.LA(1) >= '\u000E' && input.LA(1) <= '!')||(input.LA(1) >= '#' && input.LA(1) <= '[')||(input.LA(1) >= ']' && input.LA(1) <= '\uFFFF') ) {
             	        input.consume();
@@ -475,11 +454,11 @@ public class ActionHighlighterLexerBase extends Lexer {
             	    }
             	    break;
             	case 2 :
-            	    // ActionHighlighterLexerBase.g:115:5: '\\\\' ( options {greedy=true; } : . )?
+            	    // ActionHighlighterLexerBase.g:75:5: '\\\\' ( options {greedy=true; } : . )?
             	    {
             	    match('\\'); 
 
-            	    // ActionHighlighterLexerBase.g:115:10: ( options {greedy=true; } : . )?
+            	    // ActionHighlighterLexerBase.g:75:10: ( options {greedy=true; } : . )?
             	    int alt5=2;
             	    int LA5_0 = input.LA(1);
 
@@ -494,7 +473,7 @@ public class ActionHighlighterLexerBase extends Lexer {
             	    }
             	    switch (alt5) {
             	        case 1 :
-            	            // ActionHighlighterLexerBase.g:115:35: .
+            	            // ActionHighlighterLexerBase.g:75:35: .
             	            {
             	            matchAny(); 
 
@@ -513,7 +492,7 @@ public class ActionHighlighterLexerBase extends Lexer {
             } while (true);
 
 
-            // ActionHighlighterLexerBase.g:117:3: ( '\"' |)
+            // ActionHighlighterLexerBase.g:77:3: ( '\"' |)
             int alt7=2;
             int LA7_0 = input.LA(1);
 
@@ -525,7 +504,7 @@ public class ActionHighlighterLexerBase extends Lexer {
             }
             switch (alt7) {
                 case 1 :
-                    // ActionHighlighterLexerBase.g:117:5: '\"'
+                    // ActionHighlighterLexerBase.g:77:5: '\"'
                     {
                     match('\"'); 
 
@@ -534,7 +513,7 @@ public class ActionHighlighterLexerBase extends Lexer {
                     }
                     break;
                 case 2 :
-                    // ActionHighlighterLexerBase.g:118:5: 
+                    // ActionHighlighterLexerBase.g:78:5: 
                     {
                     state.type = CONTINUE_STRING_LITERAL;
 
@@ -559,14 +538,14 @@ public class ActionHighlighterLexerBase extends Lexer {
         try {
             int _type = ACTION_COMMENT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ActionHighlighterLexerBase.g:123:2: ( '//' (~ ( '\\r' | '\\n' ) )* )
-            // ActionHighlighterLexerBase.g:123:4: '//' (~ ( '\\r' | '\\n' ) )*
+            // ActionHighlighterLexerBase.g:83:2: ( '//' (~ ( '\\r' | '\\n' ) )* )
+            // ActionHighlighterLexerBase.g:83:4: '//' (~ ( '\\r' | '\\n' ) )*
             {
             match("//"); 
 
 
 
-            // ActionHighlighterLexerBase.g:123:9: (~ ( '\\r' | '\\n' ) )*
+            // ActionHighlighterLexerBase.g:83:9: (~ ( '\\r' | '\\n' ) )*
             loop8:
             do {
                 int alt8=2;
@@ -616,8 +595,8 @@ public class ActionHighlighterLexerBase extends Lexer {
         try {
             int _type = ACTION_ML_COMMENT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ActionHighlighterLexerBase.g:127:2: ( '/*' CONTINUE_COMMENT )
-            // ActionHighlighterLexerBase.g:127:4: '/*' CONTINUE_COMMENT
+            // ActionHighlighterLexerBase.g:87:2: ( '/*' CONTINUE_COMMENT )
+            // ActionHighlighterLexerBase.g:87:4: '/*' CONTINUE_COMMENT
             {
             match("/*"); 
 
@@ -642,8 +621,8 @@ public class ActionHighlighterLexerBase extends Lexer {
     // $ANTLR start "END_COMMENT"
     public final void mEND_COMMENT() throws RecognitionException {
         try {
-            // ActionHighlighterLexerBase.g:130:22: ()
-            // ActionHighlighterLexerBase.g:130:24: 
+            // ActionHighlighterLexerBase.g:90:22: ()
+            // ActionHighlighterLexerBase.g:90:24: 
             {
             }
 
@@ -658,10 +637,10 @@ public class ActionHighlighterLexerBase extends Lexer {
     // $ANTLR start "CONTINUE_COMMENT"
     public final void mCONTINUE_COMMENT() throws RecognitionException {
         try {
-            // ActionHighlighterLexerBase.g:134:2: ( (~ ( '\\r' | '\\n' | '*' ) |{...}? => '*' )* ( '*/' |) )
-            // ActionHighlighterLexerBase.g:134:4: (~ ( '\\r' | '\\n' | '*' ) |{...}? => '*' )* ( '*/' |)
+            // ActionHighlighterLexerBase.g:94:2: ( (~ ( '\\r' | '\\n' | '*' ) |{...}? => '*' )* ( '*/' |) )
+            // ActionHighlighterLexerBase.g:94:4: (~ ( '\\r' | '\\n' | '*' ) |{...}? => '*' )* ( '*/' |)
             {
-            // ActionHighlighterLexerBase.g:134:4: (~ ( '\\r' | '\\n' | '*' ) |{...}? => '*' )*
+            // ActionHighlighterLexerBase.g:94:4: (~ ( '\\r' | '\\n' | '*' ) |{...}? => '*' )*
             loop9:
             do {
                 int alt9=3;
@@ -693,7 +672,7 @@ public class ActionHighlighterLexerBase extends Lexer {
 
                 switch (alt9) {
             	case 1 :
-            	    // ActionHighlighterLexerBase.g:134:6: ~ ( '\\r' | '\\n' | '*' )
+            	    // ActionHighlighterLexerBase.g:94:6: ~ ( '\\r' | '\\n' | '*' )
             	    {
             	    if ( (input.LA(1) >= '\u0000' && input.LA(1) <= '\t')||(input.LA(1) >= '\u000B' && input.LA(1) <= '\f')||(input.LA(1) >= '\u000E' && input.LA(1) <= ')')||(input.LA(1) >= '+' && input.LA(1) <= '\uFFFF') ) {
             	        input.consume();
@@ -708,7 +687,7 @@ public class ActionHighlighterLexerBase extends Lexer {
             	    }
             	    break;
             	case 2 :
-            	    // ActionHighlighterLexerBase.g:135:5: {...}? => '*'
+            	    // ActionHighlighterLexerBase.g:95:5: {...}? => '*'
             	    {
             	    if ( !((input.LA(2) != '/')) ) {
             	        throw new FailedPredicateException(input, "CONTINUE_COMMENT", "input.LA(2) != '/'");
@@ -725,7 +704,7 @@ public class ActionHighlighterLexerBase extends Lexer {
             } while (true);
 
 
-            // ActionHighlighterLexerBase.g:137:3: ( '*/' |)
+            // ActionHighlighterLexerBase.g:97:3: ( '*/' |)
             int alt10=2;
             int LA10_0 = input.LA(1);
 
@@ -737,7 +716,7 @@ public class ActionHighlighterLexerBase extends Lexer {
             }
             switch (alt10) {
                 case 1 :
-                    // ActionHighlighterLexerBase.g:137:5: '*/'
+                    // ActionHighlighterLexerBase.g:97:5: '*/'
                     {
                     match("*/"); 
 
@@ -748,7 +727,7 @@ public class ActionHighlighterLexerBase extends Lexer {
                     }
                     break;
                 case 2 :
-                    // ActionHighlighterLexerBase.g:138:5: 
+                    // ActionHighlighterLexerBase.g:98:5: 
                     {
                     state.type = CONTINUE_COMMENT;
 
@@ -773,8 +752,8 @@ public class ActionHighlighterLexerBase extends Lexer {
         try {
             int _type = ACTION_ESCAPE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ActionHighlighterLexerBase.g:143:2: ( '\\\\' . )
-            // ActionHighlighterLexerBase.g:143:4: '\\\\' .
+            // ActionHighlighterLexerBase.g:103:2: ( '\\\\' . )
+            // ActionHighlighterLexerBase.g:103:4: '\\\\' .
             {
             match('\\'); 
 
@@ -796,10 +775,10 @@ public class ActionHighlighterLexerBase extends Lexer {
         try {
             int _type = ACTION_TEXT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ActionHighlighterLexerBase.g:147:2: ( (~ ( '\\r' | '\\n' | '\\\\' | '/' | '{' | '}' | ']' | '$' | '\\'' | '\"' ) |{...}? => ( '{' | '}' ) |{...}? => ']' |{...}? => '$' |{...}? => '/' )+ )
-            // ActionHighlighterLexerBase.g:147:4: (~ ( '\\r' | '\\n' | '\\\\' | '/' | '{' | '}' | ']' | '$' | '\\'' | '\"' ) |{...}? => ( '{' | '}' ) |{...}? => ']' |{...}? => '$' |{...}? => '/' )+
+            // ActionHighlighterLexerBase.g:107:2: ( (~ ( '\\r' | '\\n' | '\\\\' | '/' | '{' | '}' | ']' | '$' | '\\'' | '\"' ) |{...}? => ( '{' | '}' ) |{...}? => ']' |{...}? => '$' |{...}? => '/' )+ )
+            // ActionHighlighterLexerBase.g:107:4: (~ ( '\\r' | '\\n' | '\\\\' | '/' | '{' | '}' | ']' | '$' | '\\'' | '\"' ) |{...}? => ( '{' | '}' ) |{...}? => ']' |{...}? => '$' |{...}? => '/' )+
             {
-            // ActionHighlighterLexerBase.g:147:4: (~ ( '\\r' | '\\n' | '\\\\' | '/' | '{' | '}' | ']' | '$' | '\\'' | '\"' ) |{...}? => ( '{' | '}' ) |{...}? => ']' |{...}? => '$' |{...}? => '/' )+
+            // ActionHighlighterLexerBase.g:107:4: (~ ( '\\r' | '\\n' | '\\\\' | '/' | '{' | '}' | ']' | '$' | '\\'' | '\"' ) |{...}? => ( '{' | '}' ) |{...}? => ']' |{...}? => '$' |{...}? => '/' )+
             int cnt11=0;
             loop11:
             do {
@@ -825,7 +804,7 @@ public class ActionHighlighterLexerBase extends Lexer {
 
                 switch (alt11) {
             	case 1 :
-            	    // ActionHighlighterLexerBase.g:147:6: ~ ( '\\r' | '\\n' | '\\\\' | '/' | '{' | '}' | ']' | '$' | '\\'' | '\"' )
+            	    // ActionHighlighterLexerBase.g:107:6: ~ ( '\\r' | '\\n' | '\\\\' | '/' | '{' | '}' | ']' | '$' | '\\'' | '\"' )
             	    {
             	    if ( (input.LA(1) >= '\u0000' && input.LA(1) <= '\t')||(input.LA(1) >= '\u000B' && input.LA(1) <= '\f')||(input.LA(1) >= '\u000E' && input.LA(1) <= '!')||input.LA(1)=='#'||(input.LA(1) >= '%' && input.LA(1) <= '&')||(input.LA(1) >= '(' && input.LA(1) <= '.')||(input.LA(1) >= '0' && input.LA(1) <= '[')||(input.LA(1) >= '^' && input.LA(1) <= 'z')||input.LA(1)=='|'||(input.LA(1) >= '~' && input.LA(1) <= '\uFFFF') ) {
             	        input.consume();
@@ -840,7 +819,7 @@ public class ActionHighlighterLexerBase extends Lexer {
             	    }
             	    break;
             	case 2 :
-            	    // ActionHighlighterLexerBase.g:148:5: {...}? => ( '{' | '}' )
+            	    // ActionHighlighterLexerBase.g:108:5: {...}? => ( '{' | '}' )
             	    {
             	    if ( !((!getLexer().getMode().equals(ANTLRHighlighterMode.ACTION))) ) {
             	        throw new FailedPredicateException(input, "ACTION_TEXT", "!getLexer().getMode().equals(ANTLRHighlighterMode.ACTION)");
@@ -859,7 +838,7 @@ public class ActionHighlighterLexerBase extends Lexer {
             	    }
             	    break;
             	case 3 :
-            	    // ActionHighlighterLexerBase.g:149:5: {...}? => ']'
+            	    // ActionHighlighterLexerBase.g:109:5: {...}? => ']'
             	    {
             	    if ( !((!getLexer().getMode().equals(ANTLRHighlighterMode.ARG_ACTION))) ) {
             	        throw new FailedPredicateException(input, "ACTION_TEXT", "!getLexer().getMode().equals(ANTLRHighlighterMode.ARG_ACTION)");
@@ -870,7 +849,7 @@ public class ActionHighlighterLexerBase extends Lexer {
             	    }
             	    break;
             	case 4 :
-            	    // ActionHighlighterLexerBase.g:150:5: {...}? => '$'
+            	    // ActionHighlighterLexerBase.g:110:5: {...}? => '$'
             	    {
             	    if ( !((!isIdStartChar(input.LA(2)))) ) {
             	        throw new FailedPredicateException(input, "ACTION_TEXT", "!isIdStartChar(input.LA(2))");
@@ -881,7 +860,7 @@ public class ActionHighlighterLexerBase extends Lexer {
             	    }
             	    break;
             	case 5 :
-            	    // ActionHighlighterLexerBase.g:151:5: {...}? => '/'
+            	    // ActionHighlighterLexerBase.g:111:5: {...}? => '/'
             	    {
             	    if ( !((input.LA(2) != '/' && input.LA(2) != '*')) ) {
             	        throw new FailedPredicateException(input, "ACTION_TEXT", "input.LA(2) != '/' && input.LA(2) != '*'");
@@ -918,10 +897,10 @@ public class ActionHighlighterLexerBase extends Lexer {
         try {
             int _type = NEWLINE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ActionHighlighterLexerBase.g:156:2: ( ( '\\r' )? '\\n' )
-            // ActionHighlighterLexerBase.g:156:4: ( '\\r' )? '\\n'
+            // ActionHighlighterLexerBase.g:116:2: ( ( '\\r' )? '\\n' )
+            // ActionHighlighterLexerBase.g:116:4: ( '\\r' )? '\\n'
             {
-            // ActionHighlighterLexerBase.g:156:4: ( '\\r' )?
+            // ActionHighlighterLexerBase.g:116:4: ( '\\r' )?
             int alt12=2;
             int LA12_0 = input.LA(1);
 
@@ -930,7 +909,7 @@ public class ActionHighlighterLexerBase extends Lexer {
             }
             switch (alt12) {
                 case 1 :
-                    // ActionHighlighterLexerBase.g:156:4: '\\r'
+                    // ActionHighlighterLexerBase.g:116:4: '\\r'
                     {
                     match('\r'); 
 
@@ -958,8 +937,8 @@ public class ActionHighlighterLexerBase extends Lexer {
         try {
             int _type = ANYCHAR;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // ActionHighlighterLexerBase.g:160:2: ( . )
-            // ActionHighlighterLexerBase.g:160:4: .
+            // ActionHighlighterLexerBase.g:120:2: ( . )
+            // ActionHighlighterLexerBase.g:120:4: .
             {
             matchAny(); 
 
@@ -1240,6 +1219,7 @@ public class ActionHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 1 : 
                         int LA13_59 = input.LA(1);
 
@@ -1257,6 +1237,7 @@ public class ActionHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 2 : 
                         int LA13_58 = input.LA(1);
 
@@ -1274,6 +1255,7 @@ public class ActionHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 3 : 
                         int LA13_57 = input.LA(1);
 
@@ -1291,6 +1273,7 @@ public class ActionHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 4 : 
                         int LA13_56 = input.LA(1);
 
@@ -1308,6 +1291,7 @@ public class ActionHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 5 : 
                         int LA13_55 = input.LA(1);
 
@@ -1325,6 +1309,7 @@ public class ActionHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 6 : 
                         int LA13_53 = input.LA(1);
 
@@ -1342,6 +1327,7 @@ public class ActionHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 7 : 
                         int LA13_40 = input.LA(1);
 
@@ -1359,6 +1345,7 @@ public class ActionHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 8 : 
                         int LA13_52 = input.LA(1);
 
@@ -1376,6 +1363,7 @@ public class ActionHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 9 : 
                         int LA13_51 = input.LA(1);
 
@@ -1393,6 +1381,7 @@ public class ActionHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 10 : 
                         int LA13_50 = input.LA(1);
 
@@ -1410,6 +1399,7 @@ public class ActionHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 11 : 
                         int LA13_49 = input.LA(1);
 
@@ -1427,6 +1417,7 @@ public class ActionHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 12 : 
                         int LA13_32 = input.LA(1);
 
@@ -1444,6 +1435,7 @@ public class ActionHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 13 : 
                         int LA13_48 = input.LA(1);
 
@@ -1461,6 +1453,7 @@ public class ActionHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 14 : 
                         int LA13_28 = input.LA(1);
 
@@ -1482,6 +1475,7 @@ public class ActionHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 15 : 
                         int LA13_29 = input.LA(1);
 
@@ -1499,6 +1493,7 @@ public class ActionHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 16 : 
                         int LA13_46 = input.LA(1);
 
@@ -1516,6 +1511,7 @@ public class ActionHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 17 : 
                         int LA13_23 = input.LA(1);
 
@@ -1533,6 +1529,7 @@ public class ActionHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 18 : 
                         int LA13_18 = input.LA(1);
 
@@ -1550,6 +1547,7 @@ public class ActionHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 19 : 
                         int LA13_25 = input.LA(1);
 
@@ -1567,6 +1565,7 @@ public class ActionHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 20 : 
                         int LA13_44 = input.LA(1);
 
@@ -1589,6 +1588,7 @@ public class ActionHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 21 : 
                         int LA13_43 = input.LA(1);
 
@@ -1611,6 +1611,7 @@ public class ActionHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 22 : 
                         int LA13_42 = input.LA(1);
 
@@ -1633,6 +1634,7 @@ public class ActionHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 23 : 
                         int LA13_41 = input.LA(1);
 
@@ -1655,6 +1657,7 @@ public class ActionHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 24 : 
                         int LA13_54 = input.LA(1);
 
@@ -1677,6 +1680,7 @@ public class ActionHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 25 : 
                         int LA13_38 = input.LA(1);
 
@@ -1699,6 +1703,7 @@ public class ActionHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 26 : 
                         int LA13_17 = input.LA(1);
 
@@ -1721,6 +1726,7 @@ public class ActionHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 27 : 
                         int LA13_1 = input.LA(1);
 
@@ -1740,6 +1746,7 @@ public class ActionHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 28 : 
                         int LA13_16 = input.LA(1);
 
@@ -1760,6 +1767,7 @@ public class ActionHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 29 : 
                         int LA13_5 = input.LA(1);
 
@@ -1770,6 +1778,7 @@ public class ActionHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 30 : 
                         int LA13_35 = input.LA(1);
 
@@ -1790,6 +1799,7 @@ public class ActionHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 31 : 
                         int LA13_4 = input.LA(1);
 
@@ -1811,6 +1821,7 @@ public class ActionHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 32 : 
                         int LA13_11 = input.LA(1);
 
@@ -1832,6 +1843,7 @@ public class ActionHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 33 : 
                         int LA13_8 = input.LA(1);
 
@@ -1849,6 +1861,7 @@ public class ActionHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 34 : 
                         int LA13_39 = input.LA(1);
 
@@ -1871,6 +1884,7 @@ public class ActionHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 35 : 
                         int LA13_31 = input.LA(1);
 
@@ -1891,6 +1905,7 @@ public class ActionHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 36 : 
                         int LA13_36 = input.LA(1);
 
@@ -1911,6 +1926,7 @@ public class ActionHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 37 : 
                         int LA13_33 = input.LA(1);
 
@@ -1931,6 +1947,7 @@ public class ActionHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 38 : 
                         int LA13_0 = input.LA(1);
 
@@ -1957,6 +1974,7 @@ public class ActionHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 39 : 
                         int LA13_34 = input.LA(1);
 
@@ -1977,6 +1995,7 @@ public class ActionHighlighterLexerBase extends Lexer {
 
                         if ( s>=0 ) return s;
                         break;
+
                     case 40 : 
                         int LA13_7 = input.LA(1);
 
