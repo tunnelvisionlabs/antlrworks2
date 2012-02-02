@@ -33,6 +33,10 @@ public abstract class CurrentEditorParserTaskScheduler extends ParserTaskSchedul
         EditorRegistry.addPropertyChangeListener(new EditorRegistryListener());
     }
 
+    protected JTextComponent getCurrentEditor() {
+        return currentEditor;
+    }
+
     protected abstract void setEditor(JTextComponent editor);
 
     private class EditorRegistryListener implements PropertyChangeListener {

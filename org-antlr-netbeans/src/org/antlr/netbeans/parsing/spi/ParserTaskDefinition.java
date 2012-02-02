@@ -59,6 +59,10 @@ public class ParserTaskDefinition {
         return scheduler;
     }
 
+    public boolean isInterruptable() {
+        return false;
+    }
+
     @Override
     public String toString() {
         return "Task:" + getName();

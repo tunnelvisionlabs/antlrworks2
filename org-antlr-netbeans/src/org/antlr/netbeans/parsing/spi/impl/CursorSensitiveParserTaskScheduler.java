@@ -29,24 +29,18 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service=ParserTaskScheduler.class)
 public class CursorSensitiveParserTaskScheduler extends CurrentDocumentParserTaskScheduler {
 
-    private JTextComponent currentEditor;
-    private CaretListener caretListener;
+    private final CaretListener caretListener = new CaretListenerImpl();
 
     @Override
     protected void setEditor(JTextComponent editor) {
-        if (currentEditor != null) {
-            currentEditor.removeCaretListener(caretListener);
+        if (getCurrentEditor() != null) {
+            getCurrentEditor().removeCaretListener(caretListener);
         }
 
         super.setEditor(editor);
-        currentEditor = editor;
 
-        if (editor != null) {
-            if (caretListener == null) {
-                caretListener = new CaretListenerImpl();
-            }
-
-            editor.addCaretListener(caretListener);
+        if (getCurrentEditor() != null) {
+            getCurrentEditor().addCaretListener(caretListener);
         }
     }
 
@@ -63,9 +57,9 @@ public class CursorSensitiveParserTaskScheduler extends CurrentDocumentParserTas
 
         @Override
         public void caretUpdate(CaretEvent e) {
-            DocumentSnapshot snapshot = versionedDocument.getCurrentSnapshot();
+            DocumentSnapshot snapshot = getVersionedDocument().getCurrentSnapshot();
             SnapshotPosition position = new SnapshotPosition(snapshot, e.getDot());
-            ParseContext context = new ParseContext(CursorSensitiveParserTaskScheduler.this, position, currentEditor);
+            ParseContext context = new ParseContext(CursorSensitiveParserTaskScheduler.this, position, getCurrentEditor());
             schedule(context);
         }
     }

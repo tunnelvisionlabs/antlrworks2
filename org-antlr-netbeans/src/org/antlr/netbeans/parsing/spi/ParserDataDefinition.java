@@ -63,6 +63,10 @@ public class ParserDataDefinition<T> {
         return cacheable;
     }
 
+    public boolean isInterruptable() {
+        return false;
+    }
+
     @CheckForNull
     public Class<? extends ParserTaskScheduler> getScheduler() {
         return scheduler;

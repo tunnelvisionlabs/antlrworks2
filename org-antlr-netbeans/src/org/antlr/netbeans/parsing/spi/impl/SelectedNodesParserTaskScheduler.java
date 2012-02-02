@@ -30,8 +30,6 @@ import org.openide.windows.TopComponent;
 @ServiceProvider(service=ParserTaskScheduler.class)
 public class SelectedNodesParserTaskScheduler extends ParserTaskScheduler {
 
-    private VersionedDocument versionedDocument;
-
     @Override
     protected void initializeImpl() {
         TopComponent.getRegistry().addPropertyChangeListener(new TopComponentListener());
@@ -53,7 +51,7 @@ public class SelectedNodesParserTaskScheduler extends ParserTaskScheduler {
                 if (dataObject != null && dataObject.isValid()) {
                     final FileObject fileObject = dataObject.getPrimaryFile();
                     if (fileObject.isValid() && EditorSettings.getDefault().getAllMimeTypes().contains(fileObject.getMIMEType())) {
-                        versionedDocument = VersionedDocumentUtilities.getVersionedDocument(fileObject);
+                        VersionedDocument versionedDocument = VersionedDocumentUtilities.getVersionedDocument(fileObject);
                         if (versionedDocument != null) {
                             ParseContext context = new ParseContext(SelectedNodesParserTaskScheduler.this, versionedDocument);
                             schedule(context);
@@ -63,8 +61,7 @@ public class SelectedNodesParserTaskScheduler extends ParserTaskScheduler {
                 }
             }
 
-            versionedDocument = null;
-            schedule(null);
+            cancelAll(false);
             return null;
         }
     }

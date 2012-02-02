@@ -25,8 +25,16 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service=ParserTaskScheduler.class)
 public class CurrentDocumentParserTaskScheduler extends CurrentEditorParserTaskScheduler {
 
-    protected Document currentDocument;
-    protected VersionedDocument versionedDocument;
+    private Document currentDocument;
+    private VersionedDocument versionedDocument;
+
+    protected Document getCurrentDocument() {
+        return currentDocument;
+    }
+
+    protected VersionedDocument getVersionedDocument() {
+        return versionedDocument;
+    }
 
     @Override
     protected int getParseDelayMilliseconds() {
@@ -44,6 +52,9 @@ public class CurrentDocumentParserTaskScheduler extends CurrentEditorParserTaskS
             currentDocument = document;
             versionedDocument = VersionedDocumentUtilities.getVersionedDocument(document);
             schedule(createParseContext(versionedDocument, editor));
+        } else {
+            currentDocument = null;
+            versionedDocument = null;
         }
     }
 
