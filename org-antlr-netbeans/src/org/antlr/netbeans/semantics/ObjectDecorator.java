@@ -21,8 +21,15 @@ import org.openide.util.Parameters;
  * @author Sam Harwell
  */
 public class ObjectDecorator<T> {
-    private final Map<T, Map<ObjectProperty<?>, Object>> properties =
-        new HashMap<T, Map<ObjectProperty<?>, Object>>();
+    private final Map<T, Map<ObjectProperty<?>, Object>> properties;
+
+    public ObjectDecorator() {
+        properties = new HashMap<T, Map<ObjectProperty<?>, Object>>();
+    }
+
+    public ObjectDecorator(@NonNull Map<T, Map<ObjectProperty<?>, Object>> properties) {
+        this.properties = properties;
+    }
 
     @NonNull
     public Map<? extends T, ? extends Map<? extends ObjectProperty<?>, ? extends Object>> getProperties() {
