@@ -22,6 +22,7 @@ import org.antlr.netbeans.editor.text.VersionedDocument;
 import org.antlr.netbeans.parsing.spi.ParserData;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.editor.fold.Fold;
+import org.netbeans.api.editor.fold.FoldHierarchy;
 import org.netbeans.api.editor.fold.FoldType;
 import org.netbeans.spi.editor.fold.FoldHierarchyTransaction;
 import org.netbeans.spi.editor.fold.FoldOperation;
@@ -58,7 +59,16 @@ public abstract class AbstractFoldScanner<SemanticData> {
                 }
 
                 FoldOperation operation = foldManager.getOperation();
-                operation.getHierarchy().lock();
+                if (operation == null) {
+                    return;
+                }
+
+                FoldHierarchy hierarchy = operation.getHierarchy();
+                if (hierarchy == null) {
+                    return;
+                }
+
+                hierarchy.lock();
                 try{
                     FoldHierarchyTransaction transaction = operation.openTransaction();
                     synchronized (foldManager.currentFolds) {
@@ -128,7 +138,7 @@ public abstract class AbstractFoldScanner<SemanticData> {
                     }
                     transaction.commit();
                 } finally {
-                    operation.getHierarchy().unlock();
+                    hierarchy.unlock();
                 }
             }
         });
