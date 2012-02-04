@@ -57,7 +57,17 @@ public class CursorSensitiveParserTaskScheduler extends CurrentDocumentParserTas
 
         @Override
         public void caretUpdate(CaretEvent e) {
-            DocumentSnapshot snapshot = getVersionedDocument().getCurrentSnapshot();
+            VersionedDocument document = getVersionedDocument();
+            if (document == null) {
+                return;
+            }
+
+            DocumentSnapshot snapshot = document.getCurrentSnapshot();
+            int dotOffset = e.getDot();
+            if (dotOffset < 0 || dotOffset > snapshot.length()) {
+                return;
+            }
+
             SnapshotPosition position = new SnapshotPosition(snapshot, e.getDot());
             ParseContext context = new ParseContext(CursorSensitiveParserTaskScheduler.this, position, getCurrentEditor());
             schedule(context);
