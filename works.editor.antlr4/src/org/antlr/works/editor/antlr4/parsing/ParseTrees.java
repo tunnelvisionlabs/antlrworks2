@@ -14,6 +14,7 @@ import java.util.List;
 import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleContext;
+import org.antlr.v4.runtime.atn.ATN;
 import org.antlr.v4.runtime.misc.IntervalSet;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTree.TerminalNode;
@@ -119,6 +120,15 @@ public final class ParseTrees {
         }
 
         return null;
+    }
+
+    public static int getInvokingRule(ATN atn, RuleContext context) {
+        int invokingState = context.invokingState;
+        if (invokingState < 0 || invokingState >= atn.states.size()) {
+            return -1;
+        }
+
+        return atn.states.get(invokingState).ruleIndex;
     }
 
     public static <T> List<? extends T> emptyIfNull(@NullAllowed List<? extends T> list) {
