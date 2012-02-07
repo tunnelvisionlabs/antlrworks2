@@ -136,6 +136,9 @@ public abstract class AbstractTokensTaskTaggerSnapshot<TState extends LineStateI
                 }
             }
         }
+
+        firstDirtyLine = Math.min(firstDirtyLine, snapshot.getLineCount() - 1);
+        lastDirtyLine = Math.min(lastDirtyLine, snapshot.getLineCount() - 1);
     }
 
     public void initialize() {
