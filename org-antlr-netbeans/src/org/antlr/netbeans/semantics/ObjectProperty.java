@@ -56,4 +56,13 @@ public class ObjectProperty<T> {
         return name.hashCode();
     }
 
+    @Override
+    public String toString() {
+        if (defaultValue != null) {
+            return name + "(" + defaultValue + ")";
+        }
+
+        return name;
+    }
+
 }
