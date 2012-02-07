@@ -41,7 +41,9 @@ public abstract class AbstractParserCache<T extends Parser> {
     }
 
     public void putParser(T parser) {
-        parsers.add(new SoftReference<T>(parser));
+        synchronized (parsers) {
+            parsers.add(new SoftReference<T>(parser));
+        }
     }
 
     protected abstract T createParser(TokenStream input);
