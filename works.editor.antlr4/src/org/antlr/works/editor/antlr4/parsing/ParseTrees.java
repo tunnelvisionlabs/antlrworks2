@@ -14,7 +14,9 @@ import java.util.List;
 import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleContext;
+import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.atn.ATN;
+import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.misc.IntervalSet;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTree.TerminalNode;
@@ -27,6 +29,42 @@ import org.openide.util.Parameters;
  * @author Sam Harwell
  */
 public final class ParseTrees {
+
+    public static <T extends Token> Interval getSourceInterval(@NonNull ParserRuleContext<? extends T> context) {
+        Parameters.notNull("context", context);
+        int startIndex = context.start.getStartIndex();
+        int stopIndex = getStopSymbol(context).getStopIndex();
+        return new Interval(startIndex, stopIndex);
+    }
+
+    public static <T> T getStopSymbol(@NonNull ParserRuleContext<? extends T> context) {
+        Parameters.notNull("context", context);
+        if (context.stop != null) {
+            return context.stop;
+        }
+
+        for (int i = context.getChildCount() - 1; i >= 0; i--) {
+            @SuppressWarnings("unchecked")
+            T symbol = (T)getStopSymbol(context.getChild(i));
+            if (symbol != null) {
+                return symbol;
+            }
+        }
+
+        return context.start;
+    }
+
+    public static Object getStopSymbol(@NonNull ParseTree context) {
+        Parameters.notNull("context", context);
+
+        if (context instanceof ParserRuleContext<?>) {
+            return getStopSymbol((ParserRuleContext<?>)context);
+        } else if (context instanceof TerminalNode<?>) {
+            return ((TerminalNode<?>)context).getSymbol();
+        }
+
+        return null;
+    }
 
     public static boolean isInContexts(@NonNull ParserRuleContext<?> context, boolean allowGaps, @NonNull int... stack) {
         Parameters.notNull("context", context);
