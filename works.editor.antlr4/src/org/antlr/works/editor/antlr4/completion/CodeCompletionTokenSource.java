@@ -9,12 +9,10 @@
 package org.antlr.works.editor.antlr4.completion;
 
 import org.antlr.v4.runtime.CharStream;
-import org.antlr.v4.runtime.CommonToken;
 import org.antlr.v4.runtime.CommonTokenFactory;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenFactory;
 import org.antlr.v4.runtime.TokenSource;
-import org.antlr.v4.runtime.WritableToken;
 
 /**
  *
@@ -44,9 +42,10 @@ public class CodeCompletionTokenSource implements TokenSource {
                 token = new CaretToken(source, Token.DEFAULT_CHANNEL, caretOffset, caretOffset);
                 caretToken = token;
             } else {
-                if (token.getStopIndex() + 1 == caretOffset) {
+                if (token.getStopIndex() + 1 == caretOffset
+                    && token.getStopIndex() >= token.getStartIndex()) {
                     // the caret is at the end of this token, and this
-                    // isn't a word token
+                    // isn't a word token or a zero-length token
                     if (!isWordToken(token)) {
                         return token;
                     }
