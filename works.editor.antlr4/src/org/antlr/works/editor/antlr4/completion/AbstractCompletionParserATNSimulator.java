@@ -90,7 +90,7 @@ public abstract class AbstractCompletionParserATNSimulator extends ParserATNSimu
         if (decisionPoints != null) {
             int index = input.index();
             for (int i = 0; i < decisionPoints.size(); i++) {
-                if (decisionPoints.get(i).inputIndex == index && (decision == 0 || decisionPoints.get(i).decision == decision)) {
+                if (decisionPoints.get(i).inputIndex == index && decisionPoints.get(i).decision == decision) {
                     return decisionPoints.get(i).alternatives[selections.get(i)];
                 }
             }
