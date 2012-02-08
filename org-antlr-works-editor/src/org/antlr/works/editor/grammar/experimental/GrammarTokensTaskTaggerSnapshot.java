@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.WeakHashMap;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.TokenSource;
 import org.antlr.works.editor.antlr4.classification.AbstractTokensTaskTaggerSnapshot;
 import org.antlr.works.editor.antlr4.classification.SimpleLexerState;
 import org.antlr.works.editor.antlr4.highlighting.TokenSourceWithStateV4;
@@ -54,6 +55,11 @@ class GrammarTokensTaskTaggerSnapshot extends AbstractTokensTaskTaggerSnapshot<S
             startState.apply(lexer);
             return lexer;
         }
+    }
+
+    @Override
+    protected TokenSource getEffectiveTokenSource(TokenSourceWithStateV4<SimpleLexerState> lexer) {
+        return new GrammarLexerWrapper(lexer.getInputStream());
     }
 
     @Override

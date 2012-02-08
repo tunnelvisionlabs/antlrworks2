@@ -16,10 +16,19 @@ import org.antlr.v4.runtime.TokenSource;
  * @author Sam Harwell
  */
 public class DocumentSnapshotTokenFactory implements TokenFactory<DocumentSnapshotToken> {
-    public static DocumentSnapshotTokenFactory INSTANCE = new DocumentSnapshotTokenFactory();
+
+    private final TokenSource effectiveSource;
+
+    public DocumentSnapshotTokenFactory(TokenSource effectiveSource) {
+        this.effectiveSource = effectiveSource;
+    }
 
     @Override
     public DocumentSnapshotToken create(TokenSource source, int type, String text, int channel, int start, int stop, int line, int charPositionInLine) {
+        if (effectiveSource != null) {
+            source = effectiveSource;
+        }
+
         DocumentSnapshotToken t = new DocumentSnapshotToken(source, type, channel, start, stop);
         t.setLine(line);
         t.setCharPositionInLine(charPositionInLine);

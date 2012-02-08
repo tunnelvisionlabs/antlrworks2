@@ -27,6 +27,7 @@ import org.antlr.netbeans.editor.text.OffsetRegion;
 import org.antlr.netbeans.editor.text.SnapshotPositionRegion;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.TokenSource;
 import org.antlr.works.editor.antlr4.highlighting.TokenSourceWithStateV4;
 import org.netbeans.api.annotations.common.NonNull;
 import org.openide.util.Parameters;
@@ -206,7 +207,7 @@ public abstract class AbstractTokensTaskTaggerSnapshot<TState extends LineStateI
             }
 
             TokenSourceWithStateV4<TState> lexer = createLexer(input, startState);
-            lexer.setTokenFactory(new DocumentSnapshotTokenFactory());
+            lexer.setTokenFactory(new DocumentSnapshotTokenFactory(getEffectiveTokenSource(lexer)));
 
             Token previousToken = null;
             boolean previousTokenEndsLine = false;
@@ -364,6 +365,10 @@ public abstract class AbstractTokensTaskTaggerSnapshot<TState extends LineStateI
     }
 
     protected abstract TState getStartState();
+
+    protected TokenSource getEffectiveTokenSource(TokenSourceWithStateV4<TState> lexer) {
+        return lexer;
+    }
 
     protected ParseRequest<TState> adjustParseSpan(OffsetRegion span) {
         int start = span.getStart();
