@@ -26,6 +26,7 @@ import org.antlr.netbeans.parsing.spi.impl.CurrentDocumentParserTaskScheduler;
 import org.antlr.netbeans.parsing.spi.impl.CursorSensitiveParserTaskScheduler;
 import org.antlr.netbeans.parsing.spi.impl.DataInputParserTaskScheduler;
 import org.antlr.netbeans.parsing.spi.impl.DocumentContentParserTaskScheduler;
+import org.antlr.netbeans.parsing.spi.impl.ManualParserTaskScheduler;
 import org.antlr.netbeans.parsing.spi.impl.SelectedNodesParserTaskScheduler;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.editor.mimelookup.MimeLookup;
@@ -54,6 +55,9 @@ public abstract class ParserTaskScheduler {
 
     public static final Class<? extends ParserTaskScheduler> INPUT_SENSITIVE_TASK_SCHEDULER =
         DataInputParserTaskScheduler.class;
+
+    public static final Class<? extends ParserTaskScheduler> MANUAL_TASK_SCHEDULER =
+        ManualParserTaskScheduler.class;
 
     private final Map<VersionedDocument, Map<ParserDataDefinition<?>, Reference<ScheduledFuture<ParserData<?>>>>> scheduledDocumentDataTasks =
         new WeakHashMap<VersionedDocument, Map<ParserDataDefinition<?>, Reference<ScheduledFuture<ParserData<?>>>>>();
