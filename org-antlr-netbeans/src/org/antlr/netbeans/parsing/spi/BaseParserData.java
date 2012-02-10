@@ -58,4 +58,27 @@ public class BaseParserData<T> implements ParserData<T> {
         return data;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof BaseParserData<?>)) {
+            return false;
+        }
+
+        BaseParserData<?> other = (BaseParserData<?>)obj;
+        return this.definition.equals(other.definition)
+            && this.context.equals(other.context)
+            && this.snapshot.equals(other.snapshot)
+            && (this.data == other.data || (this.data != null && this.data.equals(other.data)));
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 67 * hash + (this.context != null ? this.context.hashCode() : 0);
+        hash = 67 * hash + (this.definition != null ? this.definition.hashCode() : 0);
+        hash = 67 * hash + (this.snapshot != null ? this.snapshot.hashCode() : 0);
+        hash = 67 * hash + (this.data != null ? this.data.hashCode() : 0);
+        return hash;
+    }
+
 }

@@ -484,11 +484,20 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
         return null;
     }
 
-    private synchronized void updateCachedData(VersionedDocument versionedDocument, ParserDataDefinition<?> definition, ParserData<?> data) {
+    private synchronized boolean updateCachedData(VersionedDocument versionedDocument, ParserDataDefinition<?> definition, ParserData<?> data) {
         Document document = versionedDocument.getDocument();
         if (document != null) {
+            ParserData<?> previousData = (ParserData<?>)document.getProperty(definition);
+            if (previousData == data || (previousData != null && previousData.equals(data))) {
+                return false;
+            }
+            else if (previousData != null && previousData.getSnapshot().getVersion().getVersionNumber() > data.getSnapshot().getVersion().getVersionNumber()) {
+                // don't replace new data with old
+                return false;
+            }
+
             document.putProperty(definition, data);
-            return;
+            return true;
         }
 
         @SuppressWarnings("unchecked")
@@ -498,7 +507,17 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
             versionedDocument.putProperty(DOCUMENT_PROPERTIES_KEY, documentProperties);
         }
 
+        ParserData<?> previousData = (ParserData<?>)documentProperties.get(definition);
+        if (previousData == data || (previousData != null && previousData.equals(data))) {
+            return false;
+        }
+        else if (previousData != null && previousData.getSnapshot().getVersion().getVersionNumber() > data.getSnapshot().getVersion().getVersionNumber()) {
+            // don't replace new data with old
+            return false;
+        }
+
         documentProperties.put(definition, data);
+        return previousData != data && (previousData == null || !previousData.equals(data));
     }
 
     private static class RejectionHandler implements RejectedExecutionHandler {
@@ -597,7 +616,7 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
             ResultAggregator handler = new ResultAggregator(outer, document);
             task.parse(outer, context, snapshot, Collections.<ParserDataDefinition<?>>singleton(data), handler);
 
-            for (ParserData<?> result : handler.getResults()) {
+            for (ParserData<?> result : handler.getUpdatedResults()) {
                 outer.fireDataChanged((ParserDataDefinition)result.getDefinition(), result);
             }
 
@@ -644,7 +663,7 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
             ResultAggregator handler = new ResultAggregator(outer, document);
             task.parse(outer, context, snapshot, provider.getDefinition().getOutputs(), handler);
 
-            for (ParserData<?> result : handler.getResults()) {
+            for (ParserData<?> result : handler.getUpdatedResults()) {
                 outer.fireDataChanged((ParserDataDefinition)result.getDefinition(), result);
             }
 
@@ -654,6 +673,7 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
 
     private static class ResultAggregator implements ParserResultHandler {
         private final List<ParserData<?>> results = new ArrayList<ParserData<?>>();
+        private final List<ParserData<?>> updatedResults = new ArrayList<ParserData<?>>();
         private final ParserTaskManagerImpl outer;
         private final VersionedDocument document;
 
@@ -668,13 +688,23 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
         public <T> void addResult(@NonNull ParserData<T> result) {
             Parameters.notNull("result", result);
             results.add(result);
-            if (result.getDefinition().isCacheable()) {
-                outer.updateCachedData(document, result.getDefinition(), result);
+            boolean cacheable = result.getDefinition().isCacheable();
+            boolean updated = !cacheable;
+            if (cacheable) {
+                updated |= outer.updateCachedData(document, result.getDefinition(), result);
+            }
+
+            if (updated) {
+                updatedResults.add(result);
             }
         }
 
         public List<ParserData<?>> getResults() {
             return results;
+        }
+
+        public List<ParserData<?>> getUpdatedResults() {
+            return updatedResults;
         }
     }
 

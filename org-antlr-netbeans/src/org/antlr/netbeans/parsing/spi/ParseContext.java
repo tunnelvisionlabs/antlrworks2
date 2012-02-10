@@ -109,4 +109,29 @@ public class ParseContext {
         return scheduler;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof ParseContext)) {
+            return false;
+        }
+
+        ParseContext other = (ParseContext)obj;
+        return (this.document == other.document || (this.document != null && this.document.equals(other.document)))
+            && (this.snapshot == other.snapshot || (this.snapshot != null && this.snapshot.equals(other.snapshot)))
+            && (this.position == other.position || (this.position != null && this.position.equals(other.position)))
+            && (this.component == other.component || (this.component != null && this.component.equals(other.component)))
+            && (this.scheduler == other.scheduler || (this.scheduler != null && this.scheduler.equals(other.scheduler)));
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 43 * hash + (this.document != null ? this.document.hashCode() : 0);
+        hash = 43 * hash + (this.snapshot != null ? this.snapshot.hashCode() : 0);
+        hash = 43 * hash + (this.position != null ? this.position.hashCode() : 0);
+        hash = 43 * hash + (this.component != null ? this.component.hashCode() : 0);
+        hash = 43 * hash + (this.scheduler != null ? this.scheduler.hashCode() : 0);
+        return hash;
+    }
+
 }
