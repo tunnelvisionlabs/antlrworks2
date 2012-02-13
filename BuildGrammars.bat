@@ -1,3 +1,5 @@
+@ECHO OFF
+
 set ANTLR4_VERSION=4.0-SNAPSHOT
 set ANTLR3_VERSION=3.4.1-SNAPSHOT
 set ST4_VERSION=4.0.4-SNAPSHOT
@@ -18,19 +20,19 @@ set ANTLR4_TOOL=-cp %ANTLR4_CLASSPATH% org.antlr.v4.Tool
 set SOURCE_ROOT=%CD%
 
 cd %SOURCE_ROOT%\org-antlr-works-editor\src\org\antlr\works\editor\grammar\experimental
-java %ANTLR4_TOOL% -Xforce-atn *.g
+start /B java %ANTLR4_TOOL% -Xforce-atn *.g
 
 cd %SOURCE_ROOT%\org-antlr-works-editor\src\org\antlr\works\editor\grammar\highlighter4
-java %ANTLR4_TOOL% *.g4
+start /B java %ANTLR4_TOOL% *.g4
 
 cd %SOURCE_ROOT%\org-antlr-works-editor\src\org\antlr\works\editor\st4\experimental
-java %ANTLR4_TOOL% -Xforce-atn *.g4
+start /B java %ANTLR4_TOOL% -Xforce-atn *.g4
 
 cd %SOURCE_ROOT%\org-antlr-works-editor\src\org\antlr\works\editor\st4\highlighter4
-java %ANTLR4_TOOL% *.g4
+start /B java %ANTLR4_TOOL% *.g4
 
 cd %SOURCE_ROOT%\org-antlr-works-editor\src\org\antlr\works\editor\grammar\highlighter
-java %ANTLR3_TOOL% *.g
+start /B java %ANTLR3_TOOL% *.g
 
 cd %SOURCE_ROOT%\org-antlr-works-editor\src\org\antlr\works\editor\st4\highlighter
 java %ANTLR3_TOOL% *.g
