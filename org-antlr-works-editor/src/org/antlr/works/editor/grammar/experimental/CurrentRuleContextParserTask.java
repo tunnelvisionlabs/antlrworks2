@@ -54,57 +54,59 @@ public class CurrentRuleContextParserTask implements ParserTask {
     public void parse(ParserTaskManager taskManager, ParseContext context, DocumentSnapshot snapshot, Collection<ParserDataDefinition<?>> requestedData, ParserResultHandler results)
         throws InterruptedException, ExecutionException {
 
-        if (context.getPosition() == null) {
-            return;
-        }
+        if (requestedData.contains(GrammarParserDataDefinitions.CURRENT_RULE_CONTEXT)) {
+            CurrentRuleContextData data = null;
+            if (context.getPosition() != null) {
+                int caretOffset = context.getPosition().getOffset();
 
-        int caretOffset = context.getPosition().getOffset();
+                Future<ParserData<List<Anchor>>> result =
+                    taskManager.getData(snapshot, GrammarParserDataDefinitions.DYNAMIC_ANCHOR_POINTS, EnumSet.of(ParserDataOptions.SYNCHRONOUS));
 
-        Future<ParserData<List<Anchor>>> result =
-            taskManager.getData(snapshot, GrammarParserDataDefinitions.DYNAMIC_ANCHOR_POINTS, EnumSet.of(ParserDataOptions.SYNCHRONOUS));
+                ParserData<List<Anchor>> anchorsData = result.get();
+                List<Anchor> anchors = anchorsData.getData();
 
-        ParserData<List<Anchor>> anchorsData = result.get();
-        List<Anchor> anchors = anchorsData.getData();
+                GrammarParser.ruleContext ruleContext = null;
+                int grammarType = -1;
 
-        GrammarParser.ruleContext ruleContext = null;
-        int grammarType = -1;
+                if (anchors != null) {
+                    Anchor enclosing = null;
 
-        if (anchors != null) {
-            Anchor enclosing = null;
+                    /*
+                    * parse the current rule
+                    */
+                    for (Anchor anchor : anchors) {
+                        if (anchor instanceof GrammarParserAnchorListener.GrammarTypeAnchor) {
+                            grammarType = ((GrammarParserAnchorListener.GrammarTypeAnchor)anchor).getGrammarType();
+                            continue;
+                        }
 
-            /*
-             * parse the current rule
-             */
-            for (Anchor anchor : anchors) {
-                if (anchor instanceof GrammarParserAnchorListener.GrammarTypeAnchor) {
-                    grammarType = ((GrammarParserAnchorListener.GrammarTypeAnchor)anchor).getGrammarType();
-                    continue;
+                        if (anchor.getSpan().getStartPosition(snapshot).getOffset() <= caretOffset && anchor.getSpan().getEndPosition(snapshot).getOffset() > caretOffset) {
+                            enclosing = anchor;
+                        } else if (anchor.getSpan().getStartPosition(snapshot).getOffset() > caretOffset) {
+                            break;
+                        }
+                    }
+
+                    if (enclosing != null) {
+                        CharStream input = new DocumentSnapshotCharStream(snapshot);
+                        input.seek(enclosing.getSpan().getStartPosition(snapshot).getOffset());
+                        GrammarLexer lexer = new GrammarLexer(input);
+                        CommonTokenStream tokens = new TaskTokenStream(lexer);
+                        GrammarParser parser = GrammarParserCache.DEFAULT.getParser(tokens);
+                        try {
+                            parser.setBuildParseTree(true);
+                            ruleContext = parser.rule();
+                        } finally {
+                            GrammarParserCache.DEFAULT.putParser(parser);
+                        }
+                    }
                 }
 
-                if (anchor.getSpan().getStartPosition(snapshot).getOffset() <= caretOffset && anchor.getSpan().getEndPosition(snapshot).getOffset() > caretOffset) {
-                    enclosing = anchor;
-                } else if (anchor.getSpan().getStartPosition(snapshot).getOffset() > caretOffset) {
-                    break;
-                }
+                data = new CurrentRuleContextData(snapshot, grammarType, ruleContext);
             }
 
-            if (enclosing != null) {
-                CharStream input = new DocumentSnapshotCharStream(snapshot);
-                input.seek(enclosing.getSpan().getStartPosition(snapshot).getOffset());
-                GrammarLexer lexer = new GrammarLexer(input);
-                CommonTokenStream tokens = new TaskTokenStream(lexer);
-                GrammarParser parser = GrammarParserCache.DEFAULT.getParser(tokens);
-                try {
-                    parser.setBuildParseTree(true);
-                    ruleContext = parser.rule();
-                } finally {
-                    GrammarParserCache.DEFAULT.putParser(parser);
-                }
-            }
+            results.addResult(new BaseParserData<CurrentRuleContextData>(context, GrammarParserDataDefinitions.CURRENT_RULE_CONTEXT, snapshot, data));
         }
-
-        CurrentRuleContextData data = new CurrentRuleContextData(snapshot, grammarType, ruleContext);
-        results.addResult(new BaseParserData<CurrentRuleContextData>(context, GrammarParserDataDefinitions.CURRENT_RULE_CONTEXT, snapshot, data));
     }
 
     private class TaskTokenStream extends CommonTokenStream {
