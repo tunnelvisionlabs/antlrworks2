@@ -11,10 +11,12 @@ package org.antlr.works.editor.antlr4.parsing;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.TokenSource;
 import org.antlr.v4.runtime.atn.ATN;
 import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.misc.IntervalSet;
@@ -33,7 +35,25 @@ public final class ParseTrees {
     public static <T extends Token> Interval getSourceInterval(@NonNull ParserRuleContext<? extends T> context) {
         Parameters.notNull("context", context);
         int startIndex = context.start.getStartIndex();
-        int stopIndex = getStopSymbol(context).getStopIndex();
+        Token stopSymbol = getStopSymbol(context);
+        if (stopSymbol == null) {
+            return new Interval(startIndex, startIndex - 1);
+        }
+
+        int stopIndex;
+        if (stopSymbol.getType() != Token.EOF) {
+            stopIndex = stopSymbol.getStopIndex();
+        } else {
+            TokenSource tokenSource = context.getStart().getTokenSource();
+            CharStream inputStream = tokenSource != null ? tokenSource.getInputStream() : null;
+            if (inputStream != null) {
+                stopIndex = inputStream.size() - 1;
+            } else {
+                stopIndex = context.start.getStartIndex() - 1;
+            }
+        }
+
+        stopIndex = Math.max(stopIndex, startIndex - 1);
         return new Interval(startIndex, stopIndex);
     }
 
