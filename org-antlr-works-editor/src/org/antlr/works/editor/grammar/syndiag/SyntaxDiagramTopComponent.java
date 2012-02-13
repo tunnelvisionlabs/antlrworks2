@@ -40,6 +40,7 @@ import org.antlr.works.editor.grammar.experimental.GrammarParser.lexerBlockConte
 import org.antlr.works.editor.grammar.experimental.GrammarParser.lexerRuleContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.parserRuleContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.ruleAltListContext;
+import org.netbeans.api.annotations.common.NullAllowed;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
@@ -90,12 +91,18 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
         return (SyntaxDiagramTopComponent)WindowManager.getDefault().findTopComponent("SyntaxDiagramTopComponent");
     }
 
-    public void setRuleContext(DocumentSnapshot snapshot, int grammarType, GrammarParser.ruleContext context) {
+    public void setRuleContext(@NullAllowed CurrentRuleContextData context) {
         if (!SwingUtilities.isEventDispatchThread()) {
             throw new UnsupportedOperationException();
         }
 
-        if (isSameSnapshot(this.snapshot, snapshot) && isSameContext(this.context, context)) {
+        if (context == null) {
+            clearDiagram();
+            return;
+        }
+
+        GrammarParser.ruleContext ruleContext = context.getContext();
+        if (isSameSnapshot(this.snapshot, snapshot) && isSameContext(this.context, ruleContext)) {
             return;
         }
 
@@ -104,12 +111,12 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
             diagram = null;
         }
 
-        this.snapshot = snapshot;
-        this.context = context;
+        this.snapshot = context.getSnapshot();
+        this.context = context.getContext();
         if (context != null) {
             try {
-                SyntaxBuilderListener listener = new SyntaxBuilderListener(grammarType, snapshot);
-                new ParseTreeWalker().walk(listener, context);
+                SyntaxBuilderListener listener = new SyntaxBuilderListener(context.getGrammarType(), snapshot);
+                new ParseTreeWalker().walk(listener, context.getContext());
                 this.diagram = new Diagram(listener.getRule());
                 this.jScrollPane1.setViewportView(diagram);
                 this.jScrollPane1.validate();
@@ -220,7 +227,7 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
                 public void run() {
                     SyntaxDiagramTopComponent syntaxDiagram = SyntaxDiagramTopComponent.getInstance();
                     if (syntaxDiagram != null) {
-                        syntaxDiagram.setRuleContext(ruleContext.getSnapshot(), ruleContext.getGrammarType(), ruleContext.getContext());
+                        syntaxDiagram.setRuleContext(ruleContext);
                     }
                 }
             });
