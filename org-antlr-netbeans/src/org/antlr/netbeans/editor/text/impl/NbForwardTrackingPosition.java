@@ -78,6 +78,7 @@ public class NbForwardTrackingPosition extends NbTrackingPosition {
                         sourcePosition += relevantChange.getNewLength();
                     }
                 } else {
+                    sourcePosition += relevantChange.getNewOffset() - relevantChange.getOldOffset();
                     sourcePosition += relevantChange.getDelta();
                 }
             }
