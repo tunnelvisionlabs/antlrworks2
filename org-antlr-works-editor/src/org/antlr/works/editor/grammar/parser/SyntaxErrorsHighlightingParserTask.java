@@ -61,8 +61,8 @@ public class SyntaxErrorsHighlightingParserTask implements ParserTask {
 
         try {
             DocumentSnapshot latestSnapshot = snapshot.getVersionedDocument().getCurrentSnapshot();
-            List<? extends SyntaxError> syntaxErrors = model.getResult().getSyntaxErrors();
-            Document document = model.getSnapshot().getVersionedDocument().getDocument();
+            List<? extends SyntaxError> syntaxErrors = model != null && model.getResult() != null ? model.getResult().getSyntaxErrors() : Collections.<SyntaxError>emptyList();
+            Document document = snapshot.getVersionedDocument().getDocument();
             List<ErrorDescription> errors = new ArrayList<ErrorDescription>();
             for (SyntaxError syntaxError : syntaxErrors) {
                 SnapshotPositionRegion location = syntaxError.getLocation();

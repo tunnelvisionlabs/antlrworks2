@@ -9,6 +9,7 @@
 package org.antlr.works.editor.grammar.fold;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import org.antlr.netbeans.editor.fold.AbstractFoldScanner;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
@@ -33,8 +34,11 @@ public class GrammarFoldScannerV4 extends AbstractFoldScanner<CompiledModel> {
     @Override
     protected List<FoldInfo> calculateFolds(ParserData<CompiledModel> baseResult) {
         CompiledModelV4 result4 = (CompiledModelV4)baseResult.getData();
-        DocumentSnapshot snapshot = result4.getSnapshot();
+        if (result4 == null) {
+            return Collections.emptyList();
+        }
 
+        DocumentSnapshot snapshot = result4.getSnapshot();
         final List<FoldInfo> folds = new ArrayList<FoldInfo>();
 
         GrammarRootAST parseResult = result4.getResult().getResult();

@@ -80,6 +80,10 @@ public class RuleScannerV4 extends RuleScanner {
                                     GrammarNode.GrammarNodeDescription lexerRulesRootDescription) {
 
         GrammarRootAST parseResult = result.getResult();
+        if (parseResult == null) {
+            return;
+        }
+
         FileObject fileObject = result.getFileObject();
 
         List<GrammarAST> modes = parseResult.getNodesWithType(ANTLRParser.MODE);

@@ -74,16 +74,17 @@ public class CompiledModelParserV4 extends CompiledModelParser {
                 tool.libDirectory = new File(snapshot.getVersionedDocument().getFileObject().getPath()).getParent();
                 GrammarRootAST root = tool.loadFromString(snapshot.getText().toString());
                 Grammar grammar = null;
+                CommonToken[] tokens = null;
                 if (root != null) {
                     grammar = tool.createGrammar(root);
                     grammar.fileName = snapshot.getVersionedDocument().getFileObject().getNameExt();
                     grammar.loadImportedGrammars();
-                }
 
-                CommonTokenStream tokenStream = (CommonTokenStream)root.tokens;
-                @SuppressWarnings("unchecked")
-                List<CommonToken> tokenList = tokenStream.getTokens();
-                CommonToken[] tokens = tokenList.toArray(new CommonToken[0]);
+                    CommonTokenStream tokenStream = (CommonTokenStream)root.tokens;
+                    @SuppressWarnings("unchecked")
+                    List<CommonToken> tokenList = tokenStream.getTokens();
+                    tokens = tokenList.toArray(new CommonToken[0]);
+                }
 
                 CompiledFileModelV4 currentResult = new CompiledFileModelV4(grammar, root, syntaxErrors, snapshot.getVersionedDocument().getFileObject(), tokens);
                 lastSnapshot = snapshot;

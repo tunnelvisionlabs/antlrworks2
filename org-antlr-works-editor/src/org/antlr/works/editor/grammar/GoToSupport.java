@@ -180,6 +180,10 @@ public class GoToSupport {
                     return null;
                 }
 
+                if (tagger == null) {
+                    return null;
+                }
+
                 // get the token(s) at the cursor position, with affinity both directions
                 OffsetRegion region = OffsetRegion.fromBounds(Math.max(0, offset - 1), Math.min(snapshot.length(), offset + 1));
                 Iterable<TaggedPositionRegion<TokenTag<Token>>> tags = tagger.getTags(new NormalizedSnapshotPositionRegionCollection(new SnapshotPositionRegion(snapshot, region)));

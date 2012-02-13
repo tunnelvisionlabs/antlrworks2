@@ -17,8 +17,12 @@ import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.Lexer;
 import org.antlr.v4.tool.Grammar;
 import org.antlr.v4.tool.ast.GrammarRootAST;
+import org.netbeans.api.annotations.common.CheckForNull;
+import org.netbeans.api.annotations.common.NonNull;
+import org.netbeans.api.annotations.common.NullAllowed;
 import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileUtil;
+import org.openide.util.Parameters;
 
 /**
  *
@@ -39,13 +43,15 @@ public class CompiledFileModelV4 extends CompiledFileModel {
         this.importedResults = null;
     }
 
-    public CompiledFileModelV4(Grammar grammar, GrammarRootAST result, List<? extends SyntaxError> syntaxErrors, FileObject fileObject, CommonToken[] tokens) {
+    public CompiledFileModelV4(@NullAllowed Grammar grammar, @NullAllowed GrammarRootAST result, @NonNull List<? extends SyntaxError> syntaxErrors, @NonNull FileObject fileObject, @NullAllowed CommonToken[] tokens) {
         super(fileObject, tokens);
+        Parameters.notNull("syntaxErrors", syntaxErrors);
+
         this.grammar = grammar;
         this.result = result;
         this.syntaxErrors = syntaxErrors;
         this.importedResults = new ArrayList<CompiledFileModelV4>();
-        if (grammar.importedGrammars != null) {
+        if (grammar != null && grammar.importedGrammars != null) {
             for (Grammar imported : grammar.importedGrammars) {
                 CommonTokenStream importedTokenStream = (CommonTokenStream)imported.ast.tokens;
                 String fileName = ((Lexer)importedTokenStream.getTokenSource()).getCharStream().getSourceName();
@@ -58,14 +64,17 @@ public class CompiledFileModelV4 extends CompiledFileModel {
         }
     }
 
+    @CheckForNull
     public Grammar getGrammar() {
         return grammar;
     }
 
+    @CheckForNull
     public GrammarRootAST getResult() {
         return result;
     }
 
+    @NonNull
     public List<CompiledFileModelV4> getImportedGrammarResults() {
         return importedResults;
     }
