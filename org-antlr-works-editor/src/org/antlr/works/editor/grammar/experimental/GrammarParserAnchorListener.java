@@ -20,6 +20,8 @@ import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.netbeans.editor.text.TrackingPositionRegion;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.misc.Interval;
+import org.antlr.works.editor.antlr4.parsing.ParseTrees;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.grammarTypeContext;
 import org.netbeans.api.annotations.common.NonNull;
 import org.openide.util.Parameters;
@@ -112,9 +114,12 @@ public class GrammarParserAnchorListener extends BlankGrammarParserListener {
 
     private void exitAnchor(ParserRuleContext<Token> ctx, int anchorId) {
         int start = anchorPositions.pop();
-        int stop = ctx.getStop() != null ? ctx.getStop().getStopIndex() + 1 : snapshot.length();
+        Interval sourceInterval = ParseTrees.getSourceInterval(ctx);
+        int stop = sourceInterval.b + 1;
         TrackingPositionRegion.Bias trackingMode = ctx.getStop() != null ? TrackingPositionRegion.Bias.Exclusive : TrackingPositionRegion.Bias.Forward;
-        anchors.add(createAnchor(ctx, start, stop, trackingMode, anchorId));
+        if (stop >= start) {
+            anchors.add(createAnchor(ctx, start, stop, trackingMode, anchorId));
+        }
     }
 
     private Anchor createAnchor(ParserRuleContext<Token> ctx, int start, int stop, TrackingPositionRegion.Bias trackingMode, int rule) {
