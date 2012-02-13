@@ -66,6 +66,13 @@ public class LexerTokensParserTask implements ParserTask {
 
             ParserData<Tagger<TokenTag<Token>>> result;
             synchronized (documentCache) {
+                if (GrammarEditorKit.isLegacyMode(snapshot)) {
+                    result = new BaseParserData<Tagger<TokenTag<Token>>>(context, GrammarParserDataDefinitions.LEXER_TOKENS, snapshot, null);
+                    documentCache.clear();
+                    results.addResult(result);
+                    return;
+                }
+
                 result = documentCache.get(snapshot);
 
                 if (result == null) {
