@@ -29,12 +29,6 @@ cd %SOURCE_ROOT%\org-antlr-works-editor\src\org\antlr\works\editor\st4\experimen
 start /B java %ANTLR4_TOOL% -Xforce-atn *.g4
 
 cd %SOURCE_ROOT%\org-antlr-works-editor\src\org\antlr\works\editor\st4\highlighter4
-start /B java %ANTLR4_TOOL% *.g4
-
-cd %SOURCE_ROOT%\org-antlr-works-editor\src\org\antlr\works\editor\grammar\highlighter
-start /B java %ANTLR3_TOOL% *.g
-
-cd %SOURCE_ROOT%\org-antlr-works-editor\src\org\antlr\works\editor\st4\highlighter
-java %ANTLR3_TOOL% *.g
+java %ANTLR4_TOOL% *.g4
 
 cd %SOURCE_ROOT%
