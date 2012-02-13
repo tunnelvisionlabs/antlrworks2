@@ -134,7 +134,7 @@ DOC_COMMENT
     ;
 
 BLOCK_COMMENT
-    :   '/*' BLOCK_COMMENT_BODY {$channel = HIDDEN;}
+    :   '/*' BLOCK_COMMENT_BODY -> channel(HIDDEN)
     ;
 
 fragment
@@ -173,7 +173,7 @@ DOUBLE_ANGLE_STRING_LITERAL
 // all at once and sort them out later in the grammar analysis.
 //
 BEGIN_ARG_ACTION
-    :   '[' {pushMode(ArgAction);}
+    :   '[' -> pushMode(ArgAction)
     ;
 
 ////@init
@@ -245,7 +245,7 @@ BEGIN_ARG_ACTION
 //    ;
 
 BEGIN_ACTION
-	:	'{' {pushMode(Action);} //NESTED_ACTION
+	:	'{' -> pushMode(Action) //NESTED_ACTION
 	;
 
 // ----------------
@@ -572,7 +572,7 @@ WS
         | '\n'
         | '\f'
       )+
-      {$channel = HIDDEN;}
+      -> channel(HIDDEN)
     ;
 
 // A fragment rule for use in recognizing end of line in
@@ -663,13 +663,13 @@ mode ArgAction;
         ;
 
     END_ARG_ACTION
-        :   ']' {popMode();}
+        :   ']' -> popMode
         ;
 
 mode Action;
 
     NESTED_ACTION
-        :   '{' {$type = BEGIN_ACTION; pushMode(Action);}
+        :   '{' -> type(BEGIN_ACTION), pushMode(Action)
         ;
 
     ACTION_DOT      : '.' ;
@@ -729,5 +729,5 @@ mode Action;
         ;
 
     END_ACTION
-        :   '}' {popMode();}
+        :   '}' -> popMode
         ;

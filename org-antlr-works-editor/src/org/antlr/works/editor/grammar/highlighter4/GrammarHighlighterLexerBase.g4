@@ -42,8 +42,8 @@ RETURNS     : 'returns';
 THROWS      : 'throws';
 IMPORT      : 'import';
 FRAGMENT    : 'fragment';
-TOKENS      : 'tokens' IGNORED '{' {pushMode(NonActionBrace);};
-OPTIONS     : 'options' IGNORED '{' {pushMode(NonActionBrace);};
+TOKENS      : 'tokens' IGNORED '{' -> pushMode(NonActionBrace);
+OPTIONS     : 'options' IGNORED '{' -> pushMode(NonActionBrace);
 
 // v4 only
 MODE        : 'mode';
@@ -107,7 +107,7 @@ LBRACK:	'['	;
 
 RBRACK:	']'	;
 
-LCURLY:	'{' {$type=Action_TEXT; pushMode(Action);};
+LCURLY:	'{' -> type(Action_TEXT), pushMode(Action);
 
 RCURLY:	'}'	;
 
@@ -149,7 +149,7 @@ COMMENT
 	;
 
 ML_COMMENT
-    :   '/*'                    {pushMode(BlockComment);}
+    :   '/*'                    -> pushMode(BlockComment)
     ;
 
 CHAR_LITERAL
@@ -186,7 +186,7 @@ ANYCHAR
 
 mode BlockComment;
 
-    BlockComment_NEWLINE : NEWLINE {$type = NEWLINE;};
+    BlockComment_NEWLINE : NEWLINE -> type(NEWLINE);
 
     CONTINUE_ML_COMMENT
         :   ~('\r' | '\n' | '*')+   {$type = getMultilineCommentType();}
@@ -200,14 +200,14 @@ mode BlockComment;
         :   '*'                     {$type = getMultilineCommentType();}
         ;
 
-    BlockComment_ANYCHAR : . {$type = ANYCHAR;};
+    BlockComment_ANYCHAR : .            -> type(ANYCHAR);
 
 mode ArgAction;
 
-    ArgAction_NEWLINE : NEWLINE {$type = NEWLINE;};
+    ArgAction_NEWLINE : NEWLINE         -> type(NEWLINE);
 
     ArgAction_RBRACK
-        :   ']' {$type = RBRACK; popMode();}
+        :   ']'                         -> type(RBRACK), popMode
         ;
 
     ArgAction_TEXT
@@ -244,35 +244,35 @@ mode ArgAction;
         ;
 
     ArgAction_SPECIAL
-        :   ('$' | '/' | '\\') {$type = Action_TEXT;}
+        :   ('$' | '/' | '\\')          -> type(Action_TEXT)
         ;
 
-    ArgAction_ANYCHAR : . {$type = ANYCHAR;};
+    ArgAction_ANYCHAR : .               -> type(ANYCHAR);
 
 mode NonActionBrace;
 
-    NonActionBrace_NEWLINE : NEWLINE {$type = NEWLINE;};
-    NonActionBrace_WS : WS {$type = WS;};
-    NonActionBrace_LCURLY : LCURLY {$type = LCURLY; popMode();};
+    NonActionBrace_NEWLINE : NEWLINE    -> type(NEWLINE);
+    NonActionBrace_WS : WS              -> type(WS);
+    NonActionBrace_LCURLY : LCURLY      -> type(LCURLY), popMode;
 
 mode Action;
 
-    Action_NEWLINE : NEWLINE {$type = NEWLINE;};
+    Action_NEWLINE : NEWLINE            -> type(NEWLINE);
 
     Action_COMMENT
         :	'//' (~('\r' | '\n'))*
         ;
 
     Action_ML_COMMENT
-        :   '/*'                    {pushMode(BlockComment);}
+        :   '/*'                        -> pushMode(BlockComment)
         ;
 
     Action_LCURLY
-        :   '{' {pushMode(Action); $type = Action_TEXT;}
+        :   '{'                         -> pushMode(Action), type(Action_TEXT)
         ;
 
     Action_RCURLY
-        :   '}' {popMode(); $type = Action_TEXT;}
+        :   '}'                         -> popMode, type(Action_TEXT)
         ;
 
     Action_TEXT
@@ -308,8 +308,8 @@ mode Action;
         ;
 
     Action_SPECIAL
-        :   ('$' | '/' | '\\') {$type = Action_TEXT;}
+        :   ('$' | '/' | '\\')          -> type(Action_TEXT)
         ;
 
-    Action_ANYCHAR : . {$type = ANYCHAR;};
+    Action_ANYCHAR : .                  -> type(ANYCHAR);
 
