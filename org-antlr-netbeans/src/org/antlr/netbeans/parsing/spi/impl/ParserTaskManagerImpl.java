@@ -485,6 +485,10 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
     }
 
     private synchronized boolean updateCachedData(VersionedDocument versionedDocument, ParserDataDefinition<?> definition, ParserData<?> data) {
+        if (data == null) {
+            return false;
+        }
+
         Document document = versionedDocument.getDocument();
         if (document != null) {
             ParserData<?> previousData = (ParserData<?>)document.getProperty(definition);
