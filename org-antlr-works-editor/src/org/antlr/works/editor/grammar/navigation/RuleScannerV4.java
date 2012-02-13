@@ -109,7 +109,7 @@ public class RuleScannerV4 extends RuleScanner {
             }
         }
 
-        GrammarAST tokensSpec = (GrammarAST)parseResult.getFirstDescendantWithType(ANTLRParser.TOKENS);
+        GrammarAST tokensSpec = (GrammarAST)parseResult.getFirstDescendantWithType(ANTLRParser.TOKENS_SPEC);
         if (tokensSpec != null) {
             for (Object childObject : tokensSpec.getChildren()) {
                 if (!(childObject instanceof CommonTree)) {

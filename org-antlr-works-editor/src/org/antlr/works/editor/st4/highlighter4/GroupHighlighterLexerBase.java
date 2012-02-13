@@ -64,42 +64,43 @@ public class GroupHighlighterLexerBase extends Lexer {
 	public static final int StringTemplate = 8;
 	public static final int DelimitersOpenSpec = 9;
 	public static final int DelimitersCloseSpec = 10;
-    public static String[] modeNames = {
-        "DEFAULT_MODE", "BlockComment", "TemplateComment", "AnonymousTemplate", 
-        "AnonymousTemplateParameters", "BigStringTemplate", "BigStringLineTemplate", 
-        "TemplateExpression", "StringTemplate", "DelimitersOpenSpec", "DelimitersCloseSpec"
-    };
+	public static String[] modeNames = {
+		"DEFAULT_MODE", "BlockComment", "TemplateComment", "AnonymousTemplate", 
+		"AnonymousTemplateParameters", "BigStringTemplate", "BigStringLineTemplate", 
+		"TemplateExpression", "StringTemplate", "DelimitersOpenSpec", "DelimitersCloseSpec"
+	};
 
 	public static final String[] tokenNames = {
 		"<INVALID>", "<INVALID>", "<INVALID>",
-		"OPEN_DELIMITER", "CLOSE_DELIMITER", "(", ")", ",", ".", ":", "::=", "=", 
-		"@", "]", "[", "LBRACE", "}", "group", "default", "import", "true", "false", 
-		"DELIMITERS", "WS", "NEWLINE", "ID", "STRING", "<<", "<%", "LINE_COMMENT", 
-		"/*", "ANYCHAR", "BlockComment_NEWLINE", "CONTINUE_COMMENT", "*/", "*", 
-		"BlockComment_ANYCHAR", "TemplateComment_NEWLINE", "TemplateComment_CONTINUE_COMMENT", 
-		"TemplateComment_END_COMMENT", "TemplateComment_BLOCK_COMMENT_BANG", "TemplateComment_ANYCHAR", 
-		"AnonymousTemplate_ID", "AnonymousTemplate_WS", "AnonymousTemplate_RBRACE", 
-		"AnonymousTemplate_COMMA", "AnonymousTemplate_NEWLINE", "AnonymousTemplate_COMMENT", 
-		"AnonymousTemplate_OPEN_DELIMITER", "TEXT", "ESCAPE_RBRACE", "AnonymousTemplate_ANYCHAR", 
-		"AnonymousTemplateParameters_WS", "AnonymousTemplateParameters_NEWLINE", 
-		"AnonymousTemplateParameters_COMMA", "TEMPLATE_PARAMETER", "|", "AnonymousTemplateParameters_ANYCHAR", 
-		"BigStringTemplate_NEWLINE", "BigStringTemplate_COMMENT", "BigStringTemplate_OPEN_DELIMITER", 
-		"BigStringTemplate_TEXT", "BigStringTemplate_ESCAPE", ">>", ">", "BigStringTemplate_ANYCHAR", 
+		"OPEN_DELIMITER", "CLOSE_DELIMITER", "'('", "')'", "','", "'.'", "':'", 
+		"'::='", "'='", "'@'", "']'", "'['", "LBRACE", "'}'", "'group'", "'default'", 
+		"'import'", "'true'", "'false'", "DELIMITERS", "WS", "NEWLINE", "ID", 
+		"STRING", "'<<'", "'<%'", "LINE_COMMENT", "'/*'", "ANYCHAR", "BlockComment_NEWLINE", 
+		"CONTINUE_COMMENT", "'*/'", "'*'", "BlockComment_ANYCHAR", "TemplateComment_NEWLINE", 
+		"TemplateComment_CONTINUE_COMMENT", "TemplateComment_END_COMMENT", "TemplateComment_BLOCK_COMMENT_BANG", 
+		"TemplateComment_ANYCHAR", "AnonymousTemplate_ID", "AnonymousTemplate_WS", 
+		"AnonymousTemplate_RBRACE", "AnonymousTemplate_COMMA", "AnonymousTemplate_NEWLINE", 
+		"AnonymousTemplate_COMMENT", "AnonymousTemplate_OPEN_DELIMITER", "TEXT", 
+		"ESCAPE_RBRACE", "AnonymousTemplate_ANYCHAR", "AnonymousTemplateParameters_WS", 
+		"AnonymousTemplateParameters_NEWLINE", "AnonymousTemplateParameters_COMMA", 
+		"TEMPLATE_PARAMETER", "'|'", "AnonymousTemplateParameters_ANYCHAR", "BigStringTemplate_NEWLINE", 
+		"BigStringTemplate_COMMENT", "BigStringTemplate_OPEN_DELIMITER", "BigStringTemplate_TEXT", 
+		"BigStringTemplate_ESCAPE", "'>>'", "'>'", "BigStringTemplate_ANYCHAR", 
 		"BigStringLineTemplate_NEWLINE", "BigStringLineTemplate_COMMENT", "BigStringLineTemplate_OPEN_DELIMITER", 
-		"BigStringLineTemplate_TEXT", "BigStringLineTemplate_ESCAPE", "%>", "%", 
-		"BigStringLineTemplate_ANYCHAR", "TemplateExpression_NEWLINE", "TemplateExpression_AT", 
-		"TemplateExpression_DOT", "TemplateExpression_COMMA", "TemplateExpression_COLON", 
-		"TemplateExpression_LPAREN", "TemplateExpression_RPAREN", "TemplateExpression_LBRACK", 
-		"TemplateExpression_RBRACK", "TemplateExpression_EQUALS", "TemplateExpression_LBRACE", 
-		"TemplateExpression_WS", "super", "if", "elseif", "endif", "else", "end", 
-		"FIRST", "LAST", "REST", "TRUNC", "STRIP", "TRIM", "LENGTH", "STRLEN", 
-		"REVERSE", "...", "!", "||", "&&", ";", "ESCAPE", "REGION_ID", "TemplateExpression_ID", 
-		"TemplateExpression_CLOSE_DELIMITER", "TemplateExpression_STRING", "TemplateExpression_ANYCHAR", 
-		"StringTemplate_NEWLINE", "StringTemplate_COMMENT", "StringTemplate_OPEN_DELIMITER", 
-		"StringTemplate_TEXT", "StringTemplate_ESCAPE", "\"", "StringTemplate_ANYCHAR", 
-		"DelimitersOpenSpec_WS", "DelimitersOpenSpec_NEWLINE", "DelimitersOpenSpec_DELIMITER_STRING", 
-		"DelimitersOpenSpec_COMMA", "DelimitersCloseSpec_WS", "DelimitersCloseSpec_NEWLINE", 
-		"DelimitersCloseSpec_DELIMITER_STRING"
+		"BigStringLineTemplate_TEXT", "BigStringLineTemplate_ESCAPE", "'%>'", 
+		"'%'", "BigStringLineTemplate_ANYCHAR", "TemplateExpression_NEWLINE", 
+		"TemplateExpression_AT", "TemplateExpression_DOT", "TemplateExpression_COMMA", 
+		"TemplateExpression_COLON", "TemplateExpression_LPAREN", "TemplateExpression_RPAREN", 
+		"TemplateExpression_LBRACK", "TemplateExpression_RBRACK", "TemplateExpression_EQUALS", 
+		"TemplateExpression_LBRACE", "TemplateExpression_WS", "'super'", "'if'", 
+		"'elseif'", "'endif'", "'else'", "'end'", "FIRST", "LAST", "REST", "TRUNC", 
+		"STRIP", "TRIM", "LENGTH", "STRLEN", "REVERSE", "'...'", "'!'", "'||'", 
+		"'&&'", "';'", "ESCAPE", "REGION_ID", "TemplateExpression_ID", "TemplateExpression_CLOSE_DELIMITER", 
+		"TemplateExpression_STRING", "TemplateExpression_ANYCHAR", "StringTemplate_NEWLINE", 
+		"StringTemplate_COMMENT", "StringTemplate_OPEN_DELIMITER", "StringTemplate_TEXT", 
+		"StringTemplate_ESCAPE", "'\"'", "StringTemplate_ANYCHAR", "DelimitersOpenSpec_WS", 
+		"DelimitersOpenSpec_NEWLINE", "DelimitersOpenSpec_DELIMITER_STRING", "DelimitersOpenSpec_COMMA", 
+		"DelimitersCloseSpec_WS", "DelimitersCloseSpec_NEWLINE", "DelimitersCloseSpec_DELIMITER_STRING"
 	};
 	public static final String[] ruleNames = {
 		"LPAREN", "RPAREN", "COMMA", "DOT", "COLON", "DEFINED", "EQUALS", "AT", 
@@ -417,17 +418,17 @@ public class GroupHighlighterLexerBase extends Lexer {
 	}
 	public void StringTemplate_NEWLINE_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 59 : type =  NEWLINE; break;
+			case 59 : _type =  NEWLINE; break;
 		}
 	}
 	public void AnonymousTemplate_WS_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 15 : type =  WS; break;
+			case 15 : _type =  WS; break;
 		}
 	}
 	public void BigStringLineTemplate_PERCENT_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 41 : type =  TEXT; break;
+			case 41 : _type =  TEXT; break;
 		}
 	}
 	public void REST_action(RuleContext _localctx, int actionIndex) {
@@ -444,12 +445,12 @@ public class GroupHighlighterLexerBase extends Lexer {
 	}
 	public void AnonymousTemplateParameters_NEWLINE_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 23 : type =  NEWLINE; break;
+			case 23 : _type =  NEWLINE; break;
 		}
 	}
 	public void TemplateExpression_ANYCHAR_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 58 : type =  ANYCHAR; break;
+			case 58 : _type =  ANYCHAR; break;
 		}
 	}
 	public void STRLEN_action(RuleContext _localctx, int actionIndex) {
@@ -458,7 +459,7 @@ public class GroupHighlighterLexerBase extends Lexer {
 	}
 	public void TemplateExpression_CLOSE_DELIMITER_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 56 : type =  CLOSE_DELIMITER; popMode(); break;
+			case 56 : _type =  CLOSE_DELIMITER; popMode(); break;
 		}
 	}
 	public void RPAREN_action(RuleContext _localctx, int actionIndex) {
@@ -475,7 +476,7 @@ public class GroupHighlighterLexerBase extends Lexer {
 	}
 	public void TemplateComment_CONTINUE_COMMENT_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 11 : type =  COMMENT; break;
+			case 11 : _type =  COMMENT; break;
 		}
 	}
 	public void DELIMITER_STRING_action(RuleContext _localctx, int actionIndex) {
@@ -484,7 +485,7 @@ public class GroupHighlighterLexerBase extends Lexer {
 	}
 	public void BigStringLineTemplate_OPEN_DELIMITER_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 37 : type =  OPEN_DELIMITER; pushMode(TemplateExpression); break;
+			case 37 : _type =  OPEN_DELIMITER; pushMode(TemplateExpression); break;
 		}
 	}
 	public void TRUNC_action(RuleContext _localctx, int actionIndex) {
@@ -493,7 +494,7 @@ public class GroupHighlighterLexerBase extends Lexer {
 	}
 	public void TemplateExpression_RPAREN_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 49 : type =  RPAREN; break;
+			case 49 : _type =  RPAREN; break;
 		}
 	}
 	public void BIGSTRING_action(RuleContext _localctx, int actionIndex) {
@@ -519,7 +520,7 @@ public class GroupHighlighterLexerBase extends Lexer {
 	}
 	public void TemplateExpression_LBRACE_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 53 : type =  LBRACE; pushMode(AnonymousTemplate); break;
+			case 53 : _type =  LBRACE; pushMode(AnonymousTemplate); break;
 		}
 	}
 	public void LAST_action(RuleContext _localctx, int actionIndex) {
@@ -528,7 +529,7 @@ public class GroupHighlighterLexerBase extends Lexer {
 	}
 	public void TemplateExpression_ID_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 55 : type =  ID; break;
+			case 55 : _type =  ID; break;
 		}
 	}
 	public void COMMENT_action(RuleContext _localctx, int actionIndex) {
@@ -538,12 +539,12 @@ public class GroupHighlighterLexerBase extends Lexer {
 	}
 	public void DelimitersCloseSpec_WS_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 69 : type =  WS; break;
+			case 69 : _type =  WS; break;
 		}
 	}
 	public void TemplateExpression_LBRACK_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 50 : type =  LBRACK; break;
+			case 50 : _type =  LBRACK; break;
 		}
 	}
 	public void RBRACK_action(RuleContext _localctx, int actionIndex) {
@@ -552,12 +553,12 @@ public class GroupHighlighterLexerBase extends Lexer {
 	}
 	public void BigStringTemplate_ANYCHAR_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 34 : type =  ANYCHAR; break;
+			case 34 : _type =  ANYCHAR; break;
 		}
 	}
 	public void TemplateExpression_AT_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 44 : type =  AT; break;
+			case 44 : _type =  AT; break;
 		}
 	}
 	public void RBRACE_action(RuleContext _localctx, int actionIndex) {
@@ -570,7 +571,7 @@ public class GroupHighlighterLexerBase extends Lexer {
 	}
 	public void AnonymousTemplate_COMMENT_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 18 : type =  COMMENT; pushMode(TemplateComment); break;
+			case 18 : _type =  COMMENT; pushMode(TemplateComment); break;
 		}
 	}
 	public void OPEN_DELIMITER_action(RuleContext _localctx, int actionIndex) {
@@ -595,7 +596,7 @@ public class GroupHighlighterLexerBase extends Lexer {
 	}
 	public void DelimitersOpenSpec_WS_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 66 : type =  WS; break;
+			case 66 : _type =  WS; break;
 		}
 	}
 	public void BigStringLineTemplate_END_action(RuleContext _localctx, int actionIndex) {
@@ -613,7 +614,7 @@ public class GroupHighlighterLexerBase extends Lexer {
 	}
 	public void BigStringTemplate_ESCAPE_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 31 : type =  TEXT; break;
+			case 31 : _type =  TEXT; break;
 		}
 	}
 	public void AnonymousTemplate_COMMA_action(RuleContext _localctx, int actionIndex) {
@@ -631,12 +632,12 @@ public class GroupHighlighterLexerBase extends Lexer {
 	}
 	public void AnonymousTemplateParameters_WS_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 22 : type =  WS; break;
+			case 22 : _type =  WS; break;
 		}
 	}
 	public void AnonymousTemplateParameters_ANYCHAR_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 26 : type =  ANYCHAR; break;
+			case 26 : _type =  ANYCHAR; break;
 		}
 	}
 	public void OR_action(RuleContext _localctx, int actionIndex) {
@@ -649,7 +650,7 @@ public class GroupHighlighterLexerBase extends Lexer {
 	}
 	public void TemplateExpression_COLON_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 47 : type =  COLON; break;
+			case 47 : _type =  COLON; break;
 		}
 	}
 	public void REVERSE_action(RuleContext _localctx, int actionIndex) {
@@ -666,12 +667,12 @@ public class GroupHighlighterLexerBase extends Lexer {
 	}
 	public void DelimitersCloseSpec_NEWLINE_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 70 : type =  NEWLINE; break;
+			case 70 : _type =  NEWLINE; break;
 		}
 	}
 	public void BlockComment_NEWLINE_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 5 : type =  NEWLINE; break;
+			case 5 : _type =  NEWLINE; break;
 		}
 	}
 	public void BigStringTemplate_END_action(RuleContext _localctx, int actionIndex) {
@@ -685,22 +686,22 @@ public class GroupHighlighterLexerBase extends Lexer {
 	}
 	public void TemplateExpression_LPAREN_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 48 : type =  LPAREN; break;
+			case 48 : _type =  LPAREN; break;
 		}
 	}
 	public void TemplateComment_BLOCK_COMMENT_BANG_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 13 : type =  COMMENT; break;
+			case 13 : _type =  COMMENT; break;
 		}
 	}
 	public void TemplateComment_END_COMMENT_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 12 : type =  COMMENT; popMode(); break;
+			case 12 : _type =  COMMENT; popMode(); break;
 		}
 	}
 	public void BigStringTemplate_COMMENT_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 28 : type =  COMMENT; pushMode(TemplateComment); break;
+			case 28 : _type =  COMMENT; pushMode(TemplateComment); break;
 		}
 	}
 	public void LBRACK_action(RuleContext _localctx, int actionIndex) {
@@ -709,17 +710,17 @@ public class GroupHighlighterLexerBase extends Lexer {
 	}
 	public void StringTemplate_COMMENT_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 60 : type =  COMMENT; pushMode(TemplateComment); break;
+			case 60 : _type =  COMMENT; pushMode(TemplateComment); break;
 		}
 	}
 	public void END_COMMENT_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 7 : type =  COMMENT; popMode(); break;
+			case 7 : _type =  COMMENT; popMode(); break;
 		}
 	}
 	public void BigStringTemplate_OPEN_DELIMITER_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 29 : type =  OPEN_DELIMITER; pushMode(TemplateExpression); break;
+			case 29 : _type =  OPEN_DELIMITER; pushMode(TemplateExpression); break;
 		}
 	}
 	public void LBRACE_action(RuleContext _localctx, int actionIndex) {
@@ -729,12 +730,12 @@ public class GroupHighlighterLexerBase extends Lexer {
 	}
 	public void BigStringLineTemplate_NEWLINE_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 35 : type =  NEWLINE; break;
+			case 35 : _type =  NEWLINE; break;
 		}
 	}
 	public void StringTemplate_ANYCHAR_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 65 : type =  ANYCHAR; break;
+			case 65 : _type =  ANYCHAR; break;
 		}
 	}
 	public void AND_action(RuleContext _localctx, int actionIndex) {
@@ -747,12 +748,12 @@ public class GroupHighlighterLexerBase extends Lexer {
 	}
 	public void BigStringLineTemplate_ANYCHAR_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 42 : type =  ANYCHAR; break;
+			case 42 : _type =  ANYCHAR; break;
 		}
 	}
 	public void TemplateComment_ANYCHAR_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 14 : type =  ANYCHAR; break;
+			case 14 : _type =  ANYCHAR; break;
 		}
 	}
 	public void LENGTH_action(RuleContext _localctx, int actionIndex) {
@@ -765,7 +766,7 @@ public class GroupHighlighterLexerBase extends Lexer {
 	}
 	public void TemplateExpression_EQUALS_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 52 : type =  EQUALS; break;
+			case 52 : _type =  EQUALS; break;
 		}
 	}
 	public void IF_action(RuleContext _localctx, int actionIndex) {
@@ -774,7 +775,7 @@ public class GroupHighlighterLexerBase extends Lexer {
 	}
 	public void StringTemplate_ESCAPE_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 63 : type =  TEXT; break;
+			case 63 : _type =  TEXT; break;
 		}
 	}
 	public void AT_action(RuleContext _localctx, int actionIndex) {
@@ -783,22 +784,22 @@ public class GroupHighlighterLexerBase extends Lexer {
 	}
 	public void AnonymousTemplate_OPEN_DELIMITER_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 19 : type =  OPEN_DELIMITER; pushMode(TemplateExpression); break;
+			case 19 : _type =  OPEN_DELIMITER; pushMode(TemplateExpression); break;
 		}
 	}
 	public void AnonymousTemplate_ANYCHAR_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 21 : type =  ANYCHAR; break;
+			case 21 : _type =  ANYCHAR; break;
 		}
 	}
 	public void BigStringTemplate_NEWLINE_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 27 : type =  NEWLINE; break;
+			case 27 : _type =  NEWLINE; break;
 		}
 	}
 	public void DelimitersOpenSpec_NEWLINE_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 67 : type =  NEWLINE; break;
+			case 67 : _type =  NEWLINE; break;
 		}
 	}
 	public void DELIMITERS_SPEC_action(RuleContext _localctx, int actionIndex) {
@@ -811,17 +812,17 @@ public class GroupHighlighterLexerBase extends Lexer {
 	}
 	public void TemplateExpression_COMMA_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 46 : type =  COMMA; break;
+			case 46 : _type =  COMMA; break;
 		}
 	}
 	public void BigStringLineTemplate_COMMENT_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 36 : type =  COMMENT; pushMode(TemplateComment); break;
+			case 36 : _type =  COMMENT; pushMode(TemplateComment); break;
 		}
 	}
 	public void AnonymousTemplate_NEWLINE_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 17 : type =  NEWLINE; break;
+			case 17 : _type =  NEWLINE; break;
 		}
 	}
 	public void STRIP_action(RuleContext _localctx, int actionIndex) {
@@ -830,7 +831,7 @@ public class GroupHighlighterLexerBase extends Lexer {
 	}
 	public void CONTINUE_COMMENT_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 6 : type =  COMMENT; break;
+			case 6 : _type =  COMMENT; break;
 		}
 	}
 	public void PIPE_action(RuleContext _localctx, int actionIndex) {
@@ -848,27 +849,27 @@ public class GroupHighlighterLexerBase extends Lexer {
 	}
 	public void BigStringTemplate_TEXT_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 30 : type =  TEXT; break;
+			case 30 : _type =  TEXT; break;
 		}
 	}
 	public void AnonymousTemplate_RBRACE_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 16 : type =  RBRACE; popMode(); break;
+			case 16 : _type =  RBRACE; popMode(); break;
 		}
 	}
 	public void AnonymousTemplateParameters_COMMA_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 24 : type =  COMMA; break;
+			case 24 : _type =  COMMA; break;
 		}
 	}
 	public void TemplateExpression_RBRACK_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 51 : type =  RBRACK; break;
+			case 51 : _type =  RBRACK; break;
 		}
 	}
 	public void BigStringLineTemplate_TEXT_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 38 : type =  TEXT; break;
+			case 38 : _type =  TEXT; break;
 		}
 	}
 	public void WS_CHAR_action(RuleContext _localctx, int actionIndex) {
@@ -877,7 +878,7 @@ public class GroupHighlighterLexerBase extends Lexer {
 	}
 	public void BigStringLineTemplate_ESCAPE_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 39 : type =  TEXT; break;
+			case 39 : _type =  TEXT; break;
 		}
 	}
 	public void DEFAULT_action(RuleContext _localctx, int actionIndex) {
@@ -886,12 +887,12 @@ public class GroupHighlighterLexerBase extends Lexer {
 	}
 	public void TemplateExpression_WS_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 54 : type =  WS; break;
+			case 54 : _type =  WS; break;
 		}
 	}
 	public void TemplateExpression_DOT_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 45 : type =  DOT; break;
+			case 45 : _type =  DOT; break;
 		}
 	}
 	public void TEXT_action(RuleContext _localctx, int actionIndex) {
@@ -900,7 +901,7 @@ public class GroupHighlighterLexerBase extends Lexer {
 	}
 	public void TemplateExpression_NEWLINE_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 43 : type =  NEWLINE; break;
+			case 43 : _type =  NEWLINE; break;
 		}
 	}
 	public void SEMI_action(RuleContext _localctx, int actionIndex) {
@@ -913,7 +914,7 @@ public class GroupHighlighterLexerBase extends Lexer {
 	}
 	public void StringTemplate_OPEN_DELIMITER_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 61 : type =  OPEN_DELIMITER; pushMode(TemplateExpression); break;
+			case 61 : _type =  OPEN_DELIMITER; pushMode(TemplateExpression); break;
 		}
 	}
 	public void ELSEIF_action(RuleContext _localctx, int actionIndex) {
@@ -926,7 +927,7 @@ public class GroupHighlighterLexerBase extends Lexer {
 	}
 	public void TemplateExpression_STRING_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 57 : type =  STRING; break;
+			case 57 : _type =  STRING; break;
 		}
 	}
 	public void COLON_action(RuleContext _localctx, int actionIndex) {
@@ -935,12 +936,12 @@ public class GroupHighlighterLexerBase extends Lexer {
 	}
 	public void ESCAPE_RBRACE_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 20 : type =  TEXT; break;
+			case 20 : _type =  TEXT; break;
 		}
 	}
 	public void BlockComment_ANYCHAR_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 9 : type =  ANYCHAR; break;
+			case 9 : _type =  ANYCHAR; break;
 		}
 	}
 	public void NEWLINE_action(RuleContext _localctx, int actionIndex) {
@@ -949,17 +950,17 @@ public class GroupHighlighterLexerBase extends Lexer {
 	}
 	public void TemplateComment_NEWLINE_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 10 : type =  NEWLINE; break;
+			case 10 : _type =  NEWLINE; break;
 		}
 	}
 	public void StringTemplate_TEXT_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 62 : type =  TEXT; break;
+			case 62 : _type =  TEXT; break;
 		}
 	}
 	public void StringTemplate_END_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 64 : type =  TEXT; popMode(); break;
+			case 64 : _type =  TEXT; popMode(); break;
 		}
 	}
 	public void REGION_ID_action(RuleContext _localctx, int actionIndex) {
@@ -973,17 +974,17 @@ public class GroupHighlighterLexerBase extends Lexer {
 	}
 	public void BLOCK_COMMENT_STAR_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 8 : type =  COMMENT; break;
+			case 8 : _type =  COMMENT; break;
 		}
 	}
 	public void DelimitersOpenSpec_COMMA_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 68 : type =  COMMA; mode(DelimitersCloseSpec); break;
+			case 68 : _type =  COMMA; mode(DelimitersCloseSpec); break;
 		}
 	}
 	public void BigStringTemplate_LANGLE_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 33 : type =  TEXT; break;
+			case 33 : _type =  TEXT; break;
 		}
 	}
 	public void STRING_action(RuleContext _localctx, int actionIndex) {

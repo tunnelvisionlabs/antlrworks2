@@ -45,7 +45,7 @@ public class GrammarHighlighterLexer extends GrammarHighlighterLexerBase {
 
     @Override
     public Token emit() {
-        switch (type) {
+        switch (_type) {
         case TOKENS:
             handleAcceptPositionForKeyword("tokens");
             setInTokens(true);
@@ -59,9 +59,9 @@ public class GrammarHighlighterLexer extends GrammarHighlighterLexerBase {
         case LABEL:
             handleAcceptPositionForIdentifier();
             if (isInOptions()) {
-                type = ValidGrammarOption;
+                _type = ValidGrammarOption;
             } else if (isInTokens()) {
-                type = IDENTIFIER;
+                _type = IDENTIFIER;
             }
 
             break;
@@ -85,9 +85,9 @@ public class GrammarHighlighterLexer extends GrammarHighlighterLexerBase {
             identifierLength++;
         }
 
-        if (getInputStream().index() > tokenStartCharIndex + identifierLength) {
+        if (getInputStream().index() > _tokenStartCharIndex + identifierLength) {
             int offset = identifierLength - 1;
-            getInterpreter().resetAcceptPosition(getInputStream(), tokenStartCharIndex + offset, tokenStartLine, tokenStartCharPositionInLine + offset);
+            getInterpreter().resetAcceptPosition(getInputStream(), _tokenStartCharIndex + offset, _tokenStartLine, _tokenStartCharPositionInLine + offset);
             return true;
         }
 
@@ -95,9 +95,9 @@ public class GrammarHighlighterLexer extends GrammarHighlighterLexerBase {
     }
 
     private boolean handleAcceptPositionForKeyword(String keyword) {
-        if (getInputStream().index() > tokenStartCharIndex + keyword.length()) {
+        if (getInputStream().index() > _tokenStartCharIndex + keyword.length()) {
             int offset = keyword.length() - 1;
-            getInterpreter().resetAcceptPosition(getInputStream(), tokenStartCharIndex + offset, tokenStartLine, tokenStartCharPositionInLine + offset);
+            getInterpreter().resetAcceptPosition(getInputStream(), _tokenStartCharIndex + offset, _tokenStartLine, _tokenStartCharPositionInLine + offset);
             return true;
         }
 

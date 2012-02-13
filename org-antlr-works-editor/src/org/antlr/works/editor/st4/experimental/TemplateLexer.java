@@ -53,30 +53,30 @@ public class TemplateLexer extends TemplateLexerBase {
 
     @Override
     public Token emit() {
-        switch (type) {
+        switch (_type) {
         case LBRACE:
-            if (getInputStream().index() > tokenStartCharIndex + 1) {
-                getInterpreter().resetAcceptPosition(getInputStream(), tokenStartCharIndex, tokenStartLine, tokenStartCharPositionInLine);
+            if (getInputStream().index() > _tokenStartCharIndex + 1) {
+                getInterpreter().resetAcceptPosition(getInputStream(), _tokenStartCharIndex, _tokenStartLine, _tokenStartCharPositionInLine);
                 pushMode(AnonymousTemplateParameters);
             }
             break;
 
         case DELIMITERS:
-            if (type == DELIMITERS && getInputStream().index() > tokenStartCharIndex + "delimiters".length()) {
+            if (_type == DELIMITERS && getInputStream().index() > _tokenStartCharIndex + "delimiters".length()) {
                 int offset = "delimiters".length() - 1;
-                getInterpreter().resetAcceptPosition(getInputStream(), tokenStartCharIndex + offset, tokenStartLine, tokenStartCharPositionInLine + offset);
+                getInterpreter().resetAcceptPosition(getInputStream(), _tokenStartCharIndex + offset, _tokenStartLine, _tokenStartCharPositionInLine + offset);
                 pushMode(DelimitersOpenSpec);
             }
             break;
 
         case DelimitersOpenSpec_DELIMITER_STRING:
             setDelimiters(getText().charAt(1), getCloseDelimiter());
-            type = STRING;
+            _type = STRING;
             break;
 
         case DelimitersCloseSpec_DELIMITER_STRING:
             setDelimiters(getOpenDelimiter(), getText().charAt(1));
-            type = STRING;
+            _type = STRING;
             break;
 
         default:
@@ -167,17 +167,11 @@ public class TemplateLexer extends TemplateLexerBase {
                     }
 
                     IntervalSet set = new IntervalSet(notSetTransition.set);
-                    IntervalSet notSet = notSetTransition.notSet != null ? new IntervalSet(notSetTransition.notSet) : null;
                     set.remove(removeLabel);
                     set.add(addLabel);
                     set.setReadonly(true);
-                    if (notSet != null) {
-                        notSet.add(removeLabel);
-                        notSet.remove(addLabel);
-                        notSet.setReadonly(true);
-                    }
 
-                    updated = new NotSetTransition(t.target, set, notSet);
+                    updated = new NotSetTransition(t.target, set);
                 } else if (t instanceof SetTransition) {
                     SetTransition setTransition = (SetTransition)t;
                     int removeLabel;

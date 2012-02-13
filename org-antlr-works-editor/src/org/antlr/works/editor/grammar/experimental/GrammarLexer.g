@@ -415,7 +415,7 @@ RULE_REF
 /** Allow unicode rule/token names */
 ID			:	NameStartChar NameChar*
 				{
-				if ( Character.isUpperCase(getInputStream().substring(tokenStartCharIndex, tokenStartCharIndex).charAt(0)) ) $type = TOKEN_REF;
+				if ( Character.isUpperCase(getInputStream().substring(_tokenStartCharIndex, _tokenStartCharIndex).charAt(0)) ) $type = TOKEN_REF;
 				else $type = RULE_REF;
 				};
 

@@ -42,7 +42,7 @@ public class GrammarFoldScannerV4 extends AbstractFoldScanner<CompiledModel> {
             IntervalSet foldTypes = new IntervalSet();
             foldTypes.add(ANTLRParser.MODE);
             foldTypes.add(ANTLRParser.RULE);
-            foldTypes.add(ANTLRParser.TOKENS);
+            foldTypes.add(ANTLRParser.TOKENS_SPEC);
             foldTypes.add(ANTLRParser.OPTIONS);
 //            foldTypes.add(ANTLRParser.AT);
 
@@ -58,7 +58,7 @@ public class GrammarFoldScannerV4 extends AbstractFoldScanner<CompiledModel> {
                     blockHint = child.getChild(0).getText() + "...";
                     break;
 
-                case ANTLRParser.TOKENS:
+                case ANTLRParser.TOKENS_SPEC:
                     blockHint = "tokens {...}";
                     break;
 

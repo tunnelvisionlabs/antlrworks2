@@ -114,7 +114,12 @@ public class CodeCompletionErrorStrategy extends DefaultErrorStrategy {
                 }
             }
 
-            interp.closure(intermediate, closure, PredictionContextCache.UNCACHED_LOCAL, false, true, false, true);
+            final boolean collectPredicates = false;
+            final boolean contextSensitiveDfa = false;
+            final boolean greedy = true;
+            final boolean loopsSimulateTailRecursion = false;
+            final boolean hasMoreContext = true;
+            interp.closure(intermediate, closure, collectPredicates, contextSensitiveDfa, greedy, loopsSimulateTailRecursion, hasMoreContext, PredictionContextCache.UNCACHED_LOCAL);
 
             if (!state.onlyHasEpsilonTransitions()) {
                 for (int i = 0; i < state.getNumberOfTransitions(); i++) {

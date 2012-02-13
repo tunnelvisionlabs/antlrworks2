@@ -49,7 +49,7 @@ public class SimpleLexerState implements LineStateInfo<SimpleLexerState> {
     }
 
     public static SimpleLexerState createSimpleState(@NonNull Lexer lexer) {
-        return create(lexer.mode, lexer.modeStack);
+        return create(lexer._mode, lexer._modeStack);
     }
 
     private static SimpleLexerState create(int mode, @NullAllowed Collection<Integer> modeStack) {
@@ -89,18 +89,18 @@ public class SimpleLexerState implements LineStateInfo<SimpleLexerState> {
     }
 
     public void apply(Lexer lexer) {
-        if (lexer.modeStack != null) {
-            lexer.modeStack.clear();
+        if (lexer._modeStack != null) {
+            lexer._modeStack.clear();
         }
 
-        lexer.mode = this.getMode();
+        lexer._mode = this.getMode();
 
         if (!this.getModeStack().isEmpty()) {
-            if (lexer.modeStack == null) {
-                lexer.modeStack = new ArrayDeque<Integer>();
+            if (lexer._modeStack == null) {
+                lexer._modeStack = new ArrayDeque<Integer>();
             }
 
-            lexer.modeStack.addAll(this.getModeStack());
+            lexer._modeStack.addAll(this.getModeStack());
         }
     }
 

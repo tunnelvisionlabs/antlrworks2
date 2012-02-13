@@ -46,21 +46,23 @@ public class GrammarParser extends Parser {
 		"<INVALID>", "<INVALID>", "<INVALID>",
 		"TOKEN_REF", "RULE_REF", "DOC_COMMENT", "BLOCK_COMMENT", "LINE_COMMENT", 
 		"DOUBLE_QUOTE_STRING_LITERAL", "DOUBLE_ANGLE_STRING_LITERAL", "BEGIN_ARG_ACTION", 
-		"BEGIN_ACTION", "OPTIONS", "TOKENS", "import", "fragment", "lexer", "parser", 
-		"grammar", "protected", "public", "private", "returns", "locals", "throws", 
-		"catch", "finally", "template", "mode", "COLON", "COLONCOLON", "COMMA", 
-		";", "LPAREN", "RPAREN", "->", "LT", "GT", "ASSIGN", "?", "*", "+", "+=", 
-		"|", "$", "DOT", "..", "...", "@", "#", "~", "RBRACE", "ID", "INT", "STRING_LITERAL", 
+		"BEGIN_ACTION", "OPTIONS", "TOKENS", "'import'", "'fragment'", "'lexer'", 
+		"'parser'", "'grammar'", "'protected'", "'public'", "'private'", "'returns'", 
+		"'locals'", "'throws'", "'catch'", "'finally'", "'template'", "'mode'", 
+		"COLON", "COLONCOLON", "COMMA", "';'", "LPAREN", "RPAREN", "'->'", "LT", 
+		"GT", "ASSIGN", "'?'", "'*'", "'+'", "'+='", "'|'", "'$'", "DOT", "'..'", 
+		"'...'", "'@'", "'#'", "'~'", "RBRACE", "ID", "INT", "STRING_LITERAL", 
 		"WS", "ERRCHAR", "ARG_ACTION_LT", "ARG_ACTION_GT", "ARG_ACTION_LPAREN", 
 		"ARG_ACTION_RPAREN", "ARG_ACTION_EQUALS", "ARG_ACTION_COMMA", "ARG_ACTION_ESCAPE", 
 		"ARG_ACTION_WORD", "ARG_ACTION_ELEMENT", "ARG_ACTION_TEXT", "ARG_ACTION_WS", 
-		"ARG_ACTION_NEWLINE", "END_ARG_ACTION", "{", ".", "<", ">", "(", ")", 
-		"[", "]", "=", ",", "::", ":", "-", "ACTION_ESCAPE", "ACTION_WORD", "ACTION_REFERENCE", 
-		"ACTION_COMMENT", "ACTION_LITERAL", "ACTION_TEXT", "ACTION_WS", "ACTION_NEWLINE", 
-		"}", "RULE", "PREC_RULE", "RULES", "RULEMODIFIERS", "RULEACTIONS", "BLOCK", 
-		"OPTIONAL", "CLOSURE", "POSITIVE_CLOSURE", "SET", "CHAR_RANGE", "EPSILON", 
-		"ALT", "ALTLIST", "ARG", "ARGLIST", "RET", "COMBINED", "INITACTION", "LABEL", 
-		"WILDCARD", "LIST", "ELEMENT_OPTIONS", "RESULT", "LEXER_ALT_ACTION", "LEXER_ACTION_CALL"
+		"ARG_ACTION_NEWLINE", "END_ARG_ACTION", "'{'", "'.'", "'<'", "'>'", "'('", 
+		"')'", "'['", "']'", "'='", "','", "'::'", "':'", "'-'", "ACTION_ESCAPE", 
+		"ACTION_WORD", "ACTION_REFERENCE", "ACTION_COMMENT", "ACTION_LITERAL", 
+		"ACTION_TEXT", "ACTION_WS", "ACTION_NEWLINE", "'}'", "RULE", "PREC_RULE", 
+		"RULES", "RULEMODIFIERS", "RULEACTIONS", "BLOCK", "OPTIONAL", "CLOSURE", 
+		"POSITIVE_CLOSURE", "SET", "CHAR_RANGE", "EPSILON", "ALT", "ALTLIST", 
+		"ARG", "ARGLIST", "RET", "COMBINED", "INITACTION", "LABEL", "WILDCARD", 
+		"LIST", "ELEMENT_OPTIONS", "RESULT", "LEXER_ALT_ACTION", "LEXER_ACTION_CALL"
 	};
 	public static final int
 		RULE_grammarSpec = 0, RULE_grammarType = 1, RULE_prequelConstruct = 2, 
@@ -109,11 +111,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -139,13 +141,13 @@ public class GrammarParser extends Parser {
 			_errHandler.sync(this);
 			int _alt237 = getInterpreter().adaptivePredict(_input,1,_ctx);
 			while ( _alt237!=2 && _alt237!=-1 ) {
-			    if ( _alt237==1 ) {
-			        {
-			        {
-			        setState(152); prequelConstruct();
-			        }
-			        } 
-			    }
+				if ( _alt237==1 ) {
+					{
+					{
+					setState(152); prequelConstruct();
+					}
+					} 
+				}
 				setState(158);
 				_errHandler.sync(this);
 				_alt237 = getInterpreter().adaptivePredict(_input,1,_ctx);
@@ -155,13 +157,13 @@ public class GrammarParser extends Parser {
 			_errHandler.sync(this);
 			int _alt250 = getInterpreter().adaptivePredict(_input,2,_ctx);
 			while ( _alt250!=2 && _alt250!=-1 ) {
-			    if ( _alt250==1 ) {
-			        {
-			        {
-			        setState(161); modeSpec();
-			        }
-			        } 
-			    }
+				if ( _alt250==1 ) {
+					{
+					{
+					setState(161); modeSpec();
+					}
+					} 
+				}
 				setState(167);
 				_errHandler.sync(this);
 				_alt250 = getInterpreter().adaptivePredict(_input,2,_ctx);
@@ -188,11 +190,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -244,11 +246,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -305,11 +307,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -324,14 +326,14 @@ public class GrammarParser extends Parser {
 			_errHandler.sync(this);
 			int _alt365 = getInterpreter().adaptivePredict(_input,5,_ctx);
 			while ( _alt365!=2 && _alt365!=-1 ) {
-			    if ( _alt365==1 ) {
-			        {
-			        {
-			        setState(194); option();
-			        setState(196); match(SEMI);
-			        }
-			        } 
-			    }
+				if ( _alt365==1 ) {
+					{
+					{
+					setState(194); option();
+					setState(196); match(SEMI);
+					}
+					} 
+				}
 				setState(202);
 				_errHandler.sync(this);
 				_alt365 = getInterpreter().adaptivePredict(_input,5,_ctx);
@@ -356,11 +358,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -392,11 +394,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -453,11 +455,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -473,14 +475,14 @@ public class GrammarParser extends Parser {
 			_errHandler.sync(this);
 			int _alt454 = getInterpreter().adaptivePredict(_input,7,_ctx);
 			while ( _alt454!=2 && _alt454!=-1 ) {
-			    if ( _alt454==1 ) {
-			        {
-			        {
-			        setState(225); match(COMMA);
-			        setState(227); delegateGrammar();
-			        }
-			        } 
-			    }
+				if ( _alt454==1 ) {
+					{
+					{
+					setState(225); match(COMMA);
+					setState(227); delegateGrammar();
+					}
+					} 
+				}
 				setState(233);
 				_errHandler.sync(this);
 				_alt454 = getInterpreter().adaptivePredict(_input,7,_ctx);
@@ -505,11 +507,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -554,11 +556,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -608,11 +610,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -671,11 +673,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -690,151 +692,151 @@ public class GrammarParser extends Parser {
 			_errHandler.sync(this);
 			int _alt620 = getInterpreter().adaptivePredict(_input,13,_ctx);
 			while ( _alt620!=2 && _alt620!=-1 ) {
-			    if ( _alt620==1 ) {
-			        {
-			        setState(320);
-			        //_errHandler.sync(this);
-			        switch ( getInterpreter().adaptivePredict(_input,12,_ctx) ) {
-			        	case 1:
-			        		{
-			        		setState(274); actionBlock();
-			        		}
-			        		break;
+				if ( _alt620==1 ) {
+					{
+					setState(320);
+					//_errHandler.sync(this);
+					switch ( getInterpreter().adaptivePredict(_input,12,_ctx) ) {
+						case 1:
+							{
+							setState(274); actionBlock();
+							}
+							break;
 
-			        	case 2:
-			        		{
-			        		setState(276); actionExpression();
-			        		}
-			        		break;
+						case 2:
+							{
+							setState(276); actionExpression();
+							}
+							break;
 
-			        	case 3:
-			        		{
-			        		setState(278); actionScopeExpression();
-			        		}
-			        		break;
+						case 3:
+							{
+							setState(278); actionScopeExpression();
+							}
+							break;
 
-			        	case 4:
-			        		{
-			        		setState(280); match(ACTION_WS);
-			        		}
-			        		break;
+						case 4:
+							{
+							setState(280); match(ACTION_WS);
+							}
+							break;
 
-			        	case 5:
-			        		{
-			        		setState(282); match(ACTION_NEWLINE);
-			        		}
-			        		break;
+						case 5:
+							{
+							setState(282); match(ACTION_NEWLINE);
+							}
+							break;
 
-			        	case 6:
-			        		{
-			        		setState(284); match(ACTION_COMMENT);
-			        		}
-			        		break;
+						case 6:
+							{
+							setState(284); match(ACTION_COMMENT);
+							}
+							break;
 
-			        	case 7:
-			        		{
-			        		setState(286); match(ACTION_LITERAL);
-			        		}
-			        		break;
+						case 7:
+							{
+							setState(286); match(ACTION_LITERAL);
+							}
+							break;
 
-			        	case 8:
-			        		{
-			        		setState(288); match(ACTION_TEXT);
-			        		}
-			        		break;
+						case 8:
+							{
+							setState(288); match(ACTION_TEXT);
+							}
+							break;
 
-			        	case 9:
-			        		{
-			        		setState(290); match(ACTION_LT);
-			        		}
-			        		break;
+						case 9:
+							{
+							setState(290); match(ACTION_LT);
+							}
+							break;
 
-			        	case 10:
-			        		{
-			        		setState(292); match(ACTION_GT);
-			        		}
-			        		break;
+						case 10:
+							{
+							setState(292); match(ACTION_GT);
+							}
+							break;
 
-			        	case 11:
-			        		{
-			        		setState(294); match(ACTION_LPAREN);
-			        		}
-			        		break;
+						case 11:
+							{
+							setState(294); match(ACTION_LPAREN);
+							}
+							break;
 
-			        	case 12:
-			        		{
-			        		setState(296); match(ACTION_RPAREN);
-			        		}
-			        		break;
+						case 12:
+							{
+							setState(296); match(ACTION_RPAREN);
+							}
+							break;
 
-			        	case 13:
-			        		{
-			        		setState(298); match(ACTION_LBRACK);
-			        		}
-			        		break;
+						case 13:
+							{
+							setState(298); match(ACTION_LBRACK);
+							}
+							break;
 
-			        	case 14:
-			        		{
-			        		setState(300); match(ACTION_RBRACK);
-			        		}
-			        		break;
+						case 14:
+							{
+							setState(300); match(ACTION_RBRACK);
+							}
+							break;
 
-			        	case 15:
-			        		{
-			        		setState(302); match(ACTION_EQUALS);
-			        		}
-			        		break;
+						case 15:
+							{
+							setState(302); match(ACTION_EQUALS);
+							}
+							break;
 
-			        	case 16:
-			        		{
-			        		setState(304); match(ACTION_COMMA);
-			        		}
-			        		break;
+						case 16:
+							{
+							setState(304); match(ACTION_COMMA);
+							}
+							break;
 
-			        	case 17:
-			        		{
-			        		setState(306); match(ACTION_ESCAPE);
-			        		}
-			        		break;
+						case 17:
+							{
+							setState(306); match(ACTION_ESCAPE);
+							}
+							break;
 
-			        	case 18:
-			        		{
-			        		setState(308); match(ACTION_WORD);
-			        		}
-			        		break;
+						case 18:
+							{
+							setState(308); match(ACTION_WORD);
+							}
+							break;
 
-			        	case 19:
-			        		{
-			        		setState(310); match(ACTION_REFERENCE);
-			        		}
-			        		break;
+						case 19:
+							{
+							setState(310); match(ACTION_REFERENCE);
+							}
+							break;
 
-			        	case 20:
-			        		{
-			        		setState(312); match(ACTION_COLON);
-			        		}
-			        		break;
+						case 20:
+							{
+							setState(312); match(ACTION_COLON);
+							}
+							break;
 
-			        	case 21:
-			        		{
-			        		setState(314); match(ACTION_COLON2);
-			        		}
-			        		break;
+						case 21:
+							{
+							setState(314); match(ACTION_COLON2);
+							}
+							break;
 
-			        	case 22:
-			        		{
-			        		setState(316); match(ACTION_MINUS);
-			        		}
-			        		break;
+						case 22:
+							{
+							setState(316); match(ACTION_MINUS);
+							}
+							break;
 
-			        	case 23:
-			        		{
-			        		setState(318); match(ACTION_DOT);
-			        		}
-			        		break;
-			        }
-			        } 
-			    }
+						case 23:
+							{
+							setState(318); match(ACTION_DOT);
+							}
+							break;
+					}
+					} 
+				}
 				setState(324);
 				_errHandler.sync(this);
 				_alt620 = getInterpreter().adaptivePredict(_input,13,_ctx);
@@ -862,11 +864,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -881,13 +883,13 @@ public class GrammarParser extends Parser {
 			_errHandler.sync(this);
 			int _alt635 = getInterpreter().adaptivePredict(_input,14,_ctx);
 			while ( _alt635!=2 && _alt635!=-1 ) {
-			    if ( _alt635==1 ) {
-			        {
-			        {
-			        setState(329); ignored();
-			        }
-			        } 
-			    }
+				if ( _alt635==1 ) {
+					{
+					{
+					setState(329); ignored();
+					}
+					} 
+				}
 				setState(335);
 				_errHandler.sync(this);
 				_alt635 = getInterpreter().adaptivePredict(_input,14,_ctx);
@@ -897,13 +899,13 @@ public class GrammarParser extends Parser {
 			_errHandler.sync(this);
 			int _alt642 = getInterpreter().adaptivePredict(_input,15,_ctx);
 			while ( _alt642!=2 && _alt642!=-1 ) {
-			    if ( _alt642==1 ) {
-			        {
-			        {
-			        setState(338); ignored();
-			        }
-			        } 
-			    }
+				if ( _alt642==1 ) {
+					{
+					{
+					setState(338); ignored();
+					}
+					} 
+				}
 				setState(344);
 				_errHandler.sync(this);
 				_alt642 = getInterpreter().adaptivePredict(_input,15,_ctx);
@@ -933,11 +935,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -952,13 +954,13 @@ public class GrammarParser extends Parser {
 			_errHandler.sync(this);
 			int _alt659 = getInterpreter().adaptivePredict(_input,16,_ctx);
 			while ( _alt659!=2 && _alt659!=-1 ) {
-			    if ( _alt659==1 ) {
-			        {
-			        {
-			        setState(349); ignored();
-			        }
-			        } 
-			    }
+				if ( _alt659==1 ) {
+					{
+					{
+					setState(349); ignored();
+					}
+					} 
+				}
 				setState(355);
 				_errHandler.sync(this);
 				_alt659 = getInterpreter().adaptivePredict(_input,16,_ctx);
@@ -973,13 +975,13 @@ public class GrammarParser extends Parser {
 					_errHandler.sync(this);
 					int _alt665 = getInterpreter().adaptivePredict(_input,17,_ctx);
 					while ( _alt665!=2 && _alt665!=-1 ) {
-					    if ( _alt665==1 ) {
-					        {
-					        {
-					        setState(358); ignored();
-					        }
-					        } 
-					    }
+						if ( _alt665==1 ) {
+							{
+							{
+							setState(358); ignored();
+							}
+							} 
+						}
 						setState(364);
 						_errHandler.sync(this);
 						_alt665 = getInterpreter().adaptivePredict(_input,17,_ctx);
@@ -994,13 +996,13 @@ public class GrammarParser extends Parser {
 							_errHandler.sync(this);
 							int _alt673 = getInterpreter().adaptivePredict(_input,18,_ctx);
 							while ( _alt673!=2 && _alt673!=-1 ) {
-							    if ( _alt673==1 ) {
-							        {
-							        {
-							        setState(367); ignored();
-							        }
-							        } 
-							    }
+								if ( _alt673==1 ) {
+									{
+									{
+									setState(367); ignored();
+									}
+									} 
+								}
 								setState(373);
 								_errHandler.sync(this);
 								_alt673 = getInterpreter().adaptivePredict(_input,18,_ctx);
@@ -1013,13 +1015,13 @@ public class GrammarParser extends Parser {
 					_errHandler.sync(this);
 					int _alt682 = getInterpreter().adaptivePredict(_input,20,_ctx);
 					while ( _alt682!=2 && _alt682!=-1 ) {
-					    if ( _alt682==1 ) {
-					        {
-					        {
-					        setState(378); ignored();
-					        }
-					        } 
-					    }
+						if ( _alt682==1 ) {
+							{
+							{
+							setState(378); ignored();
+							}
+							} 
+						}
 						setState(384);
 						_errHandler.sync(this);
 						_alt682 = getInterpreter().adaptivePredict(_input,20,_ctx);
@@ -1029,13 +1031,13 @@ public class GrammarParser extends Parser {
 					_errHandler.sync(this);
 					int _alt687 = getInterpreter().adaptivePredict(_input,21,_ctx);
 					while ( _alt687!=2 && _alt687!=-1 ) {
-					    if ( _alt687==1 ) {
-					        {
-					        {
-					        setState(387); ignored();
-					        }
-					        } 
-					    }
+						if ( _alt687==1 ) {
+							{
+							{
+							setState(387); ignored();
+							}
+							} 
+						}
 						setState(393);
 						_errHandler.sync(this);
 						_alt687 = getInterpreter().adaptivePredict(_input,21,_ctx);
@@ -1048,13 +1050,13 @@ public class GrammarParser extends Parser {
 			_errHandler.sync(this);
 			int _alt696 = getInterpreter().adaptivePredict(_input,23,_ctx);
 			while ( _alt696!=2 && _alt696!=-1 ) {
-			    if ( _alt696==1 ) {
-			        {
-			        {
-			        setState(398); ignored();
-			        }
-			        } 
-			    }
+				if ( _alt696==1 ) {
+					{
+					{
+					setState(398); ignored();
+					}
+					} 
+				}
 				setState(404);
 				_errHandler.sync(this);
 				_alt696 = getInterpreter().adaptivePredict(_input,23,_ctx);
@@ -1079,11 +1081,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -1099,19 +1101,19 @@ public class GrammarParser extends Parser {
 			_errHandler.sync(this);
 			int _alt759 = getInterpreter().adaptivePredict(_input,24,_ctx);
 			while ( _alt759!=2 && _alt759!=-1 ) {
-			    if ( _alt759==1 ) {
-			        {
-			        {
-			        setState(409);
-			        _input.LT(1);
-			        _la = _input.LA(1);
-			        if ( !(_la==ARG_ACTION_LT || _la==ARG_ACTION_GT || _la==ARG_ACTION_LPAREN || _la==ARG_ACTION_RPAREN || _la==ARG_ACTION_EQUALS || _la==ARG_ACTION_COMMA || _la==ARG_ACTION_ESCAPE || _la==ARG_ACTION_WORD || _la==ARG_ACTION_ELEMENT || _la==ARG_ACTION_TEXT || _la==ARG_ACTION_WS || _la==ARG_ACTION_NEWLINE) ) {
-			        _errHandler.recoverInline(this);
-			        }
-			        consume();
-			        }
-			        } 
-			    }
+				if ( _alt759==1 ) {
+					{
+					{
+					setState(409);
+					_input.LT(1);
+					_la = _input.LA(1);
+					if ( !(_la==ARG_ACTION_LT || _la==ARG_ACTION_GT || _la==ARG_ACTION_LPAREN || _la==ARG_ACTION_RPAREN || _la==ARG_ACTION_EQUALS || _la==ARG_ACTION_COMMA || _la==ARG_ACTION_ESCAPE || _la==ARG_ACTION_WORD || _la==ARG_ACTION_ELEMENT || _la==ARG_ACTION_TEXT || _la==ARG_ACTION_WS || _la==ARG_ACTION_NEWLINE) ) {
+					_errHandler.recoverInline(this);
+					}
+					consume();
+					}
+					} 
+				}
 				setState(415);
 				_errHandler.sync(this);
 				_alt759 = getInterpreter().adaptivePredict(_input,24,_ctx);
@@ -1138,11 +1140,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -1157,13 +1159,13 @@ public class GrammarParser extends Parser {
 			_errHandler.sync(this);
 			int _alt772 = getInterpreter().adaptivePredict(_input,25,_ctx);
 			while ( _alt772!=2 && _alt772!=-1 ) {
-			    if ( _alt772==1 ) {
-			        {
-			        {
-			        setState(420); ignored();
-			        }
-			        } 
-			    }
+				if ( _alt772==1 ) {
+					{
+					{
+					setState(420); ignored();
+					}
+					} 
+				}
 				setState(426);
 				_errHandler.sync(this);
 				_alt772 = getInterpreter().adaptivePredict(_input,25,_ctx);
@@ -1179,13 +1181,13 @@ public class GrammarParser extends Parser {
 					_errHandler.sync(this);
 					int _alt780 = getInterpreter().adaptivePredict(_input,26,_ctx);
 					while ( _alt780!=2 && _alt780!=-1 ) {
-					    if ( _alt780==1 ) {
-					        {
-					        {
-					        setState(429); ignored();
-					        }
-					        } 
-					    }
+						if ( _alt780==1 ) {
+							{
+							{
+							setState(429); ignored();
+							}
+							} 
+						}
 						setState(435);
 						_errHandler.sync(this);
 						_alt780 = getInterpreter().adaptivePredict(_input,26,_ctx);
@@ -1194,45 +1196,45 @@ public class GrammarParser extends Parser {
 					_errHandler.sync(this);
 					int _alt795 = getInterpreter().adaptivePredict(_input,29,_ctx);
 					while ( _alt795!=2 && _alt795!=-1 ) {
-					    if ( _alt795==1 ) {
-					        {
-					        {
-					        setState(436); match(ARG_ACTION_COMMA);
-					        setState(442);
-					        _errHandler.sync(this);
-					        int _alt786 = getInterpreter().adaptivePredict(_input,27,_ctx);
-					        while ( _alt786!=2 && _alt786!=-1 ) {
-					            if ( _alt786==1 ) {
-					                {
-					                {
-					                setState(438); ignored();
-					                }
-					                } 
-					            }
-					        	setState(444);
-					        	_errHandler.sync(this);
-					        	_alt786 = getInterpreter().adaptivePredict(_input,27,_ctx);
-					        }
-					        setState(445); _localctx.parameters = argActionParameter();
-					        _localctx.parameters_list.add(_localctx.parameters);
-					        setState(451);
-					        _errHandler.sync(this);
-					        int _alt793 = getInterpreter().adaptivePredict(_input,28,_ctx);
-					        while ( _alt793!=2 && _alt793!=-1 ) {
-					            if ( _alt793==1 ) {
-					                {
-					                {
-					                setState(447); ignored();
-					                }
-					                } 
-					            }
-					        	setState(453);
-					        	_errHandler.sync(this);
-					        	_alt793 = getInterpreter().adaptivePredict(_input,28,_ctx);
-					        }
-					        }
-					        } 
-					    }
+						if ( _alt795==1 ) {
+							{
+							{
+							setState(436); match(ARG_ACTION_COMMA);
+							setState(442);
+							_errHandler.sync(this);
+							int _alt786 = getInterpreter().adaptivePredict(_input,27,_ctx);
+							while ( _alt786!=2 && _alt786!=-1 ) {
+								if ( _alt786==1 ) {
+									{
+									{
+									setState(438); ignored();
+									}
+									} 
+								}
+								setState(444);
+								_errHandler.sync(this);
+								_alt786 = getInterpreter().adaptivePredict(_input,27,_ctx);
+							}
+							setState(445); _localctx.parameters = argActionParameter();
+							_localctx.parameters_list.add(_localctx.parameters);
+							setState(451);
+							_errHandler.sync(this);
+							int _alt793 = getInterpreter().adaptivePredict(_input,28,_ctx);
+							while ( _alt793!=2 && _alt793!=-1 ) {
+								if ( _alt793==1 ) {
+									{
+									{
+									setState(447); ignored();
+									}
+									} 
+								}
+								setState(453);
+								_errHandler.sync(this);
+								_alt793 = getInterpreter().adaptivePredict(_input,28,_ctx);
+							}
+							}
+							} 
+						}
 						setState(458);
 						_errHandler.sync(this);
 						_alt795 = getInterpreter().adaptivePredict(_input,29,_ctx);
@@ -1262,11 +1264,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -1289,13 +1291,13 @@ public class GrammarParser extends Parser {
 			_errHandler.sync(this);
 			int _alt813 = getInterpreter().adaptivePredict(_input,32,_ctx);
 			while ( _alt813!=2 && _alt813!=-1 ) {
-			    if ( _alt813==1 ) {
-			        {
-			        {
-			        setState(467); ignored();
-			        }
-			        } 
-			    }
+				if ( _alt813==1 ) {
+					{
+					{
+					setState(467); ignored();
+					}
+					} 
+				}
 				setState(473);
 				_errHandler.sync(this);
 				_alt813 = getInterpreter().adaptivePredict(_input,32,_ctx);
@@ -1320,11 +1322,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -1339,28 +1341,28 @@ public class GrammarParser extends Parser {
 			_errHandler.sync(this);
 			int _alt833 = getInterpreter().adaptivePredict(_input,34,_ctx);
 			while ( _alt833!=2 && _alt833!=-1 ) {
-			    if ( _alt833==1 ) {
-			        {
-			        {
-			        setState(482);
-			        _errHandler.sync(this);
-			        int _alt829 = getInterpreter().adaptivePredict(_input,33,_ctx);
-			        while ( _alt829!=2 && _alt829!=-1 ) {
-			            if ( _alt829==1 ) {
-			                {
-			                {
-			                setState(478); ignored();
-			                }
-			                } 
-			            }
-			        	setState(484);
-			        	_errHandler.sync(this);
-			        	_alt829 = getInterpreter().adaptivePredict(_input,33,_ctx);
-			        }
-			        setState(485); argActionParameterTypePart();
-			        }
-			        } 
-			    }
+				if ( _alt833==1 ) {
+					{
+					{
+					setState(482);
+					_errHandler.sync(this);
+					int _alt829 = getInterpreter().adaptivePredict(_input,33,_ctx);
+					while ( _alt829!=2 && _alt829!=-1 ) {
+						if ( _alt829==1 ) {
+							{
+							{
+							setState(478); ignored();
+							}
+							} 
+						}
+						setState(484);
+						_errHandler.sync(this);
+						_alt829 = getInterpreter().adaptivePredict(_input,33,_ctx);
+					}
+					setState(485); argActionParameterTypePart();
+					}
+					} 
+				}
 				setState(491);
 				_errHandler.sync(this);
 				_alt833 = getInterpreter().adaptivePredict(_input,34,_ctx);
@@ -1384,11 +1386,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -1458,11 +1460,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -1526,11 +1528,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -1572,11 +1574,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -1626,11 +1628,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -1681,11 +1683,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -1699,13 +1701,13 @@ public class GrammarParser extends Parser {
 			_errHandler.sync(this);
 			int _alt954 = getInterpreter().adaptivePredict(_input,42,_ctx);
 			while ( _alt954!=2 && _alt954!=-1 ) {
-			    if ( _alt954==1 ) {
-			        {
-			        {
-			        setState(556); rule();
-			        }
-			        } 
-			    }
+				if ( _alt954==1 ) {
+					{
+					{
+					setState(556); rule();
+					}
+					} 
+				}
 				setState(562);
 				_errHandler.sync(this);
 				_alt954 = getInterpreter().adaptivePredict(_input,42,_ctx);
@@ -1729,11 +1731,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -1778,11 +1780,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -1871,11 +1873,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -1889,13 +1891,13 @@ public class GrammarParser extends Parser {
 			_errHandler.sync(this);
 			int _alt1105 = getInterpreter().adaptivePredict(_input,50,_ctx);
 			while ( _alt1105!=2 && _alt1105!=-1 ) {
-			    if ( _alt1105==1 ) {
-			        {
-			        {
-			        setState(605); exceptionHandler();
-			        }
-			        } 
-			    }
+				if ( _alt1105==1 ) {
+					{
+					{
+					setState(605); exceptionHandler();
+					}
+					} 
+				}
 				setState(611);
 				_errHandler.sync(this);
 				_alt1105 = getInterpreter().adaptivePredict(_input,50,_ctx);
@@ -1928,11 +1930,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -1964,11 +1966,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -1999,11 +2001,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -2017,13 +2019,13 @@ public class GrammarParser extends Parser {
 			_errHandler.sync(this);
 			int _alt1145 = getInterpreter().adaptivePredict(_input,52,_ctx);
 			while ( _alt1145!=2 && _alt1145!=-1 ) {
-			    if ( _alt1145==1 ) {
-			        {
-			        {
-			        setState(626); rulePrequel();
-			        }
-			        } 
-			    }
+				if ( _alt1145==1 ) {
+					{
+					{
+					setState(626); rulePrequel();
+					}
+					} 
+				}
 				setState(632);
 				_errHandler.sync(this);
 				_alt1145 = getInterpreter().adaptivePredict(_input,52,_ctx);
@@ -2047,11 +2049,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -2095,11 +2097,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -2130,11 +2132,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -2150,14 +2152,14 @@ public class GrammarParser extends Parser {
 			_errHandler.sync(this);
 			int _alt1226 = getInterpreter().adaptivePredict(_input,54,_ctx);
 			while ( _alt1226!=2 && _alt1226!=-1 ) {
-			    if ( _alt1226==1 ) {
-			        {
-			        {
-			        setState(647); match(COMMA);
-			        setState(649); qid();
-			        }
-			        } 
-			    }
+				if ( _alt1226==1 ) {
+					{
+					{
+					setState(647); match(COMMA);
+					setState(649); qid();
+					}
+					} 
+				}
 				setState(655);
 				_errHandler.sync(this);
 				_alt1226 = getInterpreter().adaptivePredict(_input,54,_ctx);
@@ -2182,11 +2184,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -2217,11 +2219,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -2253,11 +2255,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -2305,11 +2307,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -2366,11 +2368,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -2400,11 +2402,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -2419,14 +2421,14 @@ public class GrammarParser extends Parser {
 			_errHandler.sync(this);
 			int _alt1356 = getInterpreter().adaptivePredict(_input,57,_ctx);
 			while ( _alt1356!=2 && _alt1356!=-1 ) {
-			    if ( _alt1356==1 ) {
-			        {
-			        {
-			        setState(686); match(OR);
-			        setState(688); labeledAlt();
-			        }
-			        } 
-			    }
+				if ( _alt1356==1 ) {
+					{
+					{
+					setState(686); match(OR);
+					setState(688); labeledAlt();
+					}
+					} 
+				}
 				setState(694);
 				_errHandler.sync(this);
 				_alt1356 = getInterpreter().adaptivePredict(_input,57,_ctx);
@@ -2450,11 +2452,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -2495,11 +2497,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -2550,11 +2552,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -2584,11 +2586,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -2603,14 +2605,14 @@ public class GrammarParser extends Parser {
 			_errHandler.sync(this);
 			int _alt1416 = getInterpreter().adaptivePredict(_input,61,_ctx);
 			while ( _alt1416!=2 && _alt1416!=-1 ) {
-			    if ( _alt1416==1 ) {
-			        {
-			        {
-			        setState(723); match(OR);
-			        setState(725); lexerAlt();
-			        }
-			        } 
-			    }
+				if ( _alt1416==1 ) {
+					{
+					{
+					setState(723); match(OR);
+					setState(725); lexerAlt();
+					}
+					} 
+				}
 				setState(731);
 				_errHandler.sync(this);
 				_alt1416 = getInterpreter().adaptivePredict(_input,61,_ctx);
@@ -2634,11 +2636,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -2682,11 +2684,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -2734,11 +2736,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -2847,11 +2849,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -2911,11 +2913,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -2947,11 +2949,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -2967,14 +2969,14 @@ public class GrammarParser extends Parser {
 			_errHandler.sync(this);
 			int _alt1551 = getInterpreter().adaptivePredict(_input,71,_ctx);
 			while ( _alt1551!=2 && _alt1551!=-1 ) {
-			    if ( _alt1551==1 ) {
-			        {
-			        {
-			        setState(802); match(COMMA);
-			        setState(804); lexerAction();
-			        }
-			        } 
-			    }
+				if ( _alt1551==1 ) {
+					{
+					{
+					setState(802); match(COMMA);
+					setState(804); lexerAction();
+					}
+					} 
+				}
 				setState(810);
 				_errHandler.sync(this);
 				_alt1551 = getInterpreter().adaptivePredict(_input,71,_ctx);
@@ -2998,11 +3000,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -3048,11 +3050,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -3095,11 +3097,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -3114,14 +3116,14 @@ public class GrammarParser extends Parser {
 			_errHandler.sync(this);
 			int _alt1596 = getInterpreter().adaptivePredict(_input,74,_ctx);
 			while ( _alt1596!=2 && _alt1596!=-1 ) {
-			    if ( _alt1596==1 ) {
-			        {
-			        {
-			        setState(831); match(OR);
-			        setState(833); alternative();
-			        }
-			        } 
-			    }
+				if ( _alt1596==1 ) {
+					{
+					{
+					setState(831); match(OR);
+					setState(833); alternative();
+					}
+					} 
+				}
 				setState(839);
 				_errHandler.sync(this);
 				_alt1596 = getInterpreter().adaptivePredict(_input,74,_ctx);
@@ -3145,11 +3147,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -3192,11 +3194,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -3245,11 +3247,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -3345,11 +3347,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -3409,11 +3411,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -3457,11 +3459,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -3491,11 +3493,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -3545,11 +3547,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -3629,11 +3631,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -3706,11 +3708,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -3755,11 +3757,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -3775,14 +3777,14 @@ public class GrammarParser extends Parser {
 			_errHandler.sync(this);
 			int _alt1879 = getInterpreter().adaptivePredict(_input,90,_ctx);
 			while ( _alt1879!=2 && _alt1879!=-1 ) {
-			    if ( _alt1879==1 ) {
-			        {
-			        {
-			        setState(958); match(OR);
-			        setState(960); setElement();
-			        }
-			        } 
-			    }
+				if ( _alt1879==1 ) {
+					{
+					{
+					setState(958); match(OR);
+					setState(960); setElement();
+					}
+					} 
+				}
 				setState(966);
 				_errHandler.sync(this);
 				_alt1879 = getInterpreter().adaptivePredict(_input,90,_ctx);
@@ -3807,11 +3809,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -3863,11 +3865,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -3896,14 +3898,14 @@ public class GrammarParser extends Parser {
 					_errHandler.sync(this);
 					int _alt1929 = getInterpreter().adaptivePredict(_input,93,_ctx);
 					while ( _alt1929!=2 && _alt1929!=-1 ) {
-					    if ( _alt1929==1 ) {
-					        {
-					        {
-					        setState(983); _localctx.ra = ruleAction();
-					        _localctx.ra_list.add(_localctx.ra);
-					        }
-					        } 
-					    }
+						if ( _alt1929==1 ) {
+							{
+							{
+							setState(983); _localctx.ra = ruleAction();
+							_localctx.ra_list.add(_localctx.ra);
+							}
+							} 
+						}
 						setState(989);
 						_errHandler.sync(this);
 						_alt1929 = getInterpreter().adaptivePredict(_input,93,_ctx);
@@ -3933,11 +3935,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -3976,11 +3978,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -4012,11 +4014,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -4077,11 +4079,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -4097,14 +4099,14 @@ public class GrammarParser extends Parser {
 			_errHandler.sync(this);
 			int _alt2030 = getInterpreter().adaptivePredict(_input,99,_ctx);
 			while ( _alt2030!=2 && _alt2030!=-1 ) {
-			    if ( _alt2030==1 ) {
-			        {
-			        {
-			        setState(1028); match(COMMA);
-			        setState(1030); elementOption();
-			        }
-			        } 
-			    }
+				if ( _alt2030==1 ) {
+					{
+					{
+					setState(1028); match(COMMA);
+					setState(1030); elementOption();
+					}
+					} 
+				}
 				setState(1036);
 				_errHandler.sync(this);
 				_alt2030 = getInterpreter().adaptivePredict(_input,99,_ctx);
@@ -4129,11 +4131,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -4192,11 +4194,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -4246,11 +4248,11 @@ public class GrammarParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -4265,14 +4267,14 @@ public class GrammarParser extends Parser {
 			_errHandler.sync(this);
 			int _alt2103 = getInterpreter().adaptivePredict(_input,103,_ctx);
 			while ( _alt2103!=2 && _alt2103!=-1 ) {
-			    if ( _alt2103==1 ) {
-			        {
-			        {
-			        setState(1063); match(DOT);
-			        setState(1065); id();
-			        }
-			        } 
-			    }
+				if ( _alt2103==1 ) {
+					{
+					{
+					setState(1063); match(DOT);
+					setState(1065); id();
+					}
+					} 
+				}
 				setState(1071);
 				_errHandler.sync(this);
 				_alt2103 = getInterpreter().adaptivePredict(_input,103,_ctx);

@@ -43,26 +43,27 @@ public class GrammarHighlighterLexerBase extends Lexer {
 	public static final int ArgAction = 2;
 	public static final int NonActionBrace = 3;
 	public static final int Action = 4;
-    public static String[] modeNames = {
-        "DEFAULT_MODE", "BlockComment", "ArgAction", "NonActionBrace", "Action"
-    };
+	public static String[] modeNames = {
+		"DEFAULT_MODE", "BlockComment", "ArgAction", "NonActionBrace", "Action"
+	};
 
 	public static final String[] tokenNames = {
 		"<INVALID>", "<INVALID>", "<INVALID>",
-		"InvalidGrammarOption", "ValidGrammarOption", "lexer", "parser", "catch", 
-		"finally", "grammar", "private", "protected", "public", "returns", "throws", 
-		"import", "fragment", "TOKENS", "OPTIONS", "mode", "locals", "tree", "scope", 
-		"<", ">", "@", ",", "?", "^(", "(", ")", ":", "STAR", "+", "=", "+=", 
-		"=>", "->", ";", "^", "!", "|", ".", "...", "..", "~", "[", "RBRACK", 
-		"LCURLY", "RCURLY", "$", "LABEL", "IDENTIFIER", "INT", "DIRECTIVE", "REFERENCE", 
+		"InvalidGrammarOption", "ValidGrammarOption", "'lexer'", "'parser'", "'catch'", 
+		"'finally'", "'grammar'", "'private'", "'protected'", "'public'", "'returns'", 
+		"'throws'", "'import'", "'fragment'", "TOKENS", "OPTIONS", "'mode'", "'locals'", 
+		"'tree'", "'scope'", "'<'", "'>'", "'@'", "','", "'?'", "'^('", "'('", 
+		"')'", "':'", "STAR", "'+'", "'='", "'+='", "'=>'", "'->'", "';'", "'^'", 
+		"'!'", "'|'", "'.'", "'...'", "'..'", "'~'", "'['", "RBRACK", "LCURLY", 
+		"RCURLY", "'$'", "LABEL", "IDENTIFIER", "INT", "DIRECTIVE", "REFERENCE", 
 		"WS", "NEWLINE", "COMMENT", "ML_COMMENT", "CHAR_LITERAL", "STRING_LITERAL", 
-		"ANYCHAR", "BlockComment_NEWLINE", "CONTINUE_ML_COMMENT", "*/", "*", "BlockComment_ANYCHAR", 
-		"ArgAction_NEWLINE", "]", "ArgAction_TEXT", "ArgAction_CHAR_LITERAL", 
-		"ArgAction_STRING_LITERAL", "ArgAction_ESCAPE", "ArgAction_REFERENCE", 
-		"ArgAction_SPECIAL", "ArgAction_ANYCHAR", "NonActionBrace_NEWLINE", "NonActionBrace_WS", 
-		"NonActionBrace_LCURLY", "Action_NEWLINE", "Action_COMMENT", "/*", "{", 
-		"}", "Action_TEXT", "Action_CHAR_LITERAL", "Action_STRING_LITERAL", "Action_ESCAPE", 
-		"Action_REFERENCE", "Action_SPECIAL", "Action_ANYCHAR"
+		"ANYCHAR", "BlockComment_NEWLINE", "CONTINUE_ML_COMMENT", "'*/'", "'*'", 
+		"BlockComment_ANYCHAR", "ArgAction_NEWLINE", "']'", "ArgAction_TEXT", 
+		"ArgAction_CHAR_LITERAL", "ArgAction_STRING_LITERAL", "ArgAction_ESCAPE", 
+		"ArgAction_REFERENCE", "ArgAction_SPECIAL", "ArgAction_ANYCHAR", "NonActionBrace_NEWLINE", 
+		"NonActionBrace_WS", "NonActionBrace_LCURLY", "Action_NEWLINE", "Action_COMMENT", 
+		"'/*'", "'{'", "'}'", "Action_TEXT", "Action_CHAR_LITERAL", "Action_STRING_LITERAL", 
+		"Action_ESCAPE", "Action_REFERENCE", "Action_SPECIAL", "Action_ANYCHAR"
 	};
 	public static final String[] ruleNames = {
 		"LEXER", "PARSER", "CATCH", "FINALLY", "GRAMMAR", "PRIVATE", "PROTECTED", 
@@ -86,7 +87,7 @@ public class GrammarHighlighterLexerBase extends Lexer {
 
 
 	protected int getMultilineCommentType() {
-	    return modeStack.peek()==DEFAULT_MODE ? ML_COMMENT : Action_ML_COMMENT;
+	    return _modeStack.peek()==DEFAULT_MODE ? ML_COMMENT : Action_ML_COMMENT;
 	}
 
 
@@ -306,12 +307,12 @@ public class GrammarHighlighterLexerBase extends Lexer {
 	}
 	public void ArgAction_NEWLINE_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 9 : type =  NEWLINE; break;
+			case 9 : _type =  NEWLINE; break;
 		}
 	}
 	public void END_ML_COMMENT_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 6 : type =  getMultilineCommentType(); popMode(); break;
+			case 6 : _type =  getMultilineCommentType(); popMode(); break;
 		}
 	}
 	public void STAR_action(RuleContext _localctx, int actionIndex) {
@@ -324,7 +325,7 @@ public class GrammarHighlighterLexerBase extends Lexer {
 	}
 	public void NonActionBrace_NEWLINE_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 13 : type =  NEWLINE; break;
+			case 13 : _type =  NEWLINE; break;
 		}
 	}
 	public void FRAGMENT_action(RuleContext _localctx, int actionIndex) {
@@ -341,12 +342,12 @@ public class GrammarHighlighterLexerBase extends Lexer {
 	}
 	public void Action_SPECIAL_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 20 : type =  Action_TEXT; break;
+			case 20 : _type =  Action_TEXT; break;
 		}
 	}
 	public void Action_NEWLINE_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 16 : type =  NEWLINE; break;
+			case 16 : _type =  NEWLINE; break;
 		}
 	}
 	public void DIRECTIVE_action(RuleContext _localctx, int actionIndex) {
@@ -388,7 +389,7 @@ public class GrammarHighlighterLexerBase extends Lexer {
 	}
 	public void ArgAction_ANYCHAR_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 12 : type =  ANYCHAR; break;
+			case 12 : _type =  ANYCHAR; break;
 		}
 	}
 	public void SCOPE_action(RuleContext _localctx, int actionIndex) {
@@ -413,12 +414,12 @@ public class GrammarHighlighterLexerBase extends Lexer {
 	}
 	public void Action_RCURLY_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 19 : popMode(); type =  Action_TEXT; break;
+			case 19 : popMode(); _type =  Action_TEXT; break;
 		}
 	}
 	public void NonActionBrace_WS_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 14 : type =  WS; break;
+			case 14 : _type =  WS; break;
 		}
 	}
 	public void WILDCARD_action(RuleContext _localctx, int actionIndex) {
@@ -448,12 +449,12 @@ public class GrammarHighlighterLexerBase extends Lexer {
 	}
 	public void Action_ANYCHAR_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 21 : type =  ANYCHAR; break;
+			case 21 : _type =  ANYCHAR; break;
 		}
 	}
 	public void ML_COMMENT_STAR_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 7 : type =  getMultilineCommentType(); break;
+			case 7 : _type =  getMultilineCommentType(); break;
 		}
 	}
 	public void COMMENT_action(RuleContext _localctx, int actionIndex) {
@@ -474,7 +475,7 @@ public class GrammarHighlighterLexerBase extends Lexer {
 	}
 	public void ArgAction_SPECIAL_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 11 : type =  Action_TEXT; break;
+			case 11 : _type =  Action_TEXT; break;
 		}
 	}
 	public void RETURNS_action(RuleContext _localctx, int actionIndex) {
@@ -503,7 +504,7 @@ public class GrammarHighlighterLexerBase extends Lexer {
 	}
 	public void ArgAction_RBRACK_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 10 : type =  RBRACK; popMode(); break;
+			case 10 : _type =  RBRACK; popMode(); break;
 		}
 	}
 	public void AMPERSAND_action(RuleContext _localctx, int actionIndex) {
@@ -529,7 +530,7 @@ public class GrammarHighlighterLexerBase extends Lexer {
 	}
 	public void LCURLY_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 2 : type = Action_TEXT; pushMode(Action); break;
+			case 2 : _type = Action_TEXT; pushMode(Action); break;
 		}
 	}
 	public void BANG_action(RuleContext _localctx, int actionIndex) {
@@ -550,7 +551,7 @@ public class GrammarHighlighterLexerBase extends Lexer {
 	}
 	public void NonActionBrace_LCURLY_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 15 : type =  LCURLY; popMode(); break;
+			case 15 : _type =  LCURLY; popMode(); break;
 		}
 	}
 	public void REWRITE_action(RuleContext _localctx, int actionIndex) {
@@ -579,7 +580,7 @@ public class GrammarHighlighterLexerBase extends Lexer {
 	}
 	public void BlockComment_ANYCHAR_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 8 : type =  ANYCHAR; break;
+			case 8 : _type =  ANYCHAR; break;
 		}
 	}
 	public void NEWLINE_action(RuleContext _localctx, int actionIndex) {
@@ -620,7 +621,7 @@ public class GrammarHighlighterLexerBase extends Lexer {
 	}
 	public void CONTINUE_ML_COMMENT_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 5 : type =  getMultilineCommentType(); break;
+			case 5 : _type =  getMultilineCommentType(); break;
 		}
 	}
 	public void OR_action(RuleContext _localctx, int actionIndex) {
@@ -645,7 +646,7 @@ public class GrammarHighlighterLexerBase extends Lexer {
 	}
 	public void Action_LCURLY_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 18 : pushMode(Action); type =  Action_TEXT; break;
+			case 18 : pushMode(Action); _type =  Action_TEXT; break;
 		}
 	}
 	public void CATCH_action(RuleContext _localctx, int actionIndex) {
@@ -667,7 +668,7 @@ public class GrammarHighlighterLexerBase extends Lexer {
 	}
 	public void BlockComment_NEWLINE_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 4 : type =  NEWLINE; break;
+			case 4 : _type =  NEWLINE; break;
 		}
 	}
 

@@ -48,17 +48,17 @@ public class GrammarHighlighterLexerWrapper implements TokenSourceWithStateV4<Gr
 
     @Override
     public GrammarHighlighterLexerState getState() {
-        if (grammarLexer.modeStack == null) {
-            return getCachedState(grammarLexer.isInOptions(), grammarLexer.isInTokens(), grammarLexer.mode, null);
+        if (grammarLexer._modeStack == null) {
+            return getCachedState(grammarLexer.isInOptions(), grammarLexer.isInTokens(), grammarLexer._mode, null);
         }
 
-        int[] modes = new int[grammarLexer.modeStack.size()];
+        int[] modes = new int[grammarLexer._modeStack.size()];
         int index = 0;
-        for (int mode : grammarLexer.modeStack) {
+        for (int mode : grammarLexer._modeStack) {
             modes[index++] = mode;
         }
 
-        return getCachedState(grammarLexer.isInOptions(), grammarLexer.isInTokens(), grammarLexer.mode, modes);
+        return getCachedState(grammarLexer.isInOptions(), grammarLexer.isInTokens(), grammarLexer._mode, modes);
     }
 
     private static GrammarHighlighterLexerState getCachedState(boolean inOptions, boolean inTokens, int mode, int[] modeStack) {
@@ -76,21 +76,21 @@ public class GrammarHighlighterLexerWrapper implements TokenSourceWithStateV4<Gr
     }
     public void setState(CharStream input, GrammarHighlighterLexerState state) {
         grammarLexer.setInputStream(input);
-        grammarLexer.mode = state.getMode();
+        grammarLexer._mode = state.getMode();
         grammarLexer.setInOptions(state.isInOptions());
         grammarLexer.setInTokens(state.isInTokens());
         if (state.getModeStack() != null && state.getModeStack().length > 0) {
-            if (grammarLexer.modeStack == null) {
-                grammarLexer.modeStack = new ArrayDeque<Integer>();
+            if (grammarLexer._modeStack == null) {
+                grammarLexer._modeStack = new ArrayDeque<Integer>();
             } else {
-                grammarLexer.modeStack.clear();
+                grammarLexer._modeStack.clear();
             }
 
             for (int mode : state.getModeStack()) {
-                grammarLexer.modeStack.add(mode);
+                grammarLexer._modeStack.add(mode);
             }
-        } else if (grammarLexer.modeStack != null) {
-            grammarLexer.modeStack.clear();
+        } else if (grammarLexer._modeStack != null) {
+            grammarLexer._modeStack.clear();
         }
     }
 

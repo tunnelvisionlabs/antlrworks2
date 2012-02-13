@@ -53,7 +53,7 @@ public class GroupHighlighterLexer extends GroupHighlighterLexerBase {
 
     @Override
     public Token emit() {
-        switch (type) {
+        switch (_type) {
         case LBRACE:
             if (handleAcceptPositionForKeyword("[")) {
                 pushMode(AnonymousTemplateParameters);
@@ -106,12 +106,12 @@ public class GroupHighlighterLexer extends GroupHighlighterLexerBase {
 
         case DelimitersOpenSpec_DELIMITER_STRING:
             setDelimiters(getText().charAt(1), getCloseDelimiter());
-            type = STRING;
+            _type = STRING;
             break;
 
         case DelimitersCloseSpec_DELIMITER_STRING:
             setDelimiters(getOpenDelimiter(), getText().charAt(1));
-            type = STRING;
+            _type = STRING;
             break;
 
         default:
@@ -122,9 +122,9 @@ public class GroupHighlighterLexer extends GroupHighlighterLexerBase {
     }
 
     private boolean handleAcceptPositionForKeyword(String keyword) {
-        if (getInputStream().index() > tokenStartCharIndex + keyword.length()) {
+        if (getInputStream().index() > _tokenStartCharIndex + keyword.length()) {
             int offset = keyword.length() - 1;
-            getInterpreter().resetAcceptPosition(getInputStream(), tokenStartCharIndex + offset, tokenStartLine, tokenStartCharPositionInLine + offset);
+            getInterpreter().resetAcceptPosition(getInputStream(), _tokenStartCharIndex + offset, _tokenStartLine, _tokenStartCharPositionInLine + offset);
             return true;
         }
 
@@ -212,17 +212,11 @@ public class GroupHighlighterLexer extends GroupHighlighterLexerBase {
                     }
 
                     IntervalSet set = new IntervalSet(notSetTransition.set);
-                    IntervalSet notSet = notSetTransition.notSet != null ? new IntervalSet(notSetTransition.notSet) : null;
                     set.remove(removeLabel);
                     set.add(addLabel);
                     set.setReadonly(true);
-                    if (notSet != null) {
-                        notSet.add(removeLabel);
-                        notSet.remove(addLabel);
-                        notSet.setReadonly(true);
-                    }
 
-                    updated = new NotSetTransition(t.target, set, notSet);
+                    updated = new NotSetTransition(t.target, set);
                 } else if (t instanceof SetTransition) {
                     SetTransition setTransition = (SetTransition)t;
                     int removeLabel;

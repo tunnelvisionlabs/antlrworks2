@@ -40,26 +40,27 @@ public class GrammarLexer extends Lexer {
 		ACTION_TEXT=88, ACTION_WS=89, ACTION_NEWLINE=90, END_ACTION=91;
 	public static final int ArgAction = 1;
 	public static final int Action = 2;
-    public static String[] modeNames = {
-        "DEFAULT_MODE", "ArgAction", "Action"
-    };
+	public static String[] modeNames = {
+		"DEFAULT_MODE", "ArgAction", "Action"
+	};
 
 	public static final String[] tokenNames = {
 		"<INVALID>", "<INVALID>", "<INVALID>",
 		"TOKEN_REF", "RULE_REF", "DOC_COMMENT", "BLOCK_COMMENT", "LINE_COMMENT", 
 		"DOUBLE_QUOTE_STRING_LITERAL", "DOUBLE_ANGLE_STRING_LITERAL", "BEGIN_ARG_ACTION", 
-		"BEGIN_ACTION", "OPTIONS", "TOKENS", "import", "fragment", "lexer", "parser", 
-		"grammar", "protected", "public", "private", "returns", "locals", "throws", 
-		"catch", "finally", "template", "mode", "COLON", "COLONCOLON", "COMMA", 
-		";", "LPAREN", "RPAREN", "->", "LT", "GT", "ASSIGN", "?", "*", "+", "+=", 
-		"|", "$", "DOT", "..", "...", "@", "#", "~", "RBRACE", "ID", "INT", "STRING_LITERAL", 
+		"BEGIN_ACTION", "OPTIONS", "TOKENS", "'import'", "'fragment'", "'lexer'", 
+		"'parser'", "'grammar'", "'protected'", "'public'", "'private'", "'returns'", 
+		"'locals'", "'throws'", "'catch'", "'finally'", "'template'", "'mode'", 
+		"COLON", "COLONCOLON", "COMMA", "';'", "LPAREN", "RPAREN", "'->'", "LT", 
+		"GT", "ASSIGN", "'?'", "'*'", "'+'", "'+='", "'|'", "'$'", "DOT", "'..'", 
+		"'...'", "'@'", "'#'", "'~'", "RBRACE", "ID", "INT", "STRING_LITERAL", 
 		"WS", "ERRCHAR", "ARG_ACTION_LT", "ARG_ACTION_GT", "ARG_ACTION_LPAREN", 
 		"ARG_ACTION_RPAREN", "ARG_ACTION_EQUALS", "ARG_ACTION_COMMA", "ARG_ACTION_ESCAPE", 
 		"ARG_ACTION_WORD", "ARG_ACTION_ELEMENT", "ARG_ACTION_TEXT", "ARG_ACTION_WS", 
-		"ARG_ACTION_NEWLINE", "END_ARG_ACTION", "{", ".", "<", ">", "(", ")", 
-		"[", "]", "=", ",", "::", ":", "-", "ACTION_ESCAPE", "ACTION_WORD", "ACTION_REFERENCE", 
-		"ACTION_COMMENT", "ACTION_LITERAL", "ACTION_TEXT", "ACTION_WS", "ACTION_NEWLINE", 
-		"}"
+		"ARG_ACTION_NEWLINE", "END_ARG_ACTION", "'{'", "'.'", "'<'", "'>'", "'('", 
+		"')'", "'['", "']'", "'='", "','", "'::'", "':'", "'-'", "ACTION_ESCAPE", 
+		"ACTION_WORD", "ACTION_REFERENCE", "ACTION_COMMENT", "ACTION_LITERAL", 
+		"ACTION_TEXT", "ACTION_WS", "ACTION_NEWLINE", "'}'"
 	};
 	public static final String[] ruleNames = {
 		"DOC_COMMENT", "BLOCK_COMMENT", "COMMENT", "BLOCK_COMMENT_BODY", "LINE_COMMENT", 
@@ -365,7 +366,7 @@ public class GrammarLexer extends Lexer {
 	}
 	public void BLOCK_COMMENT_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 0 : channel =  HIDDEN; break;
+			case 0 : _channel =  HIDDEN; break;
 		}
 	}
 	public void DOUBLE_QUOTE_STRING_LITERAL_action(RuleContext _localctx, int actionIndex) {
@@ -414,7 +415,7 @@ public class GrammarLexer extends Lexer {
 	}
 	public void LINE_COMMENT_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 1 : channel =  HIDDEN; break;
+			case 1 : _channel =  HIDDEN; break;
 		}
 	}
 	public void PRIVATE_action(RuleContext _localctx, int actionIndex) {
@@ -439,7 +440,7 @@ public class GrammarLexer extends Lexer {
 	}
 	public void WS_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 5 : channel =  HIDDEN; break;
+			case 5 : _channel =  HIDDEN; break;
 		}
 	}
 	public void ACTION_RBRACK_action(RuleContext _localctx, int actionIndex) {
@@ -488,7 +489,7 @@ public class GrammarLexer extends Lexer {
 	}
 	public void NESTED_ACTION_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 7 : type =  BEGIN_ACTION; pushMode(Action); break;
+			case 7 : _type =  BEGIN_ACTION; pushMode(Action); break;
 		}
 	}
 	public void FRAGMENT_action(RuleContext _localctx, int actionIndex) {
@@ -506,8 +507,8 @@ public class GrammarLexer extends Lexer {
 	public void ID_action(RuleContext _localctx, int actionIndex) {
 		switch ( actionIndex ) {
 			case 4 : 
-							if ( Character.isUpperCase(getInputStream().substring(tokenStartCharIndex, tokenStartCharIndex).charAt(0)) ) type =  TOKEN_REF;
-							else type =  RULE_REF;
+							if ( Character.isUpperCase(getInputStream().substring(_tokenStartCharIndex, _tokenStartCharIndex).charAt(0)) ) _type =  TOKEN_REF;
+							else _type =  RULE_REF;
 							 break;
 		}
 	}

@@ -24,7 +24,6 @@ import org.antlr.v4.runtime.atn.ATNConfig;
 import org.antlr.v4.runtime.atn.ATNConfigSet;
 import org.antlr.v4.runtime.atn.ATNState;
 import org.antlr.v4.runtime.atn.AtomTransition;
-import org.antlr.v4.runtime.atn.DecisionState;
 import org.antlr.v4.runtime.atn.NotSetTransition;
 import org.antlr.v4.runtime.atn.ParserATNSimulator;
 import org.antlr.v4.runtime.atn.PredictionContext;
@@ -53,7 +52,7 @@ public abstract class AbstractCompletionParserATNSimulator extends ParserATNSimu
     private List<Integer> selections;
 
     // state variables used for the custom implementation
-    private SymbolStream<Token> _input;
+    private SymbolStream<? extends Token> _input;
     private int _startIndex;
     private ParserRuleContext<?> _outerContext;
     private SimulatorState _nextState;
@@ -81,7 +80,7 @@ public abstract class AbstractCompletionParserATNSimulator extends ParserATNSimu
     }
 
     @Override
-    public int adaptivePredict(SymbolStream<Token> input, int decision, ParserRuleContext<?> outerContext) {
+    public int adaptivePredict(SymbolStream<? extends Token> input, int decision, ParserRuleContext<?> outerContext) {
         _input = input;
         _startIndex = input.index();
         _outerContext = outerContext;
@@ -106,25 +105,24 @@ public abstract class AbstractCompletionParserATNSimulator extends ParserATNSimu
         int t = _input.LA(1);
         if (t == CaretToken.CARET_TOKEN_TYPE) {
             caretToken = (CaretToken)_input.LT(1);
-            throw noViableAlt(_input, _outerContext, _nextState.s0.configs, _startIndex);
+            throw noViableAlt(_input, _outerContext, _nextState.s0.configset, _startIndex);
         }
 
         return result;
     }
 
     @Override
-    public boolean closure(ATNConfigSet configs, ATNConfigSet reach, PredictionContextCache contextCache, boolean contextSensitiveDfa, boolean greedy, boolean collectPredicates, boolean hasMoreContext) {
-        return super.closure(configs, reach, contextCache, contextSensitiveDfa, greedy, collectPredicates, hasMoreContext);
+    public boolean closure(ATNConfigSet sourceConfigs, ATNConfigSet configs, boolean collectPredicates, boolean contextSensitiveDfa, boolean greedy, boolean loopsSimulateTailRecursion, boolean hasMoreContext, PredictionContextCache contextCache) {
+        return super.closure(sourceConfigs, configs, collectPredicates, contextSensitiveDfa, greedy, loopsSimulateTailRecursion, hasMoreContext, contextCache);
     }
 
     @Override
     protected SimulatorState computeReachSet(DFA dfa, SimulatorState previous, int t, boolean greedy, PredictionContextCache contextCache) {
-		final boolean useContext = previous.useContext;
-		RuleContext remainingGlobalContext = previous.remainingOuterContext;
-		List<ATNConfig> closureConfigs = new ArrayList<ATNConfig>(previous.s0.configs);
-		List<Integer> contextElements = null;
-		ATNConfigSet reach = new ATNConfigSet(!useContext);
-        caretTransitions = null;
+        final boolean useContext = previous.useContext;
+        RuleContext remainingGlobalContext = previous.remainingOuterContext;
+        List<ATNConfig> closureConfigs = new ArrayList<ATNConfig>(previous.s0.configset);
+        List<Integer> contextElements = null;
+        ATNConfigSet reach = new ATNConfigSet(!useContext);
         boolean stepIntoGlobal;
         do {
             boolean hasMoreContext = !useContext || remainingGlobalContext != null;
@@ -164,7 +162,7 @@ public abstract class AbstractCompletionParserATNSimulator extends ParserATNSimu
             }
 
             final boolean collectPredicates = false;
-            stepIntoGlobal = closure(reachIntermediate, reach, contextCache, dfa.isContextSensitive(), greedy, collectPredicates, hasMoreContext);
+            stepIntoGlobal = closure(reachIntermediate, reach, collectPredicates, dfa.isContextSensitive(), greedy, contextCache.isContextSensitive(), hasMoreContext, contextCache);
 
             if (previous.useContext && stepIntoGlobal) {
                 reach.clear();
@@ -195,11 +193,13 @@ public abstract class AbstractCompletionParserATNSimulator extends ParserATNSimu
 
         DFAState dfaState = null;
         if (previous.s0 != null) {
-            dfaState = addDFAEdge(dfa, previous.s0.configs, t, contextElements, reach);
+            dfaState = addDFAEdge(dfa, previous.s0.configset, t, contextElements, reach);
         }
 
+// BEGIN CC
         _nextState = new SimulatorState(previous.outerContext, dfaState, useContext, (ParserRuleContext<?>)remainingGlobalContext);
         return _nextState;
+// END CC
     }
 
     protected abstract IntervalSet getWordlikeTokenTypes();

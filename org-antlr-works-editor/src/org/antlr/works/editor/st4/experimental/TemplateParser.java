@@ -54,32 +54,34 @@ public class TemplateParser extends Parser {
 		STRING=27;
 	public static final String[] tokenNames = {
 		"<INVALID>", "<INVALID>", "<INVALID>",
-		"OPEN_DELIMITER", "CLOSE_DELIMITER", "QUOTE", "(", ")", ",", ".", ":", 
-		"::=", "=", "@", "[", "]", "LBRACE", "}", "group", "default", "import", 
-		"true", "false", "DELIMITERS", "WS", "NEWLINE", "ID", "STRING", "<<", 
-		"<%", "LINE_COMMENT", "/*", "ANYCHAR", "BlockComment_NEWLINE", "CONTINUE_COMMENT", 
-		"*/", "*", "BlockComment_ANYCHAR", "TemplateComment_NEWLINE", "TemplateComment_CONTINUE_COMMENT", 
-		"TemplateComment_END_COMMENT", "TemplateComment_BLOCK_COMMENT_BANG", "TemplateComment_ANYCHAR", 
-		"AnonymousTemplate_RBRACE", "AnonymousTemplate_NEWLINE", "AnonymousTemplate_COMMENT", 
-		"AnonymousTemplate_OPEN_DELIMITER", "TEXT", "ESCAPE_RBRACE", "AnonymousTemplate_ANYCHAR", 
-		"AnonymousTemplateParameters_WS", "AnonymousTemplateParameters_NEWLINE", 
-		"AnonymousTemplateParameters_COMMA", "TEMPLATE_PARAMETER", "|", "AnonymousTemplateParameters_ANYCHAR", 
-		"BigStringTemplate_NEWLINE", "BigStringTemplate_COMMENT", "BigStringTemplate_OPEN_DELIMITER", 
-		"BigStringTemplate_TEXT", "BigStringTemplate_ESCAPE", ">>", ">", "BigStringTemplate_ANYCHAR", 
+		"OPEN_DELIMITER", "CLOSE_DELIMITER", "QUOTE", "'('", "')'", "','", "'.'", 
+		"':'", "'::='", "'='", "'@'", "'['", "']'", "LBRACE", "'}'", "'group'", 
+		"'default'", "'import'", "'true'", "'false'", "DELIMITERS", "WS", "NEWLINE", 
+		"ID", "STRING", "'<<'", "'<%'", "LINE_COMMENT", "'/*'", "ANYCHAR", "BlockComment_NEWLINE", 
+		"CONTINUE_COMMENT", "'*/'", "'*'", "BlockComment_ANYCHAR", "TemplateComment_NEWLINE", 
+		"TemplateComment_CONTINUE_COMMENT", "TemplateComment_END_COMMENT", "TemplateComment_BLOCK_COMMENT_BANG", 
+		"TemplateComment_ANYCHAR", "AnonymousTemplate_RBRACE", "AnonymousTemplate_NEWLINE", 
+		"AnonymousTemplate_COMMENT", "AnonymousTemplate_OPEN_DELIMITER", "TEXT", 
+		"ESCAPE_RBRACE", "AnonymousTemplate_ANYCHAR", "AnonymousTemplateParameters_WS", 
+		"AnonymousTemplateParameters_NEWLINE", "AnonymousTemplateParameters_COMMA", 
+		"TEMPLATE_PARAMETER", "'|'", "AnonymousTemplateParameters_ANYCHAR", "BigStringTemplate_NEWLINE", 
+		"BigStringTemplate_COMMENT", "BigStringTemplate_OPEN_DELIMITER", "BigStringTemplate_TEXT", 
+		"BigStringTemplate_ESCAPE", "'>>'", "'>'", "BigStringTemplate_ANYCHAR", 
 		"BigStringLineTemplate_NEWLINE", "BigStringLineTemplate_COMMENT", "BigStringLineTemplate_OPEN_DELIMITER", 
-		"BigStringLineTemplate_TEXT", "BigStringLineTemplate_ESCAPE", "%>", "%", 
-		"BigStringLineTemplate_ANYCHAR", "TemplateExpression_NEWLINE", "TemplateExpression_DOT", 
-		"TemplateExpression_COMMA", "TemplateExpression_COLON", "TemplateExpression_LPAREN", 
-		"TemplateExpression_RPAREN", "TemplateExpression_LBRACK", "TemplateExpression_RBRACK", 
-		"TemplateExpression_EQUALS", "TemplateExpression_LBRACE", "TemplateExpression_WS", 
-		"super", "if", "elseif", "endif", "else", "end", "...", "!", "||", "&&", 
-		";", "ESCAPE", "@end", "REGION_ID", "TemplateExpression_ID", "TemplateExpression_CLOSE_DELIMITER", 
-		"TemplateExpression_STRING", "TemplateExpression_ANYCHAR", "StringTemplate_NEWLINE", 
-		"StringTemplate_COMMENT", "StringTemplate_OPEN_DELIMITER", "StringTemplate_TEXT", 
-		"StringTemplate_ESCAPE", "\"", "StringTemplate_ANYCHAR", "DelimitersOpenSpec_WS", 
-		"DelimitersOpenSpec_NEWLINE", "DelimitersOpenSpec_DELIMITER_STRING", "DelimitersOpenSpec_COMMA", 
-		"DelimitersCloseSpec_WS", "DelimitersCloseSpec_NEWLINE", "DelimitersCloseSpec_DELIMITER_STRING", 
-		"delimiters", "implements"
+		"BigStringLineTemplate_TEXT", "BigStringLineTemplate_ESCAPE", "'%>'", 
+		"'%'", "BigStringLineTemplate_ANYCHAR", "TemplateExpression_NEWLINE", 
+		"TemplateExpression_DOT", "TemplateExpression_COMMA", "TemplateExpression_COLON", 
+		"TemplateExpression_LPAREN", "TemplateExpression_RPAREN", "TemplateExpression_LBRACK", 
+		"TemplateExpression_RBRACK", "TemplateExpression_EQUALS", "TemplateExpression_LBRACE", 
+		"TemplateExpression_WS", "'super'", "'if'", "'elseif'", "'endif'", "'else'", 
+		"'end'", "'...'", "'!'", "'||'", "'&&'", "';'", "ESCAPE", "'@end'", "REGION_ID", 
+		"TemplateExpression_ID", "TemplateExpression_CLOSE_DELIMITER", "TemplateExpression_STRING", 
+		"TemplateExpression_ANYCHAR", "StringTemplate_NEWLINE", "StringTemplate_COMMENT", 
+		"StringTemplate_OPEN_DELIMITER", "StringTemplate_TEXT", "StringTemplate_ESCAPE", 
+		"'\"'", "StringTemplate_ANYCHAR", "DelimitersOpenSpec_WS", "DelimitersOpenSpec_NEWLINE", 
+		"DelimitersOpenSpec_DELIMITER_STRING", "DelimitersOpenSpec_COMMA", "DelimitersCloseSpec_WS", 
+		"DelimitersCloseSpec_NEWLINE", "DelimitersCloseSpec_DELIMITER_STRING", 
+		"'delimiters'", "'implements'"
 	};
 	public static final int
 		RULE_group = 0, RULE_oldStyleHeader = 1, RULE_groupName = 2, RULE_delimiters = 3, 
@@ -114,11 +116,11 @@ public class TemplateParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).enterRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).exitRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -150,14 +152,14 @@ public class TemplateParser extends Parser {
 			_errHandler.sync(this);
 			int _alt44 = getInterpreter().adaptivePredict(_input,2,_ctx);
 			while ( _alt44!=2 && _alt44!=-1 ) {
-			    if ( _alt44==1 ) {
-			        {
-			        {
-			        setState(96); match(IMPORT);
-			        setState(98); string();
-			        }
-			        } 
-			    }
+				if ( _alt44==1 ) {
+					{
+					{
+					setState(96); match(IMPORT);
+					setState(98); string();
+					}
+					} 
+				}
 				setState(104);
 				_errHandler.sync(this);
 				_alt44 = getInterpreter().adaptivePredict(_input,2,_ctx);
@@ -200,11 +202,11 @@ public class TemplateParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).enterRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).exitRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -237,14 +239,14 @@ public class TemplateParser extends Parser {
 					_errHandler.sync(this);
 					int _alt76 = getInterpreter().adaptivePredict(_input,5,_ctx);
 					while ( _alt76!=2 && _alt76!=-1 ) {
-					    if ( _alt76==1 ) {
-					        {
-					        {
-					        setState(125); match(COMMA);
-					        setState(127); match(ID);
-					        }
-					        } 
-					    }
+						if ( _alt76==1 ) {
+							{
+							{
+							setState(125); match(COMMA);
+							setState(127); match(ID);
+							}
+							} 
+						}
 						setState(133);
 						_errHandler.sync(this);
 						_alt76 = getInterpreter().adaptivePredict(_input,5,_ctx);
@@ -272,11 +274,11 @@ public class TemplateParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).enterRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).exitRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -291,14 +293,14 @@ public class TemplateParser extends Parser {
 			_errHandler.sync(this);
 			int _alt95 = getInterpreter().adaptivePredict(_input,7,_ctx);
 			while ( _alt95!=2 && _alt95!=-1 ) {
-			    if ( _alt95==1 ) {
-			        {
-			        {
-			        setState(140); match(DOT);
-			        setState(142); match(ID);
-			        }
-			        } 
-			    }
+				if ( _alt95==1 ) {
+					{
+					{
+					setState(140); match(DOT);
+					setState(142); match(ID);
+					}
+					} 
+				}
 				setState(148);
 				_errHandler.sync(this);
 				_alt95 = getInterpreter().adaptivePredict(_input,7,_ctx);
@@ -322,11 +324,11 @@ public class TemplateParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).enterRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).exitRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -359,11 +361,11 @@ public class TemplateParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).enterRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).exitRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -410,11 +412,11 @@ public class TemplateParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).enterRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).exitRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -503,11 +505,11 @@ public class TemplateParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).enterRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).exitRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -526,14 +528,14 @@ public class TemplateParser extends Parser {
 					_errHandler.sync(this);
 					int _alt202 = getInterpreter().adaptivePredict(_input,12,_ctx);
 					while ( _alt202!=2 && _alt202!=-1 ) {
-					    if ( _alt202==1 ) {
-					        {
-					        {
-					        setState(205); match(COMMA);
-					        setState(207); formalArg();
-					        }
-					        } 
-					    }
+						if ( _alt202==1 ) {
+							{
+							{
+							setState(205); match(COMMA);
+							setState(207); formalArg();
+							}
+							} 
+						}
 						setState(213);
 						_errHandler.sync(this);
 						_alt202 = getInterpreter().adaptivePredict(_input,12,_ctx);
@@ -565,11 +567,11 @@ public class TemplateParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).enterRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).exitRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -636,11 +638,11 @@ public class TemplateParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).enterRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).exitRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -672,11 +674,11 @@ public class TemplateParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).enterRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).exitRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -708,11 +710,11 @@ public class TemplateParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).enterRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).exitRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -731,14 +733,14 @@ public class TemplateParser extends Parser {
 					_errHandler.sync(this);
 					int _alt278 = getInterpreter().adaptivePredict(_input,16,_ctx);
 					while ( _alt278!=2 && _alt278!=-1 ) {
-					    if ( _alt278==1 ) {
-					        {
-					        {
-					        setState(248); match(COMMA);
-					        setState(250); keyValuePair();
-					        }
-					        } 
-					    }
+						if ( _alt278==1 ) {
+							{
+							{
+							setState(248); match(COMMA);
+							setState(250); keyValuePair();
+							}
+							} 
+						}
 						setState(256);
 						_errHandler.sync(this);
 						_alt278 = getInterpreter().adaptivePredict(_input,16,_ctx);
@@ -781,11 +783,11 @@ public class TemplateParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).enterRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).exitRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -817,11 +819,11 @@ public class TemplateParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).enterRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).exitRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -853,11 +855,11 @@ public class TemplateParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).enterRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).exitRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -935,11 +937,11 @@ public class TemplateParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).enterRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).exitRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -969,11 +971,11 @@ public class TemplateParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).enterRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).exitRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -1005,11 +1007,11 @@ public class TemplateParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).enterRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).exitRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -1041,11 +1043,11 @@ public class TemplateParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).enterRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).exitRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -1077,11 +1079,11 @@ public class TemplateParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).enterRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).exitRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -1124,11 +1126,11 @@ public class TemplateParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).enterRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).exitRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -1144,15 +1146,15 @@ public class TemplateParser extends Parser {
 			_errHandler.sync(this);
 			int _alt423 = getInterpreter().adaptivePredict(_input,21,_ctx);
 			while ( _alt423!=2 && _alt423!=-1 ) {
-			    if ( _alt423==1 ) {
-			        {
-			        {
-			        setState(327); match(COMMA);
-			        setState(329); _localctx.names = match(TEMPLATE_PARAMETER);
-			        _localctx.names_list.add(_localctx.names);
-			        }
-			        } 
-			    }
+				if ( _alt423==1 ) {
+					{
+					{
+					setState(327); match(COMMA);
+					setState(329); _localctx.names = match(TEMPLATE_PARAMETER);
+					_localctx.names_list.add(_localctx.names);
+					}
+					} 
+				}
 				setState(335);
 				_errHandler.sync(this);
 				_alt423 = getInterpreter().adaptivePredict(_input,21,_ctx);
@@ -1177,11 +1179,11 @@ public class TemplateParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).enterRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).exitRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -1195,55 +1197,55 @@ public class TemplateParser extends Parser {
 			_errHandler.sync(this);
 			int _alt462 = getInterpreter().adaptivePredict(_input,23,_ctx);
 			while ( _alt462!=2 && _alt462!=-1 ) {
-			    if ( _alt462==1 ) {
-			        {
-			        setState(352);
-			        //_errHandler.sync(this);
-			        switch ( getInterpreter().adaptivePredict(_input,22,_ctx) ) {
-			        	case 1:
-			        		{
-			        		setState(338); match(NEWLINE);
-			        		}
-			        		break;
+				if ( _alt462==1 ) {
+					{
+					setState(352);
+					//_errHandler.sync(this);
+					switch ( getInterpreter().adaptivePredict(_input,22,_ctx) ) {
+						case 1:
+							{
+							setState(338); match(NEWLINE);
+							}
+							break;
 
-			        	case 2:
-			        		{
-			        		setState(340); match(COMMENT);
-			        		}
-			        		break;
+						case 2:
+							{
+							setState(340); match(COMMENT);
+							}
+							break;
 
-			        	case 3:
-			        		{
-			        		setState(342); ifstat();
-			        		}
-			        		break;
+						case 3:
+							{
+							setState(342); ifstat();
+							}
+							break;
 
-			        	case 4:
-			        		{
-			        		setState(344); region();
-			        		}
-			        		break;
+						case 4:
+							{
+							setState(344); region();
+							}
+							break;
 
-			        	case 5:
-			        		{
-			        		setState(346); exprTag();
-			        		}
-			        		break;
+						case 5:
+							{
+							setState(346); exprTag();
+							}
+							break;
 
-			        	case 6:
-			        		{
-			        		setState(348); escape();
-			        		}
-			        		break;
+						case 6:
+							{
+							setState(348); escape();
+							}
+							break;
 
-			        	case 7:
-			        		{
-			        		setState(350); match(TEXT);
-			        		}
-			        		break;
-			        }
-			        } 
-			    }
+						case 7:
+							{
+							setState(350); match(TEXT);
+							}
+							break;
+					}
+					} 
+				}
 				setState(356);
 				_errHandler.sync(this);
 				_alt462 = getInterpreter().adaptivePredict(_input,23,_ctx);
@@ -1267,11 +1269,11 @@ public class TemplateParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).enterRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).exitRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -1303,11 +1305,11 @@ public class TemplateParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).enterRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).exitRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -1349,11 +1351,11 @@ public class TemplateParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).enterRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).exitRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -1389,11 +1391,11 @@ public class TemplateParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).enterRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).exitRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -1423,11 +1425,11 @@ public class TemplateParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).enterRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).exitRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -1448,19 +1450,19 @@ public class TemplateParser extends Parser {
 			_errHandler.sync(this);
 			int _alt558 = getInterpreter().adaptivePredict(_input,25,_ctx);
 			while ( _alt558!=2 && _alt558!=-1 ) {
-			    if ( _alt558==1 ) {
-			        {
-			        {
-			        setState(405); match(OPEN_DELIMITER);
-			        setState(407); match(ELSEIF);
-			        setState(409); match(LPAREN);
-			        setState(411); conditional();
-			        setState(413); match(RPAREN);
-			        setState(415); match(CLOSE_DELIMITER);
-			        setState(417); templateBody();
-			        }
-			        } 
-			    }
+				if ( _alt558==1 ) {
+					{
+					{
+					setState(405); match(OPEN_DELIMITER);
+					setState(407); match(ELSEIF);
+					setState(409); match(LPAREN);
+					setState(411); conditional();
+					setState(413); match(RPAREN);
+					setState(415); match(CLOSE_DELIMITER);
+					setState(417); templateBody();
+					}
+					} 
+				}
 				setState(423);
 				_errHandler.sync(this);
 				_alt558 = getInterpreter().adaptivePredict(_input,25,_ctx);
@@ -1499,11 +1501,11 @@ public class TemplateParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).enterRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).exitRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -1518,14 +1520,14 @@ public class TemplateParser extends Parser {
 			_errHandler.sync(this);
 			int _alt590 = getInterpreter().adaptivePredict(_input,27,_ctx);
 			while ( _alt590!=2 && _alt590!=-1 ) {
-			    if ( _alt590==1 ) {
-			        {
-			        {
-			        setState(442); match(OR);
-			        setState(444); andConditional();
-			        }
-			        } 
-			    }
+				if ( _alt590==1 ) {
+					{
+					{
+					setState(442); match(OR);
+					setState(444); andConditional();
+					}
+					} 
+				}
 				setState(450);
 				_errHandler.sync(this);
 				_alt590 = getInterpreter().adaptivePredict(_input,27,_ctx);
@@ -1549,11 +1551,11 @@ public class TemplateParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).enterRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).exitRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -1568,14 +1570,14 @@ public class TemplateParser extends Parser {
 			_errHandler.sync(this);
 			int _alt605 = getInterpreter().adaptivePredict(_input,28,_ctx);
 			while ( _alt605!=2 && _alt605!=-1 ) {
-			    if ( _alt605==1 ) {
-			        {
-			        {
-			        setState(453); match(AND);
-			        setState(455); notConditional();
-			        }
-			        } 
-			    }
+				if ( _alt605==1 ) {
+					{
+					{
+					setState(453); match(AND);
+					setState(455); notConditional();
+					}
+					} 
+				}
 				setState(461);
 				_errHandler.sync(this);
 				_alt605 = getInterpreter().adaptivePredict(_input,28,_ctx);
@@ -1599,11 +1601,11 @@ public class TemplateParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).enterRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).exitRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -1649,11 +1651,11 @@ public class TemplateParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).enterRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).exitRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -1669,15 +1671,15 @@ public class TemplateParser extends Parser {
 			_errHandler.sync(this);
 			int _alt638 = getInterpreter().adaptivePredict(_input,30,_ctx);
 			while ( _alt638!=2 && _alt638!=-1 ) {
-			    if ( _alt638==1 ) {
-			        {
-			        {
-			        setState(472); match(COMMA);
-			        setState(474); _localctx.options_ = option();
-			        _localctx.options__list.add(_localctx.options_);
-			        }
-			        } 
-			    }
+				if ( _alt638==1 ) {
+					{
+					{
+					setState(472); match(COMMA);
+					setState(474); _localctx.options_ = option();
+					_localctx.options__list.add(_localctx.options_);
+					}
+					} 
+				}
 				setState(480);
 				_errHandler.sync(this);
 				_alt638 = getInterpreter().adaptivePredict(_input,30,_ctx);
@@ -1703,11 +1705,11 @@ public class TemplateParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).enterRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).exitRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -1747,11 +1749,11 @@ public class TemplateParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).enterRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).exitRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -1791,11 +1793,11 @@ public class TemplateParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).enterRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).exitRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -1825,11 +1827,11 @@ public class TemplateParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).enterRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).exitRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -1874,30 +1876,30 @@ public class TemplateParser extends Parser {
 			_errHandler.sync(this);
 			int _alt718 = getInterpreter().adaptivePredict(_input,36,_ctx);
 			while ( _alt718!=2 && _alt718!=-1 ) {
-			    if ( _alt718==1 ) {
-			        {
-			        {
-			        setState(515); match(COLON);
-			        setState(517); mapTemplateRef();
-			        setState(525);
-			        _errHandler.sync(this);
-			        int _alt716 = getInterpreter().adaptivePredict(_input,35,_ctx);
-			        while ( _alt716!=2 && _alt716!=-1 ) {
-			            if ( _alt716==1 ) {
-			                {
-			                {
-			                setState(519); match(COMMA);
-			                setState(521); mapTemplateRef();
-			                }
-			                } 
-			            }
-			        	setState(527);
-			        	_errHandler.sync(this);
-			        	_alt716 = getInterpreter().adaptivePredict(_input,35,_ctx);
-			        }
-			        }
-			        } 
-			    }
+				if ( _alt718==1 ) {
+					{
+					{
+					setState(515); match(COLON);
+					setState(517); mapTemplateRef();
+					setState(525);
+					_errHandler.sync(this);
+					int _alt716 = getInterpreter().adaptivePredict(_input,35,_ctx);
+					while ( _alt716!=2 && _alt716!=-1 ) {
+						if ( _alt716==1 ) {
+							{
+							{
+							setState(519); match(COMMA);
+							setState(521); mapTemplateRef();
+							}
+							} 
+						}
+						setState(527);
+						_errHandler.sync(this);
+						_alt716 = getInterpreter().adaptivePredict(_input,35,_ctx);
+					}
+					}
+					} 
+				}
 				setState(532);
 				_errHandler.sync(this);
 				_alt718 = getInterpreter().adaptivePredict(_input,36,_ctx);
@@ -1921,11 +1923,11 @@ public class TemplateParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).enterRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).exitRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -1991,11 +1993,11 @@ public class TemplateParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).enterRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).exitRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -2010,29 +2012,29 @@ public class TemplateParser extends Parser {
 			_errHandler.sync(this);
 			int _alt778 = getInterpreter().adaptivePredict(_input,40,_ctx);
 			while ( _alt778!=2 && _alt778!=-1 ) {
-			    if ( _alt778==1 ) {
-			        {
-			        setState(573);
-			        //_errHandler.sync(this);
-			        switch ( getInterpreter().adaptivePredict(_input,39,_ctx) ) {
-			        	case 1:
-			        		{
-			        		setState(561); match(DOT);
-			        		setState(563); match(ID);
-			        		}
-			        		break;
+				if ( _alt778==1 ) {
+					{
+					setState(573);
+					//_errHandler.sync(this);
+					switch ( getInterpreter().adaptivePredict(_input,39,_ctx) ) {
+						case 1:
+							{
+							setState(561); match(DOT);
+							setState(563); match(ID);
+							}
+							break;
 
-			        	case 2:
-			        		{
-			        		setState(565); match(DOT);
-			        		setState(567); match(LPAREN);
-			        		setState(569); mapExpr();
-			        		setState(571); match(RPAREN);
-			        		}
-			        		break;
-			        }
-			        } 
-			    }
+						case 2:
+							{
+							setState(565); match(DOT);
+							setState(567); match(LPAREN);
+							setState(569); mapExpr();
+							setState(571); match(RPAREN);
+							}
+							break;
+					}
+					} 
+				}
 				setState(577);
 				_errHandler.sync(this);
 				_alt778 = getInterpreter().adaptivePredict(_input,40,_ctx);
@@ -2061,11 +2063,11 @@ public class TemplateParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).enterRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).exitRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -2145,11 +2147,11 @@ public class TemplateParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).enterRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).exitRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -2257,11 +2259,11 @@ public class TemplateParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).enterRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).exitRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -2287,14 +2289,14 @@ public class TemplateParser extends Parser {
 					_errHandler.sync(this);
 					int _alt925 = getInterpreter().adaptivePredict(_input,45,_ctx);
 					while ( _alt925!=2 && _alt925!=-1 ) {
-					    if ( _alt925==1 ) {
-					        {
-					        {
-					        setState(660); match(COMMA);
-					        setState(662); namedArg();
-					        }
-					        } 
-					    }
+						if ( _alt925==1 ) {
+							{
+							{
+							setState(660); match(COMMA);
+							setState(662); namedArg();
+							}
+							} 
+						}
 						setState(668);
 						_errHandler.sync(this);
 						_alt925 = getInterpreter().adaptivePredict(_input,45,_ctx);
@@ -2342,11 +2344,11 @@ public class TemplateParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).enterRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).exitRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -2361,14 +2363,14 @@ public class TemplateParser extends Parser {
 			_errHandler.sync(this);
 			int _alt955 = getInterpreter().adaptivePredict(_input,48,_ctx);
 			while ( _alt955!=2 && _alt955!=-1 ) {
-			    if ( _alt955==1 ) {
-			        {
-			        {
-			        setState(683); match(COMMA);
-			        setState(685); arg();
-			        }
-			        } 
-			    }
+				if ( _alt955==1 ) {
+					{
+					{
+					setState(683); match(COMMA);
+					setState(685); arg();
+					}
+					} 
+				}
 				setState(691);
 				_errHandler.sync(this);
 				_alt955 = getInterpreter().adaptivePredict(_input,48,_ctx);
@@ -2392,11 +2394,11 @@ public class TemplateParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).enterRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).exitRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -2428,11 +2430,11 @@ public class TemplateParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).enterRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).exitRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -2466,11 +2468,11 @@ public class TemplateParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).enterRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).exitRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitRule(this);
 		}
 	}
 
@@ -2499,15 +2501,15 @@ public class TemplateParser extends Parser {
 					_errHandler.sync(this);
 					int _alt1006 = getInterpreter().adaptivePredict(_input,49,_ctx);
 					while ( _alt1006!=2 && _alt1006!=-1 ) {
-					    if ( _alt1006==1 ) {
-					        {
-					        {
-					        setState(708); match(COMMA);
-					        setState(710); _localctx.elements = listElement();
-					        _localctx.elements_list.add(_localctx.elements);
-					        }
-					        } 
-					    }
+						if ( _alt1006==1 ) {
+							{
+							{
+							setState(708); match(COMMA);
+							setState(710); _localctx.elements = listElement();
+							_localctx.elements_list.add(_localctx.elements);
+							}
+							} 
+						}
 						setState(716);
 						_errHandler.sync(this);
 						_alt1006 = getInterpreter().adaptivePredict(_input,49,_ctx);
@@ -2534,11 +2536,11 @@ public class TemplateParser extends Parser {
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).enterRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterRule(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener!=null ) ((TemplateParserListener)listener).exitRule(this);
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitRule(this);
 		}
 	}
 
