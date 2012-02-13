@@ -18,6 +18,8 @@ import org.antlr.netbeans.editor.text.SnapshotPositionRegion;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenStream;
+import org.antlr.v4.runtime.misc.Interval;
+import org.antlr.works.editor.antlr4.parsing.ParseTrees;
 import org.antlr.works.editor.grammar.codemodel.FileModel;
 import org.antlr.works.editor.grammar.codemodel.LabelModel;
 import org.antlr.works.editor.grammar.codemodel.ParameterModel;
@@ -162,12 +164,9 @@ public class CodeModelBuilderListener extends BlankGrammarParserListener {
             return null;
         }
 
-        Token startToken = context.start;
-        Token stopToken = context.stop;
-        if (startToken != null && stopToken != null) {
-            int startIndex = startToken.getStartIndex();
-            int stopIndex = stopToken.getStopIndex() + 1;
-            return new SnapshotPositionRegion(snapshot, OffsetRegion.fromBounds(startIndex, stopIndex));
+        Interval sourceInterval = ParseTrees.getSourceInterval(context);
+        if (sourceInterval != null && sourceInterval.b + 1 >= sourceInterval.a) {
+            return new SnapshotPositionRegion(snapshot, OffsetRegion.fromBounds(sourceInterval.a, sourceInterval.b + 1));
         }
 
         return null;
