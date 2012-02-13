@@ -198,7 +198,7 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
             Collection<? extends ParserDataDefinition> data = MimeLookup.getLookup(document.getMimeType()).lookupAll(ParserDataDefinition.class);
             for (ParserDataDefinition<?> definition : data) {
                 if (definition.getScheduler() == schedulerClass && definition.isCacheable()) {
-                    updateCachedData(document, definition, null);
+                    clearCachedData(document, definition);
                 }
             }
 
@@ -223,7 +223,7 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
             Collection<? extends ParserDataDefinition> data = MimeLookup.getLookup(document.getMimeType()).lookupAll(ParserDataDefinition.class);
             for (ParserDataDefinition<?> definition : data) {
                 if (definition.getScheduler() == schedulerClass && definition.isCacheable()) {
-                    updateCachedData(document, definition, null);
+                    clearCachedData(document, definition);
                 }
             }
 
@@ -482,6 +482,26 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
         }
 
         return null;
+    }
+
+    private synchronized boolean clearCachedData(VersionedDocument versionedDocument, ParserDataDefinition<?> definition) {
+        Document document = versionedDocument.getDocument();
+        if (document != null) {
+            ParserData<?> previousData = (ParserData<?>)document.getProperty(definition);
+            if (previousData == null) {
+                return false;
+            }
+
+            document.putProperty(definition, null);
+            return true;
+        }
+
+        Map<?, ?> documentProperties = (Map<?, ?>)versionedDocument.getProperty(DOCUMENT_PROPERTIES_KEY);
+        if (documentProperties == null) {
+            return false;
+        }
+
+        return documentProperties.remove(definition) != null;
     }
 
     private synchronized boolean updateCachedData(VersionedDocument versionedDocument, ParserDataDefinition<?> definition, ParserData<?> data) {
