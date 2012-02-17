@@ -62,8 +62,8 @@ public abstract class ParserTaskScheduler {
     private final Map<VersionedDocument, Map<ParserDataDefinition<?>, Reference<ScheduledFuture<ParserData<?>>>>> scheduledDocumentDataTasks =
         new WeakHashMap<VersionedDocument, Map<ParserDataDefinition<?>, Reference<ScheduledFuture<ParserData<?>>>>>();
 
-    private final Map<VersionedDocument, Map<ParserTaskProvider, Reference<ScheduledFuture<Collection<ParserData<?>>>>>> scheduledDocumentTasks =
-        new WeakHashMap<VersionedDocument, Map<ParserTaskProvider, Reference<ScheduledFuture<Collection<ParserData<?>>>>>>();
+    private final Map<VersionedDocument, Map<ParserTaskProvider, Reference<ScheduledFuture<Collection<? extends ParserData<?>>>>>> scheduledDocumentTasks =
+        new WeakHashMap<VersionedDocument, Map<ParserTaskProvider, Reference<ScheduledFuture<Collection<? extends ParserData<?>>>>>>();
 
     private boolean initialized;
 
@@ -121,13 +121,13 @@ public abstract class ParserTaskScheduler {
     }
 
     public void cancelTasks(VersionedDocument document, boolean mayInterruptIfRunning) {
-        Map<ParserTaskProvider, Reference<ScheduledFuture<Collection<ParserData<?>>>>> tasks;
+        Map<ParserTaskProvider, Reference<ScheduledFuture<Collection<? extends ParserData<?>>>>> tasks;
         synchronized (scheduledDocumentTasks) {
             tasks = scheduledDocumentTasks.remove(document);
         }
 
         if (tasks != null) {
-            for (Map.Entry<ParserTaskProvider, Reference<ScheduledFuture<Collection<ParserData<?>>>>> entry : tasks.entrySet()) {
+            for (Map.Entry<ParserTaskProvider, Reference<ScheduledFuture<Collection<? extends ParserData<?>>>>> entry : tasks.entrySet()) {
                 ScheduledFuture<?> scheduled = entry.getValue().get();
                 if (scheduled == null) {
                     continue;
@@ -216,11 +216,11 @@ public abstract class ParserTaskScheduler {
 
         if (!currentScheduledProviders.isEmpty()) {
             VersionedDocument document = context.getDocument();
-            Map<ParserTaskProvider, Reference<ScheduledFuture<Collection<ParserData<?>>>>> existing;
+            Map<ParserTaskProvider, Reference<ScheduledFuture<Collection<? extends ParserData<?>>>>> existing;
             synchronized(scheduledDocumentTasks) {
                 existing = scheduledDocumentTasks.get(document);
                 if (existing == null) {
-                    existing = new HashMap<ParserTaskProvider, Reference<ScheduledFuture<Collection<ParserData<?>>>>>();
+                    existing = new HashMap<ParserTaskProvider, Reference<ScheduledFuture<Collection<? extends ParserData<?>>>>>();
                     scheduledDocumentTasks.put(document, existing);
                 }
             }
@@ -239,10 +239,10 @@ public abstract class ParserTaskScheduler {
                 LOGGER.log(Level.FINE, "Rescheduling {0} tasks, document={1}, delay={2}{3}, data={4}", new Object[] { getClass().getSimpleName(), document.getFileObject().getPath(), delay, getTimeUnitDisplay(timeUnit), currentScheduledProviders });
             }
 
-            Map<ParserTaskProvider, ScheduledFuture<Collection<ParserData<?>>>> futures = getTaskManager().scheduleTask(context, currentScheduledProviders, delay, timeUnit);
+            Map<ParserTaskProvider, ScheduledFuture<Collection<? extends ParserData<?>>>> futures = getTaskManager().scheduleTask(context, currentScheduledProviders, delay, timeUnit);
             synchronized (existing) {
-                for (Map.Entry<ParserTaskProvider, ScheduledFuture<Collection<ParserData<?>>>> entry : futures.entrySet()) {
-                    existing.put(entry.getKey(), new WeakReference<ScheduledFuture<Collection<ParserData<?>>>>(entry.getValue()));
+                for (Map.Entry<ParserTaskProvider, ScheduledFuture<Collection<? extends ParserData<?>>>> entry : futures.entrySet()) {
+                    existing.put(entry.getKey(), new WeakReference<ScheduledFuture<Collection<? extends ParserData<?>>>>(entry.getValue()));
                 }
             }
         }

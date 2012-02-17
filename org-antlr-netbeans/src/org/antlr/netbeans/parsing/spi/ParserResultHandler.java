@@ -16,6 +16,6 @@ import org.netbeans.api.annotations.common.NonNull;
  */
 public interface ParserResultHandler {
 
-    <T> void addResult(@NonNull ParserData<T> result);
+    void addResult(@NonNull ParserData<?> result);
 
 }

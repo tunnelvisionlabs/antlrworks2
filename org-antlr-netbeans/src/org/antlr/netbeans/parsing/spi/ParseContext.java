@@ -8,6 +8,8 @@
  */
 package org.antlr.netbeans.parsing.spi;
 
+import java.lang.ref.Reference;
+import java.lang.ref.WeakReference;
 import javax.swing.text.JTextComponent;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.netbeans.editor.text.SnapshotPosition;
@@ -24,7 +26,7 @@ public class ParseContext {
     private final VersionedDocument document;
     private final DocumentSnapshot snapshot;
     private final SnapshotPosition position;
-    private final JTextComponent component;
+    private final Reference<JTextComponent> component;
     private final ParserTaskScheduler scheduler;
 
     public ParseContext(VersionedDocument document) {
@@ -80,7 +82,7 @@ public class ParseContext {
         this.document = document;
         this.snapshot = snapshot;
         this.position = position;
-        this.component = component;
+        this.component = new WeakReference<JTextComponent>(component);
         this.scheduler = scheduler;
     }
 
@@ -101,7 +103,7 @@ public class ParseContext {
 
     @CheckForNull
     public JTextComponent getComponent() {
-        return component;
+        return component.get();
     }
 
     @CheckForNull
