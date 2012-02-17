@@ -25,7 +25,7 @@ import org.antlr.works.editor.antlr4.semantics.AbstractParseTreeSemanticHighligh
 import org.antlr.works.editor.antlr4.semantics.AbstractSemanticHighlighter;
 import org.antlr.works.editor.st4.StringTemplateEditorKit;
 import org.antlr.works.editor.st4.TemplateParserDataDefinitions;
-import org.antlr.works.editor.st4.experimental.BlankTemplateParserListener;
+import org.antlr.works.editor.st4.experimental.TemplateParserBaseListener;
 import org.antlr.works.editor.st4.experimental.TemplateParser.anonymousTemplateContext;
 import org.antlr.works.editor.st4.experimental.TemplateParser.anonymousTemplateParametersContext;
 import org.antlr.works.editor.st4.experimental.TemplateParser.dictDefContext;
@@ -118,7 +118,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
 
     }
 
-    public static class SemanticAnalyzerListener extends BlankTemplateParserListener {
+    public static class SemanticAnalyzerListener extends TemplateParserBaseListener {
         private final Deque<Integer> memberContext = new ArrayDeque<Integer>();
         private final Deque<Set<String>> parameters = new ArrayDeque<Set<String>>();
 
@@ -174,14 +174,14 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
         }
 
         @Override
-        public void enterRule(dictDefContext ctx) {
+        public void dictDefEnter(dictDefContext ctx) {
             if (ctx.name != null) {
                 dictionaryDeclarations.add(ctx.name);
             }
         }
 
         @Override
-        public void enterRule(templateDefContext ctx) {
+        public void templateDefEnter(templateDefContext ctx) {
             parameters.push(new HashSet<String>());
 
             if (ctx.name != null) {
@@ -203,12 +203,12 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
         }
 
         @Override
-        public void exitRule(templateDefContext ctx) {
+        public void templateDefExit(templateDefContext ctx) {
             parameters.pop();
         }
 
         @Override
-        public void enterRule(formalArgContext ctx) {
+        public void formalArgEnter(formalArgContext ctx) {
             if (ctx.name != null) {
                 parameterDeclarations.add(ctx.name);
 
@@ -218,36 +218,36 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
         }
 
         @Override
-        public void enterRule(anonymousTemplateContext ctx) {
+        public void anonymousTemplateEnter(anonymousTemplateContext ctx) {
             parameters.push(new HashSet<String>());
         }
 
         @Override
-        public void exitRule(anonymousTemplateContext ctx) {
+        public void anonymousTemplateExit(anonymousTemplateContext ctx) {
             parameters.pop();
         }
 
         @Override
-        public void enterRule(anonymousTemplateParametersContext ctx) {
-            if (ctx.names_list != null) {
-                parameterDeclarations.addAll(ctx.names_list);
+        public void anonymousTemplateParametersEnter(anonymousTemplateParametersContext ctx) {
+            if (ctx.names != null) {
+                parameterDeclarations.addAll(ctx.names);
 
                 Set<String> currentParameters = parameters.peek();
-                for (Token token : ctx.names_list) {
+                for (Token token : ctx.names) {
                     currentParameters.add(token.getText());
                 }
             }
         }
 
         @Override
-        public void enterRule(optionContext ctx) {
+        public void optionEnter(optionContext ctx) {
             if (ctx.name != null) {
                 options.add(ctx.name);
             }
         }
 
         @Override
-        public void enterRule(includeExprContext ctx) {
+        public void includeExprEnter(includeExprContext ctx) {
             if (ctx.templateName != null) {
                 if (ctx.at != null) {
                     regionUses.add(ctx.templateName);
@@ -262,7 +262,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
         }
 
         @Override
-        public void enterRule(primaryContext ctx) {
+        public void primaryEnter(primaryContext ctx) {
             if (ctx.id != null) {
                 Set<String> currentParameters = parameters.isEmpty() ? null : parameters.peek();
                 if (currentParameters != null && currentParameters.contains(ctx.id.getText())) {
@@ -274,7 +274,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
         }
 
         @Override
-        public void exitRule(groupContext ctx) {
+        public void groupExit(groupContext ctx) {
         }
     }
 

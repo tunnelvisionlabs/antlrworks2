@@ -23,7 +23,7 @@ import org.antlr.works.editor.antlr4.semantics.AbstractParseTreeSemanticHighligh
 import org.antlr.works.editor.antlr4.semantics.AbstractSemanticHighlighter;
 import org.antlr.works.editor.grammar.GrammarEditorKit;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
-import org.antlr.works.editor.grammar.experimental.BlankGrammarParserListener;
+import org.antlr.works.editor.grammar.experimental.GrammarParserBaseListener;
 import org.antlr.works.editor.grammar.experimental.GrammarParser;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.argActionParameterContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.localsSpecContext;
@@ -91,7 +91,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
 
     }
 
-    public static class SemanticAnalyzerListener extends BlankGrammarParserListener {
+    public static class SemanticAnalyzerListener extends GrammarParserBaseListener {
         private final Deque<Integer> memberContext = new ArrayDeque<Integer>();
 
         private final List<Token> parameterDeclarations = new ArrayList<Token>();
@@ -111,7 +111,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
         }
 
         @Override
-        public void enterRule(argActionParameterContext ctx) {
+        public void argActionParameterEnter(argActionParameterContext ctx) {
             if (ctx.name != null) {
                 int context = memberContext.isEmpty() ? GrammarParser.RULE_rule : memberContext.peek();
                 switch (context) {
@@ -132,34 +132,34 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
         }
 
         @Override
-        public void enterRule(ruleContext ctx) {
+        public void ruleEnter(ruleContext ctx) {
             memberContext.push(GrammarParser.RULE_rule);
         }
 
         @Override
-        public void exitRule(ruleContext ctx) {
+        public void ruleExit(ruleContext ctx) {
             int context = memberContext.pop();
             assert context == GrammarParser.RULE_rule;
         }
 
         @Override
-        public void enterRule(ruleReturnsContext ctx) {
+        public void ruleReturnsEnter(ruleReturnsContext ctx) {
             memberContext.push(GrammarParser.RULE_ruleReturns);
         }
 
         @Override
-        public void exitRule(ruleReturnsContext ctx) {
+        public void ruleReturnsExit(ruleReturnsContext ctx) {
             int context = memberContext.pop();
             assert context == GrammarParser.RULE_ruleReturns;
         }
 
         @Override
-        public void enterRule(localsSpecContext ctx) {
+        public void localsSpecEnter(localsSpecContext ctx) {
             memberContext.push(GrammarParser.RULE_localsSpec);
         }
 
         @Override
-        public void exitRule(localsSpecContext ctx) {
+        public void localsSpecExit(localsSpecContext ctx) {
             int context = memberContext.pop();
             assert context == GrammarParser.RULE_localsSpec;
         }

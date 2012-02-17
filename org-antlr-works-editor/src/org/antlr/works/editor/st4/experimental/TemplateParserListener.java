@@ -12,135 +12,135 @@ import org.antlr.v4.runtime.tree.*;
 import org.antlr.v4.runtime.Token;
 
 public interface TemplateParserListener extends ParseTreeListener<Token> {
-	void enterRule(TemplateParser.memberExprContext ctx);
-	void exitRule(TemplateParser.memberExprContext ctx);
+	void memberExprEnter(TemplateParser.memberExprContext ctx);
+	void memberExprExit(TemplateParser.memberExprContext ctx);
 
-	void enterRule(TemplateParser.regionContext ctx);
-	void exitRule(TemplateParser.regionContext ctx);
+	void regionEnter(TemplateParser.regionContext ctx);
+	void regionExit(TemplateParser.regionContext ctx);
 
-	void enterRule(TemplateParser.bigstringTemplateNoNewlineContext ctx);
-	void exitRule(TemplateParser.bigstringTemplateNoNewlineContext ctx);
+	void bigstringTemplateNoNewlineEnter(TemplateParser.bigstringTemplateNoNewlineContext ctx);
+	void bigstringTemplateNoNewlineExit(TemplateParser.bigstringTemplateNoNewlineContext ctx);
 
-	void enterRule(TemplateParser.dictContext ctx);
-	void exitRule(TemplateParser.dictContext ctx);
+	void dictEnter(TemplateParser.dictContext ctx);
+	void dictExit(TemplateParser.dictContext ctx);
 
-	void enterRule(TemplateParser.dictDefContext ctx);
-	void exitRule(TemplateParser.dictDefContext ctx);
+	void dictDefEnter(TemplateParser.dictDefContext ctx);
+	void dictDefExit(TemplateParser.dictDefContext ctx);
 
-	void enterRule(TemplateParser.groupNameContext ctx);
-	void exitRule(TemplateParser.groupNameContext ctx);
+	void groupNameEnter(TemplateParser.groupNameContext ctx);
+	void groupNameExit(TemplateParser.groupNameContext ctx);
 
-	void enterRule(TemplateParser.exprContext ctx);
-	void exitRule(TemplateParser.exprContext ctx);
+	void exprEnter(TemplateParser.exprContext ctx);
+	void exprExit(TemplateParser.exprContext ctx);
 
-	void enterRule(TemplateParser.anonymousTemplateContext ctx);
-	void exitRule(TemplateParser.anonymousTemplateContext ctx);
+	void anonymousTemplateEnter(TemplateParser.anonymousTemplateContext ctx);
+	void anonymousTemplateExit(TemplateParser.anonymousTemplateContext ctx);
 
-	void enterRule(TemplateParser.escapeContext ctx);
-	void exitRule(TemplateParser.escapeContext ctx);
+	void escapeEnter(TemplateParser.escapeContext ctx);
+	void escapeExit(TemplateParser.escapeContext ctx);
 
-	void enterRule(TemplateParser.argContext ctx);
-	void exitRule(TemplateParser.argContext ctx);
+	void argEnter(TemplateParser.argContext ctx);
+	void argExit(TemplateParser.argContext ctx);
 
-	void enterRule(TemplateParser.andConditionalContext ctx);
-	void exitRule(TemplateParser.andConditionalContext ctx);
+	void andConditionalEnter(TemplateParser.andConditionalContext ctx);
+	void andConditionalExit(TemplateParser.andConditionalContext ctx);
 
-	void enterRule(TemplateParser.defContext ctx);
-	void exitRule(TemplateParser.defContext ctx);
+	void defEnter(TemplateParser.defContext ctx);
+	void defExit(TemplateParser.defContext ctx);
 
-	void enterRule(TemplateParser.mapTemplateRefContext ctx);
-	void exitRule(TemplateParser.mapTemplateRefContext ctx);
+	void mapTemplateRefEnter(TemplateParser.mapTemplateRefContext ctx);
+	void mapTemplateRefExit(TemplateParser.mapTemplateRefContext ctx);
 
-	void enterRule(TemplateParser.templateDefContext ctx);
-	void exitRule(TemplateParser.templateDefContext ctx);
+	void templateDefEnter(TemplateParser.templateDefContext ctx);
+	void templateDefExit(TemplateParser.templateDefContext ctx);
 
-	void enterRule(TemplateParser.primaryContext ctx);
-	void exitRule(TemplateParser.primaryContext ctx);
+	void primaryEnter(TemplateParser.primaryContext ctx);
+	void primaryExit(TemplateParser.primaryContext ctx);
 
-	void enterRule(TemplateParser.exprNoCommaContext ctx);
-	void exitRule(TemplateParser.exprNoCommaContext ctx);
+	void exprNoCommaEnter(TemplateParser.exprNoCommaContext ctx);
+	void exprNoCommaExit(TemplateParser.exprNoCommaContext ctx);
 
-	void enterRule(TemplateParser.bigstringTemplateContext ctx);
-	void exitRule(TemplateParser.bigstringTemplateContext ctx);
+	void bigstringTemplateEnter(TemplateParser.bigstringTemplateContext ctx);
+	void bigstringTemplateExit(TemplateParser.bigstringTemplateContext ctx);
 
-	void enterRule(TemplateParser.ifstatContext ctx);
-	void exitRule(TemplateParser.ifstatContext ctx);
+	void ifstatEnter(TemplateParser.ifstatContext ctx);
+	void ifstatExit(TemplateParser.ifstatContext ctx);
 
-	void enterRule(TemplateParser.anonymousTemplateParametersContext ctx);
-	void exitRule(TemplateParser.anonymousTemplateParametersContext ctx);
+	void anonymousTemplateParametersEnter(TemplateParser.anonymousTemplateParametersContext ctx);
+	void anonymousTemplateParametersExit(TemplateParser.anonymousTemplateParametersContext ctx);
 
-	void enterRule(TemplateParser.listElementContext ctx);
-	void exitRule(TemplateParser.listElementContext ctx);
+	void listElementEnter(TemplateParser.listElementContext ctx);
+	void listElementExit(TemplateParser.listElementContext ctx);
 
-	void enterRule(TemplateParser.optionContext ctx);
-	void exitRule(TemplateParser.optionContext ctx);
+	void optionEnter(TemplateParser.optionContext ctx);
+	void optionExit(TemplateParser.optionContext ctx);
 
-	void enterRule(TemplateParser.stringTemplateContext ctx);
-	void exitRule(TemplateParser.stringTemplateContext ctx);
+	void stringTemplateEnter(TemplateParser.stringTemplateContext ctx);
+	void stringTemplateExit(TemplateParser.stringTemplateContext ctx);
 
-	void enterRule(TemplateParser.oldStyleHeaderContext ctx);
-	void exitRule(TemplateParser.oldStyleHeaderContext ctx);
+	void oldStyleHeaderEnter(TemplateParser.oldStyleHeaderContext ctx);
+	void oldStyleHeaderExit(TemplateParser.oldStyleHeaderContext ctx);
 
-	void enterRule(TemplateParser.delimitersContext ctx);
-	void exitRule(TemplateParser.delimitersContext ctx);
+	void delimitersEnter(TemplateParser.delimitersContext ctx);
+	void delimitersExit(TemplateParser.delimitersContext ctx);
 
-	void enterRule(TemplateParser.keyValuePairContext ctx);
-	void exitRule(TemplateParser.keyValuePairContext ctx);
+	void keyValuePairEnter(TemplateParser.keyValuePairContext ctx);
+	void keyValuePairExit(TemplateParser.keyValuePairContext ctx);
 
-	void enterRule(TemplateParser.mapExprContext ctx);
-	void exitRule(TemplateParser.mapExprContext ctx);
+	void mapExprEnter(TemplateParser.mapExprContext ctx);
+	void mapExprExit(TemplateParser.mapExprContext ctx);
 
-	void enterRule(TemplateParser.listContext ctx);
-	void exitRule(TemplateParser.listContext ctx);
+	void listEnter(TemplateParser.listContext ctx);
+	void listExit(TemplateParser.listContext ctx);
 
-	void enterRule(TemplateParser.dictPairsContext ctx);
-	void exitRule(TemplateParser.dictPairsContext ctx);
+	void dictPairsEnter(TemplateParser.dictPairsContext ctx);
+	void dictPairsExit(TemplateParser.dictPairsContext ctx);
 
-	void enterRule(TemplateParser.formalArgsContext ctx);
-	void exitRule(TemplateParser.formalArgsContext ctx);
+	void formalArgsEnter(TemplateParser.formalArgsContext ctx);
+	void formalArgsExit(TemplateParser.formalArgsContext ctx);
 
-	void enterRule(TemplateParser.exprTagContext ctx);
-	void exitRule(TemplateParser.exprTagContext ctx);
+	void exprTagEnter(TemplateParser.exprTagContext ctx);
+	void exprTagExit(TemplateParser.exprTagContext ctx);
 
-	void enterRule(TemplateParser.argExprListContext ctx);
-	void exitRule(TemplateParser.argExprListContext ctx);
+	void argExprListEnter(TemplateParser.argExprListContext ctx);
+	void argExprListExit(TemplateParser.argExprListContext ctx);
 
-	void enterRule(TemplateParser.notConditionalContext ctx);
-	void exitRule(TemplateParser.notConditionalContext ctx);
+	void notConditionalEnter(TemplateParser.notConditionalContext ctx);
+	void notConditionalExit(TemplateParser.notConditionalContext ctx);
 
-	void enterRule(TemplateParser.subtemplateContext ctx);
-	void exitRule(TemplateParser.subtemplateContext ctx);
+	void subtemplateEnter(TemplateParser.subtemplateContext ctx);
+	void subtemplateExit(TemplateParser.subtemplateContext ctx);
 
-	void enterRule(TemplateParser.argumentsContext ctx);
-	void exitRule(TemplateParser.argumentsContext ctx);
+	void argumentsEnter(TemplateParser.argumentsContext ctx);
+	void argumentsExit(TemplateParser.argumentsContext ctx);
 
-	void enterRule(TemplateParser.formalArgContext ctx);
-	void exitRule(TemplateParser.formalArgContext ctx);
+	void formalArgEnter(TemplateParser.formalArgContext ctx);
+	void formalArgExit(TemplateParser.formalArgContext ctx);
 
-	void enterRule(TemplateParser.includeExprContext ctx);
-	void exitRule(TemplateParser.includeExprContext ctx);
+	void includeExprEnter(TemplateParser.includeExprContext ctx);
+	void includeExprExit(TemplateParser.includeExprContext ctx);
 
-	void enterRule(TemplateParser.stringContext ctx);
-	void exitRule(TemplateParser.stringContext ctx);
+	void stringEnter(TemplateParser.stringContext ctx);
+	void stringExit(TemplateParser.stringContext ctx);
 
-	void enterRule(TemplateParser.exprOptionsContext ctx);
-	void exitRule(TemplateParser.exprOptionsContext ctx);
+	void exprOptionsEnter(TemplateParser.exprOptionsContext ctx);
+	void exprOptionsExit(TemplateParser.exprOptionsContext ctx);
 
-	void enterRule(TemplateParser.conditionalContext ctx);
-	void exitRule(TemplateParser.conditionalContext ctx);
+	void conditionalEnter(TemplateParser.conditionalContext ctx);
+	void conditionalExit(TemplateParser.conditionalContext ctx);
 
-	void enterRule(TemplateParser.namedArgContext ctx);
-	void exitRule(TemplateParser.namedArgContext ctx);
+	void namedArgEnter(TemplateParser.namedArgContext ctx);
+	void namedArgExit(TemplateParser.namedArgContext ctx);
 
-	void enterRule(TemplateParser.groupContext ctx);
-	void exitRule(TemplateParser.groupContext ctx);
+	void groupEnter(TemplateParser.groupContext ctx);
+	void groupExit(TemplateParser.groupContext ctx);
 
-	void enterRule(TemplateParser.templateBodyContext ctx);
-	void exitRule(TemplateParser.templateBodyContext ctx);
+	void templateBodyEnter(TemplateParser.templateBodyContext ctx);
+	void templateBodyExit(TemplateParser.templateBodyContext ctx);
 
-	void enterRule(TemplateParser.defaultValuePairContext ctx);
-	void exitRule(TemplateParser.defaultValuePairContext ctx);
+	void defaultValuePairEnter(TemplateParser.defaultValuePairContext ctx);
+	void defaultValuePairExit(TemplateParser.defaultValuePairContext ctx);
 
-	void enterRule(TemplateParser.keyValueContext ctx);
-	void exitRule(TemplateParser.keyValueContext ctx);
+	void keyValueEnter(TemplateParser.keyValueContext ctx);
+	void keyValueExit(TemplateParser.keyValueContext ctx);
 }

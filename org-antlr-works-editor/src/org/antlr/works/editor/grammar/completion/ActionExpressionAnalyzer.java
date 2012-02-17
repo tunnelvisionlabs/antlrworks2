@@ -16,7 +16,7 @@ import org.antlr.works.editor.grammar.codemodel.AttributeModel;
 import org.antlr.works.editor.grammar.codemodel.FileModel;
 import org.antlr.works.editor.grammar.codemodel.LabelModel;
 import org.antlr.works.editor.grammar.codemodel.RuleModel;
-import org.antlr.works.editor.grammar.experimental.BlankGrammarParserListener;
+import org.antlr.works.editor.grammar.experimental.GrammarParserBaseListener;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.actionExpressionContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.actionScopeExpressionContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.lexerRuleContext;
@@ -29,7 +29,7 @@ import org.openide.util.Parameters;
  *
  * @author Sam Harwell
  */
-public class ActionExpressionAnalyzer extends BlankGrammarParserListener {
+public class ActionExpressionAnalyzer extends GrammarParserBaseListener {
     private final FileModel fileModel;
     private final RuleContext finalContext;
     private final List<AttributeModel> members = new ArrayList<AttributeModel>();
@@ -47,7 +47,7 @@ public class ActionExpressionAnalyzer extends BlankGrammarParserListener {
     }
 
     @Override
-    public void enterRule(actionScopeExpressionContext ctx) {
+    public void actionScopeExpressionEnter(actionScopeExpressionContext ctx) {
         if (ctx.op != null && ctx.member == null) {
             /* action scope expressions are only used for rule references
              *   $ruleName::
@@ -66,7 +66,7 @@ public class ActionExpressionAnalyzer extends BlankGrammarParserListener {
     }
 
     @Override
-    public void enterRule(actionExpressionContext ctx) {
+    public void actionExpressionEnter(actionExpressionContext ctx) {
         if (ctx.op != null && ctx.member == null) {
             /* action expressions are used for label references (explicit or implicit)
              *   $elementName. (implicit label reference)

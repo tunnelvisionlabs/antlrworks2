@@ -16,7 +16,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.Tree;
-import org.antlr.works.editor.grammar.experimental.BlankGrammarParserListener;
+import org.antlr.works.editor.grammar.experimental.GrammarParserBaseListener;
 import org.netbeans.api.annotations.common.NonNull;
 import org.openide.util.Parameters;
 
@@ -73,7 +73,7 @@ public class AnnotatedParseTree {
         final Set<Tree> trees = new HashSet<Tree>();
         final Set<Token> tokens = new HashSet<Token>();
 
-        BlankGrammarParserListener listener = new BlankGrammarParserListener() {
+        GrammarParserBaseListener listener = new GrammarParserBaseListener() {
 
             @Override
             public void enterEveryRule(ParserRuleContext<Token> ctx) {

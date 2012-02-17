@@ -26,7 +26,6 @@ import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
-import org.antlr.works.editor.grammar.experimental.BlankGrammarParserListener;
 import org.antlr.works.editor.grammar.experimental.CurrentRuleContextData;
 import org.antlr.works.editor.grammar.experimental.GrammarParser;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.altListContext;
@@ -40,6 +39,7 @@ import org.antlr.works.editor.grammar.experimental.GrammarParser.lexerBlockConte
 import org.antlr.works.editor.grammar.experimental.GrammarParser.lexerRuleContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.parserRuleContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.ruleAltListContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParserBaseListener;
 import org.netbeans.api.annotations.common.NullAllowed;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
@@ -235,7 +235,7 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
 
     }
 
-    private static class SyntaxBuilderListener extends BlankGrammarParserListener {
+    private static class SyntaxBuilderListener extends GrammarParserBaseListener {
 
         private final int grammarType;
         private final DocumentSnapshot snapshot;
@@ -259,7 +259,7 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
          */
 
         @Override
-        public void enterRule(parserRuleContext ctx) {
+        public void parserRuleEnter(parserRuleContext ctx) {
             @SuppressWarnings("LocalVariableHidesMemberVariable")
             Rule rule = new Rule(ctx.name.getText());
             this.rule = rule;
@@ -267,14 +267,14 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
         }
 
         @Override
-        public void exitRule(parserRuleContext ctx) {
+        public void parserRuleExit(parserRuleContext ctx) {
             assert nodes.size() == 1;
             this.rule = (Rule)nodes.pop();
 //            this.rule.setupElements();
         }
 
         @Override
-        public void enterRule(lexerRuleContext ctx) {
+        public void lexerRuleEnter(lexerRuleContext ctx) {
             @SuppressWarnings("LocalVariableHidesMemberVariable")
             Rule rule = new Rule(ctx.name.getText());
             this.rule = rule;
@@ -282,7 +282,7 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
         }
 
         @Override
-        public void exitRule(lexerRuleContext ctx) {
+        public void lexerRuleExit(lexerRuleContext ctx) {
             assert nodes.size() == 1;
             this.rule = (Rule)nodes.pop();
 //            this.rule.setupElements();
@@ -293,42 +293,42 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
          */
 
         @Override
-        public void enterRule(ruleAltListContext ctx) {
+        public void ruleAltListEnter(ruleAltListContext ctx) {
             enterBlock();
         }
 
         @Override
-        public void enterRule(altListContext ctx) {
+        public void altListEnter(altListContext ctx) {
             enterBlock();
         }
 
         @Override
-        public void enterRule(lexerAltListContext ctx) {
+        public void lexerAltListEnter(lexerAltListContext ctx) {
             enterBlock();
         }
 
         @Override
-        public void enterRule(lexerBlockContext ctx) {
+        public void lexerBlockEnter(lexerBlockContext ctx) {
             enterBlock();
         }
 
         @Override
-        public void exitRule(ruleAltListContext ctx) {
+        public void ruleAltListExit(ruleAltListContext ctx) {
             exitBlock();
         }
 
         @Override
-        public void exitRule(altListContext ctx) {
+        public void altListExit(altListContext ctx) {
             exitBlock();
         }
 
         @Override
-        public void exitRule(lexerAltListContext ctx) {
+        public void lexerAltListExit(lexerAltListContext ctx) {
             exitBlock();
         }
 
         @Override
-        public void exitRule(lexerBlockContext ctx) {
+        public void lexerBlockExit(lexerBlockContext ctx) {
             exitBlock();
         }
 
@@ -337,22 +337,22 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
          */
 
         @Override
-        public void enterRule(alternativeContext ctx) {
+        public void alternativeEnter(alternativeContext ctx) {
             enterAlternative();
         }
 
         @Override
-        public void enterRule(lexerAltContext ctx) {
+        public void lexerAltEnter(lexerAltContext ctx) {
             enterAlternative();
         }
 
         @Override
-        public void exitRule(alternativeContext ctx) {
+        public void alternativeExit(alternativeContext ctx) {
             exitAlternative();
         }
 
         @Override
-        public void exitRule(lexerAltContext ctx) {
+        public void lexerAltExit(lexerAltContext ctx) {
             exitAlternative();
         }
 
@@ -365,12 +365,12 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
          */
 
         @Override
-        public void enterRule(lexerAtomContext ctx) {
+        public void lexerAtomEnter(lexerAtomContext ctx) {
             enterAtom(ctx);
         }
 
         @Override
-        public void enterRule(atomContext ctx) {
+        public void atomEnter(atomContext ctx) {
             enterAtom(ctx);
         }
 
@@ -431,14 +431,14 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
         }
 
         @Override
-        public void exitRule(lexerAtomContext ctx) {
+        public void lexerAtomExit(lexerAtomContext ctx) {
             if (outermostAtom == ctx) {
                 outermostAtom = null;
             }
         }
 
         @Override
-        public void exitRule(atomContext ctx) {
+        public void atomExit(atomContext ctx) {
             if (outermostAtom == ctx) {
                 outermostAtom = null;
             }
@@ -449,7 +449,7 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
          */
 
         @Override
-        public void enterRule(ebnfSuffixContext ctx) {
+        public void ebnfSuffixEnter(ebnfSuffixContext ctx) {
             Block block;
 
             switch (ctx.start.getType()) {

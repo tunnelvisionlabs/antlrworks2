@@ -38,7 +38,7 @@ import org.netbeans.api.annotations.common.NullAllowed;
  *
  * @author Sam Harwell
  */
-public class CodeModelBuilderListener extends BlankGrammarParserListener {
+public class CodeModelBuilderListener extends GrammarParserBaseListener {
     private final DocumentSnapshot snapshot;
     private final TokenStream tokens;
 
@@ -66,24 +66,24 @@ public class CodeModelBuilderListener extends BlankGrammarParserListener {
     }
 
     @Override
-    public void exitRule(grammarSpecContext ctx) {
+    public void grammarSpecExit(grammarSpecContext ctx) {
         fileModel = new FileModel(snapshot, rules);
     }
 
     @Override
-    public void enterRule(parserRuleContext ctx) {
+    public void parserRuleEnter(parserRuleContext ctx) {
         labelUses = new HashMap<String, Collection<SnapshotPositionRegion>>();
         parameters = new ArrayList<ParameterModel>();
         returnValues = new ArrayList<ParameterModel>();
         locals = new ArrayList<ParameterModel>();
 
         if (ctx.parameters != null) {
-            handleParameters(ctx.parameters.parameters_list, parameters);
+            handleParameters(ctx.parameters.parameters, parameters);
         }
     }
 
     @Override
-    public void exitRule(parserRuleContext ctx) {
+    public void parserRuleExit(parserRuleContext ctx) {
         Token name = ctx.name;
         SnapshotPositionRegion nameSpan = getSpan(ctx.name);
         SnapshotPositionRegion ruleSpan = getSpan(ctx);
@@ -100,7 +100,7 @@ public class CodeModelBuilderListener extends BlankGrammarParserListener {
     }
 
     @Override
-    public void enterRule(lexerRuleContext ctx) {
+    public void lexerRuleEnter(lexerRuleContext ctx) {
         labelUses = new HashMap<String, Collection<SnapshotPositionRegion>>();
         parameters = new ArrayList<ParameterModel>();
         returnValues = new ArrayList<ParameterModel>();
@@ -108,7 +108,7 @@ public class CodeModelBuilderListener extends BlankGrammarParserListener {
     }
 
     @Override
-    public void exitRule(lexerRuleContext ctx) {
+    public void lexerRuleExit(lexerRuleContext ctx) {
         Token name = ctx.name;
         SnapshotPositionRegion nameSpan = getSpan(ctx.name);
         SnapshotPositionRegion ruleSpan = getSpan(ctx);
@@ -123,21 +123,21 @@ public class CodeModelBuilderListener extends BlankGrammarParserListener {
     }
 
     @Override
-    public void enterRule(ruleReturnsContext ctx) {
+    public void ruleReturnsEnter(ruleReturnsContext ctx) {
         if (ctx.values != null) {
-            handleParameters(ctx.values.parameters_list, returnValues);
+            handleParameters(ctx.values.parameters, returnValues);
         }
     }
 
     @Override
-    public void enterRule(localsSpecContext ctx) {
+    public void localsSpecEnter(localsSpecContext ctx) {
         if (ctx.values != null) {
-            handleParameters(ctx.values.parameters_list, locals);
+            handleParameters(ctx.values.parameters, locals);
         }
     }
 
     @Override
-    public void enterRule(labeledElementContext ctx) {
+    public void labeledElementEnter(labeledElementContext ctx) {
         if (ctx.label != null) {
             String name = ctx.label.start.getText();
             Collection<SnapshotPositionRegion> uses = labelUses.get(name);

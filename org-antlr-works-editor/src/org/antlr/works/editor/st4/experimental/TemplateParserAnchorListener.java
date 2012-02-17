@@ -27,7 +27,7 @@ import org.openide.util.Parameters;
  *
  * @author Sam Harwell
  */
-public class TemplateParserAnchorListener extends BlankTemplateParserListener {
+public class TemplateParserAnchorListener extends TemplateParserBaseListener {
     private final Stack<Integer> anchorPositions = new Stack<Integer>();
     private final List<Anchor> anchors = new ArrayList<Anchor>();
     private final DocumentSnapshot snapshot;

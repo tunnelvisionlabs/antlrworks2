@@ -181,7 +181,7 @@ public abstract class AbstractCompletionParserATNSimulator extends ParserATNSimu
                 contextElements.add(nextContextElement);
                 if (nextContextElement != PredictionContext.EMPTY_STATE_KEY) {
                     for (int i = 0; i < closureConfigs.size(); i++) {
-                        closureConfigs.set(i, closureConfigs.get(i).appendContext(nextContextElement));
+                        closureConfigs.set(i, closureConfigs.get(i).appendContext(nextContextElement, contextCache));
                     }
                 }
             }
@@ -193,7 +193,7 @@ public abstract class AbstractCompletionParserATNSimulator extends ParserATNSimu
 
         DFAState dfaState = null;
         if (previous.s0 != null) {
-            dfaState = addDFAEdge(dfa, previous.s0.configset, t, contextElements, reach);
+            dfaState = addDFAEdge(dfa, previous.s0.configset, t, contextElements, reach, contextCache);
         }
 
 // BEGIN CC

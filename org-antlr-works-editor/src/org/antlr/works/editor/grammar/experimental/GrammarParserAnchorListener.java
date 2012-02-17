@@ -23,6 +23,8 @@ import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.works.editor.antlr4.parsing.ParseTrees;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.grammarTypeContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.ruleContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.tokenSpecContext;
 import org.netbeans.api.annotations.common.NonNull;
 import org.openide.util.Parameters;
 
@@ -30,7 +32,7 @@ import org.openide.util.Parameters;
  *
  * @author Sam Harwell
  */
-public class GrammarParserAnchorListener extends BlankGrammarParserListener {
+public class GrammarParserAnchorListener extends GrammarParserBaseListener {
 
     private final Stack<Integer> anchorPositions = new Stack<Integer>();
     private final List<Anchor> anchors = new ArrayList<Anchor>();
@@ -79,32 +81,32 @@ public class GrammarParserAnchorListener extends BlankGrammarParserListener {
     }
 
     @Override
-    public void enterRule(GrammarParser.grammarTypeContext ctx) {
+    public void grammarTypeEnter(grammarTypeContext ctx) {
         enterAnchor(ctx);
     }
 
     @Override
-    public void exitRule(GrammarParser.grammarTypeContext ctx) {
+    public void grammarTypeExit(grammarTypeContext ctx) {
         exitAnchor(ctx, GrammarParser.RULE_grammarType);
     }
 
     @Override
-    public void enterRule(GrammarParser.ruleContext ctx) {
+    public void ruleEnter(ruleContext ctx) {
         enterAnchor(ctx);
     }
 
     @Override
-    public void exitRule(GrammarParser.ruleContext ctx) {
+    public void ruleExit(ruleContext ctx) {
         exitAnchor(ctx, GrammarParser.RULE_rule);
     }
 
     @Override
-    public void enterRule(GrammarParser.tokenSpecContext ctx) {
+    public void tokenSpecEnter(tokenSpecContext ctx) {
         enterAnchor(ctx);
     }
 
     @Override
-    public void exitRule(GrammarParser.tokenSpecContext ctx) {
+    public void tokenSpecExit(tokenSpecContext ctx) {
         exitAnchor(ctx, GrammarParser.RULE_tokenSpec);
     }
 

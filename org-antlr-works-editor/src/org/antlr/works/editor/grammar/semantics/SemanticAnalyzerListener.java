@@ -160,318 +160,318 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
     }
 
     @Override
-    public void enterRule(parserRuleContext ctx) {
+    public void parserRuleEnter(parserRuleContext ctx) {
     }
 
     @Override
-    public void exitRule(parserRuleContext ctx) {
+    public void parserRuleExit(parserRuleContext ctx) {
     }
 
     @Override
-    public void enterRule(atomContext ctx) {
+    public void atomEnter(atomContext ctx) {
     }
 
     @Override
-    public void exitRule(atomContext ctx) {
+    public void atomExit(atomContext ctx) {
     }
 
     @Override
-    public void enterRule(rulePrequelsContext ctx) {
+    public void rulePrequelsEnter(rulePrequelsContext ctx) {
     }
 
     @Override
-    public void exitRule(rulePrequelsContext ctx) {
+    public void rulePrequelsExit(rulePrequelsContext ctx) {
     }
 
     @Override
-    public void enterRule(ruleBlockContext ctx) {
+    public void ruleBlockEnter(ruleBlockContext ctx) {
     }
 
     @Override
-    public void exitRule(ruleBlockContext ctx) {
+    public void ruleBlockExit(ruleBlockContext ctx) {
     }
 
     @Override
-    public void enterRule(notSetContext ctx) {
+    public void notSetEnter(notSetContext ctx) {
     }
 
     @Override
-    public void exitRule(notSetContext ctx) {
+    public void notSetExit(notSetContext ctx) {
     }
 
     @Override
-    public void enterRule(lexerAltListContext ctx) {
+    public void lexerAltListEnter(lexerAltListContext ctx) {
     }
 
     @Override
-    public void exitRule(lexerAltListContext ctx) {
+    public void lexerAltListExit(lexerAltListContext ctx) {
     }
 
     @Override
-    public void enterRule(argActionParameterContext ctx) {
+    public void argActionParameterEnter(argActionParameterContext ctx) {
     }
 
     @Override
-    public void exitRule(argActionParameterContext ctx) {
+    public void argActionParameterExit(argActionParameterContext ctx) {
     }
 
     @Override
-    public void enterRule(ruleModifierContext ctx) {
+    public void ruleModifierEnter(ruleModifierContext ctx) {
     }
 
     @Override
-    public void exitRule(ruleModifierContext ctx) {
+    public void ruleModifierExit(ruleModifierContext ctx) {
     }
 
     @Override
-    public void enterRule(ruleAltListContext ctx) {
+    public void ruleAltListEnter(ruleAltListContext ctx) {
     }
 
     @Override
-    public void exitRule(ruleAltListContext ctx) {
+    public void ruleAltListExit(ruleAltListContext ctx) {
     }
 
     @Override
-    public void enterRule(terminalContext ctx) {
+    public void terminalEnter(terminalContext ctx) {
     }
 
     @Override
-    public void exitRule(terminalContext ctx) {
+    public void terminalExit(terminalContext ctx) {
     }
 
     @Override
-    public void enterRule(throwsSpecContext ctx) {
+    public void throwsSpecEnter(throwsSpecContext ctx) {
     }
 
     @Override
-    public void exitRule(throwsSpecContext ctx) {
+    public void throwsSpecExit(throwsSpecContext ctx) {
     }
 
     @Override
-    public void enterRule(actionContext ctx) {
+    public void actionEnter(actionContext ctx) {
     }
 
     @Override
-    public void exitRule(actionContext ctx) {
+    public void actionExit(actionContext ctx) {
     }
 
     @Override
-    public void enterRule(actionScopeExpressionContext ctx) {
+    public void actionScopeExpressionEnter(actionScopeExpressionContext ctx) {
     }
 
     @Override
-    public void exitRule(actionScopeExpressionContext ctx) {
+    public void actionScopeExpressionExit(actionScopeExpressionContext ctx) {
     }
 
     @Override
-    public void enterRule(localsSpecContext ctx) {
+    public void localsSpecEnter(localsSpecContext ctx) {
     }
 
     @Override
-    public void exitRule(localsSpecContext ctx) {
+    public void localsSpecExit(localsSpecContext ctx) {
     }
 
     @Override
-    public void enterRule(modeSpecContext ctx) {
+    public void modeSpecEnter(modeSpecContext ctx) {
     }
 
     @Override
-    public void exitRule(modeSpecContext ctx) {
+    public void modeSpecExit(modeSpecContext ctx) {
     }
 
     @Override
-    public void enterRule(elementsContext ctx) {
+    public void elementsEnter(elementsContext ctx) {
     }
 
     @Override
-    public void exitRule(elementsContext ctx) {
+    public void elementsExit(elementsContext ctx) {
     }
 
     @Override
-    public void enterRule(optionContext ctx) {
+    public void optionEnter(optionContext ctx) {
     }
 
     @Override
-    public void exitRule(optionContext ctx) {
+    public void optionExit(optionContext ctx) {
     }
 
     @Override
-    public void enterRule(elementContext ctx) {
+    public void elementEnter(elementContext ctx) {
     }
 
     @Override
-    public void exitRule(elementContext ctx) {
+    public void elementExit(elementContext ctx) {
     }
 
     @Override
-    public void enterRule(elementOptionsContext ctx) {
+    public void elementOptionsEnter(elementOptionsContext ctx) {
     }
 
     @Override
-    public void exitRule(elementOptionsContext ctx) {
+    public void elementOptionsExit(elementOptionsContext ctx) {
     }
 
     @Override
-    public void enterRule(lexerElementContext ctx) {
+    public void lexerElementEnter(lexerElementContext ctx) {
     }
 
     @Override
-    public void exitRule(lexerElementContext ctx) {
+    public void lexerElementExit(lexerElementContext ctx) {
     }
 
     @Override
-    public void enterRule(alternativeContext ctx) {
+    public void alternativeEnter(alternativeContext ctx) {
     }
 
     @Override
-    public void exitRule(alternativeContext ctx) {
+    public void alternativeExit(alternativeContext ctx) {
     }
 
     @Override
-    public void enterRule(lexerActionExprContext ctx) {
+    public void lexerActionExprEnter(lexerActionExprContext ctx) {
     }
 
     @Override
-    public void exitRule(lexerActionExprContext ctx) {
+    public void lexerActionExprExit(lexerActionExprContext ctx) {
     }
 
     @Override
-    public void enterRule(grammarTypeContext ctx) {
+    public void grammarTypeEnter(grammarTypeContext ctx) {
     }
 
     @Override
-    public void exitRule(grammarTypeContext ctx) {
+    public void grammarTypeExit(grammarTypeContext ctx) {
     }
 
     @Override
-    public void enterRule(ruleActionContext ctx) {
+    public void ruleActionEnter(ruleActionContext ctx) {
     }
 
     @Override
-    public void exitRule(ruleActionContext ctx) {
+    public void ruleActionExit(ruleActionContext ctx) {
     }
 
     @Override
-    public void enterRule(ebnfSuffixContext ctx) {
+    public void ebnfSuffixEnter(ebnfSuffixContext ctx) {
     }
 
     @Override
-    public void exitRule(ebnfSuffixContext ctx) {
+    public void ebnfSuffixExit(ebnfSuffixContext ctx) {
     }
 
     @Override
-    public void enterRule(exceptionGroupContext ctx) {
+    public void exceptionGroupEnter(exceptionGroupContext ctx) {
     }
 
     @Override
-    public void exitRule(exceptionGroupContext ctx) {
+    public void exceptionGroupExit(exceptionGroupContext ctx) {
     }
 
     @Override
-    public void enterRule(rulePrequelContext ctx) {
+    public void rulePrequelEnter(rulePrequelContext ctx) {
     }
 
     @Override
-    public void exitRule(rulePrequelContext ctx) {
+    public void rulePrequelExit(rulePrequelContext ctx) {
     }
 
     @Override
-    public void enterRule(lexerBlockContext ctx) {
+    public void lexerBlockEnter(lexerBlockContext ctx) {
     }
 
     @Override
-    public void exitRule(lexerBlockContext ctx) {
+    public void lexerBlockExit(lexerBlockContext ctx) {
     }
 
     @Override
-    public void enterRule(setElementContext ctx) {
+    public void setElementEnter(setElementContext ctx) {
     }
 
     @Override
-    public void exitRule(setElementContext ctx) {
+    public void setElementExit(setElementContext ctx) {
     }
 
     @Override
-    public void enterRule(blockSetContext ctx) {
+    public void blockSetEnter(blockSetContext ctx) {
     }
 
     @Override
-    public void exitRule(blockSetContext ctx) {
+    public void blockSetExit(blockSetContext ctx) {
     }
 
     @Override
-    public void enterRule(actionScopeNameContext ctx) {
+    public void actionScopeNameEnter(actionScopeNameContext ctx) {
     }
 
     @Override
-    public void exitRule(actionScopeNameContext ctx) {
+    public void actionScopeNameExit(actionScopeNameContext ctx) {
     }
 
     @Override
-    public void enterRule(labeledAltContext ctx) {
+    public void labeledAltEnter(labeledAltContext ctx) {
         if (ctx.getChildCount() == 3 && ctx.getChild(2) instanceof idContext) {
             treeDecorator.putProperty(ctx, GrammarTreeProperties.PROP_NODE_TYPE, NodeType.ALT_LABEL);
         }
     }
 
     @Override
-    public void exitRule(labeledAltContext ctx) {
+    public void labeledAltExit(labeledAltContext ctx) {
     }
 
     @Override
-    public void enterRule(argActionParameterTypeContext ctx) {
+    public void argActionParameterTypeEnter(argActionParameterTypeContext ctx) {
     }
 
     @Override
-    public void exitRule(argActionParameterTypeContext ctx) {
+    public void argActionParameterTypeExit(argActionParameterTypeContext ctx) {
     }
 
     @Override
-    public void enterRule(lexerAtomContext ctx) {
+    public void lexerAtomEnter(lexerAtomContext ctx) {
     }
 
     @Override
-    public void exitRule(lexerAtomContext ctx) {
+    public void lexerAtomExit(lexerAtomContext ctx) {
     }
 
     @Override
-    public void enterRule(labeledElementContext ctx) {
+    public void labeledElementEnter(labeledElementContext ctx) {
     }
 
     @Override
-    public void exitRule(labeledElementContext ctx) {
+    public void labeledElementExit(labeledElementContext ctx) {
     }
 
     @Override
-    public void enterRule(lexerRuleBlockContext ctx) {
+    public void lexerRuleBlockEnter(lexerRuleBlockContext ctx) {
     }
 
     @Override
-    public void exitRule(lexerRuleBlockContext ctx) {
+    public void lexerRuleBlockExit(lexerRuleBlockContext ctx) {
     }
 
     @Override
-    public void enterRule(finallyClauseContext ctx) {
+    public void finallyClauseEnter(finallyClauseContext ctx) {
     }
 
     @Override
-    public void exitRule(finallyClauseContext ctx) {
+    public void finallyClauseExit(finallyClauseContext ctx) {
     }
 
     @Override
-    public void enterRule(ignoredContext ctx) {
+    public void ignoredEnter(ignoredContext ctx) {
     }
 
     @Override
-    public void exitRule(ignoredContext ctx) {
+    public void ignoredExit(ignoredContext ctx) {
     }
 
     @Override
-    public void enterRule(grammarSpecContext ctx) {
+    public void grammarSpecEnter(grammarSpecContext ctx) {
     }
 
     @Override
-    public void exitRule(grammarSpecContext ctx) {
+    public void grammarSpecExit(grammarSpecContext ctx) {
         for (Token token : unresolvedReferences) {
             String text = token.getText();
             if (text == null || text.isEmpty()) {
@@ -486,63 +486,63 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
     }
 
     @Override
-    public void enterRule(delegateGrammarContext ctx) {
+    public void delegateGrammarEnter(delegateGrammarContext ctx) {
     }
 
     @Override
-    public void exitRule(delegateGrammarContext ctx) {
+    public void delegateGrammarExit(delegateGrammarContext ctx) {
     }
 
     @Override
-    public void enterRule(lexerElementsContext ctx) {
+    public void lexerElementsEnter(lexerElementsContext ctx) {
     }
 
     @Override
-    public void exitRule(lexerElementsContext ctx) {
+    public void lexerElementsExit(lexerElementsContext ctx) {
     }
 
     @Override
-    public void enterRule(rangeContext ctx) {
+    public void rangeEnter(rangeContext ctx) {
     }
 
     @Override
-    public void exitRule(rangeContext ctx) {
+    public void rangeExit(rangeContext ctx) {
     }
 
     @Override
-    public void enterRule(tokenSpecContext ctx) {
+    public void tokenSpecEnter(tokenSpecContext ctx) {
     }
 
     @Override
-    public void exitRule(tokenSpecContext ctx) {
+    public void tokenSpecExit(tokenSpecContext ctx) {
     }
 
     @Override
-    public void enterRule(blockContext ctx) {
+    public void blockEnter(blockContext ctx) {
     }
 
     @Override
-    public void exitRule(blockContext ctx) {
+    public void blockExit(blockContext ctx) {
     }
 
     @Override
-    public void enterRule(argActionParameterTypePartContext ctx) {
+    public void argActionParameterTypePartEnter(argActionParameterTypePartContext ctx) {
     }
 
     @Override
-    public void exitRule(argActionParameterTypePartContext ctx) {
+    public void argActionParameterTypePartExit(argActionParameterTypePartContext ctx) {
     }
 
     @Override
-    public void enterRule(lexerRuleContext ctx) {
+    public void lexerRuleEnter(lexerRuleContext ctx) {
     }
 
     @Override
-    public void exitRule(lexerRuleContext ctx) {
+    public void lexerRuleExit(lexerRuleContext ctx) {
     }
 
     @Override
-    public void enterRule(labeledLexerElementContext ctx) {
+    public void labeledLexerElementEnter(labeledLexerElementContext ctx) {
         if (ctx.getChildCount() == 0 || !(ctx.getChild(0) instanceof idContext)) {
             return;
         }
@@ -551,43 +551,43 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
     }
 
     @Override
-    public void exitRule(labeledLexerElementContext ctx) {
+    public void labeledLexerElementExit(labeledLexerElementContext ctx) {
     }
 
     @Override
-    public void enterRule(delegateGrammarsContext ctx) {
+    public void delegateGrammarsEnter(delegateGrammarsContext ctx) {
     }
 
     @Override
-    public void exitRule(delegateGrammarsContext ctx) {
+    public void delegateGrammarsExit(delegateGrammarsContext ctx) {
     }
 
     @Override
-    public void enterRule(actionExpressionContext ctx) {
+    public void actionExpressionEnter(actionExpressionContext ctx) {
     }
 
     @Override
-    public void exitRule(actionExpressionContext ctx) {
+    public void actionExpressionExit(actionExpressionContext ctx) {
     }
 
     @Override
-    public void enterRule(rulerefContext ctx) {
+    public void rulerefEnter(rulerefContext ctx) {
     }
 
     @Override
-    public void exitRule(rulerefContext ctx) {
+    public void rulerefExit(rulerefContext ctx) {
     }
 
     @Override
-    public void enterRule(blockSuffixContext ctx) {
+    public void blockSuffixEnter(blockSuffixContext ctx) {
     }
 
     @Override
-    public void exitRule(blockSuffixContext ctx) {
+    public void blockSuffixExit(blockSuffixContext ctx) {
     }
 
     @Override
-    public void enterRule(idContext ctx) {
+    public void idEnter(idContext ctx) {
         if (ctx.start != null && ctx.parent instanceof ParserRuleContext<?>) {
 
             int caller = ((ParserRuleContext<?>)ctx.parent).ruleIndex;
@@ -605,131 +605,131 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
     }
 
     @Override
-    public void exitRule(idContext ctx) {
+    public void idExit(idContext ctx) {
     }
 
     @Override
-    public void enterRule(actionBlockContext ctx) {
+    public void actionBlockEnter(actionBlockContext ctx) {
     }
 
     @Override
-    public void exitRule(actionBlockContext ctx) {
+    public void actionBlockExit(actionBlockContext ctx) {
     }
 
     @Override
-    public void enterRule(elementOptionContext ctx) {
+    public void elementOptionEnter(elementOptionContext ctx) {
     }
 
     @Override
-    public void exitRule(elementOptionContext ctx) {
+    public void elementOptionExit(elementOptionContext ctx) {
     }
 
     @Override
-    public void enterRule(ruleContext ctx) {
+    public void ruleEnter(ruleContext ctx) {
     }
 
     @Override
-    public void exitRule(ruleContext ctx) {
+    public void ruleExit(ruleContext ctx) {
     }
 
     @Override
-    public void enterRule(exceptionHandlerContext ctx) {
+    public void exceptionHandlerEnter(exceptionHandlerContext ctx) {
     }
 
     @Override
-    public void exitRule(exceptionHandlerContext ctx) {
+    public void exceptionHandlerExit(exceptionHandlerContext ctx) {
     }
 
     @Override
-    public void enterRule(tokensSpecContext ctx) {
+    public void tokensSpecEnter(tokensSpecContext ctx) {
     }
 
     @Override
-    public void exitRule(tokensSpecContext ctx) {
+    public void tokensSpecExit(tokensSpecContext ctx) {
     }
 
     @Override
-    public void enterRule(ruleReturnsContext ctx) {
+    public void ruleReturnsEnter(ruleReturnsContext ctx) {
     }
 
     @Override
-    public void exitRule(ruleReturnsContext ctx) {
+    public void ruleReturnsExit(ruleReturnsContext ctx) {
     }
 
     @Override
-    public void enterRule(qidContext ctx) {
+    public void qidEnter(qidContext ctx) {
     }
 
     @Override
-    public void exitRule(qidContext ctx) {
+    public void qidExit(qidContext ctx) {
     }
 
     @Override
-    public void enterRule(optionsSpecContext ctx) {
+    public void optionsSpecEnter(optionsSpecContext ctx) {
     }
 
     @Override
-    public void exitRule(optionsSpecContext ctx) {
+    public void optionsSpecExit(optionsSpecContext ctx) {
     }
 
     @Override
-    public void enterRule(altListContext ctx) {
+    public void altListEnter(altListContext ctx) {
     }
 
     @Override
-    public void exitRule(altListContext ctx) {
+    public void altListExit(altListContext ctx) {
     }
 
     @Override
-    public void enterRule(prequelConstructContext ctx) {
+    public void prequelConstructEnter(prequelConstructContext ctx) {
     }
 
     @Override
-    public void exitRule(prequelConstructContext ctx) {
+    public void prequelConstructExit(prequelConstructContext ctx) {
     }
 
     @Override
-    public void enterRule(rulesContext ctx) {
+    public void rulesEnter(rulesContext ctx) {
     }
 
     @Override
-    public void exitRule(rulesContext ctx) {
+    public void rulesExit(rulesContext ctx) {
     }
 
     @Override
-    public void enterRule(lexerActionsContext ctx) {
+    public void lexerActionsEnter(lexerActionsContext ctx) {
     }
 
     @Override
-    public void exitRule(lexerActionsContext ctx) {
+    public void lexerActionsExit(lexerActionsContext ctx) {
     }
 
     @Override
-    public void enterRule(optionValueContext ctx) {
+    public void optionValueEnter(optionValueContext ctx) {
     }
 
     @Override
-    public void exitRule(optionValueContext ctx) {
+    public void optionValueExit(optionValueContext ctx) {
     }
 
     @Override
-    public void enterRule(lexerAltContext ctx) {
+    public void lexerAltEnter(lexerAltContext ctx) {
     }
 
     @Override
-    public void exitRule(lexerAltContext ctx) {
+    public void lexerAltExit(lexerAltContext ctx) {
     }
 
     @Override
-    public void enterRule(argActionBlockContext ctx) {
+    public void argActionBlockEnter(argActionBlockContext ctx) {
     }
 
     @Override
-    public void exitRule(argActionBlockContext ctx) {
+    public void argActionBlockExit(argActionBlockContext ctx) {
     }
 
     @Override
-    public void enterRule(lexerActionContext ctx) {
+    public void lexerActionEnter(lexerActionContext ctx) {
         if (ctx.getChildCount() == 0 || !(ctx.getChild(0) instanceof idContext)) {
             return;
         }
@@ -738,31 +738,31 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
     }
 
     @Override
-    public void exitRule(lexerActionContext ctx) {
+    public void lexerActionExit(lexerActionContext ctx) {
     }
 
     @Override
-    public void enterRule(ruleModifiersContext ctx) {
+    public void ruleModifiersEnter(ruleModifiersContext ctx) {
     }
 
     @Override
-    public void exitRule(ruleModifiersContext ctx) {
+    public void ruleModifiersExit(ruleModifiersContext ctx) {
     }
 
     @Override
-    public void enterRule(argActionParametersContext ctx) {
+    public void argActionParametersEnter(argActionParametersContext ctx) {
     }
 
     @Override
-    public void exitRule(argActionParametersContext ctx) {
+    public void argActionParametersExit(argActionParametersContext ctx) {
     }
 
     @Override
-    public void enterRule(ebnfContext ctx) {
+    public void ebnfEnter(ebnfContext ctx) {
     }
 
     @Override
-    public void exitRule(ebnfContext ctx) {
+    public void ebnfExit(ebnfContext ctx) {
     }
 
 }

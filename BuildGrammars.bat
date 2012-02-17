@@ -20,13 +20,13 @@ set ANTLR4_TOOL=-cp %ANTLR4_CLASSPATH% org.antlr.v4.Tool
 set SOURCE_ROOT=%CD%
 
 cd %SOURCE_ROOT%\org-antlr-works-editor\src\org\antlr\works\editor\grammar\experimental
-start /B java %ANTLR4_TOOL% -Xforce-atn *.g
+start /B java %ANTLR4_TOOL% -visitor -Xforce-atn *.g
 
 cd %SOURCE_ROOT%\org-antlr-works-editor\src\org\antlr\works\editor\grammar\highlighter4
 start /B java %ANTLR4_TOOL% *.g4
 
 cd %SOURCE_ROOT%\org-antlr-works-editor\src\org\antlr\works\editor\st4\experimental
-start /B java %ANTLR4_TOOL% -Xforce-atn *.g4
+start /B java %ANTLR4_TOOL% -visitor -Xforce-atn *.g4
 
 cd %SOURCE_ROOT%\org-antlr-works-editor\src\org\antlr\works\editor\st4\highlighter4
 java %ANTLR4_TOOL% *.g4

@@ -16,7 +16,7 @@ import org.antlr.works.editor.st4.codemodel.FileModel;
  *
  * @author Sam Harwell
  */
-public class CodeModelBuilderListener extends BlankTemplateParserListener {
+public class CodeModelBuilderListener extends TemplateParserBaseListener {
     private final DocumentSnapshot snapshot;
     private final TokenStream tokens;
 

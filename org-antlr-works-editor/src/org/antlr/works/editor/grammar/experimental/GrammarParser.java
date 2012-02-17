@@ -106,16 +106,39 @@ public class GrammarParser extends Parser {
 		_interp = new ParserATNSimulator<Token>(this,_ATN);
 	}
 	public static class grammarSpecContext extends ParserRuleContext<Token> {
+		public Token DOC_COMMENT() { return getToken(GrammarParser.DOC_COMMENT, 0); }
+		public idContext id() {
+		    return (idContext)getRuleContext(idContext.class,0);
+		}
+		public modeSpecContext modeSpec() {
+		    return (modeSpecContext)getRuleContext(modeSpecContext.class,0);
+		}
+		public Token EOF() { return getToken(GrammarParser.EOF, 0); }
+		public Token SEMI() { return getToken(GrammarParser.SEMI, 0); }
+		public prequelConstructContext prequelConstruct() {
+		    return (prequelConstructContext)getRuleContext(prequelConstructContext.class,0);
+		}
+		public grammarTypeContext grammarType() {
+		    return (grammarTypeContext)getRuleContext(grammarTypeContext.class,0);
+		}
+		public rulesContext rules() {
+		    return (rulesContext)getRuleContext(rulesContext.class,0);
+		}
 		public grammarSpecContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).grammarSpecEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).grammarSpecExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).grammarSpecVisit(this);
+		    else return null;
 		}
 	}
 
@@ -183,18 +206,29 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class grammarTypeContext extends ParserRuleContext<Token> {
-		public Token t;;
-		public Token g;;
+		public Token t;
+		public Token g;
+		public Token PARSER() { return getToken(GrammarParser.PARSER, 0); }
+		public Token GRAMMAR(int i) {
+		    return getToken(GrammarParser.GRAMMAR, i);
+		}
+		public Token LEXER() { return getToken(GrammarParser.LEXER, 0); }
+		public List<? extends Token> GRAMMAR() { return getTokens(GrammarParser.GRAMMAR); }
 		public grammarTypeContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).grammarTypeEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).grammarTypeExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).grammarTypeVisit(this);
+		    else return null;
 		}
 	}
 
@@ -209,21 +243,21 @@ public class GrammarParser extends Parser {
 			switch ( getInterpreter().adaptivePredict(_input,3,_ctx) ) {
 				case 1:
 					{
-					setState(170); _localctx.t = match(LEXER);
-					setState(172); _localctx.g = match(GRAMMAR);
+					setState(170); ((grammarTypeContext)_localctx).t = match(LEXER);
+					setState(172); ((grammarTypeContext)_localctx).g = match(GRAMMAR);
 					}
 					break;
 
 				case 2:
 					{
-					setState(174); _localctx.t = match(PARSER);
-					setState(176); _localctx.g = match(GRAMMAR);
+					setState(174); ((grammarTypeContext)_localctx).t = match(PARSER);
+					setState(176); ((grammarTypeContext)_localctx).g = match(GRAMMAR);
 					}
 					break;
 
 				case 3:
 					{
-					setState(178); _localctx.g = match(GRAMMAR);
+					setState(178); ((grammarTypeContext)_localctx).g = match(GRAMMAR);
 					}
 					break;
 			}
@@ -241,16 +275,33 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class prequelConstructContext extends ParserRuleContext<Token> {
+		public tokensSpecContext tokensSpec() {
+		    return (tokensSpecContext)getRuleContext(tokensSpecContext.class,0);
+		}
+		public actionContext action() {
+		    return (actionContext)getRuleContext(actionContext.class,0);
+		}
+		public delegateGrammarsContext delegateGrammars() {
+		    return (delegateGrammarsContext)getRuleContext(delegateGrammarsContext.class,0);
+		}
+		public optionsSpecContext optionsSpec() {
+		    return (optionsSpecContext)getRuleContext(optionsSpecContext.class,0);
+		}
 		public prequelConstructContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).prequelConstructEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).prequelConstructExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).prequelConstructVisit(this);
+		    else return null;
 		}
 	}
 
@@ -302,16 +353,27 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class optionsSpecContext extends ParserRuleContext<Token> {
+		public Token RBRACE() { return getToken(GrammarParser.RBRACE, 0); }
+		public Token SEMI() { return getToken(GrammarParser.SEMI, 0); }
+		public Token OPTIONS() { return getToken(GrammarParser.OPTIONS, 0); }
+		public optionContext option() {
+		    return (optionContext)getRuleContext(optionContext.class,0);
+		}
 		public optionsSpecContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).optionsSpecEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).optionsSpecExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).optionsSpecVisit(this);
+		    else return null;
 		}
 	}
 
@@ -353,16 +415,28 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class optionContext extends ParserRuleContext<Token> {
+		public idContext id() {
+		    return (idContext)getRuleContext(idContext.class,0);
+		}
+		public optionValueContext optionValue() {
+		    return (optionValueContext)getRuleContext(optionValueContext.class,0);
+		}
+		public Token ASSIGN() { return getToken(GrammarParser.ASSIGN, 0); }
 		public optionContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).optionEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).optionExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).optionVisit(this);
+		    else return null;
 		}
 	}
 
@@ -389,16 +463,27 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class optionValueContext extends ParserRuleContext<Token> {
+		public Token STAR() { return getToken(GrammarParser.STAR, 0); }
+		public Token INT() { return getToken(GrammarParser.INT, 0); }
+		public Token STRING_LITERAL() { return getToken(GrammarParser.STRING_LITERAL, 0); }
+		public qidContext qid() {
+		    return (qidContext)getRuleContext(qidContext.class,0);
+		}
 		public optionValueContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).optionValueEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).optionValueExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).optionValueVisit(this);
+		    else return null;
 		}
 	}
 
@@ -450,16 +535,30 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class delegateGrammarsContext extends ParserRuleContext<Token> {
+		public List<? extends delegateGrammarContext> delegateGrammar() {
+		    return (List<delegateGrammarContext>)getRuleContexts(delegateGrammarContext.class);
+		}
+		public Token IMPORT() { return getToken(GrammarParser.IMPORT, 0); }
+		public Token COMMA() { return getToken(GrammarParser.COMMA, 0); }
+		public Token SEMI() { return getToken(GrammarParser.SEMI, 0); }
+		public delegateGrammarContext delegateGrammar(int i) {
+		    return (delegateGrammarContext)getRuleContext(delegateGrammarContext.class,i);
+		}
 		public delegateGrammarsContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).delegateGrammarsEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).delegateGrammarsExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).delegateGrammarsVisit(this);
+		    else return null;
 		}
 	}
 
@@ -502,16 +601,28 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class delegateGrammarContext extends ParserRuleContext<Token> {
+		public List<? extends idContext> id() {
+		    return (List<idContext>)getRuleContexts(idContext.class);
+		}
+		public idContext id(int i) {
+		    return (idContext)getRuleContext(idContext.class,i);
+		}
+		public Token ASSIGN() { return getToken(GrammarParser.ASSIGN, 0); }
 		public delegateGrammarContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).delegateGrammarEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).delegateGrammarExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).delegateGrammarVisit(this);
+		    else return null;
 		}
 	}
 
@@ -551,16 +662,26 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class tokensSpecContext extends ParserRuleContext<Token> {
+		public Token TOKENS() { return getToken(GrammarParser.TOKENS, 0); }
+		public Token RBRACE() { return getToken(GrammarParser.RBRACE, 0); }
+		public tokenSpecContext tokenSpec() {
+		    return (tokenSpecContext)getRuleContext(tokenSpecContext.class,0);
+		}
 		public tokensSpecContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).tokensSpecEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).tokensSpecExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).tokensSpecVisit(this);
+		    else return null;
 		}
 	}
 
@@ -605,16 +726,28 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class tokenSpecContext extends ParserRuleContext<Token> {
+		public idContext id() {
+		    return (idContext)getRuleContext(idContext.class,0);
+		}
+		public Token STRING_LITERAL() { return getToken(GrammarParser.STRING_LITERAL, 0); }
+		public Token SEMI() { return getToken(GrammarParser.SEMI, 0); }
+		public Token RULE_REF() { return getToken(GrammarParser.RULE_REF, 0); }
+		public Token ASSIGN() { return getToken(GrammarParser.ASSIGN, 0); }
 		public tokenSpecContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).tokenSpecEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).tokenSpecExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).tokenSpecVisit(this);
+		    else return null;
 		}
 	}
 
@@ -668,16 +801,52 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class actionBlockContext extends ParserRuleContext<Token> {
+		public Token ACTION_WS() { return getToken(GrammarParser.ACTION_WS, 0); }
+		public Token ACTION_COLON() { return getToken(GrammarParser.ACTION_COLON, 0); }
+		public actionExpressionContext actionExpression() {
+		    return (actionExpressionContext)getRuleContext(actionExpressionContext.class,0);
+		}
+		public actionBlockContext actionBlock() {
+		    return (actionBlockContext)getRuleContext(actionBlockContext.class,0);
+		}
+		public Token ACTION_ESCAPE() { return getToken(GrammarParser.ACTION_ESCAPE, 0); }
+		public Token ACTION_REFERENCE() { return getToken(GrammarParser.ACTION_REFERENCE, 0); }
+		public Token ACTION_COLON2() { return getToken(GrammarParser.ACTION_COLON2, 0); }
+		public Token ACTION_DOT() { return getToken(GrammarParser.ACTION_DOT, 0); }
+		public actionScopeExpressionContext actionScopeExpression() {
+		    return (actionScopeExpressionContext)getRuleContext(actionScopeExpressionContext.class,0);
+		}
+		public Token ACTION_NEWLINE() { return getToken(GrammarParser.ACTION_NEWLINE, 0); }
+		public Token ACTION_RPAREN() { return getToken(GrammarParser.ACTION_RPAREN, 0); }
+		public Token ACTION_COMMA() { return getToken(GrammarParser.ACTION_COMMA, 0); }
+		public Token ACTION_RBRACK() { return getToken(GrammarParser.ACTION_RBRACK, 0); }
+		public Token ACTION_COMMENT() { return getToken(GrammarParser.ACTION_COMMENT, 0); }
+		public Token ACTION_LT() { return getToken(GrammarParser.ACTION_LT, 0); }
+		public Token END_ACTION() { return getToken(GrammarParser.END_ACTION, 0); }
+		public Token ACTION_GT() { return getToken(GrammarParser.ACTION_GT, 0); }
+		public Token ACTION_TEXT() { return getToken(GrammarParser.ACTION_TEXT, 0); }
+		public Token ACTION_LITERAL() { return getToken(GrammarParser.ACTION_LITERAL, 0); }
+		public Token ACTION_MINUS() { return getToken(GrammarParser.ACTION_MINUS, 0); }
+		public Token BEGIN_ACTION() { return getToken(GrammarParser.BEGIN_ACTION, 0); }
+		public Token ACTION_LPAREN() { return getToken(GrammarParser.ACTION_LPAREN, 0); }
+		public Token ACTION_LBRACK() { return getToken(GrammarParser.ACTION_LBRACK, 0); }
+		public Token ACTION_WORD() { return getToken(GrammarParser.ACTION_WORD, 0); }
+		public Token ACTION_EQUALS() { return getToken(GrammarParser.ACTION_EQUALS, 0); }
 		public actionBlockContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).actionBlockEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).actionBlockExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).actionBlockVisit(this);
+		    else return null;
 		}
 	}
 
@@ -856,19 +1025,33 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class actionExpressionContext extends ParserRuleContext<Token> {
-		public Token ref;;
-		public Token op;;
-		public Token member;;
+		public Token ref;
+		public Token op;
+		public Token member;
+		public List<? extends ignoredContext> ignored() {
+		    return (List<ignoredContext>)getRuleContexts(ignoredContext.class);
+		}
+		public Token ACTION_REFERENCE() { return getToken(GrammarParser.ACTION_REFERENCE, 0); }
+		public Token ACTION_DOT() { return getToken(GrammarParser.ACTION_DOT, 0); }
+		public ignoredContext ignored(int i) {
+		    return (ignoredContext)getRuleContext(ignoredContext.class,i);
+		}
+		public Token ACTION_WORD() { return getToken(GrammarParser.ACTION_WORD, 0); }
 		public actionExpressionContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).actionExpressionEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).actionExpressionExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).actionExpressionVisit(this);
+		    else return null;
 		}
 	}
 
@@ -878,7 +1061,7 @@ public class GrammarParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(327); _localctx.ref = match(ACTION_REFERENCE);
+			setState(327); ((actionExpressionContext)_localctx).ref = match(ACTION_REFERENCE);
 			setState(333);
 			_errHandler.sync(this);
 			int _alt635 = getInterpreter().adaptivePredict(_input,14,_ctx);
@@ -894,7 +1077,7 @@ public class GrammarParser extends Parser {
 				_errHandler.sync(this);
 				_alt635 = getInterpreter().adaptivePredict(_input,14,_ctx);
 			}
-			setState(336); _localctx.op = match(ACTION_DOT);
+			setState(336); ((actionExpressionContext)_localctx).op = match(ACTION_DOT);
 			setState(342);
 			_errHandler.sync(this);
 			int _alt642 = getInterpreter().adaptivePredict(_input,15,_ctx);
@@ -910,7 +1093,7 @@ public class GrammarParser extends Parser {
 				_errHandler.sync(this);
 				_alt642 = getInterpreter().adaptivePredict(_input,15,_ctx);
 			}
-			setState(345); _localctx.member = match(ACTION_WORD);
+			setState(345); ((actionExpressionContext)_localctx).member = match(ACTION_WORD);
 			}
 			_localctx.stop = _input.LT(-1);
 		}
@@ -925,21 +1108,41 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class actionScopeExpressionContext extends ParserRuleContext<Token> {
-		public Token ref;;
-		public Token neg;;
-		public Token index;;
-		public Token op;;
-		public Token member;;
+		public Token ref;
+		public Token neg;
+		public Token index;
+		public Token op;
+		public Token member;
+		public List<? extends ignoredContext> ignored() {
+		    return (List<ignoredContext>)getRuleContexts(ignoredContext.class);
+		}
+		public Token ACTION_REFERENCE() { return getToken(GrammarParser.ACTION_REFERENCE, 0); }
+		public Token ACTION_COLON2() { return getToken(GrammarParser.ACTION_COLON2, 0); }
+		public Token ACTION_RBRACK() { return getToken(GrammarParser.ACTION_RBRACK, 0); }
+		public ignoredContext ignored(int i) {
+		    return (ignoredContext)getRuleContext(ignoredContext.class,i);
+		}
+		public Token ACTION_WORD(int i) {
+		    return getToken(GrammarParser.ACTION_WORD, i);
+		}
+		public Token ACTION_LBRACK() { return getToken(GrammarParser.ACTION_LBRACK, 0); }
+		public List<? extends Token> ACTION_WORD() { return getTokens(GrammarParser.ACTION_WORD); }
+		public Token ACTION_MINUS() { return getToken(GrammarParser.ACTION_MINUS, 0); }
 		public actionScopeExpressionContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).actionScopeExpressionEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).actionScopeExpressionExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).actionScopeExpressionVisit(this);
+		    else return null;
 		}
 	}
 
@@ -949,7 +1152,7 @@ public class GrammarParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(347); _localctx.ref = match(ACTION_REFERENCE);
+			setState(347); ((actionScopeExpressionContext)_localctx).ref = match(ACTION_REFERENCE);
 			setState(353);
 			_errHandler.sync(this);
 			int _alt659 = getInterpreter().adaptivePredict(_input,16,_ctx);
@@ -991,7 +1194,7 @@ public class GrammarParser extends Parser {
 					switch ( getInterpreter().adaptivePredict(_input,19,_ctx) ) {
 						case 1:
 							{
-							setState(365); _localctx.neg = match(ACTION_MINUS);
+							setState(365); ((actionScopeExpressionContext)_localctx).neg = match(ACTION_MINUS);
 							setState(371);
 							_errHandler.sync(this);
 							int _alt673 = getInterpreter().adaptivePredict(_input,18,_ctx);
@@ -1010,7 +1213,7 @@ public class GrammarParser extends Parser {
 							}
 							break;
 					}
-					setState(376); _localctx.index = match(ACTION_WORD);
+					setState(376); ((actionScopeExpressionContext)_localctx).index = match(ACTION_WORD);
 					setState(382);
 					_errHandler.sync(this);
 					int _alt682 = getInterpreter().adaptivePredict(_input,20,_ctx);
@@ -1045,7 +1248,7 @@ public class GrammarParser extends Parser {
 					}
 					break;
 			}
-			setState(396); _localctx.op = match(ACTION_COLON2);
+			setState(396); ((actionScopeExpressionContext)_localctx).op = match(ACTION_COLON2);
 			setState(402);
 			_errHandler.sync(this);
 			int _alt696 = getInterpreter().adaptivePredict(_input,23,_ctx);
@@ -1061,7 +1264,7 @@ public class GrammarParser extends Parser {
 				_errHandler.sync(this);
 				_alt696 = getInterpreter().adaptivePredict(_input,23,_ctx);
 			}
-			setState(405); _localctx.member = match(ACTION_WORD);
+			setState(405); ((actionScopeExpressionContext)_localctx).member = match(ACTION_WORD);
 			}
 			_localctx.stop = _input.LT(-1);
 		}
@@ -1076,16 +1279,35 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class argActionBlockContext extends ParserRuleContext<Token> {
+		public Token ARG_ACTION_GT() { return getToken(GrammarParser.ARG_ACTION_GT, 0); }
+		public Token ARG_ACTION_LPAREN() { return getToken(GrammarParser.ARG_ACTION_LPAREN, 0); }
+		public Token ARG_ACTION_COMMA() { return getToken(GrammarParser.ARG_ACTION_COMMA, 0); }
+		public Token ARG_ACTION_NEWLINE() { return getToken(GrammarParser.ARG_ACTION_NEWLINE, 0); }
+		public Token END_ARG_ACTION() { return getToken(GrammarParser.END_ARG_ACTION, 0); }
+		public Token ARG_ACTION_WS() { return getToken(GrammarParser.ARG_ACTION_WS, 0); }
+		public Token ARG_ACTION_WORD() { return getToken(GrammarParser.ARG_ACTION_WORD, 0); }
+		public Token ARG_ACTION_LT() { return getToken(GrammarParser.ARG_ACTION_LT, 0); }
+		public Token ARG_ACTION_EQUALS() { return getToken(GrammarParser.ARG_ACTION_EQUALS, 0); }
+		public Token ARG_ACTION_ESCAPE() { return getToken(GrammarParser.ARG_ACTION_ESCAPE, 0); }
+		public Token BEGIN_ARG_ACTION() { return getToken(GrammarParser.BEGIN_ARG_ACTION, 0); }
+		public Token ARG_ACTION_ELEMENT() { return getToken(GrammarParser.ARG_ACTION_ELEMENT, 0); }
+		public Token ARG_ACTION_TEXT() { return getToken(GrammarParser.ARG_ACTION_TEXT, 0); }
+		public Token ARG_ACTION_RPAREN() { return getToken(GrammarParser.ARG_ACTION_RPAREN, 0); }
 		public argActionBlockContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).argActionBlockEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).argActionBlockExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).argActionBlockVisit(this);
+		    else return null;
 		}
 	}
 
@@ -1133,18 +1355,38 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class argActionParametersContext extends ParserRuleContext<Token> {
-		public argActionParameterContext parameters;;
-		public List<argActionParameterContext> parameters_list = new ArrayList<argActionParameterContext>();;
+		public argActionParameterContext argActionParameter;
+		public List<argActionParameterContext> parameters = new ArrayList<argActionParameterContext>();
+		public List<? extends ignoredContext> ignored() {
+		    return (List<ignoredContext>)getRuleContexts(ignoredContext.class);
+		}
+		public Token END_ARG_ACTION() { return getToken(GrammarParser.END_ARG_ACTION, 0); }
+		public ignoredContext ignored(int i) {
+		    return (ignoredContext)getRuleContext(ignoredContext.class,i);
+		}
+		public argActionParameterContext argActionParameter(int i) {
+		    return (argActionParameterContext)getRuleContext(argActionParameterContext.class,i);
+		}
+		public List<? extends argActionParameterContext> argActionParameter() {
+		    return (List<argActionParameterContext>)getRuleContexts(argActionParameterContext.class);
+		}
+		public Token ARG_ACTION_COMMA() { return getToken(GrammarParser.ARG_ACTION_COMMA, 0); }
+		public Token BEGIN_ARG_ACTION() { return getToken(GrammarParser.BEGIN_ARG_ACTION, 0); }
 		public argActionParametersContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).argActionParametersEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).argActionParametersExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).argActionParametersVisit(this);
+		    else return null;
 		}
 	}
 
@@ -1175,8 +1417,8 @@ public class GrammarParser extends Parser {
 			switch ( getInterpreter().adaptivePredict(_input,30,_ctx) ) {
 				case 1:
 					{
-					setState(427); _localctx.parameters = argActionParameter();
-					_localctx.parameters_list.add(_localctx.parameters);
+					setState(427); ((argActionParametersContext)_localctx).argActionParameter = argActionParameter();
+					((argActionParametersContext)_localctx).parameters.add(((argActionParametersContext)_localctx).argActionParameter);
 					setState(433);
 					_errHandler.sync(this);
 					int _alt780 = getInterpreter().adaptivePredict(_input,26,_ctx);
@@ -1215,8 +1457,8 @@ public class GrammarParser extends Parser {
 								_errHandler.sync(this);
 								_alt786 = getInterpreter().adaptivePredict(_input,27,_ctx);
 							}
-							setState(445); _localctx.parameters = argActionParameter();
-							_localctx.parameters_list.add(_localctx.parameters);
+							setState(445); ((argActionParametersContext)_localctx).argActionParameter = argActionParameter();
+							((argActionParametersContext)_localctx).parameters.add(((argActionParametersContext)_localctx).argActionParameter);
 							setState(451);
 							_errHandler.sync(this);
 							int _alt793 = getInterpreter().adaptivePredict(_input,28,_ctx);
@@ -1257,18 +1499,30 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class argActionParameterContext extends ParserRuleContext<Token> {
-		public argActionParameterTypeContext type;;
-		public Token name;;
+		public argActionParameterTypeContext type;
+		public Token name;
+		public ignoredContext ignored() {
+		    return (ignoredContext)getRuleContext(ignoredContext.class,0);
+		}
+		public Token ARG_ACTION_WORD() { return getToken(GrammarParser.ARG_ACTION_WORD, 0); }
+		public argActionParameterTypeContext argActionParameterType() {
+		    return (argActionParameterTypeContext)getRuleContext(argActionParameterTypeContext.class,0);
+		}
 		public argActionParameterContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).argActionParameterEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).argActionParameterExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).argActionParameterVisit(this);
+		    else return null;
 		}
 	}
 
@@ -1283,7 +1537,7 @@ public class GrammarParser extends Parser {
 			switch ( getInterpreter().adaptivePredict(_input,31,_ctx) ) {
 				case 1:
 					{
-					setState(463); _localctx.type = argActionParameterType();
+					setState(463); ((argActionParameterContext)_localctx).type = argActionParameterType();
 					}
 					break;
 			}
@@ -1302,7 +1556,7 @@ public class GrammarParser extends Parser {
 				_errHandler.sync(this);
 				_alt813 = getInterpreter().adaptivePredict(_input,32,_ctx);
 			}
-			setState(474); _localctx.name = match(ARG_ACTION_WORD);
+			setState(474); ((argActionParameterContext)_localctx).name = match(ARG_ACTION_WORD);
 			}
 			_localctx.stop = _input.LT(-1);
 		}
@@ -1317,16 +1571,30 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class argActionParameterTypeContext extends ParserRuleContext<Token> {
+		public ignoredContext ignored() {
+		    return (ignoredContext)getRuleContext(ignoredContext.class,0);
+		}
+		public argActionParameterTypePartContext argActionParameterTypePart(int i) {
+		    return (argActionParameterTypePartContext)getRuleContext(argActionParameterTypePartContext.class,i);
+		}
+		public List<? extends argActionParameterTypePartContext> argActionParameterTypePart() {
+		    return (List<argActionParameterTypePartContext>)getRuleContexts(argActionParameterTypePartContext.class);
+		}
 		public argActionParameterTypeContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).argActionParameterTypeEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).argActionParameterTypeExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).argActionParameterTypeVisit(this);
+		    else return null;
 		}
 	}
 
@@ -1381,16 +1649,29 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class argActionParameterTypePartContext extends ParserRuleContext<Token> {
+		public Token ARG_ACTION_GT() { return getToken(GrammarParser.ARG_ACTION_GT, 0); }
+		public Token ARG_ACTION_LPAREN() { return getToken(GrammarParser.ARG_ACTION_LPAREN, 0); }
+		public Token ARG_ACTION_WORD() { return getToken(GrammarParser.ARG_ACTION_WORD, 0); }
+		public argActionParameterTypeContext argActionParameterType() {
+		    return (argActionParameterTypeContext)getRuleContext(argActionParameterTypeContext.class,0);
+		}
+		public Token ARG_ACTION_LT() { return getToken(GrammarParser.ARG_ACTION_LT, 0); }
+		public Token ARG_ACTION_RPAREN() { return getToken(GrammarParser.ARG_ACTION_RPAREN, 0); }
 		public argActionParameterTypePartContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).argActionParameterTypePartEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).argActionParameterTypePartExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).argActionParameterTypePartVisit(this);
+		    else return null;
 		}
 	}
 
@@ -1455,16 +1736,26 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class ignoredContext extends ParserRuleContext<Token> {
+		public Token ARG_ACTION_NEWLINE() { return getToken(GrammarParser.ARG_ACTION_NEWLINE, 0); }
+		public Token ARG_ACTION_WS() { return getToken(GrammarParser.ARG_ACTION_WS, 0); }
+		public Token ACTION_WS() { return getToken(GrammarParser.ACTION_WS, 0); }
+		public Token ACTION_COMMENT() { return getToken(GrammarParser.ACTION_COMMENT, 0); }
+		public Token ACTION_NEWLINE() { return getToken(GrammarParser.ACTION_NEWLINE, 0); }
 		public ignoredContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).ignoredEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).ignoredExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).ignoredVisit(this);
+		    else return null;
 		}
 	}
 
@@ -1523,16 +1814,32 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class actionContext extends ParserRuleContext<Token> {
+		public actionBlockContext actionBlock() {
+		    return (actionBlockContext)getRuleContext(actionBlockContext.class,0);
+		}
+		public idContext id() {
+		    return (idContext)getRuleContext(idContext.class,0);
+		}
+		public Token AT() { return getToken(GrammarParser.AT, 0); }
+		public Token COLONCOLON() { return getToken(GrammarParser.COLONCOLON, 0); }
+		public actionScopeNameContext actionScopeName() {
+		    return (actionScopeNameContext)getRuleContext(actionScopeNameContext.class,0);
+		}
 		public actionContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).actionEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).actionExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).actionVisit(this);
+		    else return null;
 		}
 	}
 
@@ -1569,16 +1876,26 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class actionScopeNameContext extends ParserRuleContext<Token> {
+		public idContext id() {
+		    return (idContext)getRuleContext(idContext.class,0);
+		}
+		public Token PARSER() { return getToken(GrammarParser.PARSER, 0); }
+		public Token LEXER() { return getToken(GrammarParser.LEXER, 0); }
 		public actionScopeNameContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).actionScopeNameEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).actionScopeNameExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).actionScopeNameVisit(this);
+		    else return null;
 		}
 	}
 
@@ -1623,16 +1940,29 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class modeSpecContext extends ParserRuleContext<Token> {
+		public idContext id() {
+		    return (idContext)getRuleContext(idContext.class,0);
+		}
+		public ruleContext rule() {
+		    return (ruleContext)getRuleContext(ruleContext.class,0);
+		}
+		public Token SEMI() { return getToken(GrammarParser.SEMI, 0); }
+		public Token MODE() { return getToken(GrammarParser.MODE, 0); }
 		public modeSpecContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).modeSpecEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).modeSpecExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).modeSpecVisit(this);
+		    else return null;
 		}
 	}
 
@@ -1678,16 +2008,24 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class rulesContext extends ParserRuleContext<Token> {
+		public ruleContext rule() {
+		    return (ruleContext)getRuleContext(ruleContext.class,0);
+		}
 		public rulesContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).rulesEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).rulesExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).rulesVisit(this);
+		    else return null;
 		}
 	}
 
@@ -1726,16 +2064,27 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class ruleContext extends ParserRuleContext<Token> {
+		public parserRuleContext parserRule() {
+		    return (parserRuleContext)getRuleContext(parserRuleContext.class,0);
+		}
+		public lexerRuleContext lexerRule() {
+		    return (lexerRuleContext)getRuleContext(lexerRuleContext.class,0);
+		}
 		public ruleContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).ruleEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).ruleExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).ruleVisit(this);
+		    else return null;
 		}
 	}
 
@@ -1773,18 +2122,51 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class parserRuleContext extends ParserRuleContext<Token> {
-		public Token name;;
-		public argActionParametersContext parameters;;
+		public Token name;
+		public argActionParametersContext parameters;
+		public Token DOC_COMMENT() { return getToken(GrammarParser.DOC_COMMENT, 0); }
+		public Token COLON() { return getToken(GrammarParser.COLON, 0); }
+		public ruleModifiersContext ruleModifiers() {
+		    return (ruleModifiersContext)getRuleContext(ruleModifiersContext.class,0);
+		}
+		public exceptionGroupContext exceptionGroup() {
+		    return (exceptionGroupContext)getRuleContext(exceptionGroupContext.class,0);
+		}
+		public rulePrequelsContext rulePrequels() {
+		    return (rulePrequelsContext)getRuleContext(rulePrequelsContext.class,0);
+		}
+		public argActionParametersContext argActionParameters() {
+		    return (argActionParametersContext)getRuleContext(argActionParametersContext.class,0);
+		}
+		public ruleReturnsContext ruleReturns() {
+		    return (ruleReturnsContext)getRuleContext(ruleReturnsContext.class,0);
+		}
+		public throwsSpecContext throwsSpec() {
+		    return (throwsSpecContext)getRuleContext(throwsSpecContext.class,0);
+		}
+		public ruleBlockContext ruleBlock() {
+		    return (ruleBlockContext)getRuleContext(ruleBlockContext.class,0);
+		}
+		public localsSpecContext localsSpec() {
+		    return (localsSpecContext)getRuleContext(localsSpecContext.class,0);
+		}
+		public Token SEMI() { return getToken(GrammarParser.SEMI, 0); }
+		public Token RULE_REF() { return getToken(GrammarParser.RULE_REF, 0); }
 		public parserRuleContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).parserRuleEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).parserRuleExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).parserRuleVisit(this);
+		    else return null;
 		}
 	}
 
@@ -1812,13 +2194,13 @@ public class GrammarParser extends Parser {
 					}
 					break;
 			}
-			setState(577); _localctx.name = match(RULE_REF);
+			setState(577); ((parserRuleContext)_localctx).name = match(RULE_REF);
 			setState(581);
 			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,46,_ctx) ) {
 				case 1:
 					{
-					setState(579); _localctx.parameters = argActionParameters();
+					setState(579); ((parserRuleContext)_localctx).parameters = argActionParameters();
 					}
 					break;
 			}
@@ -1868,16 +2250,27 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class exceptionGroupContext extends ParserRuleContext<Token> {
+		public finallyClauseContext finallyClause() {
+		    return (finallyClauseContext)getRuleContext(finallyClauseContext.class,0);
+		}
+		public exceptionHandlerContext exceptionHandler() {
+		    return (exceptionHandlerContext)getRuleContext(exceptionHandlerContext.class,0);
+		}
 		public exceptionGroupContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exceptionGroupEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exceptionGroupExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).exceptionGroupVisit(this);
+		    else return null;
 		}
 	}
 
@@ -1925,16 +2318,28 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class exceptionHandlerContext extends ParserRuleContext<Token> {
+		public actionBlockContext actionBlock() {
+		    return (actionBlockContext)getRuleContext(actionBlockContext.class,0);
+		}
+		public argActionBlockContext argActionBlock() {
+		    return (argActionBlockContext)getRuleContext(argActionBlockContext.class,0);
+		}
+		public Token CATCH() { return getToken(GrammarParser.CATCH, 0); }
 		public exceptionHandlerContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exceptionHandlerEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exceptionHandlerExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).exceptionHandlerVisit(this);
+		    else return null;
 		}
 	}
 
@@ -1961,16 +2366,25 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class finallyClauseContext extends ParserRuleContext<Token> {
+		public actionBlockContext actionBlock() {
+		    return (actionBlockContext)getRuleContext(actionBlockContext.class,0);
+		}
+		public Token FINALLY() { return getToken(GrammarParser.FINALLY, 0); }
 		public finallyClauseContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).finallyClauseEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).finallyClauseExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).finallyClauseVisit(this);
+		    else return null;
 		}
 	}
 
@@ -1996,16 +2410,24 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class rulePrequelsContext extends ParserRuleContext<Token> {
+		public rulePrequelContext rulePrequel() {
+		    return (rulePrequelContext)getRuleContext(rulePrequelContext.class,0);
+		}
 		public rulePrequelsContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).rulePrequelsEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).rulePrequelsExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).rulePrequelsVisit(this);
+		    else return null;
 		}
 	}
 
@@ -2044,16 +2466,27 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class rulePrequelContext extends ParserRuleContext<Token> {
+		public optionsSpecContext optionsSpec() {
+		    return (optionsSpecContext)getRuleContext(optionsSpecContext.class,0);
+		}
+		public ruleActionContext ruleAction() {
+		    return (ruleActionContext)getRuleContext(ruleActionContext.class,0);
+		}
 		public rulePrequelContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).rulePrequelEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).rulePrequelExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).rulePrequelVisit(this);
+		    else return null;
 		}
 	}
 
@@ -2091,17 +2524,26 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class ruleReturnsContext extends ParserRuleContext<Token> {
-		public argActionParametersContext values;;
+		public argActionParametersContext values;
+		public argActionParametersContext argActionParameters() {
+		    return (argActionParametersContext)getRuleContext(argActionParametersContext.class,0);
+		}
+		public Token RETURNS() { return getToken(GrammarParser.RETURNS, 0); }
 		public ruleReturnsContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).ruleReturnsEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).ruleReturnsExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).ruleReturnsVisit(this);
+		    else return null;
 		}
 	}
 
@@ -2112,7 +2554,7 @@ public class GrammarParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(639); match(RETURNS);
-			setState(641); _localctx.values = argActionParameters();
+			setState(641); ((ruleReturnsContext)_localctx).values = argActionParameters();
 			}
 			_localctx.stop = _input.LT(-1);
 		}
@@ -2127,16 +2569,29 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class throwsSpecContext extends ParserRuleContext<Token> {
+		public Token THROWS() { return getToken(GrammarParser.THROWS, 0); }
+		public qidContext qid(int i) {
+		    return (qidContext)getRuleContext(qidContext.class,i);
+		}
+		public List<? extends qidContext> qid() {
+		    return (List<qidContext>)getRuleContexts(qidContext.class);
+		}
+		public Token COMMA() { return getToken(GrammarParser.COMMA, 0); }
 		public throwsSpecContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).throwsSpecEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).throwsSpecExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).throwsSpecVisit(this);
+		    else return null;
 		}
 	}
 
@@ -2178,17 +2633,26 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class localsSpecContext extends ParserRuleContext<Token> {
-		public argActionParametersContext values;;
+		public argActionParametersContext values;
+		public Token LOCALS() { return getToken(GrammarParser.LOCALS, 0); }
+		public argActionParametersContext argActionParameters() {
+		    return (argActionParametersContext)getRuleContext(argActionParametersContext.class,0);
+		}
 		public localsSpecContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).localsSpecEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).localsSpecExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).localsSpecVisit(this);
+		    else return null;
 		}
 	}
 
@@ -2199,7 +2663,7 @@ public class GrammarParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(656); match(LOCALS);
-			setState(658); _localctx.values = argActionParameters();
+			setState(658); ((localsSpecContext)_localctx).values = argActionParameters();
 			}
 			_localctx.stop = _input.LT(-1);
 		}
@@ -2214,16 +2678,28 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class ruleActionContext extends ParserRuleContext<Token> {
+		public actionBlockContext actionBlock() {
+		    return (actionBlockContext)getRuleContext(actionBlockContext.class,0);
+		}
+		public idContext id() {
+		    return (idContext)getRuleContext(idContext.class,0);
+		}
+		public Token AT() { return getToken(GrammarParser.AT, 0); }
 		public ruleActionContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).ruleActionEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).ruleActionExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).ruleActionVisit(this);
+		    else return null;
 		}
 	}
 
@@ -2250,16 +2726,24 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class ruleModifiersContext extends ParserRuleContext<Token> {
+		public ruleModifierContext ruleModifier() {
+		    return (ruleModifierContext)getRuleContext(ruleModifierContext.class,0);
+		}
 		public ruleModifiersContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).ruleModifiersEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).ruleModifiersExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).ruleModifiersVisit(this);
+		    else return null;
 		}
 	}
 
@@ -2302,16 +2786,25 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class ruleModifierContext extends ParserRuleContext<Token> {
+		public Token PROTECTED() { return getToken(GrammarParser.PROTECTED, 0); }
+		public Token PRIVATE() { return getToken(GrammarParser.PRIVATE, 0); }
+		public Token PUBLIC() { return getToken(GrammarParser.PUBLIC, 0); }
+		public Token FRAGMENT() { return getToken(GrammarParser.FRAGMENT, 0); }
 		public ruleModifierContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).ruleModifierEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).ruleModifierExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).ruleModifierVisit(this);
+		    else return null;
 		}
 	}
 
@@ -2363,16 +2856,24 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class ruleBlockContext extends ParserRuleContext<Token> {
+		public ruleAltListContext ruleAltList() {
+		    return (ruleAltListContext)getRuleContext(ruleAltListContext.class,0);
+		}
 		public ruleBlockContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).ruleBlockEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).ruleBlockExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).ruleBlockVisit(this);
+		    else return null;
 		}
 	}
 
@@ -2397,16 +2898,28 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class ruleAltListContext extends ParserRuleContext<Token> {
+		public List<? extends labeledAltContext> labeledAlt() {
+		    return (List<labeledAltContext>)getRuleContexts(labeledAltContext.class);
+		}
+		public labeledAltContext labeledAlt(int i) {
+		    return (labeledAltContext)getRuleContext(labeledAltContext.class,i);
+		}
+		public Token OR() { return getToken(GrammarParser.OR, 0); }
 		public ruleAltListContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).ruleAltListEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).ruleAltListExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).ruleAltListVisit(this);
+		    else return null;
 		}
 	}
 
@@ -2447,16 +2960,28 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class labeledAltContext extends ParserRuleContext<Token> {
+		public idContext id() {
+		    return (idContext)getRuleContext(idContext.class,0);
+		}
+		public alternativeContext alternative() {
+		    return (alternativeContext)getRuleContext(alternativeContext.class,0);
+		}
+		public Token RARROW() { return getToken(GrammarParser.RARROW, 0); }
 		public labeledAltContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).labeledAltEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).labeledAltExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).labeledAltVisit(this);
+		    else return null;
 		}
 	}
 
@@ -2491,17 +3016,30 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class lexerRuleContext extends ParserRuleContext<Token> {
-		public Token name;;
+		public Token name;
+		public Token DOC_COMMENT() { return getToken(GrammarParser.DOC_COMMENT, 0); }
+		public Token COLON() { return getToken(GrammarParser.COLON, 0); }
+		public Token SEMI() { return getToken(GrammarParser.SEMI, 0); }
+		public Token FRAGMENT() { return getToken(GrammarParser.FRAGMENT, 0); }
+		public Token TOKEN_REF() { return getToken(GrammarParser.TOKEN_REF, 0); }
+		public lexerRuleBlockContext lexerRuleBlock() {
+		    return (lexerRuleBlockContext)getRuleContext(lexerRuleBlockContext.class,0);
+		}
 		public lexerRuleContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).lexerRuleEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).lexerRuleExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).lexerRuleVisit(this);
+		    else return null;
 		}
 	}
 
@@ -2529,7 +3067,7 @@ public class GrammarParser extends Parser {
 					}
 					break;
 			}
-			setState(711); _localctx.name = match(TOKEN_REF);
+			setState(711); ((lexerRuleContext)_localctx).name = match(TOKEN_REF);
 			setState(713); match(COLON);
 			setState(715); lexerRuleBlock();
 			setState(717); match(SEMI);
@@ -2547,16 +3085,24 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class lexerRuleBlockContext extends ParserRuleContext<Token> {
+		public lexerAltListContext lexerAltList() {
+		    return (lexerAltListContext)getRuleContext(lexerAltListContext.class,0);
+		}
 		public lexerRuleBlockContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).lexerRuleBlockEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).lexerRuleBlockExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).lexerRuleBlockVisit(this);
+		    else return null;
 		}
 	}
 
@@ -2581,16 +3127,28 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class lexerAltListContext extends ParserRuleContext<Token> {
+		public lexerAltContext lexerAlt(int i) {
+		    return (lexerAltContext)getRuleContext(lexerAltContext.class,i);
+		}
+		public Token OR() { return getToken(GrammarParser.OR, 0); }
+		public List<? extends lexerAltContext> lexerAlt() {
+		    return (List<lexerAltContext>)getRuleContexts(lexerAltContext.class);
+		}
 		public lexerAltListContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).lexerAltListEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).lexerAltListExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).lexerAltListVisit(this);
+		    else return null;
 		}
 	}
 
@@ -2631,16 +3189,27 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class lexerAltContext extends ParserRuleContext<Token> {
+		public lexerElementsContext lexerElements() {
+		    return (lexerElementsContext)getRuleContext(lexerElementsContext.class,0);
+		}
+		public lexerActionsContext lexerActions() {
+		    return (lexerActionsContext)getRuleContext(lexerActionsContext.class,0);
+		}
 		public lexerAltContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).lexerAltEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).lexerAltExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).lexerAltVisit(this);
+		    else return null;
 		}
 	}
 
@@ -2679,16 +3248,24 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class lexerElementsContext extends ParserRuleContext<Token> {
+		public lexerElementContext lexerElement() {
+		    return (lexerElementContext)getRuleContext(lexerElementContext.class,0);
+		}
 		public lexerElementsContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).lexerElementsEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).lexerElementsExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).lexerElementsVisit(this);
+		    else return null;
 		}
 	}
 
@@ -2731,16 +3308,37 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class lexerElementContext extends ParserRuleContext<Token> {
+		public actionBlockContext actionBlock() {
+		    return (actionBlockContext)getRuleContext(actionBlockContext.class,0);
+		}
+		public ebnfSuffixContext ebnfSuffix() {
+		    return (ebnfSuffixContext)getRuleContext(ebnfSuffixContext.class,0);
+		}
+		public lexerBlockContext lexerBlock() {
+		    return (lexerBlockContext)getRuleContext(lexerBlockContext.class,0);
+		}
+		public Token QUESTION() { return getToken(GrammarParser.QUESTION, 0); }
+		public labeledLexerElementContext labeledLexerElement() {
+		    return (labeledLexerElementContext)getRuleContext(labeledLexerElementContext.class,0);
+		}
+		public lexerAtomContext lexerAtom() {
+		    return (lexerAtomContext)getRuleContext(lexerAtomContext.class,0);
+		}
 		public lexerElementContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).lexerElementEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).lexerElementExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).lexerElementVisit(this);
+		    else return null;
 		}
 	}
 
@@ -2843,17 +3441,33 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class labeledLexerElementContext extends ParserRuleContext<Token> {
-		public Token ass;;
+		public Token ass;
+		public idContext id() {
+		    return (idContext)getRuleContext(idContext.class,0);
+		}
+		public blockContext block() {
+		    return (blockContext)getRuleContext(blockContext.class,0);
+		}
+		public lexerAtomContext lexerAtom() {
+		    return (lexerAtomContext)getRuleContext(lexerAtomContext.class,0);
+		}
+		public Token PLUS_ASSIGN() { return getToken(GrammarParser.PLUS_ASSIGN, 0); }
+		public Token ASSIGN() { return getToken(GrammarParser.ASSIGN, 0); }
 		public labeledLexerElementContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).labeledLexerElementEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).labeledLexerElementExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).labeledLexerElementVisit(this);
+		    else return null;
 		}
 	}
 
@@ -2869,13 +3483,13 @@ public class GrammarParser extends Parser {
 			switch ( getInterpreter().adaptivePredict(_input,69,_ctx) ) {
 				case 1:
 					{
-					setState(780); _localctx.ass = match(ASSIGN);
+					setState(780); ((labeledLexerElementContext)_localctx).ass = match(ASSIGN);
 					}
 					break;
 
 				case 2:
 					{
-					setState(782); _localctx.ass = match(PLUS_ASSIGN);
+					setState(782); ((labeledLexerElementContext)_localctx).ass = match(PLUS_ASSIGN);
 					}
 					break;
 			}
@@ -2908,16 +3522,26 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class lexerBlockContext extends ParserRuleContext<Token> {
+		public Token RPAREN() { return getToken(GrammarParser.RPAREN, 0); }
+		public lexerAltListContext lexerAltList() {
+		    return (lexerAltListContext)getRuleContext(lexerAltListContext.class,0);
+		}
+		public Token LPAREN() { return getToken(GrammarParser.LPAREN, 0); }
 		public lexerBlockContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).lexerBlockEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).lexerBlockExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).lexerBlockVisit(this);
+		    else return null;
 		}
 	}
 
@@ -2944,16 +3568,29 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class lexerActionsContext extends ParserRuleContext<Token> {
+		public List<? extends lexerActionContext> lexerAction() {
+		    return (List<lexerActionContext>)getRuleContexts(lexerActionContext.class);
+		}
+		public Token COMMA() { return getToken(GrammarParser.COMMA, 0); }
+		public lexerActionContext lexerAction(int i) {
+		    return (lexerActionContext)getRuleContext(lexerActionContext.class,i);
+		}
+		public Token RARROW() { return getToken(GrammarParser.RARROW, 0); }
 		public lexerActionsContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).lexerActionsEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).lexerActionsExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).lexerActionsVisit(this);
+		    else return null;
 		}
 	}
 
@@ -2995,16 +3632,29 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class lexerActionContext extends ParserRuleContext<Token> {
+		public idContext id() {
+		    return (idContext)getRuleContext(idContext.class,0);
+		}
+		public Token RPAREN() { return getToken(GrammarParser.RPAREN, 0); }
+		public lexerActionExprContext lexerActionExpr() {
+		    return (lexerActionExprContext)getRuleContext(lexerActionExprContext.class,0);
+		}
+		public Token LPAREN() { return getToken(GrammarParser.LPAREN, 0); }
 		public lexerActionContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).lexerActionEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).lexerActionExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).lexerActionVisit(this);
+		    else return null;
 		}
 	}
 
@@ -3045,16 +3695,23 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class lexerActionExprContext extends ParserRuleContext<Token> {
+		public Token INT() { return getToken(GrammarParser.INT, 0); }
+		public Token ID() { return getToken(GrammarParser.ID, 0); }
 		public lexerActionExprContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).lexerActionExprEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).lexerActionExprExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).lexerActionExprVisit(this);
+		    else return null;
 		}
 	}
 
@@ -3092,16 +3749,28 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class altListContext extends ParserRuleContext<Token> {
+		public alternativeContext alternative(int i) {
+		    return (alternativeContext)getRuleContext(alternativeContext.class,i);
+		}
+		public List<? extends alternativeContext> alternative() {
+		    return (List<alternativeContext>)getRuleContexts(alternativeContext.class);
+		}
+		public Token OR() { return getToken(GrammarParser.OR, 0); }
 		public altListContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).altListEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).altListExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).altListVisit(this);
+		    else return null;
 		}
 	}
 
@@ -3142,16 +3811,24 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class alternativeContext extends ParserRuleContext<Token> {
+		public elementsContext elements() {
+		    return (elementsContext)getRuleContext(elementsContext.class,0);
+		}
 		public alternativeContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).alternativeEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).alternativeExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).alternativeVisit(this);
+		    else return null;
 		}
 	}
 
@@ -3187,18 +3864,26 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class elementsContext extends ParserRuleContext<Token> {
-		public elementContext e;;
-		public List<elementContext> e_list = new ArrayList<elementContext>();;
+		public elementContext element;
+		public List<elementContext> e = new ArrayList<elementContext>();
+		public elementContext element() {
+		    return (elementContext)getRuleContext(elementContext.class,0);
+		}
 		public elementsContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).elementsEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).elementsExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).elementsVisit(this);
+		    else return null;
 		}
 	}
 
@@ -3216,8 +3901,8 @@ public class GrammarParser extends Parser {
 					case 1:
 						{
 						{
-						setState(846); _localctx.e = element();
-						_localctx.e_list.add(_localctx.e);
+						setState(846); ((elementsContext)_localctx).element = element();
+						((elementsContext)_localctx).e.add(((elementsContext)_localctx).element);
 						}
 						}
 						break;
@@ -3242,16 +3927,37 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class elementContext extends ParserRuleContext<Token> {
+		public actionBlockContext actionBlock() {
+		    return (actionBlockContext)getRuleContext(actionBlockContext.class,0);
+		}
+		public atomContext atom() {
+		    return (atomContext)getRuleContext(atomContext.class,0);
+		}
+		public ebnfSuffixContext ebnfSuffix() {
+		    return (ebnfSuffixContext)getRuleContext(ebnfSuffixContext.class,0);
+		}
+		public ebnfContext ebnf() {
+		    return (ebnfContext)getRuleContext(ebnfContext.class,0);
+		}
+		public Token QUESTION() { return getToken(GrammarParser.QUESTION, 0); }
+		public labeledElementContext labeledElement() {
+		    return (labeledElementContext)getRuleContext(labeledElementContext.class,0);
+		}
 		public elementContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).elementEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).elementExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).elementVisit(this);
+		    else return null;
 		}
 	}
 
@@ -3340,18 +4046,34 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class labeledElementContext extends ParserRuleContext<Token> {
-		public idContext label;;
-		public Token ass;;
+		public idContext label;
+		public Token ass;
+		public idContext id() {
+		    return (idContext)getRuleContext(idContext.class,0);
+		}
+		public atomContext atom() {
+		    return (atomContext)getRuleContext(atomContext.class,0);
+		}
+		public blockContext block() {
+		    return (blockContext)getRuleContext(blockContext.class,0);
+		}
+		public Token PLUS_ASSIGN() { return getToken(GrammarParser.PLUS_ASSIGN, 0); }
+		public Token ASSIGN() { return getToken(GrammarParser.ASSIGN, 0); }
 		public labeledElementContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).labeledElementEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).labeledElementExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).labeledElementVisit(this);
+		    else return null;
 		}
 	}
 
@@ -3361,19 +4083,19 @@ public class GrammarParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(878); _localctx.label = id();
+			setState(878); ((labeledElementContext)_localctx).label = id();
 			setState(884);
 			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,81,_ctx) ) {
 				case 1:
 					{
-					setState(880); _localctx.ass = match(ASSIGN);
+					setState(880); ((labeledElementContext)_localctx).ass = match(ASSIGN);
 					}
 					break;
 
 				case 2:
 					{
-					setState(882); _localctx.ass = match(PLUS_ASSIGN);
+					setState(882); ((labeledElementContext)_localctx).ass = match(PLUS_ASSIGN);
 					}
 					break;
 			}
@@ -3406,16 +4128,27 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class ebnfContext extends ParserRuleContext<Token> {
+		public blockContext block() {
+		    return (blockContext)getRuleContext(blockContext.class,0);
+		}
+		public blockSuffixContext blockSuffix() {
+		    return (blockSuffixContext)getRuleContext(blockSuffixContext.class,0);
+		}
 		public ebnfContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).ebnfEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).ebnfExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).ebnfVisit(this);
+		    else return null;
 		}
 	}
 
@@ -3454,16 +4187,24 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class blockSuffixContext extends ParserRuleContext<Token> {
+		public ebnfSuffixContext ebnfSuffix() {
+		    return (ebnfSuffixContext)getRuleContext(ebnfSuffixContext.class,0);
+		}
 		public blockSuffixContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).blockSuffixEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).blockSuffixExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).blockSuffixVisit(this);
+		    else return null;
 		}
 	}
 
@@ -3488,16 +4229,24 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class ebnfSuffixContext extends ParserRuleContext<Token> {
+		public Token PLUS() { return getToken(GrammarParser.PLUS, 0); }
+		public Token STAR() { return getToken(GrammarParser.STAR, 0); }
+		public Token QUESTION() { return getToken(GrammarParser.QUESTION, 0); }
 		public ebnfSuffixContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).ebnfSuffixEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).ebnfSuffixExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).ebnfSuffixVisit(this);
+		    else return null;
 		}
 	}
 
@@ -3542,16 +4291,38 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class lexerAtomContext extends ParserRuleContext<Token> {
+		public argActionBlockContext argActionBlock() {
+		    return (argActionBlockContext)getRuleContext(argActionBlockContext.class,0);
+		}
+		public terminalContext terminal() {
+		    return (terminalContext)getRuleContext(terminalContext.class,0);
+		}
+		public rangeContext range() {
+		    return (rangeContext)getRuleContext(rangeContext.class,0);
+		}
+		public elementOptionsContext elementOptions() {
+		    return (elementOptionsContext)getRuleContext(elementOptionsContext.class,0);
+		}
+		public notSetContext notSet() {
+		    return (notSetContext)getRuleContext(notSetContext.class,0);
+		}
+		public Token DOT() { return getToken(GrammarParser.DOT, 0); }
+		public Token RULE_REF() { return getToken(GrammarParser.RULE_REF, 0); }
 		public lexerAtomContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).lexerAtomEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).lexerAtomExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).lexerAtomVisit(this);
+		    else return null;
 		}
 	}
 
@@ -3626,16 +4397,37 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class atomContext extends ParserRuleContext<Token> {
+		public terminalContext terminal() {
+		    return (terminalContext)getRuleContext(terminalContext.class,0);
+		}
+		public rangeContext range() {
+		    return (rangeContext)getRuleContext(rangeContext.class,0);
+		}
+		public elementOptionsContext elementOptions() {
+		    return (elementOptionsContext)getRuleContext(elementOptionsContext.class,0);
+		}
+		public notSetContext notSet() {
+		    return (notSetContext)getRuleContext(notSetContext.class,0);
+		}
+		public Token DOT() { return getToken(GrammarParser.DOT, 0); }
+		public rulerefContext ruleref() {
+		    return (rulerefContext)getRuleContext(rulerefContext.class,0);
+		}
 		public atomContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).atomEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).atomExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).atomVisit(this);
+		    else return null;
 		}
 	}
 
@@ -3703,16 +4495,28 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class notSetContext extends ParserRuleContext<Token> {
+		public setElementContext setElement() {
+		    return (setElementContext)getRuleContext(setElementContext.class,0);
+		}
+		public blockSetContext blockSet() {
+		    return (blockSetContext)getRuleContext(blockSetContext.class,0);
+		}
+		public Token NOT() { return getToken(GrammarParser.NOT, 0); }
 		public notSetContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).notSetEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).notSetExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).notSetVisit(this);
+		    else return null;
 		}
 	}
 
@@ -3752,16 +4556,30 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class blockSetContext extends ParserRuleContext<Token> {
+		public Token RPAREN() { return getToken(GrammarParser.RPAREN, 0); }
+		public List<? extends setElementContext> setElement() {
+		    return (List<setElementContext>)getRuleContexts(setElementContext.class);
+		}
+		public setElementContext setElement(int i) {
+		    return (setElementContext)getRuleContext(setElementContext.class,i);
+		}
+		public Token LPAREN() { return getToken(GrammarParser.LPAREN, 0); }
+		public Token OR() { return getToken(GrammarParser.OR, 0); }
 		public blockSetContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).blockSetEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).blockSetExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).blockSetVisit(this);
+		    else return null;
 		}
 	}
 
@@ -3804,16 +4622,26 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class setElementContext extends ParserRuleContext<Token> {
+		public rangeContext range() {
+		    return (rangeContext)getRuleContext(rangeContext.class,0);
+		}
+		public Token STRING_LITERAL() { return getToken(GrammarParser.STRING_LITERAL, 0); }
+		public Token TOKEN_REF() { return getToken(GrammarParser.TOKEN_REF, 0); }
 		public setElementContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).setElementEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).setElementExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).setElementVisit(this);
+		    else return null;
 		}
 	}
 
@@ -3858,18 +4686,35 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class blockContext extends ParserRuleContext<Token> {
-		public ruleActionContext ra;;
-		public List<ruleActionContext> ra_list = new ArrayList<ruleActionContext>();;
+		public ruleActionContext ruleAction;
+		public List<ruleActionContext> ra = new ArrayList<ruleActionContext>();
+		public Token COLON() { return getToken(GrammarParser.COLON, 0); }
+		public Token RPAREN() { return getToken(GrammarParser.RPAREN, 0); }
+		public optionsSpecContext optionsSpec() {
+		    return (optionsSpecContext)getRuleContext(optionsSpecContext.class,0);
+		}
+		public altListContext altList() {
+		    return (altListContext)getRuleContext(altListContext.class,0);
+		}
+		public Token LPAREN() { return getToken(GrammarParser.LPAREN, 0); }
+		public ruleActionContext ruleAction() {
+		    return (ruleActionContext)getRuleContext(ruleActionContext.class,0);
+		}
 		public blockContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).blockEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).blockExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).blockVisit(this);
+		    else return null;
 		}
 	}
 
@@ -3901,8 +4746,8 @@ public class GrammarParser extends Parser {
 						if ( _alt1929==1 ) {
 							{
 							{
-							setState(983); _localctx.ra = ruleAction();
-							_localctx.ra_list.add(_localctx.ra);
+							setState(983); ((blockContext)_localctx).ruleAction = ruleAction();
+							((blockContext)_localctx).ra.add(((blockContext)_localctx).ruleAction);
 							}
 							} 
 						}
@@ -3930,16 +4775,25 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class rulerefContext extends ParserRuleContext<Token> {
+		public argActionBlockContext argActionBlock() {
+		    return (argActionBlockContext)getRuleContext(argActionBlockContext.class,0);
+		}
+		public Token RULE_REF() { return getToken(GrammarParser.RULE_REF, 0); }
 		public rulerefContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).rulerefEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).rulerefExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).rulerefVisit(this);
+		    else return null;
 		}
 	}
 
@@ -3973,16 +4827,26 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class rangeContext extends ParserRuleContext<Token> {
+		public Token RANGE() { return getToken(GrammarParser.RANGE, 0); }
+		public List<? extends Token> STRING_LITERAL() { return getTokens(GrammarParser.STRING_LITERAL); }
+		public Token STRING_LITERAL(int i) {
+		    return getToken(GrammarParser.STRING_LITERAL, i);
+		}
 		public rangeContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).rangeEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).rangeExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).rangeVisit(this);
+		    else return null;
 		}
 	}
 
@@ -4009,16 +4873,26 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class terminalContext extends ParserRuleContext<Token> {
+		public Token STRING_LITERAL() { return getToken(GrammarParser.STRING_LITERAL, 0); }
+		public elementOptionsContext elementOptions() {
+		    return (elementOptionsContext)getRuleContext(elementOptionsContext.class,0);
+		}
+		public Token TOKEN_REF() { return getToken(GrammarParser.TOKEN_REF, 0); }
 		public terminalContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).terminalEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).terminalExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).terminalVisit(this);
+		    else return null;
 		}
 	}
 
@@ -4074,16 +4948,30 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class elementOptionsContext extends ParserRuleContext<Token> {
+		public Token GT() { return getToken(GrammarParser.GT, 0); }
+		public Token LT() { return getToken(GrammarParser.LT, 0); }
+		public List<? extends elementOptionContext> elementOption() {
+		    return (List<elementOptionContext>)getRuleContexts(elementOptionContext.class);
+		}
+		public Token COMMA() { return getToken(GrammarParser.COMMA, 0); }
+		public elementOptionContext elementOption(int i) {
+		    return (elementOptionContext)getRuleContext(elementOptionContext.class,i);
+		}
 		public elementOptionsContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).elementOptionsEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).elementOptionsExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).elementOptionsVisit(this);
+		    else return null;
 		}
 	}
 
@@ -4126,16 +5014,29 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class elementOptionContext extends ParserRuleContext<Token> {
+		public idContext id() {
+		    return (idContext)getRuleContext(idContext.class,0);
+		}
+		public Token STRING_LITERAL() { return getToken(GrammarParser.STRING_LITERAL, 0); }
+		public qidContext qid() {
+		    return (qidContext)getRuleContext(qidContext.class,0);
+		}
+		public Token ASSIGN() { return getToken(GrammarParser.ASSIGN, 0); }
 		public elementOptionContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).elementOptionEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).elementOptionExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).elementOptionVisit(this);
+		    else return null;
 		}
 	}
 
@@ -4189,16 +5090,24 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class idContext extends ParserRuleContext<Token> {
+		public Token TEMPLATE() { return getToken(GrammarParser.TEMPLATE, 0); }
+		public Token RULE_REF() { return getToken(GrammarParser.RULE_REF, 0); }
+		public Token TOKEN_REF() { return getToken(GrammarParser.TOKEN_REF, 0); }
 		public idContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).idEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).idExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).idVisit(this);
+		    else return null;
 		}
 	}
 
@@ -4243,16 +5152,28 @@ public class GrammarParser extends Parser {
 	}
 
 	public static class qidContext extends ParserRuleContext<Token> {
+		public List<? extends idContext> id() {
+		    return (List<idContext>)getRuleContexts(idContext.class);
+		}
+		public Token DOT() { return getToken(GrammarParser.DOT, 0); }
+		public idContext id(int i) {
+		    return (idContext)getRuleContext(idContext.class,i);
+		}
 		public qidContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
 		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).qidEnter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).exitRule(this);
+			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).qidExit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
+		    if ( visitor instanceof GrammarParserVisitor ) return ((GrammarParserVisitor<T>)visitor).qidVisit(this);
+		    else return null;
 		}
 	}
 

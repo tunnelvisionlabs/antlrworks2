@@ -14,14 +14,22 @@ import java.util.Map;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.Token;
-import org.antlr.works.editor.grammar.experimental.BlankGrammarParserListener;
+import org.antlr.works.editor.grammar.experimental.GrammarParserBaseListener;
 import org.antlr.works.editor.grammar.experimental.GrammarParser;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.actionBlockContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.argActionBlockContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.labeledAltContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.labeledElementContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.lexerRuleContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.parserRuleContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.rulerefContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.terminalContext;
 
 /**
  *
  * @author Sam Harwell
  */
-public class LabelAnalyzer extends BlankGrammarParserListener {
+public class LabelAnalyzer extends GrammarParserBaseListener {
 
     private final Map<String, Token> labels = new HashMap<String, Token>();
     private final Map<String, Token> unlabeledElements = new HashMap<String, Token>();
@@ -65,21 +73,21 @@ public class LabelAnalyzer extends BlankGrammarParserListener {
     }
 
     @Override
-    public void enterRule(GrammarParser.parserRuleContext ctx) {
+    public void parserRuleEnter(parserRuleContext ctx) {
         if (ctx.name != null) {
             enclosingRuleName = ctx.name;
         }
     }
 
     @Override
-    public void enterRule(GrammarParser.lexerRuleContext ctx) {
+    public void lexerRuleEnter(lexerRuleContext ctx) {
         if (ctx.name != null) {
             enclosingRuleName = ctx.name;
         }
     }
 
     @Override
-    public void enterRule(GrammarParser.labeledAltContext ctx) {
+    public void labeledAltEnter(labeledAltContext ctx) {
         if (isCaretReached()) {
             return;
         }
@@ -89,7 +97,7 @@ public class LabelAnalyzer extends BlankGrammarParserListener {
     }
 
     @Override
-    public void enterRule(GrammarParser.labeledElementContext ctx) {
+    public void labeledElementEnter(labeledElementContext ctx) {
         if (isCaretReached()) {
             return;
         }
@@ -100,7 +108,7 @@ public class LabelAnalyzer extends BlankGrammarParserListener {
     }
 
     @Override
-    public void enterRule(GrammarParser.terminalContext ctx) {
+    public void terminalEnter(terminalContext ctx) {
         if (isCaretReached()) {
             return;
         }
@@ -117,7 +125,7 @@ public class LabelAnalyzer extends BlankGrammarParserListener {
     }
 
     @Override
-    public void enterRule(GrammarParser.rulerefContext ctx) {
+    public void rulerefEnter(rulerefContext ctx) {
         if (isCaretReached()) {
             return;
         }
@@ -134,7 +142,7 @@ public class LabelAnalyzer extends BlankGrammarParserListener {
     }
 
     @Override
-    public void enterRule(GrammarParser.actionBlockContext ctx) {
+    public void actionBlockEnter(actionBlockContext ctx) {
         if (isCaretReached()) {
             return;
         }
@@ -143,7 +151,7 @@ public class LabelAnalyzer extends BlankGrammarParserListener {
     }
 
     @Override
-    public void exitRule(GrammarParser.actionBlockContext ctx) {
+    public void actionBlockExit(actionBlockContext ctx) {
         checkCaretReached(ctx);
 
         if (isCaretReached()) {
@@ -154,7 +162,7 @@ public class LabelAnalyzer extends BlankGrammarParserListener {
     }
 
     @Override
-    public void enterRule(GrammarParser.argActionBlockContext ctx) {
+    public void argActionBlockEnter(argActionBlockContext ctx) {
         if (isCaretReached()) {
             return;
         }
@@ -163,7 +171,7 @@ public class LabelAnalyzer extends BlankGrammarParserListener {
     }
 
     @Override
-    public void exitRule(GrammarParser.argActionBlockContext ctx) {
+    public void argActionBlockExit(argActionBlockContext ctx) {
         checkCaretReached(ctx);
 
         if (isCaretReached()) {

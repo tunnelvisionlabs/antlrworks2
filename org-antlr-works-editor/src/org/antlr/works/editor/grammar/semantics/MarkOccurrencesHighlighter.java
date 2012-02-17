@@ -41,8 +41,8 @@ import org.antlr.works.editor.antlr4.semantics.AbstractSemanticHighlighter;
 import org.antlr.works.editor.grammar.GrammarEditorKit;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
 import org.antlr.works.editor.grammar.codemodel.FileModel;
-import org.antlr.works.editor.grammar.experimental.BlankGrammarParserListener;
 import org.antlr.works.editor.grammar.experimental.CurrentRuleContextData;
+import org.antlr.works.editor.grammar.experimental.GrammarParserBaseListener;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.editor.mimelookup.MimeLookup;
 import org.netbeans.api.editor.mimelookup.MimePath;
@@ -251,7 +251,7 @@ public class MarkOccurrencesHighlighter extends AbstractSemanticHighlighter<Curr
 
     }
 
-    public static class MarkOccurrencesListener extends BlankGrammarParserListener {
+    public static class MarkOccurrencesListener extends GrammarParserBaseListener {
 
         private final FileModel fileModel;
         private final GrammarAnnotatedParseTree annotatedParseTree;

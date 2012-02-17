@@ -12,216 +12,216 @@ import org.antlr.v4.runtime.tree.*;
 import org.antlr.v4.runtime.Token;
 
 public interface GrammarParserListener extends ParseTreeListener<Token> {
-	void enterRule(GrammarParser.parserRuleContext ctx);
-	void exitRule(GrammarParser.parserRuleContext ctx);
+	void parserRuleEnter(GrammarParser.parserRuleContext ctx);
+	void parserRuleExit(GrammarParser.parserRuleContext ctx);
 
-	void enterRule(GrammarParser.atomContext ctx);
-	void exitRule(GrammarParser.atomContext ctx);
+	void atomEnter(GrammarParser.atomContext ctx);
+	void atomExit(GrammarParser.atomContext ctx);
 
-	void enterRule(GrammarParser.rulePrequelsContext ctx);
-	void exitRule(GrammarParser.rulePrequelsContext ctx);
+	void rulePrequelsEnter(GrammarParser.rulePrequelsContext ctx);
+	void rulePrequelsExit(GrammarParser.rulePrequelsContext ctx);
 
-	void enterRule(GrammarParser.ruleBlockContext ctx);
-	void exitRule(GrammarParser.ruleBlockContext ctx);
+	void ruleBlockEnter(GrammarParser.ruleBlockContext ctx);
+	void ruleBlockExit(GrammarParser.ruleBlockContext ctx);
 
-	void enterRule(GrammarParser.notSetContext ctx);
-	void exitRule(GrammarParser.notSetContext ctx);
+	void notSetEnter(GrammarParser.notSetContext ctx);
+	void notSetExit(GrammarParser.notSetContext ctx);
 
-	void enterRule(GrammarParser.lexerAltListContext ctx);
-	void exitRule(GrammarParser.lexerAltListContext ctx);
+	void lexerAltListEnter(GrammarParser.lexerAltListContext ctx);
+	void lexerAltListExit(GrammarParser.lexerAltListContext ctx);
 
-	void enterRule(GrammarParser.argActionParameterContext ctx);
-	void exitRule(GrammarParser.argActionParameterContext ctx);
+	void argActionParameterEnter(GrammarParser.argActionParameterContext ctx);
+	void argActionParameterExit(GrammarParser.argActionParameterContext ctx);
 
-	void enterRule(GrammarParser.ruleModifierContext ctx);
-	void exitRule(GrammarParser.ruleModifierContext ctx);
+	void ruleModifierEnter(GrammarParser.ruleModifierContext ctx);
+	void ruleModifierExit(GrammarParser.ruleModifierContext ctx);
 
-	void enterRule(GrammarParser.ruleAltListContext ctx);
-	void exitRule(GrammarParser.ruleAltListContext ctx);
+	void ruleAltListEnter(GrammarParser.ruleAltListContext ctx);
+	void ruleAltListExit(GrammarParser.ruleAltListContext ctx);
 
-	void enterRule(GrammarParser.terminalContext ctx);
-	void exitRule(GrammarParser.terminalContext ctx);
+	void terminalEnter(GrammarParser.terminalContext ctx);
+	void terminalExit(GrammarParser.terminalContext ctx);
 
-	void enterRule(GrammarParser.throwsSpecContext ctx);
-	void exitRule(GrammarParser.throwsSpecContext ctx);
+	void throwsSpecEnter(GrammarParser.throwsSpecContext ctx);
+	void throwsSpecExit(GrammarParser.throwsSpecContext ctx);
 
-	void enterRule(GrammarParser.actionContext ctx);
-	void exitRule(GrammarParser.actionContext ctx);
+	void actionEnter(GrammarParser.actionContext ctx);
+	void actionExit(GrammarParser.actionContext ctx);
 
-	void enterRule(GrammarParser.actionScopeExpressionContext ctx);
-	void exitRule(GrammarParser.actionScopeExpressionContext ctx);
+	void actionScopeExpressionEnter(GrammarParser.actionScopeExpressionContext ctx);
+	void actionScopeExpressionExit(GrammarParser.actionScopeExpressionContext ctx);
 
-	void enterRule(GrammarParser.localsSpecContext ctx);
-	void exitRule(GrammarParser.localsSpecContext ctx);
+	void localsSpecEnter(GrammarParser.localsSpecContext ctx);
+	void localsSpecExit(GrammarParser.localsSpecContext ctx);
 
-	void enterRule(GrammarParser.modeSpecContext ctx);
-	void exitRule(GrammarParser.modeSpecContext ctx);
+	void modeSpecEnter(GrammarParser.modeSpecContext ctx);
+	void modeSpecExit(GrammarParser.modeSpecContext ctx);
 
-	void enterRule(GrammarParser.elementsContext ctx);
-	void exitRule(GrammarParser.elementsContext ctx);
+	void elementsEnter(GrammarParser.elementsContext ctx);
+	void elementsExit(GrammarParser.elementsContext ctx);
 
-	void enterRule(GrammarParser.optionContext ctx);
-	void exitRule(GrammarParser.optionContext ctx);
+	void optionEnter(GrammarParser.optionContext ctx);
+	void optionExit(GrammarParser.optionContext ctx);
 
-	void enterRule(GrammarParser.elementContext ctx);
-	void exitRule(GrammarParser.elementContext ctx);
+	void elementEnter(GrammarParser.elementContext ctx);
+	void elementExit(GrammarParser.elementContext ctx);
 
-	void enterRule(GrammarParser.elementOptionsContext ctx);
-	void exitRule(GrammarParser.elementOptionsContext ctx);
+	void elementOptionsEnter(GrammarParser.elementOptionsContext ctx);
+	void elementOptionsExit(GrammarParser.elementOptionsContext ctx);
 
-	void enterRule(GrammarParser.lexerElementContext ctx);
-	void exitRule(GrammarParser.lexerElementContext ctx);
+	void lexerElementEnter(GrammarParser.lexerElementContext ctx);
+	void lexerElementExit(GrammarParser.lexerElementContext ctx);
 
-	void enterRule(GrammarParser.alternativeContext ctx);
-	void exitRule(GrammarParser.alternativeContext ctx);
+	void alternativeEnter(GrammarParser.alternativeContext ctx);
+	void alternativeExit(GrammarParser.alternativeContext ctx);
 
-	void enterRule(GrammarParser.lexerActionExprContext ctx);
-	void exitRule(GrammarParser.lexerActionExprContext ctx);
+	void lexerActionExprEnter(GrammarParser.lexerActionExprContext ctx);
+	void lexerActionExprExit(GrammarParser.lexerActionExprContext ctx);
 
-	void enterRule(GrammarParser.grammarTypeContext ctx);
-	void exitRule(GrammarParser.grammarTypeContext ctx);
+	void grammarTypeEnter(GrammarParser.grammarTypeContext ctx);
+	void grammarTypeExit(GrammarParser.grammarTypeContext ctx);
 
-	void enterRule(GrammarParser.ruleActionContext ctx);
-	void exitRule(GrammarParser.ruleActionContext ctx);
+	void ruleActionEnter(GrammarParser.ruleActionContext ctx);
+	void ruleActionExit(GrammarParser.ruleActionContext ctx);
 
-	void enterRule(GrammarParser.ebnfSuffixContext ctx);
-	void exitRule(GrammarParser.ebnfSuffixContext ctx);
+	void ebnfSuffixEnter(GrammarParser.ebnfSuffixContext ctx);
+	void ebnfSuffixExit(GrammarParser.ebnfSuffixContext ctx);
 
-	void enterRule(GrammarParser.exceptionGroupContext ctx);
-	void exitRule(GrammarParser.exceptionGroupContext ctx);
+	void exceptionGroupEnter(GrammarParser.exceptionGroupContext ctx);
+	void exceptionGroupExit(GrammarParser.exceptionGroupContext ctx);
 
-	void enterRule(GrammarParser.rulePrequelContext ctx);
-	void exitRule(GrammarParser.rulePrequelContext ctx);
+	void rulePrequelEnter(GrammarParser.rulePrequelContext ctx);
+	void rulePrequelExit(GrammarParser.rulePrequelContext ctx);
 
-	void enterRule(GrammarParser.lexerBlockContext ctx);
-	void exitRule(GrammarParser.lexerBlockContext ctx);
+	void lexerBlockEnter(GrammarParser.lexerBlockContext ctx);
+	void lexerBlockExit(GrammarParser.lexerBlockContext ctx);
 
-	void enterRule(GrammarParser.setElementContext ctx);
-	void exitRule(GrammarParser.setElementContext ctx);
+	void setElementEnter(GrammarParser.setElementContext ctx);
+	void setElementExit(GrammarParser.setElementContext ctx);
 
-	void enterRule(GrammarParser.blockSetContext ctx);
-	void exitRule(GrammarParser.blockSetContext ctx);
+	void blockSetEnter(GrammarParser.blockSetContext ctx);
+	void blockSetExit(GrammarParser.blockSetContext ctx);
 
-	void enterRule(GrammarParser.actionScopeNameContext ctx);
-	void exitRule(GrammarParser.actionScopeNameContext ctx);
+	void actionScopeNameEnter(GrammarParser.actionScopeNameContext ctx);
+	void actionScopeNameExit(GrammarParser.actionScopeNameContext ctx);
 
-	void enterRule(GrammarParser.labeledAltContext ctx);
-	void exitRule(GrammarParser.labeledAltContext ctx);
+	void labeledAltEnter(GrammarParser.labeledAltContext ctx);
+	void labeledAltExit(GrammarParser.labeledAltContext ctx);
 
-	void enterRule(GrammarParser.argActionParameterTypeContext ctx);
-	void exitRule(GrammarParser.argActionParameterTypeContext ctx);
+	void argActionParameterTypeEnter(GrammarParser.argActionParameterTypeContext ctx);
+	void argActionParameterTypeExit(GrammarParser.argActionParameterTypeContext ctx);
 
-	void enterRule(GrammarParser.lexerAtomContext ctx);
-	void exitRule(GrammarParser.lexerAtomContext ctx);
+	void lexerAtomEnter(GrammarParser.lexerAtomContext ctx);
+	void lexerAtomExit(GrammarParser.lexerAtomContext ctx);
 
-	void enterRule(GrammarParser.labeledElementContext ctx);
-	void exitRule(GrammarParser.labeledElementContext ctx);
+	void labeledElementEnter(GrammarParser.labeledElementContext ctx);
+	void labeledElementExit(GrammarParser.labeledElementContext ctx);
 
-	void enterRule(GrammarParser.lexerRuleBlockContext ctx);
-	void exitRule(GrammarParser.lexerRuleBlockContext ctx);
+	void lexerRuleBlockEnter(GrammarParser.lexerRuleBlockContext ctx);
+	void lexerRuleBlockExit(GrammarParser.lexerRuleBlockContext ctx);
 
-	void enterRule(GrammarParser.finallyClauseContext ctx);
-	void exitRule(GrammarParser.finallyClauseContext ctx);
+	void finallyClauseEnter(GrammarParser.finallyClauseContext ctx);
+	void finallyClauseExit(GrammarParser.finallyClauseContext ctx);
 
-	void enterRule(GrammarParser.ignoredContext ctx);
-	void exitRule(GrammarParser.ignoredContext ctx);
+	void ignoredEnter(GrammarParser.ignoredContext ctx);
+	void ignoredExit(GrammarParser.ignoredContext ctx);
 
-	void enterRule(GrammarParser.grammarSpecContext ctx);
-	void exitRule(GrammarParser.grammarSpecContext ctx);
+	void grammarSpecEnter(GrammarParser.grammarSpecContext ctx);
+	void grammarSpecExit(GrammarParser.grammarSpecContext ctx);
 
-	void enterRule(GrammarParser.delegateGrammarContext ctx);
-	void exitRule(GrammarParser.delegateGrammarContext ctx);
+	void delegateGrammarEnter(GrammarParser.delegateGrammarContext ctx);
+	void delegateGrammarExit(GrammarParser.delegateGrammarContext ctx);
 
-	void enterRule(GrammarParser.lexerElementsContext ctx);
-	void exitRule(GrammarParser.lexerElementsContext ctx);
+	void lexerElementsEnter(GrammarParser.lexerElementsContext ctx);
+	void lexerElementsExit(GrammarParser.lexerElementsContext ctx);
 
-	void enterRule(GrammarParser.rangeContext ctx);
-	void exitRule(GrammarParser.rangeContext ctx);
+	void rangeEnter(GrammarParser.rangeContext ctx);
+	void rangeExit(GrammarParser.rangeContext ctx);
 
-	void enterRule(GrammarParser.tokenSpecContext ctx);
-	void exitRule(GrammarParser.tokenSpecContext ctx);
+	void tokenSpecEnter(GrammarParser.tokenSpecContext ctx);
+	void tokenSpecExit(GrammarParser.tokenSpecContext ctx);
 
-	void enterRule(GrammarParser.blockContext ctx);
-	void exitRule(GrammarParser.blockContext ctx);
+	void blockEnter(GrammarParser.blockContext ctx);
+	void blockExit(GrammarParser.blockContext ctx);
 
-	void enterRule(GrammarParser.argActionParameterTypePartContext ctx);
-	void exitRule(GrammarParser.argActionParameterTypePartContext ctx);
+	void argActionParameterTypePartEnter(GrammarParser.argActionParameterTypePartContext ctx);
+	void argActionParameterTypePartExit(GrammarParser.argActionParameterTypePartContext ctx);
 
-	void enterRule(GrammarParser.lexerRuleContext ctx);
-	void exitRule(GrammarParser.lexerRuleContext ctx);
+	void lexerRuleEnter(GrammarParser.lexerRuleContext ctx);
+	void lexerRuleExit(GrammarParser.lexerRuleContext ctx);
 
-	void enterRule(GrammarParser.labeledLexerElementContext ctx);
-	void exitRule(GrammarParser.labeledLexerElementContext ctx);
+	void labeledLexerElementEnter(GrammarParser.labeledLexerElementContext ctx);
+	void labeledLexerElementExit(GrammarParser.labeledLexerElementContext ctx);
 
-	void enterRule(GrammarParser.delegateGrammarsContext ctx);
-	void exitRule(GrammarParser.delegateGrammarsContext ctx);
+	void delegateGrammarsEnter(GrammarParser.delegateGrammarsContext ctx);
+	void delegateGrammarsExit(GrammarParser.delegateGrammarsContext ctx);
 
-	void enterRule(GrammarParser.actionExpressionContext ctx);
-	void exitRule(GrammarParser.actionExpressionContext ctx);
+	void actionExpressionEnter(GrammarParser.actionExpressionContext ctx);
+	void actionExpressionExit(GrammarParser.actionExpressionContext ctx);
 
-	void enterRule(GrammarParser.rulerefContext ctx);
-	void exitRule(GrammarParser.rulerefContext ctx);
+	void rulerefEnter(GrammarParser.rulerefContext ctx);
+	void rulerefExit(GrammarParser.rulerefContext ctx);
 
-	void enterRule(GrammarParser.blockSuffixContext ctx);
-	void exitRule(GrammarParser.blockSuffixContext ctx);
+	void blockSuffixEnter(GrammarParser.blockSuffixContext ctx);
+	void blockSuffixExit(GrammarParser.blockSuffixContext ctx);
 
-	void enterRule(GrammarParser.idContext ctx);
-	void exitRule(GrammarParser.idContext ctx);
+	void idEnter(GrammarParser.idContext ctx);
+	void idExit(GrammarParser.idContext ctx);
 
-	void enterRule(GrammarParser.actionBlockContext ctx);
-	void exitRule(GrammarParser.actionBlockContext ctx);
+	void actionBlockEnter(GrammarParser.actionBlockContext ctx);
+	void actionBlockExit(GrammarParser.actionBlockContext ctx);
 
-	void enterRule(GrammarParser.elementOptionContext ctx);
-	void exitRule(GrammarParser.elementOptionContext ctx);
+	void elementOptionEnter(GrammarParser.elementOptionContext ctx);
+	void elementOptionExit(GrammarParser.elementOptionContext ctx);
 
-	void enterRule(GrammarParser.ruleContext ctx);
-	void exitRule(GrammarParser.ruleContext ctx);
+	void ruleEnter(GrammarParser.ruleContext ctx);
+	void ruleExit(GrammarParser.ruleContext ctx);
 
-	void enterRule(GrammarParser.exceptionHandlerContext ctx);
-	void exitRule(GrammarParser.exceptionHandlerContext ctx);
+	void exceptionHandlerEnter(GrammarParser.exceptionHandlerContext ctx);
+	void exceptionHandlerExit(GrammarParser.exceptionHandlerContext ctx);
 
-	void enterRule(GrammarParser.tokensSpecContext ctx);
-	void exitRule(GrammarParser.tokensSpecContext ctx);
+	void tokensSpecEnter(GrammarParser.tokensSpecContext ctx);
+	void tokensSpecExit(GrammarParser.tokensSpecContext ctx);
 
-	void enterRule(GrammarParser.ruleReturnsContext ctx);
-	void exitRule(GrammarParser.ruleReturnsContext ctx);
+	void ruleReturnsEnter(GrammarParser.ruleReturnsContext ctx);
+	void ruleReturnsExit(GrammarParser.ruleReturnsContext ctx);
 
-	void enterRule(GrammarParser.qidContext ctx);
-	void exitRule(GrammarParser.qidContext ctx);
+	void qidEnter(GrammarParser.qidContext ctx);
+	void qidExit(GrammarParser.qidContext ctx);
 
-	void enterRule(GrammarParser.optionsSpecContext ctx);
-	void exitRule(GrammarParser.optionsSpecContext ctx);
+	void optionsSpecEnter(GrammarParser.optionsSpecContext ctx);
+	void optionsSpecExit(GrammarParser.optionsSpecContext ctx);
 
-	void enterRule(GrammarParser.altListContext ctx);
-	void exitRule(GrammarParser.altListContext ctx);
+	void altListEnter(GrammarParser.altListContext ctx);
+	void altListExit(GrammarParser.altListContext ctx);
 
-	void enterRule(GrammarParser.prequelConstructContext ctx);
-	void exitRule(GrammarParser.prequelConstructContext ctx);
+	void prequelConstructEnter(GrammarParser.prequelConstructContext ctx);
+	void prequelConstructExit(GrammarParser.prequelConstructContext ctx);
 
-	void enterRule(GrammarParser.rulesContext ctx);
-	void exitRule(GrammarParser.rulesContext ctx);
+	void rulesEnter(GrammarParser.rulesContext ctx);
+	void rulesExit(GrammarParser.rulesContext ctx);
 
-	void enterRule(GrammarParser.lexerActionsContext ctx);
-	void exitRule(GrammarParser.lexerActionsContext ctx);
+	void lexerActionsEnter(GrammarParser.lexerActionsContext ctx);
+	void lexerActionsExit(GrammarParser.lexerActionsContext ctx);
 
-	void enterRule(GrammarParser.optionValueContext ctx);
-	void exitRule(GrammarParser.optionValueContext ctx);
+	void optionValueEnter(GrammarParser.optionValueContext ctx);
+	void optionValueExit(GrammarParser.optionValueContext ctx);
 
-	void enterRule(GrammarParser.lexerAltContext ctx);
-	void exitRule(GrammarParser.lexerAltContext ctx);
+	void lexerAltEnter(GrammarParser.lexerAltContext ctx);
+	void lexerAltExit(GrammarParser.lexerAltContext ctx);
 
-	void enterRule(GrammarParser.argActionBlockContext ctx);
-	void exitRule(GrammarParser.argActionBlockContext ctx);
+	void argActionBlockEnter(GrammarParser.argActionBlockContext ctx);
+	void argActionBlockExit(GrammarParser.argActionBlockContext ctx);
 
-	void enterRule(GrammarParser.lexerActionContext ctx);
-	void exitRule(GrammarParser.lexerActionContext ctx);
+	void lexerActionEnter(GrammarParser.lexerActionContext ctx);
+	void lexerActionExit(GrammarParser.lexerActionContext ctx);
 
-	void enterRule(GrammarParser.ruleModifiersContext ctx);
-	void exitRule(GrammarParser.ruleModifiersContext ctx);
+	void ruleModifiersEnter(GrammarParser.ruleModifiersContext ctx);
+	void ruleModifiersExit(GrammarParser.ruleModifiersContext ctx);
 
-	void enterRule(GrammarParser.argActionParametersContext ctx);
-	void exitRule(GrammarParser.argActionParametersContext ctx);
+	void argActionParametersEnter(GrammarParser.argActionParametersContext ctx);
+	void argActionParametersExit(GrammarParser.argActionParametersContext ctx);
 
-	void enterRule(GrammarParser.ebnfContext ctx);
-	void exitRule(GrammarParser.ebnfContext ctx);
+	void ebnfEnter(GrammarParser.ebnfContext ctx);
+	void ebnfExit(GrammarParser.ebnfContext ctx);
 }
