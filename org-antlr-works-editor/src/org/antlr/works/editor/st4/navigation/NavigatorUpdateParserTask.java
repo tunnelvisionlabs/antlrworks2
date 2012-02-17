@@ -76,7 +76,7 @@ public class NavigatorUpdateParserTask implements ParserTask {
 
             Description root = parserData.getData();
 
-            Future<ParserData<CurrentTemplateContextData>> futureContextData = taskManager.getData(snapshot, TemplateParserDataDefinitions.CURRENT_TEMPLATE_CONTEXT);
+            Future<ParserData<CurrentTemplateContextData>> futureContextData = taskManager.getData(snapshot, TemplateParserDataDefinitions.CURRENT_TEMPLATE_CONTEXT, EnumSet.of(ParserDataOptions.NO_UPDATE));
             ParserData<CurrentTemplateContextData> parserContextData = futureContextData.get();
             CurrentTemplateContextData context = null;
             if (parserContextData != null) {

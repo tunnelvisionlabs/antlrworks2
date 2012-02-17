@@ -129,7 +129,7 @@ public class TemplateParserDataDefinitions {
     private static final class CurrentTemplateContextDataDefinition extends ParserDataDefinition<CurrentTemplateContextData> {
 
         public CurrentTemplateContextDataDefinition() {
-            super("StringTemplate Current Template Context", CurrentTemplateContextData.class, true, false, ParserTaskScheduler.CURSOR_SENSITIVE_TASK_SCHEDULER);
+            super("StringTemplate Current Template Context", CurrentTemplateContextData.class, true, true, ParserTaskScheduler.CURSOR_SENSITIVE_TASK_SCHEDULER);
         }
 
     }

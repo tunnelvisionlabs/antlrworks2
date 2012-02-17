@@ -144,7 +144,7 @@ public class GrammarParserDataDefinitions {
     private static final class CurrentRuleContextDataDefinition extends ParserDataDefinition<CurrentRuleContextData> {
 
         public CurrentRuleContextDataDefinition() {
-            super("Grammar Current Rule Context", CurrentRuleContextData.class, true, false, ParserTaskScheduler.CURSOR_SENSITIVE_TASK_SCHEDULER);
+            super("Grammar Current Rule Context", CurrentRuleContextData.class, true, true, ParserTaskScheduler.CURSOR_SENSITIVE_TASK_SCHEDULER);
         }
 
     }
