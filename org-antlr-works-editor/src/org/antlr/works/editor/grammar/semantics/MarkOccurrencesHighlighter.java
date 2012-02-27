@@ -18,6 +18,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.StyledDocument;
@@ -34,7 +36,6 @@ import org.antlr.netbeans.parsing.spi.ParserData;
 import org.antlr.netbeans.parsing.spi.ParserDataOptions;
 import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.v4.runtime.Lexer;
-import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
@@ -54,11 +55,13 @@ import org.netbeans.lib.editor.util.swing.DocumentUtilities;
 import org.netbeans.modules.editor.errorstripe.privatespi.Mark;
 import org.netbeans.modules.editor.errorstripe.privatespi.MarkProviderCreator;
 import org.netbeans.spi.editor.highlighting.HighlightsLayerFactory;
+import org.netbeans.spi.editor.highlighting.HighlightsSequence;
 import org.netbeans.spi.editor.highlighting.ZOrder;
 import org.netbeans.spi.editor.highlighting.support.OffsetsBag;
 import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
+import org.openide.util.WeakListeners;
 
 /**
  *
@@ -73,6 +76,7 @@ public class MarkOccurrencesHighlighter extends AbstractSemanticHighlighter<Curr
 
     public static final Color ERROR_STRIPE_COLOR = new Color(175, 172, 102);
 
+    private final DocumentListener documentListener;
     private final JTextComponent component;
     private final AttributeSet markOccurrencesAttributes;
     private final MarkOccurrencesMarkProviderCreator markProviderCreator;
@@ -83,6 +87,7 @@ public class MarkOccurrencesHighlighter extends AbstractSemanticHighlighter<Curr
         Lookup lookup = MimeLookup.getLookup(MimePath.parse(GrammarEditorKit.GRAMMAR_MIME_TYPE));
         FontColorSettings settings = lookup.lookup(FontColorSettings.class);
 
+        this.documentListener = new ClearHighlightsOnEditListener();
         this.component = component;
         this.markOccurrencesAttributes = getFontAndColors(settings, "markOccurrences");
         Collection<? extends MarkProviderCreator> markProviderCreators = MimeLookup.getLookup(DocumentUtilities.getMimeType(component)).lookupAll(MarkProviderCreator.class);
@@ -95,6 +100,7 @@ public class MarkOccurrencesHighlighter extends AbstractSemanticHighlighter<Curr
         }
 
         this.markProviderCreator = markOccurrencesMarkProviderCreator;
+        this.getDocument().addDocumentListener(WeakListeners.document(documentListener, this.getDocument()));
     }
 
     protected MarkOccurrencesListener createListener(ParserData<? extends CurrentRuleContextData> parserData) {
@@ -299,6 +305,46 @@ public class MarkOccurrencesHighlighter extends AbstractSemanticHighlighter<Curr
             }
 
             return annotatedParseTree.getTokenDecorator().getProperty(currentToken, GrammarTreeProperties.PROP_TARGET);
+        }
+
+    }
+
+    private class ClearHighlightsOnEditListener implements DocumentListener {
+
+        @Override
+        public void insertUpdate(DocumentEvent e) {
+            clearHighlights(e.getOffset());
+        }
+
+        @Override
+        public void removeUpdate(DocumentEvent e) {
+            clearHighlights(e.getOffset());
+        }
+
+        @Override
+        public void changedUpdate(DocumentEvent e) {
+            clearHighlights(e.getOffset());
+        }
+
+        private void clearHighlights(int offset) {
+            OffsetsBag container = getContainer();
+            HighlightsSequence sequence = container.getHighlights(0, Integer.MAX_VALUE);
+            if (!sequence.moveNext()) {
+                // no highlights
+                return;
+            }
+
+            if (sequence.getEndOffset() >= offset) {
+                container.clear();
+                return;
+            }
+
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    getContainer().clear();
+                }
+            });
         }
 
     }
