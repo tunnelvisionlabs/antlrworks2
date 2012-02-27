@@ -112,11 +112,11 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
         }
 
         this.snapshot = context.getSnapshot();
-        this.context = context.getContext();
-        if (context != null) {
+        this.context = ruleSpecContext;
+        if (ruleSpecContext != null) {
             try {
                 SyntaxBuilderListener listener = new SyntaxBuilderListener(context.getGrammarType(), snapshot);
-                new ParseTreeWalker().walk(listener, context.getContext());
+                new ParseTreeWalker().walk(listener, ruleSpecContext);
                 this.diagram = new Diagram(listener.getRule());
                 this.jScrollPane1.setViewportView(diagram);
                 this.jScrollPane1.validate();
@@ -366,15 +366,15 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
 
         @Override
         public void enterLexerAtom(LexerAtomContext ctx) {
-            enterAtom(ctx);
+            enterEveryAtom(ctx);
         }
 
         @Override
         public void enterAtom(AtomContext ctx) {
-            enterAtom(ctx);
+            enterEveryAtom(ctx);
         }
 
-        public void enterAtom(ParserRuleContext<Token> ctx) {
+        public void enterEveryAtom(ParserRuleContext<Token> ctx) {
             if (outermostAtom != null) {
                 return;
             }
