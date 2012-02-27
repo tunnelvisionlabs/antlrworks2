@@ -47,6 +47,7 @@ import org.openide.util.lookup.InstanceContent;
  * @author Sam Harwell
  */
 @NbBundle.Messages({
+    "# {0} - shortcut",
     "TIP_CollapsiblePanel=Click or press {0} to hide/show when the Navigator is active"
 })
 public abstract class NavigatorPanelUI extends javax.swing.JPanel implements ExplorerManager.Provider, FiltersManager.FilterChangeListener, PropertyChangeListener {

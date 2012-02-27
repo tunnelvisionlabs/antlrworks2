@@ -739,6 +739,7 @@ public final class ToolTipManagerEx extends MouseAdapter implements MouseMotionL
     }
 
     @NbBundle.Messages({
+        "# {0} - shortcut",
         "HINT_EnlargeJavaDocToolip=Press {0} to enlarge"
     })
     private class ToolTipEx extends JPanel {
