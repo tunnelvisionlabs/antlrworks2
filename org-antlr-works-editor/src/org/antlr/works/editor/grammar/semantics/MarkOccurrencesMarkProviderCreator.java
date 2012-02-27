@@ -8,7 +8,6 @@
  */
 package org.antlr.works.editor.grammar.semantics;
 
-import java.util.Map;
 import java.util.WeakHashMap;
 import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
@@ -29,10 +28,9 @@ public class MarkOccurrencesMarkProviderCreator implements MarkProviderCreator {
     public MarkOccurrencesMarkProvider createMarkProvider(JTextComponent component) {
         synchronized (lock) {
             Document document = component.getDocument();
-            @SuppressWarnings("unchecked")
-            Map<JTextComponent, MarkOccurrencesMarkProvider> providerMap = (Map<JTextComponent, MarkOccurrencesMarkProvider>)document.getProperty(MarkOccurrencesMarkProvider.class);
+            ProviderMap providerMap = (ProviderMap)document.getProperty(MarkOccurrencesMarkProvider.class);
             if (providerMap == null) {
-                providerMap = new WeakHashMap<JTextComponent, MarkOccurrencesMarkProvider>();
+                providerMap = new ProviderMap();
                 document.putProperty(MarkOccurrencesMarkProvider.class, providerMap);
             }
 
@@ -44,6 +42,9 @@ public class MarkOccurrencesMarkProviderCreator implements MarkProviderCreator {
 
             return provider;
         }
+    }
+
+    private static class ProviderMap extends WeakHashMap<JTextComponent, MarkOccurrencesMarkProvider> {
     }
 
 }

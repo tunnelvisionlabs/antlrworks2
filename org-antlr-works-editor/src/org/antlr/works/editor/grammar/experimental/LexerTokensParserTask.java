@@ -8,8 +8,10 @@
  */
 package org.antlr.works.editor.grammar.experimental;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.WeakHashMap;
 import java.util.concurrent.ExecutionException;
 import org.antlr.netbeans.editor.classification.TokenTag;
@@ -48,18 +50,17 @@ public class LexerTokensParserTask implements ParserTask {
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "rawtypes"})
     public void parse(ParserTaskManager taskManager, ParseContext context, DocumentSnapshot snapshot, Collection<ParserDataDefinition<?>> requestedData, ParserResultHandler results)
         throws InterruptedException, ExecutionException {
 
         if (requestedData.contains(GrammarParserDataDefinitions.LEXER_TOKENS)) {
-            WeakHashMap<DocumentSnapshot, ParserData<Tagger<TokenTag<Token>>>> documentCache;
+            DocumentCacheMap documentCache;
 
             synchronized (lock) {
-                documentCache = (WeakHashMap<DocumentSnapshot, ParserData<Tagger<TokenTag<Token>>>>)snapshot.getVersionedDocument().getProperty(DOCUMENT_CACHE_KEY);
+                documentCache = (DocumentCacheMap)snapshot.getVersionedDocument().getProperty(DOCUMENT_CACHE_KEY);
 
                 if (documentCache == null) {
-                    documentCache = new WeakHashMap<DocumentSnapshot, ParserData<Tagger<TokenTag<Token>>>>();
+                    documentCache = new DocumentCacheMap();
                     snapshot.getVersionedDocument().putProperty(DOCUMENT_CACHE_KEY, documentCache);
                 }
             }
@@ -79,9 +80,9 @@ public class LexerTokensParserTask implements ParserTask {
                     int requestedVersion = snapshot.getVersion().getVersionNumber();
                     ParserData<Tagger<TokenTag<Token>>> previousResult = null;
                     int previousVersion = -1;
-                    ParserData<Tagger<TokenTag<Token>>>[] values;
+                    List<ParserData<Tagger<TokenTag<Token>>>> values;
                     synchronized (documentCache) {
-                        values = documentCache.values().toArray(new ParserData[0]);
+                        values = new ArrayList<ParserData<Tagger<TokenTag<Token>>>>(documentCache.values());
                     }
 
                     for (ParserData<Tagger<TokenTag<Token>>> data : values) {
@@ -143,4 +144,8 @@ public class LexerTokensParserTask implements ParserTask {
         }
 
     }
+
+    private static class DocumentCacheMap extends WeakHashMap<DocumentSnapshot, ParserData<Tagger<TokenTag<Token>>>> {
+    }
+
 }
