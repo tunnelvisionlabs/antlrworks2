@@ -21,7 +21,7 @@ import org.antlr.v4.runtime.TokenSource;
 public class DocumentSnapshotToken extends CommonToken {
     private final DocumentSnapshot snapshot;
 
-    public DocumentSnapshotToken(TokenSource source, int type, int channel, int start, int stop) {
+    public DocumentSnapshotToken(TokenSource<?> source, int type, int channel, int start, int stop) {
         super(source, type, channel, start, stop);
         CharStream inputStream = source.getInputStream();
         if (!(inputStream instanceof DocumentSnapshotCharStream)) {

@@ -20,7 +20,7 @@ public class CaretToken extends CommonToken {
     public static final int CARET_TOKEN_TYPE = -2;
     private final Token originalToken;
 
-    public CaretToken(TokenSource source, int channel, int start, int stop) {
+    public CaretToken(TokenSource<?> source, int channel, int start, int stop) {
         super(source, CARET_TOKEN_TYPE, channel, start, stop);
         this.originalToken = null;
     }

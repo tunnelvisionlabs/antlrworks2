@@ -24,9 +24,9 @@ public interface CodeCompletionParser {
 
     ParserRuleContext<Token> getContext();
 
-    IntStream getInputStream();
+    IntStream<? extends Token> getInputStream();
 
-    TokenStream getTokenStream();
+    TokenStream<? extends Token> getTokenStream();
 
     ATN getATN();
 
