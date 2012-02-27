@@ -181,7 +181,10 @@ public class DocumentSnapshotCharStream implements CharStream {
 
     @Override
     public void seek(int index) {
-        if (index == index()) {
+        if (index <= index() && (index() - index) < getCharPositionInLine()) {
+            // moved to a previous location on the same line
+            setCharPositionInLine(getCharPositionInLine() - (index() - index));
+            setIndex(index);
             return;
         }
 
