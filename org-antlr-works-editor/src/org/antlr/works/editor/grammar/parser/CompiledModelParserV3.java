@@ -64,8 +64,7 @@ public class CompiledModelParserV3 extends CompiledModelParser {
                 g.setFileName(""); // work around a bug in Grammar.setName that results in a NPE
                 ANTLRParser.grammar__return result = parser.grammar_(g);
 
-                @SuppressWarnings("unchecked")
-                List<Token> tokenList = tokenStream.getTokens();
+                List<? extends Token> tokenList = tokenStream.getTokens();
                 CommonToken[] tokens = new CommonToken[tokenList.size()];
                 tokens = tokenList.toArray(tokens);
 

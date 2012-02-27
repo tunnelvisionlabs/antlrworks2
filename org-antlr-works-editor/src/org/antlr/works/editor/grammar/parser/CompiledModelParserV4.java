@@ -81,8 +81,7 @@ public class CompiledModelParserV4 extends CompiledModelParser {
                     grammar.loadImportedGrammars();
 
                     CommonTokenStream tokenStream = (CommonTokenStream)root.tokens;
-                    @SuppressWarnings("unchecked")
-                    List<CommonToken> tokenList = tokenStream.getTokens();
+                    List<? extends Token> tokenList = tokenStream.getTokens();
                     tokens = tokenList.toArray(new CommonToken[0]);
                 }
 

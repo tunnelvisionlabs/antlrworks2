@@ -15,6 +15,7 @@ import org.antlr.netbeans.editor.parsing.SyntaxError;
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.Lexer;
+import org.antlr.runtime.Token;
 import org.antlr.v4.tool.Grammar;
 import org.antlr.v4.tool.ast.GrammarRootAST;
 import org.netbeans.api.annotations.common.CheckForNull;
@@ -56,8 +57,7 @@ public class CompiledFileModelV4 extends CompiledFileModel {
                 CommonTokenStream importedTokenStream = (CommonTokenStream)imported.ast.tokens;
                 String fileName = ((Lexer)importedTokenStream.getTokenSource()).getCharStream().getSourceName();
                 FileObject importedFileObject = FileUtil.toFileObject(new File(fileName));
-                @SuppressWarnings("unchecked")
-                List<CommonToken> importedTokensList = importedTokenStream.getTokens();
+                List<? extends Token> importedTokensList = importedTokenStream.getTokens();
                 CommonToken[] importedTokens = importedTokensList.toArray(new CommonToken[0]);
                 importedResults.add(new CompiledFileModelV4(imported, imported.ast, null, importedFileObject, importedTokens));
             }

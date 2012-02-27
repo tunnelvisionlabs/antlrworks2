@@ -54,7 +54,6 @@ public class GrammarWrapper extends Grammar {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void importGrammar(GrammarAST grammarNameAST, String label) {
         if (tool == null) {
             return;
@@ -90,7 +89,7 @@ public class GrammarWrapper extends Grammar {
             tokenStream.setParser(parser);
             parser.setTreeAdaptor(new ANTLRErrorProvidingParser.grammar_Adaptor(parser));
 
-            List<Token> tokenList = tokenStream.getTokens();
+            List<? extends Token> tokenList = tokenStream.getTokens();
             CommonToken[] tokens = new CommonToken[tokenList.size()];
             tokens = tokenList.toArray(tokens);
 
