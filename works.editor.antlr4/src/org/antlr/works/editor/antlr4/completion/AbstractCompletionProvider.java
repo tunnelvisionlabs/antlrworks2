@@ -8,34 +8,10 @@
  */
 package org.antlr.works.editor.antlr4.completion;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Queue;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.text.AbstractDocument;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
-import org.antlr.netbeans.editor.classification.TokenTag;
-import org.antlr.netbeans.editor.navigation.Description;
-import org.antlr.netbeans.editor.tagging.TaggedPositionRegion;
-import org.antlr.netbeans.editor.tagging.Tagger;
-import org.antlr.netbeans.editor.text.DocumentSnapshot;
-import org.antlr.netbeans.editor.text.NormalizedSnapshotPositionRegionCollection;
-import org.antlr.netbeans.editor.text.OffsetRegion;
-import org.antlr.netbeans.editor.text.SnapshotPositionRegion;
-import org.antlr.netbeans.editor.text.VersionedDocumentUtilities;
-import org.antlr.netbeans.parsing.spi.ParserData;
-import org.antlr.netbeans.parsing.spi.ParserDataOptions;
-import org.antlr.netbeans.parsing.spi.ParserTaskManager;
-import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.Token;
 import org.netbeans.editor.Utilities;
 import org.netbeans.spi.editor.completion.CompletionProvider;
@@ -43,7 +19,6 @@ import org.netbeans.spi.editor.completion.CompletionTask;
 import org.netbeans.spi.editor.completion.support.AsyncCompletionQuery;
 import org.netbeans.spi.editor.completion.support.AsyncCompletionTask;
 import org.openide.util.Exceptions;
-import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
 
 /**
@@ -59,6 +34,7 @@ public abstract class AbstractCompletionProvider implements CompletionProvider {
     private static final Logger LOGGER = Logger.getLogger(AbstractCompletionProvider.class.getName());
 
     public static final int AUTO_QUERY_TYPE = 0x00010000;
+    public static final int TRIGGERED_QUERY_TYPE = 0x00020000;
 
     @Override
     public int getAutoQueryTypes(JTextComponent component, String typedText) {
@@ -66,7 +42,12 @@ public abstract class AbstractCompletionProvider implements CompletionProvider {
             return 0;
         }
 
+        int queryType = COMPLETION_QUERY_TYPE | AUTO_QUERY_TYPE;
         boolean triggered = getCompletionAutoPopupTriggers().indexOf(typedText.charAt(0)) >= 0;
+        if (triggered) {
+            queryType |= TRIGGERED_QUERY_TYPE;
+        }
+
         if (triggered || (autoPopupOnIdentifierPart() && isIdentifierPart(typedText))) {
             int offset = component.getSelectionStart() - 1;
             Token contextToken = getContext(component, offset);
@@ -88,8 +69,8 @@ public abstract class AbstractCompletionProvider implements CompletionProvider {
                 }
             }
 
-            if (isContext(contextToken, offset, COMPLETION_QUERY_TYPE | AUTO_QUERY_TYPE)) {
-                return COMPLETION_QUERY_TYPE | AUTO_QUERY_TYPE;
+            if (isContext(contextToken, offset, queryType)) {
+                return queryType;
             }
         }
 
