@@ -30,7 +30,6 @@ import org.antlr.netbeans.editor.text.VersionedDocument;
 import org.antlr.netbeans.editor.text.VersionedDocumentUtilities;
 import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.v4.runtime.FailedPredicateException;
-import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RecognitionException;
@@ -343,10 +342,10 @@ public abstract class AbstractCompletionQuery extends AsyncCompletionQuery {
 
         protected abstract void runImpl(BaseDocument document);
 
-        protected Map<RuleContext, CaretReachedException> getParseTrees(CodeCompletionParser parser) {
+        protected Map<RuleContext<Token>, CaretReachedException> getParseTrees(CodeCompletionParser parser) {
             List<MultipleDecisionData> potentialAlternatives = new ArrayList<MultipleDecisionData>();
             List<Integer> currentPath = new ArrayList<Integer>();
-            Map<RuleContext, CaretReachedException> results = new IdentityHashMap<RuleContext, CaretReachedException>();
+            Map<RuleContext<Token>, CaretReachedException> results = new IdentityHashMap<RuleContext<Token>, CaretReachedException>();
             int initialToken = parser.getTokenStream().index();
             while (true) {
                 parser.getTokenStream().seek(initialToken);
@@ -357,7 +356,7 @@ public abstract class AbstractCompletionQuery extends AsyncCompletionQuery {
             }
 
             if (LOGGER.isLoggable(Level.FINE)) {
-                for (Map.Entry<RuleContext, CaretReachedException> entry : results.entrySet()) {
+                for (Map.Entry<RuleContext<Token>, CaretReachedException> entry : results.entrySet()) {
                     LOGGER.log(Level.FINE, entry.getKey().toStringTree((Parser)parser));
                 }
             }
@@ -379,8 +378,8 @@ public abstract class AbstractCompletionQuery extends AsyncCompletionQuery {
             return false;
         }
 
-        protected void tryParse(CodeCompletionParser parser, List<MultipleDecisionData> potentialAlternatives, List<Integer> currentPath, Map<RuleContext, CaretReachedException> results) {
-            RuleContext parseTree;
+        protected void tryParse(CodeCompletionParser parser, List<MultipleDecisionData> potentialAlternatives, List<Integer> currentPath, Map<RuleContext<Token>, CaretReachedException> results) {
+            RuleContext<Token> parseTree;
             try {
                 parser.getInterpreter().setFixedDecisions(potentialAlternatives, currentPath);
                 parseTree = parseImpl(parser);
@@ -390,7 +389,7 @@ public abstract class AbstractCompletionQuery extends AsyncCompletionQuery {
                     return;
                 }
 
-                for (parseTree = ex.getFinalContext(); parseTree.getParent() != null; parseTree = (RuleContext)parseTree.getParent()) {
+                for (parseTree = ex.getFinalContext(); parseTree.getParent() != null; parseTree = parseTree.getParent()) {
                     // intentionally blank
                 }
 
@@ -442,6 +441,6 @@ public abstract class AbstractCompletionQuery extends AsyncCompletionQuery {
             }
         }
 
-        protected abstract RuleContext parseImpl(CodeCompletionParser parser);
+        protected abstract RuleContext<Token> parseImpl(CodeCompletionParser parser);
     }
 }

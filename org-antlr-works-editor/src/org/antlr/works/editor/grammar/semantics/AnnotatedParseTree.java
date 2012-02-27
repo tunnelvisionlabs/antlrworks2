@@ -14,6 +14,7 @@ import java.util.Set;
 import org.antlr.netbeans.semantics.ObjectDecorator;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.Tree;
 import org.antlr.works.editor.grammar.experimental.GrammarParserBaseListener;
@@ -76,13 +77,13 @@ public class AnnotatedParseTree {
         GrammarParserBaseListener listener = new GrammarParserBaseListener() {
 
             @Override
-            public void enterEveryRule(ParserRuleContext<Token> ctx) {
+            public void enterEveryRule(ParserRuleContext<? extends Token> ctx) {
                 trees.add(ctx);
             }
 
             @Override
-            public void visitTerminal(ParserRuleContext<Token> ctx, Token symbol) {
-                tokens.add(symbol);
+            public void visitTerminal(ParseTree.TerminalNode<? extends Token> node) {
+                tokens.add(node.getSymbol());
             }
 
         };

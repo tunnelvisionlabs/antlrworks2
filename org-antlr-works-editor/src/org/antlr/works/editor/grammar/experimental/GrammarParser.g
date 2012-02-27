@@ -334,15 +334,15 @@ actionScopeName
 	;
 
 modeSpec
-    :	MODE id SEMI rule+
+    :	MODE id SEMI ruleSpec+
     ;
 
 rules
-    :	(rule)*
+    :	(ruleSpec)*
     ;
 
-rule
-    :   parserRule
+ruleSpec
+    :   parserRuleSpec
     |   lexerRule
     ;
 
@@ -355,7 +355,7 @@ rule
 // verification of the AST determine if things are repeated or if a
 // particular functional element is not valid in the context of the
 // grammar type, such as using returns in lexer rules and so on.
-parserRule
+parserRuleSpec
     : // A rule may start with an optional documentation comment
       DOC_COMMENT?
 

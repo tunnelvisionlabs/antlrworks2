@@ -206,7 +206,7 @@ public abstract class AbstractTokensTaskTaggerSnapshot<TState extends LineStateI
                 return tags;
             }
 
-            TokenSourceWithStateV4<TState> lexer = createLexer(input, startState);
+            TokenSourceWithStateV4<Token, TState> lexer = createLexer(input, startState);
             lexer.setTokenFactory(new DocumentSnapshotTokenFactory(getEffectiveTokenSource(lexer)));
 
             Token previousToken = null;
@@ -366,7 +366,7 @@ public abstract class AbstractTokensTaskTaggerSnapshot<TState extends LineStateI
 
     protected abstract TState getStartState();
 
-    protected TokenSource getEffectiveTokenSource(TokenSourceWithStateV4<TState> lexer) {
+    protected TokenSource<Token> getEffectiveTokenSource(TokenSourceWithStateV4<Token, TState> lexer) {
         return lexer;
     }
 
@@ -406,7 +406,7 @@ public abstract class AbstractTokensTaskTaggerSnapshot<TState extends LineStateI
         return startLineCurrent > endLinePrevious + 1;
     }
 
-    protected boolean isMultiLineToken(TokenSourceWithStateV4<TState> lexer, Token token) {
+    protected boolean isMultiLineToken(TokenSourceWithStateV4<Token, TState> lexer, Token token) {
         /*if (lexer != null && lexer.getLine() > token.getLine()) {
             return true;
         }*/
@@ -416,7 +416,7 @@ public abstract class AbstractTokensTaskTaggerSnapshot<TState extends LineStateI
         return startLine != stopLine;
     }
 
-    protected boolean tokenEndsAtEndOfLine(TokenSourceWithStateV4<TState> lexer, Token token) {
+    protected boolean tokenEndsAtEndOfLine(TokenSourceWithStateV4<Token, TState> lexer, Token token) {
         CharStream charStream = lexer.getCharStream();
         if (charStream != null) {
             int nextCharIndex = token.getStopIndex() + 1;
@@ -461,7 +461,7 @@ public abstract class AbstractTokensTaskTaggerSnapshot<TState extends LineStateI
         return input;
     }
 
-    protected abstract TokenSourceWithStateV4<TState> createLexer(CharStream input, TState startState);
+    protected abstract TokenSourceWithStateV4<Token, TState> createLexer(CharStream input, TState startState);
 
     protected Collection<TaggedPositionRegion<TokenTag<Token>>> getTagsForToken(Token token) {
         TokenTag<Token> tag = highlightToken(token);

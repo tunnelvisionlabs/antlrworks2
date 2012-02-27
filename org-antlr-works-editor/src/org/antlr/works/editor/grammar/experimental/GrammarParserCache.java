@@ -9,6 +9,7 @@
 package org.antlr.works.editor.grammar.experimental;
 
 import org.antlr.v4.runtime.DefaultErrorStrategy;
+import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenStream;
 import org.antlr.works.editor.antlr4.completion.AbstractParserCache;
 
@@ -16,21 +17,21 @@ import org.antlr.works.editor.antlr4.completion.AbstractParserCache;
  *
  * @author Sam Harwell
  */
-public class GrammarParserCache extends AbstractParserCache<GrammarParser> {
+public class GrammarParserCache extends AbstractParserCache<Token, GrammarParser> {
     public static final GrammarParserCache DEFAULT = new GrammarParserCache();
 
     @Override
-    protected GrammarParser createParser(TokenStream input) {
+    protected GrammarParser createParser(TokenStream<? extends Token> input) {
         GrammarParser parser = new GrammarParser(input);
         parser.getInterpreter().disable_global_context = true;
         return parser;
     }
 
     @Override
-    public GrammarParser getParser(TokenStream input) {
+    public GrammarParser getParser(TokenStream<? extends Token> input) {
         GrammarParser result = super.getParser(input);
         result.setBuildParseTree(false);
-        result.setErrorHandler(new DefaultErrorStrategy());
+        result.setErrorHandler(new DefaultErrorStrategy<Token>());
         return result;
     }
 

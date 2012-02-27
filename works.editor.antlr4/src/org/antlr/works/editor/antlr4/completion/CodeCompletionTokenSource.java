@@ -18,15 +18,15 @@ import org.antlr.v4.runtime.TokenSource;
  *
  * @author Sam Harwell
  */
-public class CodeCompletionTokenSource implements TokenSource {
+public class CodeCompletionTokenSource implements TokenSource<Token> {
     private final int caretOffset;
-    private final TokenSource source;
+    private final TokenSource<Token> source;
 
-    private TokenFactory<?> tokenFactory = CommonTokenFactory.DEFAULT;
+    private TokenFactory<? extends Token> tokenFactory = CommonTokenFactory.DEFAULT;
 
     private Token caretToken;
 
-    public CodeCompletionTokenSource(int caretOffset, TokenSource source) {
+    public CodeCompletionTokenSource(int caretOffset, TokenSource<Token> source) {
         this.caretOffset = caretOffset;
         this.source = source;
     }
@@ -80,6 +80,11 @@ public class CodeCompletionTokenSource implements TokenSource {
     @Override
     public String getSourceName() {
         return source.getSourceName();
+    }
+
+    @Override
+    public TokenFactory<? extends Token> getTokenFactory() {
+        return tokenFactory;
     }
 
     @Override

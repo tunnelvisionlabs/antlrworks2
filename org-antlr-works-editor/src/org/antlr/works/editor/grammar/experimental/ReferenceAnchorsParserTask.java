@@ -84,7 +84,7 @@ public class ReferenceAnchorsParserTask implements ParserTask {
             if (parseTreeResult == null || anchorPointsResult == null || fileModelResult == null) {
                 Future<ParserData<Tagger<TokenTag<Token>>>> futureTokensData = taskManager.getData(snapshot, GrammarParserDataDefinitions.LEXER_TOKENS);
                 Tagger<TokenTag<Token>> tagger = futureTokensData.get().getData();
-                TaggerTokenSource tokenSource = new TaggerTokenSource(tagger, snapshot);
+                TaggerTokenSource<Token> tokenSource = new TaggerTokenSource<Token>(tagger, snapshot);
         //        DocumentSnapshotCharStream input = new DocumentSnapshotCharStream(snapshot);
         //        input.setSourceName((String)document.getDocument().getProperty(Document.TitleProperty));
         //        GrammarLexer lexer = new GrammarLexer(input);
@@ -93,14 +93,14 @@ public class ReferenceAnchorsParserTask implements ParserTask {
                 GrammarParser parser = GrammarParserCache.DEFAULT.getParser(tokenStream);
                 try {
                     parser.setBuildParseTree(true);
-                    parser.setErrorHandler(new BailErrorStrategy());
+                    parser.setErrorHandler(new BailErrorStrategy<Token>());
                     parseResult = parser.grammarSpec();
                 } catch (RuntimeException ex) {
                     if (ex.getClass() == RuntimeException.class && ex.getCause() instanceof RecognitionException) {
                         // retry with default error handler
                         tokenStream.reset();
                         parser.setTokenStream(tokenStream);
-                        parser.setErrorHandler(new DefaultErrorStrategy());
+                        parser.setErrorHandler(new DefaultErrorStrategy<Token>());
                         parseResult = parser.grammarSpec();
                     } else {
                         throw ex;
@@ -133,7 +133,7 @@ public class ReferenceAnchorsParserTask implements ParserTask {
     }
 
     private static class InterruptableTokenStream extends CommonTokenStream {
-        public InterruptableTokenStream(TokenSource tokenSource) {
+        public InterruptableTokenStream(TokenSource<? extends Token> tokenSource) {
             super(tokenSource);
         }
 

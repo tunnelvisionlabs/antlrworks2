@@ -24,13 +24,13 @@ import org.antlr.works.editor.grammar.codemodel.FileModel;
 import org.antlr.works.editor.grammar.codemodel.LabelModel;
 import org.antlr.works.editor.grammar.codemodel.ParameterModel;
 import org.antlr.works.editor.grammar.codemodel.RuleModel;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.argActionParameterContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.grammarSpecContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.labeledElementContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.lexerRuleContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.localsSpecContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.parserRuleContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.ruleReturnsContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.ArgActionParameterContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.GrammarSpecContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.LabeledElementContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.LexerRuleContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.LocalsSpecContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.ParserRuleSpecContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.RuleReturnsContext;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;
 
@@ -40,7 +40,7 @@ import org.netbeans.api.annotations.common.NullAllowed;
  */
 public class CodeModelBuilderListener extends GrammarParserBaseListener {
     private final DocumentSnapshot snapshot;
-    private final TokenStream tokens;
+    private final TokenStream<? extends Token> tokens;
 
     // final result
     private FileModel fileModel;
@@ -55,7 +55,7 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
     private Collection<ParameterModel> returnValues;
     private Collection<ParameterModel> locals;
 
-    public CodeModelBuilderListener(DocumentSnapshot snapshot, TokenStream tokens) {
+    public CodeModelBuilderListener(DocumentSnapshot snapshot, TokenStream<? extends Token> tokens) {
         this.snapshot = snapshot;
         this.tokens = tokens;
         rules = new ArrayList<RuleModel>();
@@ -66,12 +66,12 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
     }
 
     @Override
-    public void grammarSpecExit(grammarSpecContext ctx) {
+    public void exitGrammarSpec(GrammarSpecContext ctx) {
         fileModel = new FileModel(snapshot, rules);
     }
 
     @Override
-    public void parserRuleEnter(parserRuleContext ctx) {
+    public void enterParserRuleSpec(ParserRuleSpecContext ctx) {
         labelUses = new HashMap<String, Collection<SnapshotPositionRegion>>();
         parameters = new ArrayList<ParameterModel>();
         returnValues = new ArrayList<ParameterModel>();
@@ -83,7 +83,7 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
     }
 
     @Override
-    public void parserRuleExit(parserRuleContext ctx) {
+    public void exitParserRuleSpec(ParserRuleSpecContext ctx) {
         Token name = ctx.name;
         SnapshotPositionRegion nameSpan = getSpan(ctx.name);
         SnapshotPositionRegion ruleSpan = getSpan(ctx);
@@ -100,7 +100,7 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
     }
 
     @Override
-    public void lexerRuleEnter(lexerRuleContext ctx) {
+    public void enterLexerRule(LexerRuleContext ctx) {
         labelUses = new HashMap<String, Collection<SnapshotPositionRegion>>();
         parameters = new ArrayList<ParameterModel>();
         returnValues = new ArrayList<ParameterModel>();
@@ -108,7 +108,7 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
     }
 
     @Override
-    public void lexerRuleExit(lexerRuleContext ctx) {
+    public void exitLexerRule(LexerRuleContext ctx) {
         Token name = ctx.name;
         SnapshotPositionRegion nameSpan = getSpan(ctx.name);
         SnapshotPositionRegion ruleSpan = getSpan(ctx);
@@ -123,21 +123,21 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
     }
 
     @Override
-    public void ruleReturnsEnter(ruleReturnsContext ctx) {
+    public void enterRuleReturns(RuleReturnsContext ctx) {
         if (ctx.values != null) {
             handleParameters(ctx.values.parameters, returnValues);
         }
     }
 
     @Override
-    public void localsSpecEnter(localsSpecContext ctx) {
+    public void enterLocalsSpec(LocalsSpecContext ctx) {
         if (ctx.values != null) {
             handleParameters(ctx.values.parameters, locals);
         }
     }
 
     @Override
-    public void labeledElementEnter(labeledElementContext ctx) {
+    public void enterLabeledElement(LabeledElementContext ctx) {
         if (ctx.label != null) {
             String name = ctx.label.start.getText();
             Collection<SnapshotPositionRegion> uses = labelUses.get(name);
@@ -172,12 +172,12 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
         return null;
     }
 
-    private void handleParameters(@NullAllowed Collection<argActionParameterContext> contexts, @NonNull Collection<ParameterModel> models) {
+    private void handleParameters(@NullAllowed Collection<ArgActionParameterContext> contexts, @NonNull Collection<ParameterModel> models) {
         if (contexts == null) {
             return;
         }
 
-        for (argActionParameterContext context : contexts) {
+        for (ArgActionParameterContext context : contexts) {
             SnapshotPositionRegion typeSpan = getSpan(context.type);
             String type = getText(context.type);
             Token name = context.name;

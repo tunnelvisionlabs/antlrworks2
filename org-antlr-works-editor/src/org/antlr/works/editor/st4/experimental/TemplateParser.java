@@ -18,8 +18,7 @@ import java.util.List;
 import java.util.Iterator;
 import java.util.ArrayList;
 
-@SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
-public class TemplateParser extends Parser {
+public class TemplateParser extends Parser<Token> {
 	public static final int
 		StringTemplate_NEWLINE=101, BigStringLineTemplate_PERCENT=70, EQUALS=12, 
 		NOT=90, AnonymousTemplateParameters_NEWLINE=51, TemplateExpression_ANYCHAR=100, 
@@ -108,43 +107,56 @@ public class TemplateParser extends Parser {
 		"exprNoComma", "expr", "mapExpr", "mapTemplateRef", "memberExpr", "includeExpr", 
 		"primary", "arguments", "argExprList", "arg", "namedArg", "list", "listElement"
 	};
-	public TemplateParser(TokenStream input) {
+
+	@Override
+	public String getGrammarFileName() { return "TemplateParser.g4"; }
+
+	@Override
+	public String[] getTokenNames() { return tokenNames; }
+
+	@Override
+	public String[] getRuleNames() { return ruleNames; }
+
+	@Override
+	public ATN getATN() { return _ATN; }
+
+	public TemplateParser(TokenStream<? extends Token> input) {
 		super(input);
 		_interp = new ParserATNSimulator<Token>(this,_ATN);
 	}
-	public static class groupContext extends ParserRuleContext<Token> {
-		public oldStyleHeaderContext oldStyleHeader() {
-		    return (oldStyleHeaderContext)getRuleContext(oldStyleHeaderContext.class,0);
+	public static class GroupContext extends ParserRuleContext<Token> {
+		public OldStyleHeaderContext oldStyleHeader() {
+		    return getRuleContext(OldStyleHeaderContext.class,0);
 		}
-		public defContext def() {
-		    return (defContext)getRuleContext(defContext.class,0);
+		public DefContext def() {
+		    return getRuleContext(DefContext.class,0);
 		}
-		public delimitersContext delimiters() {
-		    return (delimitersContext)getRuleContext(delimitersContext.class,0);
+		public DelimitersContext delimiters() {
+		    return getRuleContext(DelimitersContext.class,0);
 		}
-		public stringContext string() {
-		    return (stringContext)getRuleContext(stringContext.class,0);
+		public StringContext string() {
+		    return getRuleContext(StringContext.class,0);
 		}
-		public groupContext(ParserRuleContext<Token> parent, int state) {
+		public GroupContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
-		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).groupEnter(this);
+		public void enterRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterGroup(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).groupExit(this);
+		public void exitRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitGroup(this);
 		}
 		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
-		    if ( visitor instanceof TemplateParserVisitor ) return ((TemplateParserVisitor<T>)visitor).groupVisit(this);
-		    else return null;
+		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
+			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitGroup(this);
+			else return null;
 		}
 	}
 
-	public final groupContext group() throws RecognitionException {
-		groupContext _localctx = new groupContext(_ctx, 0);
+	public final GroupContext group() throws RecognitionException {
+		GroupContext _localctx = new GroupContext(_ctx, 0);
 		enterRule(_localctx, RULE_group);
 		try {
 			enterOuterAlt(_localctx, 1);
@@ -215,31 +227,31 @@ public class TemplateParser extends Parser {
 		return _localctx;
 	}
 
-	public static class oldStyleHeaderContext extends ParserRuleContext<Token> {
+	public static class OldStyleHeaderContext extends ParserRuleContext<Token> {
 		public Token ID(int i) {
 		    return getToken(TemplateParser.ID, i);
 		}
 		public List<? extends Token> ID() { return getTokens(TemplateParser.ID); }
-		public oldStyleHeaderContext(ParserRuleContext<Token> parent, int state) {
+		public OldStyleHeaderContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
-		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).oldStyleHeaderEnter(this);
+		public void enterRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterOldStyleHeader(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).oldStyleHeaderExit(this);
+		public void exitRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitOldStyleHeader(this);
 		}
 		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
-		    if ( visitor instanceof TemplateParserVisitor ) return ((TemplateParserVisitor<T>)visitor).oldStyleHeaderVisit(this);
-		    else return null;
+		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
+			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitOldStyleHeader(this);
+			else return null;
 		}
 	}
 
-	public final oldStyleHeaderContext oldStyleHeader() throws RecognitionException {
-		oldStyleHeaderContext _localctx = new oldStyleHeaderContext(_ctx, 2);
+	public final OldStyleHeaderContext oldStyleHeader() throws RecognitionException {
+		OldStyleHeaderContext _localctx = new OldStyleHeaderContext(_ctx, 2);
 		enterRule(_localctx, RULE_oldStyleHeader);
 		try {
 			enterOuterAlt(_localctx, 1);
@@ -296,31 +308,31 @@ public class TemplateParser extends Parser {
 		return _localctx;
 	}
 
-	public static class groupNameContext extends ParserRuleContext<Token> {
+	public static class GroupNameContext extends ParserRuleContext<Token> {
 		public Token ID(int i) {
 		    return getToken(TemplateParser.ID, i);
 		}
 		public List<? extends Token> ID() { return getTokens(TemplateParser.ID); }
-		public groupNameContext(ParserRuleContext<Token> parent, int state) {
+		public GroupNameContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
-		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).groupNameEnter(this);
+		public void enterRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterGroupName(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).groupNameExit(this);
+		public void exitRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitGroupName(this);
 		}
 		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
-		    if ( visitor instanceof TemplateParserVisitor ) return ((TemplateParserVisitor<T>)visitor).groupNameVisit(this);
-		    else return null;
+		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
+			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitGroupName(this);
+			else return null;
 		}
 	}
 
-	public final groupNameContext groupName() throws RecognitionException {
-		groupNameContext _localctx = new groupNameContext(_ctx, 4);
+	public final GroupNameContext groupName() throws RecognitionException {
+		GroupNameContext _localctx = new GroupNameContext(_ctx, 4);
 		enterRule(_localctx, RULE_groupName);
 		try {
 			enterOuterAlt(_localctx, 1);
@@ -355,29 +367,29 @@ public class TemplateParser extends Parser {
 		return _localctx;
 	}
 
-	public static class delimitersContext extends ParserRuleContext<Token> {
+	public static class DelimitersContext extends ParserRuleContext<Token> {
 		public Token DelimitersOpenSpec_DELIMITER_STRING() { return getToken(TemplateParser.DelimitersOpenSpec_DELIMITER_STRING, 0); }
 		public Token DelimitersCloseSpec_DELIMITER_STRING() { return getToken(TemplateParser.DelimitersCloseSpec_DELIMITER_STRING, 0); }
-		public delimitersContext(ParserRuleContext<Token> parent, int state) {
+		public DelimitersContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
-		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).delimitersEnter(this);
+		public void enterRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterDelimiters(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).delimitersExit(this);
+		public void exitRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitDelimiters(this);
 		}
 		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
-		    if ( visitor instanceof TemplateParserVisitor ) return ((TemplateParserVisitor<T>)visitor).delimitersVisit(this);
-		    else return null;
+		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
+			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitDelimiters(this);
+			else return null;
 		}
 	}
 
-	public final delimitersContext delimiters() throws RecognitionException {
-		delimitersContext _localctx = new delimitersContext(_ctx, 6);
+	public final DelimitersContext delimiters() throws RecognitionException {
+		DelimitersContext _localctx = new DelimitersContext(_ctx, 6);
 		enterRule(_localctx, RULE_delimiters);
 		try {
 			enterOuterAlt(_localctx, 1);
@@ -399,33 +411,33 @@ public class TemplateParser extends Parser {
 		return _localctx;
 	}
 
-	public static class defContext extends ParserRuleContext<Token> {
-		public dictDefContext dictDef() {
-		    return (dictDefContext)getRuleContext(dictDefContext.class,0);
+	public static class DefContext extends ParserRuleContext<Token> {
+		public DictDefContext dictDef() {
+		    return getRuleContext(DictDefContext.class,0);
 		}
-		public templateDefContext templateDef() {
-		    return (templateDefContext)getRuleContext(templateDefContext.class,0);
+		public TemplateDefContext templateDef() {
+		    return getRuleContext(TemplateDefContext.class,0);
 		}
-		public defContext(ParserRuleContext<Token> parent, int state) {
+		public DefContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
-		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).defEnter(this);
+		public void enterRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterDef(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).defExit(this);
+		public void exitRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitDef(this);
 		}
 		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
-		    if ( visitor instanceof TemplateParserVisitor ) return ((TemplateParserVisitor<T>)visitor).defVisit(this);
-		    else return null;
+		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
+			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitDef(this);
+			else return null;
 		}
 	}
 
-	public final defContext def() throws RecognitionException {
-		defContext _localctx = new defContext(_ctx, 8);
+	public final DefContext def() throws RecognitionException {
+		DefContext _localctx = new DefContext(_ctx, 8);
 		enterRule(_localctx, RULE_def);
 		try {
 			setState(161);
@@ -457,47 +469,47 @@ public class TemplateParser extends Parser {
 		return _localctx;
 	}
 
-	public static class templateDefContext extends ParserRuleContext<Token> {
+	public static class TemplateDefContext extends ParserRuleContext<Token> {
 		public Token enclosing;
 		public Token name;
 		public Token alias;
 		public Token target;
-		public stringTemplateContext stringTemplate() {
-		    return (stringTemplateContext)getRuleContext(stringTemplateContext.class,0);
+		public StringTemplateContext stringTemplate() {
+		    return getRuleContext(StringTemplateContext.class,0);
 		}
-		public bigstringTemplateNoNewlineContext bigstringTemplateNoNewline() {
-		    return (bigstringTemplateNoNewlineContext)getRuleContext(bigstringTemplateNoNewlineContext.class,0);
+		public BigstringTemplateNoNewlineContext bigstringTemplateNoNewline() {
+		    return getRuleContext(BigstringTemplateNoNewlineContext.class,0);
 		}
 		public Token ID(int i) {
 		    return getToken(TemplateParser.ID, i);
 		}
 		public List<? extends Token> ID() { return getTokens(TemplateParser.ID); }
-		public bigstringTemplateContext bigstringTemplate() {
-		    return (bigstringTemplateContext)getRuleContext(bigstringTemplateContext.class,0);
+		public BigstringTemplateContext bigstringTemplate() {
+		    return getRuleContext(BigstringTemplateContext.class,0);
 		}
-		public formalArgsContext formalArgs() {
-		    return (formalArgsContext)getRuleContext(formalArgsContext.class,0);
+		public FormalArgsContext formalArgs() {
+		    return getRuleContext(FormalArgsContext.class,0);
 		}
-		public templateDefContext(ParserRuleContext<Token> parent, int state) {
+		public TemplateDefContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
-		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).templateDefEnter(this);
+		public void enterRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterTemplateDef(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).templateDefExit(this);
+		public void exitRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitTemplateDef(this);
 		}
 		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
-		    if ( visitor instanceof TemplateParserVisitor ) return ((TemplateParserVisitor<T>)visitor).templateDefVisit(this);
-		    else return null;
+		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
+			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitTemplateDef(this);
+			else return null;
 		}
 	}
 
-	public final templateDefContext templateDef() throws RecognitionException {
-		templateDefContext _localctx = new templateDefContext(_ctx, 10);
+	public final TemplateDefContext templateDef() throws RecognitionException {
+		TemplateDefContext _localctx = new TemplateDefContext(_ctx, 10);
 		enterRule(_localctx, RULE_templateDef);
 		try {
 			setState(201);
@@ -512,9 +524,9 @@ public class TemplateParser extends Parser {
 						case 1:
 							{
 							setState(163); match(AT);
-							setState(165); ((templateDefContext)_localctx).enclosing = match(ID);
+							setState(165); _localctx.enclosing = match(ID);
 							setState(167); match(DOT);
-							setState(169); ((templateDefContext)_localctx).name = match(ID);
+							setState(169); _localctx.name = match(ID);
 							setState(171); match(LPAREN);
 							setState(173); match(RPAREN);
 							}
@@ -522,7 +534,7 @@ public class TemplateParser extends Parser {
 
 						case 2:
 							{
-							setState(175); ((templateDefContext)_localctx).name = match(ID);
+							setState(175); _localctx.name = match(ID);
 							setState(177); match(LPAREN);
 							setState(179); formalArgs();
 							setState(181); match(RPAREN);
@@ -557,9 +569,9 @@ public class TemplateParser extends Parser {
 				case 2:
 					enterOuterAlt(_localctx, 2);
 					{
-					setState(195); ((templateDefContext)_localctx).alias = match(ID);
+					setState(195); _localctx.alias = match(ID);
 					setState(197); match(DEFINED);
-					setState(199); ((templateDefContext)_localctx).target = match(ID);
+					setState(199); _localctx.target = match(ID);
 					}
 					break;
 			}
@@ -575,33 +587,33 @@ public class TemplateParser extends Parser {
 		return _localctx;
 	}
 
-	public static class formalArgsContext extends ParserRuleContext<Token> {
-		public List<? extends formalArgContext> formalArg() {
-		    return (List<formalArgContext>)getRuleContexts(formalArgContext.class);
+	public static class FormalArgsContext extends ParserRuleContext<Token> {
+		public List<? extends FormalArgContext> formalArg() {
+		    return getRuleContexts(FormalArgContext.class);
 		}
-		public formalArgContext formalArg(int i) {
-		    return (formalArgContext)getRuleContext(formalArgContext.class,i);
+		public FormalArgContext formalArg(int i) {
+		    return getRuleContext(FormalArgContext.class,i);
 		}
-		public formalArgsContext(ParserRuleContext<Token> parent, int state) {
+		public FormalArgsContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
-		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).formalArgsEnter(this);
+		public void enterRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterFormalArgs(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).formalArgsExit(this);
+		public void exitRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitFormalArgs(this);
 		}
 		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
-		    if ( visitor instanceof TemplateParserVisitor ) return ((TemplateParserVisitor<T>)visitor).formalArgsVisit(this);
-		    else return null;
+		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
+			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitFormalArgs(this);
+			else return null;
 		}
 	}
 
-	public final formalArgsContext formalArgs() throws RecognitionException {
-		formalArgsContext _localctx = new formalArgsContext(_ctx, 12);
+	public final FormalArgsContext formalArgs() throws RecognitionException {
+		FormalArgsContext _localctx = new FormalArgsContext(_ctx, 12);
 		enterRule(_localctx, RULE_formalArgs);
 		try {
 			setState(216);
@@ -631,6 +643,7 @@ public class TemplateParser extends Parser {
 					break;
 
 				case 2:
+					enterOuterAlt(_localctx, 2);
 					{
 					}
 					break;
@@ -647,42 +660,42 @@ public class TemplateParser extends Parser {
 		return _localctx;
 	}
 
-	public static class formalArgContext extends ParserRuleContext<Token> {
+	public static class FormalArgContext extends ParserRuleContext<Token> {
 		public Token name;
-		public stringContext string() {
-		    return (stringContext)getRuleContext(stringContext.class,0);
+		public StringContext string() {
+		    return getRuleContext(StringContext.class,0);
 		}
 		public Token ID() { return getToken(TemplateParser.ID, 0); }
 		public Token FALSE() { return getToken(TemplateParser.FALSE, 0); }
 		public Token TRUE() { return getToken(TemplateParser.TRUE, 0); }
-		public anonymousTemplateContext anonymousTemplate() {
-		    return (anonymousTemplateContext)getRuleContext(anonymousTemplateContext.class,0);
+		public AnonymousTemplateContext anonymousTemplate() {
+		    return getRuleContext(AnonymousTemplateContext.class,0);
 		}
-		public formalArgContext(ParserRuleContext<Token> parent, int state) {
+		public FormalArgContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
-		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).formalArgEnter(this);
+		public void enterRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterFormalArg(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).formalArgExit(this);
+		public void exitRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitFormalArg(this);
 		}
 		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
-		    if ( visitor instanceof TemplateParserVisitor ) return ((TemplateParserVisitor<T>)visitor).formalArgVisit(this);
-		    else return null;
+		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
+			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitFormalArg(this);
+			else return null;
 		}
 	}
 
-	public final formalArgContext formalArg() throws RecognitionException {
-		formalArgContext _localctx = new formalArgContext(_ctx, 14);
+	public final FormalArgContext formalArg() throws RecognitionException {
+		FormalArgContext _localctx = new FormalArgContext(_ctx, 14);
 		enterRule(_localctx, RULE_formalArg);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(218); ((formalArgContext)_localctx).name = match(ID);
+			setState(218); _localctx.name = match(ID);
 			setState(232);
 			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,15,_ctx) ) {
@@ -732,37 +745,37 @@ public class TemplateParser extends Parser {
 		return _localctx;
 	}
 
-	public static class dictDefContext extends ParserRuleContext<Token> {
+	public static class DictDefContext extends ParserRuleContext<Token> {
 		public Token name;
-		public dictContext dict() {
-		    return (dictContext)getRuleContext(dictContext.class,0);
+		public DictContext dict() {
+		    return getRuleContext(DictContext.class,0);
 		}
 		public Token ID() { return getToken(TemplateParser.ID, 0); }
-		public dictDefContext(ParserRuleContext<Token> parent, int state) {
+		public DictDefContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
-		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).dictDefEnter(this);
+		public void enterRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterDictDef(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).dictDefExit(this);
+		public void exitRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitDictDef(this);
 		}
 		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
-		    if ( visitor instanceof TemplateParserVisitor ) return ((TemplateParserVisitor<T>)visitor).dictDefVisit(this);
-		    else return null;
+		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
+			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitDictDef(this);
+			else return null;
 		}
 	}
 
-	public final dictDefContext dictDef() throws RecognitionException {
-		dictDefContext _localctx = new dictDefContext(_ctx, 16);
+	public final DictDefContext dictDef() throws RecognitionException {
+		DictDefContext _localctx = new DictDefContext(_ctx, 16);
 		enterRule(_localctx, RULE_dictDef);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(234); ((dictDefContext)_localctx).name = match(ID);
+			setState(234); _localctx.name = match(ID);
 			setState(236); match(DEFINED);
 			setState(238); dict();
 			}
@@ -778,30 +791,30 @@ public class TemplateParser extends Parser {
 		return _localctx;
 	}
 
-	public static class dictContext extends ParserRuleContext<Token> {
-		public dictPairsContext dictPairs() {
-		    return (dictPairsContext)getRuleContext(dictPairsContext.class,0);
+	public static class DictContext extends ParserRuleContext<Token> {
+		public DictPairsContext dictPairs() {
+		    return getRuleContext(DictPairsContext.class,0);
 		}
-		public dictContext(ParserRuleContext<Token> parent, int state) {
+		public DictContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
-		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).dictEnter(this);
+		public void enterRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterDict(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).dictExit(this);
+		public void exitRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitDict(this);
 		}
 		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
-		    if ( visitor instanceof TemplateParserVisitor ) return ((TemplateParserVisitor<T>)visitor).dictVisit(this);
-		    else return null;
+		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
+			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitDict(this);
+			else return null;
 		}
 	}
 
-	public final dictContext dict() throws RecognitionException {
-		dictContext _localctx = new dictContext(_ctx, 18);
+	public final DictContext dict() throws RecognitionException {
+		DictContext _localctx = new DictContext(_ctx, 18);
 		enterRule(_localctx, RULE_dict);
 		try {
 			enterOuterAlt(_localctx, 1);
@@ -822,36 +835,36 @@ public class TemplateParser extends Parser {
 		return _localctx;
 	}
 
-	public static class dictPairsContext extends ParserRuleContext<Token> {
-		public List<? extends keyValuePairContext> keyValuePair() {
-		    return (List<keyValuePairContext>)getRuleContexts(keyValuePairContext.class);
+	public static class DictPairsContext extends ParserRuleContext<Token> {
+		public List<? extends KeyValuePairContext> keyValuePair() {
+		    return getRuleContexts(KeyValuePairContext.class);
 		}
-		public keyValuePairContext keyValuePair(int i) {
-		    return (keyValuePairContext)getRuleContext(keyValuePairContext.class,i);
+		public KeyValuePairContext keyValuePair(int i) {
+		    return getRuleContext(KeyValuePairContext.class,i);
 		}
-		public defaultValuePairContext defaultValuePair() {
-		    return (defaultValuePairContext)getRuleContext(defaultValuePairContext.class,0);
+		public DefaultValuePairContext defaultValuePair() {
+		    return getRuleContext(DefaultValuePairContext.class,0);
 		}
-		public dictPairsContext(ParserRuleContext<Token> parent, int state) {
+		public DictPairsContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
-		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).dictPairsEnter(this);
+		public void enterRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterDictPairs(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).dictPairsExit(this);
+		public void exitRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitDictPairs(this);
 		}
 		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
-		    if ( visitor instanceof TemplateParserVisitor ) return ((TemplateParserVisitor<T>)visitor).dictPairsVisit(this);
-		    else return null;
+		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
+			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitDictPairs(this);
+			else return null;
 		}
 	}
 
-	public final dictPairsContext dictPairs() throws RecognitionException {
-		dictPairsContext _localctx = new dictPairsContext(_ctx, 20);
+	public final DictPairsContext dictPairs() throws RecognitionException {
+		DictPairsContext _localctx = new DictPairsContext(_ctx, 20);
 		enterRule(_localctx, RULE_dictPairs);
 		try {
 			setState(265);
@@ -909,30 +922,30 @@ public class TemplateParser extends Parser {
 		return _localctx;
 	}
 
-	public static class defaultValuePairContext extends ParserRuleContext<Token> {
-		public keyValueContext keyValue() {
-		    return (keyValueContext)getRuleContext(keyValueContext.class,0);
+	public static class DefaultValuePairContext extends ParserRuleContext<Token> {
+		public KeyValueContext keyValue() {
+		    return getRuleContext(KeyValueContext.class,0);
 		}
-		public defaultValuePairContext(ParserRuleContext<Token> parent, int state) {
+		public DefaultValuePairContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
-		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).defaultValuePairEnter(this);
+		public void enterRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterDefaultValuePair(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).defaultValuePairExit(this);
+		public void exitRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitDefaultValuePair(this);
 		}
 		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
-		    if ( visitor instanceof TemplateParserVisitor ) return ((TemplateParserVisitor<T>)visitor).defaultValuePairVisit(this);
-		    else return null;
+		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
+			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitDefaultValuePair(this);
+			else return null;
 		}
 	}
 
-	public final defaultValuePairContext defaultValuePair() throws RecognitionException {
-		defaultValuePairContext _localctx = new defaultValuePairContext(_ctx, 22);
+	public final DefaultValuePairContext defaultValuePair() throws RecognitionException {
+		DefaultValuePairContext _localctx = new DefaultValuePairContext(_ctx, 22);
 		enterRule(_localctx, RULE_defaultValuePair);
 		try {
 			enterOuterAlt(_localctx, 1);
@@ -953,33 +966,33 @@ public class TemplateParser extends Parser {
 		return _localctx;
 	}
 
-	public static class keyValuePairContext extends ParserRuleContext<Token> {
-		public stringContext string() {
-		    return (stringContext)getRuleContext(stringContext.class,0);
+	public static class KeyValuePairContext extends ParserRuleContext<Token> {
+		public StringContext string() {
+		    return getRuleContext(StringContext.class,0);
 		}
-		public keyValueContext keyValue() {
-		    return (keyValueContext)getRuleContext(keyValueContext.class,0);
+		public KeyValueContext keyValue() {
+		    return getRuleContext(KeyValueContext.class,0);
 		}
-		public keyValuePairContext(ParserRuleContext<Token> parent, int state) {
+		public KeyValuePairContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
-		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).keyValuePairEnter(this);
+		public void enterRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterKeyValuePair(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).keyValuePairExit(this);
+		public void exitRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitKeyValuePair(this);
 		}
 		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
-		    if ( visitor instanceof TemplateParserVisitor ) return ((TemplateParserVisitor<T>)visitor).keyValuePairVisit(this);
-		    else return null;
+		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
+			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitKeyValuePair(this);
+			else return null;
 		}
 	}
 
-	public final keyValuePairContext keyValuePair() throws RecognitionException {
-		keyValuePairContext _localctx = new keyValuePairContext(_ctx, 24);
+	public final KeyValuePairContext keyValuePair() throws RecognitionException {
+		KeyValuePairContext _localctx = new KeyValuePairContext(_ctx, 24);
 		enterRule(_localctx, RULE_keyValuePair);
 		try {
 			enterOuterAlt(_localctx, 1);
@@ -1000,42 +1013,42 @@ public class TemplateParser extends Parser {
 		return _localctx;
 	}
 
-	public static class keyValueContext extends ParserRuleContext<Token> {
-		public bigstringTemplateNoNewlineContext bigstringTemplateNoNewline() {
-		    return (bigstringTemplateNoNewlineContext)getRuleContext(bigstringTemplateNoNewlineContext.class,0);
+	public static class KeyValueContext extends ParserRuleContext<Token> {
+		public BigstringTemplateNoNewlineContext bigstringTemplateNoNewline() {
+		    return getRuleContext(BigstringTemplateNoNewlineContext.class,0);
 		}
-		public stringContext string() {
-		    return (stringContext)getRuleContext(stringContext.class,0);
+		public StringContext string() {
+		    return getRuleContext(StringContext.class,0);
 		}
 		public Token ID() { return getToken(TemplateParser.ID, 0); }
 		public Token FALSE() { return getToken(TemplateParser.FALSE, 0); }
-		public bigstringTemplateContext bigstringTemplate() {
-		    return (bigstringTemplateContext)getRuleContext(bigstringTemplateContext.class,0);
+		public BigstringTemplateContext bigstringTemplate() {
+		    return getRuleContext(BigstringTemplateContext.class,0);
 		}
 		public Token TRUE() { return getToken(TemplateParser.TRUE, 0); }
-		public anonymousTemplateContext anonymousTemplate() {
-		    return (anonymousTemplateContext)getRuleContext(anonymousTemplateContext.class,0);
+		public AnonymousTemplateContext anonymousTemplate() {
+		    return getRuleContext(AnonymousTemplateContext.class,0);
 		}
-		public keyValueContext(ParserRuleContext<Token> parent, int state) {
+		public KeyValueContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
-		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).keyValueEnter(this);
+		public void enterRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterKeyValue(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).keyValueExit(this);
+		public void exitRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitKeyValue(this);
 		}
 		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
-		    if ( visitor instanceof TemplateParserVisitor ) return ((TemplateParserVisitor<T>)visitor).keyValueVisit(this);
-		    else return null;
+		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
+			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitKeyValue(this);
+			else return null;
 		}
 	}
 
-	public final keyValueContext keyValue() throws RecognitionException {
-		keyValueContext _localctx = new keyValueContext(_ctx, 26);
+	public final KeyValueContext keyValue() throws RecognitionException {
+		KeyValueContext _localctx = new KeyValueContext(_ctx, 26);
 		enterRule(_localctx, RULE_keyValue);
 		try {
 			setState(293);
@@ -1102,30 +1115,30 @@ public class TemplateParser extends Parser {
 		return _localctx;
 	}
 
-	public static class stringContext extends ParserRuleContext<Token> {
-		public stringTemplateContext stringTemplate() {
-		    return (stringTemplateContext)getRuleContext(stringTemplateContext.class,0);
+	public static class StringContext extends ParserRuleContext<Token> {
+		public StringTemplateContext stringTemplate() {
+		    return getRuleContext(StringTemplateContext.class,0);
 		}
-		public stringContext(ParserRuleContext<Token> parent, int state) {
+		public StringContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
-		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).stringEnter(this);
+		public void enterRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterString(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).stringExit(this);
+		public void exitRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitString(this);
 		}
 		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
-		    if ( visitor instanceof TemplateParserVisitor ) return ((TemplateParserVisitor<T>)visitor).stringVisit(this);
-		    else return null;
+		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
+			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitString(this);
+			else return null;
 		}
 	}
 
-	public final stringContext string() throws RecognitionException {
-		stringContext _localctx = new stringContext(_ctx, 28);
+	public final StringContext string() throws RecognitionException {
+		StringContext _localctx = new StringContext(_ctx, 28);
 		enterRule(_localctx, RULE_string);
 		try {
 			enterOuterAlt(_localctx, 1);
@@ -1144,34 +1157,34 @@ public class TemplateParser extends Parser {
 		return _localctx;
 	}
 
-	public static class stringTemplateContext extends ParserRuleContext<Token> {
+	public static class StringTemplateContext extends ParserRuleContext<Token> {
 		public List<? extends Token> QUOTE() { return getTokens(TemplateParser.QUOTE); }
-		public templateBodyContext templateBody() {
-		    return (templateBodyContext)getRuleContext(templateBodyContext.class,0);
+		public TemplateBodyContext templateBody() {
+		    return getRuleContext(TemplateBodyContext.class,0);
 		}
 		public Token QUOTE(int i) {
 		    return getToken(TemplateParser.QUOTE, i);
 		}
-		public stringTemplateContext(ParserRuleContext<Token> parent, int state) {
+		public StringTemplateContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
-		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).stringTemplateEnter(this);
+		public void enterRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterStringTemplate(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).stringTemplateExit(this);
+		public void exitRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitStringTemplate(this);
 		}
 		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
-		    if ( visitor instanceof TemplateParserVisitor ) return ((TemplateParserVisitor<T>)visitor).stringTemplateVisit(this);
-		    else return null;
+		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
+			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitStringTemplate(this);
+			else return null;
 		}
 	}
 
-	public final stringTemplateContext stringTemplate() throws RecognitionException {
-		stringTemplateContext _localctx = new stringTemplateContext(_ctx, 30);
+	public final StringTemplateContext stringTemplate() throws RecognitionException {
+		StringTemplateContext _localctx = new StringTemplateContext(_ctx, 30);
 		enterRule(_localctx, RULE_stringTemplate);
 		try {
 			enterOuterAlt(_localctx, 1);
@@ -1192,32 +1205,32 @@ public class TemplateParser extends Parser {
 		return _localctx;
 	}
 
-	public static class bigstringTemplateContext extends ParserRuleContext<Token> {
-		public templateBodyContext templateBody() {
-		    return (templateBodyContext)getRuleContext(templateBodyContext.class,0);
+	public static class BigstringTemplateContext extends ParserRuleContext<Token> {
+		public TemplateBodyContext templateBody() {
+		    return getRuleContext(TemplateBodyContext.class,0);
 		}
 		public Token BigStringTemplate_END() { return getToken(TemplateParser.BigStringTemplate_END, 0); }
 		public Token BIGSTRING() { return getToken(TemplateParser.BIGSTRING, 0); }
-		public bigstringTemplateContext(ParserRuleContext<Token> parent, int state) {
+		public BigstringTemplateContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
-		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).bigstringTemplateEnter(this);
+		public void enterRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterBigstringTemplate(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).bigstringTemplateExit(this);
+		public void exitRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitBigstringTemplate(this);
 		}
 		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
-		    if ( visitor instanceof TemplateParserVisitor ) return ((TemplateParserVisitor<T>)visitor).bigstringTemplateVisit(this);
-		    else return null;
+		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
+			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitBigstringTemplate(this);
+			else return null;
 		}
 	}
 
-	public final bigstringTemplateContext bigstringTemplate() throws RecognitionException {
-		bigstringTemplateContext _localctx = new bigstringTemplateContext(_ctx, 32);
+	public final BigstringTemplateContext bigstringTemplate() throws RecognitionException {
+		BigstringTemplateContext _localctx = new BigstringTemplateContext(_ctx, 32);
 		enterRule(_localctx, RULE_bigstringTemplate);
 		try {
 			enterOuterAlt(_localctx, 1);
@@ -1238,32 +1251,32 @@ public class TemplateParser extends Parser {
 		return _localctx;
 	}
 
-	public static class bigstringTemplateNoNewlineContext extends ParserRuleContext<Token> {
+	public static class BigstringTemplateNoNewlineContext extends ParserRuleContext<Token> {
 		public Token BIGSTRINGLINE() { return getToken(TemplateParser.BIGSTRINGLINE, 0); }
-		public templateBodyContext templateBody() {
-		    return (templateBodyContext)getRuleContext(templateBodyContext.class,0);
+		public TemplateBodyContext templateBody() {
+		    return getRuleContext(TemplateBodyContext.class,0);
 		}
 		public Token BigStringLineTemplate_END() { return getToken(TemplateParser.BigStringLineTemplate_END, 0); }
-		public bigstringTemplateNoNewlineContext(ParserRuleContext<Token> parent, int state) {
+		public BigstringTemplateNoNewlineContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
-		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).bigstringTemplateNoNewlineEnter(this);
+		public void enterRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterBigstringTemplateNoNewline(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).bigstringTemplateNoNewlineExit(this);
+		public void exitRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitBigstringTemplateNoNewline(this);
 		}
 		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
-		    if ( visitor instanceof TemplateParserVisitor ) return ((TemplateParserVisitor<T>)visitor).bigstringTemplateNoNewlineVisit(this);
-		    else return null;
+		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
+			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitBigstringTemplateNoNewline(this);
+			else return null;
 		}
 	}
 
-	public final bigstringTemplateNoNewlineContext bigstringTemplateNoNewline() throws RecognitionException {
-		bigstringTemplateNoNewlineContext _localctx = new bigstringTemplateNoNewlineContext(_ctx, 34);
+	public final BigstringTemplateNoNewlineContext bigstringTemplateNoNewline() throws RecognitionException {
+		BigstringTemplateNoNewlineContext _localctx = new BigstringTemplateNoNewlineContext(_ctx, 34);
 		enterRule(_localctx, RULE_bigstringTemplateNoNewline);
 		try {
 			enterOuterAlt(_localctx, 1);
@@ -1284,35 +1297,35 @@ public class TemplateParser extends Parser {
 		return _localctx;
 	}
 
-	public static class anonymousTemplateContext extends ParserRuleContext<Token> {
+	public static class AnonymousTemplateContext extends ParserRuleContext<Token> {
 		public Token RBRACE() { return getToken(TemplateParser.RBRACE, 0); }
-		public anonymousTemplateParametersContext anonymousTemplateParameters() {
-		    return (anonymousTemplateParametersContext)getRuleContext(anonymousTemplateParametersContext.class,0);
+		public AnonymousTemplateParametersContext anonymousTemplateParameters() {
+		    return getRuleContext(AnonymousTemplateParametersContext.class,0);
 		}
-		public templateBodyContext templateBody() {
-		    return (templateBodyContext)getRuleContext(templateBodyContext.class,0);
+		public TemplateBodyContext templateBody() {
+		    return getRuleContext(TemplateBodyContext.class,0);
 		}
 		public Token LBRACE() { return getToken(TemplateParser.LBRACE, 0); }
-		public anonymousTemplateContext(ParserRuleContext<Token> parent, int state) {
+		public AnonymousTemplateContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
-		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).anonymousTemplateEnter(this);
+		public void enterRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterAnonymousTemplate(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).anonymousTemplateExit(this);
+		public void exitRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitAnonymousTemplate(this);
 		}
 		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
-		    if ( visitor instanceof TemplateParserVisitor ) return ((TemplateParserVisitor<T>)visitor).anonymousTemplateVisit(this);
-		    else return null;
+		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
+			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitAnonymousTemplate(this);
+			else return null;
 		}
 	}
 
-	public final anonymousTemplateContext anonymousTemplate() throws RecognitionException {
-		anonymousTemplateContext _localctx = new anonymousTemplateContext(_ctx, 36);
+	public final AnonymousTemplateContext anonymousTemplate() throws RecognitionException {
+		AnonymousTemplateContext _localctx = new AnonymousTemplateContext(_ctx, 36);
 		enterRule(_localctx, RULE_anonymousTemplate);
 		try {
 			enterOuterAlt(_localctx, 1);
@@ -1342,7 +1355,7 @@ public class TemplateParser extends Parser {
 		return _localctx;
 	}
 
-	public static class anonymousTemplateParametersContext extends ParserRuleContext<Token> {
+	public static class AnonymousTemplateParametersContext extends ParserRuleContext<Token> {
 		public Token TEMPLATE_PARAMETER;
 		public List<Token> names = new ArrayList<Token>();
 		public Token TEMPLATE_PARAMETER(int i) {
@@ -1351,32 +1364,32 @@ public class TemplateParser extends Parser {
 		public Token PIPE() { return getToken(TemplateParser.PIPE, 0); }
 		public List<? extends Token> TEMPLATE_PARAMETER() { return getTokens(TemplateParser.TEMPLATE_PARAMETER); }
 		public Token COMMA() { return getToken(TemplateParser.COMMA, 0); }
-		public anonymousTemplateParametersContext(ParserRuleContext<Token> parent, int state) {
+		public AnonymousTemplateParametersContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
-		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).anonymousTemplateParametersEnter(this);
+		public void enterRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterAnonymousTemplateParameters(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).anonymousTemplateParametersExit(this);
+		public void exitRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitAnonymousTemplateParameters(this);
 		}
 		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
-		    if ( visitor instanceof TemplateParserVisitor ) return ((TemplateParserVisitor<T>)visitor).anonymousTemplateParametersVisit(this);
-		    else return null;
+		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
+			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitAnonymousTemplateParameters(this);
+			else return null;
 		}
 	}
 
-	public final anonymousTemplateParametersContext anonymousTemplateParameters() throws RecognitionException {
-		anonymousTemplateParametersContext _localctx = new anonymousTemplateParametersContext(_ctx, 38);
+	public final AnonymousTemplateParametersContext anonymousTemplateParameters() throws RecognitionException {
+		AnonymousTemplateParametersContext _localctx = new AnonymousTemplateParametersContext(_ctx, 38);
 		enterRule(_localctx, RULE_anonymousTemplateParameters);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(325); ((anonymousTemplateParametersContext)_localctx).TEMPLATE_PARAMETER = match(TEMPLATE_PARAMETER);
-			((anonymousTemplateParametersContext)_localctx).names.add(((anonymousTemplateParametersContext)_localctx).TEMPLATE_PARAMETER);
+			setState(325); _localctx.TEMPLATE_PARAMETER = match(TEMPLATE_PARAMETER);
+			_localctx.names.add(_localctx.TEMPLATE_PARAMETER);
 			setState(333);
 			_errHandler.sync(this);
 			int _alt423 = getInterpreter().adaptivePredict(_input,21,_ctx);
@@ -1385,8 +1398,8 @@ public class TemplateParser extends Parser {
 					{
 					{
 					setState(327); match(COMMA);
-					setState(329); ((anonymousTemplateParametersContext)_localctx).TEMPLATE_PARAMETER = match(TEMPLATE_PARAMETER);
-					((anonymousTemplateParametersContext)_localctx).names.add(((anonymousTemplateParametersContext)_localctx).TEMPLATE_PARAMETER);
+					setState(329); _localctx.TEMPLATE_PARAMETER = match(TEMPLATE_PARAMETER);
+					_localctx.names.add(_localctx.TEMPLATE_PARAMETER);
 					}
 					} 
 				}
@@ -1408,42 +1421,42 @@ public class TemplateParser extends Parser {
 		return _localctx;
 	}
 
-	public static class templateBodyContext extends ParserRuleContext<Token> {
-		public exprTagContext exprTag() {
-		    return (exprTagContext)getRuleContext(exprTagContext.class,0);
+	public static class TemplateBodyContext extends ParserRuleContext<Token> {
+		public ExprTagContext exprTag() {
+		    return getRuleContext(ExprTagContext.class,0);
 		}
-		public regionContext region() {
-		    return (regionContext)getRuleContext(regionContext.class,0);
+		public RegionContext region() {
+		    return getRuleContext(RegionContext.class,0);
 		}
 		public Token NEWLINE() { return getToken(TemplateParser.NEWLINE, 0); }
 		public Token TEXT() { return getToken(TemplateParser.TEXT, 0); }
 		public Token COMMENT() { return getToken(TemplateParser.COMMENT, 0); }
-		public ifstatContext ifstat() {
-		    return (ifstatContext)getRuleContext(ifstatContext.class,0);
+		public IfstatContext ifstat() {
+		    return getRuleContext(IfstatContext.class,0);
 		}
-		public escapeContext escape() {
-		    return (escapeContext)getRuleContext(escapeContext.class,0);
+		public EscapeContext escape() {
+		    return getRuleContext(EscapeContext.class,0);
 		}
-		public templateBodyContext(ParserRuleContext<Token> parent, int state) {
+		public TemplateBodyContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
-		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).templateBodyEnter(this);
+		public void enterRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterTemplateBody(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).templateBodyExit(this);
+		public void exitRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitTemplateBody(this);
 		}
 		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
-		    if ( visitor instanceof TemplateParserVisitor ) return ((TemplateParserVisitor<T>)visitor).templateBodyVisit(this);
-		    else return null;
+		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
+			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitTemplateBody(this);
+			else return null;
 		}
 	}
 
-	public final templateBodyContext templateBody() throws RecognitionException {
-		templateBodyContext _localctx = new templateBodyContext(_ctx, 40);
+	public final TemplateBodyContext templateBody() throws RecognitionException {
+		TemplateBodyContext _localctx = new TemplateBodyContext(_ctx, 40);
 		enterRule(_localctx, RULE_templateBody);
 		try {
 			enterOuterAlt(_localctx, 1);
@@ -1518,30 +1531,30 @@ public class TemplateParser extends Parser {
 		return _localctx;
 	}
 
-	public static class escapeContext extends ParserRuleContext<Token> {
+	public static class EscapeContext extends ParserRuleContext<Token> {
 		public Token CLOSE_DELIMITER() { return getToken(TemplateParser.CLOSE_DELIMITER, 0); }
 		public Token ESCAPE() { return getToken(TemplateParser.ESCAPE, 0); }
 		public Token OPEN_DELIMITER() { return getToken(TemplateParser.OPEN_DELIMITER, 0); }
-		public escapeContext(ParserRuleContext<Token> parent, int state) {
+		public EscapeContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
-		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).escapeEnter(this);
+		public void enterRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterEscape(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).escapeExit(this);
+		public void exitRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitEscape(this);
 		}
 		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
-		    if ( visitor instanceof TemplateParserVisitor ) return ((TemplateParserVisitor<T>)visitor).escapeVisit(this);
-		    else return null;
+		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
+			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitEscape(this);
+			else return null;
 		}
 	}
 
-	public final escapeContext escape() throws RecognitionException {
-		escapeContext _localctx = new escapeContext(_ctx, 42);
+	public final EscapeContext escape() throws RecognitionException {
+		EscapeContext _localctx = new EscapeContext(_ctx, 42);
 		enterRule(_localctx, RULE_escape);
 		try {
 			enterOuterAlt(_localctx, 1);
@@ -1562,36 +1575,36 @@ public class TemplateParser extends Parser {
 		return _localctx;
 	}
 
-	public static class exprTagContext extends ParserRuleContext<Token> {
+	public static class ExprTagContext extends ParserRuleContext<Token> {
 		public Token CLOSE_DELIMITER() { return getToken(TemplateParser.CLOSE_DELIMITER, 0); }
-		public exprOptionsContext exprOptions() {
-		    return (exprOptionsContext)getRuleContext(exprOptionsContext.class,0);
+		public ExprOptionsContext exprOptions() {
+		    return getRuleContext(ExprOptionsContext.class,0);
 		}
 		public Token SEMI() { return getToken(TemplateParser.SEMI, 0); }
-		public exprContext expr() {
-		    return (exprContext)getRuleContext(exprContext.class,0);
+		public ExprContext expr() {
+		    return getRuleContext(ExprContext.class,0);
 		}
 		public Token OPEN_DELIMITER() { return getToken(TemplateParser.OPEN_DELIMITER, 0); }
-		public exprTagContext(ParserRuleContext<Token> parent, int state) {
+		public ExprTagContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
-		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exprTagEnter(this);
+		public void enterRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterExprTag(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exprTagExit(this);
+		public void exitRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitExprTag(this);
 		}
 		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
-		    if ( visitor instanceof TemplateParserVisitor ) return ((TemplateParserVisitor<T>)visitor).exprTagVisit(this);
-		    else return null;
+		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
+			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitExprTag(this);
+			else return null;
 		}
 	}
 
-	public final exprTagContext exprTag() throws RecognitionException {
-		exprTagContext _localctx = new exprTagContext(_ctx, 44);
+	public final ExprTagContext exprTag() throws RecognitionException {
+		ExprTagContext _localctx = new ExprTagContext(_ctx, 44);
 		enterRule(_localctx, RULE_exprTag);
 		try {
 			enterOuterAlt(_localctx, 1);
@@ -1622,7 +1635,7 @@ public class TemplateParser extends Parser {
 		return _localctx;
 	}
 
-	public static class regionContext extends ParserRuleContext<Token> {
+	public static class RegionContext extends ParserRuleContext<Token> {
 		public Token REGION_ID() { return getToken(TemplateParser.REGION_ID, 0); }
 		public List<? extends Token> CLOSE_DELIMITER() { return getTokens(TemplateParser.CLOSE_DELIMITER); }
 		public Token OPEN_DELIMITER(int i) {
@@ -1630,32 +1643,32 @@ public class TemplateParser extends Parser {
 		}
 		public Token REGION_END() { return getToken(TemplateParser.REGION_END, 0); }
 		public List<? extends Token> OPEN_DELIMITER() { return getTokens(TemplateParser.OPEN_DELIMITER); }
-		public templateBodyContext templateBody() {
-		    return (templateBodyContext)getRuleContext(templateBodyContext.class,0);
+		public TemplateBodyContext templateBody() {
+		    return getRuleContext(TemplateBodyContext.class,0);
 		}
 		public Token CLOSE_DELIMITER(int i) {
 		    return getToken(TemplateParser.CLOSE_DELIMITER, i);
 		}
-		public regionContext(ParserRuleContext<Token> parent, int state) {
+		public RegionContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
-		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).regionEnter(this);
+		public void enterRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterRegion(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).regionExit(this);
+		public void exitRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitRegion(this);
 		}
 		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
-		    if ( visitor instanceof TemplateParserVisitor ) return ((TemplateParserVisitor<T>)visitor).regionVisit(this);
-		    else return null;
+		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
+			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitRegion(this);
+			else return null;
 		}
 	}
 
-	public final regionContext region() throws RecognitionException {
-		regionContext _localctx = new regionContext(_ctx, 46);
+	public final RegionContext region() throws RecognitionException {
+		RegionContext _localctx = new RegionContext(_ctx, 46);
 		enterRule(_localctx, RULE_region);
 		try {
 			enterOuterAlt(_localctx, 1);
@@ -1680,30 +1693,30 @@ public class TemplateParser extends Parser {
 		return _localctx;
 	}
 
-	public static class subtemplateContext extends ParserRuleContext<Token> {
-		public anonymousTemplateContext anonymousTemplate() {
-		    return (anonymousTemplateContext)getRuleContext(anonymousTemplateContext.class,0);
+	public static class SubtemplateContext extends ParserRuleContext<Token> {
+		public AnonymousTemplateContext anonymousTemplate() {
+		    return getRuleContext(AnonymousTemplateContext.class,0);
 		}
-		public subtemplateContext(ParserRuleContext<Token> parent, int state) {
+		public SubtemplateContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
-		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).subtemplateEnter(this);
+		public void enterRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterSubtemplate(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).subtemplateExit(this);
+		public void exitRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitSubtemplate(this);
 		}
 		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
-		    if ( visitor instanceof TemplateParserVisitor ) return ((TemplateParserVisitor<T>)visitor).subtemplateVisit(this);
-		    else return null;
+		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
+			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitSubtemplate(this);
+			else return null;
 		}
 	}
 
-	public final subtemplateContext subtemplate() throws RecognitionException {
-		subtemplateContext _localctx = new subtemplateContext(_ctx, 48);
+	public final SubtemplateContext subtemplate() throws RecognitionException {
+		SubtemplateContext _localctx = new SubtemplateContext(_ctx, 48);
 		enterRule(_localctx, RULE_subtemplate);
 		try {
 			enterOuterAlt(_localctx, 1);
@@ -1722,7 +1735,7 @@ public class TemplateParser extends Parser {
 		return _localctx;
 	}
 
-	public static class ifstatContext extends ParserRuleContext<Token> {
+	public static class IfstatContext extends ParserRuleContext<Token> {
 		public List<? extends Token> RPAREN() { return getTokens(TemplateParser.RPAREN); }
 		public Token RPAREN(int i) {
 		    return getToken(TemplateParser.RPAREN, i);
@@ -1736,45 +1749,45 @@ public class TemplateParser extends Parser {
 		}
 		public Token ELSE() { return getToken(TemplateParser.ELSE, 0); }
 		public Token ENDIF() { return getToken(TemplateParser.ENDIF, 0); }
-		public templateBodyContext templateBody(int i) {
-		    return (templateBodyContext)getRuleContext(templateBodyContext.class,i);
+		public TemplateBodyContext templateBody(int i) {
+		    return getRuleContext(TemplateBodyContext.class,i);
 		}
 		public List<? extends Token> CLOSE_DELIMITER() { return getTokens(TemplateParser.CLOSE_DELIMITER); }
 		public Token LPAREN(int i) {
 		    return getToken(TemplateParser.LPAREN, i);
 		}
-		public conditionalContext conditional(int i) {
-		    return (conditionalContext)getRuleContext(conditionalContext.class,i);
+		public ConditionalContext conditional(int i) {
+		    return getRuleContext(ConditionalContext.class,i);
 		}
-		public List<? extends conditionalContext> conditional() {
-		    return (List<conditionalContext>)getRuleContexts(conditionalContext.class);
+		public List<? extends ConditionalContext> conditional() {
+		    return getRuleContexts(ConditionalContext.class);
 		}
-		public List<? extends templateBodyContext> templateBody() {
-		    return (List<templateBodyContext>)getRuleContexts(templateBodyContext.class);
+		public List<? extends TemplateBodyContext> templateBody() {
+		    return getRuleContexts(TemplateBodyContext.class);
 		}
 		public List<? extends Token> LPAREN() { return getTokens(TemplateParser.LPAREN); }
 		public Token IF() { return getToken(TemplateParser.IF, 0); }
 		public Token ELSEIF() { return getToken(TemplateParser.ELSEIF, 0); }
-		public ifstatContext(ParserRuleContext<Token> parent, int state) {
+		public IfstatContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
-		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).ifstatEnter(this);
+		public void enterRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterIfstat(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).ifstatExit(this);
+		public void exitRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitIfstat(this);
 		}
 		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
-		    if ( visitor instanceof TemplateParserVisitor ) return ((TemplateParserVisitor<T>)visitor).ifstatVisit(this);
-		    else return null;
+		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
+			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitIfstat(this);
+			else return null;
 		}
 	}
 
-	public final ifstatContext ifstat() throws RecognitionException {
-		ifstatContext _localctx = new ifstatContext(_ctx, 50);
+	public final IfstatContext ifstat() throws RecognitionException {
+		IfstatContext _localctx = new IfstatContext(_ctx, 50);
 		enterRule(_localctx, RULE_ifstat);
 		try {
 			enterOuterAlt(_localctx, 1);
@@ -1835,34 +1848,34 @@ public class TemplateParser extends Parser {
 		return _localctx;
 	}
 
-	public static class conditionalContext extends ParserRuleContext<Token> {
-		public andConditionalContext andConditional(int i) {
-		    return (andConditionalContext)getRuleContext(andConditionalContext.class,i);
+	public static class ConditionalContext extends ParserRuleContext<Token> {
+		public AndConditionalContext andConditional(int i) {
+		    return getRuleContext(AndConditionalContext.class,i);
 		}
-		public List<? extends andConditionalContext> andConditional() {
-		    return (List<andConditionalContext>)getRuleContexts(andConditionalContext.class);
+		public List<? extends AndConditionalContext> andConditional() {
+		    return getRuleContexts(AndConditionalContext.class);
 		}
 		public Token OR() { return getToken(TemplateParser.OR, 0); }
-		public conditionalContext(ParserRuleContext<Token> parent, int state) {
+		public ConditionalContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
-		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).conditionalEnter(this);
+		public void enterRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterConditional(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).conditionalExit(this);
+		public void exitRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitConditional(this);
 		}
 		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
-		    if ( visitor instanceof TemplateParserVisitor ) return ((TemplateParserVisitor<T>)visitor).conditionalVisit(this);
-		    else return null;
+		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
+			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitConditional(this);
+			else return null;
 		}
 	}
 
-	public final conditionalContext conditional() throws RecognitionException {
-		conditionalContext _localctx = new conditionalContext(_ctx, 52);
+	public final ConditionalContext conditional() throws RecognitionException {
+		ConditionalContext _localctx = new ConditionalContext(_ctx, 52);
 		enterRule(_localctx, RULE_conditional);
 		try {
 			enterOuterAlt(_localctx, 1);
@@ -1897,34 +1910,34 @@ public class TemplateParser extends Parser {
 		return _localctx;
 	}
 
-	public static class andConditionalContext extends ParserRuleContext<Token> {
-		public List<? extends notConditionalContext> notConditional() {
-		    return (List<notConditionalContext>)getRuleContexts(notConditionalContext.class);
+	public static class AndConditionalContext extends ParserRuleContext<Token> {
+		public List<? extends NotConditionalContext> notConditional() {
+		    return getRuleContexts(NotConditionalContext.class);
 		}
-		public notConditionalContext notConditional(int i) {
-		    return (notConditionalContext)getRuleContext(notConditionalContext.class,i);
+		public NotConditionalContext notConditional(int i) {
+		    return getRuleContext(NotConditionalContext.class,i);
 		}
 		public Token AND() { return getToken(TemplateParser.AND, 0); }
-		public andConditionalContext(ParserRuleContext<Token> parent, int state) {
+		public AndConditionalContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
-		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).andConditionalEnter(this);
+		public void enterRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterAndConditional(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).andConditionalExit(this);
+		public void exitRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitAndConditional(this);
 		}
 		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
-		    if ( visitor instanceof TemplateParserVisitor ) return ((TemplateParserVisitor<T>)visitor).andConditionalVisit(this);
-		    else return null;
+		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
+			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitAndConditional(this);
+			else return null;
 		}
 	}
 
-	public final andConditionalContext andConditional() throws RecognitionException {
-		andConditionalContext _localctx = new andConditionalContext(_ctx, 54);
+	public final AndConditionalContext andConditional() throws RecognitionException {
+		AndConditionalContext _localctx = new AndConditionalContext(_ctx, 54);
 		enterRule(_localctx, RULE_andConditional);
 		try {
 			enterOuterAlt(_localctx, 1);
@@ -1959,34 +1972,34 @@ public class TemplateParser extends Parser {
 		return _localctx;
 	}
 
-	public static class notConditionalContext extends ParserRuleContext<Token> {
-		public memberExprContext memberExpr() {
-		    return (memberExprContext)getRuleContext(memberExprContext.class,0);
+	public static class NotConditionalContext extends ParserRuleContext<Token> {
+		public MemberExprContext memberExpr() {
+		    return getRuleContext(MemberExprContext.class,0);
 		}
-		public notConditionalContext notConditional() {
-		    return (notConditionalContext)getRuleContext(notConditionalContext.class,0);
+		public NotConditionalContext notConditional() {
+		    return getRuleContext(NotConditionalContext.class,0);
 		}
 		public Token NOT() { return getToken(TemplateParser.NOT, 0); }
-		public notConditionalContext(ParserRuleContext<Token> parent, int state) {
+		public NotConditionalContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
-		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).notConditionalEnter(this);
+		public void enterRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterNotConditional(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).notConditionalExit(this);
+		public void exitRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitNotConditional(this);
 		}
 		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
-		    if ( visitor instanceof TemplateParserVisitor ) return ((TemplateParserVisitor<T>)visitor).notConditionalVisit(this);
-		    else return null;
+		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
+			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitNotConditional(this);
+			else return null;
 		}
 	}
 
-	public final notConditionalContext notConditional() throws RecognitionException {
-		notConditionalContext _localctx = new notConditionalContext(_ctx, 56);
+	public final NotConditionalContext notConditional() throws RecognitionException {
+		NotConditionalContext _localctx = new NotConditionalContext(_ctx, 56);
 		enterRule(_localctx, RULE_notConditional);
 		try {
 			setState(468);
@@ -2019,42 +2032,42 @@ public class TemplateParser extends Parser {
 		return _localctx;
 	}
 
-	public static class exprOptionsContext extends ParserRuleContext<Token> {
-		public optionContext option;
-		public List<optionContext> options_ = new ArrayList<optionContext>();
-		public optionContext option(int i) {
-		    return (optionContext)getRuleContext(optionContext.class,i);
+	public static class ExprOptionsContext extends ParserRuleContext<Token> {
+		public OptionContext option;
+		public List<OptionContext> options_ = new ArrayList<OptionContext>();
+		public OptionContext option(int i) {
+		    return getRuleContext(OptionContext.class,i);
 		}
 		public Token COMMA() { return getToken(TemplateParser.COMMA, 0); }
-		public List<? extends optionContext> option() {
-		    return (List<optionContext>)getRuleContexts(optionContext.class);
+		public List<? extends OptionContext> option() {
+		    return getRuleContexts(OptionContext.class);
 		}
-		public exprOptionsContext(ParserRuleContext<Token> parent, int state) {
+		public ExprOptionsContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
-		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exprOptionsEnter(this);
+		public void enterRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterExprOptions(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exprOptionsExit(this);
+		public void exitRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitExprOptions(this);
 		}
 		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
-		    if ( visitor instanceof TemplateParserVisitor ) return ((TemplateParserVisitor<T>)visitor).exprOptionsVisit(this);
-		    else return null;
+		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
+			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitExprOptions(this);
+			else return null;
 		}
 	}
 
-	public final exprOptionsContext exprOptions() throws RecognitionException {
-		exprOptionsContext _localctx = new exprOptionsContext(_ctx, 58);
+	public final ExprOptionsContext exprOptions() throws RecognitionException {
+		ExprOptionsContext _localctx = new ExprOptionsContext(_ctx, 58);
 		enterRule(_localctx, RULE_exprOptions);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(470); ((exprOptionsContext)_localctx).option = option();
-			((exprOptionsContext)_localctx).options_.add(((exprOptionsContext)_localctx).option);
+			setState(470); _localctx.option = option();
+			_localctx.options_.add(_localctx.option);
 			setState(478);
 			_errHandler.sync(this);
 			int _alt638 = getInterpreter().adaptivePredict(_input,30,_ctx);
@@ -2063,8 +2076,8 @@ public class TemplateParser extends Parser {
 					{
 					{
 					setState(472); match(COMMA);
-					setState(474); ((exprOptionsContext)_localctx).option = option();
-					((exprOptionsContext)_localctx).options_.add(((exprOptionsContext)_localctx).option);
+					setState(474); _localctx.option = option();
+					_localctx.options_.add(_localctx.option);
 					}
 					} 
 				}
@@ -2085,46 +2098,46 @@ public class TemplateParser extends Parser {
 		return _localctx;
 	}
 
-	public static class optionContext extends ParserRuleContext<Token> {
+	public static class OptionContext extends ParserRuleContext<Token> {
 		public Token name;
-		public exprNoCommaContext value;
+		public ExprNoCommaContext value;
 		public Token EQUALS() { return getToken(TemplateParser.EQUALS, 0); }
 		public Token ID() { return getToken(TemplateParser.ID, 0); }
-		public exprNoCommaContext exprNoComma() {
-		    return (exprNoCommaContext)getRuleContext(exprNoCommaContext.class,0);
+		public ExprNoCommaContext exprNoComma() {
+		    return getRuleContext(ExprNoCommaContext.class,0);
 		}
-		public optionContext(ParserRuleContext<Token> parent, int state) {
+		public OptionContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
-		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).optionEnter(this);
+		public void enterRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterOption(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).optionExit(this);
+		public void exitRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitOption(this);
 		}
 		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
-		    if ( visitor instanceof TemplateParserVisitor ) return ((TemplateParserVisitor<T>)visitor).optionVisit(this);
-		    else return null;
+		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
+			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitOption(this);
+			else return null;
 		}
 	}
 
-	public final optionContext option() throws RecognitionException {
-		optionContext _localctx = new optionContext(_ctx, 60);
+	public final OptionContext option() throws RecognitionException {
+		OptionContext _localctx = new OptionContext(_ctx, 60);
 		enterRule(_localctx, RULE_option);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(481); ((optionContext)_localctx).name = match(ID);
+			setState(481); _localctx.name = match(ID);
 			setState(487);
 			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,31,_ctx) ) {
 				case 1:
 					{
 					setState(483); match(EQUALS);
-					setState(485); ((optionContext)_localctx).value = exprNoComma();
+					setState(485); _localctx.value = exprNoComma();
 					}
 					break;
 			}
@@ -2141,34 +2154,34 @@ public class TemplateParser extends Parser {
 		return _localctx;
 	}
 
-	public static class exprNoCommaContext extends ParserRuleContext<Token> {
+	public static class ExprNoCommaContext extends ParserRuleContext<Token> {
 		public Token COLON() { return getToken(TemplateParser.COLON, 0); }
-		public memberExprContext memberExpr() {
-		    return (memberExprContext)getRuleContext(memberExprContext.class,0);
+		public MemberExprContext memberExpr() {
+		    return getRuleContext(MemberExprContext.class,0);
 		}
-		public mapTemplateRefContext mapTemplateRef() {
-		    return (mapTemplateRefContext)getRuleContext(mapTemplateRefContext.class,0);
+		public MapTemplateRefContext mapTemplateRef() {
+		    return getRuleContext(MapTemplateRefContext.class,0);
 		}
-		public exprNoCommaContext(ParserRuleContext<Token> parent, int state) {
+		public ExprNoCommaContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
-		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exprNoCommaEnter(this);
+		public void enterRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterExprNoComma(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exprNoCommaExit(this);
+		public void exitRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitExprNoComma(this);
 		}
 		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
-		    if ( visitor instanceof TemplateParserVisitor ) return ((TemplateParserVisitor<T>)visitor).exprNoCommaVisit(this);
-		    else return null;
+		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
+			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitExprNoComma(this);
+			else return null;
 		}
 	}
 
-	public final exprNoCommaContext exprNoComma() throws RecognitionException {
-		exprNoCommaContext _localctx = new exprNoCommaContext(_ctx, 62);
+	public final ExprNoCommaContext exprNoComma() throws RecognitionException {
+		ExprNoCommaContext _localctx = new ExprNoCommaContext(_ctx, 62);
 		enterRule(_localctx, RULE_exprNoComma);
 		try {
 			enterOuterAlt(_localctx, 1);
@@ -2197,30 +2210,30 @@ public class TemplateParser extends Parser {
 		return _localctx;
 	}
 
-	public static class exprContext extends ParserRuleContext<Token> {
-		public mapExprContext mapExpr() {
-		    return (mapExprContext)getRuleContext(mapExprContext.class,0);
+	public static class ExprContext extends ParserRuleContext<Token> {
+		public MapExprContext mapExpr() {
+		    return getRuleContext(MapExprContext.class,0);
 		}
-		public exprContext(ParserRuleContext<Token> parent, int state) {
+		public ExprContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
-		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exprEnter(this);
+		public void enterRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterExpr(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exprExit(this);
+		public void exitRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitExpr(this);
 		}
 		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
-		    if ( visitor instanceof TemplateParserVisitor ) return ((TemplateParserVisitor<T>)visitor).exprVisit(this);
-		    else return null;
+		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
+			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitExpr(this);
+			else return null;
 		}
 	}
 
-	public final exprContext expr() throws RecognitionException {
-		exprContext _localctx = new exprContext(_ctx, 64);
+	public final ExprContext expr() throws RecognitionException {
+		ExprContext _localctx = new ExprContext(_ctx, 64);
 		enterRule(_localctx, RULE_expr);
 		try {
 			enterOuterAlt(_localctx, 1);
@@ -2239,47 +2252,47 @@ public class TemplateParser extends Parser {
 		return _localctx;
 	}
 
-	public static class mapExprContext extends ParserRuleContext<Token> {
+	public static class MapExprContext extends ParserRuleContext<Token> {
 		public List<? extends Token> COLON() { return getTokens(TemplateParser.COLON); }
-		public List<? extends memberExprContext> memberExpr() {
-		    return (List<memberExprContext>)getRuleContexts(memberExprContext.class);
+		public List<? extends MemberExprContext> memberExpr() {
+		    return getRuleContexts(MemberExprContext.class);
 		}
 		public Token COMMA(int i) {
 		    return getToken(TemplateParser.COMMA, i);
 		}
-		public List<? extends mapTemplateRefContext> mapTemplateRef() {
-		    return (List<mapTemplateRefContext>)getRuleContexts(mapTemplateRefContext.class);
+		public List<? extends MapTemplateRefContext> mapTemplateRef() {
+		    return getRuleContexts(MapTemplateRefContext.class);
 		}
 		public List<? extends Token> COMMA() { return getTokens(TemplateParser.COMMA); }
-		public mapTemplateRefContext mapTemplateRef(int i) {
-		    return (mapTemplateRefContext)getRuleContext(mapTemplateRefContext.class,i);
+		public MapTemplateRefContext mapTemplateRef(int i) {
+		    return getRuleContext(MapTemplateRefContext.class,i);
 		}
-		public memberExprContext memberExpr(int i) {
-		    return (memberExprContext)getRuleContext(memberExprContext.class,i);
+		public MemberExprContext memberExpr(int i) {
+		    return getRuleContext(MemberExprContext.class,i);
 		}
 		public Token COLON(int i) {
 		    return getToken(TemplateParser.COLON, i);
 		}
-		public mapExprContext(ParserRuleContext<Token> parent, int state) {
+		public MapExprContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
-		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).mapExprEnter(this);
+		public void enterRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterMapExpr(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).mapExprExit(this);
+		public void exitRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitMapExpr(this);
 		}
 		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
-		    if ( visitor instanceof TemplateParserVisitor ) return ((TemplateParserVisitor<T>)visitor).mapExprVisit(this);
-		    else return null;
+		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
+			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitMapExpr(this);
+			else return null;
 		}
 	}
 
-	public final mapExprContext mapExpr() throws RecognitionException {
-		mapExprContext _localctx = new mapExprContext(_ctx, 66);
+	public final MapExprContext mapExpr() throws RecognitionException {
+		MapExprContext _localctx = new MapExprContext(_ctx, 66);
 		enterRule(_localctx, RULE_mapExpr);
 		try {
 			enterOuterAlt(_localctx, 1);
@@ -2360,48 +2373,48 @@ public class TemplateParser extends Parser {
 		return _localctx;
 	}
 
-	public static class mapTemplateRefContext extends ParserRuleContext<Token> {
-		public argExprListContext argExprList() {
-		    return (argExprListContext)getRuleContext(argExprListContext.class,0);
+	public static class MapTemplateRefContext extends ParserRuleContext<Token> {
+		public ArgExprListContext argExprList() {
+		    return getRuleContext(ArgExprListContext.class,0);
 		}
-		public subtemplateContext subtemplate() {
-		    return (subtemplateContext)getRuleContext(subtemplateContext.class,0);
+		public SubtemplateContext subtemplate() {
+		    return getRuleContext(SubtemplateContext.class,0);
 		}
 		public List<? extends Token> RPAREN() { return getTokens(TemplateParser.RPAREN); }
 		public Token RPAREN(int i) {
 		    return getToken(TemplateParser.RPAREN, i);
 		}
-		public argumentsContext arguments() {
-		    return (argumentsContext)getRuleContext(argumentsContext.class,0);
+		public ArgumentsContext arguments() {
+		    return getRuleContext(ArgumentsContext.class,0);
 		}
 		public Token LPAREN(int i) {
 		    return getToken(TemplateParser.LPAREN, i);
 		}
 		public Token ID() { return getToken(TemplateParser.ID, 0); }
-		public mapExprContext mapExpr() {
-		    return (mapExprContext)getRuleContext(mapExprContext.class,0);
+		public MapExprContext mapExpr() {
+		    return getRuleContext(MapExprContext.class,0);
 		}
 		public List<? extends Token> LPAREN() { return getTokens(TemplateParser.LPAREN); }
-		public mapTemplateRefContext(ParserRuleContext<Token> parent, int state) {
+		public MapTemplateRefContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
-		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).mapTemplateRefEnter(this);
+		public void enterRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterMapTemplateRef(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).mapTemplateRefExit(this);
+		public void exitRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitMapTemplateRef(this);
 		}
 		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
-		    if ( visitor instanceof TemplateParserVisitor ) return ((TemplateParserVisitor<T>)visitor).mapTemplateRefVisit(this);
-		    else return null;
+		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
+			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitMapTemplateRef(this);
+			else return null;
 		}
 	}
 
-	public final mapTemplateRefContext mapTemplateRef() throws RecognitionException {
-		mapTemplateRefContext _localctx = new mapTemplateRefContext(_ctx, 68);
+	public final MapTemplateRefContext mapTemplateRef() throws RecognitionException {
+		MapTemplateRefContext _localctx = new MapTemplateRefContext(_ctx, 68);
 		enterRule(_localctx, RULE_mapTemplateRef);
 		try {
 			setState(557);
@@ -2456,40 +2469,40 @@ public class TemplateParser extends Parser {
 		return _localctx;
 	}
 
-	public static class memberExprContext extends ParserRuleContext<Token> {
+	public static class MemberExprContext extends ParserRuleContext<Token> {
 		public Token RPAREN() { return getToken(TemplateParser.RPAREN, 0); }
 		public Token DOT(int i) {
 		    return getToken(TemplateParser.DOT, i);
 		}
-		public includeExprContext includeExpr() {
-		    return (includeExprContext)getRuleContext(includeExprContext.class,0);
+		public IncludeExprContext includeExpr() {
+		    return getRuleContext(IncludeExprContext.class,0);
 		}
 		public Token ID() { return getToken(TemplateParser.ID, 0); }
 		public List<? extends Token> DOT() { return getTokens(TemplateParser.DOT); }
-		public mapExprContext mapExpr() {
-		    return (mapExprContext)getRuleContext(mapExprContext.class,0);
+		public MapExprContext mapExpr() {
+		    return getRuleContext(MapExprContext.class,0);
 		}
 		public Token LPAREN() { return getToken(TemplateParser.LPAREN, 0); }
-		public memberExprContext(ParserRuleContext<Token> parent, int state) {
+		public MemberExprContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
-		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).memberExprEnter(this);
+		public void enterRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterMemberExpr(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).memberExprExit(this);
+		public void exitRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitMemberExpr(this);
 		}
 		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
-		    if ( visitor instanceof TemplateParserVisitor ) return ((TemplateParserVisitor<T>)visitor).memberExprVisit(this);
-		    else return null;
+		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
+			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitMemberExpr(this);
+			else return null;
 		}
 	}
 
-	public final memberExprContext memberExpr() throws RecognitionException {
-		memberExprContext _localctx = new memberExprContext(_ctx, 70);
+	public final MemberExprContext memberExpr() throws RecognitionException {
+		MemberExprContext _localctx = new MemberExprContext(_ctx, 70);
 		enterRule(_localctx, RULE_memberExpr);
 		try {
 			enterOuterAlt(_localctx, 1);
@@ -2539,45 +2552,45 @@ public class TemplateParser extends Parser {
 		return _localctx;
 	}
 
-	public static class includeExprContext extends ParserRuleContext<Token> {
+	public static class IncludeExprContext extends ParserRuleContext<Token> {
 		public Token super_;
 		public Token templateName;
-		public argumentsContext args;
+		public ArgumentsContext args;
 		public Token at;
 		public Token regionName;
 		public Token REGION_ID() { return getToken(TemplateParser.REGION_ID, 0); }
 		public Token AT() { return getToken(TemplateParser.AT, 0); }
 		public Token RPAREN() { return getToken(TemplateParser.RPAREN, 0); }
-		public argumentsContext arguments() {
-		    return (argumentsContext)getRuleContext(argumentsContext.class,0);
+		public ArgumentsContext arguments() {
+		    return getRuleContext(ArgumentsContext.class,0);
 		}
 		public Token SUPER() { return getToken(TemplateParser.SUPER, 0); }
-		public primaryContext primary() {
-		    return (primaryContext)getRuleContext(primaryContext.class,0);
+		public PrimaryContext primary() {
+		    return getRuleContext(PrimaryContext.class,0);
 		}
 		public Token ID() { return getToken(TemplateParser.ID, 0); }
 		public Token DOT() { return getToken(TemplateParser.DOT, 0); }
 		public Token LPAREN() { return getToken(TemplateParser.LPAREN, 0); }
-		public includeExprContext(ParserRuleContext<Token> parent, int state) {
+		public IncludeExprContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
-		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).includeExprEnter(this);
+		public void enterRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterIncludeExpr(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).includeExprExit(this);
+		public void exitRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitIncludeExpr(this);
 		}
 		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
-		    if ( visitor instanceof TemplateParserVisitor ) return ((TemplateParserVisitor<T>)visitor).includeExprVisit(this);
-		    else return null;
+		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
+			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitIncludeExpr(this);
+			else return null;
 		}
 	}
 
-	public final includeExprContext includeExpr() throws RecognitionException {
-		includeExprContext _localctx = new includeExprContext(_ctx, 72);
+	public final IncludeExprContext includeExpr() throws RecognitionException {
+		IncludeExprContext _localctx = new IncludeExprContext(_ctx, 72);
 		enterRule(_localctx, RULE_includeExpr);
 		try {
 			setState(618);
@@ -2586,11 +2599,11 @@ public class TemplateParser extends Parser {
 				case 1:
 					enterOuterAlt(_localctx, 1);
 					{
-					setState(578); ((includeExprContext)_localctx).super_ = match(SUPER);
+					setState(578); _localctx.super_ = match(SUPER);
 					setState(580); match(DOT);
-					setState(582); ((includeExprContext)_localctx).templateName = match(ID);
+					setState(582); _localctx.templateName = match(ID);
 					setState(584); match(LPAREN);
-					setState(586); ((includeExprContext)_localctx).args = arguments();
+					setState(586); _localctx.args = arguments();
 					setState(588); match(RPAREN);
 					}
 					break;
@@ -2598,9 +2611,9 @@ public class TemplateParser extends Parser {
 				case 2:
 					enterOuterAlt(_localctx, 2);
 					{
-					setState(590); ((includeExprContext)_localctx).templateName = match(ID);
+					setState(590); _localctx.templateName = match(ID);
 					setState(592); match(LPAREN);
-					setState(594); ((includeExprContext)_localctx).args = arguments();
+					setState(594); _localctx.args = arguments();
 					setState(596); match(RPAREN);
 					}
 					break;
@@ -2608,10 +2621,10 @@ public class TemplateParser extends Parser {
 				case 3:
 					enterOuterAlt(_localctx, 3);
 					{
-					setState(598); ((includeExprContext)_localctx).at = match(AT);
-					setState(600); ((includeExprContext)_localctx).super_ = match(SUPER);
+					setState(598); _localctx.at = match(AT);
+					setState(600); _localctx.super_ = match(SUPER);
 					setState(602); match(DOT);
-					setState(604); ((includeExprContext)_localctx).templateName = match(ID);
+					setState(604); _localctx.templateName = match(ID);
 					setState(606); match(LPAREN);
 					setState(608); match(RPAREN);
 					}
@@ -2620,7 +2633,7 @@ public class TemplateParser extends Parser {
 				case 4:
 					enterOuterAlt(_localctx, 4);
 					{
-					setState(610); ((includeExprContext)_localctx).regionName = match(REGION_ID);
+					setState(610); _localctx.regionName = match(REGION_ID);
 					setState(612); match(LPAREN);
 					setState(614); match(RPAREN);
 					}
@@ -2645,55 +2658,55 @@ public class TemplateParser extends Parser {
 		return _localctx;
 	}
 
-	public static class primaryContext extends ParserRuleContext<Token> {
+	public static class PrimaryContext extends ParserRuleContext<Token> {
 		public Token id;
 		public List<? extends Token> RPAREN() { return getTokens(TemplateParser.RPAREN); }
 		public Token RPAREN(int i) {
 		    return getToken(TemplateParser.RPAREN, i);
 		}
-		public listContext list() {
-		    return (listContext)getRuleContext(listContext.class,0);
+		public ListContext list() {
+		    return getRuleContext(ListContext.class,0);
 		}
-		public exprContext expr() {
-		    return (exprContext)getRuleContext(exprContext.class,0);
+		public ExprContext expr() {
+		    return getRuleContext(ExprContext.class,0);
 		}
-		public argExprListContext argExprList() {
-		    return (argExprListContext)getRuleContext(argExprListContext.class,0);
+		public ArgExprListContext argExprList() {
+		    return getRuleContext(ArgExprListContext.class,0);
 		}
-		public subtemplateContext subtemplate() {
-		    return (subtemplateContext)getRuleContext(subtemplateContext.class,0);
+		public SubtemplateContext subtemplate() {
+		    return getRuleContext(SubtemplateContext.class,0);
 		}
 		public Token LPAREN(int i) {
 		    return getToken(TemplateParser.LPAREN, i);
 		}
 		public Token ID() { return getToken(TemplateParser.ID, 0); }
 		public Token FALSE() { return getToken(TemplateParser.FALSE, 0); }
-		public conditionalContext conditional() {
-		    return (conditionalContext)getRuleContext(conditionalContext.class,0);
+		public ConditionalContext conditional() {
+		    return getRuleContext(ConditionalContext.class,0);
 		}
 		public Token TRUE() { return getToken(TemplateParser.TRUE, 0); }
 		public List<? extends Token> LPAREN() { return getTokens(TemplateParser.LPAREN); }
 		public Token STRING() { return getToken(TemplateParser.STRING, 0); }
-		public primaryContext(ParserRuleContext<Token> parent, int state) {
+		public PrimaryContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
-		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).primaryEnter(this);
+		public void enterRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterPrimary(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).primaryExit(this);
+		public void exitRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitPrimary(this);
 		}
 		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
-		    if ( visitor instanceof TemplateParserVisitor ) return ((TemplateParserVisitor<T>)visitor).primaryVisit(this);
-		    else return null;
+		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
+			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitPrimary(this);
+			else return null;
 		}
 	}
 
-	public final primaryContext primary() throws RecognitionException {
-		primaryContext _localctx = new primaryContext(_ctx, 74);
+	public final PrimaryContext primary() throws RecognitionException {
+		PrimaryContext _localctx = new PrimaryContext(_ctx, 74);
 		enterRule(_localctx, RULE_primary);
 		try {
 			setState(654);
@@ -2702,7 +2715,7 @@ public class TemplateParser extends Parser {
 				case 1:
 					enterOuterAlt(_localctx, 1);
 					{
-					setState(620); ((primaryContext)_localctx).id = match(ID);
+					setState(620); _localctx.id = match(ID);
 					}
 					break;
 
@@ -2790,41 +2803,41 @@ public class TemplateParser extends Parser {
 		return _localctx;
 	}
 
-	public static class argumentsContext extends ParserRuleContext<Token> {
+	public static class ArgumentsContext extends ParserRuleContext<Token> {
 		public Token ELLIPSIS() { return getToken(TemplateParser.ELLIPSIS, 0); }
-		public argExprListContext argExprList() {
-		    return (argExprListContext)getRuleContext(argExprListContext.class,0);
+		public ArgExprListContext argExprList() {
+		    return getRuleContext(ArgExprListContext.class,0);
 		}
 		public Token COMMA(int i) {
 		    return getToken(TemplateParser.COMMA, i);
 		}
-		public namedArgContext namedArg(int i) {
-		    return (namedArgContext)getRuleContext(namedArgContext.class,i);
+		public NamedArgContext namedArg(int i) {
+		    return getRuleContext(NamedArgContext.class,i);
 		}
 		public List<? extends Token> COMMA() { return getTokens(TemplateParser.COMMA); }
-		public List<? extends namedArgContext> namedArg() {
-		    return (List<namedArgContext>)getRuleContexts(namedArgContext.class);
+		public List<? extends NamedArgContext> namedArg() {
+		    return getRuleContexts(NamedArgContext.class);
 		}
-		public argumentsContext(ParserRuleContext<Token> parent, int state) {
+		public ArgumentsContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
-		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).argumentsEnter(this);
+		public void enterRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterArguments(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).argumentsExit(this);
+		public void exitRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitArguments(this);
 		}
 		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
-		    if ( visitor instanceof TemplateParserVisitor ) return ((TemplateParserVisitor<T>)visitor).argumentsVisit(this);
-		    else return null;
+		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
+			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitArguments(this);
+			else return null;
 		}
 	}
 
-	public final argumentsContext arguments() throws RecognitionException {
-		argumentsContext _localctx = new argumentsContext(_ctx, 76);
+	public final ArgumentsContext arguments() throws RecognitionException {
+		ArgumentsContext _localctx = new ArgumentsContext(_ctx, 76);
 		enterRule(_localctx, RULE_arguments);
 		try {
 			setState(679);
@@ -2878,6 +2891,7 @@ public class TemplateParser extends Parser {
 					break;
 
 				case 4:
+					enterOuterAlt(_localctx, 4);
 					{
 					}
 					break;
@@ -2894,34 +2908,34 @@ public class TemplateParser extends Parser {
 		return _localctx;
 	}
 
-	public static class argExprListContext extends ParserRuleContext<Token> {
-		public List<? extends argContext> arg() {
-		    return (List<argContext>)getRuleContexts(argContext.class);
+	public static class ArgExprListContext extends ParserRuleContext<Token> {
+		public List<? extends ArgContext> arg() {
+		    return getRuleContexts(ArgContext.class);
 		}
-		public argContext arg(int i) {
-		    return (argContext)getRuleContext(argContext.class,i);
+		public ArgContext arg(int i) {
+		    return getRuleContext(ArgContext.class,i);
 		}
 		public Token COMMA() { return getToken(TemplateParser.COMMA, 0); }
-		public argExprListContext(ParserRuleContext<Token> parent, int state) {
+		public ArgExprListContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
-		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).argExprListEnter(this);
+		public void enterRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterArgExprList(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).argExprListExit(this);
+		public void exitRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitArgExprList(this);
 		}
 		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
-		    if ( visitor instanceof TemplateParserVisitor ) return ((TemplateParserVisitor<T>)visitor).argExprListVisit(this);
-		    else return null;
+		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
+			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitArgExprList(this);
+			else return null;
 		}
 	}
 
-	public final argExprListContext argExprList() throws RecognitionException {
-		argExprListContext _localctx = new argExprListContext(_ctx, 78);
+	public final ArgExprListContext argExprList() throws RecognitionException {
+		ArgExprListContext _localctx = new ArgExprListContext(_ctx, 78);
 		enterRule(_localctx, RULE_argExprList);
 		try {
 			enterOuterAlt(_localctx, 1);
@@ -2956,30 +2970,30 @@ public class TemplateParser extends Parser {
 		return _localctx;
 	}
 
-	public static class argContext extends ParserRuleContext<Token> {
-		public exprNoCommaContext exprNoComma() {
-		    return (exprNoCommaContext)getRuleContext(exprNoCommaContext.class,0);
+	public static class ArgContext extends ParserRuleContext<Token> {
+		public ExprNoCommaContext exprNoComma() {
+		    return getRuleContext(ExprNoCommaContext.class,0);
 		}
-		public argContext(ParserRuleContext<Token> parent, int state) {
+		public ArgContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
-		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).argEnter(this);
+		public void enterRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterArg(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).argExit(this);
+		public void exitRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitArg(this);
 		}
 		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
-		    if ( visitor instanceof TemplateParserVisitor ) return ((TemplateParserVisitor<T>)visitor).argVisit(this);
-		    else return null;
+		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
+			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitArg(this);
+			else return null;
 		}
 	}
 
-	public final argContext arg() throws RecognitionException {
-		argContext _localctx = new argContext(_ctx, 80);
+	public final ArgContext arg() throws RecognitionException {
+		ArgContext _localctx = new ArgContext(_ctx, 80);
 		enterRule(_localctx, RULE_arg);
 		try {
 			enterOuterAlt(_localctx, 1);
@@ -2998,41 +3012,41 @@ public class TemplateParser extends Parser {
 		return _localctx;
 	}
 
-	public static class namedArgContext extends ParserRuleContext<Token> {
+	public static class NamedArgContext extends ParserRuleContext<Token> {
 		public Token name;
-		public argContext value;
-		public argContext arg() {
-		    return (argContext)getRuleContext(argContext.class,0);
+		public ArgContext value;
+		public ArgContext arg() {
+		    return getRuleContext(ArgContext.class,0);
 		}
 		public Token EQUALS() { return getToken(TemplateParser.EQUALS, 0); }
 		public Token ID() { return getToken(TemplateParser.ID, 0); }
-		public namedArgContext(ParserRuleContext<Token> parent, int state) {
+		public NamedArgContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
-		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).namedArgEnter(this);
+		public void enterRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterNamedArg(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).namedArgExit(this);
+		public void exitRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitNamedArg(this);
 		}
 		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
-		    if ( visitor instanceof TemplateParserVisitor ) return ((TemplateParserVisitor<T>)visitor).namedArgVisit(this);
-		    else return null;
+		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
+			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitNamedArg(this);
+			else return null;
 		}
 	}
 
-	public final namedArgContext namedArg() throws RecognitionException {
-		namedArgContext _localctx = new namedArgContext(_ctx, 82);
+	public final NamedArgContext namedArg() throws RecognitionException {
+		NamedArgContext _localctx = new NamedArgContext(_ctx, 82);
 		enterRule(_localctx, RULE_namedArg);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(694); ((namedArgContext)_localctx).name = match(ID);
+			setState(694); _localctx.name = match(ID);
 			setState(696); match(EQUALS);
-			setState(698); ((namedArgContext)_localctx).value = arg();
+			setState(698); _localctx.value = arg();
 			}
 			_localctx.stop = _input.LT(-1);
 		}
@@ -3046,38 +3060,38 @@ public class TemplateParser extends Parser {
 		return _localctx;
 	}
 
-	public static class listContext extends ParserRuleContext<Token> {
-		public listElementContext listElement;
-		public List<listElementContext> elements = new ArrayList<listElementContext>();
+	public static class ListContext extends ParserRuleContext<Token> {
+		public ListElementContext listElement;
+		public List<ListElementContext> elements = new ArrayList<ListElementContext>();
 		public Token RBRACK() { return getToken(TemplateParser.RBRACK, 0); }
-		public listElementContext listElement(int i) {
-		    return (listElementContext)getRuleContext(listElementContext.class,i);
+		public ListElementContext listElement(int i) {
+		    return getRuleContext(ListElementContext.class,i);
 		}
 		public Token LBRACK() { return getToken(TemplateParser.LBRACK, 0); }
 		public Token COMMA() { return getToken(TemplateParser.COMMA, 0); }
-		public List<? extends listElementContext> listElement() {
-		    return (List<listElementContext>)getRuleContexts(listElementContext.class);
+		public List<? extends ListElementContext> listElement() {
+		    return getRuleContexts(ListElementContext.class);
 		}
-		public listContext(ParserRuleContext<Token> parent, int state) {
+		public ListContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
-		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).listEnter(this);
+		public void enterRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterList(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).listExit(this);
+		public void exitRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitList(this);
 		}
 		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
-		    if ( visitor instanceof TemplateParserVisitor ) return ((TemplateParserVisitor<T>)visitor).listVisit(this);
-		    else return null;
+		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
+			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitList(this);
+			else return null;
 		}
 	}
 
-	public final listContext list() throws RecognitionException {
-		listContext _localctx = new listContext(_ctx, 84);
+	public final ListContext list() throws RecognitionException {
+		ListContext _localctx = new ListContext(_ctx, 84);
 		enterRule(_localctx, RULE_list);
 		try {
 			setState(719);
@@ -3095,8 +3109,8 @@ public class TemplateParser extends Parser {
 					enterOuterAlt(_localctx, 2);
 					{
 					setState(704); match(LBRACK);
-					setState(706); ((listContext)_localctx).listElement = listElement();
-					((listContext)_localctx).elements.add(((listContext)_localctx).listElement);
+					setState(706); _localctx.listElement = listElement();
+					_localctx.elements.add(_localctx.listElement);
 					setState(714);
 					_errHandler.sync(this);
 					int _alt1006 = getInterpreter().adaptivePredict(_input,49,_ctx);
@@ -3105,8 +3119,8 @@ public class TemplateParser extends Parser {
 							{
 							{
 							setState(708); match(COMMA);
-							setState(710); ((listContext)_localctx).listElement = listElement();
-							((listContext)_localctx).elements.add(((listContext)_localctx).listElement);
+							setState(710); _localctx.listElement = listElement();
+							_localctx.elements.add(_localctx.listElement);
 							}
 							} 
 						}
@@ -3130,30 +3144,30 @@ public class TemplateParser extends Parser {
 		return _localctx;
 	}
 
-	public static class listElementContext extends ParserRuleContext<Token> {
-		public exprNoCommaContext exprNoComma() {
-		    return (exprNoCommaContext)getRuleContext(exprNoCommaContext.class,0);
+	public static class ListElementContext extends ParserRuleContext<Token> {
+		public ExprNoCommaContext exprNoComma() {
+		    return getRuleContext(ExprNoCommaContext.class,0);
 		}
-		public listElementContext(ParserRuleContext<Token> parent, int state) {
+		public ListElementContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
 		@Override
-		public void enterRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).listElementEnter(this);
+		public void enterRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterListElement(this);
 		}
 		@Override
-		public void exitRule(ParseTreeListener<Token> listener) {
-			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).listElementExit(this);
+		public void exitRule(ParseTreeListener<? super Token> listener) {
+			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).exitListElement(this);
 		}
 		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) { 
-		    if ( visitor instanceof TemplateParserVisitor ) return ((TemplateParserVisitor<T>)visitor).listElementVisit(this);
-		    else return null;
+		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
+			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitListElement(this);
+			else return null;
 		}
 	}
 
-	public final listElementContext listElement() throws RecognitionException {
-		listElementContext _localctx = new listElementContext(_ctx, 86);
+	public final ListElementContext listElement() throws RecognitionException {
+		ListElementContext _localctx = new ListElementContext(_ctx, 86);
 		enterRule(_localctx, RULE_listElement);
 		try {
 			enterOuterAlt(_localctx, 1);
@@ -3179,13 +3193,6 @@ public class TemplateParser extends Parser {
 		}
 		return _localctx;
 	}
-
-	@Override
-	public String[] getTokenNames() { return tokenNames; }
-	@Override
-	public String[] getRuleNames() { return ruleNames; }
-	@Override
-	public ATN getATN() { return _ATN; }
 
 	public static final String _serializedATN =
 		"\1t\u02d6\2\0\7\0\2\1\7\1\2\2\7\2\2\3\7\3\2\4\7\4\2\5\7\5\2\6\7\6\2\7"+

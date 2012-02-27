@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.WeakHashMap;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenSource;
 import org.antlr.works.editor.antlr4.classification.AbstractTokensTaskTaggerSnapshot;
 import org.antlr.works.editor.antlr4.classification.SimpleLexerState;
@@ -41,7 +42,7 @@ class TemplateTokensTaskTaggerSnapshot extends AbstractTokensTaskTaggerSnapshot<
     }
 
     @Override
-    protected TokenSourceWithStateV4<SimpleLexerState> createLexer(CharStream input, SimpleLexerState startState) {
+    protected TokenSourceWithStateV4<Token, SimpleLexerState> createLexer(CharStream input, SimpleLexerState startState) {
         synchronized (lexerCache) {
             Reference<TemplateLexerWrapper> ref = lexerCache.get(Thread.currentThread());
             TemplateLexerWrapper lexer = ref != null ? ref.get() : null;
@@ -58,7 +59,7 @@ class TemplateTokensTaskTaggerSnapshot extends AbstractTokensTaskTaggerSnapshot<
     }
 
     @Override
-    protected TokenSource getEffectiveTokenSource(TokenSourceWithStateV4<SimpleLexerState> lexer) {
+    protected TokenSource<Token> getEffectiveTokenSource(TokenSourceWithStateV4<Token, SimpleLexerState> lexer) {
         return new TemplateLexerWrapper(lexer.getInputStream());
     }
 
@@ -67,7 +68,7 @@ class TemplateTokensTaskTaggerSnapshot extends AbstractTokensTaskTaggerSnapshot<
         return new TemplateTokensTaskTaggerSnapshot(this, targetSnapshot);
     }
 
-    private static class TemplateLexerWrapper extends TemplateLexer implements TokenSourceWithStateV4<SimpleLexerState> {
+    private static class TemplateLexerWrapper extends TemplateLexer implements TokenSourceWithStateV4<Token, SimpleLexerState> {
 
         public TemplateLexerWrapper(CharStream input) {
             super(input);

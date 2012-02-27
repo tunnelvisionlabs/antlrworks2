@@ -13,17 +13,18 @@ import java.lang.ref.SoftReference;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import org.antlr.v4.runtime.Parser;
+import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenStream;
 
 /**
  *
  * @author Sam Harwell
  */
-public abstract class AbstractParserCache<T extends Parser> {
+public abstract class AbstractParserCache<Symbol extends Token, T extends Parser<Symbol>> {
 
     private final Deque<Reference<T>> parsers = new ArrayDeque<Reference<T>>();
 
-    public T getParser(TokenStream input) {
+    public T getParser(TokenStream<? extends Symbol> input) {
         T parser = null;
         synchronized (parsers) {
             while (parser == null && !parsers.isEmpty()) {
@@ -46,6 +47,6 @@ public abstract class AbstractParserCache<T extends Parser> {
         }
     }
 
-    protected abstract T createParser(TokenStream input);
+    protected abstract T createParser(TokenStream<? extends Symbol> input);
 
 }

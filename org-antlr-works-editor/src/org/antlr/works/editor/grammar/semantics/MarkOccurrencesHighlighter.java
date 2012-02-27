@@ -36,6 +36,7 @@ import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.works.editor.antlr4.semantics.AbstractSemanticHighlighter;
 import org.antlr.works.editor.grammar.GrammarEditorKit;
@@ -272,18 +273,18 @@ public class MarkOccurrencesHighlighter extends AbstractSemanticHighlighter<Curr
         }
 
         @Override
-        public void visitTerminal(ParserRuleContext<Token> ctx, Token symbol) {
+        public void visitTerminal(ParseTree.TerminalNode<? extends Token> node) {
             if (referencedToken == null) {
                 return;
             }
 
-            if (symbol.equals(referencedToken)) {
-                markedOccurrences.add(symbol);
+            if (node.getSymbol().equals(referencedToken)) {
+                markedOccurrences.add(node.getSymbol());
             }
 
-            Token target = annotatedParseTree.getTokenDecorator().getProperty(symbol, GrammarTreeProperties.PROP_TARGET);
+            Token target = annotatedParseTree.getTokenDecorator().getProperty(node.getSymbol(), GrammarTreeProperties.PROP_TARGET);
             if (target != null && target.equals(referencedToken)) {
-                markedOccurrences.add(symbol);
+                markedOccurrences.add(node.getSymbol());
             }
         }
 

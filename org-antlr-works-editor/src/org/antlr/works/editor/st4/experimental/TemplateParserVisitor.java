@@ -11,92 +11,92 @@ package org.antlr.works.editor.st4.experimental;
 import org.antlr.v4.runtime.tree.*;
 import org.antlr.v4.runtime.Token;
 
-public interface TemplateParserVisitor<T> {
-	T memberExprVisit(TemplateParser.memberExprContext ctx);
+public interface TemplateParserVisitor<Symbol extends Token, Result> extends ParseTreeVisitor<Symbol, Result> {
+	Result visitMemberExpr(TemplateParser.MemberExprContext ctx);
 
-	T regionVisit(TemplateParser.regionContext ctx);
+	Result visitRegion(TemplateParser.RegionContext ctx);
 
-	T bigstringTemplateNoNewlineVisit(TemplateParser.bigstringTemplateNoNewlineContext ctx);
+	Result visitBigstringTemplateNoNewline(TemplateParser.BigstringTemplateNoNewlineContext ctx);
 
-	T dictVisit(TemplateParser.dictContext ctx);
+	Result visitDict(TemplateParser.DictContext ctx);
 
-	T dictDefVisit(TemplateParser.dictDefContext ctx);
+	Result visitDictDef(TemplateParser.DictDefContext ctx);
 
-	T groupNameVisit(TemplateParser.groupNameContext ctx);
+	Result visitGroupName(TemplateParser.GroupNameContext ctx);
 
-	T exprVisit(TemplateParser.exprContext ctx);
+	Result visitExpr(TemplateParser.ExprContext ctx);
 
-	T anonymousTemplateVisit(TemplateParser.anonymousTemplateContext ctx);
+	Result visitAnonymousTemplate(TemplateParser.AnonymousTemplateContext ctx);
 
-	T escapeVisit(TemplateParser.escapeContext ctx);
+	Result visitEscape(TemplateParser.EscapeContext ctx);
 
-	T argVisit(TemplateParser.argContext ctx);
+	Result visitArg(TemplateParser.ArgContext ctx);
 
-	T andConditionalVisit(TemplateParser.andConditionalContext ctx);
+	Result visitAndConditional(TemplateParser.AndConditionalContext ctx);
 
-	T defVisit(TemplateParser.defContext ctx);
+	Result visitDef(TemplateParser.DefContext ctx);
 
-	T mapTemplateRefVisit(TemplateParser.mapTemplateRefContext ctx);
+	Result visitMapTemplateRef(TemplateParser.MapTemplateRefContext ctx);
 
-	T templateDefVisit(TemplateParser.templateDefContext ctx);
+	Result visitTemplateDef(TemplateParser.TemplateDefContext ctx);
 
-	T primaryVisit(TemplateParser.primaryContext ctx);
+	Result visitPrimary(TemplateParser.PrimaryContext ctx);
 
-	T exprNoCommaVisit(TemplateParser.exprNoCommaContext ctx);
+	Result visitExprNoComma(TemplateParser.ExprNoCommaContext ctx);
 
-	T bigstringTemplateVisit(TemplateParser.bigstringTemplateContext ctx);
+	Result visitBigstringTemplate(TemplateParser.BigstringTemplateContext ctx);
 
-	T ifstatVisit(TemplateParser.ifstatContext ctx);
+	Result visitIfstat(TemplateParser.IfstatContext ctx);
 
-	T anonymousTemplateParametersVisit(TemplateParser.anonymousTemplateParametersContext ctx);
+	Result visitAnonymousTemplateParameters(TemplateParser.AnonymousTemplateParametersContext ctx);
 
-	T listElementVisit(TemplateParser.listElementContext ctx);
+	Result visitListElement(TemplateParser.ListElementContext ctx);
 
-	T optionVisit(TemplateParser.optionContext ctx);
+	Result visitOption(TemplateParser.OptionContext ctx);
 
-	T stringTemplateVisit(TemplateParser.stringTemplateContext ctx);
+	Result visitStringTemplate(TemplateParser.StringTemplateContext ctx);
 
-	T oldStyleHeaderVisit(TemplateParser.oldStyleHeaderContext ctx);
+	Result visitOldStyleHeader(TemplateParser.OldStyleHeaderContext ctx);
 
-	T delimitersVisit(TemplateParser.delimitersContext ctx);
+	Result visitDelimiters(TemplateParser.DelimitersContext ctx);
 
-	T keyValuePairVisit(TemplateParser.keyValuePairContext ctx);
+	Result visitKeyValuePair(TemplateParser.KeyValuePairContext ctx);
 
-	T mapExprVisit(TemplateParser.mapExprContext ctx);
+	Result visitMapExpr(TemplateParser.MapExprContext ctx);
 
-	T listVisit(TemplateParser.listContext ctx);
+	Result visitList(TemplateParser.ListContext ctx);
 
-	T dictPairsVisit(TemplateParser.dictPairsContext ctx);
+	Result visitDictPairs(TemplateParser.DictPairsContext ctx);
 
-	T formalArgsVisit(TemplateParser.formalArgsContext ctx);
+	Result visitFormalArgs(TemplateParser.FormalArgsContext ctx);
 
-	T exprTagVisit(TemplateParser.exprTagContext ctx);
+	Result visitExprTag(TemplateParser.ExprTagContext ctx);
 
-	T argExprListVisit(TemplateParser.argExprListContext ctx);
+	Result visitArgExprList(TemplateParser.ArgExprListContext ctx);
 
-	T notConditionalVisit(TemplateParser.notConditionalContext ctx);
+	Result visitNotConditional(TemplateParser.NotConditionalContext ctx);
 
-	T subtemplateVisit(TemplateParser.subtemplateContext ctx);
+	Result visitSubtemplate(TemplateParser.SubtemplateContext ctx);
 
-	T argumentsVisit(TemplateParser.argumentsContext ctx);
+	Result visitArguments(TemplateParser.ArgumentsContext ctx);
 
-	T formalArgVisit(TemplateParser.formalArgContext ctx);
+	Result visitFormalArg(TemplateParser.FormalArgContext ctx);
 
-	T includeExprVisit(TemplateParser.includeExprContext ctx);
+	Result visitIncludeExpr(TemplateParser.IncludeExprContext ctx);
 
-	T stringVisit(TemplateParser.stringContext ctx);
+	Result visitString(TemplateParser.StringContext ctx);
 
-	T exprOptionsVisit(TemplateParser.exprOptionsContext ctx);
+	Result visitExprOptions(TemplateParser.ExprOptionsContext ctx);
 
-	T conditionalVisit(TemplateParser.conditionalContext ctx);
+	Result visitConditional(TemplateParser.ConditionalContext ctx);
 
-	T namedArgVisit(TemplateParser.namedArgContext ctx);
+	Result visitNamedArg(TemplateParser.NamedArgContext ctx);
 
-	T groupVisit(TemplateParser.groupContext ctx);
+	Result visitGroup(TemplateParser.GroupContext ctx);
 
-	T templateBodyVisit(TemplateParser.templateBodyContext ctx);
+	Result visitTemplateBody(TemplateParser.TemplateBodyContext ctx);
 
-	T defaultValuePairVisit(TemplateParser.defaultValuePairContext ctx);
+	Result visitDefaultValuePair(TemplateParser.DefaultValuePairContext ctx);
 
-	T keyValueVisit(TemplateParser.keyValueContext ctx);
+	Result visitKeyValue(TemplateParser.KeyValueContext ctx);
 }

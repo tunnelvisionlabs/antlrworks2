@@ -9,6 +9,7 @@
 package org.antlr.works.editor.st4.experimental;
 
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
+import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenStream;
 import org.antlr.works.editor.st4.codemodel.FileModel;
 
@@ -18,11 +19,11 @@ import org.antlr.works.editor.st4.codemodel.FileModel;
  */
 public class CodeModelBuilderListener extends TemplateParserBaseListener {
     private final DocumentSnapshot snapshot;
-    private final TokenStream tokens;
+    private final TokenStream<? extends Token> tokens;
 
     private FileModel fileModel;
 
-    public CodeModelBuilderListener(DocumentSnapshot snapshot, TokenStream tokens) {
+    public CodeModelBuilderListener(DocumentSnapshot snapshot, TokenStream<? extends Token> tokens) {
         this.snapshot = snapshot;
         this.tokens = tokens;
     }

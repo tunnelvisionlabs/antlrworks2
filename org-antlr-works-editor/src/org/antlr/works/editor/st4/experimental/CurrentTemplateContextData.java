@@ -9,7 +9,7 @@
 package org.antlr.works.editor.st4.experimental;
 
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
-import org.antlr.works.editor.st4.experimental.TemplateParser.groupContext;
+import org.antlr.works.editor.st4.experimental.TemplateParser.GroupContext;
 import org.netbeans.api.annotations.common.CheckForNull;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;
@@ -22,9 +22,9 @@ public class CurrentTemplateContextData {
     @NonNull
     private final DocumentSnapshot snapshot;
     @NullAllowed
-    private final groupContext context;
+    private final GroupContext context;
 
-    public CurrentTemplateContextData(@NonNull DocumentSnapshot snapshot, @NullAllowed groupContext context) {
+    public CurrentTemplateContextData(@NonNull DocumentSnapshot snapshot, @NullAllowed GroupContext context) {
         this.snapshot = snapshot;
         this.context = context;
     }
@@ -35,7 +35,7 @@ public class CurrentTemplateContextData {
     }
 
     @CheckForNull
-    public groupContext getContext() {
+    public GroupContext getContext() {
         return context;
     }
 

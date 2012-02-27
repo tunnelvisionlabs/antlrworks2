@@ -30,6 +30,7 @@ import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
 import org.antlr.netbeans.parsing.spi.SingletonParserTaskProvider;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenSource;
 import org.antlr.works.editor.antlr4.classification.DocumentSnapshotCharStream;
 import org.antlr.works.editor.st4.StringTemplateEditorKit;
@@ -66,7 +67,7 @@ public class CurrentTemplateContextParserTask implements ParserTask {
         ParserData<List<Anchor>> anchorsData = result.get();
         List<Anchor> anchors = anchorsData.getData();
 
-        TemplateParser.groupContext ruleContext = null;
+        TemplateParser.GroupContext ruleContext = null;
 
         if (anchors != null) {
             Anchor enclosing = null;
@@ -109,7 +110,7 @@ public class CurrentTemplateContextParserTask implements ParserTask {
 
     private static class TaskTokenStream extends CommonTokenStream {
 
-        public TaskTokenStream(TokenSource tokenSource) {
+        public TaskTokenStream(TokenSource<Token> tokenSource) {
             super(tokenSource);
         }
 

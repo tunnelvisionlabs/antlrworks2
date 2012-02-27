@@ -10,9 +10,9 @@ package org.antlr.works.editor.grammar.experimental;
 
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.v4.runtime.Token;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.lexerRuleContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.parserRuleContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.ruleContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.LexerRuleContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.ParserRuleSpecContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.RuleSpecContext;
 
 /**
  *
@@ -21,9 +21,9 @@ import org.antlr.works.editor.grammar.experimental.GrammarParser.ruleContext;
 public final class CurrentRuleContextData {
     private final DocumentSnapshot snapshot;
     private final int grammarType;
-    private final ruleContext context;
+    private final RuleSpecContext context;
 
-    public CurrentRuleContextData(DocumentSnapshot snapshot, int grammarType, ruleContext context) {
+    public CurrentRuleContextData(DocumentSnapshot snapshot, int grammarType, RuleSpecContext context) {
         this.snapshot = snapshot;
         this.grammarType = grammarType;
         this.context = context;
@@ -37,7 +37,7 @@ public final class CurrentRuleContextData {
         return grammarType;
     }
 
-    public ruleContext getContext() {
+    public RuleSpecContext getContext() {
         return context;
     }
 
@@ -47,10 +47,10 @@ public final class CurrentRuleContextData {
         }
 
         Token nameToken = null;
-        if (context.getChild(0) instanceof parserRuleContext) {
-            nameToken = ((parserRuleContext)context.getChild(0)).name;
-        } else if (context.getChild(0) instanceof lexerRuleContext) {
-            nameToken = ((lexerRuleContext)context.getChild(0)).name;
+        if (context.getChild(0) instanceof ParserRuleSpecContext) {
+            nameToken = ((ParserRuleSpecContext)context.getChild(0)).name;
+        } else if (context.getChild(0) instanceof LexerRuleContext) {
+            nameToken = ((LexerRuleContext)context.getChild(0)).name;
         }
 
         if (nameToken == null) {

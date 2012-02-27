@@ -27,10 +27,10 @@ import org.antlr.v4.runtime.misc.IntervalSet;
  *
  * @author Sam Harwell
  */
-public class CodeCompletionErrorStrategy extends DefaultErrorStrategy {
+public class CodeCompletionErrorStrategy<Symbol extends Token> extends DefaultErrorStrategy<Symbol> {
 
     @Override
-    public void reportError(Parser recognizer, RecognitionException e) throws RecognitionException {
+    public void reportError(Parser<? extends Symbol> recognizer, RecognitionException e) throws RecognitionException {
         if (e != null && e.getOffendingToken() != null && e.getOffendingToken().getType() == CaretToken.CARET_TOKEN_TYPE) {
             return;
         }
@@ -39,7 +39,7 @@ public class CodeCompletionErrorStrategy extends DefaultErrorStrategy {
     }
 
     @Override
-    public void sync(Parser recognizer) {
+    public void sync(Parser<? extends Symbol> recognizer) {
         if (recognizer.getInputStream().LA(1) == CaretToken.CARET_TOKEN_TYPE) {
             return;
         }
@@ -54,7 +54,7 @@ public class CodeCompletionErrorStrategy extends DefaultErrorStrategy {
 
     /** Consume tokens until one matches the given token set */
     @Override
-    public void consumeUntil(Parser recognizer, IntervalSet set) {
+    public void consumeUntil(Parser<? extends Symbol> recognizer, IntervalSet set) {
         //System.out.println("consumeUntil("+set.toString(getTokenNames())+")");
         int ttype = recognizer.getInputStream().LA(1);
         while (ttype != Token.EOF && ttype != CaretToken.CARET_TOKEN_TYPE && !set.contains(ttype) ) {
@@ -66,7 +66,7 @@ public class CodeCompletionErrorStrategy extends DefaultErrorStrategy {
     }
 
     @Override
-    public void recover(Parser recognizer, RecognitionException e) {
+    public void recover(Parser<? extends Symbol> recognizer, RecognitionException e) {
         if (recognizer instanceof CodeCompletionParser
             && ((CodeCompletionParser)recognizer).getInterpreter().getCaretTransitions() != null) {
 
@@ -91,7 +91,7 @@ public class CodeCompletionErrorStrategy extends DefaultErrorStrategy {
     }
 
     @Override
-    public Token recoverInline(Parser recognizer) throws RecognitionException {
+    public <T extends Symbol> T recoverInline(Parser<T> recognizer) throws RecognitionException {
         if (recognizer instanceof CodeCompletionParser
             && recognizer.getInputStream().LT(1) instanceof CaretToken) {
 
@@ -171,7 +171,7 @@ public class CodeCompletionErrorStrategy extends DefaultErrorStrategy {
     }
 
     @Override
-    public boolean singleTokenInsertion(Parser recognizer) {
+    public boolean singleTokenInsertion(Parser<? extends Symbol> recognizer) {
         if (recognizer.getInputStream().LA(1) == CaretToken.CARET_TOKEN_TYPE) {
             return false;
         }
@@ -181,7 +181,7 @@ public class CodeCompletionErrorStrategy extends DefaultErrorStrategy {
     }
 
     @Override
-    public Token singleTokenDeletion(Parser recognizer) {
+    public <T extends Symbol> T singleTokenDeletion(Parser<T> recognizer) {
         if (recognizer.getInputStream().LA(1) == CaretToken.CARET_TOKEN_TYPE) {
             return null;
         }

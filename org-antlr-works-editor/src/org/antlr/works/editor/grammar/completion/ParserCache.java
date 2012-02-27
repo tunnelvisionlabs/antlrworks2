@@ -8,6 +8,7 @@
  */
 package org.antlr.works.editor.grammar.completion;
 
+import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenStream;
 import org.antlr.works.editor.antlr4.completion.AbstractParserCache;
 
@@ -15,10 +16,10 @@ import org.antlr.works.editor.antlr4.completion.AbstractParserCache;
  *
  * @author Sam Harwell
  */
-public class ParserCache extends AbstractParserCache<CodeCompletionGrammarParser> {
+public class ParserCache extends AbstractParserCache<Token, CodeCompletionGrammarParser> {
 
     @Override
-    protected CodeCompletionGrammarParser createParser(TokenStream input) {
+    protected CodeCompletionGrammarParser createParser(TokenStream<? extends Token> input) {
         return new CodeCompletionGrammarParser(input);
     }
 

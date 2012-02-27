@@ -49,8 +49,6 @@ import org.antlr.v4.runtime.atn.WildcardTransition;
 import org.antlr.v4.runtime.misc.IntervalSet;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
-import org.antlr.v4.runtime.tree.Tree;
-import org.antlr.v4.runtime.tree.Trees;
 import org.antlr.works.editor.antlr4.classification.TaggerTokenSource;
 import org.antlr.works.editor.antlr4.completion.AbstractCompletionQuery;
 import org.antlr.works.editor.antlr4.completion.CaretReachedException;
@@ -58,13 +56,14 @@ import org.antlr.works.editor.antlr4.completion.CaretToken;
 import org.antlr.works.editor.antlr4.completion.CodeCompletionErrorStrategy;
 import org.antlr.works.editor.antlr4.completion.CodeCompletionParser;
 import org.antlr.works.editor.antlr4.completion.CodeCompletionTokenSource;
+import org.antlr.works.editor.antlr4.parsing.ParseTrees;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
 import org.antlr.works.editor.grammar.codemodel.AttributeModel;
 import org.antlr.works.editor.grammar.codemodel.FileModel;
 import org.antlr.works.editor.grammar.experimental.GrammarLexer;
 import org.antlr.works.editor.grammar.experimental.GrammarParser;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.actionExpressionContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.actionScopeExpressionContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.ActionExpressionContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.ActionScopeExpressionContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParserAnchorListener;
 import org.netbeans.editor.BaseDocument;
 import org.netbeans.spi.editor.completion.CompletionItem;
@@ -141,7 +140,7 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
 
             boolean possibleInAction;
             boolean definiteInAction;
-            Map<RuleContext, CaretReachedException> parseTrees = null;
+            Map<RuleContext<Token>, CaretReachedException> parseTrees = null;
             CaretToken caretToken = null;
             int grammarType = -1;
 
@@ -212,21 +211,21 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
                         LOGGER.log(Level.FINE, "Code completion from anchor region: {0}.", region);
                     }
 
-                    TaggerTokenSource taggerTokenSource = new TaggerTokenSource(tagger, new SnapshotPositionRegion(snapshot, region));
+                    TaggerTokenSource<Token> taggerTokenSource = new TaggerTokenSource<Token>(tagger, new SnapshotPositionRegion(snapshot, region));
 
 //                        CharStream input = new DocumentSnapshotCharStream(snapshot);
 //                        input.seek(enclosing.getSpan().getStartPosition(snapshot).getOffset());
 //                        GrammarLexer lexer = new GrammarLexer(input);
-                    TokenSource tokenSource = new CodeCompletionTokenSource(getCaretOffset(), taggerTokenSource);
+                    TokenSource<Token> tokenSource = new CodeCompletionTokenSource(getCaretOffset(), taggerTokenSource);
                     CommonTokenStream tokens = new CommonTokenStream(tokenSource);
 
                     CodeCompletionGrammarParser parser = parserCache.getParser(tokens);
                     try {
                         parser.setBuildParseTree(true);
-                        parser.setErrorHandler(new CodeCompletionErrorStrategy());
+                        parser.setErrorHandler(new CodeCompletionErrorStrategy<Token>());
 
                         switch (previous.getRule()) {
-                        case GrammarParser.RULE_rule:
+                        case GrammarParser.RULE_ruleSpec:
                             parseTrees = getParseTrees(parser);
                             break;
 
@@ -245,7 +244,7 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
                             possibleReference = false;
 
                             declarationOrReferenceLoop:
-                            for (Map.Entry<RuleContext, CaretReachedException> entry : parseTrees.entrySet()) {
+                            for (Map.Entry<RuleContext<Token>, CaretReachedException> entry : parseTrees.entrySet()) {
                                 CaretReachedException ex = entry.getValue();
                                 if (ex == null || ex.getTransitions() == null) {
                                     continue;
@@ -338,7 +337,7 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
                             remainingKeywords.add(GrammarLexer.TEMPLATE);
                             remainingKeywords.add(GrammarLexer.MODE);
 
-                            for (Map.Entry<RuleContext, CaretReachedException> entry : parseTrees.entrySet()) {
+                            for (Map.Entry<RuleContext<Token>, CaretReachedException> entry : parseTrees.entrySet()) {
                                 CaretReachedException caretReachedException = entry.getValue();
                                 if (caretReachedException == null || caretReachedException.getTransitions() == null) {
                                     continue;
@@ -374,33 +373,33 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
                             boolean fileModelDataFailed = false;
                             boolean inExpression = false;
 
-                            for (Map.Entry<RuleContext, CaretReachedException> entry : parseTrees.entrySet()) {
-                                RuleContext finalContext = entry.getValue() != null ? entry.getValue().getFinalContext() : null;
+                            for (Map.Entry<RuleContext<Token>, CaretReachedException> entry : parseTrees.entrySet()) {
+                                RuleContext<Token> finalContext = entry.getValue() != null ? entry.getValue().getFinalContext() : null;
                                 if (finalContext == null) {
                                     continue;
                                 }
 
-                                ParseTree expressionRoot = null;
-                                if (finalContext instanceof actionScopeExpressionContext
-                                    || finalContext instanceof actionExpressionContext) {
+                                ParseTree<Token> expressionRoot = null;
+                                if (finalContext instanceof ActionScopeExpressionContext
+                                    || finalContext instanceof ActionExpressionContext) {
                                     expressionRoot = finalContext;
                                 }
 
-                                for (Tree tree : Trees.getAncestors(finalContext)) {
-                                    if (tree instanceof actionScopeExpressionContext
-                                        || tree instanceof actionExpressionContext) {
-                                        expressionRoot = (ParseTree)tree;
+                                for (ParseTree<Token> tree : ParseTrees.getAncestors(finalContext)) {
+                                    if (tree instanceof ActionScopeExpressionContext
+                                        || tree instanceof ActionExpressionContext) {
+                                        expressionRoot = tree;
                                     }
                                 }
 
                                 if (expressionRoot == null) {
                                     continue;
-                                } else if (expressionRoot instanceof actionScopeExpressionContext) {
-                                    if (((actionScopeExpressionContext)expressionRoot).op == null) {
+                                } else if (expressionRoot instanceof ActionScopeExpressionContext) {
+                                    if (((ActionScopeExpressionContext)expressionRoot).op == null) {
                                         continue;
                                     }
-                                } else if (expressionRoot instanceof actionExpressionContext) {
-                                    if (((actionExpressionContext)expressionRoot).op == null) {
+                                } else if (expressionRoot instanceof ActionExpressionContext) {
+                                    if (((ActionExpressionContext)expressionRoot).op == null) {
                                         continue;
                                     }
                                 }
@@ -431,9 +430,9 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
                                 }
                             }
 
-                            for (Map.Entry<RuleContext, CaretReachedException> entry : parseTrees.entrySet()) {
-                                ParseTree parseTree = entry.getKey();
-                                RuleContext finalContext = entry.getValue() != null ? entry.getValue().getFinalContext() : null;
+                            for (Map.Entry<RuleContext<Token>, CaretReachedException> entry : parseTrees.entrySet()) {
+                                ParseTree<Token> parseTree = entry.getKey();
+                                RuleContext<Token> finalContext = entry.getValue() != null ? entry.getValue().getFinalContext() : null;
                                 LabelAnalyzer labelAnalyzer = new LabelAnalyzer(finalContext);
                                 ParseTreeWalker.DEFAULT.walk(labelAnalyzer, parseTree);
 
@@ -581,7 +580,7 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
         }
 
         @Override
-        protected RuleContext parseImpl(CodeCompletionParser parser) {
+        protected RuleContext<Token> parseImpl(CodeCompletionParser parser) {
             return ((CodeCompletionGrammarParser)parser).rules();
         }
 

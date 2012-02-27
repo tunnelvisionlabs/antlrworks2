@@ -9,6 +9,7 @@
 package org.antlr.works.editor.grammar.completion;
 
 import org.antlr.v4.runtime.Parser;
+import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.atn.ATN;
 import org.antlr.v4.runtime.misc.IntervalSet;
 import org.antlr.works.editor.antlr4.completion.AbstractCompletionParserATNSimulator;
@@ -21,7 +22,7 @@ import org.netbeans.api.annotations.common.NonNull;
  */
 public class CompletionParserATNSimulator extends AbstractCompletionParserATNSimulator {
 
-    public CompletionParserATNSimulator(@NonNull Parser parser, ATN atn) {
+    public CompletionParserATNSimulator(@NonNull Parser<Token> parser, ATN atn) {
         super(parser, atn);
         disable_global_context = true;
     }

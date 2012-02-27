@@ -8,6 +8,7 @@
  */
 package org.antlr.works.editor.antlr4.parsing;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -44,7 +45,7 @@ public final class ParseTrees {
         if (stopSymbol.getType() != Token.EOF) {
             stopIndex = stopSymbol.getStopIndex();
         } else {
-            TokenSource tokenSource = context.getStart().getTokenSource();
+            TokenSource<?> tokenSource = context.getStart().getTokenSource();
             CharStream inputStream = tokenSource != null ? tokenSource.getInputStream() : null;
             if (inputStream != null) {
                 stopIndex = inputStream.size() - 1;
@@ -57,7 +58,7 @@ public final class ParseTrees {
         return new Interval(startIndex, stopIndex);
     }
 
-    public static <T> T getStopSymbol(@NonNull ParserRuleContext<? extends T> context) {
+    public static <T extends Token> T getStopSymbol(@NonNull ParserRuleContext<T> context) {
         Parameters.notNull("context", context);
         if (context.stop != null) {
             return context.stop;
@@ -65,7 +66,7 @@ public final class ParseTrees {
 
         for (int i = context.getChildCount() - 1; i >= 0; i--) {
             @SuppressWarnings("unchecked")
-            T symbol = (T)getStopSymbol(context.getChild(i));
+            T symbol = getStopSymbol(context.getChild(i));
             if (symbol != null) {
                 return symbol;
             }
@@ -74,13 +75,13 @@ public final class ParseTrees {
         return context.start;
     }
 
-    public static Object getStopSymbol(@NonNull ParseTree context) {
+    public static <Symbol extends Token> Symbol getStopSymbol(@NonNull ParseTree<Symbol> context) {
         Parameters.notNull("context", context);
 
         if (context instanceof ParserRuleContext<?>) {
-            return getStopSymbol((ParserRuleContext<?>)context);
+            return getStopSymbol((ParserRuleContext<Symbol>)context);
         } else if (context instanceof TerminalNode<?>) {
-            return ((TerminalNode<?>)context).getSymbol();
+            return ((TerminalNode<Symbol>)context).getSymbol();
         }
 
         return null;
@@ -111,11 +112,11 @@ public final class ParseTrees {
         return true;
     }
 
-    public static boolean isInAnyContext(Parser parser, RuleContext context, IntervalSet values) {
+    public static <T extends Token> boolean isInAnyContext(Parser<T> parser, RuleContext<T> context, IntervalSet values) {
         return isInAnyContext(parser, context, values, true);
     }
 
-    public static boolean isInAnyContext(Parser parser, RuleContext context, IntervalSet values, boolean checkTop) {
+    public static <T extends Token> boolean isInAnyContext(Parser<T> parser, RuleContext<T> context, IntervalSet values, boolean checkTop) {
         return findTopContext(parser, context, values, checkTop) != null;
     }
 
@@ -127,11 +128,11 @@ public final class ParseTrees {
         return findTopContext(context, values, checkTop) != null;
     }
 
-    public static RuleContext findTopContext(Parser parser, RuleContext context, IntervalSet values) {
+    public static <T extends Token> RuleContext<T> findTopContext(Parser<T> parser, RuleContext<T> context, IntervalSet values) {
         return findTopContext(parser, context, values, true);
     }
 
-    public static RuleContext findTopContext(Parser parser, RuleContext context, IntervalSet values, boolean checkTop) {
+    public static <T extends Token> RuleContext<T> findTopContext(Parser<T> parser, RuleContext<T> context, IntervalSet values, boolean checkTop) {
         if (checkTop && context instanceof ParserRuleContext<?>) {
             if (values.contains(((ParserRuleContext<?>)context).ruleIndex)) {
                 return context;
@@ -149,11 +150,11 @@ public final class ParseTrees {
         return findTopContext(parser, context.parent, values, false);
     }
 
-    public static ParserRuleContext<?> findTopContext(ParserRuleContext<?> context, IntervalSet values) {
+    public static <T extends Token> ParserRuleContext<T> findTopContext(ParserRuleContext<T> context, IntervalSet values) {
         return findTopContext(context, values, true);
     }
 
-    public static ParserRuleContext<?> findTopContext(ParserRuleContext<?> context, IntervalSet values, boolean checkTop) {
+    public static <T extends Token> ParserRuleContext<T> findTopContext(ParserRuleContext<T> context, IntervalSet values, boolean checkTop) {
         if (checkTop && values.contains(context.ruleIndex)) {
             return context;
         }
@@ -162,16 +163,16 @@ public final class ParseTrees {
             return null;
         }
 
-        return findTopContext((ParserRuleContext<?>)context.parent, values, true);
+        return findTopContext((ParserRuleContext<T>)context.parent, values, true);
     }
 
-    public static TerminalNode<?> findTerminalNode(Collection<? extends ParseTree> children, Object symbol) {
-        for (Object element : children) {
+    public static <Symbol> TerminalNode<Symbol> findTerminalNode(Collection<? extends ParseTree<Symbol>> children, Symbol symbol) {
+        for (ParseTree<Symbol> element : children) {
             if (!(element instanceof TerminalNode<?>)) {
                 continue;
             }
 
-            TerminalNode<?> node = (TerminalNode<?>)element;
+            TerminalNode<Symbol> node = (TerminalNode<Symbol>)element;
             if (node.getSymbol() == symbol) {
                 return node;
             }
@@ -180,7 +181,7 @@ public final class ParseTrees {
         return null;
     }
 
-    public static int getInvokingRule(ATN atn, RuleContext context) {
+    public static int getInvokingRule(ATN atn, RuleContext<?> context) {
         int invokingState = context.invokingState;
         if (invokingState < 0 || invokingState >= atn.states.size()) {
             return -1;
@@ -189,12 +190,31 @@ public final class ParseTrees {
         return atn.states.get(invokingState).ruleIndex;
     }
 
-    public static <T> List<? extends T> emptyIfNull(@NullAllowed List<? extends T> list) {
+    public static <T> List<T> emptyIfNull(@NullAllowed List<T> list) {
         if (list == null) {
             return Collections.emptyList();
         }
 
         return list;
+    }
+
+    /** Return a list of all ancestors of this node.  The first node of
+     *  list is the root and the last is the parent of this node.
+     */
+    @NonNull
+    public static <T> List<? extends ParseTree<T>> getAncestors(@NonNull ParseTree<T> t) {
+        if ( t.getParent()==null ) {
+            return Collections.emptyList();
+        }
+
+        List<ParseTree<T>> ancestors = new ArrayList<ParseTree<T>>();
+        t = t.getParent();
+        while ( t!=null ) {
+            ancestors.add(0, t); // insert at start
+            t = t.getParent();
+        }
+
+        return ancestors;
     }
 
     private ParseTrees() {

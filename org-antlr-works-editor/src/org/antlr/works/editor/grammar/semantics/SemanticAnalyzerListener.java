@@ -15,79 +15,81 @@ import java.util.Map;
 import org.antlr.netbeans.semantics.ObjectDecorator;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.ParseTree.ErrorNode;
 import org.antlr.v4.runtime.tree.Tree;
 import org.antlr.works.editor.grammar.experimental.GrammarParser;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.actionBlockContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.actionContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.actionExpressionContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.actionScopeExpressionContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.actionScopeNameContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.altListContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.alternativeContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.argActionBlockContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.argActionParameterContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.argActionParameterTypeContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.argActionParameterTypePartContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.argActionParametersContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.atomContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.blockContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.blockSetContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.blockSuffixContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.delegateGrammarContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.delegateGrammarsContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.ebnfContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.ebnfSuffixContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.elementContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.elementOptionContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.elementOptionsContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.elementsContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.exceptionGroupContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.exceptionHandlerContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.finallyClauseContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.grammarSpecContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.grammarTypeContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.idContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.ignoredContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.labeledAltContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.labeledElementContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.labeledLexerElementContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.lexerActionContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.lexerActionExprContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.lexerActionsContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.lexerAltContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.lexerAltListContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.lexerAtomContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.lexerBlockContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.lexerElementContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.lexerElementsContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.lexerRuleBlockContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.lexerRuleContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.localsSpecContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.modeSpecContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.notSetContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.optionContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.optionValueContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.optionsSpecContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.parserRuleContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.prequelConstructContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.qidContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.rangeContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.ruleActionContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.ruleAltListContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.ruleBlockContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.ruleContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.ruleModifierContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.ruleModifiersContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.rulePrequelContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.rulePrequelsContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.ruleReturnsContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.rulerefContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.rulesContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.setElementContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.terminalContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.throwsSpecContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.tokenSpecContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.tokensSpecContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.ActionBlockContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.ActionContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.ActionExpressionContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.ActionScopeExpressionContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.ActionScopeNameContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.AltListContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.AlternativeContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.ArgActionBlockContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.ArgActionParameterContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.ArgActionParameterTypeContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.ArgActionParameterTypePartContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.ArgActionParametersContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.AtomContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.BlockContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.BlockSetContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.BlockSuffixContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.DelegateGrammarContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.DelegateGrammarsContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.EbnfContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.EbnfSuffixContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.ElementContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.ElementOptionContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.ElementOptionsContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.ElementsContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.ExceptionGroupContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.ExceptionHandlerContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.FinallyClauseContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.GrammarSpecContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.GrammarTypeContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.IdContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.IgnoredContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.LabeledAltContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.LabeledElementContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.LabeledLexerElementContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.LexerActionContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.LexerActionExprContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.LexerActionsContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.LexerAltContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.LexerAltListContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.LexerAtomContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.LexerBlockContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.LexerElementContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.LexerElementsContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.LexerRuleBlockContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.LexerRuleContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.LocalsSpecContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.ModeSpecContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.NotSetContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.OptionContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.OptionValueContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.OptionsSpecContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.ParserRuleSpecContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.PrequelConstructContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.QidContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.RangeContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.RuleActionContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.RuleAltListContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.RuleBlockContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.RuleSpecContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.RuleModifierContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.RuleModifiersContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.RulePrequelContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.RulePrequelsContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.RuleReturnsContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.RulerefContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.RulesContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.SetElementContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.TerminalContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.ThrowsSpecContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.TokenSpecContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.TokensSpecContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParserListener;
 import org.netbeans.api.annotations.common.NonNull;
 import org.openide.util.Parameters;
@@ -113,13 +115,15 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
     }
 
     @Override
-    public void visitTerminal(ParserRuleContext<Token> ctx, Token symbol) {
-        NodeType nodeType = treeDecorator.getProperty(ctx, GrammarTreeProperties.PROP_NODE_TYPE);
+    public void visitTerminal(ParseTree.TerminalNode<? extends Token> node) {
+        NodeType nodeType = treeDecorator.getProperty(node.getParent(), GrammarTreeProperties.PROP_NODE_TYPE);
 
+        Token symbol = node.getSymbol();
+        int RuleIndex = node.getParent().getRuleContext().getRuleIndex();
         switch (symbol.getType()) {
         case GrammarParser.RULE_REF:
-            switch (ctx.ruleIndex) {
-            case GrammarParser.RULE_parserRule:
+            switch (RuleIndex) {
+            case GrammarParser.RULE_parserRuleSpec:
                 nodeType = NodeType.RULE_DECL;
                 declaredRules.put(symbol.getText(), symbol);
                 break;
@@ -132,7 +136,7 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
             break;
 
         case GrammarParser.TOKEN_REF:
-            switch (ctx.ruleIndex) {
+            switch (RuleIndex) {
             case GrammarParser.RULE_lexerRule:
                 nodeType = NodeType.TOKEN_DECL;
                 declaredRules.put(symbol.getText(), symbol);
@@ -152,326 +156,331 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
     }
 
     @Override
-    public void enterEveryRule(ParserRuleContext<Token> ctx) {
+    public void visitErrorNode(ErrorNode<? extends Token> node) {
+        visitTerminal(node);
     }
 
     @Override
-    public void exitEveryRule(ParserRuleContext<Token> ctx) {
+    public void enterEveryRule(ParserRuleContext<? extends Token> ctx) {
     }
 
     @Override
-    public void parserRuleEnter(parserRuleContext ctx) {
+    public void exitEveryRule(ParserRuleContext<? extends Token> ctx) {
     }
 
     @Override
-    public void parserRuleExit(parserRuleContext ctx) {
+    public void enterParserRuleSpec(ParserRuleSpecContext ctx) {
     }
 
     @Override
-    public void atomEnter(atomContext ctx) {
+    public void exitParserRuleSpec(ParserRuleSpecContext ctx) {
     }
 
     @Override
-    public void atomExit(atomContext ctx) {
+    public void enterAtom(AtomContext ctx) {
     }
 
     @Override
-    public void rulePrequelsEnter(rulePrequelsContext ctx) {
+    public void exitAtom(AtomContext ctx) {
     }
 
     @Override
-    public void rulePrequelsExit(rulePrequelsContext ctx) {
+    public void enterRulePrequels(RulePrequelsContext ctx) {
     }
 
     @Override
-    public void ruleBlockEnter(ruleBlockContext ctx) {
+    public void exitRulePrequels(RulePrequelsContext ctx) {
     }
 
     @Override
-    public void ruleBlockExit(ruleBlockContext ctx) {
+    public void enterRuleBlock(RuleBlockContext ctx) {
     }
 
     @Override
-    public void notSetEnter(notSetContext ctx) {
+    public void exitRuleBlock(RuleBlockContext ctx) {
     }
 
     @Override
-    public void notSetExit(notSetContext ctx) {
+    public void enterNotSet(NotSetContext ctx) {
     }
 
     @Override
-    public void lexerAltListEnter(lexerAltListContext ctx) {
+    public void exitNotSet(NotSetContext ctx) {
     }
 
     @Override
-    public void lexerAltListExit(lexerAltListContext ctx) {
+    public void enterLexerAltList(LexerAltListContext ctx) {
     }
 
     @Override
-    public void argActionParameterEnter(argActionParameterContext ctx) {
+    public void exitLexerAltList(LexerAltListContext ctx) {
     }
 
     @Override
-    public void argActionParameterExit(argActionParameterContext ctx) {
+    public void enterArgActionParameter(ArgActionParameterContext ctx) {
     }
 
     @Override
-    public void ruleModifierEnter(ruleModifierContext ctx) {
+    public void exitArgActionParameter(ArgActionParameterContext ctx) {
     }
 
     @Override
-    public void ruleModifierExit(ruleModifierContext ctx) {
+    public void enterRuleModifier(RuleModifierContext ctx) {
     }
 
     @Override
-    public void ruleAltListEnter(ruleAltListContext ctx) {
+    public void exitRuleModifier(RuleModifierContext ctx) {
     }
 
     @Override
-    public void ruleAltListExit(ruleAltListContext ctx) {
+    public void enterRuleAltList(RuleAltListContext ctx) {
     }
 
     @Override
-    public void terminalEnter(terminalContext ctx) {
+    public void exitRuleAltList(RuleAltListContext ctx) {
     }
 
     @Override
-    public void terminalExit(terminalContext ctx) {
+    public void enterTerminal(TerminalContext ctx) {
     }
 
     @Override
-    public void throwsSpecEnter(throwsSpecContext ctx) {
+    public void exitTerminal(TerminalContext ctx) {
     }
 
     @Override
-    public void throwsSpecExit(throwsSpecContext ctx) {
+    public void enterThrowsSpec(ThrowsSpecContext ctx) {
     }
 
     @Override
-    public void actionEnter(actionContext ctx) {
+    public void exitThrowsSpec(ThrowsSpecContext ctx) {
     }
 
     @Override
-    public void actionExit(actionContext ctx) {
+    public void enterAction(ActionContext ctx) {
     }
 
     @Override
-    public void actionScopeExpressionEnter(actionScopeExpressionContext ctx) {
+    public void exitAction(ActionContext ctx) {
     }
 
     @Override
-    public void actionScopeExpressionExit(actionScopeExpressionContext ctx) {
+    public void enterActionScopeExpression(ActionScopeExpressionContext ctx) {
     }
 
     @Override
-    public void localsSpecEnter(localsSpecContext ctx) {
+    public void exitActionScopeExpression(ActionScopeExpressionContext ctx) {
     }
 
     @Override
-    public void localsSpecExit(localsSpecContext ctx) {
+    public void enterLocalsSpec(LocalsSpecContext ctx) {
     }
 
     @Override
-    public void modeSpecEnter(modeSpecContext ctx) {
+    public void exitLocalsSpec(LocalsSpecContext ctx) {
     }
 
     @Override
-    public void modeSpecExit(modeSpecContext ctx) {
+    public void enterModeSpec(ModeSpecContext ctx) {
     }
 
     @Override
-    public void elementsEnter(elementsContext ctx) {
+    public void exitModeSpec(ModeSpecContext ctx) {
     }
 
     @Override
-    public void elementsExit(elementsContext ctx) {
+    public void enterElements(ElementsContext ctx) {
     }
 
     @Override
-    public void optionEnter(optionContext ctx) {
+    public void exitElements(ElementsContext ctx) {
     }
 
     @Override
-    public void optionExit(optionContext ctx) {
+    public void enterOption(OptionContext ctx) {
     }
 
     @Override
-    public void elementEnter(elementContext ctx) {
+    public void exitOption(OptionContext ctx) {
     }
 
     @Override
-    public void elementExit(elementContext ctx) {
+    public void enterElement(ElementContext ctx) {
     }
 
     @Override
-    public void elementOptionsEnter(elementOptionsContext ctx) {
+    public void exitElement(ElementContext ctx) {
     }
 
     @Override
-    public void elementOptionsExit(elementOptionsContext ctx) {
+    public void enterElementOptions(ElementOptionsContext ctx) {
     }
 
     @Override
-    public void lexerElementEnter(lexerElementContext ctx) {
+    public void exitElementOptions(ElementOptionsContext ctx) {
     }
 
     @Override
-    public void lexerElementExit(lexerElementContext ctx) {
+    public void enterLexerElement(LexerElementContext ctx) {
     }
 
     @Override
-    public void alternativeEnter(alternativeContext ctx) {
+    public void exitLexerElement(LexerElementContext ctx) {
     }
 
     @Override
-    public void alternativeExit(alternativeContext ctx) {
+    public void enterAlternative(AlternativeContext ctx) {
     }
 
     @Override
-    public void lexerActionExprEnter(lexerActionExprContext ctx) {
+    public void exitAlternative(AlternativeContext ctx) {
     }
 
     @Override
-    public void lexerActionExprExit(lexerActionExprContext ctx) {
+    public void enterLexerActionExpr(LexerActionExprContext ctx) {
     }
 
     @Override
-    public void grammarTypeEnter(grammarTypeContext ctx) {
+    public void exitLexerActionExpr(LexerActionExprContext ctx) {
     }
 
     @Override
-    public void grammarTypeExit(grammarTypeContext ctx) {
+    public void enterGrammarType(GrammarTypeContext ctx) {
     }
 
     @Override
-    public void ruleActionEnter(ruleActionContext ctx) {
+    public void exitGrammarType(GrammarTypeContext ctx) {
     }
 
     @Override
-    public void ruleActionExit(ruleActionContext ctx) {
+    public void enterRuleAction(RuleActionContext ctx) {
     }
 
     @Override
-    public void ebnfSuffixEnter(ebnfSuffixContext ctx) {
+    public void exitRuleAction(RuleActionContext ctx) {
     }
 
     @Override
-    public void ebnfSuffixExit(ebnfSuffixContext ctx) {
+    public void enterEbnfSuffix(EbnfSuffixContext ctx) {
     }
 
     @Override
-    public void exceptionGroupEnter(exceptionGroupContext ctx) {
+    public void exitEbnfSuffix(EbnfSuffixContext ctx) {
     }
 
     @Override
-    public void exceptionGroupExit(exceptionGroupContext ctx) {
+    public void enterExceptionGroup(ExceptionGroupContext ctx) {
     }
 
     @Override
-    public void rulePrequelEnter(rulePrequelContext ctx) {
+    public void exitExceptionGroup(ExceptionGroupContext ctx) {
     }
 
     @Override
-    public void rulePrequelExit(rulePrequelContext ctx) {
+    public void enterRulePrequel(RulePrequelContext ctx) {
     }
 
     @Override
-    public void lexerBlockEnter(lexerBlockContext ctx) {
+    public void exitRulePrequel(RulePrequelContext ctx) {
     }
 
     @Override
-    public void lexerBlockExit(lexerBlockContext ctx) {
+    public void enterLexerBlock(LexerBlockContext ctx) {
     }
 
     @Override
-    public void setElementEnter(setElementContext ctx) {
+    public void exitLexerBlock(LexerBlockContext ctx) {
     }
 
     @Override
-    public void setElementExit(setElementContext ctx) {
+    public void enterSetElement(SetElementContext ctx) {
     }
 
     @Override
-    public void blockSetEnter(blockSetContext ctx) {
+    public void exitSetElement(SetElementContext ctx) {
     }
 
     @Override
-    public void blockSetExit(blockSetContext ctx) {
+    public void enterBlockSet(BlockSetContext ctx) {
     }
 
     @Override
-    public void actionScopeNameEnter(actionScopeNameContext ctx) {
+    public void exitBlockSet(BlockSetContext ctx) {
     }
 
     @Override
-    public void actionScopeNameExit(actionScopeNameContext ctx) {
+    public void enterActionScopeName(ActionScopeNameContext ctx) {
     }
 
     @Override
-    public void labeledAltEnter(labeledAltContext ctx) {
-        if (ctx.getChildCount() == 3 && ctx.getChild(2) instanceof idContext) {
+    public void exitActionScopeName(ActionScopeNameContext ctx) {
+    }
+
+    @Override
+    public void enterLabeledAlt(LabeledAltContext ctx) {
+        if (ctx.getChildCount() == 3 && ctx.getChild(2) instanceof IdContext) {
             treeDecorator.putProperty(ctx, GrammarTreeProperties.PROP_NODE_TYPE, NodeType.ALT_LABEL);
         }
     }
 
     @Override
-    public void labeledAltExit(labeledAltContext ctx) {
+    public void exitLabeledAlt(LabeledAltContext ctx) {
     }
 
     @Override
-    public void argActionParameterTypeEnter(argActionParameterTypeContext ctx) {
+    public void enterArgActionParameterType(ArgActionParameterTypeContext ctx) {
     }
 
     @Override
-    public void argActionParameterTypeExit(argActionParameterTypeContext ctx) {
+    public void exitArgActionParameterType(ArgActionParameterTypeContext ctx) {
     }
 
     @Override
-    public void lexerAtomEnter(lexerAtomContext ctx) {
+    public void enterLexerAtom(LexerAtomContext ctx) {
     }
 
     @Override
-    public void lexerAtomExit(lexerAtomContext ctx) {
+    public void exitLexerAtom(LexerAtomContext ctx) {
     }
 
     @Override
-    public void labeledElementEnter(labeledElementContext ctx) {
+    public void enterLabeledElement(LabeledElementContext ctx) {
     }
 
     @Override
-    public void labeledElementExit(labeledElementContext ctx) {
+    public void exitLabeledElement(LabeledElementContext ctx) {
     }
 
     @Override
-    public void lexerRuleBlockEnter(lexerRuleBlockContext ctx) {
+    public void enterLexerRuleBlock(LexerRuleBlockContext ctx) {
     }
 
     @Override
-    public void lexerRuleBlockExit(lexerRuleBlockContext ctx) {
+    public void exitLexerRuleBlock(LexerRuleBlockContext ctx) {
     }
 
     @Override
-    public void finallyClauseEnter(finallyClauseContext ctx) {
+    public void enterFinallyClause(FinallyClauseContext ctx) {
     }
 
     @Override
-    public void finallyClauseExit(finallyClauseContext ctx) {
+    public void exitFinallyClause(FinallyClauseContext ctx) {
     }
 
     @Override
-    public void ignoredEnter(ignoredContext ctx) {
+    public void enterIgnored(IgnoredContext ctx) {
     }
 
     @Override
-    public void ignoredExit(ignoredContext ctx) {
+    public void exitIgnored(IgnoredContext ctx) {
     }
 
     @Override
-    public void grammarSpecEnter(grammarSpecContext ctx) {
+    public void enterGrammarSpec(GrammarSpecContext ctx) {
     }
 
     @Override
-    public void grammarSpecExit(grammarSpecContext ctx) {
+    public void exitGrammarSpec(GrammarSpecContext ctx) {
         for (Token token : unresolvedReferences) {
             String text = token.getText();
             if (text == null || text.isEmpty()) {
@@ -486,64 +495,64 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
     }
 
     @Override
-    public void delegateGrammarEnter(delegateGrammarContext ctx) {
+    public void enterDelegateGrammar(DelegateGrammarContext ctx) {
     }
 
     @Override
-    public void delegateGrammarExit(delegateGrammarContext ctx) {
+    public void exitDelegateGrammar(DelegateGrammarContext ctx) {
     }
 
     @Override
-    public void lexerElementsEnter(lexerElementsContext ctx) {
+    public void enterLexerElements(LexerElementsContext ctx) {
     }
 
     @Override
-    public void lexerElementsExit(lexerElementsContext ctx) {
+    public void exitLexerElements(LexerElementsContext ctx) {
     }
 
     @Override
-    public void rangeEnter(rangeContext ctx) {
+    public void enterRange(RangeContext ctx) {
     }
 
     @Override
-    public void rangeExit(rangeContext ctx) {
+    public void exitRange(RangeContext ctx) {
     }
 
     @Override
-    public void tokenSpecEnter(tokenSpecContext ctx) {
+    public void enterTokenSpec(TokenSpecContext ctx) {
     }
 
     @Override
-    public void tokenSpecExit(tokenSpecContext ctx) {
+    public void exitTokenSpec(TokenSpecContext ctx) {
     }
 
     @Override
-    public void blockEnter(blockContext ctx) {
+    public void enterBlock(BlockContext ctx) {
     }
 
     @Override
-    public void blockExit(blockContext ctx) {
+    public void exitBlock(BlockContext ctx) {
     }
 
     @Override
-    public void argActionParameterTypePartEnter(argActionParameterTypePartContext ctx) {
+    public void enterArgActionParameterTypePart(ArgActionParameterTypePartContext ctx) {
     }
 
     @Override
-    public void argActionParameterTypePartExit(argActionParameterTypePartContext ctx) {
+    public void exitArgActionParameterTypePart(ArgActionParameterTypePartContext ctx) {
     }
 
     @Override
-    public void lexerRuleEnter(lexerRuleContext ctx) {
+    public void enterLexerRule(LexerRuleContext ctx) {
     }
 
     @Override
-    public void lexerRuleExit(lexerRuleContext ctx) {
+    public void exitLexerRule(LexerRuleContext ctx) {
     }
 
     @Override
-    public void labeledLexerElementEnter(labeledLexerElementContext ctx) {
-        if (ctx.getChildCount() == 0 || !(ctx.getChild(0) instanceof idContext)) {
+    public void enterLabeledLexerElement(LabeledLexerElementContext ctx) {
+        if (ctx.getChildCount() == 0 || !(ctx.getChild(0) instanceof IdContext)) {
             return;
         }
 
@@ -551,43 +560,43 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
     }
 
     @Override
-    public void labeledLexerElementExit(labeledLexerElementContext ctx) {
+    public void exitLabeledLexerElement(LabeledLexerElementContext ctx) {
     }
 
     @Override
-    public void delegateGrammarsEnter(delegateGrammarsContext ctx) {
+    public void enterDelegateGrammars(DelegateGrammarsContext ctx) {
     }
 
     @Override
-    public void delegateGrammarsExit(delegateGrammarsContext ctx) {
+    public void exitDelegateGrammars(DelegateGrammarsContext ctx) {
     }
 
     @Override
-    public void actionExpressionEnter(actionExpressionContext ctx) {
+    public void enterActionExpression(ActionExpressionContext ctx) {
     }
 
     @Override
-    public void actionExpressionExit(actionExpressionContext ctx) {
+    public void exitActionExpression(ActionExpressionContext ctx) {
     }
 
     @Override
-    public void rulerefEnter(rulerefContext ctx) {
+    public void enterRuleref(RulerefContext ctx) {
     }
 
     @Override
-    public void rulerefExit(rulerefContext ctx) {
+    public void exitRuleref(RulerefContext ctx) {
     }
 
     @Override
-    public void blockSuffixEnter(blockSuffixContext ctx) {
+    public void enterBlockSuffix(BlockSuffixContext ctx) {
     }
 
     @Override
-    public void blockSuffixExit(blockSuffixContext ctx) {
+    public void exitBlockSuffix(BlockSuffixContext ctx) {
     }
 
     @Override
-    public void idEnter(idContext ctx) {
+    public void enterId(IdContext ctx) {
         if (ctx.start != null && ctx.parent instanceof ParserRuleContext<?>) {
 
             int caller = ((ParserRuleContext<?>)ctx.parent).ruleIndex;
@@ -605,132 +614,132 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
     }
 
     @Override
-    public void idExit(idContext ctx) {
+    public void exitId(IdContext ctx) {
     }
 
     @Override
-    public void actionBlockEnter(actionBlockContext ctx) {
+    public void enterActionBlock(ActionBlockContext ctx) {
     }
 
     @Override
-    public void actionBlockExit(actionBlockContext ctx) {
+    public void exitActionBlock(ActionBlockContext ctx) {
     }
 
     @Override
-    public void elementOptionEnter(elementOptionContext ctx) {
+    public void enterElementOption(ElementOptionContext ctx) {
     }
 
     @Override
-    public void elementOptionExit(elementOptionContext ctx) {
+    public void exitElementOption(ElementOptionContext ctx) {
     }
 
     @Override
-    public void ruleEnter(ruleContext ctx) {
+    public void enterRuleSpec(RuleSpecContext ctx) {
     }
 
     @Override
-    public void ruleExit(ruleContext ctx) {
+    public void exitRuleSpec(RuleSpecContext ctx) {
     }
 
     @Override
-    public void exceptionHandlerEnter(exceptionHandlerContext ctx) {
+    public void enterExceptionHandler(ExceptionHandlerContext ctx) {
     }
 
     @Override
-    public void exceptionHandlerExit(exceptionHandlerContext ctx) {
+    public void exitExceptionHandler(ExceptionHandlerContext ctx) {
     }
 
     @Override
-    public void tokensSpecEnter(tokensSpecContext ctx) {
+    public void enterTokensSpec(TokensSpecContext ctx) {
     }
 
     @Override
-    public void tokensSpecExit(tokensSpecContext ctx) {
+    public void exitTokensSpec(TokensSpecContext ctx) {
     }
 
     @Override
-    public void ruleReturnsEnter(ruleReturnsContext ctx) {
+    public void enterRuleReturns(RuleReturnsContext ctx) {
     }
 
     @Override
-    public void ruleReturnsExit(ruleReturnsContext ctx) {
+    public void exitRuleReturns(RuleReturnsContext ctx) {
     }
 
     @Override
-    public void qidEnter(qidContext ctx) {
+    public void enterQid(QidContext ctx) {
     }
 
     @Override
-    public void qidExit(qidContext ctx) {
+    public void exitQid(QidContext ctx) {
     }
 
     @Override
-    public void optionsSpecEnter(optionsSpecContext ctx) {
+    public void enterOptionsSpec(OptionsSpecContext ctx) {
     }
 
     @Override
-    public void optionsSpecExit(optionsSpecContext ctx) {
+    public void exitOptionsSpec(OptionsSpecContext ctx) {
     }
 
     @Override
-    public void altListEnter(altListContext ctx) {
+    public void enterAltList(AltListContext ctx) {
     }
 
     @Override
-    public void altListExit(altListContext ctx) {
+    public void exitAltList(AltListContext ctx) {
     }
 
     @Override
-    public void prequelConstructEnter(prequelConstructContext ctx) {
+    public void enterPrequelConstruct(PrequelConstructContext ctx) {
     }
 
     @Override
-    public void prequelConstructExit(prequelConstructContext ctx) {
+    public void exitPrequelConstruct(PrequelConstructContext ctx) {
     }
 
     @Override
-    public void rulesEnter(rulesContext ctx) {
+    public void enterRules(RulesContext ctx) {
     }
 
     @Override
-    public void rulesExit(rulesContext ctx) {
+    public void exitRules(RulesContext ctx) {
     }
 
     @Override
-    public void lexerActionsEnter(lexerActionsContext ctx) {
+    public void enterLexerActions(LexerActionsContext ctx) {
     }
 
     @Override
-    public void lexerActionsExit(lexerActionsContext ctx) {
+    public void exitLexerActions(LexerActionsContext ctx) {
     }
 
     @Override
-    public void optionValueEnter(optionValueContext ctx) {
+    public void enterOptionValue(OptionValueContext ctx) {
     }
 
     @Override
-    public void optionValueExit(optionValueContext ctx) {
+    public void exitOptionValue(OptionValueContext ctx) {
     }
 
     @Override
-    public void lexerAltEnter(lexerAltContext ctx) {
+    public void enterLexerAlt(LexerAltContext ctx) {
     }
 
     @Override
-    public void lexerAltExit(lexerAltContext ctx) {
+    public void exitLexerAlt(LexerAltContext ctx) {
     }
 
     @Override
-    public void argActionBlockEnter(argActionBlockContext ctx) {
+    public void enterArgActionBlock(ArgActionBlockContext ctx) {
     }
 
     @Override
-    public void argActionBlockExit(argActionBlockContext ctx) {
+    public void exitArgActionBlock(ArgActionBlockContext ctx) {
     }
 
     @Override
-    public void lexerActionEnter(lexerActionContext ctx) {
-        if (ctx.getChildCount() == 0 || !(ctx.getChild(0) instanceof idContext)) {
+    public void enterLexerAction(LexerActionContext ctx) {
+        if (ctx.getChildCount() == 0 || !(ctx.getChild(0) instanceof IdContext)) {
             return;
         }
 
@@ -738,31 +747,31 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
     }
 
     @Override
-    public void lexerActionExit(lexerActionContext ctx) {
+    public void exitLexerAction(LexerActionContext ctx) {
     }
 
     @Override
-    public void ruleModifiersEnter(ruleModifiersContext ctx) {
+    public void enterRuleModifiers(RuleModifiersContext ctx) {
     }
 
     @Override
-    public void ruleModifiersExit(ruleModifiersContext ctx) {
+    public void exitRuleModifiers(RuleModifiersContext ctx) {
     }
 
     @Override
-    public void argActionParametersEnter(argActionParametersContext ctx) {
+    public void enterArgActionParameters(ArgActionParametersContext ctx) {
     }
 
     @Override
-    public void argActionParametersExit(argActionParametersContext ctx) {
+    public void exitArgActionParameters(ArgActionParametersContext ctx) {
     }
 
     @Override
-    public void ebnfEnter(ebnfContext ctx) {
+    public void enterEbnf(EbnfContext ctx) {
     }
 
     @Override
-    public void ebnfExit(ebnfContext ctx) {
+    public void exitEbnf(EbnfContext ctx) {
     }
 
 }

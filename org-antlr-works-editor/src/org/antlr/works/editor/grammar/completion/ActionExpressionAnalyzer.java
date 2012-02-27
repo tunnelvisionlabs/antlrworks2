@@ -16,12 +16,12 @@ import org.antlr.works.editor.grammar.codemodel.AttributeModel;
 import org.antlr.works.editor.grammar.codemodel.FileModel;
 import org.antlr.works.editor.grammar.codemodel.LabelModel;
 import org.antlr.works.editor.grammar.codemodel.RuleModel;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.ActionExpressionContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.ActionScopeExpressionContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.LexerRuleContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.ParserRuleSpecContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.RuleSpecContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParserBaseListener;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.actionExpressionContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.actionScopeExpressionContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.lexerRuleContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.parserRuleContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.ruleContext;
 import org.netbeans.api.annotations.common.NonNull;
 import org.openide.util.Parameters;
 
@@ -31,10 +31,10 @@ import org.openide.util.Parameters;
  */
 public class ActionExpressionAnalyzer extends GrammarParserBaseListener {
     private final FileModel fileModel;
-    private final RuleContext finalContext;
+    private final RuleContext<?> finalContext;
     private final List<AttributeModel> members = new ArrayList<AttributeModel>();
 
-    public ActionExpressionAnalyzer(@NonNull FileModel fileModel, @NonNull RuleContext finalContext) {
+    public ActionExpressionAnalyzer(@NonNull FileModel fileModel, @NonNull RuleContext<?> finalContext) {
         Parameters.notNull("fileModel", fileModel);
         Parameters.notNull("finalContext", finalContext);
 
@@ -47,13 +47,13 @@ public class ActionExpressionAnalyzer extends GrammarParserBaseListener {
     }
 
     @Override
-    public void actionScopeExpressionEnter(actionScopeExpressionContext ctx) {
+    public void enterActionScopeExpression(ActionScopeExpressionContext ctx) {
         if (ctx.op != null && ctx.member == null) {
             /* action scope expressions are only used for rule references
              *   $ruleName::
              */
 
-            ruleContext enclosingRule = getEnclosingRuleContext(ctx);
+            RuleSpecContext enclosingRule = getEnclosingRuleContext(ctx);
             RuleModel referencedRule = getReferencedRule(enclosingRule, ctx.ref, false);
             if (referencedRule != null) {
                 // for a scope reference, we can reference the parameters, locals, return values, and labels
@@ -66,14 +66,14 @@ public class ActionExpressionAnalyzer extends GrammarParserBaseListener {
     }
 
     @Override
-    public void actionExpressionEnter(actionExpressionContext ctx) {
+    public void enterActionExpression(ActionExpressionContext ctx) {
         if (ctx.op != null && ctx.member == null) {
             /* action expressions are used for label references (explicit or implicit)
              *   $elementName. (implicit label reference)
              *   $labelName.   (explicit label reference)
              */
 
-            ruleContext enclosingRule = getEnclosingRuleContext(ctx);
+            RuleSpecContext enclosingRule = getEnclosingRuleContext(ctx);
             RuleModel referencedRule = getReferencedRule(enclosingRule, ctx.ref, true);
             if (referencedRule != null) {
                 // for a regular reference, we can reference the return values and labels
@@ -88,16 +88,17 @@ public class ActionExpressionAnalyzer extends GrammarParserBaseListener {
         }
     }
 
-    private Token getName(ruleContext rule) {
-        if (rule.getChild(0) instanceof parserRuleContext) {
-            return ((parserRuleContext)rule.getChild(0)).name;
-        } else if (rule.getChild(0) instanceof lexerRuleContext) {
-            return ((lexerRuleContext)rule.getChild(0)).name;
+    private Token getName(RuleSpecContext rule) {
+        if (rule.getChild(0) instanceof ParserRuleSpecContext) {
+            return ((ParserRuleSpecContext)rule.getChild(0)).name;
+        } else if (rule.getChild(0) instanceof LexerRuleContext) {
+            return ((LexerRuleContext)rule.getChild(0)).name;
         } else {
             return null;
         }
     }
-    private RuleModel getReferencedRule(ruleContext enclosingRule, Token reference, boolean followLabels) {
+
+    private RuleModel getReferencedRule(RuleSpecContext enclosingRule, Token reference, boolean followLabels) {
         String enclosingRuleName = getName(enclosingRule).getText();
         RuleModel ruleModel = fileModel.getRule(enclosingRuleName);
         RuleModel referencedRule = null;
@@ -120,10 +121,10 @@ public class ActionExpressionAnalyzer extends GrammarParserBaseListener {
         return referencedRule;
     }
 
-    private static ruleContext getEnclosingRuleContext(RuleContext context) {
+    private static RuleSpecContext getEnclosingRuleContext(RuleContext<?> context) {
         while (context != null) {
-            if (context instanceof ruleContext) {
-                return (ruleContext)context;
+            if (context instanceof RuleSpecContext) {
+                return (RuleSpecContext)context;
             }
 
             context = context.parent;

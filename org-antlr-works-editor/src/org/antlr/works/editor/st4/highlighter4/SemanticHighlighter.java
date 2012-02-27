@@ -25,16 +25,16 @@ import org.antlr.works.editor.antlr4.semantics.AbstractParseTreeSemanticHighligh
 import org.antlr.works.editor.antlr4.semantics.AbstractSemanticHighlighter;
 import org.antlr.works.editor.st4.StringTemplateEditorKit;
 import org.antlr.works.editor.st4.TemplateParserDataDefinitions;
+import org.antlr.works.editor.st4.experimental.TemplateParser.AnonymousTemplateContext;
+import org.antlr.works.editor.st4.experimental.TemplateParser.AnonymousTemplateParametersContext;
+import org.antlr.works.editor.st4.experimental.TemplateParser.DictDefContext;
+import org.antlr.works.editor.st4.experimental.TemplateParser.FormalArgContext;
+import org.antlr.works.editor.st4.experimental.TemplateParser.GroupContext;
+import org.antlr.works.editor.st4.experimental.TemplateParser.IncludeExprContext;
+import org.antlr.works.editor.st4.experimental.TemplateParser.OptionContext;
+import org.antlr.works.editor.st4.experimental.TemplateParser.PrimaryContext;
+import org.antlr.works.editor.st4.experimental.TemplateParser.TemplateDefContext;
 import org.antlr.works.editor.st4.experimental.TemplateParserBaseListener;
-import org.antlr.works.editor.st4.experimental.TemplateParser.anonymousTemplateContext;
-import org.antlr.works.editor.st4.experimental.TemplateParser.anonymousTemplateParametersContext;
-import org.antlr.works.editor.st4.experimental.TemplateParser.dictDefContext;
-import org.antlr.works.editor.st4.experimental.TemplateParser.formalArgContext;
-import org.antlr.works.editor.st4.experimental.TemplateParser.groupContext;
-import org.antlr.works.editor.st4.experimental.TemplateParser.includeExprContext;
-import org.antlr.works.editor.st4.experimental.TemplateParser.optionContext;
-import org.antlr.works.editor.st4.experimental.TemplateParser.primaryContext;
-import org.antlr.works.editor.st4.experimental.TemplateParser.templateDefContext;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.editor.mimelookup.MimeLookup;
 import org.netbeans.api.editor.mimelookup.MimePath;
@@ -84,7 +84,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
     }
 
     @Override
-    protected ParseTree getParseTree(ParserData<? extends ParserRuleContext<Token>> parserData) {
+    protected ParseTree<Token> getParseTree(ParserData<? extends ParserRuleContext<Token>> parserData) {
         return parserData.getData();
     }
 
@@ -174,14 +174,14 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
         }
 
         @Override
-        public void dictDefEnter(dictDefContext ctx) {
+        public void enterDictDef(DictDefContext ctx) {
             if (ctx.name != null) {
                 dictionaryDeclarations.add(ctx.name);
             }
         }
 
         @Override
-        public void templateDefEnter(templateDefContext ctx) {
+        public void enterTemplateDef(TemplateDefContext ctx) {
             parameters.push(new HashSet<String>());
 
             if (ctx.name != null) {
@@ -203,12 +203,12 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
         }
 
         @Override
-        public void templateDefExit(templateDefContext ctx) {
+        public void exitTemplateDef(TemplateDefContext ctx) {
             parameters.pop();
         }
 
         @Override
-        public void formalArgEnter(formalArgContext ctx) {
+        public void enterFormalArg(FormalArgContext ctx) {
             if (ctx.name != null) {
                 parameterDeclarations.add(ctx.name);
 
@@ -218,17 +218,17 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
         }
 
         @Override
-        public void anonymousTemplateEnter(anonymousTemplateContext ctx) {
+        public void enterAnonymousTemplate(AnonymousTemplateContext ctx) {
             parameters.push(new HashSet<String>());
         }
 
         @Override
-        public void anonymousTemplateExit(anonymousTemplateContext ctx) {
+        public void exitAnonymousTemplate(AnonymousTemplateContext ctx) {
             parameters.pop();
         }
 
         @Override
-        public void anonymousTemplateParametersEnter(anonymousTemplateParametersContext ctx) {
+        public void enterAnonymousTemplateParameters(AnonymousTemplateParametersContext ctx) {
             if (ctx.names != null) {
                 parameterDeclarations.addAll(ctx.names);
 
@@ -240,14 +240,14 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
         }
 
         @Override
-        public void optionEnter(optionContext ctx) {
+        public void enterOption(OptionContext ctx) {
             if (ctx.name != null) {
                 options.add(ctx.name);
             }
         }
 
         @Override
-        public void includeExprEnter(includeExprContext ctx) {
+        public void enterIncludeExpr(IncludeExprContext ctx) {
             if (ctx.templateName != null) {
                 if (ctx.at != null) {
                     regionUses.add(ctx.templateName);
@@ -262,7 +262,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
         }
 
         @Override
-        public void primaryEnter(primaryContext ctx) {
+        public void enterPrimary(PrimaryContext ctx) {
             if (ctx.id != null) {
                 Set<String> currentParameters = parameters.isEmpty() ? null : parameters.peek();
                 if (currentParameters != null && currentParameters.contains(ctx.id.getText())) {
@@ -274,7 +274,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
         }
 
         @Override
-        public void groupExit(groupContext ctx) {
+        public void exitGroup(GroupContext ctx) {
         }
     }
 

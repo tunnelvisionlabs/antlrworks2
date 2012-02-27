@@ -10,147 +10,148 @@ package org.antlr.works.editor.grammar.experimental;
 
 import org.antlr.v4.runtime.tree.*;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.ParserRuleContext;
 
-public class GrammarParserBaseVisitor<T> extends ParseTreeVisitor<T> implements GrammarParserVisitor<T> {
-	@Override public T parserRuleVisit(GrammarParser.parserRuleContext ctx) { visitChildren(ctx); return null; }
+public class GrammarParserBaseVisitor<Result> extends AbstractParseTreeVisitor<Token, Result> implements GrammarParserVisitor<Token, Result> {
+	@Override public Result visitRuleSpec(GrammarParser.RuleSpecContext ctx) { return visitChildren(ctx); }
 
-	@Override public T atomVisit(GrammarParser.atomContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitAtom(GrammarParser.AtomContext ctx) { return visitChildren(ctx); }
 
-	@Override public T rulePrequelsVisit(GrammarParser.rulePrequelsContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitRulePrequels(GrammarParser.RulePrequelsContext ctx) { return visitChildren(ctx); }
 
-	@Override public T ruleBlockVisit(GrammarParser.ruleBlockContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitRuleBlock(GrammarParser.RuleBlockContext ctx) { return visitChildren(ctx); }
 
-	@Override public T notSetVisit(GrammarParser.notSetContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitNotSet(GrammarParser.NotSetContext ctx) { return visitChildren(ctx); }
 
-	@Override public T lexerAltListVisit(GrammarParser.lexerAltListContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitLexerAltList(GrammarParser.LexerAltListContext ctx) { return visitChildren(ctx); }
 
-	@Override public T argActionParameterVisit(GrammarParser.argActionParameterContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitArgActionParameter(GrammarParser.ArgActionParameterContext ctx) { return visitChildren(ctx); }
 
-	@Override public T ruleModifierVisit(GrammarParser.ruleModifierContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitRuleModifier(GrammarParser.RuleModifierContext ctx) { return visitChildren(ctx); }
 
-	@Override public T ruleAltListVisit(GrammarParser.ruleAltListContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitRuleAltList(GrammarParser.RuleAltListContext ctx) { return visitChildren(ctx); }
 
-	@Override public T terminalVisit(GrammarParser.terminalContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitTerminal(GrammarParser.TerminalContext ctx) { return visitChildren(ctx); }
 
-	@Override public T throwsSpecVisit(GrammarParser.throwsSpecContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitThrowsSpec(GrammarParser.ThrowsSpecContext ctx) { return visitChildren(ctx); }
 
-	@Override public T actionVisit(GrammarParser.actionContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitAction(GrammarParser.ActionContext ctx) { return visitChildren(ctx); }
 
-	@Override public T actionScopeExpressionVisit(GrammarParser.actionScopeExpressionContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitActionScopeExpression(GrammarParser.ActionScopeExpressionContext ctx) { return visitChildren(ctx); }
 
-	@Override public T localsSpecVisit(GrammarParser.localsSpecContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitLocalsSpec(GrammarParser.LocalsSpecContext ctx) { return visitChildren(ctx); }
 
-	@Override public T modeSpecVisit(GrammarParser.modeSpecContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitModeSpec(GrammarParser.ModeSpecContext ctx) { return visitChildren(ctx); }
 
-	@Override public T elementsVisit(GrammarParser.elementsContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitElements(GrammarParser.ElementsContext ctx) { return visitChildren(ctx); }
 
-	@Override public T optionVisit(GrammarParser.optionContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitOption(GrammarParser.OptionContext ctx) { return visitChildren(ctx); }
 
-	@Override public T elementVisit(GrammarParser.elementContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitElement(GrammarParser.ElementContext ctx) { return visitChildren(ctx); }
 
-	@Override public T elementOptionsVisit(GrammarParser.elementOptionsContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitElementOptions(GrammarParser.ElementOptionsContext ctx) { return visitChildren(ctx); }
 
-	@Override public T lexerElementVisit(GrammarParser.lexerElementContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitLexerElement(GrammarParser.LexerElementContext ctx) { return visitChildren(ctx); }
 
-	@Override public T alternativeVisit(GrammarParser.alternativeContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitAlternative(GrammarParser.AlternativeContext ctx) { return visitChildren(ctx); }
 
-	@Override public T lexerActionExprVisit(GrammarParser.lexerActionExprContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitParserRuleSpec(GrammarParser.ParserRuleSpecContext ctx) { return visitChildren(ctx); }
 
-	@Override public T grammarTypeVisit(GrammarParser.grammarTypeContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitLexerActionExpr(GrammarParser.LexerActionExprContext ctx) { return visitChildren(ctx); }
 
-	@Override public T ruleActionVisit(GrammarParser.ruleActionContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitGrammarType(GrammarParser.GrammarTypeContext ctx) { return visitChildren(ctx); }
 
-	@Override public T ebnfSuffixVisit(GrammarParser.ebnfSuffixContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitRuleAction(GrammarParser.RuleActionContext ctx) { return visitChildren(ctx); }
 
-	@Override public T exceptionGroupVisit(GrammarParser.exceptionGroupContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitEbnfSuffix(GrammarParser.EbnfSuffixContext ctx) { return visitChildren(ctx); }
 
-	@Override public T rulePrequelVisit(GrammarParser.rulePrequelContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitExceptionGroup(GrammarParser.ExceptionGroupContext ctx) { return visitChildren(ctx); }
 
-	@Override public T lexerBlockVisit(GrammarParser.lexerBlockContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitRulePrequel(GrammarParser.RulePrequelContext ctx) { return visitChildren(ctx); }
 
-	@Override public T setElementVisit(GrammarParser.setElementContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitLexerBlock(GrammarParser.LexerBlockContext ctx) { return visitChildren(ctx); }
 
-	@Override public T blockSetVisit(GrammarParser.blockSetContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitSetElement(GrammarParser.SetElementContext ctx) { return visitChildren(ctx); }
 
-	@Override public T actionScopeNameVisit(GrammarParser.actionScopeNameContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitBlockSet(GrammarParser.BlockSetContext ctx) { return visitChildren(ctx); }
 
-	@Override public T labeledAltVisit(GrammarParser.labeledAltContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitActionScopeName(GrammarParser.ActionScopeNameContext ctx) { return visitChildren(ctx); }
 
-	@Override public T argActionParameterTypeVisit(GrammarParser.argActionParameterTypeContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitLabeledAlt(GrammarParser.LabeledAltContext ctx) { return visitChildren(ctx); }
 
-	@Override public T lexerAtomVisit(GrammarParser.lexerAtomContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitArgActionParameterType(GrammarParser.ArgActionParameterTypeContext ctx) { return visitChildren(ctx); }
 
-	@Override public T labeledElementVisit(GrammarParser.labeledElementContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitLexerAtom(GrammarParser.LexerAtomContext ctx) { return visitChildren(ctx); }
 
-	@Override public T lexerRuleBlockVisit(GrammarParser.lexerRuleBlockContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitLabeledElement(GrammarParser.LabeledElementContext ctx) { return visitChildren(ctx); }
 
-	@Override public T finallyClauseVisit(GrammarParser.finallyClauseContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitLexerRuleBlock(GrammarParser.LexerRuleBlockContext ctx) { return visitChildren(ctx); }
 
-	@Override public T ignoredVisit(GrammarParser.ignoredContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitFinallyClause(GrammarParser.FinallyClauseContext ctx) { return visitChildren(ctx); }
 
-	@Override public T grammarSpecVisit(GrammarParser.grammarSpecContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitIgnored(GrammarParser.IgnoredContext ctx) { return visitChildren(ctx); }
 
-	@Override public T delegateGrammarVisit(GrammarParser.delegateGrammarContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitGrammarSpec(GrammarParser.GrammarSpecContext ctx) { return visitChildren(ctx); }
 
-	@Override public T lexerElementsVisit(GrammarParser.lexerElementsContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitDelegateGrammar(GrammarParser.DelegateGrammarContext ctx) { return visitChildren(ctx); }
 
-	@Override public T rangeVisit(GrammarParser.rangeContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitLexerElements(GrammarParser.LexerElementsContext ctx) { return visitChildren(ctx); }
 
-	@Override public T tokenSpecVisit(GrammarParser.tokenSpecContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitRange(GrammarParser.RangeContext ctx) { return visitChildren(ctx); }
 
-	@Override public T blockVisit(GrammarParser.blockContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitTokenSpec(GrammarParser.TokenSpecContext ctx) { return visitChildren(ctx); }
 
-	@Override public T argActionParameterTypePartVisit(GrammarParser.argActionParameterTypePartContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitBlock(GrammarParser.BlockContext ctx) { return visitChildren(ctx); }
 
-	@Override public T lexerRuleVisit(GrammarParser.lexerRuleContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitArgActionParameterTypePart(GrammarParser.ArgActionParameterTypePartContext ctx) { return visitChildren(ctx); }
 
-	@Override public T labeledLexerElementVisit(GrammarParser.labeledLexerElementContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitLexerRule(GrammarParser.LexerRuleContext ctx) { return visitChildren(ctx); }
 
-	@Override public T delegateGrammarsVisit(GrammarParser.delegateGrammarsContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitLabeledLexerElement(GrammarParser.LabeledLexerElementContext ctx) { return visitChildren(ctx); }
 
-	@Override public T actionExpressionVisit(GrammarParser.actionExpressionContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitDelegateGrammars(GrammarParser.DelegateGrammarsContext ctx) { return visitChildren(ctx); }
 
-	@Override public T rulerefVisit(GrammarParser.rulerefContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitActionExpression(GrammarParser.ActionExpressionContext ctx) { return visitChildren(ctx); }
 
-	@Override public T blockSuffixVisit(GrammarParser.blockSuffixContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitRuleref(GrammarParser.RulerefContext ctx) { return visitChildren(ctx); }
 
-	@Override public T idVisit(GrammarParser.idContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitBlockSuffix(GrammarParser.BlockSuffixContext ctx) { return visitChildren(ctx); }
 
-	@Override public T actionBlockVisit(GrammarParser.actionBlockContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitId(GrammarParser.IdContext ctx) { return visitChildren(ctx); }
 
-	@Override public T elementOptionVisit(GrammarParser.elementOptionContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitActionBlock(GrammarParser.ActionBlockContext ctx) { return visitChildren(ctx); }
 
-	@Override public T ruleVisit(GrammarParser.ruleContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitElementOption(GrammarParser.ElementOptionContext ctx) { return visitChildren(ctx); }
 
-	@Override public T exceptionHandlerVisit(GrammarParser.exceptionHandlerContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitExceptionHandler(GrammarParser.ExceptionHandlerContext ctx) { return visitChildren(ctx); }
 
-	@Override public T tokensSpecVisit(GrammarParser.tokensSpecContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitTokensSpec(GrammarParser.TokensSpecContext ctx) { return visitChildren(ctx); }
 
-	@Override public T ruleReturnsVisit(GrammarParser.ruleReturnsContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitRuleReturns(GrammarParser.RuleReturnsContext ctx) { return visitChildren(ctx); }
 
-	@Override public T qidVisit(GrammarParser.qidContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitQid(GrammarParser.QidContext ctx) { return visitChildren(ctx); }
 
-	@Override public T optionsSpecVisit(GrammarParser.optionsSpecContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitOptionsSpec(GrammarParser.OptionsSpecContext ctx) { return visitChildren(ctx); }
 
-	@Override public T altListVisit(GrammarParser.altListContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitAltList(GrammarParser.AltListContext ctx) { return visitChildren(ctx); }
 
-	@Override public T prequelConstructVisit(GrammarParser.prequelConstructContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitPrequelConstruct(GrammarParser.PrequelConstructContext ctx) { return visitChildren(ctx); }
 
-	@Override public T rulesVisit(GrammarParser.rulesContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitRules(GrammarParser.RulesContext ctx) { return visitChildren(ctx); }
 
-	@Override public T lexerActionsVisit(GrammarParser.lexerActionsContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitLexerActions(GrammarParser.LexerActionsContext ctx) { return visitChildren(ctx); }
 
-	@Override public T optionValueVisit(GrammarParser.optionValueContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitOptionValue(GrammarParser.OptionValueContext ctx) { return visitChildren(ctx); }
 
-	@Override public T lexerAltVisit(GrammarParser.lexerAltContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitLexerAlt(GrammarParser.LexerAltContext ctx) { return visitChildren(ctx); }
 
-	@Override public T argActionBlockVisit(GrammarParser.argActionBlockContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitArgActionBlock(GrammarParser.ArgActionBlockContext ctx) { return visitChildren(ctx); }
 
-	@Override public T lexerActionVisit(GrammarParser.lexerActionContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitLexerAction(GrammarParser.LexerActionContext ctx) { return visitChildren(ctx); }
 
-	@Override public T ruleModifiersVisit(GrammarParser.ruleModifiersContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitRuleModifiers(GrammarParser.RuleModifiersContext ctx) { return visitChildren(ctx); }
 
-	@Override public T argActionParametersVisit(GrammarParser.argActionParametersContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitArgActionParameters(GrammarParser.ArgActionParametersContext ctx) { return visitChildren(ctx); }
 
-	@Override public T ebnfVisit(GrammarParser.ebnfContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitEbnf(GrammarParser.EbnfContext ctx) { return visitChildren(ctx); }
 }

@@ -54,10 +54,10 @@ public abstract class AbstractCompletionParserATNSimulator extends ParserATNSimu
     // state variables used for the custom implementation
     private SymbolStream<? extends Token> _input;
     private int _startIndex;
-    private ParserRuleContext<?> _outerContext;
-    private SimulatorState _nextState;
+    private ParserRuleContext<Token> _outerContext;
+    private SimulatorState<Token> _nextState;
 
-    public AbstractCompletionParserATNSimulator(@NonNull Parser parser, ATN atn) {
+    public AbstractCompletionParserATNSimulator(@NonNull Parser<Token> parser, ATN atn) {
         super(parser, atn);
         Parameters.notNull("parser", parser);
         disable_global_context = true;
@@ -80,7 +80,7 @@ public abstract class AbstractCompletionParserATNSimulator extends ParserATNSimu
     }
 
     @Override
-    public int adaptivePredict(SymbolStream<? extends Token> input, int decision, ParserRuleContext<?> outerContext) {
+    public int adaptivePredict(SymbolStream<? extends Token> input, int decision, ParserRuleContext<Token> outerContext) {
         _input = input;
         _startIndex = input.index();
         _outerContext = outerContext;
@@ -117,9 +117,9 @@ public abstract class AbstractCompletionParserATNSimulator extends ParserATNSimu
     }
 
     @Override
-    protected SimulatorState computeReachSet(DFA dfa, SimulatorState previous, int t, boolean greedy, PredictionContextCache contextCache) {
+    protected SimulatorState<Token> computeReachSet(DFA dfa, SimulatorState<Token> previous, int t, boolean greedy, PredictionContextCache contextCache) {
         final boolean useContext = previous.useContext;
-        RuleContext remainingGlobalContext = previous.remainingOuterContext;
+        RuleContext<Token> remainingGlobalContext = previous.remainingOuterContext;
         List<ATNConfig> closureConfigs = new ArrayList<ATNConfig>(previous.s0.configset);
         List<Integer> contextElements = null;
         ATNConfigSet reach = new ATNConfigSet(!useContext);
@@ -197,7 +197,7 @@ public abstract class AbstractCompletionParserATNSimulator extends ParserATNSimu
         }
 
 // BEGIN CC
-        _nextState = new SimulatorState(previous.outerContext, dfaState, useContext, (ParserRuleContext<?>)remainingGlobalContext);
+        _nextState = new SimulatorState<Token>(previous.outerContext, dfaState, useContext, (ParserRuleContext<Token>)remainingGlobalContext);
         return _nextState;
 // END CC
     }

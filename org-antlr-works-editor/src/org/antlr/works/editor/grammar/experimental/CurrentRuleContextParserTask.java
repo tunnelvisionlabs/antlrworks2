@@ -30,6 +30,7 @@ import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
 import org.antlr.netbeans.parsing.spi.SingletonParserTaskProvider;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenSource;
 import org.antlr.works.editor.antlr4.classification.DocumentSnapshotCharStream;
 import org.antlr.works.editor.grammar.GrammarEditorKit;
@@ -65,7 +66,7 @@ public class CurrentRuleContextParserTask implements ParserTask {
                 ParserData<List<Anchor>> anchorsData = result.get();
                 List<Anchor> anchors = anchorsData.getData();
 
-                GrammarParser.ruleContext ruleContext = null;
+                GrammarParser.RuleSpecContext ruleContext = null;
                 int grammarType = -1;
 
                 if (anchors != null) {
@@ -95,7 +96,7 @@ public class CurrentRuleContextParserTask implements ParserTask {
                         GrammarParser parser = GrammarParserCache.DEFAULT.getParser(tokens);
                         try {
                             parser.setBuildParseTree(true);
-                            ruleContext = parser.rule();
+                            ruleContext = parser.ruleSpec();
                         } finally {
                             GrammarParserCache.DEFAULT.putParser(parser);
                         }
@@ -111,7 +112,7 @@ public class CurrentRuleContextParserTask implements ParserTask {
 
     private class TaskTokenStream extends CommonTokenStream {
 
-        public TaskTokenStream(TokenSource tokenSource) {
+        public TaskTokenStream(TokenSource<? extends Token> tokenSource) {
             super(tokenSource);
         }
 

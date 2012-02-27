@@ -22,9 +22,9 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.works.editor.antlr4.parsing.ParseTrees;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.grammarTypeContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.ruleContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.tokenSpecContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.GrammarTypeContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.RuleSpecContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.TokenSpecContext;
 import org.netbeans.api.annotations.common.NonNull;
 import org.openide.util.Parameters;
 
@@ -69,44 +69,44 @@ public class GrammarParserAnchorListener extends GrammarParserBaseListener {
     }
 
     @Override
-    public void enterEveryRule(ParserRuleContext<Token> ctx) {
+    public void enterEveryRule(ParserRuleContext<? extends Token> ctx) {
         checkCancellation();
         super.enterEveryRule(ctx);
     }
 
     @Override
-    public void exitEveryRule(ParserRuleContext<Token> ctx) {
+    public void exitEveryRule(ParserRuleContext<? extends Token> ctx) {
         checkCancellation();
         super.exitEveryRule(ctx);
     }
 
     @Override
-    public void grammarTypeEnter(grammarTypeContext ctx) {
+    public void enterGrammarType(GrammarTypeContext ctx) {
         enterAnchor(ctx);
     }
 
     @Override
-    public void grammarTypeExit(grammarTypeContext ctx) {
+    public void exitGrammarType(GrammarTypeContext ctx) {
         exitAnchor(ctx, GrammarParser.RULE_grammarType);
     }
 
     @Override
-    public void ruleEnter(ruleContext ctx) {
+    public void enterRuleSpec(RuleSpecContext ctx) {
         enterAnchor(ctx);
     }
 
     @Override
-    public void ruleExit(ruleContext ctx) {
-        exitAnchor(ctx, GrammarParser.RULE_rule);
+    public void exitRuleSpec(RuleSpecContext ctx) {
+        exitAnchor(ctx, GrammarParser.RULE_ruleSpec);
     }
 
     @Override
-    public void tokenSpecEnter(tokenSpecContext ctx) {
+    public void enterTokenSpec(TokenSpecContext ctx) {
         enterAnchor(ctx);
     }
 
     @Override
-    public void tokenSpecExit(tokenSpecContext ctx) {
+    public void exitTokenSpec(TokenSpecContext ctx) {
         exitAnchor(ctx, GrammarParser.RULE_tokenSpec);
     }
 
@@ -127,7 +127,7 @@ public class GrammarParserAnchorListener extends GrammarParserBaseListener {
     private Anchor createAnchor(ParserRuleContext<Token> ctx, int start, int stop, TrackingPositionRegion.Bias trackingMode, int rule) {
         TrackingPositionRegion trackingSpan = snapshot.createTrackingRegion(start, stop - start, trackingMode);
         if (rule == GrammarParser.RULE_grammarType) {
-            return new GrammarTypeAnchor((GrammarParser.grammarTypeContext)ctx, trackingSpan);
+            return new GrammarTypeAnchor((GrammarParser.GrammarTypeContext)ctx, trackingSpan);
         } else {
             return new GrammarAnchor(trackingSpan, rule);
         }
@@ -148,7 +148,7 @@ public class GrammarParserAnchorListener extends GrammarParserBaseListener {
 
         private final int grammarType;
 
-        private GrammarTypeAnchor(grammarTypeContext ctx, TrackingPositionRegion span) {
+        private GrammarTypeAnchor(GrammarTypeContext ctx, TrackingPositionRegion span) {
             super(span, GrammarParser.RULE_grammarType);
             if (ctx.t == null) {
                 grammarType = GrammarParser.COMBINED;

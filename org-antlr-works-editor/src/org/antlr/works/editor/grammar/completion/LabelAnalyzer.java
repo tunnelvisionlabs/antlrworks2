@@ -14,16 +14,16 @@ import java.util.Map;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.Token;
-import org.antlr.works.editor.grammar.experimental.GrammarParserBaseListener;
 import org.antlr.works.editor.grammar.experimental.GrammarParser;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.actionBlockContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.argActionBlockContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.labeledAltContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.labeledElementContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.lexerRuleContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.parserRuleContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.rulerefContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.terminalContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.ActionBlockContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.ArgActionBlockContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.LabeledAltContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.LabeledElementContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.LexerRuleContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.ParserRuleSpecContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.RulerefContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.TerminalContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParserBaseListener;
 
 /**
  *
@@ -33,17 +33,17 @@ public class LabelAnalyzer extends GrammarParserBaseListener {
 
     private final Map<String, Token> labels = new HashMap<String, Token>();
     private final Map<String, Token> unlabeledElements = new HashMap<String, Token>();
-    private final RuleContext finalContext;
+    private final RuleContext<?> finalContext;
 
     private Token enclosingRuleName;
     private boolean caretReached;
     private boolean inAction;
 
-    public LabelAnalyzer(RuleContext finalContext) {
+    public LabelAnalyzer(RuleContext<?> finalContext) {
         this.finalContext = finalContext;
     }
 
-    public final RuleContext getFinalContext() {
+    public final RuleContext<?> getFinalContext() {
         return finalContext;
     }
 
@@ -68,26 +68,26 @@ public class LabelAnalyzer extends GrammarParserBaseListener {
     }
 
     @Override
-    public void exitEveryRule(ParserRuleContext<Token> ctx) {
+    public void exitEveryRule(ParserRuleContext<? extends Token> ctx) {
         checkCaretReached(ctx);
     }
 
     @Override
-    public void parserRuleEnter(parserRuleContext ctx) {
+    public void enterParserRuleSpec(ParserRuleSpecContext ctx) {
         if (ctx.name != null) {
             enclosingRuleName = ctx.name;
         }
     }
 
     @Override
-    public void lexerRuleEnter(lexerRuleContext ctx) {
+    public void enterLexerRule(LexerRuleContext ctx) {
         if (ctx.name != null) {
             enclosingRuleName = ctx.name;
         }
     }
 
     @Override
-    public void labeledAltEnter(labeledAltContext ctx) {
+    public void enterLabeledAlt(LabeledAltContext ctx) {
         if (isCaretReached()) {
             return;
         }
@@ -97,7 +97,7 @@ public class LabelAnalyzer extends GrammarParserBaseListener {
     }
 
     @Override
-    public void labeledElementEnter(labeledElementContext ctx) {
+    public void enterLabeledElement(LabeledElementContext ctx) {
         if (isCaretReached()) {
             return;
         }
@@ -108,7 +108,7 @@ public class LabelAnalyzer extends GrammarParserBaseListener {
     }
 
     @Override
-    public void terminalEnter(terminalContext ctx) {
+    public void enterTerminal(TerminalContext ctx) {
         if (isCaretReached()) {
             return;
         }
@@ -125,7 +125,7 @@ public class LabelAnalyzer extends GrammarParserBaseListener {
     }
 
     @Override
-    public void rulerefEnter(rulerefContext ctx) {
+    public void enterRuleref(RulerefContext ctx) {
         if (isCaretReached()) {
             return;
         }
@@ -142,7 +142,7 @@ public class LabelAnalyzer extends GrammarParserBaseListener {
     }
 
     @Override
-    public void actionBlockEnter(actionBlockContext ctx) {
+    public void enterActionBlock(ActionBlockContext ctx) {
         if (isCaretReached()) {
             return;
         }
@@ -151,7 +151,7 @@ public class LabelAnalyzer extends GrammarParserBaseListener {
     }
 
     @Override
-    public void actionBlockExit(actionBlockContext ctx) {
+    public void exitActionBlock(ActionBlockContext ctx) {
         checkCaretReached(ctx);
 
         if (isCaretReached()) {
@@ -162,7 +162,7 @@ public class LabelAnalyzer extends GrammarParserBaseListener {
     }
 
     @Override
-    public void argActionBlockEnter(argActionBlockContext ctx) {
+    public void enterArgActionBlock(ArgActionBlockContext ctx) {
         if (isCaretReached()) {
             return;
         }
@@ -171,7 +171,7 @@ public class LabelAnalyzer extends GrammarParserBaseListener {
     }
 
     @Override
-    public void argActionBlockExit(argActionBlockContext ctx) {
+    public void exitArgActionBlock(ArgActionBlockContext ctx) {
         checkCaretReached(ctx);
 
         if (isCaretReached()) {
@@ -181,17 +181,17 @@ public class LabelAnalyzer extends GrammarParserBaseListener {
         inAction = false;
     }
 
-    private void checkCaretReached(RuleContext ctx) {
+    private void checkCaretReached(RuleContext<?> ctx) {
         if (ctx == getFinalContext()) {
             caretReached = true;
         }
     }
 
     private static boolean isLabeledContext(ParserRuleContext<Token> ctx) {
-        for (RuleContext current = ctx; current != null; current = current.parent) {
-            if (current instanceof GrammarParser.labeledElementContext) {
+        for (RuleContext<?> current = ctx; current != null; current = current.parent) {
+            if (current instanceof GrammarParser.LabeledElementContext) {
                 return true;
-            } else if (current instanceof GrammarParser.notSetContext) {
+            } else if (current instanceof GrammarParser.NotSetContext) {
                 return true;
             }
         }

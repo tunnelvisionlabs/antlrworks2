@@ -28,17 +28,17 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
 import org.antlr.works.editor.grammar.experimental.CurrentRuleContextData;
 import org.antlr.works.editor.grammar.experimental.GrammarParser;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.altListContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.alternativeContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.atomContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.ebnfSuffixContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.lexerAltContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.lexerAltListContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.lexerAtomContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.lexerBlockContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.lexerRuleContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.parserRuleContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.ruleAltListContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.AltListContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.AlternativeContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.AtomContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.EbnfSuffixContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.LexerAltContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.LexerAltListContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.LexerAtomContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.LexerBlockContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.LexerRuleContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.ParserRuleSpecContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.RuleAltListContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParserBaseListener;
 import org.netbeans.api.annotations.common.NullAllowed;
 import org.netbeans.api.settings.ConvertAsProperties;
@@ -75,7 +75,7 @@ import org.openide.windows.WindowManager;
 public final class SyntaxDiagramTopComponent extends TopComponent {
 
     private DocumentSnapshot snapshot;
-    private GrammarParser.ruleContext context;
+    private GrammarParser.RuleSpecContext context;
     private Diagram diagram;
 
     public SyntaxDiagramTopComponent() {
@@ -101,8 +101,8 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
             return;
         }
 
-        GrammarParser.ruleContext ruleContext = context.getContext();
-        if (isSameSnapshot(this.snapshot, snapshot) && isSameContext(this.context, ruleContext)) {
+        GrammarParser.RuleSpecContext ruleSpecContext = context.getContext();
+        if (isSameSnapshot(this.snapshot, snapshot) && isSameContext(this.context, ruleSpecContext)) {
             return;
         }
 
@@ -149,7 +149,7 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
         return a.equals(b);
     }
 
-    private static boolean isSameContext(GrammarParser.ruleContext a, GrammarParser.ruleContext b) {
+    private static boolean isSameContext(GrammarParser.RuleSpecContext a, GrammarParser.RuleSpecContext b) {
         if (a == b) {
             return true;
         }
@@ -221,13 +221,13 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
         @Override
         public void dataChanged(ParserDataEvent<? extends CurrentRuleContextData> event) {
             ParserData<? extends CurrentRuleContextData> parserData = event.getData();
-            final CurrentRuleContextData ruleContext = parserData.getData();
+            final CurrentRuleContextData RuleSpecContext = parserData.getData();
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
                     SyntaxDiagramTopComponent syntaxDiagram = SyntaxDiagramTopComponent.getInstance();
                     if (syntaxDiagram != null) {
-                        syntaxDiagram.setRuleContext(ruleContext);
+                        syntaxDiagram.setRuleContext(RuleSpecContext);
                     }
                 }
             });
@@ -241,7 +241,7 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
         private final DocumentSnapshot snapshot;
         private final Deque<JComponent> nodes = new ArrayDeque<JComponent>();
 
-        private Rule rule;
+        private Rule RuleSpec;
         private ParserRuleContext<Token> outermostAtom;
 
         public SyntaxBuilderListener(int grammarType, DocumentSnapshot snapshot) {
@@ -251,84 +251,84 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
         }
 
         public Rule getRule() {
-            return rule;
+            return RuleSpec;
         }
 
         /*
-         * rule is the top level context
+         * RuleSpec is the top level context
          */
 
         @Override
-        public void parserRuleEnter(parserRuleContext ctx) {
+        public void enterParserRuleSpec(ParserRuleSpecContext ctx) {
             @SuppressWarnings("LocalVariableHidesMemberVariable")
-            Rule rule = new Rule(ctx.name.getText());
-            this.rule = rule;
-            nodes.push(rule);
+            Rule RuleSpec = new Rule(ctx.name.getText());
+            this.RuleSpec = RuleSpec;
+            nodes.push(RuleSpec);
         }
 
         @Override
-        public void parserRuleExit(parserRuleContext ctx) {
+        public void exitParserRuleSpec(ParserRuleSpecContext ctx) {
             assert nodes.size() == 1;
-            this.rule = (Rule)nodes.pop();
-//            this.rule.setupElements();
+            this.RuleSpec = (Rule)nodes.pop();
+//            this.RuleSpec.setupElements();
         }
 
         @Override
-        public void lexerRuleEnter(lexerRuleContext ctx) {
+        public void enterLexerRule(LexerRuleContext ctx) {
             @SuppressWarnings("LocalVariableHidesMemberVariable")
-            Rule rule = new Rule(ctx.name.getText());
-            this.rule = rule;
-            nodes.push(rule);
+            Rule RuleSpec = new Rule(ctx.name.getText());
+            this.RuleSpec = RuleSpec;
+            nodes.push(RuleSpec);
         }
 
         @Override
-        public void lexerRuleExit(lexerRuleContext ctx) {
+        public void exitLexerRule(LexerRuleContext ctx) {
             assert nodes.size() == 1;
-            this.rule = (Rule)nodes.pop();
-//            this.rule.setupElements();
+            this.RuleSpec = (Rule)nodes.pop();
+//            this.RuleSpec.setupElements();
         }
 
         /*
-         * ruleAltList and altList form the true body of a Block
+         * RuleSpecAltList and altList form the true body of a Block
          */
 
         @Override
-        public void ruleAltListEnter(ruleAltListContext ctx) {
+        public void enterRuleAltList(RuleAltListContext ctx) {
             enterBlock();
         }
 
         @Override
-        public void altListEnter(altListContext ctx) {
+        public void enterAltList(AltListContext ctx) {
             enterBlock();
         }
 
         @Override
-        public void lexerAltListEnter(lexerAltListContext ctx) {
+        public void enterLexerAltList(LexerAltListContext ctx) {
             enterBlock();
         }
 
         @Override
-        public void lexerBlockEnter(lexerBlockContext ctx) {
+        public void enterLexerBlock(LexerBlockContext ctx) {
             enterBlock();
         }
 
         @Override
-        public void ruleAltListExit(ruleAltListContext ctx) {
+        public void exitRuleAltList(RuleAltListContext ctx) {
             exitBlock();
         }
 
         @Override
-        public void altListExit(altListContext ctx) {
+        public void exitAltList(AltListContext ctx) {
             exitBlock();
         }
 
         @Override
-        public void lexerAltListExit(lexerAltListContext ctx) {
+        public void exitLexerAltList(LexerAltListContext ctx) {
             exitBlock();
         }
 
         @Override
-        public void lexerBlockExit(lexerBlockContext ctx) {
+        public void exitLexerBlock(LexerBlockContext ctx) {
             exitBlock();
         }
 
@@ -337,22 +337,22 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
          */
 
         @Override
-        public void alternativeEnter(alternativeContext ctx) {
+        public void enterAlternative(AlternativeContext ctx) {
             enterAlternative();
         }
 
         @Override
-        public void lexerAltEnter(lexerAltContext ctx) {
+        public void enterLexerAlt(LexerAltContext ctx) {
             enterAlternative();
         }
 
         @Override
-        public void alternativeExit(alternativeContext ctx) {
+        public void exitAlternative(AlternativeContext ctx) {
             exitAlternative();
         }
 
         @Override
-        public void lexerAltExit(lexerAltContext ctx) {
+        public void exitLexerAlt(LexerAltContext ctx) {
             exitAlternative();
         }
 
@@ -365,12 +365,12 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
          */
 
         @Override
-        public void lexerAtomEnter(lexerAtomContext ctx) {
+        public void enterLexerAtom(LexerAtomContext ctx) {
             enterAtom(ctx);
         }
 
         @Override
-        public void atomEnter(atomContext ctx) {
+        public void enterAtom(AtomContext ctx) {
             enterAtom(ctx);
         }
 
@@ -390,15 +390,15 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
             boolean wildcard = ctx.start.getType() == GrammarParser.DOT;
             boolean hasChild = ctx.children != null && !ctx.children.isEmpty();
             boolean reference = hasChild
-                && (ctx.children.get(0) instanceof GrammarParser.terminalContext
-                || ctx.children.get(0) instanceof GrammarParser.rulerefContext);
-            boolean range = hasChild && ctx.children.get(0) instanceof GrammarParser.rangeContext;
-            boolean notset = hasChild && ctx.children.get(0) instanceof GrammarParser.notSetContext;
+                && (ctx.children.get(0) instanceof GrammarParser.TerminalContext
+                || ctx.children.get(0) instanceof GrammarParser.RulerefContext);
+            boolean range = hasChild && ctx.children.get(0) instanceof GrammarParser.RangeContext;
+            boolean notset = hasChild && ctx.children.get(0) instanceof GrammarParser.NotSetContext;
 
             if (wildcard || reference) {
                 String text = ctx.start.getText();
                 boolean nonTerminal = Character.isLowerCase(text.charAt(0));
-                if (!nonTerminal && Character.isUpperCase(text.charAt(0)) && rule != null && Character.isUpperCase(rule.getRuleName().charAt(0)))
+                if (!nonTerminal && Character.isUpperCase(text.charAt(0)) && RuleSpec != null && Character.isUpperCase(RuleSpec.getRuleName().charAt(0)))
                     nonTerminal = true;
 
                 if (nonTerminal) {
@@ -409,7 +409,7 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
             } else if (range) {
                 String label = "???";
                 Terminal terminal = null;
-                GrammarParser.rangeContext rangeContext = (GrammarParser.rangeContext)ctx.children.get(0);
+                GrammarParser.RangeContext rangeContext = (GrammarParser.RangeContext)ctx.children.get(0);
                 if (rangeContext.children != null && rangeContext.children.size() == 3) {
                     Token start = (Token)((ParseTree.TerminalNode<?>)rangeContext.children.get(0)).getSymbol();
                     Token end = (Token)((ParseTree.TerminalNode<?>)rangeContext.children.get(2)).getSymbol();
@@ -431,14 +431,14 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
         }
 
         @Override
-        public void lexerAtomExit(lexerAtomContext ctx) {
+        public void exitLexerAtom(LexerAtomContext ctx) {
             if (outermostAtom == ctx) {
                 outermostAtom = null;
             }
         }
 
         @Override
-        public void atomExit(atomContext ctx) {
+        public void exitAtom(AtomContext ctx) {
             if (outermostAtom == ctx) {
                 outermostAtom = null;
             }
@@ -449,7 +449,7 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
          */
 
         @Override
-        public void ebnfSuffixEnter(ebnfSuffixContext ctx) {
+        public void enterEbnfSuffix(EbnfSuffixContext ctx) {
             Block block;
 
             switch (ctx.start.getType()) {

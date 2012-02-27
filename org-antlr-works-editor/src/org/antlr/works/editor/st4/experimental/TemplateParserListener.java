@@ -12,135 +12,135 @@ import org.antlr.v4.runtime.tree.*;
 import org.antlr.v4.runtime.Token;
 
 public interface TemplateParserListener extends ParseTreeListener<Token> {
-	void memberExprEnter(TemplateParser.memberExprContext ctx);
-	void memberExprExit(TemplateParser.memberExprContext ctx);
+	void enterMemberExpr(TemplateParser.MemberExprContext ctx);
+	void exitMemberExpr(TemplateParser.MemberExprContext ctx);
 
-	void regionEnter(TemplateParser.regionContext ctx);
-	void regionExit(TemplateParser.regionContext ctx);
+	void enterRegion(TemplateParser.RegionContext ctx);
+	void exitRegion(TemplateParser.RegionContext ctx);
 
-	void bigstringTemplateNoNewlineEnter(TemplateParser.bigstringTemplateNoNewlineContext ctx);
-	void bigstringTemplateNoNewlineExit(TemplateParser.bigstringTemplateNoNewlineContext ctx);
+	void enterBigstringTemplateNoNewline(TemplateParser.BigstringTemplateNoNewlineContext ctx);
+	void exitBigstringTemplateNoNewline(TemplateParser.BigstringTemplateNoNewlineContext ctx);
 
-	void dictEnter(TemplateParser.dictContext ctx);
-	void dictExit(TemplateParser.dictContext ctx);
+	void enterDict(TemplateParser.DictContext ctx);
+	void exitDict(TemplateParser.DictContext ctx);
 
-	void dictDefEnter(TemplateParser.dictDefContext ctx);
-	void dictDefExit(TemplateParser.dictDefContext ctx);
+	void enterDictDef(TemplateParser.DictDefContext ctx);
+	void exitDictDef(TemplateParser.DictDefContext ctx);
 
-	void groupNameEnter(TemplateParser.groupNameContext ctx);
-	void groupNameExit(TemplateParser.groupNameContext ctx);
+	void enterGroupName(TemplateParser.GroupNameContext ctx);
+	void exitGroupName(TemplateParser.GroupNameContext ctx);
 
-	void exprEnter(TemplateParser.exprContext ctx);
-	void exprExit(TemplateParser.exprContext ctx);
+	void enterExpr(TemplateParser.ExprContext ctx);
+	void exitExpr(TemplateParser.ExprContext ctx);
 
-	void anonymousTemplateEnter(TemplateParser.anonymousTemplateContext ctx);
-	void anonymousTemplateExit(TemplateParser.anonymousTemplateContext ctx);
+	void enterAnonymousTemplate(TemplateParser.AnonymousTemplateContext ctx);
+	void exitAnonymousTemplate(TemplateParser.AnonymousTemplateContext ctx);
 
-	void escapeEnter(TemplateParser.escapeContext ctx);
-	void escapeExit(TemplateParser.escapeContext ctx);
+	void enterEscape(TemplateParser.EscapeContext ctx);
+	void exitEscape(TemplateParser.EscapeContext ctx);
 
-	void argEnter(TemplateParser.argContext ctx);
-	void argExit(TemplateParser.argContext ctx);
+	void enterArg(TemplateParser.ArgContext ctx);
+	void exitArg(TemplateParser.ArgContext ctx);
 
-	void andConditionalEnter(TemplateParser.andConditionalContext ctx);
-	void andConditionalExit(TemplateParser.andConditionalContext ctx);
+	void enterAndConditional(TemplateParser.AndConditionalContext ctx);
+	void exitAndConditional(TemplateParser.AndConditionalContext ctx);
 
-	void defEnter(TemplateParser.defContext ctx);
-	void defExit(TemplateParser.defContext ctx);
+	void enterDef(TemplateParser.DefContext ctx);
+	void exitDef(TemplateParser.DefContext ctx);
 
-	void mapTemplateRefEnter(TemplateParser.mapTemplateRefContext ctx);
-	void mapTemplateRefExit(TemplateParser.mapTemplateRefContext ctx);
+	void enterMapTemplateRef(TemplateParser.MapTemplateRefContext ctx);
+	void exitMapTemplateRef(TemplateParser.MapTemplateRefContext ctx);
 
-	void templateDefEnter(TemplateParser.templateDefContext ctx);
-	void templateDefExit(TemplateParser.templateDefContext ctx);
+	void enterTemplateDef(TemplateParser.TemplateDefContext ctx);
+	void exitTemplateDef(TemplateParser.TemplateDefContext ctx);
 
-	void primaryEnter(TemplateParser.primaryContext ctx);
-	void primaryExit(TemplateParser.primaryContext ctx);
+	void enterPrimary(TemplateParser.PrimaryContext ctx);
+	void exitPrimary(TemplateParser.PrimaryContext ctx);
 
-	void exprNoCommaEnter(TemplateParser.exprNoCommaContext ctx);
-	void exprNoCommaExit(TemplateParser.exprNoCommaContext ctx);
+	void enterExprNoComma(TemplateParser.ExprNoCommaContext ctx);
+	void exitExprNoComma(TemplateParser.ExprNoCommaContext ctx);
 
-	void bigstringTemplateEnter(TemplateParser.bigstringTemplateContext ctx);
-	void bigstringTemplateExit(TemplateParser.bigstringTemplateContext ctx);
+	void enterBigstringTemplate(TemplateParser.BigstringTemplateContext ctx);
+	void exitBigstringTemplate(TemplateParser.BigstringTemplateContext ctx);
 
-	void ifstatEnter(TemplateParser.ifstatContext ctx);
-	void ifstatExit(TemplateParser.ifstatContext ctx);
+	void enterIfstat(TemplateParser.IfstatContext ctx);
+	void exitIfstat(TemplateParser.IfstatContext ctx);
 
-	void anonymousTemplateParametersEnter(TemplateParser.anonymousTemplateParametersContext ctx);
-	void anonymousTemplateParametersExit(TemplateParser.anonymousTemplateParametersContext ctx);
+	void enterAnonymousTemplateParameters(TemplateParser.AnonymousTemplateParametersContext ctx);
+	void exitAnonymousTemplateParameters(TemplateParser.AnonymousTemplateParametersContext ctx);
 
-	void listElementEnter(TemplateParser.listElementContext ctx);
-	void listElementExit(TemplateParser.listElementContext ctx);
+	void enterListElement(TemplateParser.ListElementContext ctx);
+	void exitListElement(TemplateParser.ListElementContext ctx);
 
-	void optionEnter(TemplateParser.optionContext ctx);
-	void optionExit(TemplateParser.optionContext ctx);
+	void enterOption(TemplateParser.OptionContext ctx);
+	void exitOption(TemplateParser.OptionContext ctx);
 
-	void stringTemplateEnter(TemplateParser.stringTemplateContext ctx);
-	void stringTemplateExit(TemplateParser.stringTemplateContext ctx);
+	void enterStringTemplate(TemplateParser.StringTemplateContext ctx);
+	void exitStringTemplate(TemplateParser.StringTemplateContext ctx);
 
-	void oldStyleHeaderEnter(TemplateParser.oldStyleHeaderContext ctx);
-	void oldStyleHeaderExit(TemplateParser.oldStyleHeaderContext ctx);
+	void enterOldStyleHeader(TemplateParser.OldStyleHeaderContext ctx);
+	void exitOldStyleHeader(TemplateParser.OldStyleHeaderContext ctx);
 
-	void delimitersEnter(TemplateParser.delimitersContext ctx);
-	void delimitersExit(TemplateParser.delimitersContext ctx);
+	void enterDelimiters(TemplateParser.DelimitersContext ctx);
+	void exitDelimiters(TemplateParser.DelimitersContext ctx);
 
-	void keyValuePairEnter(TemplateParser.keyValuePairContext ctx);
-	void keyValuePairExit(TemplateParser.keyValuePairContext ctx);
+	void enterKeyValuePair(TemplateParser.KeyValuePairContext ctx);
+	void exitKeyValuePair(TemplateParser.KeyValuePairContext ctx);
 
-	void mapExprEnter(TemplateParser.mapExprContext ctx);
-	void mapExprExit(TemplateParser.mapExprContext ctx);
+	void enterMapExpr(TemplateParser.MapExprContext ctx);
+	void exitMapExpr(TemplateParser.MapExprContext ctx);
 
-	void listEnter(TemplateParser.listContext ctx);
-	void listExit(TemplateParser.listContext ctx);
+	void enterList(TemplateParser.ListContext ctx);
+	void exitList(TemplateParser.ListContext ctx);
 
-	void dictPairsEnter(TemplateParser.dictPairsContext ctx);
-	void dictPairsExit(TemplateParser.dictPairsContext ctx);
+	void enterDictPairs(TemplateParser.DictPairsContext ctx);
+	void exitDictPairs(TemplateParser.DictPairsContext ctx);
 
-	void formalArgsEnter(TemplateParser.formalArgsContext ctx);
-	void formalArgsExit(TemplateParser.formalArgsContext ctx);
+	void enterFormalArgs(TemplateParser.FormalArgsContext ctx);
+	void exitFormalArgs(TemplateParser.FormalArgsContext ctx);
 
-	void exprTagEnter(TemplateParser.exprTagContext ctx);
-	void exprTagExit(TemplateParser.exprTagContext ctx);
+	void enterExprTag(TemplateParser.ExprTagContext ctx);
+	void exitExprTag(TemplateParser.ExprTagContext ctx);
 
-	void argExprListEnter(TemplateParser.argExprListContext ctx);
-	void argExprListExit(TemplateParser.argExprListContext ctx);
+	void enterArgExprList(TemplateParser.ArgExprListContext ctx);
+	void exitArgExprList(TemplateParser.ArgExprListContext ctx);
 
-	void notConditionalEnter(TemplateParser.notConditionalContext ctx);
-	void notConditionalExit(TemplateParser.notConditionalContext ctx);
+	void enterNotConditional(TemplateParser.NotConditionalContext ctx);
+	void exitNotConditional(TemplateParser.NotConditionalContext ctx);
 
-	void subtemplateEnter(TemplateParser.subtemplateContext ctx);
-	void subtemplateExit(TemplateParser.subtemplateContext ctx);
+	void enterSubtemplate(TemplateParser.SubtemplateContext ctx);
+	void exitSubtemplate(TemplateParser.SubtemplateContext ctx);
 
-	void argumentsEnter(TemplateParser.argumentsContext ctx);
-	void argumentsExit(TemplateParser.argumentsContext ctx);
+	void enterArguments(TemplateParser.ArgumentsContext ctx);
+	void exitArguments(TemplateParser.ArgumentsContext ctx);
 
-	void formalArgEnter(TemplateParser.formalArgContext ctx);
-	void formalArgExit(TemplateParser.formalArgContext ctx);
+	void enterFormalArg(TemplateParser.FormalArgContext ctx);
+	void exitFormalArg(TemplateParser.FormalArgContext ctx);
 
-	void includeExprEnter(TemplateParser.includeExprContext ctx);
-	void includeExprExit(TemplateParser.includeExprContext ctx);
+	void enterIncludeExpr(TemplateParser.IncludeExprContext ctx);
+	void exitIncludeExpr(TemplateParser.IncludeExprContext ctx);
 
-	void stringEnter(TemplateParser.stringContext ctx);
-	void stringExit(TemplateParser.stringContext ctx);
+	void enterString(TemplateParser.StringContext ctx);
+	void exitString(TemplateParser.StringContext ctx);
 
-	void exprOptionsEnter(TemplateParser.exprOptionsContext ctx);
-	void exprOptionsExit(TemplateParser.exprOptionsContext ctx);
+	void enterExprOptions(TemplateParser.ExprOptionsContext ctx);
+	void exitExprOptions(TemplateParser.ExprOptionsContext ctx);
 
-	void conditionalEnter(TemplateParser.conditionalContext ctx);
-	void conditionalExit(TemplateParser.conditionalContext ctx);
+	void enterConditional(TemplateParser.ConditionalContext ctx);
+	void exitConditional(TemplateParser.ConditionalContext ctx);
 
-	void namedArgEnter(TemplateParser.namedArgContext ctx);
-	void namedArgExit(TemplateParser.namedArgContext ctx);
+	void enterNamedArg(TemplateParser.NamedArgContext ctx);
+	void exitNamedArg(TemplateParser.NamedArgContext ctx);
 
-	void groupEnter(TemplateParser.groupContext ctx);
-	void groupExit(TemplateParser.groupContext ctx);
+	void enterGroup(TemplateParser.GroupContext ctx);
+	void exitGroup(TemplateParser.GroupContext ctx);
 
-	void templateBodyEnter(TemplateParser.templateBodyContext ctx);
-	void templateBodyExit(TemplateParser.templateBodyContext ctx);
+	void enterTemplateBody(TemplateParser.TemplateBodyContext ctx);
+	void exitTemplateBody(TemplateParser.TemplateBodyContext ctx);
 
-	void defaultValuePairEnter(TemplateParser.defaultValuePairContext ctx);
-	void defaultValuePairExit(TemplateParser.defaultValuePairContext ctx);
+	void enterDefaultValuePair(TemplateParser.DefaultValuePairContext ctx);
+	void exitDefaultValuePair(TemplateParser.DefaultValuePairContext ctx);
 
-	void keyValueEnter(TemplateParser.keyValueContext ctx);
-	void keyValueExit(TemplateParser.keyValueContext ctx);
+	void enterKeyValue(TemplateParser.KeyValueContext ctx);
+	void exitKeyValue(TemplateParser.KeyValueContext ctx);
 }

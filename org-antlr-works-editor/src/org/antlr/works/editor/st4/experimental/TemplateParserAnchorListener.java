@@ -63,12 +63,12 @@ public class TemplateParserAnchorListener extends TemplateParserBaseListener {
     }
 
     @Override
-    public void enterEveryRule(ParserRuleContext<Token> ctx) {
+    public void enterEveryRule(ParserRuleContext<? extends Token> ctx) {
         checkCancellation();
     }
 
     @Override
-    public void exitEveryRule(ParserRuleContext<Token> ctx) {
+    public void exitEveryRule(ParserRuleContext<? extends Token> ctx) {
         checkCancellation();
     }
 

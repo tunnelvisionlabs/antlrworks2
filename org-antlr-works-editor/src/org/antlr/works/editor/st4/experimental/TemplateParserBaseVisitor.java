@@ -10,93 +10,94 @@ package org.antlr.works.editor.st4.experimental;
 
 import org.antlr.v4.runtime.tree.*;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.ParserRuleContext;
 
-public class TemplateParserBaseVisitor<T> extends ParseTreeVisitor<T> implements TemplateParserVisitor<T> {
-	@Override public T memberExprVisit(TemplateParser.memberExprContext ctx) { visitChildren(ctx); return null; }
+public class TemplateParserBaseVisitor<Result> extends AbstractParseTreeVisitor<Token, Result> implements TemplateParserVisitor<Token, Result> {
+	@Override public Result visitMemberExpr(TemplateParser.MemberExprContext ctx) { return visitChildren(ctx); }
 
-	@Override public T regionVisit(TemplateParser.regionContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitRegion(TemplateParser.RegionContext ctx) { return visitChildren(ctx); }
 
-	@Override public T bigstringTemplateNoNewlineVisit(TemplateParser.bigstringTemplateNoNewlineContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitBigstringTemplateNoNewline(TemplateParser.BigstringTemplateNoNewlineContext ctx) { return visitChildren(ctx); }
 
-	@Override public T dictVisit(TemplateParser.dictContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitDict(TemplateParser.DictContext ctx) { return visitChildren(ctx); }
 
-	@Override public T dictDefVisit(TemplateParser.dictDefContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitDictDef(TemplateParser.DictDefContext ctx) { return visitChildren(ctx); }
 
-	@Override public T groupNameVisit(TemplateParser.groupNameContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitGroupName(TemplateParser.GroupNameContext ctx) { return visitChildren(ctx); }
 
-	@Override public T exprVisit(TemplateParser.exprContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitExpr(TemplateParser.ExprContext ctx) { return visitChildren(ctx); }
 
-	@Override public T anonymousTemplateVisit(TemplateParser.anonymousTemplateContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitAnonymousTemplate(TemplateParser.AnonymousTemplateContext ctx) { return visitChildren(ctx); }
 
-	@Override public T escapeVisit(TemplateParser.escapeContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitEscape(TemplateParser.EscapeContext ctx) { return visitChildren(ctx); }
 
-	@Override public T argVisit(TemplateParser.argContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitArg(TemplateParser.ArgContext ctx) { return visitChildren(ctx); }
 
-	@Override public T andConditionalVisit(TemplateParser.andConditionalContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitAndConditional(TemplateParser.AndConditionalContext ctx) { return visitChildren(ctx); }
 
-	@Override public T defVisit(TemplateParser.defContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitDef(TemplateParser.DefContext ctx) { return visitChildren(ctx); }
 
-	@Override public T mapTemplateRefVisit(TemplateParser.mapTemplateRefContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitMapTemplateRef(TemplateParser.MapTemplateRefContext ctx) { return visitChildren(ctx); }
 
-	@Override public T templateDefVisit(TemplateParser.templateDefContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitTemplateDef(TemplateParser.TemplateDefContext ctx) { return visitChildren(ctx); }
 
-	@Override public T primaryVisit(TemplateParser.primaryContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitPrimary(TemplateParser.PrimaryContext ctx) { return visitChildren(ctx); }
 
-	@Override public T exprNoCommaVisit(TemplateParser.exprNoCommaContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitExprNoComma(TemplateParser.ExprNoCommaContext ctx) { return visitChildren(ctx); }
 
-	@Override public T bigstringTemplateVisit(TemplateParser.bigstringTemplateContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitBigstringTemplate(TemplateParser.BigstringTemplateContext ctx) { return visitChildren(ctx); }
 
-	@Override public T ifstatVisit(TemplateParser.ifstatContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitIfstat(TemplateParser.IfstatContext ctx) { return visitChildren(ctx); }
 
-	@Override public T anonymousTemplateParametersVisit(TemplateParser.anonymousTemplateParametersContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitAnonymousTemplateParameters(TemplateParser.AnonymousTemplateParametersContext ctx) { return visitChildren(ctx); }
 
-	@Override public T listElementVisit(TemplateParser.listElementContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitListElement(TemplateParser.ListElementContext ctx) { return visitChildren(ctx); }
 
-	@Override public T optionVisit(TemplateParser.optionContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitOption(TemplateParser.OptionContext ctx) { return visitChildren(ctx); }
 
-	@Override public T stringTemplateVisit(TemplateParser.stringTemplateContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitStringTemplate(TemplateParser.StringTemplateContext ctx) { return visitChildren(ctx); }
 
-	@Override public T oldStyleHeaderVisit(TemplateParser.oldStyleHeaderContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitOldStyleHeader(TemplateParser.OldStyleHeaderContext ctx) { return visitChildren(ctx); }
 
-	@Override public T delimitersVisit(TemplateParser.delimitersContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitDelimiters(TemplateParser.DelimitersContext ctx) { return visitChildren(ctx); }
 
-	@Override public T keyValuePairVisit(TemplateParser.keyValuePairContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitKeyValuePair(TemplateParser.KeyValuePairContext ctx) { return visitChildren(ctx); }
 
-	@Override public T mapExprVisit(TemplateParser.mapExprContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitMapExpr(TemplateParser.MapExprContext ctx) { return visitChildren(ctx); }
 
-	@Override public T listVisit(TemplateParser.listContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitList(TemplateParser.ListContext ctx) { return visitChildren(ctx); }
 
-	@Override public T dictPairsVisit(TemplateParser.dictPairsContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitDictPairs(TemplateParser.DictPairsContext ctx) { return visitChildren(ctx); }
 
-	@Override public T formalArgsVisit(TemplateParser.formalArgsContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitFormalArgs(TemplateParser.FormalArgsContext ctx) { return visitChildren(ctx); }
 
-	@Override public T exprTagVisit(TemplateParser.exprTagContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitExprTag(TemplateParser.ExprTagContext ctx) { return visitChildren(ctx); }
 
-	@Override public T argExprListVisit(TemplateParser.argExprListContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitArgExprList(TemplateParser.ArgExprListContext ctx) { return visitChildren(ctx); }
 
-	@Override public T notConditionalVisit(TemplateParser.notConditionalContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitNotConditional(TemplateParser.NotConditionalContext ctx) { return visitChildren(ctx); }
 
-	@Override public T subtemplateVisit(TemplateParser.subtemplateContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitSubtemplate(TemplateParser.SubtemplateContext ctx) { return visitChildren(ctx); }
 
-	@Override public T argumentsVisit(TemplateParser.argumentsContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitArguments(TemplateParser.ArgumentsContext ctx) { return visitChildren(ctx); }
 
-	@Override public T formalArgVisit(TemplateParser.formalArgContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitFormalArg(TemplateParser.FormalArgContext ctx) { return visitChildren(ctx); }
 
-	@Override public T includeExprVisit(TemplateParser.includeExprContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitIncludeExpr(TemplateParser.IncludeExprContext ctx) { return visitChildren(ctx); }
 
-	@Override public T stringVisit(TemplateParser.stringContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitString(TemplateParser.StringContext ctx) { return visitChildren(ctx); }
 
-	@Override public T exprOptionsVisit(TemplateParser.exprOptionsContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitExprOptions(TemplateParser.ExprOptionsContext ctx) { return visitChildren(ctx); }
 
-	@Override public T conditionalVisit(TemplateParser.conditionalContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitConditional(TemplateParser.ConditionalContext ctx) { return visitChildren(ctx); }
 
-	@Override public T namedArgVisit(TemplateParser.namedArgContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitNamedArg(TemplateParser.NamedArgContext ctx) { return visitChildren(ctx); }
 
-	@Override public T groupVisit(TemplateParser.groupContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitGroup(TemplateParser.GroupContext ctx) { return visitChildren(ctx); }
 
-	@Override public T templateBodyVisit(TemplateParser.templateBodyContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitTemplateBody(TemplateParser.TemplateBodyContext ctx) { return visitChildren(ctx); }
 
-	@Override public T defaultValuePairVisit(TemplateParser.defaultValuePairContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitDefaultValuePair(TemplateParser.DefaultValuePairContext ctx) { return visitChildren(ctx); }
 
-	@Override public T keyValueVisit(TemplateParser.keyValueContext ctx) { visitChildren(ctx); return null; }
+	@Override public Result visitKeyValue(TemplateParser.KeyValueContext ctx) { return visitChildren(ctx); }
 }

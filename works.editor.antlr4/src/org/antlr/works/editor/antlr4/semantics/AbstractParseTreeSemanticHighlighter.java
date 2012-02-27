@@ -35,7 +35,7 @@ public abstract class AbstractParseTreeSemanticHighlighter<Listener extends Pars
 
     protected abstract Listener createListener(@NonNull ParserData<? extends Data> parserData);
 
-    protected abstract ParseTree getParseTree(@NonNull final ParserData<? extends Data> parserData);
+    protected abstract ParseTree<? extends Token> getParseTree(@NonNull final ParserData<? extends Data> parserData);
 
     protected abstract void updateHighlights(OffsetsBag container, DocumentSnapshot sourceSnapshot, DocumentSnapshot currentSnapshot, Listener listener);
 
