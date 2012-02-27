@@ -45,6 +45,10 @@ public class TemplateGroupWrapper extends STGroup {
     @Override
     public CompiledST defineRegion(String enclosingTemplateName, Token regionT, String template, Token templateToken) {
         CompiledST result = super.defineRegion(enclosingTemplateName, regionT, template, templateToken);
+        if (result == null) {
+            return null;
+        }
+
         TemplateInformation info = new TemplateInformation(enclosingTemplateName, (CommonToken)regionT, (CommonToken)templateToken, result);
         templateInformation.add(info);
         compiledTemplateInformation.put(result, info);
@@ -54,6 +58,10 @@ public class TemplateGroupWrapper extends STGroup {
     @Override
     public CompiledST defineTemplate(String fullyQualifiedTemplateName, Token nameT, List<FormalArgument> args, String template, Token templateToken) {
         CompiledST result = super.defineTemplate(fullyQualifiedTemplateName, nameT, args, template, templateToken);
+        if (result == null) {
+            return null;
+        }
+
         TemplateInformation info = new TemplateInformation((CommonToken)nameT, (CommonToken)templateToken, result);
         templateInformation.add(info);
         compiledTemplateInformation.put(result, info);
@@ -63,6 +71,10 @@ public class TemplateGroupWrapper extends STGroup {
     @Override
     public CompiledST defineTemplateAlias(Token aliasT, Token targetT) {
         CompiledST result = super.defineTemplateAlias(aliasT, targetT);
+        if (result == null) {
+            return null;
+        }
+
         templateInformation.add(new TemplateInformation((CommonToken)aliasT, (CommonToken)targetT, result));
         return result;
     }
