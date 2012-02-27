@@ -25,6 +25,7 @@ import org.antlr.works.editor.grammar.codemodel.LabelModel;
 import org.antlr.works.editor.grammar.codemodel.ParameterModel;
 import org.antlr.works.editor.grammar.codemodel.RuleModel;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.ArgActionParameterContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.ArgActionParametersContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.GrammarSpecContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.LabeledElementContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.LexerRuleContext;
@@ -77,8 +78,9 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
         returnValues = new ArrayList<ParameterModel>();
         locals = new ArrayList<ParameterModel>();
 
-        if (ctx.parameters != null) {
-            handleParameters(ctx.parameters.parameters, parameters);
+        ArgActionParametersContext ctxparameters = ctx.argActionParameters();
+        if (ctxparameters != null) {
+            handleParameters(ctxparameters.parameters, parameters);
         }
     }
 
@@ -124,15 +126,17 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
 
     @Override
     public void enterRuleReturns(RuleReturnsContext ctx) {
-        if (ctx.values != null) {
-            handleParameters(ctx.values.parameters, returnValues);
+        ArgActionParametersContext values = ctx.argActionParameters();
+        if (values != null) {
+            handleParameters(values.parameters, returnValues);
         }
     }
 
     @Override
     public void enterLocalsSpec(LocalsSpecContext ctx) {
-        if (ctx.values != null) {
-            handleParameters(ctx.values.parameters, locals);
+        ArgActionParametersContext values = ctx.argActionParameters();
+        if (values != null) {
+            handleParameters(values.parameters, locals);
         }
     }
 

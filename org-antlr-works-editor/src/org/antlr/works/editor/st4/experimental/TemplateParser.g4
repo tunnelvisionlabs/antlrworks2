@@ -192,7 +192,7 @@ notConditional
     ;
 
 exprOptions
-    :   options_+=option (COMMA options_+=option)*
+    :   option (COMMA option)*
     ;
 
 option
@@ -230,15 +230,15 @@ memberExpr
     ;
 
 includeExpr
-    :   super_=SUPER DOT templateName=ID LPAREN args=arguments RPAREN
-    |   templateName=ID LPAREN args=arguments RPAREN
-    |   at=AT super_=SUPER DOT templateName=ID LPAREN RPAREN
+    :   SUPER DOT templateName=ID LPAREN arguments RPAREN
+    |   templateName=ID LPAREN arguments RPAREN
+    |   AT SUPER DOT templateName=ID LPAREN RPAREN
     |   regionName=REGION_ID LPAREN RPAREN
     |   primary
     ;
 
 primary
-    :   id=ID
+    :   ID
     |   STRING
     |   TRUE
     |   FALSE
@@ -269,7 +269,7 @@ namedArg
 
 list
     :   LBRACK RBRACK
-    |   LBRACK elements+=listElement (COMMA elements+=listElement)* RBRACK
+    |   LBRACK listElement (COMMA listElement)* RBRACK
     ;
 
 listElement

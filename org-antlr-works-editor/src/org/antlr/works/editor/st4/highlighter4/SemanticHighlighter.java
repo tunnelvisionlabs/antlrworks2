@@ -249,7 +249,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
         @Override
         public void enterIncludeExpr(IncludeExprContext ctx) {
             if (ctx.templateName != null) {
-                if (ctx.at != null) {
+                if (ctx.AT() != null) {
                     regionUses.add(ctx.templateName);
                 } else {
                     templateUses.add(ctx.templateName);
@@ -263,12 +263,13 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
 
         @Override
         public void enterPrimary(PrimaryContext ctx) {
-            if (ctx.id != null) {
+            Token id = ctx.ID();
+            if (id != null) {
                 Set<String> currentParameters = parameters.isEmpty() ? null : parameters.peek();
-                if (currentParameters != null && currentParameters.contains(ctx.id.getText())) {
-                    parameterUses.add(ctx.id);
+                if (currentParameters != null && currentParameters.contains(id.getText())) {
+                    parameterUses.add(id);
                 } else {
-                    attributeUses.add(ctx.id);
+                    attributeUses.add(id);
                 }
             }
         }

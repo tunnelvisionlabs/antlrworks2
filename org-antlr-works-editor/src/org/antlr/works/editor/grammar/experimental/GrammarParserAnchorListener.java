@@ -150,10 +150,12 @@ public class GrammarParserAnchorListener extends GrammarParserBaseListener {
 
         private GrammarTypeAnchor(GrammarTypeContext ctx, TrackingPositionRegion span) {
             super(span, GrammarParser.RULE_grammarType);
-            if (ctx.t == null) {
-                grammarType = GrammarParser.COMBINED;
+            if (ctx.LEXER() != null) {
+                grammarType = GrammarParser.LEXER;
+            } else if (ctx.PARSER() != null) {
+                grammarType = GrammarParser.PARSER;
             } else {
-                grammarType = ctx.t.getType();
+                grammarType = GrammarParser.COMBINED;
             }
         }
 

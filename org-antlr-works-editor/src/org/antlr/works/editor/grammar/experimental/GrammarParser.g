@@ -133,12 +133,12 @@ grammarSpec
 	;
 
 grammarType
-    :	(	t=LEXER g=GRAMMAR
+    :	(	LEXER GRAMMAR
 		| // A standalone parser specification
-		  	t=PARSER g=GRAMMAR
+		  	PARSER GRAMMAR
 
 		// A combined lexer and parser specification
-		| 	g=GRAMMAR
+		| 	GRAMMAR
 		)
     ;
 
@@ -338,7 +338,7 @@ modeSpec
     ;
 
 rules
-    :	(ruleSpec)*
+    :	ruleSpec*
     ;
 
 ruleSpec
@@ -377,7 +377,7 @@ parserRuleSpec
 	  // semantic verifcation, type assignment etc. We require that
 	  // the input parameters are the next syntactically significant element
 	  // following the rule id.
-	  parameters=argActionParameters?
+	  argActionParameters?
 
 	  ruleReturns?
 
@@ -432,7 +432,7 @@ finallyClause
 	;
 
 rulePrequels
-	:	(rulePrequel)*
+	:	rulePrequel*
 	;
 
 // An individual rule level configuration as referenced by the ruleActions
@@ -450,7 +450,7 @@ rulePrequel
 // as a single lexical action element, to be processed later.
 //
 ruleReturns
-	: RETURNS values=argActionParameters
+	: RETURNS argActionParameters
 	;
 
 // --------------
@@ -470,7 +470,7 @@ throwsSpec
 
 // locals [Cat x, float g]
 localsSpec
-    :   LOCALS values=argActionParameters
+    :   LOCALS argActionParameters
     ;
 
 // @ Sections are generally target language specific things
@@ -605,7 +605,7 @@ alternative
     ;
 
 elements
-    : e+=element+
+    : element+
     ;
 
 element
@@ -711,7 +711,7 @@ setElement
 //
 block
  	:	LPAREN
-        ( optionsSpec? ra+=ruleAction* COLON )?
+        ( optionsSpec? ruleAction* COLON )?
         altList
 		RPAREN
     ;

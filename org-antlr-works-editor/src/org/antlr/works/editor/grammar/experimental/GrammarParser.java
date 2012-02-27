@@ -218,8 +218,6 @@ public class GrammarParser extends Parser<Token> {
 	}
 
 	public static class GrammarTypeContext extends ParserRuleContext<Token> {
-		public Token t;
-		public Token g;
 		public Token PARSER() { return getToken(GrammarParser.PARSER, 0); }
 		public Token GRAMMAR(int i) {
 		    return getToken(GrammarParser.GRAMMAR, i);
@@ -255,21 +253,21 @@ public class GrammarParser extends Parser<Token> {
 			switch ( getInterpreter().adaptivePredict(_input,3,_ctx) ) {
 				case 1:
 					{
-					setState(170); _localctx.t = match(LEXER);
-					setState(172); _localctx.g = match(GRAMMAR);
+					setState(170); match(LEXER);
+					setState(172); match(GRAMMAR);
 					}
 					break;
 
 				case 2:
 					{
-					setState(174); _localctx.t = match(PARSER);
-					setState(176); _localctx.g = match(GRAMMAR);
+					setState(174); match(PARSER);
+					setState(176); match(GRAMMAR);
 					}
 					break;
 
 				case 3:
 					{
-					setState(178); _localctx.g = match(GRAMMAR);
+					setState(178); match(GRAMMAR);
 					}
 					break;
 			}
@@ -398,9 +396,9 @@ public class GrammarParser extends Parser<Token> {
 			setState(192); match(OPTIONS);
 			setState(200);
 			_errHandler.sync(this);
-			int _alt365 = getInterpreter().adaptivePredict(_input,5,_ctx);
-			while ( _alt365!=2 && _alt365!=-1 ) {
-				if ( _alt365==1 ) {
+			int _alt355 = getInterpreter().adaptivePredict(_input,5,_ctx);
+			while ( _alt355!=2 && _alt355!=-1 ) {
+				if ( _alt355==1 ) {
 					{
 					{
 					setState(194); option();
@@ -410,7 +408,7 @@ public class GrammarParser extends Parser<Token> {
 				}
 				setState(202);
 				_errHandler.sync(this);
-				_alt365 = getInterpreter().adaptivePredict(_input,5,_ctx);
+				_alt355 = getInterpreter().adaptivePredict(_input,5,_ctx);
 			}
 			setState(203); match(RBRACE);
 			}
@@ -584,9 +582,9 @@ public class GrammarParser extends Parser<Token> {
 			setState(223); delegateGrammar();
 			setState(231);
 			_errHandler.sync(this);
-			int _alt454 = getInterpreter().adaptivePredict(_input,7,_ctx);
-			while ( _alt454!=2 && _alt454!=-1 ) {
-				if ( _alt454==1 ) {
+			int _alt444 = getInterpreter().adaptivePredict(_input,7,_ctx);
+			while ( _alt444!=2 && _alt444!=-1 ) {
+				if ( _alt444==1 ) {
 					{
 					{
 					setState(225); match(COMMA);
@@ -596,7 +594,7 @@ public class GrammarParser extends Parser<Token> {
 				}
 				setState(233);
 				_errHandler.sync(this);
-				_alt454 = getInterpreter().adaptivePredict(_input,7,_ctx);
+				_alt444 = getInterpreter().adaptivePredict(_input,7,_ctx);
 			}
 			setState(234); match(SEMI);
 			}
@@ -706,9 +704,9 @@ public class GrammarParser extends Parser<Token> {
 			setState(246); match(TOKENS);
 			setState(250); 
 			_errHandler.sync(this);
-			int _alt489 = getInterpreter().adaptivePredict(_input,9,_ctx);
+			int _alt479 = getInterpreter().adaptivePredict(_input,9,_ctx);
 			do {
-				switch ( _alt489 ) {
+				switch ( _alt479 ) {
 					case 1:
 						{
 						{
@@ -721,8 +719,8 @@ public class GrammarParser extends Parser<Token> {
 				}
 				setState(252); 
 				_errHandler.sync(this);
-				_alt489 = getInterpreter().adaptivePredict(_input,9,_ctx);
-			} while ( _alt489!=2 && _alt489!=-1 );
+				_alt479 = getInterpreter().adaptivePredict(_input,9,_ctx);
+			} while ( _alt479!=2 && _alt479!=-1 );
 			setState(254); match(RBRACE);
 			}
 			_localctx.stop = _input.LT(-1);
@@ -871,9 +869,9 @@ public class GrammarParser extends Parser<Token> {
 			setState(272); match(BEGIN_ACTION);
 			setState(322);
 			_errHandler.sync(this);
-			int _alt620 = getInterpreter().adaptivePredict(_input,13,_ctx);
-			while ( _alt620!=2 && _alt620!=-1 ) {
-				if ( _alt620==1 ) {
+			int _alt610 = getInterpreter().adaptivePredict(_input,13,_ctx);
+			while ( _alt610!=2 && _alt610!=-1 ) {
+				if ( _alt610==1 ) {
 					{
 					setState(320);
 					//_errHandler.sync(this);
@@ -1020,7 +1018,7 @@ public class GrammarParser extends Parser<Token> {
 				}
 				setState(324);
 				_errHandler.sync(this);
-				_alt620 = getInterpreter().adaptivePredict(_input,13,_ctx);
+				_alt610 = getInterpreter().adaptivePredict(_input,13,_ctx);
 			}
 			setState(325); match(END_ACTION);
 			}
@@ -1076,9 +1074,9 @@ public class GrammarParser extends Parser<Token> {
 			setState(327); _localctx.ref = match(ACTION_REFERENCE);
 			setState(333);
 			_errHandler.sync(this);
-			int _alt635 = getInterpreter().adaptivePredict(_input,14,_ctx);
-			while ( _alt635!=2 && _alt635!=-1 ) {
-				if ( _alt635==1 ) {
+			int _alt625 = getInterpreter().adaptivePredict(_input,14,_ctx);
+			while ( _alt625!=2 && _alt625!=-1 ) {
+				if ( _alt625==1 ) {
 					{
 					{
 					setState(329); ignored();
@@ -1087,14 +1085,14 @@ public class GrammarParser extends Parser<Token> {
 				}
 				setState(335);
 				_errHandler.sync(this);
-				_alt635 = getInterpreter().adaptivePredict(_input,14,_ctx);
+				_alt625 = getInterpreter().adaptivePredict(_input,14,_ctx);
 			}
 			setState(336); _localctx.op = match(ACTION_DOT);
 			setState(342);
 			_errHandler.sync(this);
-			int _alt642 = getInterpreter().adaptivePredict(_input,15,_ctx);
-			while ( _alt642!=2 && _alt642!=-1 ) {
-				if ( _alt642==1 ) {
+			int _alt632 = getInterpreter().adaptivePredict(_input,15,_ctx);
+			while ( _alt632!=2 && _alt632!=-1 ) {
+				if ( _alt632==1 ) {
 					{
 					{
 					setState(338); ignored();
@@ -1103,7 +1101,7 @@ public class GrammarParser extends Parser<Token> {
 				}
 				setState(344);
 				_errHandler.sync(this);
-				_alt642 = getInterpreter().adaptivePredict(_input,15,_ctx);
+				_alt632 = getInterpreter().adaptivePredict(_input,15,_ctx);
 			}
 			setState(345); _localctx.member = match(ACTION_WORD);
 			}
@@ -1167,9 +1165,9 @@ public class GrammarParser extends Parser<Token> {
 			setState(347); _localctx.ref = match(ACTION_REFERENCE);
 			setState(353);
 			_errHandler.sync(this);
-			int _alt659 = getInterpreter().adaptivePredict(_input,16,_ctx);
-			while ( _alt659!=2 && _alt659!=-1 ) {
-				if ( _alt659==1 ) {
+			int _alt649 = getInterpreter().adaptivePredict(_input,16,_ctx);
+			while ( _alt649!=2 && _alt649!=-1 ) {
+				if ( _alt649==1 ) {
 					{
 					{
 					setState(349); ignored();
@@ -1178,7 +1176,7 @@ public class GrammarParser extends Parser<Token> {
 				}
 				setState(355);
 				_errHandler.sync(this);
-				_alt659 = getInterpreter().adaptivePredict(_input,16,_ctx);
+				_alt649 = getInterpreter().adaptivePredict(_input,16,_ctx);
 			}
 			setState(394);
 			//_errHandler.sync(this);
@@ -1188,9 +1186,9 @@ public class GrammarParser extends Parser<Token> {
 					setState(356); match(ACTION_LBRACK);
 					setState(362);
 					_errHandler.sync(this);
-					int _alt665 = getInterpreter().adaptivePredict(_input,17,_ctx);
-					while ( _alt665!=2 && _alt665!=-1 ) {
-						if ( _alt665==1 ) {
+					int _alt655 = getInterpreter().adaptivePredict(_input,17,_ctx);
+					while ( _alt655!=2 && _alt655!=-1 ) {
+						if ( _alt655==1 ) {
 							{
 							{
 							setState(358); ignored();
@@ -1199,7 +1197,7 @@ public class GrammarParser extends Parser<Token> {
 						}
 						setState(364);
 						_errHandler.sync(this);
-						_alt665 = getInterpreter().adaptivePredict(_input,17,_ctx);
+						_alt655 = getInterpreter().adaptivePredict(_input,17,_ctx);
 					}
 					setState(374);
 					//_errHandler.sync(this);
@@ -1209,9 +1207,9 @@ public class GrammarParser extends Parser<Token> {
 							setState(365); _localctx.neg = match(ACTION_MINUS);
 							setState(371);
 							_errHandler.sync(this);
-							int _alt673 = getInterpreter().adaptivePredict(_input,18,_ctx);
-							while ( _alt673!=2 && _alt673!=-1 ) {
-								if ( _alt673==1 ) {
+							int _alt663 = getInterpreter().adaptivePredict(_input,18,_ctx);
+							while ( _alt663!=2 && _alt663!=-1 ) {
+								if ( _alt663==1 ) {
 									{
 									{
 									setState(367); ignored();
@@ -1220,7 +1218,7 @@ public class GrammarParser extends Parser<Token> {
 								}
 								setState(373);
 								_errHandler.sync(this);
-								_alt673 = getInterpreter().adaptivePredict(_input,18,_ctx);
+								_alt663 = getInterpreter().adaptivePredict(_input,18,_ctx);
 							}
 							}
 							break;
@@ -1228,9 +1226,9 @@ public class GrammarParser extends Parser<Token> {
 					setState(376); _localctx.index = match(ACTION_WORD);
 					setState(382);
 					_errHandler.sync(this);
-					int _alt682 = getInterpreter().adaptivePredict(_input,20,_ctx);
-					while ( _alt682!=2 && _alt682!=-1 ) {
-						if ( _alt682==1 ) {
+					int _alt672 = getInterpreter().adaptivePredict(_input,20,_ctx);
+					while ( _alt672!=2 && _alt672!=-1 ) {
+						if ( _alt672==1 ) {
 							{
 							{
 							setState(378); ignored();
@@ -1239,14 +1237,14 @@ public class GrammarParser extends Parser<Token> {
 						}
 						setState(384);
 						_errHandler.sync(this);
-						_alt682 = getInterpreter().adaptivePredict(_input,20,_ctx);
+						_alt672 = getInterpreter().adaptivePredict(_input,20,_ctx);
 					}
 					setState(385); match(ACTION_RBRACK);
 					setState(391);
 					_errHandler.sync(this);
-					int _alt687 = getInterpreter().adaptivePredict(_input,21,_ctx);
-					while ( _alt687!=2 && _alt687!=-1 ) {
-						if ( _alt687==1 ) {
+					int _alt677 = getInterpreter().adaptivePredict(_input,21,_ctx);
+					while ( _alt677!=2 && _alt677!=-1 ) {
+						if ( _alt677==1 ) {
 							{
 							{
 							setState(387); ignored();
@@ -1255,7 +1253,7 @@ public class GrammarParser extends Parser<Token> {
 						}
 						setState(393);
 						_errHandler.sync(this);
-						_alt687 = getInterpreter().adaptivePredict(_input,21,_ctx);
+						_alt677 = getInterpreter().adaptivePredict(_input,21,_ctx);
 					}
 					}
 					break;
@@ -1263,9 +1261,9 @@ public class GrammarParser extends Parser<Token> {
 			setState(396); _localctx.op = match(ACTION_COLON2);
 			setState(402);
 			_errHandler.sync(this);
-			int _alt696 = getInterpreter().adaptivePredict(_input,23,_ctx);
-			while ( _alt696!=2 && _alt696!=-1 ) {
-				if ( _alt696==1 ) {
+			int _alt686 = getInterpreter().adaptivePredict(_input,23,_ctx);
+			while ( _alt686!=2 && _alt686!=-1 ) {
+				if ( _alt686==1 ) {
 					{
 					{
 					setState(398); ignored();
@@ -1274,7 +1272,7 @@ public class GrammarParser extends Parser<Token> {
 				}
 				setState(404);
 				_errHandler.sync(this);
-				_alt696 = getInterpreter().adaptivePredict(_input,23,_ctx);
+				_alt686 = getInterpreter().adaptivePredict(_input,23,_ctx);
 			}
 			setState(405); _localctx.member = match(ACTION_WORD);
 			}
@@ -1333,9 +1331,9 @@ public class GrammarParser extends Parser<Token> {
 			setState(407); match(BEGIN_ARG_ACTION);
 			setState(413);
 			_errHandler.sync(this);
-			int _alt759 = getInterpreter().adaptivePredict(_input,24,_ctx);
-			while ( _alt759!=2 && _alt759!=-1 ) {
-				if ( _alt759==1 ) {
+			int _alt749 = getInterpreter().adaptivePredict(_input,24,_ctx);
+			while ( _alt749!=2 && _alt749!=-1 ) {
+				if ( _alt749==1 ) {
 					{
 					{
 					setState(409);
@@ -1350,7 +1348,7 @@ public class GrammarParser extends Parser<Token> {
 				}
 				setState(415);
 				_errHandler.sync(this);
-				_alt759 = getInterpreter().adaptivePredict(_input,24,_ctx);
+				_alt749 = getInterpreter().adaptivePredict(_input,24,_ctx);
 			}
 			setState(416); match(END_ARG_ACTION);
 			}
@@ -1411,9 +1409,9 @@ public class GrammarParser extends Parser<Token> {
 			setState(418); match(BEGIN_ARG_ACTION);
 			setState(424);
 			_errHandler.sync(this);
-			int _alt772 = getInterpreter().adaptivePredict(_input,25,_ctx);
-			while ( _alt772!=2 && _alt772!=-1 ) {
-				if ( _alt772==1 ) {
+			int _alt762 = getInterpreter().adaptivePredict(_input,25,_ctx);
+			while ( _alt762!=2 && _alt762!=-1 ) {
+				if ( _alt762==1 ) {
 					{
 					{
 					setState(420); ignored();
@@ -1422,7 +1420,7 @@ public class GrammarParser extends Parser<Token> {
 				}
 				setState(426);
 				_errHandler.sync(this);
-				_alt772 = getInterpreter().adaptivePredict(_input,25,_ctx);
+				_alt762 = getInterpreter().adaptivePredict(_input,25,_ctx);
 			}
 			setState(459);
 			//_errHandler.sync(this);
@@ -1433,9 +1431,9 @@ public class GrammarParser extends Parser<Token> {
 					_localctx.parameters.add(_localctx.argActionParameter);
 					setState(433);
 					_errHandler.sync(this);
-					int _alt780 = getInterpreter().adaptivePredict(_input,26,_ctx);
-					while ( _alt780!=2 && _alt780!=-1 ) {
-						if ( _alt780==1 ) {
+					int _alt770 = getInterpreter().adaptivePredict(_input,26,_ctx);
+					while ( _alt770!=2 && _alt770!=-1 ) {
+						if ( _alt770==1 ) {
 							{
 							{
 							setState(429); ignored();
@@ -1444,21 +1442,21 @@ public class GrammarParser extends Parser<Token> {
 						}
 						setState(435);
 						_errHandler.sync(this);
-						_alt780 = getInterpreter().adaptivePredict(_input,26,_ctx);
+						_alt770 = getInterpreter().adaptivePredict(_input,26,_ctx);
 					}
 					setState(456);
 					_errHandler.sync(this);
-					int _alt795 = getInterpreter().adaptivePredict(_input,29,_ctx);
-					while ( _alt795!=2 && _alt795!=-1 ) {
-						if ( _alt795==1 ) {
+					int _alt785 = getInterpreter().adaptivePredict(_input,29,_ctx);
+					while ( _alt785!=2 && _alt785!=-1 ) {
+						if ( _alt785==1 ) {
 							{
 							{
 							setState(436); match(ARG_ACTION_COMMA);
 							setState(442);
 							_errHandler.sync(this);
-							int _alt786 = getInterpreter().adaptivePredict(_input,27,_ctx);
-							while ( _alt786!=2 && _alt786!=-1 ) {
-								if ( _alt786==1 ) {
+							int _alt776 = getInterpreter().adaptivePredict(_input,27,_ctx);
+							while ( _alt776!=2 && _alt776!=-1 ) {
+								if ( _alt776==1 ) {
 									{
 									{
 									setState(438); ignored();
@@ -1467,15 +1465,15 @@ public class GrammarParser extends Parser<Token> {
 								}
 								setState(444);
 								_errHandler.sync(this);
-								_alt786 = getInterpreter().adaptivePredict(_input,27,_ctx);
+								_alt776 = getInterpreter().adaptivePredict(_input,27,_ctx);
 							}
 							setState(445); _localctx.argActionParameter = argActionParameter();
 							_localctx.parameters.add(_localctx.argActionParameter);
 							setState(451);
 							_errHandler.sync(this);
-							int _alt793 = getInterpreter().adaptivePredict(_input,28,_ctx);
-							while ( _alt793!=2 && _alt793!=-1 ) {
-								if ( _alt793==1 ) {
+							int _alt783 = getInterpreter().adaptivePredict(_input,28,_ctx);
+							while ( _alt783!=2 && _alt783!=-1 ) {
+								if ( _alt783==1 ) {
 									{
 									{
 									setState(447); ignored();
@@ -1484,14 +1482,14 @@ public class GrammarParser extends Parser<Token> {
 								}
 								setState(453);
 								_errHandler.sync(this);
-								_alt793 = getInterpreter().adaptivePredict(_input,28,_ctx);
+								_alt783 = getInterpreter().adaptivePredict(_input,28,_ctx);
 							}
 							}
 							} 
 						}
 						setState(458);
 						_errHandler.sync(this);
-						_alt795 = getInterpreter().adaptivePredict(_input,29,_ctx);
+						_alt785 = getInterpreter().adaptivePredict(_input,29,_ctx);
 					}
 					}
 					break;
@@ -1555,9 +1553,9 @@ public class GrammarParser extends Parser<Token> {
 			}
 			setState(471);
 			_errHandler.sync(this);
-			int _alt813 = getInterpreter().adaptivePredict(_input,32,_ctx);
-			while ( _alt813!=2 && _alt813!=-1 ) {
-				if ( _alt813==1 ) {
+			int _alt803 = getInterpreter().adaptivePredict(_input,32,_ctx);
+			while ( _alt803!=2 && _alt803!=-1 ) {
+				if ( _alt803==1 ) {
 					{
 					{
 					setState(467); ignored();
@@ -1566,7 +1564,7 @@ public class GrammarParser extends Parser<Token> {
 				}
 				setState(473);
 				_errHandler.sync(this);
-				_alt813 = getInterpreter().adaptivePredict(_input,32,_ctx);
+				_alt803 = getInterpreter().adaptivePredict(_input,32,_ctx);
 			}
 			setState(474); _localctx.name = match(ARG_ACTION_WORD);
 			}
@@ -1619,16 +1617,16 @@ public class GrammarParser extends Parser<Token> {
 			setState(476); argActionParameterTypePart();
 			setState(489);
 			_errHandler.sync(this);
-			int _alt833 = getInterpreter().adaptivePredict(_input,34,_ctx);
-			while ( _alt833!=2 && _alt833!=-1 ) {
-				if ( _alt833==1 ) {
+			int _alt823 = getInterpreter().adaptivePredict(_input,34,_ctx);
+			while ( _alt823!=2 && _alt823!=-1 ) {
+				if ( _alt823==1 ) {
 					{
 					{
 					setState(482);
 					_errHandler.sync(this);
-					int _alt829 = getInterpreter().adaptivePredict(_input,33,_ctx);
-					while ( _alt829!=2 && _alt829!=-1 ) {
-						if ( _alt829==1 ) {
+					int _alt819 = getInterpreter().adaptivePredict(_input,33,_ctx);
+					while ( _alt819!=2 && _alt819!=-1 ) {
+						if ( _alt819==1 ) {
 							{
 							{
 							setState(478); ignored();
@@ -1637,7 +1635,7 @@ public class GrammarParser extends Parser<Token> {
 						}
 						setState(484);
 						_errHandler.sync(this);
-						_alt829 = getInterpreter().adaptivePredict(_input,33,_ctx);
+						_alt819 = getInterpreter().adaptivePredict(_input,33,_ctx);
 					}
 					setState(485); argActionParameterTypePart();
 					}
@@ -1645,7 +1643,7 @@ public class GrammarParser extends Parser<Token> {
 				}
 				setState(491);
 				_errHandler.sync(this);
-				_alt833 = getInterpreter().adaptivePredict(_input,34,_ctx);
+				_alt823 = getInterpreter().adaptivePredict(_input,34,_ctx);
 			}
 			}
 			_localctx.stop = _input.LT(-1);
@@ -1989,9 +1987,9 @@ public class GrammarParser extends Parser<Token> {
 			setState(548); match(SEMI);
 			setState(552); 
 			_errHandler.sync(this);
-			int _alt943 = getInterpreter().adaptivePredict(_input,41,_ctx);
+			int _alt933 = getInterpreter().adaptivePredict(_input,41,_ctx);
 			do {
-				switch ( _alt943 ) {
+				switch ( _alt933 ) {
 					case 1:
 						{
 						{
@@ -2004,8 +2002,8 @@ public class GrammarParser extends Parser<Token> {
 				}
 				setState(554); 
 				_errHandler.sync(this);
-				_alt943 = getInterpreter().adaptivePredict(_input,41,_ctx);
-			} while ( _alt943!=2 && _alt943!=-1 );
+				_alt933 = getInterpreter().adaptivePredict(_input,41,_ctx);
+			} while ( _alt933!=2 && _alt933!=-1 );
 			}
 			_localctx.stop = _input.LT(-1);
 		}
@@ -2049,9 +2047,9 @@ public class GrammarParser extends Parser<Token> {
 			{
 			setState(560);
 			_errHandler.sync(this);
-			int _alt954 = getInterpreter().adaptivePredict(_input,42,_ctx);
-			while ( _alt954!=2 && _alt954!=-1 ) {
-				if ( _alt954==1 ) {
+			int _alt942 = getInterpreter().adaptivePredict(_input,42,_ctx);
+			while ( _alt942!=2 && _alt942!=-1 ) {
+				if ( _alt942==1 ) {
 					{
 					{
 					setState(556); ruleSpec();
@@ -2060,7 +2058,7 @@ public class GrammarParser extends Parser<Token> {
 				}
 				setState(562);
 				_errHandler.sync(this);
-				_alt954 = getInterpreter().adaptivePredict(_input,42,_ctx);
+				_alt942 = getInterpreter().adaptivePredict(_input,42,_ctx);
 			}
 			}
 			_localctx.stop = _input.LT(-1);
@@ -2135,7 +2133,6 @@ public class GrammarParser extends Parser<Token> {
 
 	public static class ParserRuleSpecContext extends ParserRuleContext<Token> {
 		public Token name;
-		public ArgActionParametersContext parameters;
 		public Token DOC_COMMENT() { return getToken(GrammarParser.DOC_COMMENT, 0); }
 		public Token COLON() { return getToken(GrammarParser.COLON, 0); }
 		public RuleModifiersContext ruleModifiers() {
@@ -2147,11 +2144,11 @@ public class GrammarParser extends Parser<Token> {
 		public RulePrequelsContext rulePrequels() {
 		    return getRuleContext(RulePrequelsContext.class,0);
 		}
-		public ArgActionParametersContext argActionParameters() {
-		    return getRuleContext(ArgActionParametersContext.class,0);
-		}
 		public RuleReturnsContext ruleReturns() {
 		    return getRuleContext(RuleReturnsContext.class,0);
+		}
+		public ArgActionParametersContext argActionParameters() {
+		    return getRuleContext(ArgActionParametersContext.class,0);
 		}
 		public ThrowsSpecContext throwsSpec() {
 		    return getRuleContext(ThrowsSpecContext.class,0);
@@ -2212,7 +2209,7 @@ public class GrammarParser extends Parser<Token> {
 			switch ( getInterpreter().adaptivePredict(_input,46,_ctx) ) {
 				case 1:
 					{
-					setState(579); _localctx.parameters = argActionParameters();
+					setState(579); argActionParameters();
 					}
 					break;
 			}
@@ -2294,9 +2291,9 @@ public class GrammarParser extends Parser<Token> {
 			{
 			setState(609);
 			_errHandler.sync(this);
-			int _alt1105 = getInterpreter().adaptivePredict(_input,50,_ctx);
-			while ( _alt1105!=2 && _alt1105!=-1 ) {
-				if ( _alt1105==1 ) {
+			int _alt1091 = getInterpreter().adaptivePredict(_input,50,_ctx);
+			while ( _alt1091!=2 && _alt1091!=-1 ) {
+				if ( _alt1091==1 ) {
 					{
 					{
 					setState(605); exceptionHandler();
@@ -2305,7 +2302,7 @@ public class GrammarParser extends Parser<Token> {
 				}
 				setState(611);
 				_errHandler.sync(this);
-				_alt1105 = getInterpreter().adaptivePredict(_input,50,_ctx);
+				_alt1091 = getInterpreter().adaptivePredict(_input,50,_ctx);
 			}
 			setState(614);
 			//_errHandler.sync(this);
@@ -2451,9 +2448,9 @@ public class GrammarParser extends Parser<Token> {
 			{
 			setState(630);
 			_errHandler.sync(this);
-			int _alt1145 = getInterpreter().adaptivePredict(_input,52,_ctx);
-			while ( _alt1145!=2 && _alt1145!=-1 ) {
-				if ( _alt1145==1 ) {
+			int _alt1129 = getInterpreter().adaptivePredict(_input,52,_ctx);
+			while ( _alt1129!=2 && _alt1129!=-1 ) {
+				if ( _alt1129==1 ) {
 					{
 					{
 					setState(626); rulePrequel();
@@ -2462,7 +2459,7 @@ public class GrammarParser extends Parser<Token> {
 				}
 				setState(632);
 				_errHandler.sync(this);
-				_alt1145 = getInterpreter().adaptivePredict(_input,52,_ctx);
+				_alt1129 = getInterpreter().adaptivePredict(_input,52,_ctx);
 			}
 			}
 			_localctx.stop = _input.LT(-1);
@@ -2536,7 +2533,6 @@ public class GrammarParser extends Parser<Token> {
 	}
 
 	public static class RuleReturnsContext extends ParserRuleContext<Token> {
-		public ArgActionParametersContext values;
 		public ArgActionParametersContext argActionParameters() {
 		    return getRuleContext(ArgActionParametersContext.class,0);
 		}
@@ -2566,7 +2562,7 @@ public class GrammarParser extends Parser<Token> {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(639); match(RETURNS);
-			setState(641); _localctx.values = argActionParameters();
+			setState(641); argActionParameters();
 			}
 			_localctx.stop = _input.LT(-1);
 		}
@@ -2617,9 +2613,9 @@ public class GrammarParser extends Parser<Token> {
 			setState(645); qid();
 			setState(653);
 			_errHandler.sync(this);
-			int _alt1226 = getInterpreter().adaptivePredict(_input,54,_ctx);
-			while ( _alt1226!=2 && _alt1226!=-1 ) {
-				if ( _alt1226==1 ) {
+			int _alt1208 = getInterpreter().adaptivePredict(_input,54,_ctx);
+			while ( _alt1208!=2 && _alt1208!=-1 ) {
+				if ( _alt1208==1 ) {
 					{
 					{
 					setState(647); match(COMMA);
@@ -2629,7 +2625,7 @@ public class GrammarParser extends Parser<Token> {
 				}
 				setState(655);
 				_errHandler.sync(this);
-				_alt1226 = getInterpreter().adaptivePredict(_input,54,_ctx);
+				_alt1208 = getInterpreter().adaptivePredict(_input,54,_ctx);
 			}
 			}
 			_localctx.stop = _input.LT(-1);
@@ -2645,7 +2641,6 @@ public class GrammarParser extends Parser<Token> {
 	}
 
 	public static class LocalsSpecContext extends ParserRuleContext<Token> {
-		public ArgActionParametersContext values;
 		public Token LOCALS() { return getToken(GrammarParser.LOCALS, 0); }
 		public ArgActionParametersContext argActionParameters() {
 		    return getRuleContext(ArgActionParametersContext.class,0);
@@ -2675,7 +2670,7 @@ public class GrammarParser extends Parser<Token> {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(656); match(LOCALS);
-			setState(658); _localctx.values = argActionParameters();
+			setState(658); argActionParameters();
 			}
 			_localctx.stop = _input.LT(-1);
 		}
@@ -2767,9 +2762,9 @@ public class GrammarParser extends Parser<Token> {
 			{
 			setState(668); 
 			_errHandler.sync(this);
-			int _alt1289 = getInterpreter().adaptivePredict(_input,55,_ctx);
+			int _alt1269 = getInterpreter().adaptivePredict(_input,55,_ctx);
 			do {
-				switch ( _alt1289 ) {
+				switch ( _alt1269 ) {
 					case 1:
 						{
 						{
@@ -2782,8 +2777,8 @@ public class GrammarParser extends Parser<Token> {
 				}
 				setState(670); 
 				_errHandler.sync(this);
-				_alt1289 = getInterpreter().adaptivePredict(_input,55,_ctx);
-			} while ( _alt1289!=2 && _alt1289!=-1 );
+				_alt1269 = getInterpreter().adaptivePredict(_input,55,_ctx);
+			} while ( _alt1269!=2 && _alt1269!=-1 );
 			}
 			_localctx.stop = _input.LT(-1);
 		}
@@ -2944,9 +2939,9 @@ public class GrammarParser extends Parser<Token> {
 			setState(684); labeledAlt();
 			setState(692);
 			_errHandler.sync(this);
-			int _alt1356 = getInterpreter().adaptivePredict(_input,57,_ctx);
-			while ( _alt1356!=2 && _alt1356!=-1 ) {
-				if ( _alt1356==1 ) {
+			int _alt1336 = getInterpreter().adaptivePredict(_input,57,_ctx);
+			while ( _alt1336!=2 && _alt1336!=-1 ) {
+				if ( _alt1336==1 ) {
 					{
 					{
 					setState(686); match(OR);
@@ -2956,7 +2951,7 @@ public class GrammarParser extends Parser<Token> {
 				}
 				setState(694);
 				_errHandler.sync(this);
-				_alt1356 = getInterpreter().adaptivePredict(_input,57,_ctx);
+				_alt1336 = getInterpreter().adaptivePredict(_input,57,_ctx);
 			}
 			}
 			_localctx.stop = _input.LT(-1);
@@ -3173,9 +3168,9 @@ public class GrammarParser extends Parser<Token> {
 			setState(721); lexerAlt();
 			setState(729);
 			_errHandler.sync(this);
-			int _alt1416 = getInterpreter().adaptivePredict(_input,61,_ctx);
-			while ( _alt1416!=2 && _alt1416!=-1 ) {
-				if ( _alt1416==1 ) {
+			int _alt1396 = getInterpreter().adaptivePredict(_input,61,_ctx);
+			while ( _alt1396!=2 && _alt1396!=-1 ) {
+				if ( _alt1396==1 ) {
 					{
 					{
 					setState(723); match(OR);
@@ -3185,7 +3180,7 @@ public class GrammarParser extends Parser<Token> {
 				}
 				setState(731);
 				_errHandler.sync(this);
-				_alt1416 = getInterpreter().adaptivePredict(_input,61,_ctx);
+				_alt1396 = getInterpreter().adaptivePredict(_input,61,_ctx);
 			}
 			}
 			_localctx.stop = _input.LT(-1);
@@ -3289,9 +3284,9 @@ public class GrammarParser extends Parser<Token> {
 			{
 			setState(742); 
 			_errHandler.sync(this);
-			int _alt1441 = getInterpreter().adaptivePredict(_input,63,_ctx);
+			int _alt1421 = getInterpreter().adaptivePredict(_input,63,_ctx);
 			do {
-				switch ( _alt1441 ) {
+				switch ( _alt1421 ) {
 					case 1:
 						{
 						{
@@ -3304,8 +3299,8 @@ public class GrammarParser extends Parser<Token> {
 				}
 				setState(744); 
 				_errHandler.sync(this);
-				_alt1441 = getInterpreter().adaptivePredict(_input,63,_ctx);
-			} while ( _alt1441!=2 && _alt1441!=-1 );
+				_alt1421 = getInterpreter().adaptivePredict(_input,63,_ctx);
+			} while ( _alt1421!=2 && _alt1421!=-1 );
 			}
 			_localctx.stop = _input.LT(-1);
 		}
@@ -3616,9 +3611,9 @@ public class GrammarParser extends Parser<Token> {
 			setState(800); lexerAction();
 			setState(808);
 			_errHandler.sync(this);
-			int _alt1551 = getInterpreter().adaptivePredict(_input,71,_ctx);
-			while ( _alt1551!=2 && _alt1551!=-1 ) {
-				if ( _alt1551==1 ) {
+			int _alt1531 = getInterpreter().adaptivePredict(_input,71,_ctx);
+			while ( _alt1531!=2 && _alt1531!=-1 ) {
+				if ( _alt1531==1 ) {
 					{
 					{
 					setState(802); match(COMMA);
@@ -3628,7 +3623,7 @@ public class GrammarParser extends Parser<Token> {
 				}
 				setState(810);
 				_errHandler.sync(this);
-				_alt1551 = getInterpreter().adaptivePredict(_input,71,_ctx);
+				_alt1531 = getInterpreter().adaptivePredict(_input,71,_ctx);
 			}
 			}
 			_localctx.stop = _input.LT(-1);
@@ -3795,9 +3790,9 @@ public class GrammarParser extends Parser<Token> {
 			setState(829); alternative();
 			setState(837);
 			_errHandler.sync(this);
-			int _alt1596 = getInterpreter().adaptivePredict(_input,74,_ctx);
-			while ( _alt1596!=2 && _alt1596!=-1 ) {
-				if ( _alt1596==1 ) {
+			int _alt1576 = getInterpreter().adaptivePredict(_input,74,_ctx);
+			while ( _alt1576!=2 && _alt1576!=-1 ) {
+				if ( _alt1576==1 ) {
 					{
 					{
 					setState(831); match(OR);
@@ -3807,7 +3802,7 @@ public class GrammarParser extends Parser<Token> {
 				}
 				setState(839);
 				_errHandler.sync(this);
-				_alt1596 = getInterpreter().adaptivePredict(_input,74,_ctx);
+				_alt1576 = getInterpreter().adaptivePredict(_input,74,_ctx);
 			}
 			}
 			_localctx.stop = _input.LT(-1);
@@ -3877,8 +3872,6 @@ public class GrammarParser extends Parser<Token> {
 	}
 
 	public static class ElementsContext extends ParserRuleContext<Token> {
-		public ElementContext element;
-		public List<ElementContext> e = new ArrayList<ElementContext>();
 		public ElementContext element() {
 		    return getRuleContext(ElementContext.class,0);
 		}
@@ -3908,14 +3901,13 @@ public class GrammarParser extends Parser<Token> {
 			{
 			setState(848); 
 			_errHandler.sync(this);
-			int _alt1623 = getInterpreter().adaptivePredict(_input,76,_ctx);
+			int _alt1601 = getInterpreter().adaptivePredict(_input,76,_ctx);
 			do {
-				switch ( _alt1623 ) {
+				switch ( _alt1601 ) {
 					case 1:
 						{
 						{
-						setState(846); _localctx.element = element();
-						_localctx.e.add(_localctx.element);
+						setState(846); element();
 						}
 						}
 						break;
@@ -3924,8 +3916,8 @@ public class GrammarParser extends Parser<Token> {
 				}
 				setState(850); 
 				_errHandler.sync(this);
-				_alt1623 = getInterpreter().adaptivePredict(_input,76,_ctx);
-			} while ( _alt1623!=2 && _alt1623!=-1 );
+				_alt1601 = getInterpreter().adaptivePredict(_input,76,_ctx);
+			} while ( _alt1601!=2 && _alt1601!=-1 );
 			}
 			_localctx.stop = _input.LT(-1);
 		}
@@ -4606,9 +4598,9 @@ public class GrammarParser extends Parser<Token> {
 			setState(956); setElement();
 			setState(964);
 			_errHandler.sync(this);
-			int _alt1879 = getInterpreter().adaptivePredict(_input,90,_ctx);
-			while ( _alt1879!=2 && _alt1879!=-1 ) {
-				if ( _alt1879==1 ) {
+			int _alt1857 = getInterpreter().adaptivePredict(_input,90,_ctx);
+			while ( _alt1857!=2 && _alt1857!=-1 ) {
+				if ( _alt1857==1 ) {
 					{
 					{
 					setState(958); match(OR);
@@ -4618,7 +4610,7 @@ public class GrammarParser extends Parser<Token> {
 				}
 				setState(966);
 				_errHandler.sync(this);
-				_alt1879 = getInterpreter().adaptivePredict(_input,90,_ctx);
+				_alt1857 = getInterpreter().adaptivePredict(_input,90,_ctx);
 			}
 			setState(967); match(RPAREN);
 			}
@@ -4699,8 +4691,6 @@ public class GrammarParser extends Parser<Token> {
 	}
 
 	public static class BlockContext extends ParserRuleContext<Token> {
-		public RuleActionContext ruleAction;
-		public List<RuleActionContext> ra = new ArrayList<RuleActionContext>();
 		public Token COLON() { return getToken(GrammarParser.COLON, 0); }
 		public Token RPAREN() { return getToken(GrammarParser.RPAREN, 0); }
 		public OptionsSpecContext optionsSpec() {
@@ -4754,19 +4744,18 @@ public class GrammarParser extends Parser<Token> {
 					}
 					setState(987);
 					_errHandler.sync(this);
-					int _alt1929 = getInterpreter().adaptivePredict(_input,93,_ctx);
-					while ( _alt1929!=2 && _alt1929!=-1 ) {
-						if ( _alt1929==1 ) {
+					int _alt1905 = getInterpreter().adaptivePredict(_input,93,_ctx);
+					while ( _alt1905!=2 && _alt1905!=-1 ) {
+						if ( _alt1905==1 ) {
 							{
 							{
-							setState(983); _localctx.ruleAction = ruleAction();
-							_localctx.ra.add(_localctx.ruleAction);
+							setState(983); ruleAction();
 							}
 							} 
 						}
 						setState(989);
 						_errHandler.sync(this);
-						_alt1929 = getInterpreter().adaptivePredict(_input,93,_ctx);
+						_alt1905 = getInterpreter().adaptivePredict(_input,93,_ctx);
 					}
 					setState(990); match(COLON);
 					}
@@ -4998,9 +4987,9 @@ public class GrammarParser extends Parser<Token> {
 			setState(1026); elementOption();
 			setState(1034);
 			_errHandler.sync(this);
-			int _alt2030 = getInterpreter().adaptivePredict(_input,99,_ctx);
-			while ( _alt2030!=2 && _alt2030!=-1 ) {
-				if ( _alt2030==1 ) {
+			int _alt2006 = getInterpreter().adaptivePredict(_input,99,_ctx);
+			while ( _alt2006!=2 && _alt2006!=-1 ) {
+				if ( _alt2006==1 ) {
 					{
 					{
 					setState(1028); match(COMMA);
@@ -5010,7 +4999,7 @@ public class GrammarParser extends Parser<Token> {
 				}
 				setState(1036);
 				_errHandler.sync(this);
-				_alt2030 = getInterpreter().adaptivePredict(_input,99,_ctx);
+				_alt2006 = getInterpreter().adaptivePredict(_input,99,_ctx);
 			}
 			setState(1037); match(GT);
 			}
@@ -5199,9 +5188,9 @@ public class GrammarParser extends Parser<Token> {
 			setState(1061); id();
 			setState(1069);
 			_errHandler.sync(this);
-			int _alt2103 = getInterpreter().adaptivePredict(_input,103,_ctx);
-			while ( _alt2103!=2 && _alt2103!=-1 ) {
-				if ( _alt2103==1 ) {
+			int _alt2079 = getInterpreter().adaptivePredict(_input,103,_ctx);
+			while ( _alt2079!=2 && _alt2079!=-1 ) {
+				if ( _alt2079==1 ) {
 					{
 					{
 					setState(1063); match(DOT);
@@ -5211,7 +5200,7 @@ public class GrammarParser extends Parser<Token> {
 				}
 				setState(1071);
 				_errHandler.sync(this);
-				_alt2103 = getInterpreter().adaptivePredict(_input,103,_ctx);
+				_alt2079 = getInterpreter().adaptivePredict(_input,103,_ctx);
 			}
 			}
 			_localctx.stop = _input.LT(-1);
