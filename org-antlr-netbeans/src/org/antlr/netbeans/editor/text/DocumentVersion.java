@@ -19,10 +19,6 @@ public interface DocumentVersion {
 
     public @NonNull VersionedDocument getVersionedDocument();
 
-    /**
-     * @deprecated figure out how to handle GrammarTokensTaskTaggerSnapshot ctor without this
-     */
-    @Deprecated
     public @NonNull DocumentSnapshot getSnapshot();
 
     public int getLength();
