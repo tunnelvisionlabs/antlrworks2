@@ -95,7 +95,9 @@ public class GrammarCompletionProvider extends AbstractCompletionProvider {
 
     @Override
     public boolean isContext(Token token, int offset, int queryType) {
-        return isContext(token, offset, true, true);
+        boolean allowInStrings = false;
+        boolean allowInActions = (queryType & TRIGGERED_QUERY_TYPE) != 0;
+        return isContext(token, offset, allowInStrings, allowInActions);
     }
 
     /*package*/ boolean isContext(Token token, int offset, boolean allowInStrings, boolean allowInActions) {
