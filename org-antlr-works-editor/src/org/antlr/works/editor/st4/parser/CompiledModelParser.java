@@ -95,8 +95,7 @@ public class CompiledModelParser {
                     parser.group(group, "/");
                     TemplateGroupRuleReturnScope returnScope = buildAstForGroupTemplates(group);
                     FileObject fileObject = snapshot.getVersionedDocument().getFileObject();
-                    @SuppressWarnings("unchecked")
-                    CommonToken[] groupTokens = (CommonToken[])tokens.getTokens().toArray(new CommonToken[0]);
+                    CommonToken[] groupTokens = tokens.getTokens().toArray(new CommonToken[0]);
                     lastSnapshot = snapshot;
                     lastResult = new CompiledFileModel(parser, returnScope, syntaxErrors, fileObject, groupTokens);
                     lastException = null;

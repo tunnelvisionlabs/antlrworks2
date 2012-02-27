@@ -47,7 +47,6 @@ public class GrammarFoldManagerParserTask implements ParserTask {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void parse(ParserTaskManager taskManager, ParseContext context, DocumentSnapshot snapshot, Collection<ParserDataDefinition<?>> requestedData, ParserResultHandler results)
         throws InterruptedException, ExecutionException {
 

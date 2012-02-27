@@ -53,7 +53,6 @@ public class NavigatorUpdateParserTask implements ParserTask {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void parse(ParserTaskManager taskManager, ParseContext parseContext, DocumentSnapshot snapshot, Collection<ParserDataDefinition<?>> requestedData, ParserResultHandler results)
         throws InterruptedException, ExecutionException {
 

@@ -59,7 +59,6 @@ public class LexerDebuggerSelectedTokenHighlighterLayerFactory implements Highli
                 if (LexerDebuggerEditorKit.PROP_SELECTED_TOKENS.equals(evt.getPropertyName())) {
                     container.clear();
 
-                    @SuppressWarnings("unchecked")
                     List<?> tokens = (List<?>)evt.getNewValue();
                     for (Object obj : tokens) {
                         if (obj instanceof TraceToken) {
