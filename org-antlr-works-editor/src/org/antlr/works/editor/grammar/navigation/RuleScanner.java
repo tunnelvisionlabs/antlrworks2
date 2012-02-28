@@ -9,7 +9,14 @@
 package org.antlr.works.editor.grammar.navigation;
 
 import org.antlr.netbeans.editor.navigation.Description;
+import org.antlr.netbeans.editor.text.OffsetRegion;
+import org.antlr.runtime.CommonToken;
+import org.antlr.runtime.tree.CommonTree;
+import org.antlr.works.editor.grammar.parser.CompiledFileModel;
 import org.antlr.works.editor.grammar.parser.CompiledModel;
+import org.netbeans.api.annotations.common.CheckForNull;
+import org.netbeans.api.annotations.common.NonNull;
+import org.netbeans.api.annotations.common.NullAllowed;
 import org.openide.util.NbBundle;
 
 /**
@@ -28,5 +35,39 @@ public abstract class RuleScanner {
     }
 
     protected abstract GrammarNode.GrammarNodeDescription scanImpl(CompiledModel model);
+
+    @CheckForNull
+    protected CommonToken getToken(@NonNull CompiledFileModel result, int tokenIndex) {
+        CommonToken[] tokens = result.getTokens();
+        if (tokens != null && tokenIndex >= 0 && tokenIndex < tokens.length) {
+            return tokens[tokenIndex];
+        }
+
+        return null;
+    }
+
+    @CheckForNull
+    protected OffsetRegion getSpan(@NullAllowed CommonToken startToken, @NullAllowed CommonToken stopToken) {
+        if (startToken == null || stopToken == null) {
+            return null;
+        }
+
+        if (startToken.getStartIndex() > stopToken.getStopIndex() + 1) {
+            return null;
+        }
+
+        return OffsetRegion.fromBounds(startToken.getStartIndex(), stopToken.getStopIndex() + 1);
+    }
+
+    @CheckForNull
+    protected OffsetRegion getSpan(@NonNull CompiledFileModel result, @NullAllowed CommonTree tree) {
+        if (tree == null) {
+            return null;
+        }
+
+        CommonToken startToken = getToken(result, tree.getTokenStartIndex());
+        CommonToken stopToken = getToken(result, tree.getTokenStopIndex());
+        return getSpan(startToken, stopToken);
+    }
 
 }

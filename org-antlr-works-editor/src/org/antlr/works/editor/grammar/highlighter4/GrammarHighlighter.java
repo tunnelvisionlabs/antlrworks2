@@ -10,19 +10,34 @@ package org.antlr.works.editor.grammar.highlighter4;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Collection;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import javax.swing.text.JTextComponent;
 import javax.swing.text.StyledDocument;
+import org.antlr.netbeans.editor.navigation.Description;
 import org.antlr.netbeans.editor.text.OffsetRegion;
+import org.antlr.netbeans.editor.text.SnapshotPositionRegion;
+import org.antlr.netbeans.editor.text.TrackingPositionRegion;
+import org.antlr.netbeans.editor.text.VersionedDocument;
+import org.antlr.netbeans.editor.text.VersionedDocumentUtilities;
+import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.Token;
 import org.antlr.works.editor.antlr4.highlighting.ANTLRHighlighterBaseV4;
 import org.antlr.works.editor.antlr4.highlighting.TokenSourceWithStateV4;
+import org.antlr.works.editor.grammar.GoToSupport;
 import org.antlr.works.editor.grammar.GrammarEditorKit;
+import org.antlr.works.editor.grammar.completion.GrammarCompletionProvider;
+import org.antlr.works.editor.grammar.experimental.GrammarParser;
 import org.netbeans.api.editor.mimelookup.MimeLookup;
 import org.netbeans.api.editor.mimelookup.MimePath;
+import org.netbeans.api.editor.settings.AttributesUtilities;
+import org.netbeans.api.editor.settings.EditorStyleConstants;
 import org.netbeans.api.editor.settings.FontColorSettings;
 import org.netbeans.lib.editor.util.swing.DocumentUtilities;
+import org.netbeans.spi.editor.highlighting.HighlightAttributeValue;
 import org.openide.text.NbDocument;
 import org.openide.util.Lookup;
 
@@ -32,6 +47,8 @@ import org.openide.util.Lookup;
  */
 public class GrammarHighlighter extends ANTLRHighlighterBaseV4<GrammarHighlighterLexerState> {
     public static final String DOCUMENT_PROPERTY = "grammar-highlighter";
+    private static final AttributeSet TOOLTIP =
+        AttributesUtilities.createImmutable(EditorStyleConstants.Tooltip, new TooltipResolver());
 
     private final AttributeSet identifierAttributes;
     private final AttributeSet keywordAttributes;
@@ -72,15 +89,15 @@ public class GrammarHighlighter extends ANTLRHighlighterBaseV4<GrammarHighlighte
 
         Lookup lookup = MimeLookup.getLookup(MimePath.parse(GrammarEditorKit.GRAMMAR_MIME_TYPE));
         FontColorSettings settings = lookup.lookup(FontColorSettings.class);
-        identifierAttributes = getFontAndColors(settings, "identifier");
+        identifierAttributes = getFontAndColors(settings, "identifier", true);
         keywordAttributes = getFontAndColors(settings, "keyword");
         commentAttributes = getFontAndColors(settings, "comment");
-        stringLiteralAttributes = getFontAndColors(settings, "stringliteral");
+        stringLiteralAttributes = getFontAndColors(settings, "stringliteral", true);
         numberLiteralAttributes = getFontAndColors(settings, "number");
-        symbolDefinitionAttributes = getFontAndColors(settings, "definition");
+        symbolDefinitionAttributes = getFontAndColors(settings, "definition", true);
         symbolReferenceAttributes = getFontAndColors(settings, "reference");
-        parserRuleAttributes = getFontAndColors(settings, "parserrule");
-        lexerRuleAttributes = getFontAndColors(settings, "lexerrule");
+        parserRuleAttributes = getFontAndColors(settings, "parserrule", true);
+        lexerRuleAttributes = getFontAndColors(settings, "lexerrule", true);
         astOperatorAttributes = getFontAndColors(settings, "astoperator");
         directiveAttributes = getFontAndColors(settings, "directive");
         validOptionAttributes = getFontAndColors(settings, "validoption");
@@ -94,7 +111,15 @@ public class GrammarHighlighter extends ANTLRHighlighterBaseV4<GrammarHighlighte
     }
 
     private static AttributeSet getFontAndColors(FontColorSettings settings, String category) {
+        return getFontAndColors(settings, category, false);
+    }
+
+    private static AttributeSet getFontAndColors(FontColorSettings settings, String category, boolean tooltip) {
         AttributeSet attributes = settings.getTokenFontColors(category);
+        if (tooltip) {
+            attributes = AttributesUtilities.createComposite(attributes, TOOLTIP);
+        }
+
         return attributes;
     }
 
@@ -217,6 +242,58 @@ public class GrammarHighlighter extends ANTLRHighlighterBaseV4<GrammarHighlighte
         } else {
             return lexerRuleAttributes;
         }
+    }
+
+    private static final class TooltipResolver implements HighlightAttributeValue<String> {
+
+        @Override
+        public String getValue(JTextComponent component, Document document, Object attributeKey, int startOffset, int endOffset) {
+            Token token = GoToSupport.getContext(document, startOffset);
+            if (token == null) {
+                return "";
+            }
+
+            String ruleName;
+            switch (token.getType()) {
+            case GrammarParser.RULE_REF:
+            case GrammarParser.TOKEN_REF:
+                ruleName = token.getText();
+                break;
+
+            default:
+                return "";
+            }
+
+            ParserTaskManager taskManager = Lookup.getDefault().lookup(ParserTaskManager.class);
+            VersionedDocument versionedDocument = VersionedDocumentUtilities.getVersionedDocument(document);
+            Collection<Description> rules = GrammarCompletionProvider.getRulesFromGrammar(taskManager, versionedDocument.getCurrentSnapshot());
+
+            Description target = null;
+            for (Description rule : rules) {
+                if (rule.getName() != null && rule.getName().equals(ruleName)) {
+                    target = rule;
+                    break;
+                }
+            }
+
+            if (target == null) {
+                return "";
+            }
+
+            SnapshotPositionRegion region = target.getSpan();
+            if (region != null) {
+                TrackingPositionRegion trackingRegion = region.getSnapshot().createTrackingRegion(region.getRegion(), TrackingPositionRegion.Bias.Forward);
+                return trackingRegion.getText(versionedDocument.getCurrentSnapshot());
+            }
+
+            String result = target.getHtmlHeader();
+            if (result == null) {
+                result = target.getName();
+            }
+
+            return result;
+        }
+
     }
 
 }

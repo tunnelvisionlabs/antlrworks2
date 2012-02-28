@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.netbeans.editor.text.SnapshotPosition;
+import org.antlr.netbeans.editor.text.SnapshotPositionRegion;
 import org.openide.filesystems.FileObject;
 
 /**
@@ -34,6 +35,7 @@ public class Description {
     private Collection<Description> children;
     private int offset;
     private SnapshotPosition position;
+    private SnapshotPositionRegion span;
 
     public Description() {
     }
@@ -56,6 +58,10 @@ public class Description {
         }
 
         return offset;
+    }
+
+    public SnapshotPositionRegion getSpan() {
+        return span;
     }
 
     public String getName() {
@@ -96,6 +102,10 @@ public class Description {
                 position = new SnapshotPosition(snapshot, offset);
             }
         }
+    }
+
+    public void setSpan(SnapshotPositionRegion span) {
+        this.span = span;
     }
 
     public FileObject getFileObject() {
