@@ -21,6 +21,7 @@ import org.antlr.netbeans.parsing.spi.ParserData;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.ParseTree.TerminalNode;
 import org.antlr.works.editor.antlr4.semantics.AbstractParseTreeSemanticHighlighter;
 import org.antlr.works.editor.antlr4.semantics.AbstractSemanticHighlighter;
 import org.antlr.works.editor.st4.StringTemplateEditorKit;
@@ -263,13 +264,13 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
 
         @Override
         public void enterPrimary(PrimaryContext ctx) {
-            Token id = ctx.ID();
+            TerminalNode<Token> id = ctx.ID();
             if (id != null) {
                 Set<String> currentParameters = parameters.isEmpty() ? null : parameters.peek();
-                if (currentParameters != null && currentParameters.contains(id.getText())) {
-                    parameterUses.add(id);
+                if (currentParameters != null && currentParameters.contains(id.getSymbol().getText())) {
+                    parameterUses.add(id.getSymbol());
                 } else {
-                    attributeUses.add(id);
+                    attributeUses.add(id.getSymbol());
                 }
             }
         }

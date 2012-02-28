@@ -118,15 +118,15 @@ public class GrammarParser extends Parser<Token> {
 		_interp = new ParserATNSimulator<Token>(this,_ATN);
 	}
 	public static class GrammarSpecContext extends ParserRuleContext<Token> {
-		public Token DOC_COMMENT() { return getToken(GrammarParser.DOC_COMMENT, 0); }
+		public TerminalNode<Token> DOC_COMMENT() { return getToken(GrammarParser.DOC_COMMENT, 0); }
 		public IdContext id() {
 		    return getRuleContext(IdContext.class,0);
 		}
 		public ModeSpecContext modeSpec() {
 		    return getRuleContext(ModeSpecContext.class,0);
 		}
-		public Token EOF() { return getToken(GrammarParser.EOF, 0); }
-		public Token SEMI() { return getToken(GrammarParser.SEMI, 0); }
+		public TerminalNode<Token> EOF() { return getToken(GrammarParser.EOF, 0); }
+		public TerminalNode<Token> SEMI() { return getToken(GrammarParser.SEMI, 0); }
 		public PrequelConstructContext prequelConstruct() {
 		    return getRuleContext(PrequelConstructContext.class,0);
 		}
@@ -218,12 +218,12 @@ public class GrammarParser extends Parser<Token> {
 	}
 
 	public static class GrammarTypeContext extends ParserRuleContext<Token> {
-		public Token PARSER() { return getToken(GrammarParser.PARSER, 0); }
-		public Token GRAMMAR(int i) {
+		public TerminalNode<Token> PARSER() { return getToken(GrammarParser.PARSER, 0); }
+		public TerminalNode<Token> GRAMMAR(int i) {
 		    return getToken(GrammarParser.GRAMMAR, i);
 		}
-		public Token LEXER() { return getToken(GrammarParser.LEXER, 0); }
-		public List<? extends Token> GRAMMAR() { return getTokens(GrammarParser.GRAMMAR); }
+		public TerminalNode<Token> LEXER() { return getToken(GrammarParser.LEXER, 0); }
+		public List<? extends TerminalNode<Token>> GRAMMAR() { return getTokens(GrammarParser.GRAMMAR); }
 		public GrammarTypeContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
@@ -363,9 +363,9 @@ public class GrammarParser extends Parser<Token> {
 	}
 
 	public static class OptionsSpecContext extends ParserRuleContext<Token> {
-		public Token RBRACE() { return getToken(GrammarParser.RBRACE, 0); }
-		public Token SEMI() { return getToken(GrammarParser.SEMI, 0); }
-		public Token OPTIONS() { return getToken(GrammarParser.OPTIONS, 0); }
+		public TerminalNode<Token> RBRACE() { return getToken(GrammarParser.RBRACE, 0); }
+		public TerminalNode<Token> SEMI() { return getToken(GrammarParser.SEMI, 0); }
+		public TerminalNode<Token> OPTIONS() { return getToken(GrammarParser.OPTIONS, 0); }
 		public OptionContext option() {
 		    return getRuleContext(OptionContext.class,0);
 		}
@@ -431,7 +431,7 @@ public class GrammarParser extends Parser<Token> {
 		public OptionValueContext optionValue() {
 		    return getRuleContext(OptionValueContext.class,0);
 		}
-		public Token ASSIGN() { return getToken(GrammarParser.ASSIGN, 0); }
+		public TerminalNode<Token> ASSIGN() { return getToken(GrammarParser.ASSIGN, 0); }
 		public OptionContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
@@ -473,9 +473,9 @@ public class GrammarParser extends Parser<Token> {
 	}
 
 	public static class OptionValueContext extends ParserRuleContext<Token> {
-		public Token STAR() { return getToken(GrammarParser.STAR, 0); }
-		public Token INT() { return getToken(GrammarParser.INT, 0); }
-		public Token STRING_LITERAL() { return getToken(GrammarParser.STRING_LITERAL, 0); }
+		public TerminalNode<Token> STAR() { return getToken(GrammarParser.STAR, 0); }
+		public TerminalNode<Token> INT() { return getToken(GrammarParser.INT, 0); }
+		public TerminalNode<Token> STRING_LITERAL() { return getToken(GrammarParser.STRING_LITERAL, 0); }
 		public QidContext qid() {
 		    return getRuleContext(QidContext.class,0);
 		}
@@ -548,9 +548,9 @@ public class GrammarParser extends Parser<Token> {
 		public List<? extends DelegateGrammarContext> delegateGrammar() {
 		    return getRuleContexts(DelegateGrammarContext.class);
 		}
-		public Token IMPORT() { return getToken(GrammarParser.IMPORT, 0); }
-		public Token COMMA() { return getToken(GrammarParser.COMMA, 0); }
-		public Token SEMI() { return getToken(GrammarParser.SEMI, 0); }
+		public TerminalNode<Token> IMPORT() { return getToken(GrammarParser.IMPORT, 0); }
+		public TerminalNode<Token> COMMA() { return getToken(GrammarParser.COMMA, 0); }
+		public TerminalNode<Token> SEMI() { return getToken(GrammarParser.SEMI, 0); }
 		public DelegateGrammarContext delegateGrammar(int i) {
 		    return getRuleContext(DelegateGrammarContext.class,i);
 		}
@@ -617,7 +617,7 @@ public class GrammarParser extends Parser<Token> {
 		public IdContext id(int i) {
 		    return getRuleContext(IdContext.class,i);
 		}
-		public Token ASSIGN() { return getToken(GrammarParser.ASSIGN, 0); }
+		public TerminalNode<Token> ASSIGN() { return getToken(GrammarParser.ASSIGN, 0); }
 		public DelegateGrammarContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
@@ -672,8 +672,8 @@ public class GrammarParser extends Parser<Token> {
 	}
 
 	public static class TokensSpecContext extends ParserRuleContext<Token> {
-		public Token TOKENS() { return getToken(GrammarParser.TOKENS, 0); }
-		public Token RBRACE() { return getToken(GrammarParser.RBRACE, 0); }
+		public TerminalNode<Token> TOKENS() { return getToken(GrammarParser.TOKENS, 0); }
+		public TerminalNode<Token> RBRACE() { return getToken(GrammarParser.RBRACE, 0); }
 		public TokenSpecContext tokenSpec() {
 		    return getRuleContext(TokenSpecContext.class,0);
 		}
@@ -739,10 +739,10 @@ public class GrammarParser extends Parser<Token> {
 		public IdContext id() {
 		    return getRuleContext(IdContext.class,0);
 		}
-		public Token STRING_LITERAL() { return getToken(GrammarParser.STRING_LITERAL, 0); }
-		public Token SEMI() { return getToken(GrammarParser.SEMI, 0); }
-		public Token RULE_REF() { return getToken(GrammarParser.RULE_REF, 0); }
-		public Token ASSIGN() { return getToken(GrammarParser.ASSIGN, 0); }
+		public TerminalNode<Token> STRING_LITERAL() { return getToken(GrammarParser.STRING_LITERAL, 0); }
+		public TerminalNode<Token> SEMI() { return getToken(GrammarParser.SEMI, 0); }
+		public TerminalNode<Token> RULE_REF() { return getToken(GrammarParser.RULE_REF, 0); }
+		public TerminalNode<Token> ASSIGN() { return getToken(GrammarParser.ASSIGN, 0); }
 		public TokenSpecContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
@@ -811,37 +811,37 @@ public class GrammarParser extends Parser<Token> {
 	}
 
 	public static class ActionBlockContext extends ParserRuleContext<Token> {
-		public Token ACTION_WS() { return getToken(GrammarParser.ACTION_WS, 0); }
-		public Token ACTION_COLON() { return getToken(GrammarParser.ACTION_COLON, 0); }
+		public TerminalNode<Token> ACTION_WS() { return getToken(GrammarParser.ACTION_WS, 0); }
+		public TerminalNode<Token> ACTION_COLON() { return getToken(GrammarParser.ACTION_COLON, 0); }
 		public ActionExpressionContext actionExpression() {
 		    return getRuleContext(ActionExpressionContext.class,0);
 		}
 		public ActionBlockContext actionBlock() {
 		    return getRuleContext(ActionBlockContext.class,0);
 		}
-		public Token ACTION_ESCAPE() { return getToken(GrammarParser.ACTION_ESCAPE, 0); }
-		public Token ACTION_REFERENCE() { return getToken(GrammarParser.ACTION_REFERENCE, 0); }
-		public Token ACTION_COLON2() { return getToken(GrammarParser.ACTION_COLON2, 0); }
-		public Token ACTION_DOT() { return getToken(GrammarParser.ACTION_DOT, 0); }
+		public TerminalNode<Token> ACTION_ESCAPE() { return getToken(GrammarParser.ACTION_ESCAPE, 0); }
+		public TerminalNode<Token> ACTION_REFERENCE() { return getToken(GrammarParser.ACTION_REFERENCE, 0); }
+		public TerminalNode<Token> ACTION_COLON2() { return getToken(GrammarParser.ACTION_COLON2, 0); }
+		public TerminalNode<Token> ACTION_DOT() { return getToken(GrammarParser.ACTION_DOT, 0); }
 		public ActionScopeExpressionContext actionScopeExpression() {
 		    return getRuleContext(ActionScopeExpressionContext.class,0);
 		}
-		public Token ACTION_NEWLINE() { return getToken(GrammarParser.ACTION_NEWLINE, 0); }
-		public Token ACTION_RPAREN() { return getToken(GrammarParser.ACTION_RPAREN, 0); }
-		public Token ACTION_COMMA() { return getToken(GrammarParser.ACTION_COMMA, 0); }
-		public Token ACTION_RBRACK() { return getToken(GrammarParser.ACTION_RBRACK, 0); }
-		public Token ACTION_COMMENT() { return getToken(GrammarParser.ACTION_COMMENT, 0); }
-		public Token ACTION_LT() { return getToken(GrammarParser.ACTION_LT, 0); }
-		public Token END_ACTION() { return getToken(GrammarParser.END_ACTION, 0); }
-		public Token ACTION_GT() { return getToken(GrammarParser.ACTION_GT, 0); }
-		public Token ACTION_TEXT() { return getToken(GrammarParser.ACTION_TEXT, 0); }
-		public Token ACTION_LITERAL() { return getToken(GrammarParser.ACTION_LITERAL, 0); }
-		public Token ACTION_MINUS() { return getToken(GrammarParser.ACTION_MINUS, 0); }
-		public Token BEGIN_ACTION() { return getToken(GrammarParser.BEGIN_ACTION, 0); }
-		public Token ACTION_LPAREN() { return getToken(GrammarParser.ACTION_LPAREN, 0); }
-		public Token ACTION_LBRACK() { return getToken(GrammarParser.ACTION_LBRACK, 0); }
-		public Token ACTION_WORD() { return getToken(GrammarParser.ACTION_WORD, 0); }
-		public Token ACTION_EQUALS() { return getToken(GrammarParser.ACTION_EQUALS, 0); }
+		public TerminalNode<Token> ACTION_NEWLINE() { return getToken(GrammarParser.ACTION_NEWLINE, 0); }
+		public TerminalNode<Token> ACTION_RPAREN() { return getToken(GrammarParser.ACTION_RPAREN, 0); }
+		public TerminalNode<Token> ACTION_COMMA() { return getToken(GrammarParser.ACTION_COMMA, 0); }
+		public TerminalNode<Token> ACTION_RBRACK() { return getToken(GrammarParser.ACTION_RBRACK, 0); }
+		public TerminalNode<Token> ACTION_COMMENT() { return getToken(GrammarParser.ACTION_COMMENT, 0); }
+		public TerminalNode<Token> ACTION_LT() { return getToken(GrammarParser.ACTION_LT, 0); }
+		public TerminalNode<Token> END_ACTION() { return getToken(GrammarParser.END_ACTION, 0); }
+		public TerminalNode<Token> ACTION_GT() { return getToken(GrammarParser.ACTION_GT, 0); }
+		public TerminalNode<Token> ACTION_TEXT() { return getToken(GrammarParser.ACTION_TEXT, 0); }
+		public TerminalNode<Token> ACTION_LITERAL() { return getToken(GrammarParser.ACTION_LITERAL, 0); }
+		public TerminalNode<Token> ACTION_MINUS() { return getToken(GrammarParser.ACTION_MINUS, 0); }
+		public TerminalNode<Token> BEGIN_ACTION() { return getToken(GrammarParser.BEGIN_ACTION, 0); }
+		public TerminalNode<Token> ACTION_LPAREN() { return getToken(GrammarParser.ACTION_LPAREN, 0); }
+		public TerminalNode<Token> ACTION_LBRACK() { return getToken(GrammarParser.ACTION_LBRACK, 0); }
+		public TerminalNode<Token> ACTION_WORD() { return getToken(GrammarParser.ACTION_WORD, 0); }
+		public TerminalNode<Token> ACTION_EQUALS() { return getToken(GrammarParser.ACTION_EQUALS, 0); }
 		public ActionBlockContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
@@ -1041,12 +1041,12 @@ public class GrammarParser extends Parser<Token> {
 		public List<? extends IgnoredContext> ignored() {
 		    return getRuleContexts(IgnoredContext.class);
 		}
-		public Token ACTION_REFERENCE() { return getToken(GrammarParser.ACTION_REFERENCE, 0); }
-		public Token ACTION_DOT() { return getToken(GrammarParser.ACTION_DOT, 0); }
+		public TerminalNode<Token> ACTION_REFERENCE() { return getToken(GrammarParser.ACTION_REFERENCE, 0); }
+		public TerminalNode<Token> ACTION_DOT() { return getToken(GrammarParser.ACTION_DOT, 0); }
 		public IgnoredContext ignored(int i) {
 		    return getRuleContext(IgnoredContext.class,i);
 		}
-		public Token ACTION_WORD() { return getToken(GrammarParser.ACTION_WORD, 0); }
+		public TerminalNode<Token> ACTION_WORD() { return getToken(GrammarParser.ACTION_WORD, 0); }
 		public ActionExpressionContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
@@ -1126,18 +1126,18 @@ public class GrammarParser extends Parser<Token> {
 		public List<? extends IgnoredContext> ignored() {
 		    return getRuleContexts(IgnoredContext.class);
 		}
-		public Token ACTION_REFERENCE() { return getToken(GrammarParser.ACTION_REFERENCE, 0); }
-		public Token ACTION_COLON2() { return getToken(GrammarParser.ACTION_COLON2, 0); }
-		public Token ACTION_RBRACK() { return getToken(GrammarParser.ACTION_RBRACK, 0); }
+		public TerminalNode<Token> ACTION_REFERENCE() { return getToken(GrammarParser.ACTION_REFERENCE, 0); }
+		public TerminalNode<Token> ACTION_COLON2() { return getToken(GrammarParser.ACTION_COLON2, 0); }
+		public TerminalNode<Token> ACTION_RBRACK() { return getToken(GrammarParser.ACTION_RBRACK, 0); }
 		public IgnoredContext ignored(int i) {
 		    return getRuleContext(IgnoredContext.class,i);
 		}
-		public Token ACTION_WORD(int i) {
+		public TerminalNode<Token> ACTION_WORD(int i) {
 		    return getToken(GrammarParser.ACTION_WORD, i);
 		}
-		public Token ACTION_LBRACK() { return getToken(GrammarParser.ACTION_LBRACK, 0); }
-		public List<? extends Token> ACTION_WORD() { return getTokens(GrammarParser.ACTION_WORD); }
-		public Token ACTION_MINUS() { return getToken(GrammarParser.ACTION_MINUS, 0); }
+		public TerminalNode<Token> ACTION_LBRACK() { return getToken(GrammarParser.ACTION_LBRACK, 0); }
+		public List<? extends TerminalNode<Token>> ACTION_WORD() { return getTokens(GrammarParser.ACTION_WORD); }
+		public TerminalNode<Token> ACTION_MINUS() { return getToken(GrammarParser.ACTION_MINUS, 0); }
 		public ActionScopeExpressionContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
@@ -1289,20 +1289,20 @@ public class GrammarParser extends Parser<Token> {
 	}
 
 	public static class ArgActionBlockContext extends ParserRuleContext<Token> {
-		public Token ARG_ACTION_GT() { return getToken(GrammarParser.ARG_ACTION_GT, 0); }
-		public Token ARG_ACTION_LPAREN() { return getToken(GrammarParser.ARG_ACTION_LPAREN, 0); }
-		public Token ARG_ACTION_COMMA() { return getToken(GrammarParser.ARG_ACTION_COMMA, 0); }
-		public Token ARG_ACTION_NEWLINE() { return getToken(GrammarParser.ARG_ACTION_NEWLINE, 0); }
-		public Token END_ARG_ACTION() { return getToken(GrammarParser.END_ARG_ACTION, 0); }
-		public Token ARG_ACTION_WS() { return getToken(GrammarParser.ARG_ACTION_WS, 0); }
-		public Token ARG_ACTION_WORD() { return getToken(GrammarParser.ARG_ACTION_WORD, 0); }
-		public Token ARG_ACTION_LT() { return getToken(GrammarParser.ARG_ACTION_LT, 0); }
-		public Token ARG_ACTION_EQUALS() { return getToken(GrammarParser.ARG_ACTION_EQUALS, 0); }
-		public Token ARG_ACTION_ESCAPE() { return getToken(GrammarParser.ARG_ACTION_ESCAPE, 0); }
-		public Token BEGIN_ARG_ACTION() { return getToken(GrammarParser.BEGIN_ARG_ACTION, 0); }
-		public Token ARG_ACTION_ELEMENT() { return getToken(GrammarParser.ARG_ACTION_ELEMENT, 0); }
-		public Token ARG_ACTION_TEXT() { return getToken(GrammarParser.ARG_ACTION_TEXT, 0); }
-		public Token ARG_ACTION_RPAREN() { return getToken(GrammarParser.ARG_ACTION_RPAREN, 0); }
+		public TerminalNode<Token> ARG_ACTION_GT() { return getToken(GrammarParser.ARG_ACTION_GT, 0); }
+		public TerminalNode<Token> ARG_ACTION_LPAREN() { return getToken(GrammarParser.ARG_ACTION_LPAREN, 0); }
+		public TerminalNode<Token> ARG_ACTION_COMMA() { return getToken(GrammarParser.ARG_ACTION_COMMA, 0); }
+		public TerminalNode<Token> ARG_ACTION_NEWLINE() { return getToken(GrammarParser.ARG_ACTION_NEWLINE, 0); }
+		public TerminalNode<Token> END_ARG_ACTION() { return getToken(GrammarParser.END_ARG_ACTION, 0); }
+		public TerminalNode<Token> ARG_ACTION_WS() { return getToken(GrammarParser.ARG_ACTION_WS, 0); }
+		public TerminalNode<Token> ARG_ACTION_WORD() { return getToken(GrammarParser.ARG_ACTION_WORD, 0); }
+		public TerminalNode<Token> ARG_ACTION_LT() { return getToken(GrammarParser.ARG_ACTION_LT, 0); }
+		public TerminalNode<Token> ARG_ACTION_EQUALS() { return getToken(GrammarParser.ARG_ACTION_EQUALS, 0); }
+		public TerminalNode<Token> ARG_ACTION_ESCAPE() { return getToken(GrammarParser.ARG_ACTION_ESCAPE, 0); }
+		public TerminalNode<Token> BEGIN_ARG_ACTION() { return getToken(GrammarParser.BEGIN_ARG_ACTION, 0); }
+		public TerminalNode<Token> ARG_ACTION_ELEMENT() { return getToken(GrammarParser.ARG_ACTION_ELEMENT, 0); }
+		public TerminalNode<Token> ARG_ACTION_TEXT() { return getToken(GrammarParser.ARG_ACTION_TEXT, 0); }
+		public TerminalNode<Token> ARG_ACTION_RPAREN() { return getToken(GrammarParser.ARG_ACTION_RPAREN, 0); }
 		public ArgActionBlockContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
@@ -1370,7 +1370,7 @@ public class GrammarParser extends Parser<Token> {
 		public List<? extends IgnoredContext> ignored() {
 		    return getRuleContexts(IgnoredContext.class);
 		}
-		public Token END_ARG_ACTION() { return getToken(GrammarParser.END_ARG_ACTION, 0); }
+		public TerminalNode<Token> END_ARG_ACTION() { return getToken(GrammarParser.END_ARG_ACTION, 0); }
 		public IgnoredContext ignored(int i) {
 		    return getRuleContext(IgnoredContext.class,i);
 		}
@@ -1380,8 +1380,8 @@ public class GrammarParser extends Parser<Token> {
 		public List<? extends ArgActionParameterContext> argActionParameter() {
 		    return getRuleContexts(ArgActionParameterContext.class);
 		}
-		public Token ARG_ACTION_COMMA() { return getToken(GrammarParser.ARG_ACTION_COMMA, 0); }
-		public Token BEGIN_ARG_ACTION() { return getToken(GrammarParser.BEGIN_ARG_ACTION, 0); }
+		public TerminalNode<Token> ARG_ACTION_COMMA() { return getToken(GrammarParser.ARG_ACTION_COMMA, 0); }
+		public TerminalNode<Token> BEGIN_ARG_ACTION() { return getToken(GrammarParser.BEGIN_ARG_ACTION, 0); }
 		public ArgActionParametersContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
@@ -1514,7 +1514,7 @@ public class GrammarParser extends Parser<Token> {
 		public IgnoredContext ignored() {
 		    return getRuleContext(IgnoredContext.class,0);
 		}
-		public Token ARG_ACTION_WORD() { return getToken(GrammarParser.ARG_ACTION_WORD, 0); }
+		public TerminalNode<Token> ARG_ACTION_WORD() { return getToken(GrammarParser.ARG_ACTION_WORD, 0); }
 		public ArgActionParameterTypeContext argActionParameterType() {
 		    return getRuleContext(ArgActionParameterTypeContext.class,0);
 		}
@@ -1659,14 +1659,14 @@ public class GrammarParser extends Parser<Token> {
 	}
 
 	public static class ArgActionParameterTypePartContext extends ParserRuleContext<Token> {
-		public Token ARG_ACTION_GT() { return getToken(GrammarParser.ARG_ACTION_GT, 0); }
-		public Token ARG_ACTION_LPAREN() { return getToken(GrammarParser.ARG_ACTION_LPAREN, 0); }
-		public Token ARG_ACTION_WORD() { return getToken(GrammarParser.ARG_ACTION_WORD, 0); }
+		public TerminalNode<Token> ARG_ACTION_GT() { return getToken(GrammarParser.ARG_ACTION_GT, 0); }
+		public TerminalNode<Token> ARG_ACTION_LPAREN() { return getToken(GrammarParser.ARG_ACTION_LPAREN, 0); }
+		public TerminalNode<Token> ARG_ACTION_WORD() { return getToken(GrammarParser.ARG_ACTION_WORD, 0); }
 		public ArgActionParameterTypeContext argActionParameterType() {
 		    return getRuleContext(ArgActionParameterTypeContext.class,0);
 		}
-		public Token ARG_ACTION_LT() { return getToken(GrammarParser.ARG_ACTION_LT, 0); }
-		public Token ARG_ACTION_RPAREN() { return getToken(GrammarParser.ARG_ACTION_RPAREN, 0); }
+		public TerminalNode<Token> ARG_ACTION_LT() { return getToken(GrammarParser.ARG_ACTION_LT, 0); }
+		public TerminalNode<Token> ARG_ACTION_RPAREN() { return getToken(GrammarParser.ARG_ACTION_RPAREN, 0); }
 		public ArgActionParameterTypePartContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
@@ -1746,11 +1746,11 @@ public class GrammarParser extends Parser<Token> {
 	}
 
 	public static class IgnoredContext extends ParserRuleContext<Token> {
-		public Token ARG_ACTION_NEWLINE() { return getToken(GrammarParser.ARG_ACTION_NEWLINE, 0); }
-		public Token ARG_ACTION_WS() { return getToken(GrammarParser.ARG_ACTION_WS, 0); }
-		public Token ACTION_WS() { return getToken(GrammarParser.ACTION_WS, 0); }
-		public Token ACTION_COMMENT() { return getToken(GrammarParser.ACTION_COMMENT, 0); }
-		public Token ACTION_NEWLINE() { return getToken(GrammarParser.ACTION_NEWLINE, 0); }
+		public TerminalNode<Token> ARG_ACTION_NEWLINE() { return getToken(GrammarParser.ARG_ACTION_NEWLINE, 0); }
+		public TerminalNode<Token> ARG_ACTION_WS() { return getToken(GrammarParser.ARG_ACTION_WS, 0); }
+		public TerminalNode<Token> ACTION_WS() { return getToken(GrammarParser.ACTION_WS, 0); }
+		public TerminalNode<Token> ACTION_COMMENT() { return getToken(GrammarParser.ACTION_COMMENT, 0); }
+		public TerminalNode<Token> ACTION_NEWLINE() { return getToken(GrammarParser.ACTION_NEWLINE, 0); }
 		public IgnoredContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
@@ -1830,8 +1830,8 @@ public class GrammarParser extends Parser<Token> {
 		public IdContext id() {
 		    return getRuleContext(IdContext.class,0);
 		}
-		public Token AT() { return getToken(GrammarParser.AT, 0); }
-		public Token COLONCOLON() { return getToken(GrammarParser.COLONCOLON, 0); }
+		public TerminalNode<Token> AT() { return getToken(GrammarParser.AT, 0); }
+		public TerminalNode<Token> COLONCOLON() { return getToken(GrammarParser.COLONCOLON, 0); }
 		public ActionScopeNameContext actionScopeName() {
 		    return getRuleContext(ActionScopeNameContext.class,0);
 		}
@@ -1889,8 +1889,8 @@ public class GrammarParser extends Parser<Token> {
 		public IdContext id() {
 		    return getRuleContext(IdContext.class,0);
 		}
-		public Token PARSER() { return getToken(GrammarParser.PARSER, 0); }
-		public Token LEXER() { return getToken(GrammarParser.LEXER, 0); }
+		public TerminalNode<Token> PARSER() { return getToken(GrammarParser.PARSER, 0); }
+		public TerminalNode<Token> LEXER() { return getToken(GrammarParser.LEXER, 0); }
 		public ActionScopeNameContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
@@ -1956,8 +1956,8 @@ public class GrammarParser extends Parser<Token> {
 		public IdContext id() {
 		    return getRuleContext(IdContext.class,0);
 		}
-		public Token SEMI() { return getToken(GrammarParser.SEMI, 0); }
-		public Token MODE() { return getToken(GrammarParser.MODE, 0); }
+		public TerminalNode<Token> SEMI() { return getToken(GrammarParser.SEMI, 0); }
+		public TerminalNode<Token> MODE() { return getToken(GrammarParser.MODE, 0); }
 		public ModeSpecContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
@@ -2133,8 +2133,8 @@ public class GrammarParser extends Parser<Token> {
 
 	public static class ParserRuleSpecContext extends ParserRuleContext<Token> {
 		public Token name;
-		public Token DOC_COMMENT() { return getToken(GrammarParser.DOC_COMMENT, 0); }
-		public Token COLON() { return getToken(GrammarParser.COLON, 0); }
+		public TerminalNode<Token> DOC_COMMENT() { return getToken(GrammarParser.DOC_COMMENT, 0); }
+		public TerminalNode<Token> COLON() { return getToken(GrammarParser.COLON, 0); }
 		public RuleModifiersContext ruleModifiers() {
 		    return getRuleContext(RuleModifiersContext.class,0);
 		}
@@ -2159,8 +2159,8 @@ public class GrammarParser extends Parser<Token> {
 		public LocalsSpecContext localsSpec() {
 		    return getRuleContext(LocalsSpecContext.class,0);
 		}
-		public Token SEMI() { return getToken(GrammarParser.SEMI, 0); }
-		public Token RULE_REF() { return getToken(GrammarParser.RULE_REF, 0); }
+		public TerminalNode<Token> SEMI() { return getToken(GrammarParser.SEMI, 0); }
+		public TerminalNode<Token> RULE_REF() { return getToken(GrammarParser.RULE_REF, 0); }
 		public ParserRuleSpecContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
@@ -2333,7 +2333,7 @@ public class GrammarParser extends Parser<Token> {
 		public ArgActionBlockContext argActionBlock() {
 		    return getRuleContext(ArgActionBlockContext.class,0);
 		}
-		public Token CATCH() { return getToken(GrammarParser.CATCH, 0); }
+		public TerminalNode<Token> CATCH() { return getToken(GrammarParser.CATCH, 0); }
 		public ExceptionHandlerContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
@@ -2378,7 +2378,7 @@ public class GrammarParser extends Parser<Token> {
 		public ActionBlockContext actionBlock() {
 		    return getRuleContext(ActionBlockContext.class,0);
 		}
-		public Token FINALLY() { return getToken(GrammarParser.FINALLY, 0); }
+		public TerminalNode<Token> FINALLY() { return getToken(GrammarParser.FINALLY, 0); }
 		public FinallyClauseContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
@@ -2536,7 +2536,7 @@ public class GrammarParser extends Parser<Token> {
 		public ArgActionParametersContext argActionParameters() {
 		    return getRuleContext(ArgActionParametersContext.class,0);
 		}
-		public Token RETURNS() { return getToken(GrammarParser.RETURNS, 0); }
+		public TerminalNode<Token> RETURNS() { return getToken(GrammarParser.RETURNS, 0); }
 		public RuleReturnsContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
@@ -2577,14 +2577,14 @@ public class GrammarParser extends Parser<Token> {
 	}
 
 	public static class ThrowsSpecContext extends ParserRuleContext<Token> {
-		public Token THROWS() { return getToken(GrammarParser.THROWS, 0); }
+		public TerminalNode<Token> THROWS() { return getToken(GrammarParser.THROWS, 0); }
 		public QidContext qid(int i) {
 		    return getRuleContext(QidContext.class,i);
 		}
 		public List<? extends QidContext> qid() {
 		    return getRuleContexts(QidContext.class);
 		}
-		public Token COMMA() { return getToken(GrammarParser.COMMA, 0); }
+		public TerminalNode<Token> COMMA() { return getToken(GrammarParser.COMMA, 0); }
 		public ThrowsSpecContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
@@ -2641,7 +2641,7 @@ public class GrammarParser extends Parser<Token> {
 	}
 
 	public static class LocalsSpecContext extends ParserRuleContext<Token> {
-		public Token LOCALS() { return getToken(GrammarParser.LOCALS, 0); }
+		public TerminalNode<Token> LOCALS() { return getToken(GrammarParser.LOCALS, 0); }
 		public ArgActionParametersContext argActionParameters() {
 		    return getRuleContext(ArgActionParametersContext.class,0);
 		}
@@ -2691,7 +2691,7 @@ public class GrammarParser extends Parser<Token> {
 		public IdContext id() {
 		    return getRuleContext(IdContext.class,0);
 		}
-		public Token AT() { return getToken(GrammarParser.AT, 0); }
+		public TerminalNode<Token> AT() { return getToken(GrammarParser.AT, 0); }
 		public RuleActionContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
@@ -2793,10 +2793,10 @@ public class GrammarParser extends Parser<Token> {
 	}
 
 	public static class RuleModifierContext extends ParserRuleContext<Token> {
-		public Token PROTECTED() { return getToken(GrammarParser.PROTECTED, 0); }
-		public Token PRIVATE() { return getToken(GrammarParser.PRIVATE, 0); }
-		public Token PUBLIC() { return getToken(GrammarParser.PUBLIC, 0); }
-		public Token FRAGMENT() { return getToken(GrammarParser.FRAGMENT, 0); }
+		public TerminalNode<Token> PROTECTED() { return getToken(GrammarParser.PROTECTED, 0); }
+		public TerminalNode<Token> PRIVATE() { return getToken(GrammarParser.PRIVATE, 0); }
+		public TerminalNode<Token> PUBLIC() { return getToken(GrammarParser.PUBLIC, 0); }
+		public TerminalNode<Token> FRAGMENT() { return getToken(GrammarParser.FRAGMENT, 0); }
 		public RuleModifierContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
@@ -2911,7 +2911,7 @@ public class GrammarParser extends Parser<Token> {
 		public LabeledAltContext labeledAlt(int i) {
 		    return getRuleContext(LabeledAltContext.class,i);
 		}
-		public Token OR() { return getToken(GrammarParser.OR, 0); }
+		public TerminalNode<Token> OR() { return getToken(GrammarParser.OR, 0); }
 		public RuleAltListContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
@@ -2973,7 +2973,7 @@ public class GrammarParser extends Parser<Token> {
 		public AlternativeContext alternative() {
 		    return getRuleContext(AlternativeContext.class,0);
 		}
-		public Token RARROW() { return getToken(GrammarParser.RARROW, 0); }
+		public TerminalNode<Token> RARROW() { return getToken(GrammarParser.RARROW, 0); }
 		public LabeledAltContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
@@ -3024,11 +3024,11 @@ public class GrammarParser extends Parser<Token> {
 
 	public static class LexerRuleContext extends ParserRuleContext<Token> {
 		public Token name;
-		public Token DOC_COMMENT() { return getToken(GrammarParser.DOC_COMMENT, 0); }
-		public Token COLON() { return getToken(GrammarParser.COLON, 0); }
-		public Token SEMI() { return getToken(GrammarParser.SEMI, 0); }
-		public Token FRAGMENT() { return getToken(GrammarParser.FRAGMENT, 0); }
-		public Token TOKEN_REF() { return getToken(GrammarParser.TOKEN_REF, 0); }
+		public TerminalNode<Token> DOC_COMMENT() { return getToken(GrammarParser.DOC_COMMENT, 0); }
+		public TerminalNode<Token> COLON() { return getToken(GrammarParser.COLON, 0); }
+		public TerminalNode<Token> SEMI() { return getToken(GrammarParser.SEMI, 0); }
+		public TerminalNode<Token> FRAGMENT() { return getToken(GrammarParser.FRAGMENT, 0); }
+		public TerminalNode<Token> TOKEN_REF() { return getToken(GrammarParser.TOKEN_REF, 0); }
 		public LexerRuleBlockContext lexerRuleBlock() {
 		    return getRuleContext(LexerRuleBlockContext.class,0);
 		}
@@ -3137,7 +3137,7 @@ public class GrammarParser extends Parser<Token> {
 		public LexerAltContext lexerAlt(int i) {
 		    return getRuleContext(LexerAltContext.class,i);
 		}
-		public Token OR() { return getToken(GrammarParser.OR, 0); }
+		public TerminalNode<Token> OR() { return getToken(GrammarParser.OR, 0); }
 		public List<? extends LexerAltContext> lexerAlt() {
 		    return getRuleContexts(LexerAltContext.class);
 		}
@@ -3324,7 +3324,7 @@ public class GrammarParser extends Parser<Token> {
 		public LexerBlockContext lexerBlock() {
 		    return getRuleContext(LexerBlockContext.class,0);
 		}
-		public Token QUESTION() { return getToken(GrammarParser.QUESTION, 0); }
+		public TerminalNode<Token> QUESTION() { return getToken(GrammarParser.QUESTION, 0); }
 		public LabeledLexerElementContext labeledLexerElement() {
 		    return getRuleContext(LabeledLexerElementContext.class,0);
 		}
@@ -3458,8 +3458,8 @@ public class GrammarParser extends Parser<Token> {
 		public LexerAtomContext lexerAtom() {
 		    return getRuleContext(LexerAtomContext.class,0);
 		}
-		public Token PLUS_ASSIGN() { return getToken(GrammarParser.PLUS_ASSIGN, 0); }
-		public Token ASSIGN() { return getToken(GrammarParser.ASSIGN, 0); }
+		public TerminalNode<Token> PLUS_ASSIGN() { return getToken(GrammarParser.PLUS_ASSIGN, 0); }
+		public TerminalNode<Token> ASSIGN() { return getToken(GrammarParser.ASSIGN, 0); }
 		public LabeledLexerElementContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
@@ -3529,11 +3529,11 @@ public class GrammarParser extends Parser<Token> {
 	}
 
 	public static class LexerBlockContext extends ParserRuleContext<Token> {
-		public Token RPAREN() { return getToken(GrammarParser.RPAREN, 0); }
+		public TerminalNode<Token> RPAREN() { return getToken(GrammarParser.RPAREN, 0); }
 		public LexerAltListContext lexerAltList() {
 		    return getRuleContext(LexerAltListContext.class,0);
 		}
-		public Token LPAREN() { return getToken(GrammarParser.LPAREN, 0); }
+		public TerminalNode<Token> LPAREN() { return getToken(GrammarParser.LPAREN, 0); }
 		public LexerBlockContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
@@ -3578,11 +3578,11 @@ public class GrammarParser extends Parser<Token> {
 		public List<? extends LexerActionContext> lexerAction() {
 		    return getRuleContexts(LexerActionContext.class);
 		}
-		public Token COMMA() { return getToken(GrammarParser.COMMA, 0); }
+		public TerminalNode<Token> COMMA() { return getToken(GrammarParser.COMMA, 0); }
 		public LexerActionContext lexerAction(int i) {
 		    return getRuleContext(LexerActionContext.class,i);
 		}
-		public Token RARROW() { return getToken(GrammarParser.RARROW, 0); }
+		public TerminalNode<Token> RARROW() { return getToken(GrammarParser.RARROW, 0); }
 		public LexerActionsContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
@@ -3642,11 +3642,11 @@ public class GrammarParser extends Parser<Token> {
 		public IdContext id() {
 		    return getRuleContext(IdContext.class,0);
 		}
-		public Token RPAREN() { return getToken(GrammarParser.RPAREN, 0); }
+		public TerminalNode<Token> RPAREN() { return getToken(GrammarParser.RPAREN, 0); }
 		public LexerActionExprContext lexerActionExpr() {
 		    return getRuleContext(LexerActionExprContext.class,0);
 		}
-		public Token LPAREN() { return getToken(GrammarParser.LPAREN, 0); }
+		public TerminalNode<Token> LPAREN() { return getToken(GrammarParser.LPAREN, 0); }
 		public LexerActionContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
@@ -3702,8 +3702,8 @@ public class GrammarParser extends Parser<Token> {
 	}
 
 	public static class LexerActionExprContext extends ParserRuleContext<Token> {
-		public Token INT() { return getToken(GrammarParser.INT, 0); }
-		public Token ID() { return getToken(GrammarParser.ID, 0); }
+		public TerminalNode<Token> INT() { return getToken(GrammarParser.INT, 0); }
+		public TerminalNode<Token> ID() { return getToken(GrammarParser.ID, 0); }
 		public LexerActionExprContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
@@ -3762,7 +3762,7 @@ public class GrammarParser extends Parser<Token> {
 		public List<? extends AlternativeContext> alternative() {
 		    return getRuleContexts(AlternativeContext.class);
 		}
-		public Token OR() { return getToken(GrammarParser.OR, 0); }
+		public TerminalNode<Token> OR() { return getToken(GrammarParser.OR, 0); }
 		public AltListContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
@@ -3944,7 +3944,7 @@ public class GrammarParser extends Parser<Token> {
 		public EbnfContext ebnf() {
 		    return getRuleContext(EbnfContext.class,0);
 		}
-		public Token QUESTION() { return getToken(GrammarParser.QUESTION, 0); }
+		public TerminalNode<Token> QUESTION() { return getToken(GrammarParser.QUESTION, 0); }
 		public LabeledElementContext labeledElement() {
 		    return getRuleContext(LabeledElementContext.class,0);
 		}
@@ -4062,8 +4062,8 @@ public class GrammarParser extends Parser<Token> {
 		public BlockContext block() {
 		    return getRuleContext(BlockContext.class,0);
 		}
-		public Token PLUS_ASSIGN() { return getToken(GrammarParser.PLUS_ASSIGN, 0); }
-		public Token ASSIGN() { return getToken(GrammarParser.ASSIGN, 0); }
+		public TerminalNode<Token> PLUS_ASSIGN() { return getToken(GrammarParser.PLUS_ASSIGN, 0); }
+		public TerminalNode<Token> ASSIGN() { return getToken(GrammarParser.ASSIGN, 0); }
 		public LabeledElementContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
@@ -4234,9 +4234,9 @@ public class GrammarParser extends Parser<Token> {
 	}
 
 	public static class EbnfSuffixContext extends ParserRuleContext<Token> {
-		public Token PLUS() { return getToken(GrammarParser.PLUS, 0); }
-		public Token STAR() { return getToken(GrammarParser.STAR, 0); }
-		public Token QUESTION() { return getToken(GrammarParser.QUESTION, 0); }
+		public TerminalNode<Token> PLUS() { return getToken(GrammarParser.PLUS, 0); }
+		public TerminalNode<Token> STAR() { return getToken(GrammarParser.STAR, 0); }
+		public TerminalNode<Token> QUESTION() { return getToken(GrammarParser.QUESTION, 0); }
 		public EbnfSuffixContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
@@ -4311,8 +4311,8 @@ public class GrammarParser extends Parser<Token> {
 		public NotSetContext notSet() {
 		    return getRuleContext(NotSetContext.class,0);
 		}
-		public Token DOT() { return getToken(GrammarParser.DOT, 0); }
-		public Token RULE_REF() { return getToken(GrammarParser.RULE_REF, 0); }
+		public TerminalNode<Token> DOT() { return getToken(GrammarParser.DOT, 0); }
+		public TerminalNode<Token> RULE_REF() { return getToken(GrammarParser.RULE_REF, 0); }
 		public LexerAtomContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
@@ -4414,7 +4414,7 @@ public class GrammarParser extends Parser<Token> {
 		public NotSetContext notSet() {
 		    return getRuleContext(NotSetContext.class,0);
 		}
-		public Token DOT() { return getToken(GrammarParser.DOT, 0); }
+		public TerminalNode<Token> DOT() { return getToken(GrammarParser.DOT, 0); }
 		public RulerefContext ruleref() {
 		    return getRuleContext(RulerefContext.class,0);
 		}
@@ -4506,7 +4506,7 @@ public class GrammarParser extends Parser<Token> {
 		public BlockSetContext blockSet() {
 		    return getRuleContext(BlockSetContext.class,0);
 		}
-		public Token NOT() { return getToken(GrammarParser.NOT, 0); }
+		public TerminalNode<Token> NOT() { return getToken(GrammarParser.NOT, 0); }
 		public NotSetContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
@@ -4561,15 +4561,15 @@ public class GrammarParser extends Parser<Token> {
 	}
 
 	public static class BlockSetContext extends ParserRuleContext<Token> {
-		public Token RPAREN() { return getToken(GrammarParser.RPAREN, 0); }
+		public TerminalNode<Token> RPAREN() { return getToken(GrammarParser.RPAREN, 0); }
 		public List<? extends SetElementContext> setElement() {
 		    return getRuleContexts(SetElementContext.class);
 		}
 		public SetElementContext setElement(int i) {
 		    return getRuleContext(SetElementContext.class,i);
 		}
-		public Token LPAREN() { return getToken(GrammarParser.LPAREN, 0); }
-		public Token OR() { return getToken(GrammarParser.OR, 0); }
+		public TerminalNode<Token> LPAREN() { return getToken(GrammarParser.LPAREN, 0); }
+		public TerminalNode<Token> OR() { return getToken(GrammarParser.OR, 0); }
 		public BlockSetContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
@@ -4630,8 +4630,8 @@ public class GrammarParser extends Parser<Token> {
 		public RangeContext range() {
 		    return getRuleContext(RangeContext.class,0);
 		}
-		public Token STRING_LITERAL() { return getToken(GrammarParser.STRING_LITERAL, 0); }
-		public Token TOKEN_REF() { return getToken(GrammarParser.TOKEN_REF, 0); }
+		public TerminalNode<Token> STRING_LITERAL() { return getToken(GrammarParser.STRING_LITERAL, 0); }
+		public TerminalNode<Token> TOKEN_REF() { return getToken(GrammarParser.TOKEN_REF, 0); }
 		public SetElementContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
@@ -4691,15 +4691,15 @@ public class GrammarParser extends Parser<Token> {
 	}
 
 	public static class BlockContext extends ParserRuleContext<Token> {
-		public Token COLON() { return getToken(GrammarParser.COLON, 0); }
-		public Token RPAREN() { return getToken(GrammarParser.RPAREN, 0); }
+		public TerminalNode<Token> COLON() { return getToken(GrammarParser.COLON, 0); }
+		public TerminalNode<Token> RPAREN() { return getToken(GrammarParser.RPAREN, 0); }
 		public OptionsSpecContext optionsSpec() {
 		    return getRuleContext(OptionsSpecContext.class,0);
 		}
 		public AltListContext altList() {
 		    return getRuleContext(AltListContext.class,0);
 		}
-		public Token LPAREN() { return getToken(GrammarParser.LPAREN, 0); }
+		public TerminalNode<Token> LPAREN() { return getToken(GrammarParser.LPAREN, 0); }
 		public RuleActionContext ruleAction() {
 		    return getRuleContext(RuleActionContext.class,0);
 		}
@@ -4780,7 +4780,7 @@ public class GrammarParser extends Parser<Token> {
 		public ArgActionBlockContext argActionBlock() {
 		    return getRuleContext(ArgActionBlockContext.class,0);
 		}
-		public Token RULE_REF() { return getToken(GrammarParser.RULE_REF, 0); }
+		public TerminalNode<Token> RULE_REF() { return getToken(GrammarParser.RULE_REF, 0); }
 		public RulerefContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
@@ -4829,9 +4829,9 @@ public class GrammarParser extends Parser<Token> {
 	}
 
 	public static class RangeContext extends ParserRuleContext<Token> {
-		public Token RANGE() { return getToken(GrammarParser.RANGE, 0); }
-		public List<? extends Token> STRING_LITERAL() { return getTokens(GrammarParser.STRING_LITERAL); }
-		public Token STRING_LITERAL(int i) {
+		public TerminalNode<Token> RANGE() { return getToken(GrammarParser.RANGE, 0); }
+		public List<? extends TerminalNode<Token>> STRING_LITERAL() { return getTokens(GrammarParser.STRING_LITERAL); }
+		public TerminalNode<Token> STRING_LITERAL(int i) {
 		    return getToken(GrammarParser.STRING_LITERAL, i);
 		}
 		public RangeContext(ParserRuleContext<Token> parent, int state) {
@@ -4875,11 +4875,11 @@ public class GrammarParser extends Parser<Token> {
 	}
 
 	public static class TerminalContext extends ParserRuleContext<Token> {
-		public Token STRING_LITERAL() { return getToken(GrammarParser.STRING_LITERAL, 0); }
+		public TerminalNode<Token> STRING_LITERAL() { return getToken(GrammarParser.STRING_LITERAL, 0); }
 		public ElementOptionsContext elementOptions() {
 		    return getRuleContext(ElementOptionsContext.class,0);
 		}
-		public Token TOKEN_REF() { return getToken(GrammarParser.TOKEN_REF, 0); }
+		public TerminalNode<Token> TOKEN_REF() { return getToken(GrammarParser.TOKEN_REF, 0); }
 		public TerminalContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
@@ -4950,12 +4950,12 @@ public class GrammarParser extends Parser<Token> {
 	}
 
 	public static class ElementOptionsContext extends ParserRuleContext<Token> {
-		public Token GT() { return getToken(GrammarParser.GT, 0); }
-		public Token LT() { return getToken(GrammarParser.LT, 0); }
+		public TerminalNode<Token> GT() { return getToken(GrammarParser.GT, 0); }
+		public TerminalNode<Token> LT() { return getToken(GrammarParser.LT, 0); }
 		public List<? extends ElementOptionContext> elementOption() {
 		    return getRuleContexts(ElementOptionContext.class);
 		}
-		public Token COMMA() { return getToken(GrammarParser.COMMA, 0); }
+		public TerminalNode<Token> COMMA() { return getToken(GrammarParser.COMMA, 0); }
 		public ElementOptionContext elementOption(int i) {
 		    return getRuleContext(ElementOptionContext.class,i);
 		}
@@ -5019,11 +5019,11 @@ public class GrammarParser extends Parser<Token> {
 		public IdContext id() {
 		    return getRuleContext(IdContext.class,0);
 		}
-		public Token STRING_LITERAL() { return getToken(GrammarParser.STRING_LITERAL, 0); }
+		public TerminalNode<Token> STRING_LITERAL() { return getToken(GrammarParser.STRING_LITERAL, 0); }
 		public QidContext qid() {
 		    return getRuleContext(QidContext.class,0);
 		}
-		public Token ASSIGN() { return getToken(GrammarParser.ASSIGN, 0); }
+		public TerminalNode<Token> ASSIGN() { return getToken(GrammarParser.ASSIGN, 0); }
 		public ElementOptionContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
@@ -5092,9 +5092,9 @@ public class GrammarParser extends Parser<Token> {
 	}
 
 	public static class IdContext extends ParserRuleContext<Token> {
-		public Token TEMPLATE() { return getToken(GrammarParser.TEMPLATE, 0); }
-		public Token RULE_REF() { return getToken(GrammarParser.RULE_REF, 0); }
-		public Token TOKEN_REF() { return getToken(GrammarParser.TOKEN_REF, 0); }
+		public TerminalNode<Token> TEMPLATE() { return getToken(GrammarParser.TEMPLATE, 0); }
+		public TerminalNode<Token> RULE_REF() { return getToken(GrammarParser.RULE_REF, 0); }
+		public TerminalNode<Token> TOKEN_REF() { return getToken(GrammarParser.TOKEN_REF, 0); }
 		public IdContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
@@ -5157,7 +5157,7 @@ public class GrammarParser extends Parser<Token> {
 		public List<? extends IdContext> id() {
 		    return getRuleContexts(IdContext.class);
 		}
-		public Token DOT() { return getToken(GrammarParser.DOT, 0); }
+		public TerminalNode<Token> DOT() { return getToken(GrammarParser.DOT, 0); }
 		public IdContext id(int i) {
 		    return getRuleContext(IdContext.class,i);
 		}
