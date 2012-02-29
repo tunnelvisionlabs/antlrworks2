@@ -57,6 +57,11 @@ public class NavigatorUpdateParserTask implements ParserTask {
         throws InterruptedException, ExecutionException {
 
         synchronized (lock) {
+            GrammarRulesPanel panel = GrammarRulesPanel.getInstance();
+            if (panel == null) {
+                return;
+            }
+
             JTextComponent currentComponent = EditorRegistry.lastFocusedComponent();
             if (currentComponent == null) {
                 return;
@@ -83,7 +88,12 @@ public class NavigatorUpdateParserTask implements ParserTask {
             }
 
             String selectedRule = context != null ? context.getRuleName() : null;
-            GrammarRulesPanelUI ui = GrammarRulesPanel.findGrammarRulesPanelUI();
+
+            GrammarRulesPanelUI ui = panel != null ? panel.getComponent() : null;
+            if (ui == null) {
+                return;
+            }
+
             ui.refresh(root, selectedRule);
         }
     }

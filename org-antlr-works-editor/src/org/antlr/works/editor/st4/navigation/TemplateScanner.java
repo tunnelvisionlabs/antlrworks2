@@ -29,7 +29,8 @@ import org.stringtemplate.v4.misc.Misc;
 public class TemplateScanner {
 
     public Description scan(CompiledModel model) {
-        TemplatesPanelUI ui = TemplatesPanel.findTemplatesPanelUI();
+        TemplatesPanel panel = TemplatesPanel.getInstance();
+        TemplatesPanelUI ui = panel != null ? panel.getComponent() : null;
         if (ui == null) {
             return null;
         }

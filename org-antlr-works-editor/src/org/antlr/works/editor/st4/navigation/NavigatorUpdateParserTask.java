@@ -57,6 +57,11 @@ public class NavigatorUpdateParserTask implements ParserTask {
         throws InterruptedException, ExecutionException {
 
         synchronized (lock) {
+            TemplatesPanel panel = TemplatesPanel.getInstance();
+            if (panel == null) {
+                return;
+            }
+
             JTextComponent currentComponent = EditorRegistry.lastFocusedComponent();
             if (currentComponent == null) {
                 return;
@@ -83,7 +88,12 @@ public class NavigatorUpdateParserTask implements ParserTask {
             }
 
             String selectedRule = context != null ? context.getTemplateName() : null;
-            TemplatesPanelUI ui = TemplatesPanel.findTemplatesPanelUI();
+
+            TemplatesPanelUI ui = panel != null ? panel.getComponent() : null;
+            if (ui == null) {
+                return;
+            }
+
             ui.refresh(root, selectedRule);
         }
     }
