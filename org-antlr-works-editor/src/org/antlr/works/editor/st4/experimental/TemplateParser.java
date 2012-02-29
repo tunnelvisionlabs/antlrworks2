@@ -159,6 +159,7 @@ public class TemplateParser extends Parser<Token> {
 		GroupContext _localctx = new GroupContext(_ctx, 0);
 		enterRule(_localctx, RULE_group);
 		try {
+			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(90);
@@ -181,9 +182,9 @@ public class TemplateParser extends Parser<Token> {
 			}
 			setState(102);
 			_errHandler.sync(this);
-			int _alt44 = getInterpreter().adaptivePredict(_input,2,_ctx);
-			while ( _alt44!=2 && _alt44!=-1 ) {
-				if ( _alt44==1 ) {
+			_alt = getInterpreter().adaptivePredict(_input,2,_ctx);
+			while ( _alt!=2 && _alt!=-1 ) {
+				if ( _alt==1 ) {
 					{
 					{
 					setState(96); match(IMPORT);
@@ -193,13 +194,13 @@ public class TemplateParser extends Parser<Token> {
 				}
 				setState(104);
 				_errHandler.sync(this);
-				_alt44 = getInterpreter().adaptivePredict(_input,2,_ctx);
+				_alt = getInterpreter().adaptivePredict(_input,2,_ctx);
 			}
 			setState(107); 
 			_errHandler.sync(this);
-			int _alt47 = getInterpreter().adaptivePredict(_input,3,_ctx);
+			_alt = getInterpreter().adaptivePredict(_input,3,_ctx);
 			do {
-				switch ( _alt47 ) {
+				switch ( _alt ) {
 					case 1:
 						{
 						{
@@ -212,8 +213,8 @@ public class TemplateParser extends Parser<Token> {
 				}
 				setState(109); 
 				_errHandler.sync(this);
-				_alt47 = getInterpreter().adaptivePredict(_input,3,_ctx);
-			} while ( _alt47!=2 && _alt47!=-1 );
+				_alt = getInterpreter().adaptivePredict(_input,3,_ctx);
+			} while ( _alt!=2 && _alt!=-1 );
 			}
 			_localctx.stop = _input.LT(-1);
 		}
@@ -254,6 +255,7 @@ public class TemplateParser extends Parser<Token> {
 		OldStyleHeaderContext _localctx = new OldStyleHeaderContext(_ctx, 2);
 		enterRule(_localctx, RULE_oldStyleHeader);
 		try {
+			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(111); match(GROUP);
@@ -277,9 +279,9 @@ public class TemplateParser extends Parser<Token> {
 					setState(123); match(ID);
 					setState(131);
 					_errHandler.sync(this);
-					int _alt76 = getInterpreter().adaptivePredict(_input,5,_ctx);
-					while ( _alt76!=2 && _alt76!=-1 ) {
-						if ( _alt76==1 ) {
+					_alt = getInterpreter().adaptivePredict(_input,5,_ctx);
+					while ( _alt!=2 && _alt!=-1 ) {
+						if ( _alt==1 ) {
 							{
 							{
 							setState(125); match(COMMA);
@@ -289,7 +291,7 @@ public class TemplateParser extends Parser<Token> {
 						}
 						setState(133);
 						_errHandler.sync(this);
-						_alt76 = getInterpreter().adaptivePredict(_input,5,_ctx);
+						_alt = getInterpreter().adaptivePredict(_input,5,_ctx);
 					}
 					}
 					break;
@@ -335,14 +337,15 @@ public class TemplateParser extends Parser<Token> {
 		GroupNameContext _localctx = new GroupNameContext(_ctx, 4);
 		enterRule(_localctx, RULE_groupName);
 		try {
+			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(138); match(ID);
 			setState(146);
 			_errHandler.sync(this);
-			int _alt95 = getInterpreter().adaptivePredict(_input,7,_ctx);
-			while ( _alt95!=2 && _alt95!=-1 ) {
-				if ( _alt95==1 ) {
+			_alt = getInterpreter().adaptivePredict(_input,7,_ctx);
+			while ( _alt!=2 && _alt!=-1 ) {
+				if ( _alt==1 ) {
 					{
 					{
 					setState(140); match(DOT);
@@ -352,7 +355,7 @@ public class TemplateParser extends Parser<Token> {
 				}
 				setState(148);
 				_errHandler.sync(this);
-				_alt95 = getInterpreter().adaptivePredict(_input,7,_ctx);
+				_alt = getInterpreter().adaptivePredict(_input,7,_ctx);
 			}
 			}
 			_localctx.stop = _input.LT(-1);
@@ -616,6 +619,7 @@ public class TemplateParser extends Parser<Token> {
 		FormalArgsContext _localctx = new FormalArgsContext(_ctx, 12);
 		enterRule(_localctx, RULE_formalArgs);
 		try {
+			int _alt;
 			setState(216);
 			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,13,_ctx) ) {
@@ -625,9 +629,9 @@ public class TemplateParser extends Parser<Token> {
 					setState(203); formalArg();
 					setState(211);
 					_errHandler.sync(this);
-					int _alt202 = getInterpreter().adaptivePredict(_input,12,_ctx);
-					while ( _alt202!=2 && _alt202!=-1 ) {
-						if ( _alt202==1 ) {
+					_alt = getInterpreter().adaptivePredict(_input,12,_ctx);
+					while ( _alt!=2 && _alt!=-1 ) {
+						if ( _alt==1 ) {
 							{
 							{
 							setState(205); match(COMMA);
@@ -637,7 +641,7 @@ public class TemplateParser extends Parser<Token> {
 						}
 						setState(213);
 						_errHandler.sync(this);
-						_alt202 = getInterpreter().adaptivePredict(_input,12,_ctx);
+						_alt = getInterpreter().adaptivePredict(_input,12,_ctx);
 					}
 					}
 					break;
@@ -867,6 +871,7 @@ public class TemplateParser extends Parser<Token> {
 		DictPairsContext _localctx = new DictPairsContext(_ctx, 20);
 		enterRule(_localctx, RULE_dictPairs);
 		try {
+			int _alt;
 			setState(265);
 			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,18,_ctx) ) {
@@ -876,9 +881,9 @@ public class TemplateParser extends Parser<Token> {
 					setState(246); keyValuePair();
 					setState(254);
 					_errHandler.sync(this);
-					int _alt278 = getInterpreter().adaptivePredict(_input,16,_ctx);
-					while ( _alt278!=2 && _alt278!=-1 ) {
-						if ( _alt278==1 ) {
+					_alt = getInterpreter().adaptivePredict(_input,16,_ctx);
+					while ( _alt!=2 && _alt!=-1 ) {
+						if ( _alt==1 ) {
 							{
 							{
 							setState(248); match(COMMA);
@@ -888,7 +893,7 @@ public class TemplateParser extends Parser<Token> {
 						}
 						setState(256);
 						_errHandler.sync(this);
-						_alt278 = getInterpreter().adaptivePredict(_input,16,_ctx);
+						_alt = getInterpreter().adaptivePredict(_input,16,_ctx);
 					}
 					setState(261);
 					//_errHandler.sync(this);
@@ -1386,15 +1391,16 @@ public class TemplateParser extends Parser<Token> {
 		AnonymousTemplateParametersContext _localctx = new AnonymousTemplateParametersContext(_ctx, 38);
 		enterRule(_localctx, RULE_anonymousTemplateParameters);
 		try {
+			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(325); _localctx.TEMPLATE_PARAMETER = match(TEMPLATE_PARAMETER);
 			_localctx.names.add(_localctx.TEMPLATE_PARAMETER);
 			setState(333);
 			_errHandler.sync(this);
-			int _alt423 = getInterpreter().adaptivePredict(_input,21,_ctx);
-			while ( _alt423!=2 && _alt423!=-1 ) {
-				if ( _alt423==1 ) {
+			_alt = getInterpreter().adaptivePredict(_input,21,_ctx);
+			while ( _alt!=2 && _alt!=-1 ) {
+				if ( _alt==1 ) {
 					{
 					{
 					setState(327); match(COMMA);
@@ -1405,7 +1411,7 @@ public class TemplateParser extends Parser<Token> {
 				}
 				setState(335);
 				_errHandler.sync(this);
-				_alt423 = getInterpreter().adaptivePredict(_input,21,_ctx);
+				_alt = getInterpreter().adaptivePredict(_input,21,_ctx);
 			}
 			setState(336); match(PIPE);
 			}
@@ -1459,13 +1465,14 @@ public class TemplateParser extends Parser<Token> {
 		TemplateBodyContext _localctx = new TemplateBodyContext(_ctx, 40);
 		enterRule(_localctx, RULE_templateBody);
 		try {
+			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(354);
 			_errHandler.sync(this);
-			int _alt462 = getInterpreter().adaptivePredict(_input,23,_ctx);
-			while ( _alt462!=2 && _alt462!=-1 ) {
-				if ( _alt462==1 ) {
+			_alt = getInterpreter().adaptivePredict(_input,23,_ctx);
+			while ( _alt!=2 && _alt!=-1 ) {
+				if ( _alt==1 ) {
 					{
 					setState(352);
 					//_errHandler.sync(this);
@@ -1516,7 +1523,7 @@ public class TemplateParser extends Parser<Token> {
 				}
 				setState(356);
 				_errHandler.sync(this);
-				_alt462 = getInterpreter().adaptivePredict(_input,23,_ctx);
+				_alt = getInterpreter().adaptivePredict(_input,23,_ctx);
 			}
 			}
 			_localctx.stop = _input.LT(-1);
@@ -1790,6 +1797,7 @@ public class TemplateParser extends Parser<Token> {
 		IfstatContext _localctx = new IfstatContext(_ctx, 50);
 		enterRule(_localctx, RULE_ifstat);
 		try {
+			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(391); match(OPEN_DELIMITER);
@@ -1801,9 +1809,9 @@ public class TemplateParser extends Parser<Token> {
 			setState(403); templateBody();
 			setState(421);
 			_errHandler.sync(this);
-			int _alt558 = getInterpreter().adaptivePredict(_input,25,_ctx);
-			while ( _alt558!=2 && _alt558!=-1 ) {
-				if ( _alt558==1 ) {
+			_alt = getInterpreter().adaptivePredict(_input,25,_ctx);
+			while ( _alt!=2 && _alt!=-1 ) {
+				if ( _alt==1 ) {
 					{
 					{
 					setState(405); match(OPEN_DELIMITER);
@@ -1818,7 +1826,7 @@ public class TemplateParser extends Parser<Token> {
 				}
 				setState(423);
 				_errHandler.sync(this);
-				_alt558 = getInterpreter().adaptivePredict(_input,25,_ctx);
+				_alt = getInterpreter().adaptivePredict(_input,25,_ctx);
 			}
 			setState(432);
 			//_errHandler.sync(this);
@@ -1878,14 +1886,15 @@ public class TemplateParser extends Parser<Token> {
 		ConditionalContext _localctx = new ConditionalContext(_ctx, 52);
 		enterRule(_localctx, RULE_conditional);
 		try {
+			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(440); andConditional();
 			setState(448);
 			_errHandler.sync(this);
-			int _alt590 = getInterpreter().adaptivePredict(_input,27,_ctx);
-			while ( _alt590!=2 && _alt590!=-1 ) {
-				if ( _alt590==1 ) {
+			_alt = getInterpreter().adaptivePredict(_input,27,_ctx);
+			while ( _alt!=2 && _alt!=-1 ) {
+				if ( _alt==1 ) {
 					{
 					{
 					setState(442); match(OR);
@@ -1895,7 +1904,7 @@ public class TemplateParser extends Parser<Token> {
 				}
 				setState(450);
 				_errHandler.sync(this);
-				_alt590 = getInterpreter().adaptivePredict(_input,27,_ctx);
+				_alt = getInterpreter().adaptivePredict(_input,27,_ctx);
 			}
 			}
 			_localctx.stop = _input.LT(-1);
@@ -1940,14 +1949,15 @@ public class TemplateParser extends Parser<Token> {
 		AndConditionalContext _localctx = new AndConditionalContext(_ctx, 54);
 		enterRule(_localctx, RULE_andConditional);
 		try {
+			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(451); notConditional();
 			setState(459);
 			_errHandler.sync(this);
-			int _alt605 = getInterpreter().adaptivePredict(_input,28,_ctx);
-			while ( _alt605!=2 && _alt605!=-1 ) {
-				if ( _alt605==1 ) {
+			_alt = getInterpreter().adaptivePredict(_input,28,_ctx);
+			while ( _alt!=2 && _alt!=-1 ) {
+				if ( _alt==1 ) {
 					{
 					{
 					setState(453); match(AND);
@@ -1957,7 +1967,7 @@ public class TemplateParser extends Parser<Token> {
 				}
 				setState(461);
 				_errHandler.sync(this);
-				_alt605 = getInterpreter().adaptivePredict(_input,28,_ctx);
+				_alt = getInterpreter().adaptivePredict(_input,28,_ctx);
 			}
 			}
 			_localctx.stop = _input.LT(-1);
@@ -2062,14 +2072,15 @@ public class TemplateParser extends Parser<Token> {
 		ExprOptionsContext _localctx = new ExprOptionsContext(_ctx, 58);
 		enterRule(_localctx, RULE_exprOptions);
 		try {
+			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(470); option();
 			setState(478);
 			_errHandler.sync(this);
-			int _alt634 = getInterpreter().adaptivePredict(_input,30,_ctx);
-			while ( _alt634!=2 && _alt634!=-1 ) {
-				if ( _alt634==1 ) {
+			_alt = getInterpreter().adaptivePredict(_input,30,_ctx);
+			while ( _alt!=2 && _alt!=-1 ) {
+				if ( _alt==1 ) {
 					{
 					{
 					setState(472); match(COMMA);
@@ -2079,7 +2090,7 @@ public class TemplateParser extends Parser<Token> {
 				}
 				setState(480);
 				_errHandler.sync(this);
-				_alt634 = getInterpreter().adaptivePredict(_input,30,_ctx);
+				_alt = getInterpreter().adaptivePredict(_input,30,_ctx);
 			}
 			}
 			_localctx.stop = _input.LT(-1);
@@ -2291,6 +2302,7 @@ public class TemplateParser extends Parser<Token> {
 		MapExprContext _localctx = new MapExprContext(_ctx, 66);
 		enterRule(_localctx, RULE_mapExpr);
 		try {
+			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(499); memberExpr();
@@ -2301,9 +2313,9 @@ public class TemplateParser extends Parser<Token> {
 					{
 					setState(505); 
 					_errHandler.sync(this);
-					int _alt694 = getInterpreter().adaptivePredict(_input,33,_ctx);
+					_alt = getInterpreter().adaptivePredict(_input,33,_ctx);
 					do {
-						switch ( _alt694 ) {
+						switch ( _alt ) {
 							case 1:
 								{
 								{
@@ -2317,8 +2329,8 @@ public class TemplateParser extends Parser<Token> {
 						}
 						setState(507); 
 						_errHandler.sync(this);
-						_alt694 = getInterpreter().adaptivePredict(_input,33,_ctx);
-					} while ( _alt694!=2 && _alt694!=-1 );
+						_alt = getInterpreter().adaptivePredict(_input,33,_ctx);
+					} while ( _alt!=2 && _alt!=-1 );
 					setState(509); match(COLON);
 					setState(511); mapTemplateRef();
 					}
@@ -2326,18 +2338,18 @@ public class TemplateParser extends Parser<Token> {
 			}
 			setState(530);
 			_errHandler.sync(this);
-			int _alt714 = getInterpreter().adaptivePredict(_input,36,_ctx);
-			while ( _alt714!=2 && _alt714!=-1 ) {
-				if ( _alt714==1 ) {
+			_alt = getInterpreter().adaptivePredict(_input,36,_ctx);
+			while ( _alt!=2 && _alt!=-1 ) {
+				if ( _alt==1 ) {
 					{
 					{
 					setState(515); match(COLON);
 					setState(517); mapTemplateRef();
 					setState(525);
 					_errHandler.sync(this);
-					int _alt712 = getInterpreter().adaptivePredict(_input,35,_ctx);
-					while ( _alt712!=2 && _alt712!=-1 ) {
-						if ( _alt712==1 ) {
+					_alt = getInterpreter().adaptivePredict(_input,35,_ctx);
+					while ( _alt!=2 && _alt!=-1 ) {
+						if ( _alt==1 ) {
 							{
 							{
 							setState(519); match(COMMA);
@@ -2347,14 +2359,14 @@ public class TemplateParser extends Parser<Token> {
 						}
 						setState(527);
 						_errHandler.sync(this);
-						_alt712 = getInterpreter().adaptivePredict(_input,35,_ctx);
+						_alt = getInterpreter().adaptivePredict(_input,35,_ctx);
 					}
 					}
 					} 
 				}
 				setState(532);
 				_errHandler.sync(this);
-				_alt714 = getInterpreter().adaptivePredict(_input,36,_ctx);
+				_alt = getInterpreter().adaptivePredict(_input,36,_ctx);
 			}
 			}
 			_localctx.stop = _input.LT(-1);
@@ -2501,14 +2513,15 @@ public class TemplateParser extends Parser<Token> {
 		MemberExprContext _localctx = new MemberExprContext(_ctx, 70);
 		enterRule(_localctx, RULE_memberExpr);
 		try {
+			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(559); includeExpr();
 			setState(575);
 			_errHandler.sync(this);
-			int _alt774 = getInterpreter().adaptivePredict(_input,40,_ctx);
-			while ( _alt774!=2 && _alt774!=-1 ) {
-				if ( _alt774==1 ) {
+			_alt = getInterpreter().adaptivePredict(_input,40,_ctx);
+			while ( _alt!=2 && _alt!=-1 ) {
+				if ( _alt==1 ) {
 					{
 					setState(573);
 					//_errHandler.sync(this);
@@ -2533,7 +2546,7 @@ public class TemplateParser extends Parser<Token> {
 				}
 				setState(577);
 				_errHandler.sync(this);
-				_alt774 = getInterpreter().adaptivePredict(_input,40,_ctx);
+				_alt = getInterpreter().adaptivePredict(_input,40,_ctx);
 			}
 			}
 			_localctx.stop = _input.LT(-1);
@@ -2832,6 +2845,7 @@ public class TemplateParser extends Parser<Token> {
 		ArgumentsContext _localctx = new ArgumentsContext(_ctx, 76);
 		enterRule(_localctx, RULE_arguments);
 		try {
+			int _alt;
 			setState(679);
 			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,47,_ctx) ) {
@@ -2848,9 +2862,9 @@ public class TemplateParser extends Parser<Token> {
 					setState(658); namedArg();
 					setState(666);
 					_errHandler.sync(this);
-					int _alt909 = getInterpreter().adaptivePredict(_input,45,_ctx);
-					while ( _alt909!=2 && _alt909!=-1 ) {
-						if ( _alt909==1 ) {
+					_alt = getInterpreter().adaptivePredict(_input,45,_ctx);
+					while ( _alt!=2 && _alt!=-1 ) {
+						if ( _alt==1 ) {
 							{
 							{
 							setState(660); match(COMMA);
@@ -2860,7 +2874,7 @@ public class TemplateParser extends Parser<Token> {
 						}
 						setState(668);
 						_errHandler.sync(this);
-						_alt909 = getInterpreter().adaptivePredict(_input,45,_ctx);
+						_alt = getInterpreter().adaptivePredict(_input,45,_ctx);
 					}
 					setState(673);
 					//_errHandler.sync(this);
@@ -2930,14 +2944,15 @@ public class TemplateParser extends Parser<Token> {
 		ArgExprListContext _localctx = new ArgExprListContext(_ctx, 78);
 		enterRule(_localctx, RULE_argExprList);
 		try {
+			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(681); arg();
 			setState(689);
 			_errHandler.sync(this);
-			int _alt939 = getInterpreter().adaptivePredict(_input,48,_ctx);
-			while ( _alt939!=2 && _alt939!=-1 ) {
-				if ( _alt939==1 ) {
+			_alt = getInterpreter().adaptivePredict(_input,48,_ctx);
+			while ( _alt!=2 && _alt!=-1 ) {
+				if ( _alt==1 ) {
 					{
 					{
 					setState(683); match(COMMA);
@@ -2947,7 +2962,7 @@ public class TemplateParser extends Parser<Token> {
 				}
 				setState(691);
 				_errHandler.sync(this);
-				_alt939 = getInterpreter().adaptivePredict(_input,48,_ctx);
+				_alt = getInterpreter().adaptivePredict(_input,48,_ctx);
 			}
 			}
 			_localctx.stop = _input.LT(-1);
@@ -3084,6 +3099,7 @@ public class TemplateParser extends Parser<Token> {
 		ListContext _localctx = new ListContext(_ctx, 84);
 		enterRule(_localctx, RULE_list);
 		try {
+			int _alt;
 			setState(719);
 			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,50,_ctx) ) {
@@ -3102,9 +3118,9 @@ public class TemplateParser extends Parser<Token> {
 					setState(706); listElement();
 					setState(714);
 					_errHandler.sync(this);
-					int _alt986 = getInterpreter().adaptivePredict(_input,49,_ctx);
-					while ( _alt986!=2 && _alt986!=-1 ) {
-						if ( _alt986==1 ) {
+					_alt = getInterpreter().adaptivePredict(_input,49,_ctx);
+					while ( _alt!=2 && _alt!=-1 ) {
+						if ( _alt==1 ) {
 							{
 							{
 							setState(708); match(COMMA);
@@ -3114,7 +3130,7 @@ public class TemplateParser extends Parser<Token> {
 						}
 						setState(716);
 						_errHandler.sync(this);
-						_alt986 = getInterpreter().adaptivePredict(_input,49,_ctx);
+						_alt = getInterpreter().adaptivePredict(_input,49,_ctx);
 					}
 					setState(717); match(RBRACK);
 					}
