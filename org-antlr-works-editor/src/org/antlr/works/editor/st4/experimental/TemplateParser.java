@@ -155,6 +155,7 @@ public class TemplateParser extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final GroupContext group() throws RecognitionException {
 		GroupContext _localctx = new GroupContext(_ctx, 0);
 		enterRule(_localctx, RULE_group);
@@ -251,6 +252,7 @@ public class TemplateParser extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final OldStyleHeaderContext oldStyleHeader() throws RecognitionException {
 		OldStyleHeaderContext _localctx = new OldStyleHeaderContext(_ctx, 2);
 		enterRule(_localctx, RULE_oldStyleHeader);
@@ -333,6 +335,7 @@ public class TemplateParser extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final GroupNameContext groupName() throws RecognitionException {
 		GroupNameContext _localctx = new GroupNameContext(_ctx, 4);
 		enterRule(_localctx, RULE_groupName);
@@ -391,6 +394,7 @@ public class TemplateParser extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final DelimitersContext delimiters() throws RecognitionException {
 		DelimitersContext _localctx = new DelimitersContext(_ctx, 6);
 		enterRule(_localctx, RULE_delimiters);
@@ -439,6 +443,7 @@ public class TemplateParser extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final DefContext def() throws RecognitionException {
 		DefContext _localctx = new DefContext(_ctx, 8);
 		enterRule(_localctx, RULE_def);
@@ -511,6 +516,7 @@ public class TemplateParser extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final TemplateDefContext templateDef() throws RecognitionException {
 		TemplateDefContext _localctx = new TemplateDefContext(_ctx, 10);
 		enterRule(_localctx, RULE_templateDef);
@@ -615,6 +621,7 @@ public class TemplateParser extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final FormalArgsContext formalArgs() throws RecognitionException {
 		FormalArgsContext _localctx = new FormalArgsContext(_ctx, 12);
 		enterRule(_localctx, RULE_formalArgs);
@@ -693,6 +700,7 @@ public class TemplateParser extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final FormalArgContext formalArg() throws RecognitionException {
 		FormalArgContext _localctx = new FormalArgContext(_ctx, 14);
 		enterRule(_localctx, RULE_formalArg);
@@ -773,6 +781,7 @@ public class TemplateParser extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final DictDefContext dictDef() throws RecognitionException {
 		DictDefContext _localctx = new DictDefContext(_ctx, 16);
 		enterRule(_localctx, RULE_dictDef);
@@ -817,6 +826,7 @@ public class TemplateParser extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final DictContext dict() throws RecognitionException {
 		DictContext _localctx = new DictContext(_ctx, 18);
 		enterRule(_localctx, RULE_dict);
@@ -867,6 +877,7 @@ public class TemplateParser extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final DictPairsContext dictPairs() throws RecognitionException {
 		DictPairsContext _localctx = new DictPairsContext(_ctx, 20);
 		enterRule(_localctx, RULE_dictPairs);
@@ -949,6 +960,7 @@ public class TemplateParser extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final DefaultValuePairContext defaultValuePair() throws RecognitionException {
 		DefaultValuePairContext _localctx = new DefaultValuePairContext(_ctx, 22);
 		enterRule(_localctx, RULE_defaultValuePair);
@@ -996,6 +1008,7 @@ public class TemplateParser extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final KeyValuePairContext keyValuePair() throws RecognitionException {
 		KeyValuePairContext _localctx = new KeyValuePairContext(_ctx, 24);
 		enterRule(_localctx, RULE_keyValuePair);
@@ -1052,6 +1065,7 @@ public class TemplateParser extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final KeyValueContext keyValue() throws RecognitionException {
 		KeyValueContext _localctx = new KeyValueContext(_ctx, 26);
 		enterRule(_localctx, RULE_keyValue);
@@ -1142,6 +1156,7 @@ public class TemplateParser extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final StringContext string() throws RecognitionException {
 		StringContext _localctx = new StringContext(_ctx, 28);
 		enterRule(_localctx, RULE_string);
@@ -1188,6 +1203,7 @@ public class TemplateParser extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final StringTemplateContext stringTemplate() throws RecognitionException {
 		StringTemplateContext _localctx = new StringTemplateContext(_ctx, 30);
 		enterRule(_localctx, RULE_stringTemplate);
@@ -1234,6 +1250,7 @@ public class TemplateParser extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final BigstringTemplateContext bigstringTemplate() throws RecognitionException {
 		BigstringTemplateContext _localctx = new BigstringTemplateContext(_ctx, 32);
 		enterRule(_localctx, RULE_bigstringTemplate);
@@ -1280,6 +1297,7 @@ public class TemplateParser extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final BigstringTemplateNoNewlineContext bigstringTemplateNoNewline() throws RecognitionException {
 		BigstringTemplateNoNewlineContext _localctx = new BigstringTemplateNoNewlineContext(_ctx, 34);
 		enterRule(_localctx, RULE_bigstringTemplateNoNewline);
@@ -1329,6 +1347,7 @@ public class TemplateParser extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final AnonymousTemplateContext anonymousTemplate() throws RecognitionException {
 		AnonymousTemplateContext _localctx = new AnonymousTemplateContext(_ctx, 36);
 		enterRule(_localctx, RULE_anonymousTemplate);
@@ -1387,6 +1406,7 @@ public class TemplateParser extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final AnonymousTemplateParametersContext anonymousTemplateParameters() throws RecognitionException {
 		AnonymousTemplateParametersContext _localctx = new AnonymousTemplateParametersContext(_ctx, 38);
 		enterRule(_localctx, RULE_anonymousTemplateParameters);
@@ -1461,6 +1481,7 @@ public class TemplateParser extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final TemplateBodyContext templateBody() throws RecognitionException {
 		TemplateBodyContext _localctx = new TemplateBodyContext(_ctx, 40);
 		enterRule(_localctx, RULE_templateBody);
@@ -1560,6 +1581,7 @@ public class TemplateParser extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final EscapeContext escape() throws RecognitionException {
 		EscapeContext _localctx = new EscapeContext(_ctx, 42);
 		enterRule(_localctx, RULE_escape);
@@ -1610,6 +1632,7 @@ public class TemplateParser extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final ExprTagContext exprTag() throws RecognitionException {
 		ExprTagContext _localctx = new ExprTagContext(_ctx, 44);
 		enterRule(_localctx, RULE_exprTag);
@@ -1674,6 +1697,7 @@ public class TemplateParser extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final RegionContext region() throws RecognitionException {
 		RegionContext _localctx = new RegionContext(_ctx, 46);
 		enterRule(_localctx, RULE_region);
@@ -1722,6 +1746,7 @@ public class TemplateParser extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final SubtemplateContext subtemplate() throws RecognitionException {
 		SubtemplateContext _localctx = new SubtemplateContext(_ctx, 48);
 		enterRule(_localctx, RULE_subtemplate);
@@ -1793,6 +1818,7 @@ public class TemplateParser extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final IfstatContext ifstat() throws RecognitionException {
 		IfstatContext _localctx = new IfstatContext(_ctx, 50);
 		enterRule(_localctx, RULE_ifstat);
@@ -1882,6 +1908,7 @@ public class TemplateParser extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final ConditionalContext conditional() throws RecognitionException {
 		ConditionalContext _localctx = new ConditionalContext(_ctx, 52);
 		enterRule(_localctx, RULE_conditional);
@@ -1945,6 +1972,7 @@ public class TemplateParser extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final AndConditionalContext andConditional() throws RecognitionException {
 		AndConditionalContext _localctx = new AndConditionalContext(_ctx, 54);
 		enterRule(_localctx, RULE_andConditional);
@@ -2008,6 +2036,7 @@ public class TemplateParser extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final NotConditionalContext notConditional() throws RecognitionException {
 		NotConditionalContext _localctx = new NotConditionalContext(_ctx, 56);
 		enterRule(_localctx, RULE_notConditional);
@@ -2068,6 +2097,7 @@ public class TemplateParser extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final ExprOptionsContext exprOptions() throws RecognitionException {
 		ExprOptionsContext _localctx = new ExprOptionsContext(_ctx, 58);
 		enterRule(_localctx, RULE_exprOptions);
@@ -2131,6 +2161,7 @@ public class TemplateParser extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final OptionContext option() throws RecognitionException {
 		OptionContext _localctx = new OptionContext(_ctx, 60);
 		enterRule(_localctx, RULE_option);
@@ -2187,6 +2218,7 @@ public class TemplateParser extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final ExprNoCommaContext exprNoComma() throws RecognitionException {
 		ExprNoCommaContext _localctx = new ExprNoCommaContext(_ctx, 62);
 		enterRule(_localctx, RULE_exprNoComma);
@@ -2239,6 +2271,7 @@ public class TemplateParser extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final ExprContext expr() throws RecognitionException {
 		ExprContext _localctx = new ExprContext(_ctx, 64);
 		enterRule(_localctx, RULE_expr);
@@ -2298,6 +2331,7 @@ public class TemplateParser extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final MapExprContext mapExpr() throws RecognitionException {
 		MapExprContext _localctx = new MapExprContext(_ctx, 66);
 		enterRule(_localctx, RULE_mapExpr);
@@ -2421,6 +2455,7 @@ public class TemplateParser extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final MapTemplateRefContext mapTemplateRef() throws RecognitionException {
 		MapTemplateRefContext _localctx = new MapTemplateRefContext(_ctx, 68);
 		enterRule(_localctx, RULE_mapTemplateRef);
@@ -2509,6 +2544,7 @@ public class TemplateParser extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final MemberExprContext memberExpr() throws RecognitionException {
 		MemberExprContext _localctx = new MemberExprContext(_ctx, 70);
 		enterRule(_localctx, RULE_memberExpr);
@@ -2595,6 +2631,7 @@ public class TemplateParser extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final IncludeExprContext includeExpr() throws RecognitionException {
 		IncludeExprContext _localctx = new IncludeExprContext(_ctx, 72);
 		enterRule(_localctx, RULE_includeExpr);
@@ -2710,6 +2747,7 @@ public class TemplateParser extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final PrimaryContext primary() throws RecognitionException {
 		PrimaryContext _localctx = new PrimaryContext(_ctx, 74);
 		enterRule(_localctx, RULE_primary);
@@ -2841,6 +2879,7 @@ public class TemplateParser extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final ArgumentsContext arguments() throws RecognitionException {
 		ArgumentsContext _localctx = new ArgumentsContext(_ctx, 76);
 		enterRule(_localctx, RULE_arguments);
@@ -2940,6 +2979,7 @@ public class TemplateParser extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final ArgExprListContext argExprList() throws RecognitionException {
 		ArgExprListContext _localctx = new ArgExprListContext(_ctx, 78);
 		enterRule(_localctx, RULE_argExprList);
@@ -2999,6 +3039,7 @@ public class TemplateParser extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final ArgContext arg() throws RecognitionException {
 		ArgContext _localctx = new ArgContext(_ctx, 80);
 		enterRule(_localctx, RULE_arg);
@@ -3045,6 +3086,7 @@ public class TemplateParser extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final NamedArgContext namedArg() throws RecognitionException {
 		NamedArgContext _localctx = new NamedArgContext(_ctx, 82);
 		enterRule(_localctx, RULE_namedArg);
@@ -3095,6 +3137,7 @@ public class TemplateParser extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final ListContext list() throws RecognitionException {
 		ListContext _localctx = new ListContext(_ctx, 84);
 		enterRule(_localctx, RULE_list);
@@ -3170,6 +3213,7 @@ public class TemplateParser extends Parser<Token> {
 		}
 	}
 
+	@RuleVersion(0)
 	public final ListElementContext listElement() throws RecognitionException {
 		ListElementContext _localctx = new ListElementContext(_ctx, 86);
 		enterRule(_localctx, RULE_listElement);
