@@ -597,9 +597,9 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
 
     @Override
     public void enterId(IdContext ctx) {
-        if (ctx.start != null && ctx.parent instanceof ParserRuleContext<?>) {
+        if (ctx.start != null && ctx.parent != null) {
 
-            int caller = ((ParserRuleContext<?>)ctx.parent).ruleIndex;
+            int caller = ctx.parent.getRuleIndex();
             switch (caller) {
             case GrammarParser.RULE_grammarSpec:
                 tokenDecorator.putProperty(ctx.start, GrammarTreeProperties.PROP_NODE_TYPE, NodeType.GRAMMAR_DECL);

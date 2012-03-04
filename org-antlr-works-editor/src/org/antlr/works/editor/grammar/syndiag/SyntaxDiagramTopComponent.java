@@ -411,8 +411,8 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
                 Terminal terminal = null;
                 GrammarParser.RangeContext rangeContext = (GrammarParser.RangeContext)ctx.children.get(0);
                 if (rangeContext.children != null && rangeContext.children.size() == 3) {
-                    Token start = (Token)((ParseTree.TerminalNode<?>)rangeContext.children.get(0)).getSymbol();
-                    Token end = (Token)((ParseTree.TerminalNode<?>)rangeContext.children.get(2)).getSymbol();
+                    Token start = ((ParseTree.TerminalNode<Token>)rangeContext.children.get(0)).getSymbol();
+                    Token end = ((ParseTree.TerminalNode<Token>)rangeContext.children.get(2)).getSymbol();
                     if (start != null && end != null) {
                         terminal = new RangeTerminal(start.getText(), end.getText(), sourceSpan);
                     }
