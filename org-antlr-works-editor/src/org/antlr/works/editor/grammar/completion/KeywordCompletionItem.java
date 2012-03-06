@@ -8,8 +8,10 @@
  */
 package org.antlr.works.editor.grammar.completion;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import org.antlr.v4.runtime.misc.IntervalSet;
+import org.antlr.works.editor.grammar.experimental.GrammarLexer;
 import org.netbeans.api.annotations.common.NonNull;
 import org.openide.util.Parameters;
 
@@ -19,26 +21,41 @@ import org.openide.util.Parameters;
  */
 public class KeywordCompletionItem extends GrammarCompletionItem {
 
-    public static final Collection<KeywordCompletionItem> KEYWORD_ITEMS =
-        new ArrayList<KeywordCompletionItem>() {{
-            add(new KeywordCompletionItem("lexer"));
-            add(new KeywordCompletionItem("parser"));
-            add(new KeywordCompletionItem("catch"));
-            add(new KeywordCompletionItem("finally"));
-            add(new KeywordCompletionItem("grammar"));
-            add(new KeywordCompletionItem("locals"));
-            add(new KeywordCompletionItem("mode"));
-            add(new KeywordCompletionItem("private"));
-            add(new KeywordCompletionItem("protected"));
-            add(new KeywordCompletionItem("public"));
-            add(new KeywordCompletionItem("returns"));
-            add(new KeywordCompletionItem("throws"));
-            add(new KeywordCompletionItem("tree"));
-            add(new KeywordCompletionItem("scope"));
-            add(new KeywordCompletionItem("import"));
-            add(new KeywordCompletionItem("fragment"));
-            add(new KeywordCompletionItem("tokens"));
-            add(new KeywordCompletionItem("options"));
+    public static final IntervalSet KEYWORD_TYPES =
+        new IntervalSet(GrammarLexer.LEXER,
+                        GrammarLexer.PARSER,
+                        GrammarLexer.CATCH,
+                        GrammarLexer.FINALLY,
+                        GrammarLexer.GRAMMAR,
+                        GrammarLexer.LOCALS,
+                        GrammarLexer.MODE,
+                        GrammarLexer.PRIVATE,
+                        GrammarLexer.PROTECTED,
+                        GrammarLexer.PUBLIC,
+                        GrammarLexer.RETURNS,
+                        GrammarLexer.THROWS,
+                        GrammarLexer.IMPORT,
+                        GrammarLexer.FRAGMENT,
+                        GrammarLexer.TOKENS,
+                        GrammarLexer.OPTIONS);
+
+    private static final Map<Integer, String> KEYWORDS =
+        new HashMap<Integer, String>() {{
+            for (int i : KEYWORD_TYPES.toArray()) {
+                String keyword = GrammarLexer.tokenNames[i].toLowerCase();
+                if (keyword.charAt(0) == '\'') {
+                    keyword = keyword.substring(1, keyword.length() - 1);
+                }
+
+                put(i, keyword);
+            }
+        }};
+
+    public static final Map<Integer, KeywordCompletionItem> KEYWORD_ITEMS =
+        new HashMap<Integer, KeywordCompletionItem>() {{
+            for (Map.Entry<Integer, String> keyword : KEYWORDS.entrySet()) {
+                put(keyword.getKey(), new KeywordCompletionItem(keyword.getValue()));
+            }
         }};
 
     private final String keyword;

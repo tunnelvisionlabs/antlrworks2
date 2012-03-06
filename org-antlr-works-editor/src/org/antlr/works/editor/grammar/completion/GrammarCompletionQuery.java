@@ -329,24 +329,7 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
                             /*
                             * KEYWORD ANALYSIS
                             */
-                            IntervalSet remainingKeywords = new IntervalSet();
-                            remainingKeywords.add(GrammarLexer.OPTIONS);
-                            remainingKeywords.add(GrammarLexer.TOKENS);
-                            remainingKeywords.add(GrammarLexer.IMPORT);
-                            remainingKeywords.add(GrammarLexer.FRAGMENT);
-                            remainingKeywords.add(GrammarLexer.LEXER);
-                            remainingKeywords.add(GrammarLexer.PARSER);
-                            remainingKeywords.add(GrammarLexer.GRAMMAR);
-                            remainingKeywords.add(GrammarLexer.PROTECTED);
-                            remainingKeywords.add(GrammarLexer.PUBLIC);
-                            remainingKeywords.add(GrammarLexer.PRIVATE);
-                            remainingKeywords.add(GrammarLexer.RETURNS);
-                            remainingKeywords.add(GrammarLexer.LOCALS);
-                            remainingKeywords.add(GrammarLexer.THROWS);
-                            remainingKeywords.add(GrammarLexer.CATCH);
-                            remainingKeywords.add(GrammarLexer.FINALLY);
-                            remainingKeywords.add(GrammarLexer.TEMPLATE);
-                            remainingKeywords.add(GrammarLexer.MODE);
+                            IntervalSet remainingKeywords = new IntervalSet(KeywordCompletionItem.KEYWORD_TYPES);
 
                             for (Map.Entry<RuleContext<Token>, CaretReachedException> entry : parseTrees.entrySet()) {
                                 CaretReachedException caretReachedException = entry.getValue();
@@ -369,7 +352,7 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
                                         for (int keyword : remainingKeywords.toArray()) {
                                             if (label.contains(keyword)) {
                                                 remainingKeywords.remove(keyword);
-                                                KeywordCompletionItem item = new KeywordCompletionItem(GrammarLexer.tokenNames[keyword].toLowerCase());
+                                                KeywordCompletionItem item = KeywordCompletionItem.KEYWORD_ITEMS.get(keyword);
                                                 intermediateResults.put(item.getInsertPrefix().toString(), item);
                                             }
                                         }
@@ -545,7 +528,7 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
 
             if (parseTrees == null && possibleKeyword) {
                 // Add keywords
-                results.addAll(KeywordCompletionItem.KEYWORD_ITEMS);
+                results.addAll(KeywordCompletionItem.KEYWORD_ITEMS.values());
             }
 
             if (possibleReference) {
