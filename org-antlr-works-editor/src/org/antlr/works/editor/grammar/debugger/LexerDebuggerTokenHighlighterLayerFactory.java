@@ -35,6 +35,11 @@ import org.netbeans.spi.editor.highlighting.support.OffsetsBag;
 public class LexerDebuggerTokenHighlighterLayerFactory implements HighlightsLayerFactory {
     private static final boolean INTERNAL_PARSE = true;
 
+    private static final int FULL = 0;
+    private static final int START = 1;
+    private static final int MIDDLE = 2;
+    private static final int STOP = 3;
+
     private static final Color[] ModeColors =
     {
         Color.red,
@@ -48,17 +53,56 @@ public class LexerDebuggerTokenHighlighterLayerFactory implements HighlightsLaye
         Color.black,
     };
 
-    private static final AttributeSet[] TokenOutlineAttributes =
+    private static final AttributeSet[] TokenFullOutlineAttributes =
     {
-        createOutlineAttributeSet(0),
-        createOutlineAttributeSet(1),
-        createOutlineAttributeSet(2),
-        createOutlineAttributeSet(3),
-        createOutlineAttributeSet(4),
-        createOutlineAttributeSet(5),
-        createOutlineAttributeSet(6),
-        createOutlineAttributeSet(7),
-        createOutlineAttributeSet(8),
+        createOutlineAttributeSet(FULL, 0),
+        createOutlineAttributeSet(FULL, 1),
+        createOutlineAttributeSet(FULL, 2),
+        createOutlineAttributeSet(FULL, 3),
+        createOutlineAttributeSet(FULL, 4),
+        createOutlineAttributeSet(FULL, 5),
+        createOutlineAttributeSet(FULL, 6),
+        createOutlineAttributeSet(FULL, 7),
+        createOutlineAttributeSet(FULL, 8),
+    };
+
+    private static final AttributeSet[] TokenStartOutlineAttributes =
+    {
+        createOutlineAttributeSet(START, 0),
+        createOutlineAttributeSet(START, 1),
+        createOutlineAttributeSet(START, 2),
+        createOutlineAttributeSet(START, 3),
+        createOutlineAttributeSet(START, 4),
+        createOutlineAttributeSet(START, 5),
+        createOutlineAttributeSet(START, 6),
+        createOutlineAttributeSet(START, 7),
+        createOutlineAttributeSet(START, 8),
+    };
+
+    private static final AttributeSet[] TokenMiddleOutlineAttributes =
+    {
+        createOutlineAttributeSet(MIDDLE, 0),
+        createOutlineAttributeSet(MIDDLE, 1),
+        createOutlineAttributeSet(MIDDLE, 2),
+        createOutlineAttributeSet(MIDDLE, 3),
+        createOutlineAttributeSet(MIDDLE, 4),
+        createOutlineAttributeSet(MIDDLE, 5),
+        createOutlineAttributeSet(MIDDLE, 6),
+        createOutlineAttributeSet(MIDDLE, 7),
+        createOutlineAttributeSet(MIDDLE, 8),
+    };
+
+    private static final AttributeSet[] TokenStopOutlineAttributes =
+    {
+        createOutlineAttributeSet(STOP, 0),
+        createOutlineAttributeSet(STOP, 1),
+        createOutlineAttributeSet(STOP, 2),
+        createOutlineAttributeSet(STOP, 3),
+        createOutlineAttributeSet(STOP, 4),
+        createOutlineAttributeSet(STOP, 5),
+        createOutlineAttributeSet(STOP, 6),
+        createOutlineAttributeSet(STOP, 7),
+        createOutlineAttributeSet(STOP, 8),
     };
 
     private static Color getColorForMode(int mode) {
@@ -87,22 +131,46 @@ public class LexerDebuggerTokenHighlighterLayerFactory implements HighlightsLaye
         return Math.max(0, Math.min(255, rounded));
     }
 
-    private static AttributeSet createOutlineAttributeSet(int mode) {
+    private static AttributeSet createOutlineAttributeSet(int part, int mode) {
         Color color = getColorForMode(mode, 0.3);
         MutableAttributeSet attributes = new SimpleAttributeSet();
-        attributes.addAttribute(EditorStyleConstants.LeftBorderLineColor, color);
-        attributes.addAttribute(EditorStyleConstants.RightBorderLineColor, color);
+        if (part == START || part == FULL) {
+            attributes.addAttribute(EditorStyleConstants.LeftBorderLineColor, color);
+        }
+
+        if (part == STOP || part == FULL) {
+            attributes.addAttribute(EditorStyleConstants.RightBorderLineColor, color);
+        }
+
         attributes.addAttribute(EditorStyleConstants.BottomBorderLineColor, color);
         attributes.addAttribute(EditorStyleConstants.TopBorderLineColor, color);
         return attributes;
     }
 
-    private static AttributeSet getTokenOutlineAttributes(int mode) {
-        if (mode >= 0 && mode < TokenOutlineAttributes.length) {
-            return TokenOutlineAttributes[mode];
+    private static AttributeSet getTokenOutlineAttributes(int part, int mode) {
+        AttributeSet[] attributes;
+        switch (part) {
+        case FULL:
+            attributes = TokenFullOutlineAttributes;
+            break;
+        case START:
+            attributes = TokenStartOutlineAttributes;
+            break;
+        case MIDDLE:
+            attributes = TokenMiddleOutlineAttributes;
+            break;
+        case STOP:
+            attributes = TokenStopOutlineAttributes;
+            break;
+        default:
+            return SimpleAttributeSet.EMPTY;
         }
 
-        return TokenOutlineAttributes[TokenOutlineAttributes.length - 1];
+        if (mode >= 0 && mode < attributes.length) {
+            return attributes[mode];
+        }
+
+        return attributes[attributes.length - 1];
     }
 
     @Override
@@ -126,8 +194,9 @@ public class LexerDebuggerTokenHighlighterLayerFactory implements HighlightsLaye
 
         OffsetsBag highlights = new OffsetsBag(document);
         for (TraceToken token : tokens) {
-            AttributeSet tokenAttributes = getTokenOutlineAttributes(token.getMode());
-            highlights.addHighlight(token.getStartIndex(), token.getStopIndex() + 1, tokenAttributes);
+            int start = token.getStartIndex();
+            int stop = token.getStopIndex();
+            addHighlights(highlights, start, stop, token.getMode());
         }
 
         return highlights;
@@ -152,10 +221,30 @@ public class LexerDebuggerTokenHighlighterLayerFactory implements HighlightsLaye
 //        }
     }
 
+    private static void addHighlights(OffsetsBag highlights, int start, int stop, int mode) {
+        if (stop < start) {
+            return;
+        }
+
+        if (stop == start) {
+            AttributeSet tokenAttributes = getTokenOutlineAttributes(FULL, mode);
+            highlights.addHighlight(start, stop + 1, tokenAttributes);
+        } else {
+            AttributeSet tokenStartAttributes = getTokenOutlineAttributes(START, mode);
+            highlights.addHighlight(start, start + 1, tokenStartAttributes);
+            if (stop > start + 1) {
+                AttributeSet tokenMiddleAttributes = getTokenOutlineAttributes(MIDDLE, mode);
+                highlights.addHighlight(start + 1, stop, tokenMiddleAttributes);
+            }
+            AttributeSet tokenStopAttributes = getTokenOutlineAttributes(STOP, mode);
+            highlights.addHighlight(stop, stop + 1, tokenStopAttributes);
+        }
+    }
+
     private static HighlightsContainer loadHighlights(Document document, InputStream reader) {
         OffsetsBag highlights = new OffsetsBag(document);
 
-        AttributeSet tokenAttributes = getTokenOutlineAttributes(0);
+        int mode = 0;
         int previousStop = -1;
 
         try {
@@ -169,8 +258,7 @@ public class LexerDebuggerTokenHighlighterLayerFactory implements HighlightsLaye
                 switch (opcode) {
                 case BeginMatch:
                 {
-                    byte mode = (byte)reader.read();
-                    tokenAttributes = getTokenOutlineAttributes(mode);
+                    mode = (byte)reader.read();
                     reader.skip(opcode.getArgumentSize() - 1);
                     break;
                 }
@@ -202,7 +290,7 @@ public class LexerDebuggerTokenHighlighterLayerFactory implements HighlightsLaye
                     reader.skip(opcode.getArgumentSize() - 4 * (Integer.SIZE / 8));
                     if (stopIndex > previousStop && startIndex < stopIndex + 1) {
                         previousStop = stopIndex;
-                        highlights.addHighlight(startIndex, stopIndex + 1, tokenAttributes);
+                        addHighlights(highlights, startIndex, stopIndex, mode);
                     }
                     break;
 
