@@ -6,18 +6,18 @@
  *  distribution. For information about licensing, contact Sam Harwell at:
  *      sam@tunnelvisionlabs.com
  */
-package org.antlr.works.editor.grammar.codemodel.impl;
+package org.antlr.works.editor.grammar.codemodel;
 
-import org.antlr.works.editor.grammar.codemodel.ParameterModel;
+import java.util.Collection;
+import org.netbeans.api.annotations.common.NonNull;
 
 /**
  *
  * @author Sam Harwell
  */
-public class ParameterModelImpl extends AbstractAttributeModel implements ParameterModel {
+public interface TokenVocabDeclarationModel extends CodeElementModel {
 
-    public ParameterModelImpl(String name, String type, FileModelImpl file) {
-        super(name, type, file);
-    }
+    @NonNull
+    Collection<? extends TokenVocabModel> resolve();
 
 }

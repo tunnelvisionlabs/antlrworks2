@@ -8,19 +8,124 @@
  */
 package org.antlr.works.editor.grammar.codemodel.impl;
 
-import org.antlr.works.editor.grammar.GrammarEditorKit;
-import org.netbeans.api.editor.mimelookup.MimeRegistration;
-import org.openide.filesystems.FileObject;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.WeakHashMap;
+import org.antlr.works.editor.grammar.codemodel.CodeElementModel;
+import org.antlr.works.editor.grammar.codemodel.CodeModelCache;
+import org.antlr.works.editor.grammar.codemodel.ImportDeclarationModel;
+import org.antlr.works.editor.grammar.codemodel.PackageModel;
+import org.netbeans.api.annotations.common.CheckForNull;
+import org.netbeans.api.annotations.common.NonNull;
+import org.netbeans.api.annotations.common.NullAllowed;
+import org.netbeans.api.project.Project;
+import org.openide.util.Lookup;
+import org.openide.util.Parameters;
+import org.openide.util.lookup.ServiceProvider;
 
 /**
  *
  * @author Sam Harwell
  */
-@MimeRegistration(mimeType=GrammarEditorKit.GRAMMAR_MIME_TYPE, service=CodeModelCacheImpl.class)
-public class CodeModelCacheImpl {
+@ServiceProvider(service=CodeModelCache.class)
+public class CodeModelCacheImpl implements CodeModelCache {
+    private static CodeModelCacheImpl instance;
 
-    public FileModelImpl getFileModel(FileObject fileObject) {
-        throw new UnsupportedOperationException("Not implemented yet.");
+    private CodeModelProjectCache defaultProjectCache;
+    private final Map<Project, CodeModelProjectCache> projectCaches =
+        new WeakHashMap<Project, CodeModelProjectCache>();
+
+    @Override
+    @NonNull
+    public Collection<? extends PackageModel> getPackages(Project project) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @NonNull
+    @Override
+    public Collection<? extends PackageModelImpl> getPackages(Project project, String path) {
+        CodeModelProjectCache cache = getProjectCache(project, false);
+        if (cache == null) {
+            return Collections.emptyList();
+        }
+
+        PackageModelImpl unique = cache.getUniquePackage(path);
+        if (unique == null) {
+            return Collections.emptyList();
+        }
+
+        return Collections.singletonList(unique);
+    }
+
+    @CheckForNull
+    public PackageModelImpl getUniquePackage(Project project, String path) {
+        CodeModelProjectCache cache = getProjectCache(project, false);
+        if (cache == null) {
+            return null;
+        }
+
+        return cache.getUniquePackage(path);
+    }
+
+    @NonNull
+    public Collection<? extends FileModelImpl> resolvePackages(ImportDeclarationModel importModel) {
+        throw new UnsupportedOperationException();
+        //Project project = importModel.getPackage().getProject();
+        //CodeModelProjectCache projectCache = getProjectCache(project, false);
+        //PackageModelImpl unique = projectCache.getUniquePackage(importModel.getPath());
+        //if (unique == null) {
+        //    return Collections.emptyList();
+        //}
+        //
+        //return Collections.singletonList(unique);
+    }
+
+    @CheckForNull
+    public CodeModelProjectCache getProjectCache(@NullAllowed Project project, boolean create) {
+        synchronized (projectCaches) {
+            CodeModelProjectCache cache = project != null ? projectCaches.get(project) : defaultProjectCache;
+            if (cache == null && create) {
+                cache = new CodeModelProjectCache(project);
+                if (project == null) {
+                    defaultProjectCache = cache;
+                } else {
+                    projectCaches.put(project, cache);
+                }
+            }
+
+            return cache;
+        }
+    }
+
+    public void updateFile(@NonNull FileModelImpl fileModel) {
+        assert fileModel.isFrozen();
+        Project project = fileModel.getProject();
+        CodeModelProjectCache projectCache = getProjectCache(project, true);
+        projectCache.updateFile(fileModel);
+    }
+
+    public static synchronized CodeModelCacheImpl getInstance() {
+        if (instance == null) {
+            instance = (CodeModelCacheImpl)Lookup.getDefault().lookup(CodeModelCache.class);
+        }
+
+        return instance;
+    }
+
+    public static <T extends CodeElementModel> Collection<T> findElementsByName(Collection<? extends T> elements, @NonNull String name) {
+        Parameters.notNull("name", name);
+
+        List<T> result = new ArrayList<T>();
+        for (T element : elements) {
+            if (name.equals(element.getName())) {
+                result.add(element);
+            }
+        }
+
+        return result;
     }
 
 }

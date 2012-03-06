@@ -13,8 +13,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
@@ -24,6 +27,7 @@ import javax.swing.text.JTextComponent;
 import org.antlr.netbeans.editor.navigation.Description;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.netbeans.parsing.spi.ParserData;
+import org.antlr.netbeans.parsing.spi.ParserDataDefinition;
 import org.antlr.netbeans.parsing.spi.ParserDataOptions;
 import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.v4.runtime.Lexer;
@@ -32,7 +36,11 @@ import org.antlr.works.editor.antlr4.completion.AbstractCompletionProvider;
 import org.antlr.works.editor.grammar.GoToSupport;
 import org.antlr.works.editor.grammar.GrammarEditorKit;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
+import org.antlr.works.editor.grammar.codemodel.FileModel;
+import org.antlr.works.editor.grammar.codemodel.RuleModel;
+import org.antlr.works.editor.grammar.codemodel.TokenData;
 import org.antlr.works.editor.grammar.experimental.GrammarLexer;
+import org.antlr.works.editor.grammar.navigation.GrammarNode;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.netbeans.spi.editor.completion.CompletionProvider;
 import org.netbeans.spi.editor.completion.support.AsyncCompletionQuery;
@@ -127,42 +135,45 @@ public class GrammarCompletionProvider extends AbstractCompletionProvider {
     }
 
     public static Collection<Description> getRulesFromGrammar(ParserTaskManager taskManager, DocumentSnapshot snapshot) {
-        Description rootDescription = null;
-        Future<ParserData<Description>> futureNavigatorRootData = taskManager.getData(snapshot, GrammarParserDataDefinitions.NAVIGATOR_ROOT, EnumSet.of(ParserDataOptions.SYNCHRONOUS));
-        try {
-            ParserData<Description> data = futureNavigatorRootData.get();
-            if (data != null) {
-                rootDescription = data.getData();
-            }
-        } catch (InterruptedException ex) {
-            if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.log(Level.FINE, "An exception occurred while parsing navigator data.", ex);
-            }
-        } catch (ExecutionException ex) {
-            if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.log(Level.FINE, "An exception occurred while parsing navigator data.", ex);
-            }
-        }
+        Map<String, Description> rules = new HashMap<String, Description>();
 
+        Description rootDescription = GrammarParserDataDefinitions.tryGetData(taskManager, snapshot, GrammarParserDataDefinitions.NAVIGATOR_ROOT, EnumSet.of(ParserDataOptions.SYNCHRONOUS));
         if (rootDescription != null) {
-            List<Description> rules = new ArrayList<Description>();
             Queue<Description> workList = new ArrayDeque<Description>();
             workList.add(rootDescription);
 
             while (!workList.isEmpty()) {
                 Description description = workList.remove();
                 if (description.getOffset() > 0) {
-                    rules.add(description);
+                    rules.put(description.getName(), description);
                 }
 
                 if (description.getChildren() != null) {
                     workList.addAll(description.getChildren());
                 }
             }
-
-            return rules;
         }
 
-        return Collections.emptyList();
+        FileModel fileModel = GrammarParserDataDefinitions.tryGetData(taskManager, snapshot, GrammarParserDataDefinitions.FILE_MODEL, EnumSet.of(ParserDataOptions.SYNCHRONOUS));
+        if (fileModel != null) {
+            for (RuleModel ruleModel : fileModel.getRules()) {
+                if (rules.containsKey(ruleModel.getName())) {
+                    continue;
+                }
+
+                rules.put(ruleModel.getName(), new GrammarNode.GrammarNodeDescription(ruleModel.getName()));
+            }
+
+            for (TokenData tokenData : fileModel.getVocabulary().getTokens()) {
+                if (rules.containsKey(tokenData.getName())) {
+                    continue;
+                }
+
+                rules.put(tokenData.getName(), new GrammarNode.GrammarNodeDescription(tokenData.getName()));
+            }
+        }
+
+        return rules.values();
     }
+
 }

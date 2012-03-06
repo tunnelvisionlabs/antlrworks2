@@ -9,38 +9,37 @@
 package org.antlr.works.editor.grammar.codemodel.impl;
 
 import java.util.Collection;
-import org.antlr.netbeans.editor.text.SnapshotPositionRegion;
-import org.antlr.works.editor.grammar.codemodel.AttributeModel;
+import org.antlr.works.editor.grammar.codemodel.LabelKind;
+import org.antlr.works.editor.grammar.codemodel.LabelModel;
+import org.antlr.works.editor.grammar.codemodel.RuleModel;
 import org.netbeans.api.annotations.common.NonNull;
+import org.openide.util.Parameters;
 
 /**
  *
  * @author Sam Harwell
  */
-public class LabelModelImpl implements AttributeModel {
-    @NonNull
-    private final String name;
-    @NonNull
-    private final Collection<SnapshotPositionRegion> uses;
+public class LabelModelImpl extends AbstractAttributeModel implements LabelModel {
+    private LabelKind labelKind = LabelKind.UNDEFINED;
 
-    public LabelModelImpl(@NonNull String name, @NonNull Collection<SnapshotPositionRegion> uses) {
-        this.name = name;
-        this.uses = uses;
+    public LabelModelImpl(String name, FileModelImpl file) {
+        super(name, "Label", file);
     }
 
     @NonNull
     @Override
-    public String getName() {
-        return name;
+    public LabelKind getLabelKind() {
+        return labelKind;
+    }
+
+    public void setLabelKind(LabelKind labelKind) {
+        Parameters.notNull("labelKind", labelKind);
+        ensureModifiable();
+        this.labelKind = labelKind;
     }
 
     @Override
-    public String getType() {
-        return "Label";
-    }
-
-    @NonNull
-    public Collection<SnapshotPositionRegion> getUses() {
-        return uses;
+    public Collection<? extends RuleModel> getReferencedRules() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

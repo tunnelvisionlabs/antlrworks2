@@ -8,9 +8,12 @@
  */
 package org.antlr.works.editor.grammar.experimental;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Deque;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.netbeans.editor.text.OffsetRegion;
@@ -21,47 +24,62 @@ import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.misc.Interval;
+import org.antlr.v4.runtime.tree.ParseTree.TerminalNode;
 import org.antlr.works.editor.antlr4.parsing.ParseTrees;
 import org.antlr.works.editor.grammar.codemodel.impl.FileModelImpl;
+import org.antlr.works.editor.grammar.codemodel.impl.ImportDeclarationModelImpl;
 import org.antlr.works.editor.grammar.codemodel.impl.LabelModelImpl;
+import org.antlr.works.editor.grammar.codemodel.impl.LexerRuleModelImpl;
 import org.antlr.works.editor.grammar.codemodel.impl.ParameterModelImpl;
+import org.antlr.works.editor.grammar.codemodel.impl.ParserRuleModelImpl;
 import org.antlr.works.editor.grammar.codemodel.impl.RuleModelImpl;
+import org.antlr.works.editor.grammar.codemodel.impl.TokenRuleModelImpl;
+import org.antlr.works.editor.grammar.codemodel.impl.TokenVocabDeclarationModelImpl;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.ArgActionParameterContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.ArgActionParametersContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.DelegateGrammarContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.GrammarSpecContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.IdContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.LabeledElementContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.LexerRuleContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.LocalsSpecContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.OptionContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.OptionValueContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.ParserRuleSpecContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.QidContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.RuleReturnsContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.TokenSpecContext;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;
+import org.netbeans.api.project.FileOwnerQuery;
+import org.netbeans.api.project.Project;
+import org.openide.filesystems.FileObject;
+import org.openide.filesystems.FileUtil;
 
 /**
  *
  * @author Sam Harwell
  */
 public class CodeModelBuilderListener extends GrammarParserBaseListener {
+    private final Project project;
     private final DocumentSnapshot snapshot;
     private final TokenStream<? extends Token> tokens;
 
     // final result
     private FileModelImpl fileModel;
 
-    // elements of the current grammar (file)
-    private Collection<RuleModelImpl> rules;
-
-    // elements of the current rule
-    private Map<String, Collection<SnapshotPositionRegion>> labelUses;
-
-    private Collection<ParameterModelImpl> parameters;
-    private Collection<ParameterModelImpl> returnValues;
-    private Collection<ParameterModelImpl> locals;
+    private final Deque<RuleModelImpl> ruleModelStack = new ArrayDeque<RuleModelImpl>();
+    private final Deque<Collection<RuleModelImpl>> ruleContainerStack = new ArrayDeque<Collection<RuleModelImpl>>();
+    private final Deque<Collection<ParameterModelImpl>> parameterContainerStack = new ArrayDeque<Collection<ParameterModelImpl>>();
+    private final Deque<Collection<ParameterModelImpl>> returnValueContainerStack = new ArrayDeque<Collection<ParameterModelImpl>>();
+    private final Deque<Collection<ParameterModelImpl>> localContainerStack = new ArrayDeque<Collection<ParameterModelImpl>>();
+    private final Deque<Collection<LabelModelImpl>> labelContainerStack = new ArrayDeque<Collection<LabelModelImpl>>();
+    private final Deque<Map<String, Collection<SnapshotPositionRegion>>> labelUses = new ArrayDeque<Map<String, Collection<SnapshotPositionRegion>>>();
 
     public CodeModelBuilderListener(DocumentSnapshot snapshot, TokenStream<? extends Token> tokens) {
+        this.project = FileOwnerQuery.getOwner(snapshot.getVersionedDocument().getFileObject());
         this.snapshot = snapshot;
         this.tokens = tokens;
-        rules = new ArrayList<RuleModelImpl>();
     }
 
     public FileModelImpl getFileModel() {
@@ -69,8 +87,67 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
     }
 
     @Override
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_grammarSpec, version=0)
+    public void enterGrammarSpec(GrammarSpecContext ctx) {
+        FileObject packageFolder = snapshot.getVersionedDocument().getFileObject().getParent();
+        FileObject projectFolder = project != null ? project.getProjectDirectory() : null;
+
+        String packagePath;
+        if (projectFolder != null) {
+            packagePath = FileUtil.getRelativePath(projectFolder, packageFolder);
+        } else {
+            packagePath = packageFolder.getNameExt();
+        }
+
+        FileObject fileObject = snapshot.getVersionedDocument().getFileObject();
+        this.fileModel = new FileModelImpl(fileObject, project, packagePath);
+        this.ruleContainerStack.push(this.fileModel.getRules());
+    }
+
+    @Override
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_grammarSpec, version=0)
     public void exitGrammarSpec(GrammarSpecContext ctx) {
-        fileModel = new FileModelImpl(snapshot, rules);
+        this.fileModel.freeze();
+        this.ruleContainerStack.pop();
+    }
+
+    @RuleDependencies({
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_parserRuleSpec, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerRule, version=0),
+    })
+    private void handleEnterRule(ParserRuleContext<Token> ctx, Token name) {
+        String ruleName = name != null ? name.getText() : "?";
+        RuleModelImpl ruleModel;
+        if (ctx instanceof GrammarParser.ParserRuleSpecContext) {
+            ruleModel = new ParserRuleModelImpl(ruleName, fileModel);
+        } else if (ctx instanceof GrammarParser.LexerRuleContext) {
+            ruleModel = new LexerRuleModelImpl(ruleName, fileModel);
+        } else {
+            throw new UnsupportedOperationException();
+        }
+
+        ruleContainerStack.peek().add(ruleModel);
+        ruleModelStack.push(ruleModel);
+        parameterContainerStack.push(ruleModel.getParameters());
+        returnValueContainerStack.push(ruleModel.getReturnValues());
+        localContainerStack.push(ruleModel.getLocals());
+        labelContainerStack.push(ruleModel.getLabels());
+        labelUses.push(new HashMap<String, Collection<SnapshotPositionRegion>>());
+    }
+
+    private void handleExitRule(ParserRuleContext<Token> ctx) {
+        Collection<LabelModelImpl> labels = labelContainerStack.peek();
+        for (Map.Entry<String, Collection<SnapshotPositionRegion>> labelUsage : labelUses.peek().entrySet()) {
+            //labels.add(new LabelModelImpl(labelUsage.getKey(), labelUsage.getValue()));
+            labels.add(new LabelModelImpl(labelUsage.getKey(), fileModel));
+        }
+
+        ruleModelStack.pop();
+        parameterContainerStack.pop();
+        returnValueContainerStack.pop();
+        localContainerStack.pop();
+        labelContainerStack.pop();
+        labelUses.pop();
     }
 
     @Override
@@ -79,58 +156,57 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_argActionParameters, version=0),
     })
     public void enterParserRuleSpec(ParserRuleSpecContext ctx) {
-        labelUses = new HashMap<String, Collection<SnapshotPositionRegion>>();
-        parameters = new ArrayList<ParameterModelImpl>();
-        returnValues = new ArrayList<ParameterModelImpl>();
-        locals = new ArrayList<ParameterModelImpl>();
+        handleEnterRule(ctx, ctx.name);
 
         ArgActionParametersContext ctxparameters = ctx.argActionParameters();
         if (ctxparameters != null) {
-            handleParameters(ctxparameters.parameters, parameters);
+            handleParameters(ctxparameters.parameters, parameterContainerStack.peek());
         }
     }
 
     @Override
     @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_parserRuleSpec, version=0)
     public void exitParserRuleSpec(ParserRuleSpecContext ctx) {
-        Token name = ctx.name;
-        SnapshotPositionRegion nameSpan = getSpan(ctx.name);
-        SnapshotPositionRegion ruleSpan = getSpan(ctx);
-
-        Collection<LabelModelImpl> labels = new ArrayList<LabelModelImpl>();
-        for (Map.Entry<String, Collection<SnapshotPositionRegion>> labelUsage : labelUses.entrySet()) {
-            labels.add(new LabelModelImpl(labelUsage.getKey(), labelUsage.getValue()));
-        }
-
-        if (name != null) {
-            RuleModelImpl ruleModel = new RuleModelImpl(ruleSpan, nameSpan, name.getText(), parameters, returnValues, locals, labels);
-            rules.add(ruleModel);
-        }
+        handleExitRule(ctx);
     }
 
     @Override
     @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerRule, version=0)
     public void enterLexerRule(LexerRuleContext ctx) {
-        labelUses = new HashMap<String, Collection<SnapshotPositionRegion>>();
-        parameters = new ArrayList<ParameterModelImpl>();
-        returnValues = new ArrayList<ParameterModelImpl>();
-        locals = new ArrayList<ParameterModelImpl>();
+        handleEnterRule(ctx, ctx.name);
     }
 
     @Override
     @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerRule, version=0)
     public void exitLexerRule(LexerRuleContext ctx) {
-        Token name = ctx.name;
-        SnapshotPositionRegion nameSpan = getSpan(ctx.name);
-        SnapshotPositionRegion ruleSpan = getSpan(ctx);
+        handleExitRule(ctx);
+    }
 
-        Collection<LabelModelImpl> labels = new ArrayList<LabelModelImpl>();
-        for (Map.Entry<String, Collection<SnapshotPositionRegion>> labelUsage : labelUses.entrySet()) {
-            labels.add(new LabelModelImpl(labelUsage.getKey(), labelUsage.getValue()));
+    @Override
+    @RuleDependencies({
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_tokenSpec, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=0),
+    })
+    public void enterTokenSpec(TokenSpecContext ctx) {
+        IdContext id = ctx.id();
+        if (id == null) {
+            return;
         }
 
-        RuleModelImpl ruleModel = new RuleModelImpl(ruleSpan, nameSpan, name.getText(), parameters, returnValues, locals, labels);
-        rules.add(ruleModel);
+        String tokenName = ctx.id().start.getText();
+        String literal = null;
+        TerminalNode<Token> literalNode = ctx.STRING_LITERAL();
+        if (literalNode != null) {
+            literal = literalNode.getSymbol().getText();
+            literal = literal.substring(1, literal.length() - 1);
+        }
+
+        RuleModelImpl ruleModel = new TokenRuleModelImpl(ctx.id().start.getText(), literal, fileModel);
+        ruleContainerStack.peek().add(ruleModel);
+    }
+
+    @Override
+    public void exitTokenSpec(TokenSpecContext ctx) {
     }
 
     @Override
@@ -141,7 +217,7 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
     public void enterRuleReturns(RuleReturnsContext ctx) {
         ArgActionParametersContext values = ctx.argActionParameters();
         if (values != null) {
-            handleParameters(values.parameters, returnValues);
+            handleParameters(values.parameters, returnValueContainerStack.peek());
         }
     }
 
@@ -153,7 +229,7 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
     public void enterLocalsSpec(LocalsSpecContext ctx) {
         ArgActionParametersContext values = ctx.argActionParameters();
         if (values != null) {
-            handleParameters(values.parameters, locals);
+            handleParameters(values.parameters, localContainerStack.peek());
         }
     }
 
@@ -165,10 +241,10 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
     public void enterLabeledElement(LabeledElementContext ctx) {
         if (ctx.label != null) {
             String name = ctx.label.start.getText();
-            Collection<SnapshotPositionRegion> uses = labelUses.get(name);
+            Collection<SnapshotPositionRegion> uses = labelUses.peek().get(name);
             if (uses == null) {
                 uses = new ArrayList<SnapshotPositionRegion>();
-                labelUses.put(name, uses);
+                labelUses.peek().put(name, uses);
             }
 
             SnapshotPositionRegion use = getSpan(ctx.label);
@@ -176,12 +252,69 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
         }
     }
 
-    private SnapshotPositionRegion getSpan(Token token) {
-        if (token == null) {
-            return null;
+    @Override
+    @RuleDependencies({
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_option, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_optionValue, version=0),
+    })
+    public void enterOption(OptionContext ctx) {
+        IdContext id = ctx.id();
+        if (id != null && id.start != null) {
+            String optionName = id.start.getText();
+            if ("tokenVocab".equals(optionName)) {
+                String vocabName = getOptionValue(ctx.optionValue());
+                if (vocabName != null && !vocabName.isEmpty()) {
+                    fileModel.getTokenVocabDeclaration().add(new TokenVocabDeclarationModelImpl(vocabName, fileModel));
+                }
+            }
         }
-        
-        return new SnapshotPositionRegion(snapshot, OffsetRegion.fromBounds(token.getStartIndex(), token.getStopIndex() + 1));
+    }
+
+    @RuleDependencies({
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_qid, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_optionValue, version=0),
+    })
+    private String getOptionValue(OptionValueContext ctx) {
+        QidContext qid = ctx.qid();
+        if (qid != null) {
+            return getText(qid);
+        }
+
+        TerminalNode<Token> node = ctx.INT();
+        if (node != null) {
+            return node.getSymbol().getText();
+        }
+
+        node = ctx.STAR();
+        if (node != null) {
+            return node.getSymbol().getText();
+        }
+
+        node = ctx.STRING_LITERAL();
+        if (node != null) {
+            String result = node.getSymbol().getText();
+            result = result.substring(0, result.length() - 1);
+            result = result.replace("\\\"", "\"");
+            return result;
+        }
+
+        return null;
+    }
+
+    @Override
+    public void enterDelegateGrammar(DelegateGrammarContext ctx) {
+        List<? extends IdContext> nodes = ctx.id();
+        if (nodes.isEmpty()) {
+            return;
+        }
+
+        String name = getText(nodes.get(0));
+        String target = getText(nodes.get(nodes.size() - 1));
+        ImportDeclarationModelImpl importDeclarationModel =
+            new ImportDeclarationModelImpl(name, target, fileModel);
+
+        fileModel.getImportDeclarations().add(importDeclarationModel);
     }
 
     private SnapshotPositionRegion getSpan(ParserRuleContext<Token> context) {
@@ -207,11 +340,9 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
         }
 
         for (ArgActionParameterContext context : contexts) {
-            SnapshotPositionRegion typeSpan = getSpan(context.type);
             String type = getText(context.type);
             Token name = context.name;
-            SnapshotPositionRegion nameSpan = getSpan(context.name);
-            ParameterModelImpl parameter = new ParameterModelImpl(nameSpan, typeSpan, name != null ? name.getText() : "?", type);
+            ParameterModelImpl parameter = new ParameterModelImpl(name != null ? name.getText() : "?", type, fileModel);
             models.add(parameter);
         }
     }
@@ -223,4 +354,5 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
 
         return tokens.toString(context.start, context.stop);
     }
+
 }

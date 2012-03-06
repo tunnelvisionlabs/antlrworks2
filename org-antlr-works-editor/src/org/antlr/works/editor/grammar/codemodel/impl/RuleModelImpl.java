@@ -9,90 +9,84 @@
 package org.antlr.works.editor.grammar.codemodel.impl;
 
 import java.util.Collection;
-import org.antlr.netbeans.editor.text.SnapshotPositionRegion;
+import java.util.List;
+import org.antlr.works.editor.grammar.codemodel.LabelModel;
+import org.antlr.works.editor.grammar.codemodel.ParameterModel;
+import org.antlr.works.editor.grammar.codemodel.RuleModel;
+import org.netbeans.api.annotations.common.NonNull;
 
 /**
  *
  * @author Sam Harwell
  */
-public class RuleModelImpl {
-    private final SnapshotPositionRegion ruleSpan;
-    private final SnapshotPositionRegion nameSpan;
-    private final String name;
-    private final Collection<ParameterModelImpl> parameters;
-    private final Collection<ParameterModelImpl> returnValues;
-    private final Collection<ParameterModelImpl> locals;
-    private final Collection<LabelModelImpl> labels;
+public abstract class RuleModelImpl extends AbstractCodeElementModel implements RuleModel {
+    private final FreezableArrayList<ParameterModelImpl> parameters = new FreezableArrayList<ParameterModelImpl>();
+    private final FreezableArrayList<ParameterModelImpl> returnValues = new FreezableArrayList<ParameterModelImpl>();
+    private final FreezableArrayList<ParameterModelImpl> locals = new FreezableArrayList<ParameterModelImpl>();
+    private final FreezableArrayList<LabelModelImpl> labels = new FreezableArrayList<LabelModelImpl>();
+    @SuppressWarnings("unchecked")
+    private final ProxyCollection<AbstractCodeElementModel> members = new ProxyCollection<AbstractCodeElementModel>(parameters, returnValues, locals, labels);
 
-    public RuleModelImpl(SnapshotPositionRegion ruleSpan,
-                     SnapshotPositionRegion nameSpan,
-                     String name,
-                     Collection<ParameterModelImpl> parameters,
-                     Collection<ParameterModelImpl> returnValues,
-                     Collection<ParameterModelImpl> locals,
-                     Collection<LabelModelImpl> labels) {
-        this.ruleSpan = ruleSpan;
-        this.nameSpan = nameSpan;
-        this.name = name;
-        this.parameters = parameters;
-        this.returnValues = returnValues;
-        this.locals = locals;
-        this.labels = labels;
+    public RuleModelImpl(String name, FileModelImpl file) {
+        super(name, file);
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public Collection<ParameterModelImpl> getParameters() {
+    @NonNull
+    @Override
+    public List<ParameterModelImpl> getParameters() {
         return parameters;
     }
 
-    public Collection<ParameterModelImpl> getReturnValues() {
+    @Override
+    public Collection<? extends ParameterModel> getParameters(String name) {
+        return CodeModelCacheImpl.findElementsByName(getParameters(), name);
+    }
+
+    @NonNull
+    @Override
+    public List<ParameterModelImpl> getReturnValues() {
         return returnValues;
     }
 
-    public Collection<ParameterModelImpl> getLocals() {
+    @Override
+    public Collection<? extends ParameterModel> getReturnValues(String name) {
+        return CodeModelCacheImpl.findElementsByName(getReturnValues(), name);
+    }
+
+    @NonNull
+    @Override
+    public List<ParameterModelImpl> getLocals() {
         return locals;
     }
 
-    public Collection<LabelModelImpl> getLabels() {
+    @Override
+    public Collection<? extends ParameterModel> getLocals(String name) {
+        return CodeModelCacheImpl.findElementsByName(getLocals(), name);
+    }
+
+    @NonNull
+    @Override
+    public List<LabelModelImpl> getLabels() {
         return labels;
     }
 
-    public ParameterModelImpl getParameter(String name) {
-        return findParameterByName(parameters, name);
+    @Override
+    public Collection<? extends LabelModel> getLabels(String name) {
+        return CodeModelCacheImpl.findElementsByName(getLabels(), name);
     }
 
-    public ParameterModelImpl getReturnValue(String name) {
-        return findParameterByName(returnValues, name);
+    @NonNull
+    @Override
+    public Collection<? extends AbstractCodeElementModel> getMembers() {
+        return members;
     }
 
-    public ParameterModelImpl getLocal(String name) {
-        return findParameterByName(locals, name);
-    }
-
-    public LabelModelImpl getLabel(String name) {
-        return findLabelByName(labels, name);
-    }
-
-    private static ParameterModelImpl findParameterByName(Collection<ParameterModelImpl> parameters, String name) {
-        for (ParameterModelImpl parameter : parameters) {
-            if (parameter.getName().equals(name)) {
-                return parameter;
-            }
-        }
-        
-        return null;
-    }
-
-    private static LabelModelImpl findLabelByName(Collection<LabelModelImpl> labels, String name) {
-        for (LabelModelImpl label : labels) {
-            if (label.getName().equals(name)) {
-                return label;
-            }
-        }
-
-        return null;
+    @Override
+    protected void freezeImpl() {
+        parameters.freeze();
+        returnValues.freeze();
+        locals.freeze();
+        labels.freeze();
+        super.freezeImpl();
     }
 }

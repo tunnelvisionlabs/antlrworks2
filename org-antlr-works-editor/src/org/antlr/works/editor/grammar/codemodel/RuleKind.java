@@ -6,18 +6,20 @@
  *  distribution. For information about licensing, contact Sam Harwell at:
  *      sam@tunnelvisionlabs.com
  */
-package org.antlr.works.editor.grammar.codemodel.impl;
-
-import org.antlr.works.editor.grammar.codemodel.ParameterModel;
+package org.antlr.works.editor.grammar.codemodel;
 
 /**
  *
  * @author Sam Harwell
  */
-public class ParameterModelImpl extends AbstractAttributeModel implements ParameterModel {
+public enum RuleKind {
 
-    public ParameterModelImpl(String name, String type, FileModelImpl file) {
-        super(name, type, file);
-    }
+    LEXER,
+    PARSER,
+    /** Pseudo-rule kind for an entry in a {@code tokens{}} block.*/
+    TOKEN,
+
+    UNKNOWN,
+    UNDEFINED,
 
 }

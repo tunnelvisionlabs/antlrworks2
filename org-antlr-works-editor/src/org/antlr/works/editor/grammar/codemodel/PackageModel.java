@@ -8,12 +8,22 @@
  */
 package org.antlr.works.editor.grammar.codemodel;
 
+import java.util.Collection;
+import org.netbeans.api.annotations.common.NonNull;
+import org.netbeans.api.project.Project;
+
 /**
  *
  * @author Sam Harwell
  */
-public interface AttributeModel extends CodeElementModel {
+public interface PackageModel extends CodeElementModel {
 
-    String getType();
+    Project getProject();
+
+    @NonNull
+    Collection<? extends FileModel> getFiles();
+
+    @NonNull
+    Collection<? extends TokenVocabModel> getVocabularies();
 
 }

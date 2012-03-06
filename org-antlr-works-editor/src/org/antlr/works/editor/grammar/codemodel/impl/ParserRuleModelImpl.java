@@ -8,16 +8,21 @@
  */
 package org.antlr.works.editor.grammar.codemodel.impl;
 
-import org.antlr.works.editor.grammar.codemodel.ParameterModel;
+import org.antlr.works.editor.grammar.codemodel.RuleKind;
 
 /**
  *
  * @author Sam Harwell
  */
-public class ParameterModelImpl extends AbstractAttributeModel implements ParameterModel {
+public class ParserRuleModelImpl extends RuleModelImpl {
 
-    public ParameterModelImpl(String name, String type, FileModelImpl file) {
-        super(name, type, file);
+    public ParserRuleModelImpl(String name, FileModelImpl file) {
+        super(name, file);
+    }
+
+    @Override
+    public RuleKind getRuleKind() {
+        return RuleKind.PARSER;
     }
 
 }

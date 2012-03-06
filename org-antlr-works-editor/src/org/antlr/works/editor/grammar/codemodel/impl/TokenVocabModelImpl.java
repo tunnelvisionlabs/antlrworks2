@@ -8,16 +8,22 @@
  */
 package org.antlr.works.editor.grammar.codemodel.impl;
 
-import org.antlr.works.editor.grammar.codemodel.ParameterModel;
+import java.util.Collection;
+import java.util.Collections;
 
 /**
  *
  * @author Sam Harwell
  */
-public class ParameterModelImpl extends AbstractAttributeModel implements ParameterModel {
+public class TokenVocabModelImpl extends AbstractTokenVocabModel {
 
-    public ParameterModelImpl(String name, String type, FileModelImpl file) {
-        super(name, type, file);
+    public TokenVocabModelImpl(String name, FileModelImpl file) {
+        super(name, file);
+    }
+
+    @Override
+    public Collection<TokenDataImpl> getTokens() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
 }
