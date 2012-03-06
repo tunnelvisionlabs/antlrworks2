@@ -11,7 +11,9 @@ package org.antlr.works.editor.grammar.highlighter4;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.StyledDocument;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
@@ -27,7 +29,12 @@ import org.antlr.works.editor.grammar.GrammarEditorKit;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
 import org.antlr.works.editor.grammar.experimental.GrammarParser;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.ArgActionParameterContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.BlockContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.ElementOptionContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.GrammarTypeContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.IdContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.LocalsSpecContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.OptionContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.RuleReturnsContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.RuleSpecContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParserBaseListener;
@@ -49,6 +56,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
     private final AttributeSet parameterDeclarationAttributes;
     private final AttributeSet returnValueDeclarationAttributes;
     private final AttributeSet localDeclarationAttributes;
+    private final AttributeSet invalidOptionAttributes;
 
     private SemanticHighlighter(@NonNull StyledDocument document) {
         super(document, GrammarParserDataDefinitions.REFERENCE_PARSE_TREE);
@@ -58,6 +66,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
         this.parameterDeclarationAttributes = getFontAndColors(settings, "definition");
         this.returnValueDeclarationAttributes = getFontAndColors(settings, "definition");
         this.localDeclarationAttributes = getFontAndColors(settings, "definition");
+        this.invalidOptionAttributes = getFontAndColors(settings, "invalidoption");
     }
 
     @Override
@@ -76,6 +85,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
         addHighlights(container, sourceSnapshot, currentSnapshot, listener.getParameterDeclarations(), parameterDeclarationAttributes);
         addHighlights(container, sourceSnapshot, currentSnapshot, listener.getReturnValueDeclarations(), returnValueDeclarationAttributes);
         addHighlights(container, sourceSnapshot, currentSnapshot, listener.getLocalsDeclarations(), localDeclarationAttributes);
+        addHighlights(container, sourceSnapshot, currentSnapshot, listener.getInvalidOptions(), invalidOptionAttributes);
         targetContainer.setHighlights(container);
     }
 
@@ -94,11 +104,50 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
     }
 
     public static class SemanticAnalyzerListener extends GrammarParserBaseListener {
+        private static final Set<String> knownBlockOptions = new HashSet<String>() {{
+            add("greedy");
+            add("simrecursion_");
+        }};
+        private static final Set<String> knownRuleOptions = new HashSet<String>() {{
+            add("context");
+            add("simrecursion_");
+        }};
+        private static final Set<String> knownLexerGrammarOptions = new HashSet<String>() {{
+            add("language");
+            add("tokenVocab");
+            add("TokenLabelType");
+            add("superClass");
+            add("filter");
+        }};
+        private static final Set<String> knownParserGrammarOptions = new HashSet<String>() {{
+            add("tokenVocab");
+            add("TokenLabelType");
+            add("superClass");
+        }};
+        private static final Set<String> knownCombinedGrammarOptions = new HashSet<String>() {{
+            add("language");
+            add("tokenVocab");
+            add("TokenLabelType");
+            add("superClass");
+            add("filter");
+        }};
+        private static final Set<String> knownTokenOptions = new HashSet<String>() {{
+            add("assoc");
+        }};
+        private static final Set<String> knownSemPredOptions = new HashSet<String>() {{
+            add("fail");
+        }};
+
         private final Deque<Integer> memberContext = new ArrayDeque<Integer>();
 
         private final List<Token> parameterDeclarations = new ArrayList<Token>();
         private final List<Token> returnValueDeclarations = new ArrayList<Token>();
         private final List<Token> localsDeclarations = new ArrayList<Token>();
+        private final List<Token> invalidOptions = new ArrayList<Token>();
+
+        private int grammarType;
+        private int ruleLevel;
+        private int blockLevel;
 
         public List<Token> getParameterDeclarations() {
             return parameterDeclarations;
@@ -110,6 +159,22 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
 
         public List<Token> getLocalsDeclarations() {
             return localsDeclarations;
+        }
+
+        public List<Token> getInvalidOptions() {
+            return invalidOptions;
+        }
+
+        @Override
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_grammarType, version=0)
+        public void enterGrammarType(GrammarTypeContext ctx) {
+            if (ctx.LEXER() != null) {
+                grammarType = GrammarParser.LEXER;
+            } else if (ctx.PARSER() != null) {
+                grammarType = GrammarParser.PARSER;
+            } else {
+                grammarType = GrammarParser.COMBINED;
+            }
         }
 
         @Override
@@ -143,6 +208,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleSpec, version=0)
         public void enterRuleSpec(RuleSpecContext ctx) {
             memberContext.push(GrammarParser.RULE_ruleSpec);
+            ruleLevel++;
         }
 
         @Override
@@ -150,6 +216,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
         public void exitRuleSpec(RuleSpecContext ctx) {
             int context = memberContext.pop();
             assert context == GrammarParser.RULE_ruleSpec;
+            ruleLevel--;
         }
 
         @Override
@@ -176,6 +243,69 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
         public void exitLocalsSpec(LocalsSpecContext ctx) {
             int context = memberContext.pop();
             assert context == GrammarParser.RULE_localsSpec;
+        }
+
+        @Override
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_block, version=0)
+        public void enterBlock(BlockContext ctx) {
+            blockLevel++;
+        }
+
+        @Override
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_block, version=0)
+        public void exitBlock(BlockContext ctx) {
+            blockLevel--;
+        }
+
+        @Override
+        @RuleDependencies({
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_option, version=0),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=0),
+        })
+        public void enterOption(OptionContext ctx) {
+            IdContext id = ctx.id();
+            if (id != null) {
+                String option = id.start.getText();
+                boolean valid;
+                if (blockLevel > 0) {
+                    valid = knownBlockOptions.contains(option);
+                } else if (ruleLevel > 0) {
+                    valid = knownRuleOptions.contains(option);
+                } else {
+                    switch (grammarType) {
+                    case GrammarParser.LEXER:
+                        valid = knownLexerGrammarOptions.contains(option);
+                        break;
+                    case GrammarParser.PARSER:
+                        valid = knownParserGrammarOptions.contains(option);
+                        break;
+                    case GrammarParser.COMBINED:
+                    default:
+                        valid = knownCombinedGrammarOptions.contains(option);
+                        break;
+                    }
+                }
+
+                if (!valid) {
+                    invalidOptions.add(id.start);
+                }
+            }
+        }
+
+        @Override
+        @RuleDependencies({
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_elementOption, version=0),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=0),
+        })
+        public void enterElementOption(ElementOptionContext ctx) {
+            IdContext id = ctx.id();
+            if (id != null) {
+                String option = id.start.getText();
+                boolean valid = knownTokenOptions.contains(option);
+                if (!valid) {
+                    invalidOptions.add(id.start);
+                }
+            }
         }
     }
 
