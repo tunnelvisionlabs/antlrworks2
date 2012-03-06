@@ -61,7 +61,7 @@ import org.antlr.works.editor.antlr4.completion.CodeCompletionTokenSource;
 import org.antlr.works.editor.antlr4.parsing.ParseTrees;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
 import org.antlr.works.editor.grammar.codemodel.AttributeModel;
-import org.antlr.works.editor.grammar.codemodel.FileModel;
+import org.antlr.works.editor.grammar.codemodel.impl.FileModelImpl;
 import org.antlr.works.editor.grammar.experimental.GrammarLexer;
 import org.antlr.works.editor.grammar.experimental.GrammarParser;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.ActionExpressionContext;
@@ -363,7 +363,7 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
                             /*
                             * EXPRESSION ANALYSIS
                             */
-                            FileModel fileModel = null;
+                            FileModelImpl fileModel = null;
                             boolean fileModelDataFailed = false;
                             boolean inExpression = false;
 
@@ -399,7 +399,7 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
                                 }
 
                                 if (fileModel == null && !fileModelDataFailed) {
-                                    Future<ParserData<FileModel>> futureFileModelData = taskManager.getData(snapshot, GrammarParserDataDefinitions.FILE_MODEL, EnumSet.of(ParserDataOptions.ALLOW_STALE, ParserDataOptions.SYNCHRONOUS));
+                                    Future<ParserData<FileModelImpl>> futureFileModelData = taskManager.getData(snapshot, GrammarParserDataDefinitions.FILE_MODEL, EnumSet.of(ParserDataOptions.ALLOW_STALE, ParserDataOptions.SYNCHRONOUS));
                                     try {
                                         fileModel = futureFileModelData.get().getData();
                                     } catch (InterruptedException ex) {

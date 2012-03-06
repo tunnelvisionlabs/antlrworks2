@@ -15,9 +15,9 @@ import org.antlr.v4.runtime.RuleDependencies;
 import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
 import org.antlr.works.editor.grammar.codemodel.AttributeModel;
-import org.antlr.works.editor.grammar.codemodel.FileModel;
-import org.antlr.works.editor.grammar.codemodel.LabelModel;
-import org.antlr.works.editor.grammar.codemodel.RuleModel;
+import org.antlr.works.editor.grammar.codemodel.impl.FileModelImpl;
+import org.antlr.works.editor.grammar.codemodel.impl.LabelModelImpl;
+import org.antlr.works.editor.grammar.codemodel.impl.RuleModelImpl;
 import org.antlr.works.editor.grammar.experimental.GrammarParser;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.ActionExpressionContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.ActionScopeExpressionContext;
@@ -33,11 +33,11 @@ import org.openide.util.Parameters;
  * @author Sam Harwell
  */
 public class ActionExpressionAnalyzer extends GrammarParserBaseListener {
-    private final FileModel fileModel;
+    private final FileModelImpl fileModel;
     private final RuleContext<?> finalContext;
     private final List<AttributeModel> members = new ArrayList<AttributeModel>();
 
-    public ActionExpressionAnalyzer(@NonNull FileModel fileModel, @NonNull RuleContext<?> finalContext) {
+    public ActionExpressionAnalyzer(@NonNull FileModelImpl fileModel, @NonNull RuleContext<?> finalContext) {
         Parameters.notNull("fileModel", fileModel);
         Parameters.notNull("finalContext", finalContext);
 
@@ -61,7 +61,7 @@ public class ActionExpressionAnalyzer extends GrammarParserBaseListener {
              */
 
             RuleSpecContext enclosingRule = getEnclosingRuleContext(ctx);
-            RuleModel referencedRule = getReferencedRule(enclosingRule, ctx.ref, false);
+            RuleModelImpl referencedRule = getReferencedRule(enclosingRule, ctx.ref, false);
             if (referencedRule != null) {
                 // for a scope reference, we can reference the parameters, locals, return values, and labels
                 members.addAll(referencedRule.getParameters());
@@ -85,7 +85,7 @@ public class ActionExpressionAnalyzer extends GrammarParserBaseListener {
              */
 
             RuleSpecContext enclosingRule = getEnclosingRuleContext(ctx);
-            RuleModel referencedRule = getReferencedRule(enclosingRule, ctx.ref, true);
+            RuleModelImpl referencedRule = getReferencedRule(enclosingRule, ctx.ref, true);
             if (referencedRule != null) {
                 // for a regular reference, we can reference the return values and labels
                 members.addAll(referencedRule.getReturnValues());
@@ -115,17 +115,17 @@ public class ActionExpressionAnalyzer extends GrammarParserBaseListener {
     }
 
     @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleSpec, version=0)
-    private RuleModel getReferencedRule(RuleSpecContext enclosingRule, Token reference, boolean followLabels) {
+    private RuleModelImpl getReferencedRule(RuleSpecContext enclosingRule, Token reference, boolean followLabels) {
         String enclosingRuleName = getName(enclosingRule).getText();
-        RuleModel ruleModel = fileModel.getRule(enclosingRuleName);
-        RuleModel referencedRule = null;
+        RuleModelImpl ruleModel = fileModel.getRule(enclosingRuleName);
+        RuleModelImpl referencedRule = null;
 
         if (followLabels) {
             /* first try for a label reference. even though labels are not allowed to
              * alias rule names, we want to minimize the impact of this restriction
              * on the ability of code completion to provide useful results.
              */
-            LabelModel label = ruleModel.getLabel(reference.getText().substring(1));
+            LabelModelImpl label = ruleModel.getLabel(reference.getText().substring(1));
             if (label != null) {
                 throw new UnsupportedOperationException("Not implemented yet.");
             }

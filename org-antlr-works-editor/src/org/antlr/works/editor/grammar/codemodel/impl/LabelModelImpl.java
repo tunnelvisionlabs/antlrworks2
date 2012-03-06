@@ -6,23 +6,24 @@
  *  distribution. For information about licensing, contact Sam Harwell at:
  *      sam@tunnelvisionlabs.com
  */
-package org.antlr.works.editor.grammar.codemodel;
+package org.antlr.works.editor.grammar.codemodel.impl;
 
 import java.util.Collection;
 import org.antlr.netbeans.editor.text.SnapshotPositionRegion;
+import org.antlr.works.editor.grammar.codemodel.AttributeModel;
 import org.netbeans.api.annotations.common.NonNull;
 
 /**
  *
  * @author Sam Harwell
  */
-public class LabelModel implements AttributeModel {
+public class LabelModelImpl implements AttributeModel {
     @NonNull
     private final String name;
     @NonNull
     private final Collection<SnapshotPositionRegion> uses;
 
-    public LabelModel(@NonNull String name, @NonNull Collection<SnapshotPositionRegion> uses) {
+    public LabelModelImpl(@NonNull String name, @NonNull Collection<SnapshotPositionRegion> uses) {
         this.name = name;
         this.uses = uses;
     }

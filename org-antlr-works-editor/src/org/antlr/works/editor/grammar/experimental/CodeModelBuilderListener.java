@@ -22,10 +22,10 @@ import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.works.editor.antlr4.parsing.ParseTrees;
-import org.antlr.works.editor.grammar.codemodel.FileModel;
-import org.antlr.works.editor.grammar.codemodel.LabelModel;
-import org.antlr.works.editor.grammar.codemodel.ParameterModel;
-import org.antlr.works.editor.grammar.codemodel.RuleModel;
+import org.antlr.works.editor.grammar.codemodel.impl.FileModelImpl;
+import org.antlr.works.editor.grammar.codemodel.impl.LabelModelImpl;
+import org.antlr.works.editor.grammar.codemodel.impl.ParameterModelImpl;
+import org.antlr.works.editor.grammar.codemodel.impl.RuleModelImpl;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.ArgActionParameterContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.ArgActionParametersContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.GrammarSpecContext;
@@ -46,31 +46,31 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
     private final TokenStream<? extends Token> tokens;
 
     // final result
-    private FileModel fileModel;
+    private FileModelImpl fileModel;
 
     // elements of the current grammar (file)
-    private Collection<RuleModel> rules;
+    private Collection<RuleModelImpl> rules;
 
     // elements of the current rule
     private Map<String, Collection<SnapshotPositionRegion>> labelUses;
 
-    private Collection<ParameterModel> parameters;
-    private Collection<ParameterModel> returnValues;
-    private Collection<ParameterModel> locals;
+    private Collection<ParameterModelImpl> parameters;
+    private Collection<ParameterModelImpl> returnValues;
+    private Collection<ParameterModelImpl> locals;
 
     public CodeModelBuilderListener(DocumentSnapshot snapshot, TokenStream<? extends Token> tokens) {
         this.snapshot = snapshot;
         this.tokens = tokens;
-        rules = new ArrayList<RuleModel>();
+        rules = new ArrayList<RuleModelImpl>();
     }
 
-    public FileModel getFileModel() {
+    public FileModelImpl getFileModel() {
         return fileModel;
     }
 
     @Override
     public void exitGrammarSpec(GrammarSpecContext ctx) {
-        fileModel = new FileModel(snapshot, rules);
+        fileModel = new FileModelImpl(snapshot, rules);
     }
 
     @Override
@@ -80,9 +80,9 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
     })
     public void enterParserRuleSpec(ParserRuleSpecContext ctx) {
         labelUses = new HashMap<String, Collection<SnapshotPositionRegion>>();
-        parameters = new ArrayList<ParameterModel>();
-        returnValues = new ArrayList<ParameterModel>();
-        locals = new ArrayList<ParameterModel>();
+        parameters = new ArrayList<ParameterModelImpl>();
+        returnValues = new ArrayList<ParameterModelImpl>();
+        locals = new ArrayList<ParameterModelImpl>();
 
         ArgActionParametersContext ctxparameters = ctx.argActionParameters();
         if (ctxparameters != null) {
@@ -97,13 +97,13 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
         SnapshotPositionRegion nameSpan = getSpan(ctx.name);
         SnapshotPositionRegion ruleSpan = getSpan(ctx);
 
-        Collection<LabelModel> labels = new ArrayList<LabelModel>();
+        Collection<LabelModelImpl> labels = new ArrayList<LabelModelImpl>();
         for (Map.Entry<String, Collection<SnapshotPositionRegion>> labelUsage : labelUses.entrySet()) {
-            labels.add(new LabelModel(labelUsage.getKey(), labelUsage.getValue()));
+            labels.add(new LabelModelImpl(labelUsage.getKey(), labelUsage.getValue()));
         }
 
         if (name != null) {
-            RuleModel ruleModel = new RuleModel(ruleSpan, nameSpan, name.getText(), parameters, returnValues, locals, labels);
+            RuleModelImpl ruleModel = new RuleModelImpl(ruleSpan, nameSpan, name.getText(), parameters, returnValues, locals, labels);
             rules.add(ruleModel);
         }
     }
@@ -112,9 +112,9 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
     @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerRule, version=0)
     public void enterLexerRule(LexerRuleContext ctx) {
         labelUses = new HashMap<String, Collection<SnapshotPositionRegion>>();
-        parameters = new ArrayList<ParameterModel>();
-        returnValues = new ArrayList<ParameterModel>();
-        locals = new ArrayList<ParameterModel>();
+        parameters = new ArrayList<ParameterModelImpl>();
+        returnValues = new ArrayList<ParameterModelImpl>();
+        locals = new ArrayList<ParameterModelImpl>();
     }
 
     @Override
@@ -124,12 +124,12 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
         SnapshotPositionRegion nameSpan = getSpan(ctx.name);
         SnapshotPositionRegion ruleSpan = getSpan(ctx);
 
-        Collection<LabelModel> labels = new ArrayList<LabelModel>();
+        Collection<LabelModelImpl> labels = new ArrayList<LabelModelImpl>();
         for (Map.Entry<String, Collection<SnapshotPositionRegion>> labelUsage : labelUses.entrySet()) {
-            labels.add(new LabelModel(labelUsage.getKey(), labelUsage.getValue()));
+            labels.add(new LabelModelImpl(labelUsage.getKey(), labelUsage.getValue()));
         }
 
-        RuleModel ruleModel = new RuleModel(ruleSpan, nameSpan, name.getText(), parameters, returnValues, locals, labels);
+        RuleModelImpl ruleModel = new RuleModelImpl(ruleSpan, nameSpan, name.getText(), parameters, returnValues, locals, labels);
         rules.add(ruleModel);
     }
 
@@ -201,7 +201,7 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_argActionParameter, version=0),
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_argActionParameterType, version=0),
     })
-    private void handleParameters(@NullAllowed Collection<ArgActionParameterContext> contexts, @NonNull Collection<ParameterModel> models) {
+    private void handleParameters(@NullAllowed Collection<ArgActionParameterContext> contexts, @NonNull Collection<ParameterModelImpl> models) {
         if (contexts == null) {
             return;
         }
@@ -211,7 +211,7 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
             String type = getText(context.type);
             Token name = context.name;
             SnapshotPositionRegion nameSpan = getSpan(context.name);
-            ParameterModel parameter = new ParameterModel(nameSpan, typeSpan, name != null ? name.getText() : "?", type);
+            ParameterModelImpl parameter = new ParameterModelImpl(nameSpan, typeSpan, name != null ? name.getText() : "?", type);
             models.add(parameter);
         }
     }

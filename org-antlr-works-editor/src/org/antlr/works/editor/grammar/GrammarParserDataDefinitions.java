@@ -17,7 +17,7 @@ import org.antlr.netbeans.parsing.spi.ParserDataDefinition;
 import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
-import org.antlr.works.editor.grammar.codemodel.FileModel;
+import org.antlr.works.editor.grammar.codemodel.impl.FileModelImpl;
 import org.antlr.works.editor.grammar.experimental.CurrentRuleContextData;
 import org.antlr.works.editor.grammar.parser.CompiledModel;
 import org.antlr.works.editor.grammar.semantics.GrammarAnnotatedParseTree;
@@ -37,7 +37,7 @@ public class GrammarParserDataDefinitions {
     public static final ParserDataDefinition<List<Anchor>> DYNAMIC_ANCHOR_POINTS = new DynamicAnchorPointsDataDefinition();
     public static final ParserDataDefinition<Tagger<TokenTag<Token>>> LEXER_TOKENS = new LexerTokensDataDefinition();
     public static final ParserDataDefinition<CurrentRuleContextData> CURRENT_RULE_CONTEXT = new CurrentRuleContextDataDefinition();
-    public static final ParserDataDefinition<FileModel> FILE_MODEL = new FileModelDataDefinition();
+    public static final ParserDataDefinition<FileModelImpl> FILE_MODEL = new FileModelDataDefinition();
 
     public static final ParserDataDefinition<Description> NAVIGATOR_ROOT = new NavigatorRootDataDefinition();
 
@@ -80,7 +80,7 @@ public class GrammarParserDataDefinitions {
     }
 
     @MimeRegistration(mimeType=GrammarEditorKit.GRAMMAR_MIME_TYPE, service=ParserDataDefinition.class)
-    public static ParserDataDefinition<FileModel> getFileModelDataDefinition() {
+    public static ParserDataDefinition<FileModelImpl> getFileModelDataDefinition() {
         return FILE_MODEL;
     }
 
@@ -149,10 +149,10 @@ public class GrammarParserDataDefinitions {
 
     }
 
-    private static final class FileModelDataDefinition extends ParserDataDefinition<FileModel> {
+    private static final class FileModelDataDefinition extends ParserDataDefinition<FileModelImpl> {
 
         public FileModelDataDefinition() {
-            super("Grammar File Model", FileModel.class, false, true, ParserTaskScheduler.CONTENT_SENSITIVE_TASK_SCHEDULER);
+            super("Grammar File Model", FileModelImpl.class, false, true, ParserTaskScheduler.CONTENT_SENSITIVE_TASK_SCHEDULER);
         }
 
     }

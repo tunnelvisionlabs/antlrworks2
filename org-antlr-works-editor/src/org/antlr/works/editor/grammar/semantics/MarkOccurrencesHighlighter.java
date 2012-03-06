@@ -42,7 +42,7 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.works.editor.antlr4.semantics.AbstractSemanticHighlighter;
 import org.antlr.works.editor.grammar.GrammarEditorKit;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
-import org.antlr.works.editor.grammar.codemodel.FileModel;
+import org.antlr.works.editor.grammar.codemodel.impl.FileModelImpl;
 import org.antlr.works.editor.grammar.experimental.CurrentRuleContextData;
 import org.antlr.works.editor.grammar.experimental.GrammarParserBaseListener;
 import org.netbeans.api.annotations.common.NonNull;
@@ -108,13 +108,13 @@ public class MarkOccurrencesHighlighter extends AbstractSemanticHighlighter<Curr
             return null;
         }
 
-        FileModel fileModel = null;
+        FileModelImpl fileModel = null;
         GrammarAnnotatedParseTree annotatedParseTree = null;
         try {
-            Future<ParserData<FileModel>> futureFileModelData = getTaskManager().getData(parserData.getSnapshot(), GrammarParserDataDefinitions.FILE_MODEL);
+            Future<ParserData<FileModelImpl>> futureFileModelData = getTaskManager().getData(parserData.getSnapshot(), GrammarParserDataDefinitions.FILE_MODEL);
             Future<ParserData<GrammarAnnotatedParseTree>> futureAnnotatedParseTreeData = getTaskManager().getData(parserData.getSnapshot(), GrammarParserDataDefinitions.ANNOTATED_PARSE_TREE);
 
-            ParserData<FileModel> annotatedFileModelData = futureFileModelData != null ? futureFileModelData.get() : null;
+            ParserData<FileModelImpl> annotatedFileModelData = futureFileModelData != null ? futureFileModelData.get() : null;
             fileModel = annotatedFileModelData != null ? annotatedFileModelData.getData() : null;
 
             ParserData<GrammarAnnotatedParseTree> annotatedParseTreeData = futureAnnotatedParseTreeData != null ? futureAnnotatedParseTreeData.get() : null;
@@ -260,14 +260,14 @@ public class MarkOccurrencesHighlighter extends AbstractSemanticHighlighter<Curr
 
     public static class MarkOccurrencesListener extends GrammarParserBaseListener {
 
-        private final FileModel fileModel;
+        private final FileModelImpl fileModel;
         private final GrammarAnnotatedParseTree annotatedParseTree;
 
         private final List<Token> markedOccurrences = new ArrayList<Token>();
 
         private Token referencedToken;
 
-        public MarkOccurrencesListener(FileModel fileModel, GrammarAnnotatedParseTree annotatedParseTree, SnapshotPosition position) {
+        public MarkOccurrencesListener(FileModelImpl fileModel, GrammarAnnotatedParseTree annotatedParseTree, SnapshotPosition position) {
             this.fileModel = fileModel;
             this.annotatedParseTree = annotatedParseTree;
             this.referencedToken = findReferencedToken(position);

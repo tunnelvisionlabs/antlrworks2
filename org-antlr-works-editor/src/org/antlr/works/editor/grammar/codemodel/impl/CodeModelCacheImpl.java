@@ -6,7 +6,7 @@
  *  distribution. For information about licensing, contact Sam Harwell at:
  *      sam@tunnelvisionlabs.com
  */
-package org.antlr.works.editor.grammar.codemodel;
+package org.antlr.works.editor.grammar.codemodel.impl;
 
 import org.antlr.works.editor.grammar.GrammarEditorKit;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
@@ -16,10 +16,10 @@ import org.openide.filesystems.FileObject;
  *
  * @author Sam Harwell
  */
-@MimeRegistration(mimeType=GrammarEditorKit.GRAMMAR_MIME_TYPE, service=CodeModelService.class)
-public class CodeModelService {
+@MimeRegistration(mimeType=GrammarEditorKit.GRAMMAR_MIME_TYPE, service=CodeModelCacheImpl.class)
+public class CodeModelCacheImpl {
 
-    public FileModel getFileModel(FileObject fileObject) {
+    public FileModelImpl getFileModel(FileObject fileObject) {
         throw new UnsupportedOperationException("Not implemented yet.");
     }
 

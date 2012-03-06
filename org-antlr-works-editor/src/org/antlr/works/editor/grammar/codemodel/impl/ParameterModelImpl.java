@@ -6,9 +6,10 @@
  *  distribution. For information about licensing, contact Sam Harwell at:
  *      sam@tunnelvisionlabs.com
  */
-package org.antlr.works.editor.grammar.codemodel;
+package org.antlr.works.editor.grammar.codemodel.impl;
 
 import org.antlr.netbeans.editor.text.SnapshotPositionRegion;
+import org.antlr.works.editor.grammar.codemodel.AttributeModel;
 import org.netbeans.api.annotations.common.CheckForNull;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;
@@ -17,7 +18,7 @@ import org.netbeans.api.annotations.common.NullAllowed;
  *
  * @author Sam Harwell
  */
-public class ParameterModel implements AttributeModel {
+public class ParameterModelImpl implements AttributeModel {
     @NullAllowed
     private final SnapshotPositionRegion nameSpan;
     @NullAllowed
@@ -27,7 +28,7 @@ public class ParameterModel implements AttributeModel {
     @NonNull
     private final String type;
 
-    public ParameterModel(@NullAllowed SnapshotPositionRegion nameSpan, @NullAllowed SnapshotPositionRegion typeSpan, @NonNull String name, @NonNull String type) {
+    public ParameterModelImpl(@NullAllowed SnapshotPositionRegion nameSpan, @NullAllowed SnapshotPositionRegion typeSpan, @NonNull String name, @NonNull String type) {
         this.nameSpan = nameSpan;
         this.typeSpan = typeSpan;
         this.name = name;

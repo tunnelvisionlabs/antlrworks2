@@ -45,7 +45,7 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.works.editor.antlr4.classification.TaggerTokenSource;
 import org.antlr.works.editor.grammar.GrammarEditorKit;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
-import org.antlr.works.editor.grammar.codemodel.FileModel;
+import org.antlr.works.editor.grammar.codemodel.impl.FileModelImpl;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 
 /**
@@ -82,7 +82,7 @@ public class ReferenceAnchorsParserTask implements ParserTask {
         synchronized (lock) {
             ParserData<ParserRuleContext<Token>> parseTreeResult = taskManager.getData(snapshot, GrammarParserDataDefinitions.REFERENCE_PARSE_TREE, EnumSet.of(ParserDataOptions.NO_UPDATE)).get();
             ParserData<List<Anchor>> anchorPointsResult = taskManager.getData(snapshot, GrammarParserDataDefinitions.REFERENCE_ANCHOR_POINTS, EnumSet.of(ParserDataOptions.NO_UPDATE)).get();
-            ParserData<FileModel> fileModelResult = taskManager.getData(snapshot, GrammarParserDataDefinitions.FILE_MODEL, EnumSet.of(ParserDataOptions.NO_UPDATE)).get();
+            ParserData<FileModelImpl> fileModelResult = taskManager.getData(snapshot, GrammarParserDataDefinitions.FILE_MODEL, EnumSet.of(ParserDataOptions.NO_UPDATE)).get();
             if (parseTreeResult == null || anchorPointsResult == null || fileModelResult == null) {
                 Future<ParserData<Tagger<TokenTag<Token>>>> futureTokensData = taskManager.getData(snapshot, GrammarParserDataDefinitions.LEXER_TOKENS);
                 Tagger<TokenTag<Token>> tagger = futureTokensData.get().getData();
@@ -122,7 +122,7 @@ public class ReferenceAnchorsParserTask implements ParserTask {
                 if (fileModelResult == null) {
                     CodeModelBuilderListener codeModelBuilderListener = new CodeModelBuilderListener(snapshot, tokenStream);
                     ParseTreeWalker.DEFAULT.walk(codeModelBuilderListener, parseResult);
-                    fileModelResult = new BaseParserData<FileModel>(context, GrammarParserDataDefinitions.FILE_MODEL, snapshot, codeModelBuilderListener.getFileModel());
+                    fileModelResult = new BaseParserData<FileModelImpl>(context, GrammarParserDataDefinitions.FILE_MODEL, snapshot, codeModelBuilderListener.getFileModel());
                 }
             }
 

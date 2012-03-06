@@ -6,7 +6,7 @@
  *  distribution. For information about licensing, contact Sam Harwell at:
  *      sam@tunnelvisionlabs.com
  */
-package org.antlr.works.editor.grammar.codemodel;
+package org.antlr.works.editor.grammar.codemodel.impl;
 
 import java.util.Collection;
 import org.antlr.netbeans.editor.text.SnapshotPositionRegion;
@@ -15,22 +15,22 @@ import org.antlr.netbeans.editor.text.SnapshotPositionRegion;
  *
  * @author Sam Harwell
  */
-public class RuleModel {
+public class RuleModelImpl {
     private final SnapshotPositionRegion ruleSpan;
     private final SnapshotPositionRegion nameSpan;
     private final String name;
-    private final Collection<ParameterModel> parameters;
-    private final Collection<ParameterModel> returnValues;
-    private final Collection<ParameterModel> locals;
-    private final Collection<LabelModel> labels;
+    private final Collection<ParameterModelImpl> parameters;
+    private final Collection<ParameterModelImpl> returnValues;
+    private final Collection<ParameterModelImpl> locals;
+    private final Collection<LabelModelImpl> labels;
 
-    public RuleModel(SnapshotPositionRegion ruleSpan,
+    public RuleModelImpl(SnapshotPositionRegion ruleSpan,
                      SnapshotPositionRegion nameSpan,
                      String name,
-                     Collection<ParameterModel> parameters,
-                     Collection<ParameterModel> returnValues,
-                     Collection<ParameterModel> locals,
-                     Collection<LabelModel> labels) {
+                     Collection<ParameterModelImpl> parameters,
+                     Collection<ParameterModelImpl> returnValues,
+                     Collection<ParameterModelImpl> locals,
+                     Collection<LabelModelImpl> labels) {
         this.ruleSpan = ruleSpan;
         this.nameSpan = nameSpan;
         this.name = name;
@@ -44,40 +44,40 @@ public class RuleModel {
         return name;
     }
 
-    public Collection<ParameterModel> getParameters() {
+    public Collection<ParameterModelImpl> getParameters() {
         return parameters;
     }
 
-    public Collection<ParameterModel> getReturnValues() {
+    public Collection<ParameterModelImpl> getReturnValues() {
         return returnValues;
     }
 
-    public Collection<ParameterModel> getLocals() {
+    public Collection<ParameterModelImpl> getLocals() {
         return locals;
     }
 
-    public Collection<LabelModel> getLabels() {
+    public Collection<LabelModelImpl> getLabels() {
         return labels;
     }
 
-    public ParameterModel getParameter(String name) {
+    public ParameterModelImpl getParameter(String name) {
         return findParameterByName(parameters, name);
     }
 
-    public ParameterModel getReturnValue(String name) {
+    public ParameterModelImpl getReturnValue(String name) {
         return findParameterByName(returnValues, name);
     }
 
-    public ParameterModel getLocal(String name) {
+    public ParameterModelImpl getLocal(String name) {
         return findParameterByName(locals, name);
     }
 
-    public LabelModel getLabel(String name) {
+    public LabelModelImpl getLabel(String name) {
         return findLabelByName(labels, name);
     }
 
-    private static ParameterModel findParameterByName(Collection<ParameterModel> parameters, String name) {
-        for (ParameterModel parameter : parameters) {
+    private static ParameterModelImpl findParameterByName(Collection<ParameterModelImpl> parameters, String name) {
+        for (ParameterModelImpl parameter : parameters) {
             if (parameter.getName().equals(name)) {
                 return parameter;
             }
@@ -86,8 +86,8 @@ public class RuleModel {
         return null;
     }
 
-    private static LabelModel findLabelByName(Collection<LabelModel> labels, String name) {
-        for (LabelModel label : labels) {
+    private static LabelModelImpl findLabelByName(Collection<LabelModelImpl> labels, String name) {
+        for (LabelModelImpl label : labels) {
             if (label.getName().equals(name)) {
                 return label;
             }
