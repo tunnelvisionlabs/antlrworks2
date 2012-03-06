@@ -13,6 +13,8 @@ import java.util.HashMap;
 import java.util.Map;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleContext;
+import org.antlr.v4.runtime.RuleDependencies;
+import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
 import org.antlr.works.editor.grammar.experimental.GrammarParser;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.ActionBlockContext;
@@ -73,6 +75,7 @@ public class LabelAnalyzer extends GrammarParserBaseListener {
     }
 
     @Override
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_actionExpression, version=0)
     public void enterParserRuleSpec(ParserRuleSpecContext ctx) {
         if (ctx.name != null) {
             enclosingRuleName = ctx.name;
@@ -80,6 +83,7 @@ public class LabelAnalyzer extends GrammarParserBaseListener {
     }
 
     @Override
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerRule, version=0)
     public void enterLexerRule(LexerRuleContext ctx) {
         if (ctx.name != null) {
             enclosingRuleName = ctx.name;
@@ -87,6 +91,7 @@ public class LabelAnalyzer extends GrammarParserBaseListener {
     }
 
     @Override
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_labeledAlt, version=0)
     public void enterLabeledAlt(LabeledAltContext ctx) {
         if (isCaretReached()) {
             return;
@@ -97,6 +102,7 @@ public class LabelAnalyzer extends GrammarParserBaseListener {
     }
 
     @Override
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_labeledElement, version=0)
     public void enterLabeledElement(LabeledElementContext ctx) {
         if (isCaretReached()) {
             return;
@@ -108,6 +114,7 @@ public class LabelAnalyzer extends GrammarParserBaseListener {
     }
 
     @Override
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_terminal, version=0)
     public void enterTerminal(TerminalContext ctx) {
         if (isCaretReached()) {
             return;
@@ -125,6 +132,7 @@ public class LabelAnalyzer extends GrammarParserBaseListener {
     }
 
     @Override
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleref, version=0)
     public void enterRuleref(RulerefContext ctx) {
         if (isCaretReached()) {
             return;
@@ -142,6 +150,7 @@ public class LabelAnalyzer extends GrammarParserBaseListener {
     }
 
     @Override
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_actionBlock, version=0)
     public void enterActionBlock(ActionBlockContext ctx) {
         if (isCaretReached()) {
             return;
@@ -151,6 +160,7 @@ public class LabelAnalyzer extends GrammarParserBaseListener {
     }
 
     @Override
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_actionBlock, version=0)
     public void exitActionBlock(ActionBlockContext ctx) {
         checkCaretReached(ctx);
 
@@ -162,6 +172,7 @@ public class LabelAnalyzer extends GrammarParserBaseListener {
     }
 
     @Override
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_argActionBlock, version=0)
     public void enterArgActionBlock(ArgActionBlockContext ctx) {
         if (isCaretReached()) {
             return;
@@ -171,6 +182,7 @@ public class LabelAnalyzer extends GrammarParserBaseListener {
     }
 
     @Override
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_argActionBlock, version=0)
     public void exitArgActionBlock(ArgActionBlockContext ctx) {
         checkCaretReached(ctx);
 
@@ -187,6 +199,10 @@ public class LabelAnalyzer extends GrammarParserBaseListener {
         }
     }
 
+    @RuleDependencies({
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_labeledElement, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_notSet, version=0),
+    })
     private static boolean isLabeledContext(ParserRuleContext<Token> ctx) {
         for (RuleContext<?> current = ctx; current != null; current = current.parent) {
             if (current instanceof GrammarParser.LabeledElementContext) {

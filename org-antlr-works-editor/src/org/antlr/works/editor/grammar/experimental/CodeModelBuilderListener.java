@@ -16,6 +16,8 @@ import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.netbeans.editor.text.OffsetRegion;
 import org.antlr.netbeans.editor.text.SnapshotPositionRegion;
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.RuleDependencies;
+import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.misc.Interval;
@@ -72,6 +74,10 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
     }
 
     @Override
+    @RuleDependencies({
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_parserRuleSpec, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_argActionParameters, version=0),
+    })
     public void enterParserRuleSpec(ParserRuleSpecContext ctx) {
         labelUses = new HashMap<String, Collection<SnapshotPositionRegion>>();
         parameters = new ArrayList<ParameterModel>();
@@ -85,6 +91,7 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
     }
 
     @Override
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_parserRuleSpec, version=0)
     public void exitParserRuleSpec(ParserRuleSpecContext ctx) {
         Token name = ctx.name;
         SnapshotPositionRegion nameSpan = getSpan(ctx.name);
@@ -102,6 +109,7 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
     }
 
     @Override
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerRule, version=0)
     public void enterLexerRule(LexerRuleContext ctx) {
         labelUses = new HashMap<String, Collection<SnapshotPositionRegion>>();
         parameters = new ArrayList<ParameterModel>();
@@ -110,6 +118,7 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
     }
 
     @Override
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerRule, version=0)
     public void exitLexerRule(LexerRuleContext ctx) {
         Token name = ctx.name;
         SnapshotPositionRegion nameSpan = getSpan(ctx.name);
@@ -125,6 +134,10 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
     }
 
     @Override
+    @RuleDependencies({
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleReturns, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_argActionParameters, version=0),
+    })
     public void enterRuleReturns(RuleReturnsContext ctx) {
         ArgActionParametersContext values = ctx.argActionParameters();
         if (values != null) {
@@ -133,6 +146,10 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
     }
 
     @Override
+    @RuleDependencies({
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_localsSpec, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_argActionParameters, version=0),
+    })
     public void enterLocalsSpec(LocalsSpecContext ctx) {
         ArgActionParametersContext values = ctx.argActionParameters();
         if (values != null) {
@@ -141,6 +158,10 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
     }
 
     @Override
+    @RuleDependencies({
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_labeledElement, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=0),
+    })
     public void enterLabeledElement(LabeledElementContext ctx) {
         if (ctx.label != null) {
             String name = ctx.label.start.getText();
@@ -176,6 +197,10 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
         return null;
     }
 
+    @RuleDependencies({
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_argActionParameter, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_argActionParameterType, version=0),
+    })
     private void handleParameters(@NullAllowed Collection<ArgActionParameterContext> contexts, @NonNull Collection<ParameterModel> models) {
         if (contexts == null) {
             return;

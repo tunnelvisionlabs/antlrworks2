@@ -17,18 +17,20 @@ import javax.swing.text.StyledDocument;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.netbeans.parsing.spi.ParserData;
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.RuleDependencies;
+import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.works.editor.antlr4.semantics.AbstractParseTreeSemanticHighlighter;
 import org.antlr.works.editor.antlr4.semantics.AbstractSemanticHighlighter;
 import org.antlr.works.editor.grammar.GrammarEditorKit;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
-import org.antlr.works.editor.grammar.experimental.GrammarParserBaseListener;
 import org.antlr.works.editor.grammar.experimental.GrammarParser;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.ArgActionParameterContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.LocalsSpecContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.RuleSpecContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.RuleReturnsContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.RuleSpecContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParserBaseListener;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.editor.mimelookup.MimeLookup;
 import org.netbeans.api.editor.mimelookup.MimePath;
@@ -111,6 +113,12 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
         }
 
         @Override
+        @RuleDependencies({
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_argActionParameter, version=0),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleSpec, version=0),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleReturns, version=0),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_localsSpec, version=0),
+        })
         public void enterArgActionParameter(ArgActionParameterContext ctx) {
             if (ctx.name != null) {
                 int context = memberContext.isEmpty() ? GrammarParser.RULE_ruleSpec : memberContext.peek();
@@ -132,33 +140,39 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
         }
 
         @Override
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleSpec, version=0)
         public void enterRuleSpec(RuleSpecContext ctx) {
             memberContext.push(GrammarParser.RULE_ruleSpec);
         }
 
         @Override
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleSpec, version=0)
         public void exitRuleSpec(RuleSpecContext ctx) {
             int context = memberContext.pop();
             assert context == GrammarParser.RULE_ruleSpec;
         }
 
         @Override
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleReturns, version=0)
         public void enterRuleReturns(RuleReturnsContext ctx) {
             memberContext.push(GrammarParser.RULE_ruleReturns);
         }
 
         @Override
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleReturns, version=0)
         public void exitRuleReturns(RuleReturnsContext ctx) {
             int context = memberContext.pop();
             assert context == GrammarParser.RULE_ruleReturns;
         }
 
         @Override
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_localsSpec, version=0)
         public void enterLocalsSpec(LocalsSpecContext ctx) {
             memberContext.push(GrammarParser.RULE_localsSpec);
         }
 
         @Override
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_localsSpec, version=0)
         public void exitLocalsSpec(LocalsSpecContext ctx) {
             int context = memberContext.pop();
             assert context == GrammarParser.RULE_localsSpec;

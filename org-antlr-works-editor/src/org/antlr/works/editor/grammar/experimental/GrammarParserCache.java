@@ -11,7 +11,14 @@ package org.antlr.works.editor.grammar.experimental;
 import org.antlr.v4.runtime.DefaultErrorStrategy;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenStream;
+import org.antlr.v4.runtime.misc.RuleDependencyChecker;
 import org.antlr.works.editor.antlr4.completion.AbstractParserCache;
+import org.antlr.works.editor.grammar.completion.ActionExpressionAnalyzer;
+import org.antlr.works.editor.grammar.completion.GrammarCompletionQuery;
+import org.antlr.works.editor.grammar.completion.LabelAnalyzer;
+import org.antlr.works.editor.grammar.highlighter4.SemanticHighlighter;
+import org.antlr.works.editor.grammar.semantics.SemanticAnalyzerListener;
+import org.antlr.works.editor.grammar.syndiag.SyntaxDiagramTopComponent;
 
 /**
  *
@@ -20,8 +27,14 @@ import org.antlr.works.editor.antlr4.completion.AbstractParserCache;
 public class GrammarParserCache extends AbstractParserCache<Token, GrammarParser> {
     public static final GrammarParserCache DEFAULT = new GrammarParserCache();
 
+    private static boolean dependenciesChecked;
+
     @Override
     protected GrammarParser createParser(TokenStream<? extends Token> input) {
+        if (!dependenciesChecked) {
+            checkDependencies();
+        }
+
         GrammarParser parser = new GrammarParser(input);
         parser.getInterpreter().disable_global_context = true;
         return parser;
@@ -35,4 +48,18 @@ public class GrammarParserCache extends AbstractParserCache<Token, GrammarParser
         return result;
     }
 
+    private static void checkDependencies() {
+        RuleDependencyChecker.checkDependencies(ActionExpressionAnalyzer.class);
+        RuleDependencyChecker.checkDependencies(GrammarCompletionQuery.class);
+        RuleDependencyChecker.checkDependencies(LabelAnalyzer.class);
+        RuleDependencyChecker.checkDependencies(CodeModelBuilderListener.class);
+        RuleDependencyChecker.checkDependencies(CurrentRuleContextData.class);
+        RuleDependencyChecker.checkDependencies(CurrentRuleContextParserTask.class);
+        RuleDependencyChecker.checkDependencies(GrammarParserAnchorListener.class);
+        RuleDependencyChecker.checkDependencies(ReferenceAnchorsParserTask.class);
+        RuleDependencyChecker.checkDependencies(SemanticAnalyzerListener.class);
+        RuleDependencyChecker.checkDependencies(SemanticHighlighter.class);
+        RuleDependencyChecker.checkDependencies(SyntaxDiagramTopComponent.class);
+        dependenciesChecked = true;
+    }
 }

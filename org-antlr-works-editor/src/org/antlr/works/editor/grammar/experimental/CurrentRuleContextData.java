@@ -9,6 +9,8 @@
 package org.antlr.works.editor.grammar.experimental;
 
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
+import org.antlr.v4.runtime.RuleDependencies;
+import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.LexerRuleContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.ParserRuleSpecContext;
@@ -41,6 +43,11 @@ public final class CurrentRuleContextData {
         return context;
     }
 
+    @RuleDependencies({
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleSpec, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_parserRuleSpec, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerRule, version=0),
+    })
     public String getRuleName() {
         if (context == null) {
             return null;

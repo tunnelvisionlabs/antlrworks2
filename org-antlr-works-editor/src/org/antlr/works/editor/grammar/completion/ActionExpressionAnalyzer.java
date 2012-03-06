@@ -11,11 +11,14 @@ package org.antlr.works.editor.grammar.completion;
 import java.util.ArrayList;
 import java.util.List;
 import org.antlr.v4.runtime.RuleContext;
+import org.antlr.v4.runtime.RuleDependencies;
+import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
 import org.antlr.works.editor.grammar.codemodel.AttributeModel;
 import org.antlr.works.editor.grammar.codemodel.FileModel;
 import org.antlr.works.editor.grammar.codemodel.LabelModel;
 import org.antlr.works.editor.grammar.codemodel.RuleModel;
+import org.antlr.works.editor.grammar.experimental.GrammarParser;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.ActionExpressionContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.ActionScopeExpressionContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.LexerRuleContext;
@@ -47,6 +50,10 @@ public class ActionExpressionAnalyzer extends GrammarParserBaseListener {
     }
 
     @Override
+    @RuleDependencies({
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_actionExpression, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleSpec, version=0),
+    })
     public void enterActionScopeExpression(ActionScopeExpressionContext ctx) {
         if (ctx.op != null && ctx.member == null) {
             /* action scope expressions are only used for rule references
@@ -66,6 +73,10 @@ public class ActionExpressionAnalyzer extends GrammarParserBaseListener {
     }
 
     @Override
+    @RuleDependencies({
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_actionExpression, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleSpec, version=0),
+    })
     public void enterActionExpression(ActionExpressionContext ctx) {
         if (ctx.op != null && ctx.member == null) {
             /* action expressions are used for label references (explicit or implicit)
@@ -88,6 +99,11 @@ public class ActionExpressionAnalyzer extends GrammarParserBaseListener {
         }
     }
 
+    @RuleDependencies({
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleSpec, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_parserRuleSpec, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerRule, version=0),
+    })
     private Token getName(RuleSpecContext rule) {
         if (rule.getChild(0) instanceof ParserRuleSpecContext) {
             return ((ParserRuleSpecContext)rule.getChild(0)).name;
@@ -98,6 +114,7 @@ public class ActionExpressionAnalyzer extends GrammarParserBaseListener {
         }
     }
 
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleSpec, version=0)
     private RuleModel getReferencedRule(RuleSpecContext enclosingRule, Token reference, boolean followLabels) {
         String enclosingRuleName = getName(enclosingRule).getText();
         RuleModel ruleModel = fileModel.getRule(enclosingRuleName);
@@ -121,6 +138,7 @@ public class ActionExpressionAnalyzer extends GrammarParserBaseListener {
         return referencedRule;
     }
 
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleSpec, version=0)
     private static RuleSpecContext getEnclosingRuleContext(RuleContext<?> context) {
         while (context != null) {
             if (context instanceof RuleSpecContext) {

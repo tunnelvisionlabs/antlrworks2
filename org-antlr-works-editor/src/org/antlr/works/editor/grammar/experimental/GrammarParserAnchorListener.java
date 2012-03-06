@@ -19,6 +19,7 @@ import org.antlr.netbeans.editor.completion.Anchor;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.netbeans.editor.text.TrackingPositionRegion;
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.works.editor.antlr4.parsing.ParseTrees;
@@ -81,31 +82,37 @@ public class GrammarParserAnchorListener extends GrammarParserBaseListener {
     }
 
     @Override
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_grammarType, version=0)
     public void enterGrammarType(GrammarTypeContext ctx) {
         enterAnchor(ctx);
     }
 
     @Override
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_grammarType, version=0)
     public void exitGrammarType(GrammarTypeContext ctx) {
         exitAnchor(ctx, GrammarParser.RULE_grammarType);
     }
 
     @Override
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleSpec, version=0)
     public void enterRuleSpec(RuleSpecContext ctx) {
         enterAnchor(ctx);
     }
 
     @Override
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleSpec, version=0)
     public void exitRuleSpec(RuleSpecContext ctx) {
         exitAnchor(ctx, GrammarParser.RULE_ruleSpec);
     }
 
     @Override
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_tokenSpec, version=0)
     public void enterTokenSpec(TokenSpecContext ctx) {
         enterAnchor(ctx);
     }
 
     @Override
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_tokenSpec, version=0)
     public void exitTokenSpec(TokenSpecContext ctx) {
         exitAnchor(ctx, GrammarParser.RULE_tokenSpec);
     }
@@ -124,6 +131,7 @@ public class GrammarParserAnchorListener extends GrammarParserBaseListener {
         }
     }
 
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_grammarType, version=0)
     private Anchor createAnchor(ParserRuleContext<Token> ctx, int start, int stop, TrackingPositionRegion.Bias trackingMode, int rule) {
         TrackingPositionRegion trackingSpan = snapshot.createTrackingRegion(start, stop - start, trackingMode);
         if (rule == GrammarParser.RULE_grammarType) {
@@ -148,6 +156,7 @@ public class GrammarParserAnchorListener extends GrammarParserBaseListener {
 
         private final int grammarType;
 
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_grammarType, version=0)
         private GrammarTypeAnchor(GrammarTypeContext ctx, TrackingPositionRegion span) {
             super(span, GrammarParser.RULE_grammarType);
             if (ctx.LEXER() != null) {
