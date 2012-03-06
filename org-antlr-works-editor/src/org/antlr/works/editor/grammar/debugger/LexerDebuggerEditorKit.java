@@ -15,17 +15,24 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.naming.BinaryRefAddr;
 import javax.swing.Action;
+import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.EditorKit;
 import javax.swing.text.StyledDocument;
 import javax.swing.text.TextAction;
+import javax.xml.bind.DatatypeConverter;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.atn.LexerATNSimulator;
@@ -34,6 +41,8 @@ import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.netbeans.editor.BaseDocument;
 import org.netbeans.modules.editor.NbEditorKit;
 import org.openide.util.Exceptions;
+import org.openide.util.Parameters;
+import sun.beans.editors.IntegerEditor;
 
 /**
  *
@@ -42,6 +51,7 @@ import org.openide.util.Exceptions;
 @MimeRegistration(mimeType=LexerDebuggerEditorKit.LEXER_DEBUGGER_MIME_TYPE, service=EditorKit.class)
 public class LexerDebuggerEditorKit extends NbEditorKit {
     private static final Logger LOG = Logger.getLogger(LexerDebuggerEditorKit.class.getName());
+    private static final String UTF_8 = "UTF-8"; // NOI18N
 
     private static final boolean INTERNAL_PARSE = true;
 
@@ -49,6 +59,9 @@ public class LexerDebuggerEditorKit extends NbEditorKit {
     public static final String PROP_TOKENS = "Trace Tokens";
     public static final String PROP_SELECTED_TOKENS = "Selected Trace Tokens";
     public static final String PROP_CHANNELS = "Channels";
+
+    public static final String PROP_TOKEN_NAMES = "Token Names";
+    public static final String PROP_MODE_NAMES = "Mode Names";
 
     public static final String LEXER_DEBUGGER_MIME_TYPE = "text/x-antlr3-ldbg";
 
@@ -76,33 +89,101 @@ public class LexerDebuggerEditorKit extends NbEditorKit {
         return actions;
     }
 
+    @Override
+    public void read(Reader in, Document doc, int pos) throws IOException, BadLocationException {
+        String data = readAllText(in, 0);
+        byte[] binary = DatatypeConverter.parseBase64Binary(data);
+        int inputSize = readInteger(binary, 0);
+        InputStream inputStream = new ByteArrayInputStream(binary, 4, inputSize);
+        super.read(new InputStreamReader(inputStream, UTF_8), doc, pos);
+
+        // read the token names
+        int tokenNamesOffset = 4 + inputSize;
+        int tokenNamesSize = readInteger(binary, tokenNamesOffset);
+        String[] tokenNames = readStrings(binary, tokenNamesOffset + 4, tokenNamesSize);
+        doc.putProperty(PROP_TOKEN_NAMES, tokenNames);
+
+        // read the mode names
+        int modeNamesOffset = tokenNamesOffset + 4 + tokenNamesSize;
+        int modeNamesSize = readInteger(binary, modeNamesOffset);
+        String[] modeNames = readStrings(binary, modeNamesOffset + 4, modeNamesSize);
+        doc.putProperty(PROP_MODE_NAMES, modeNames);
+
+        // read the trace
+        int traceOffset = modeNamesOffset + 4 + modeNamesSize;
+        int traceSize = readInteger(binary, traceOffset);
+        byte[] traceData = Arrays.copyOfRange(binary, traceOffset + 4, traceOffset + 4 + traceSize);
+        doc.putProperty(PROP_TRACE, traceData);
+    }
+
+    private static String readAllText(Reader reader, int estimatedSize) throws IOException {
+        StringBuilder builder = new StringBuilder(Math.max(16, estimatedSize));
+        char[] buffer = new char[1024];
+        while (true) {
+            int count = reader.read(buffer, 0, buffer.length);
+            if (count < 0) {
+                break;
+            }
+
+            builder.append(buffer, 0, count);
+        }
+
+        return builder.toString();
+    }
+
+    private static int readInteger(byte[] data, int offset) {
+        int value = (data[offset++] & 0xFF);
+        value |= (data[offset++] & 0xFF) << 8;
+        value |= (data[offset++] & 0xFF) << 16;
+        value |= (data[offset++] & 0xFF) << 24;
+        return value;
+    }
+
+    private static String[] readStrings(byte[] data, int offset, int length) throws IOException {
+        InputStream inputStream = new ByteArrayInputStream(data, offset, length);
+        InputStreamReader reader = new InputStreamReader(inputStream, UTF_8);
+        String text = readAllText(reader, length);
+        return text.split("\\n");
+    }
+
+    public static class TraceData {
+        public final TraceToken[] tokens;
+        public final String[] tokenNames;
+        public final String[] modes;
+
+        public TraceData(TraceToken[] tokens, String[] tokenNames, String[] modes) {
+            Parameters.notNull("tokens", tokens);
+            Parameters.notNull("tokenNames", tokenNames);
+            Parameters.notNull("modes", modes);
+
+            this.tokens = tokens;
+            this.tokenNames = tokenNames;
+            this.modes = modes;
+        }
+    }
+
     public TraceToken[] getTokens(Document document) {
         TraceToken[] tokens = (TraceToken[])document.getProperty(PROP_TOKENS);
         if (tokens == null) {
-            try {
-                Set<Integer> channels = new HashSet<Integer>();
-
-                if (INTERNAL_PARSE) {
-                    Lexer lexer = LexerDebuggerTest.createLexer(new DocumentCharStreamV4((StyledDocument)document));
-                    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                    lexer.getInterpreter().setTraceStream(outputStream);
-                    CommonTokenStream tokenStream = new CommonTokenStream(lexer);
-                    tokenStream.fill();
-                    outputStream.flush();
-                    LOG.info(String.format("Lexer trace consumes %d bytes.\n", outputStream.size()));
-                    document.putProperty(PROP_TRACE, outputStream.toByteArray());
-                    tokens = loadTokens(document, new ByteArrayInputStream(outputStream.toByteArray()));
-                } else {
-                    String sourceFileName = (String)document.getProperty(Document.StreamDescriptionProperty);
-                    String traceFileName = sourceFileName + ".trace";
-                    File traceFile = new File(traceFileName);
-                    tokens = loadTokens(document, new BufferedInputStream(new FileInputStream(traceFileName)));
-                }
-
-                document.putProperty(PROP_TOKENS, tokens);
-            } catch (IOException ex) {
-                Exceptions.printStackTrace(ex);
-            }
+            byte[] traceData = (byte[])document.getProperty(PROP_TRACE);
+            tokens = loadTokens(document, new ByteArrayInputStream(traceData));
+            //if (INTERNAL_PARSE) {
+            //    Lexer lexer = LexerDebuggerTest.createLexer(new DocumentCharStreamV4((StyledDocument)document));
+            //    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            //    lexer.getInterpreter().setTraceStream(outputStream);
+            //    CommonTokenStream tokenStream = new CommonTokenStream(lexer);
+            //    tokenStream.fill();
+            //    outputStream.flush();
+            //    LOG.info(String.format("Lexer trace consumes %d bytes.\n", outputStream.size()));
+            //    document.putProperty(PROP_TRACE, outputStream.toByteArray());
+            //    tokens = loadTokens(document, new ByteArrayInputStream(outputStream.toByteArray()));
+            //} else {
+            //    String sourceFileName = (String)document.getProperty(Document.StreamDescriptionProperty);
+            //    String traceFileName = sourceFileName + ".trace";
+            //    File traceFile = new File(traceFileName);
+            //    tokens = loadTokens(document, new BufferedInputStream(new FileInputStream(traceFileName)));
+            //}
+            document.putProperty(PROP_TOKENS, tokens);
         }
 
         return tokens;

@@ -260,13 +260,6 @@
                         <attr name="position" intvalue="1200"/>
                     </file>
                 </folder>
-                <folder name="Factories">
-                    <file name="LexerDebuggerDataLoader.instance">
-                        <attr name="dataObjectClass" stringvalue="org.antlr.works.editor.grammar.debugger.LexerDebuggerDataObject"/>
-                        <attr name="instanceCreate" methodvalue="org.openide.loaders.DataLoaderPool.factory"/>
-                        <attr name="mimeType" stringvalue="text/x-antlr3-ldbg"/>
-                    </file>
-                </folder>
             </folder>
             <folder name="x-stringtemplate4">
                 <folder name="Actions">
@@ -347,10 +340,6 @@
     </folder>
     <folder name="Services">
         <folder name="MIMEResolver">
-            <file name="LexerDebuggerResolver.xml" url="grammar/debugger/LexerDebuggerResolver.xml">
-                <attr name="displayName" bundlevalue="org.antlr.works.editor.Bundle#Services/MIMEResolver/LexerDebuggerResolver.xml"/>
-                <attr name="position" intvalue="101"/>
-            </file>
             <file name="StringTemplateFileTypeResolver.xml" url="st4/StringTemplateFileTypeResolver.xml">
                 <attr name="displayName" bundlevalue="org.antlr.works.editor.Bundle#Services/MIMEResolver/StringTemplateFileTypeResolver.xml"/>
                 <attr name="position" intvalue="102"/>

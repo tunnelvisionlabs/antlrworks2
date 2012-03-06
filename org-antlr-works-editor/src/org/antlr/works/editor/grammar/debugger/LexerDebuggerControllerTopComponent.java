@@ -13,6 +13,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import javax.swing.AbstractListModel;
 import javax.swing.DefaultListCellRenderer;
@@ -445,11 +446,16 @@ public final class LexerDebuggerControllerTopComponent extends TopComponent {
                     return;
                 }
 
+                Document document = component.getDocument();
+                String[] tokenNamesArray = (String[])document.getProperty(LexerDebuggerEditorKit.PROP_TOKEN_NAMES);
+                String[] modeNamesArray = (String[])document.getProperty(LexerDebuggerEditorKit.PROP_MODE_NAMES);
+                final List<String> tokenNames = tokenNamesArray != null ? Arrays.asList(tokenNamesArray) : Collections.<String>emptyList();
+                final List<String> modeNames = modeNamesArray != null ? Arrays.asList(modeNamesArray) : Collections.<String>emptyList();
+
                 currentComponent = component;
-                List<String> tokenNames = LexerDebuggerTest.getTokenNames();
 
                 lstTokenTypes.setModel(new AbstractListModel() {
-                    private final List<String> elements = LexerDebuggerTest.getTokenNames();
+                    private final List<String> elements = tokenNames;
 
                     @Override
                     public int getSize() {
@@ -494,7 +500,7 @@ public final class LexerDebuggerControllerTopComponent extends TopComponent {
                 });
 
                 lstModes.setModel(new AbstractListModel() {
-                    private final List<String> elements = LexerDebuggerTest.getModeNames();
+                    private final List<String> elements = modeNames;
 
                     @Override
                     public int getSize() {
