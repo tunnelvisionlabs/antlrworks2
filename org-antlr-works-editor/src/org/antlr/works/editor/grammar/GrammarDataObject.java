@@ -9,33 +9,46 @@
 package org.antlr.works.editor.grammar;
 
 import java.io.IOException;
+import org.netbeans.core.spi.multiview.MultiViewElement;
+import org.netbeans.core.spi.multiview.text.MultiViewEditorElement;
 import org.openide.filesystems.FileObject;
-import org.openide.loaders.DataNode;
+import org.openide.filesystems.MIMEResolver;
 import org.openide.loaders.DataObjectExistsException;
 import org.openide.loaders.MultiDataObject;
 import org.openide.loaders.MultiFileLoader;
-import org.openide.nodes.Children;
-import org.openide.nodes.CookieSet;
-import org.openide.nodes.Node;
-import org.openide.text.DataEditorSupport;
 import org.openide.util.Lookup;
+import org.openide.util.NbBundle;
+import org.openide.windows.TopComponent;
 
+@NbBundle.Messages({
+    "GrammarResolver=Grammar Files",
+    "CTL_SourceTabCaption=&Source"
+})
+@MIMEResolver.ExtensionRegistration(
+    position=100,
+    displayName="#GrammarResolver",
+    extension={"g", "g3", "g4"},
+    mimeType=GrammarEditorKit.GRAMMAR_MIME_TYPE)
 public class GrammarDataObject extends MultiDataObject {
 
-    @SuppressWarnings("LeakingThisInConstructor")
     public GrammarDataObject(FileObject pf, MultiFileLoader loader) throws DataObjectExistsException, IOException {
         super(pf, loader);
-        CookieSet cookies = getCookieSet();
-        cookies.add((Node.Cookie) DataEditorSupport.create(this, getPrimaryEntry(), cookies));
+        registerEditor(GrammarEditorKit.GRAMMAR_MIME_TYPE, true);
     }
 
     @Override
-    protected Node createNodeDelegate() {
-        return new DataNode(this, Children.LEAF, getLookup());
+    protected int associateLookup() {
+        return 1;
     }
 
-    @Override
-    public Lookup getLookup() {
-        return getCookieSet().getLookup();
+    @MultiViewElement.Registration(
+        displayName="#CTL_SourceTabCaption",
+        iconBase="",
+        persistenceType=TopComponent.PERSISTENCE_ONLY_OPENED,
+        preferredID="",
+        mimeType=GrammarEditorKit.GRAMMAR_MIME_TYPE,
+        position=2000)
+    public static MultiViewEditorElement createMultiViewEditorElement(Lookup context) {
+        return new MultiViewEditorElement(context);
     }
 }

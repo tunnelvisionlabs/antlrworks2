@@ -200,13 +200,6 @@
                         <attr name="position" intvalue="1200"/>
                     </file>
                 </folder>
-                <folder name="Factories">
-                    <file name="GrammarDataLoader.instance">
-                        <attr name="dataObjectClass" stringvalue="org.antlr.works.editor.grammar.GrammarDataObject"/>
-                        <attr name="instanceCreate" methodvalue="org.openide.loaders.DataLoaderPool.factory"/>
-                        <attr name="mimeType" stringvalue="text/x-antlr3"/>
-                    </file>
-                </folder>
             </folder>
             <folder name="x-antlr3-ldbg">
                 <folder name="Actions">
@@ -354,10 +347,6 @@
     </folder>
     <folder name="Services">
         <folder name="MIMEResolver">
-            <file name="GrammarResolver.xml" url="grammar/GrammarResolver.xml">
-                <attr name="displayName" bundlevalue="org.antlr.works.editor.Bundle#Services/MIMEResolver/GrammarResolver.xml"/>
-                <attr name="position" intvalue="100"/>
-            </file>
             <file name="LexerDebuggerResolver.xml" url="grammar/debugger/LexerDebuggerResolver.xml">
                 <attr name="displayName" bundlevalue="org.antlr.works.editor.Bundle#Services/MIMEResolver/LexerDebuggerResolver.xml"/>
                 <attr name="position" intvalue="101"/>
