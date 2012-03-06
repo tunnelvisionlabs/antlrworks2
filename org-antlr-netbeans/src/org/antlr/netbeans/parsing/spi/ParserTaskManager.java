@@ -9,7 +9,6 @@
 package org.antlr.netbeans.parsing.spi;
 
 import java.util.Collection;
-import java.util.EnumSet;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
@@ -32,17 +31,17 @@ public interface ParserTaskManager {
 
     @NonNull Future<ParserData<?>>[] getData(@NonNull DocumentSnapshot snapshot, @NonNull Collection<? extends ParserDataDefinition<?>> definitions);
 
-    @CheckForNull <T> Future<ParserData<T>> getData(@NonNull DocumentSnapshot snapshot, @NonNull ParserDataDefinition<T> definition, @NonNull EnumSet<ParserDataOptions> options);
+    @CheckForNull <T> Future<ParserData<T>> getData(@NonNull DocumentSnapshot snapshot, @NonNull ParserDataDefinition<T> definition, @NonNull Collection<ParserDataOptions> options);
 
-    @NonNull Future<ParserData<?>>[] getData(@NonNull DocumentSnapshot snapshot, @NonNull Collection<? extends ParserDataDefinition<?>> definitions, @NonNull EnumSet<ParserDataOptions> options);
+    @NonNull Future<ParserData<?>>[] getData(@NonNull DocumentSnapshot snapshot, @NonNull Collection<? extends ParserDataDefinition<?>> definitions, @NonNull Collection<ParserDataOptions> options);
 
     @CheckForNull <T> Future<ParserData<T>> getData(@NonNull DocumentSnapshot snapshot, @NullAllowed JTextComponent component, @NonNull ParserDataDefinition<T> definition);
 
     @NonNull Future<ParserData<?>>[] getData(@NonNull DocumentSnapshot snapshot, @NullAllowed JTextComponent component, @NonNull Collection<? extends ParserDataDefinition<?>> definitions);
 
-    @CheckForNull <T> Future<ParserData<T>> getData(@NonNull DocumentSnapshot snapshot, @NullAllowed JTextComponent component, @NonNull ParserDataDefinition<T> definition, @NonNull EnumSet<ParserDataOptions> options);
+    @CheckForNull <T> Future<ParserData<T>> getData(@NonNull DocumentSnapshot snapshot, @NullAllowed JTextComponent component, @NonNull ParserDataDefinition<T> definition, @NonNull Collection<ParserDataOptions> options);
 
-    @NonNull Future<ParserData<?>>[] getData(@NonNull DocumentSnapshot snapshot, @NullAllowed JTextComponent component, @NonNull Collection<? extends ParserDataDefinition<?>> definitions, @NonNull EnumSet<ParserDataOptions> options);
+    @NonNull Future<ParserData<?>>[] getData(@NonNull DocumentSnapshot snapshot, @NullAllowed JTextComponent component, @NonNull Collection<? extends ParserDataDefinition<?>> definitions, @NonNull Collection<ParserDataOptions> options);
 
     <T> ScheduledFuture<ParserData<T>> scheduleData(@NonNull ParseContext context, @NonNull ParserDataDefinition<T> data);
 

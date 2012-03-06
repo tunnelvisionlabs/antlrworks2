@@ -104,12 +104,12 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
     }
 
     @Override
-    public <T> Future<ParserData<T>> getData(final DocumentSnapshot snapshot, final ParserDataDefinition<T> definition, EnumSet<ParserDataOptions> options) {
+    public <T> Future<ParserData<T>> getData(final DocumentSnapshot snapshot, final ParserDataDefinition<T> definition, Collection<ParserDataOptions> options) {
         return getData(snapshot, null, definition, options);
     }
 
     @Override
-    public Future<ParserData<?>>[] getData(DocumentSnapshot snapshot, Collection<? extends ParserDataDefinition<?>> definitions, EnumSet<ParserDataOptions> options) {
+    public Future<ParserData<?>>[] getData(DocumentSnapshot snapshot, Collection<? extends ParserDataDefinition<?>> definitions, Collection<ParserDataOptions> options) {
         return getData(snapshot, null, definitions, options);
     }
 
@@ -124,7 +124,7 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
     }
 
     @Override
-    public <T> Future<ParserData<T>> getData(final DocumentSnapshot snapshot, JTextComponent component, final ParserDataDefinition<T> definition, EnumSet<ParserDataOptions> options) {
+    public <T> Future<ParserData<T>> getData(final DocumentSnapshot snapshot, JTextComponent component, final ParserDataDefinition<T> definition, Collection<ParserDataOptions> options) {
         Parameters.notNull("snapshot", snapshot);
         Parameters.notNull("definition", definition);
         Parameters.notNull("options", options);
@@ -164,7 +164,7 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
     }
 
     @Override
-    public Future<ParserData<?>>[] getData(DocumentSnapshot snapshot, JTextComponent component, Collection<? extends ParserDataDefinition<?>> definitions, EnumSet<ParserDataOptions> options) {
+    public Future<ParserData<?>>[] getData(DocumentSnapshot snapshot, JTextComponent component, Collection<? extends ParserDataDefinition<?>> definitions, Collection<ParserDataOptions> options) {
         Parameters.notNull("snapshot", snapshot);
         Parameters.notNull("definitions", definitions);
         Parameters.notNull("options", options);
