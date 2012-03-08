@@ -171,7 +171,13 @@ public abstract class AbstractSemanticHighlighter<SemanticData> extends Abstract
 
     protected void addHighlights(OffsetsBag container, DocumentSnapshot sourceSnapshot, DocumentSnapshot currentSnapshot, Collection<Token> tokens, AttributeSet attributes) {
         for (Token token : tokens) {
-            TrackingPositionRegion trackingRegion = sourceSnapshot.createTrackingRegion(OffsetRegion.fromBounds(token.getStartIndex(), token.getStopIndex() + 1), Bias.Forward);
+            int startIndex = token.getStartIndex();
+            int stopIndex = token.getStopIndex();
+            if (startIndex < 0 || stopIndex < 0 || (startIndex > stopIndex + 1)) {
+                continue;
+            }
+
+            TrackingPositionRegion trackingRegion = sourceSnapshot.createTrackingRegion(OffsetRegion.fromBounds(startIndex, stopIndex + 1), Bias.Forward);
             SnapshotPositionRegion region = trackingRegion.getRegion(currentSnapshot);
             container.addHighlight(region.getStart().getOffset(), region.getEnd().getOffset(), attributes);
         }
