@@ -55,13 +55,13 @@ import org.antlr.works.editor.grammar.experimental.GrammarParser.IgnoredContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.LabeledAltContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.LabeledElementContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.LabeledLexerElementContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.LexerActionContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.LexerActionExprContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.LexerActionsContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.LexerAltContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.LexerAltListContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.LexerAtomContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.LexerBlockContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.LexerCommandContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.LexerCommandExprContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser.LexerCommandsContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.LexerElementContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.LexerElementsContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser.LexerRuleBlockContext;
@@ -345,11 +345,11 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
     }
 
     @Override
-    public void enterLexerActionExpr(LexerActionExprContext ctx) {
+    public void enterLexerCommandExpr(LexerCommandExprContext ctx) {
     }
 
     @Override
-    public void exitLexerActionExpr(LexerActionExprContext ctx) {
+    public void exitLexerCommandExpr(LexerCommandExprContext ctx) {
     }
 
     @Override
@@ -728,11 +728,11 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
     }
 
     @Override
-    public void enterLexerActions(LexerActionsContext ctx) {
+    public void enterLexerCommands(LexerCommandsContext ctx) {
     }
 
     @Override
-    public void exitLexerActions(LexerActionsContext ctx) {
+    public void exitLexerCommands(LexerCommandsContext ctx) {
     }
 
     @Override
@@ -761,10 +761,10 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerAction, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommand, version=0),
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=0),
     })
-    public void enterLexerAction(LexerActionContext ctx) {
+    public void enterLexerCommand(LexerCommandContext ctx) {
         if (ctx.getChildCount() == 0 || !(ctx.getChild(0) instanceof IdContext)) {
             return;
         }
@@ -773,7 +773,7 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
     }
 
     @Override
-    public void exitLexerAction(LexerActionContext ctx) {
+    public void exitLexerCommand(LexerCommandContext ctx) {
     }
 
     @Override

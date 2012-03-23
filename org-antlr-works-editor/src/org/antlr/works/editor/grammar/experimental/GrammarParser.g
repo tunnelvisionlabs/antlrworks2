@@ -26,7 +26,6 @@ options {
 // nodes for the AST we are generating. The tokens section is where we
 // specify any such tokens
 tokens {
-    LEXER;
     RULE;
 	PREC_RULE; // flip to this if we find that it's left-recursive
     RULES;
@@ -529,7 +528,7 @@ lexerAltList
 
 lexerAlt
 	:	lexerElements
-		(	lexerActions
+		(	lexerCommands
 		|
 		)
 	;
@@ -567,17 +566,18 @@ lexerBlock
     ;
 
 // channel=HIDDEN, skip, more, mode(INSIDE), push(INSIDE), pop
-lexerActions
-	:	RARROW lexerAction (COMMA lexerAction)*
+lexerCommands
+	:	RARROW lexerCommand (COMMA lexerCommand)*
 	;
 
-lexerAction
-	:	id LPAREN lexerActionExpr RPAREN
+lexerCommand
+	:	id LPAREN lexerCommandExpr RPAREN
     |   id
 	;
 
-lexerActionExpr
-	:	ID
+lexerCommandExpr
+@version{1}
+	:	id
 	|	INT
 	;
 
@@ -645,6 +645,7 @@ lexerAtom
     |   RULE_REF
     |	notSet
     |	argActionBlock
+    //|	LEXER_CHAR_SET
 	|   // Wildcard '.' means any character in a lexer, any
 		// token in parser and any node or subtree in a tree parser
 		// Because the terminal rule is allowed to be the node
@@ -685,9 +686,12 @@ blockSet
     ;
 
 setElement
+@version{1}
 	:	TOKEN_REF
 	|	STRING_LITERAL
 	|	range
+	|	argActionBlock
+	//|	LEXER_CHAR_SET
 	;
 
 // -------------

@@ -27,6 +27,9 @@ public interface GrammarParserListener extends ParseTreeListener<Token> {
 	void enterNotSet(GrammarParser.NotSetContext ctx);
 	void exitNotSet(GrammarParser.NotSetContext ctx);
 
+	void enterLexerCommands(GrammarParser.LexerCommandsContext ctx);
+	void exitLexerCommands(GrammarParser.LexerCommandsContext ctx);
+
 	void enterLexerAltList(GrammarParser.LexerAltListContext ctx);
 	void exitLexerAltList(GrammarParser.LexerAltListContext ctx);
 
@@ -41,6 +44,9 @@ public interface GrammarParserListener extends ParseTreeListener<Token> {
 
 	void enterTerminal(GrammarParser.TerminalContext ctx);
 	void exitTerminal(GrammarParser.TerminalContext ctx);
+
+	void enterLexerCommand(GrammarParser.LexerCommandContext ctx);
+	void exitLexerCommand(GrammarParser.LexerCommandContext ctx);
 
 	void enterThrowsSpec(GrammarParser.ThrowsSpecContext ctx);
 	void exitThrowsSpec(GrammarParser.ThrowsSpecContext ctx);
@@ -77,9 +83,6 @@ public interface GrammarParserListener extends ParseTreeListener<Token> {
 
 	void enterParserRuleSpec(GrammarParser.ParserRuleSpecContext ctx);
 	void exitParserRuleSpec(GrammarParser.ParserRuleSpecContext ctx);
-
-	void enterLexerActionExpr(GrammarParser.LexerActionExprContext ctx);
-	void exitLexerActionExpr(GrammarParser.LexerActionExprContext ctx);
 
 	void enterGrammarType(GrammarParser.GrammarTypeContext ctx);
 	void exitGrammarType(GrammarParser.GrammarTypeContext ctx);
@@ -201,9 +204,6 @@ public interface GrammarParserListener extends ParseTreeListener<Token> {
 	void enterRules(GrammarParser.RulesContext ctx);
 	void exitRules(GrammarParser.RulesContext ctx);
 
-	void enterLexerActions(GrammarParser.LexerActionsContext ctx);
-	void exitLexerActions(GrammarParser.LexerActionsContext ctx);
-
 	void enterOptionValue(GrammarParser.OptionValueContext ctx);
 	void exitOptionValue(GrammarParser.OptionValueContext ctx);
 
@@ -213,9 +213,6 @@ public interface GrammarParserListener extends ParseTreeListener<Token> {
 	void enterArgActionBlock(GrammarParser.ArgActionBlockContext ctx);
 	void exitArgActionBlock(GrammarParser.ArgActionBlockContext ctx);
 
-	void enterLexerAction(GrammarParser.LexerActionContext ctx);
-	void exitLexerAction(GrammarParser.LexerActionContext ctx);
-
 	void enterRuleModifiers(GrammarParser.RuleModifiersContext ctx);
 	void exitRuleModifiers(GrammarParser.RuleModifiersContext ctx);
 
@@ -224,4 +221,7 @@ public interface GrammarParserListener extends ParseTreeListener<Token> {
 
 	void enterEbnf(GrammarParser.EbnfContext ctx);
 	void exitEbnf(GrammarParser.EbnfContext ctx);
+
+	void enterLexerCommandExpr(GrammarParser.LexerCommandExprContext ctx);
+	void exitLexerCommandExpr(GrammarParser.LexerCommandExprContext ctx);
 }

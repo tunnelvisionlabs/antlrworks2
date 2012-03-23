@@ -22,6 +22,8 @@ public interface GrammarParserVisitor<Symbol extends Token, Result> extends Pars
 
 	Result visitNotSet(GrammarParser.NotSetContext ctx);
 
+	Result visitLexerCommands(GrammarParser.LexerCommandsContext ctx);
+
 	Result visitLexerAltList(GrammarParser.LexerAltListContext ctx);
 
 	Result visitArgActionParameter(GrammarParser.ArgActionParameterContext ctx);
@@ -31,6 +33,8 @@ public interface GrammarParserVisitor<Symbol extends Token, Result> extends Pars
 	Result visitRuleAltList(GrammarParser.RuleAltListContext ctx);
 
 	Result visitTerminal(GrammarParser.TerminalContext ctx);
+
+	Result visitLexerCommand(GrammarParser.LexerCommandContext ctx);
 
 	Result visitThrowsSpec(GrammarParser.ThrowsSpecContext ctx);
 
@@ -55,8 +59,6 @@ public interface GrammarParserVisitor<Symbol extends Token, Result> extends Pars
 	Result visitAlternative(GrammarParser.AlternativeContext ctx);
 
 	Result visitParserRuleSpec(GrammarParser.ParserRuleSpecContext ctx);
-
-	Result visitLexerActionExpr(GrammarParser.LexerActionExprContext ctx);
 
 	Result visitGrammarType(GrammarParser.GrammarTypeContext ctx);
 
@@ -138,19 +140,17 @@ public interface GrammarParserVisitor<Symbol extends Token, Result> extends Pars
 
 	Result visitRules(GrammarParser.RulesContext ctx);
 
-	Result visitLexerActions(GrammarParser.LexerActionsContext ctx);
-
 	Result visitOptionValue(GrammarParser.OptionValueContext ctx);
 
 	Result visitLexerAlt(GrammarParser.LexerAltContext ctx);
 
 	Result visitArgActionBlock(GrammarParser.ArgActionBlockContext ctx);
 
-	Result visitLexerAction(GrammarParser.LexerActionContext ctx);
-
 	Result visitRuleModifiers(GrammarParser.RuleModifiersContext ctx);
 
 	Result visitArgActionParameters(GrammarParser.ArgActionParametersContext ctx);
 
 	Result visitEbnf(GrammarParser.EbnfContext ctx);
+
+	Result visitLexerCommandExpr(GrammarParser.LexerCommandExprContext ctx);
 }

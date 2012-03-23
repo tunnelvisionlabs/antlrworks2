@@ -23,6 +23,8 @@ public class GrammarParserBaseVisitor<Result> extends AbstractParseTreeVisitor<T
 
 	@Override public Result visitNotSet(GrammarParser.NotSetContext ctx) { return visitChildren(ctx); }
 
+	@Override public Result visitLexerCommands(GrammarParser.LexerCommandsContext ctx) { return visitChildren(ctx); }
+
 	@Override public Result visitLexerAltList(GrammarParser.LexerAltListContext ctx) { return visitChildren(ctx); }
 
 	@Override public Result visitArgActionParameter(GrammarParser.ArgActionParameterContext ctx) { return visitChildren(ctx); }
@@ -32,6 +34,8 @@ public class GrammarParserBaseVisitor<Result> extends AbstractParseTreeVisitor<T
 	@Override public Result visitRuleAltList(GrammarParser.RuleAltListContext ctx) { return visitChildren(ctx); }
 
 	@Override public Result visitTerminal(GrammarParser.TerminalContext ctx) { return visitChildren(ctx); }
+
+	@Override public Result visitLexerCommand(GrammarParser.LexerCommandContext ctx) { return visitChildren(ctx); }
 
 	@Override public Result visitThrowsSpec(GrammarParser.ThrowsSpecContext ctx) { return visitChildren(ctx); }
 
@@ -56,8 +60,6 @@ public class GrammarParserBaseVisitor<Result> extends AbstractParseTreeVisitor<T
 	@Override public Result visitAlternative(GrammarParser.AlternativeContext ctx) { return visitChildren(ctx); }
 
 	@Override public Result visitParserRuleSpec(GrammarParser.ParserRuleSpecContext ctx) { return visitChildren(ctx); }
-
-	@Override public Result visitLexerActionExpr(GrammarParser.LexerActionExprContext ctx) { return visitChildren(ctx); }
 
 	@Override public Result visitGrammarType(GrammarParser.GrammarTypeContext ctx) { return visitChildren(ctx); }
 
@@ -139,19 +141,17 @@ public class GrammarParserBaseVisitor<Result> extends AbstractParseTreeVisitor<T
 
 	@Override public Result visitRules(GrammarParser.RulesContext ctx) { return visitChildren(ctx); }
 
-	@Override public Result visitLexerActions(GrammarParser.LexerActionsContext ctx) { return visitChildren(ctx); }
-
 	@Override public Result visitOptionValue(GrammarParser.OptionValueContext ctx) { return visitChildren(ctx); }
 
 	@Override public Result visitLexerAlt(GrammarParser.LexerAltContext ctx) { return visitChildren(ctx); }
 
 	@Override public Result visitArgActionBlock(GrammarParser.ArgActionBlockContext ctx) { return visitChildren(ctx); }
 
-	@Override public Result visitLexerAction(GrammarParser.LexerActionContext ctx) { return visitChildren(ctx); }
-
 	@Override public Result visitRuleModifiers(GrammarParser.RuleModifiersContext ctx) { return visitChildren(ctx); }
 
 	@Override public Result visitArgActionParameters(GrammarParser.ArgActionParametersContext ctx) { return visitChildren(ctx); }
 
 	@Override public Result visitEbnf(GrammarParser.EbnfContext ctx) { return visitChildren(ctx); }
+
+	@Override public Result visitLexerCommandExpr(GrammarParser.LexerCommandExprContext ctx) { return visitChildren(ctx); }
 }

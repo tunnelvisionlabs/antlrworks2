@@ -29,6 +29,9 @@ public class GrammarParserBaseListener implements GrammarParserListener {
 	@Override public void enterNotSet(GrammarParser.NotSetContext ctx) { }
 	@Override public void exitNotSet(GrammarParser.NotSetContext ctx) { }
 
+	@Override public void enterLexerCommands(GrammarParser.LexerCommandsContext ctx) { }
+	@Override public void exitLexerCommands(GrammarParser.LexerCommandsContext ctx) { }
+
 	@Override public void enterLexerAltList(GrammarParser.LexerAltListContext ctx) { }
 	@Override public void exitLexerAltList(GrammarParser.LexerAltListContext ctx) { }
 
@@ -43,6 +46,9 @@ public class GrammarParserBaseListener implements GrammarParserListener {
 
 	@Override public void enterTerminal(GrammarParser.TerminalContext ctx) { }
 	@Override public void exitTerminal(GrammarParser.TerminalContext ctx) { }
+
+	@Override public void enterLexerCommand(GrammarParser.LexerCommandContext ctx) { }
+	@Override public void exitLexerCommand(GrammarParser.LexerCommandContext ctx) { }
 
 	@Override public void enterThrowsSpec(GrammarParser.ThrowsSpecContext ctx) { }
 	@Override public void exitThrowsSpec(GrammarParser.ThrowsSpecContext ctx) { }
@@ -79,9 +85,6 @@ public class GrammarParserBaseListener implements GrammarParserListener {
 
 	@Override public void enterParserRuleSpec(GrammarParser.ParserRuleSpecContext ctx) { }
 	@Override public void exitParserRuleSpec(GrammarParser.ParserRuleSpecContext ctx) { }
-
-	@Override public void enterLexerActionExpr(GrammarParser.LexerActionExprContext ctx) { }
-	@Override public void exitLexerActionExpr(GrammarParser.LexerActionExprContext ctx) { }
 
 	@Override public void enterGrammarType(GrammarParser.GrammarTypeContext ctx) { }
 	@Override public void exitGrammarType(GrammarParser.GrammarTypeContext ctx) { }
@@ -203,9 +206,6 @@ public class GrammarParserBaseListener implements GrammarParserListener {
 	@Override public void enterRules(GrammarParser.RulesContext ctx) { }
 	@Override public void exitRules(GrammarParser.RulesContext ctx) { }
 
-	@Override public void enterLexerActions(GrammarParser.LexerActionsContext ctx) { }
-	@Override public void exitLexerActions(GrammarParser.LexerActionsContext ctx) { }
-
 	@Override public void enterOptionValue(GrammarParser.OptionValueContext ctx) { }
 	@Override public void exitOptionValue(GrammarParser.OptionValueContext ctx) { }
 
@@ -215,9 +215,6 @@ public class GrammarParserBaseListener implements GrammarParserListener {
 	@Override public void enterArgActionBlock(GrammarParser.ArgActionBlockContext ctx) { }
 	@Override public void exitArgActionBlock(GrammarParser.ArgActionBlockContext ctx) { }
 
-	@Override public void enterLexerAction(GrammarParser.LexerActionContext ctx) { }
-	@Override public void exitLexerAction(GrammarParser.LexerActionContext ctx) { }
-
 	@Override public void enterRuleModifiers(GrammarParser.RuleModifiersContext ctx) { }
 	@Override public void exitRuleModifiers(GrammarParser.RuleModifiersContext ctx) { }
 
@@ -226,6 +223,9 @@ public class GrammarParserBaseListener implements GrammarParserListener {
 
 	@Override public void enterEbnf(GrammarParser.EbnfContext ctx) { }
 	@Override public void exitEbnf(GrammarParser.EbnfContext ctx) { }
+
+	@Override public void enterLexerCommandExpr(GrammarParser.LexerCommandExprContext ctx) { }
+	@Override public void exitLexerCommandExpr(GrammarParser.LexerCommandExprContext ctx) { }
 
 	@Override public void enterEveryRule(ParserRuleContext<? extends Token> ctx) { }
 	@Override public void exitEveryRule(ParserRuleContext<? extends Token> ctx) { }
