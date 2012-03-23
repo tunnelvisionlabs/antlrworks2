@@ -346,6 +346,8 @@ public abstract class AbstractCompletionQuery extends AsyncCompletionQuery {
             List<MultipleDecisionData> potentialAlternatives = new ArrayList<MultipleDecisionData>();
             List<Integer> currentPath = new ArrayList<Integer>();
             Map<RuleContext<Token>, CaretReachedException> results = new IdentityHashMap<RuleContext<Token>, CaretReachedException>();
+            // make sure the token stream is initialized before getting the index
+            parser.getTokenStream().LA(1);
             int initialToken = parser.getTokenStream().index();
             while (true) {
                 parser.getTokenStream().seek(initialToken);
