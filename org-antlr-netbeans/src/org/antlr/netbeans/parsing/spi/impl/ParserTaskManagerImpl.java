@@ -48,6 +48,7 @@ import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.editor.mimelookup.MimeLookup;
 import org.netbeans.lib.editor.util.ListenerList;
+import org.openide.filesystems.FileObject;
 import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.openide.util.Parameters;
@@ -628,7 +629,9 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
             if (LOGGER.isLoggable(Level.FINE)) {
                 String threadName = Thread.currentThread().getName();
                 String messageFormat = "{0}: Updating data \"{1}\" with task \"{2}\" for {3}#{4}";
-                LOGGER.log(Level.FINE, messageFormat, new Object[] { threadName, data.getName(), task.getDefinition().getName(), document.getFileObject().getPath(), snapshot.getVersion().getVersionNumber() });
+                FileObject fileObject = document.getFileObject();
+                String path = fileObject != null ? fileObject.getPath() : "";
+                LOGGER.log(Level.FINE, messageFormat, new Object[] { threadName, data.getName(), task.getDefinition().getName(), path, snapshot.getVersion().getVersionNumber() });
             }
 
             ResultAggregator handler = new ResultAggregator(outer, context);
@@ -668,11 +671,13 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
 
             if (LOGGER.isLoggable(Level.FINE)) {
                 String messageFormat = "{0}: Updating task \"{1}\" for {2}#{3}";
+                FileObject fileObject = document.getFileObject();
+                String path = fileObject != null ? fileObject.getPath() : "";
                 Object[] args =
                     {
                         Thread.currentThread().getName(),
                         task.getDefinition().getName(),
-                        document.getFileObject().getPath(),
+                        path,
                         snapshot.getVersion().getVersionNumber()
                     };
                 LOGGER.log(Level.FINE, messageFormat, args);

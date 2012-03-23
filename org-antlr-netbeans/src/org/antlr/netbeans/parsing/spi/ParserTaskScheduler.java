@@ -30,6 +30,7 @@ import org.antlr.netbeans.parsing.spi.impl.ManualParserTaskScheduler;
 import org.antlr.netbeans.parsing.spi.impl.SelectedNodesParserTaskScheduler;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.editor.mimelookup.MimeLookup;
+import org.openide.filesystems.FileObject;
 import org.openide.util.Lookup;
 import org.openide.util.Parameters;
 
@@ -182,7 +183,9 @@ public abstract class ParserTaskScheduler {
             }
 
             if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.log(Level.FINE, "Rescheduling {0} data, document={1}, delay={2}{3}, data={4}", new Object[] { getClass().getSimpleName(), document.getFileObject().getPath(), delay, getTimeUnitDisplay(timeUnit), currentScheduledData });
+                FileObject fileObject = document.getFileObject();
+                String path = fileObject != null ? fileObject.getPath() : "";
+                LOGGER.log(Level.FINE, "Rescheduling {0} data, document={1}, delay={2}{3}, data={4}", new Object[] { getClass().getSimpleName(), path, delay, getTimeUnitDisplay(timeUnit), currentScheduledData });
             }
 
             Map<ParserDataDefinition<?>, ScheduledFuture<ParserData<?>>> futures = getTaskManager().scheduleData(context, currentScheduledData, delay, timeUnit);
@@ -236,7 +239,9 @@ public abstract class ParserTaskScheduler {
             }
 
             if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.log(Level.FINE, "Rescheduling {0} tasks, document={1}, delay={2}{3}, data={4}", new Object[] { getClass().getSimpleName(), document.getFileObject().getPath(), delay, getTimeUnitDisplay(timeUnit), currentScheduledProviders });
+                FileObject fileObject = document.getFileObject();
+                String path = fileObject != null ? fileObject.getPath() : "";
+                LOGGER.log(Level.FINE, "Rescheduling {0} tasks, document={1}, delay={2}{3}, data={4}", new Object[] { getClass().getSimpleName(), path, delay, getTimeUnitDisplay(timeUnit), currentScheduledProviders });
             }
 
             Map<ParserTaskProvider, ScheduledFuture<Collection<? extends ParserData<?>>>> futures = getTaskManager().scheduleTask(context, currentScheduledProviders, delay, timeUnit);

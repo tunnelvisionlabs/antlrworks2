@@ -228,7 +228,8 @@ public abstract class NavigatorPanelUI extends javax.swing.JPanel implements Exp
 
     public void refresh(final Description description) {
         final NavigatorNode rootNode = getRootNode();
-        if (rootNode != null && rootNode.getDescription().getFileObject().equals(description.getFileObject())) {
+        FileObject rootFileObject = rootNode != null ? rootNode.getDescription().getFileObject() : null;
+        if (rootFileObject != null && rootFileObject.equals(description.getFileObject())) {
             RP.post(new Runnable() {
                     @Override
                     public void run() {

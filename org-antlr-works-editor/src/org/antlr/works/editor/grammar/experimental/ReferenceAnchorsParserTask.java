@@ -122,12 +122,16 @@ public class ReferenceAnchorsParserTask implements ParserTask {
                 }
 
                 if (fileModelResult == null) {
-                    CodeModelBuilderListener codeModelBuilderListener = new CodeModelBuilderListener(snapshot, tokenStream);
-                    ParseTreeWalker.DEFAULT.walk(codeModelBuilderListener, parseResult);
-                    FileModelImpl fileModel = codeModelBuilderListener.getFileModel();
-                    if (fileModel != null) {
-                        updateCodeModelCache(fileModel);
+                    FileModelImpl fileModel = null;
+                    if (snapshot.getVersionedDocument().getFileObject() != null) {
+                        CodeModelBuilderListener codeModelBuilderListener = new CodeModelBuilderListener(snapshot, tokenStream);
+                        ParseTreeWalker.DEFAULT.walk(codeModelBuilderListener, parseResult);
+                        fileModel = codeModelBuilderListener.getFileModel();
+                        if (fileModel != null) {
+                            updateCodeModelCache(fileModel);
+                        }
                     }
+
                     fileModelResult = new BaseParserData<FileModel>(context, GrammarParserDataDefinitions.FILE_MODEL, snapshot, fileModel);
                 }
             }

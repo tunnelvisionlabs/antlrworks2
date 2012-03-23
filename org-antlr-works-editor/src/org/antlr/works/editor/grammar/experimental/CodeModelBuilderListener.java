@@ -77,7 +77,8 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
     private final Deque<Map<String, Collection<SnapshotPositionRegion>>> labelUses = new ArrayDeque<Map<String, Collection<SnapshotPositionRegion>>>();
 
     public CodeModelBuilderListener(DocumentSnapshot snapshot, TokenStream<? extends Token> tokens) {
-        this.project = FileOwnerQuery.getOwner(snapshot.getVersionedDocument().getFileObject());
+        FileObject fileObject = snapshot.getVersionedDocument().getFileObject();
+        this.project = fileObject != null ? FileOwnerQuery.getOwner(fileObject) : null;
         this.snapshot = snapshot;
         this.tokens = tokens;
     }
