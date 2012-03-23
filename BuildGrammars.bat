@@ -14,21 +14,21 @@ set ST4_CLASSPATH=%ANTLR_MAVEN_HOME%\ST4\%ST4_VERSION%\ST4-%ST4_VERSION%.jar;%AN
 set ANTLR3_CLASSPATH=%ANTLR_MAVEN_HOME%\antlr\%ANTLR3_VERSION%\antlr-%ANTLR3_VERSION%.jar;%ST4_CLASSPATH%
 set ANTLR4_CLASSPATH=%ANTLR_MAVEN_HOME%\antlr4\%ANTLR4_VERSION%\antlr4-%ANTLR4_VERSION%.jar;%ST4_CLASSPATH%;%ANTLR4_RUNTIME_CLASSPATH%
 
-set ANTLR3_TOOL=-cp %ANTLR3_CLASSPATH% org.antlr.Tool
-set ANTLR4_TOOL=-cp %ANTLR4_CLASSPATH% org.antlr.v4.Tool
+set ANTLR3_TOOL=-cp "%ANTLR3_CLASSPATH%" org.antlr.Tool
+set ANTLR4_TOOL=-cp "%ANTLR4_CLASSPATH%" org.antlr.v4.Tool
 
 set SOURCE_ROOT=%CD%
 
-cd %SOURCE_ROOT%\org-antlr-works-editor\src\org\antlr\works\editor\grammar\experimental
-start /B java %ANTLR4_TOOL% -visitor -Xforce-atn *.g
+set CURRENT_SOURCE=%SOURCE_ROOT%\org-antlr-works-editor\src\org\antlr\works\editor\grammar\experimental
+start /D %CURRENT_SOURCE% /B "Title" "%JAVA_HOME%\bin\java.exe" %ANTLR4_TOOL% -visitor -Xforce-atn *.g
 
-cd %SOURCE_ROOT%\org-antlr-works-editor\src\org\antlr\works\editor\grammar\highlighter4
-start /B java %ANTLR4_TOOL% *.g4
+set CURRENT_SOURCE=%SOURCE_ROOT%\org-antlr-works-editor\src\org\antlr\works\editor\grammar\highlighter4
+start /D %CURRENT_SOURCE% /B "Title" "%JAVA_HOME%\bin\java.exe" %ANTLR4_TOOL% *.g4
 
-cd %SOURCE_ROOT%\org-antlr-works-editor\src\org\antlr\works\editor\st4\experimental
-start /B java %ANTLR4_TOOL% -visitor -Xforce-atn *.g4
+set CURRENT_SOURCE=%SOURCE_ROOT%\org-antlr-works-editor\src\org\antlr\works\editor\st4\experimental
+start /D %CURRENT_SOURCE% /B "Title" "%JAVA_HOME%\bin\java.exe" %ANTLR4_TOOL% -visitor -Xforce-atn *.g4
 
-cd %SOURCE_ROOT%\org-antlr-works-editor\src\org\antlr\works\editor\st4\highlighter4
-java %ANTLR4_TOOL% *.g4
+set CURRENT_SOURCE=%SOURCE_ROOT%\org-antlr-works-editor\src\org\antlr\works\editor\st4\highlighter4
+start /D %CURRENT_SOURCE% /WAIT /B "Title" "%JAVA_HOME%\bin\java.exe" %ANTLR4_TOOL% *.g4
 
 cd %SOURCE_ROOT%
