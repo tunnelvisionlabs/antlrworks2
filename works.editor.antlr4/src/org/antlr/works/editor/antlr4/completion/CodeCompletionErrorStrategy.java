@@ -102,9 +102,9 @@ public class CodeCompletionErrorStrategy<Symbol extends Token> extends DefaultEr
             int stateNumber = recognizer.getContext().s;
             ATNState state = interp.atn.states.get(stateNumber);
 
-            PredictionContext context = PredictionContext.fromRuleContext(recognizer.getContext());
-            ATNConfigSet intermediate = new ATNConfigSet(true);
-            ATNConfigSet closure = new ATNConfigSet(true);
+            PredictionContext context = PredictionContext.fromRuleContext(recognizer.getContext(), false);
+            ATNConfigSet intermediate = new ATNConfigSet();
+            ATNConfigSet closure = new ATNConfigSet();
             for (int i = 0; i < state.getNumberOfTransitions(); i++) {
                 Transition transition = state.transition(i);
                 if (transition.isEpsilon()) {
@@ -115,11 +115,10 @@ public class CodeCompletionErrorStrategy<Symbol extends Token> extends DefaultEr
             }
 
             final boolean collectPredicates = false;
-            final boolean contextSensitiveDfa = false;
             final boolean greedy = true;
             final boolean loopsSimulateTailRecursion = false;
             final boolean hasMoreContext = true;
-            interp.closure(intermediate, closure, collectPredicates, contextSensitiveDfa, greedy, loopsSimulateTailRecursion, hasMoreContext, PredictionContextCache.UNCACHED_LOCAL);
+            interp.closure(intermediate, closure, collectPredicates, greedy, loopsSimulateTailRecursion, hasMoreContext, PredictionContextCache.UNCACHED);
 
             if (!state.onlyHasEpsilonTransitions()) {
                 for (int i = 0; i < state.getNumberOfTransitions(); i++) {
@@ -137,7 +136,7 @@ public class CodeCompletionErrorStrategy<Symbol extends Token> extends DefaultEr
                 int n = c.state.getNumberOfTransitions();
                 for (int ti = 0; ti < n; ti++) {               // for each transition
                     Transition trans = c.state.transition(ti);
-                    ATNState target = interp.getReachableTarget(trans, CaretToken.CARET_TOKEN_TYPE);
+                    ATNState target = interp.getReachableTarget(c, trans, CaretToken.CARET_TOKEN_TYPE);
                     if (target != null) {
                         if (transitions == null) {
                             transitions = new LinkedHashMap<ATNConfig, List<Transition>>();

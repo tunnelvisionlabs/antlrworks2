@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Map;
 import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.SymbolStream;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.atn.ATN;
@@ -26,7 +25,6 @@ import org.antlr.v4.runtime.atn.ATNState;
 import org.antlr.v4.runtime.atn.AtomTransition;
 import org.antlr.v4.runtime.atn.NotSetTransition;
 import org.antlr.v4.runtime.atn.ParserATNSimulator;
-import org.antlr.v4.runtime.atn.PredictionContext;
 import org.antlr.v4.runtime.atn.PredictionContextCache;
 import org.antlr.v4.runtime.atn.RangeTransition;
 import org.antlr.v4.runtime.atn.SetTransition;
@@ -34,7 +32,6 @@ import org.antlr.v4.runtime.atn.SimulatorState;
 import org.antlr.v4.runtime.atn.Transition;
 import org.antlr.v4.runtime.atn.WildcardTransition;
 import org.antlr.v4.runtime.dfa.DFA;
-import org.antlr.v4.runtime.dfa.DFAState;
 import org.antlr.v4.runtime.misc.IntervalSet;
 import org.netbeans.api.annotations.common.NonNull;
 import org.openide.util.Parameters;
@@ -112,105 +109,26 @@ public abstract class AbstractCompletionParserATNSimulator extends ParserATNSimu
     }
 
     @Override
-    public boolean closure(ATNConfigSet sourceConfigs, ATNConfigSet configs, boolean collectPredicates, boolean contextSensitiveDfa, boolean greedy, boolean loopsSimulateTailRecursion, boolean hasMoreContext, PredictionContextCache contextCache) {
-        return super.closure(sourceConfigs, configs, collectPredicates, contextSensitiveDfa, greedy, loopsSimulateTailRecursion, hasMoreContext, contextCache);
+    protected void closure(ATNConfigSet sourceConfigs, ATNConfigSet configs, boolean collectPredicates, boolean greedy, boolean loopsSimulateTailRecursion, boolean hasMoreContext, PredictionContextCache contextCache) {
+        super.closure(sourceConfigs, configs, collectPredicates, greedy, loopsSimulateTailRecursion, hasMoreContext, contextCache);
     }
 
     @Override
     protected SimulatorState<Token> computeReachSet(DFA dfa, SimulatorState<Token> previous, int t, boolean greedy, PredictionContextCache contextCache) {
-        final boolean useContext = previous.useContext;
-        RuleContext<Token> remainingGlobalContext = previous.remainingOuterContext;
-        List<ATNConfig> closureConfigs = new ArrayList<ATNConfig>(previous.s0.configset);
-        List<Integer> contextElements = null;
-        ATNConfigSet reach = new ATNConfigSet(!useContext);
-        boolean stepIntoGlobal;
-        do {
-            boolean hasMoreContext = !useContext || remainingGlobalContext != null;
-            ATNConfigSet reachIntermediate = new ATNConfigSet(!useContext);
-            int ncl = closureConfigs.size();
-            for (int ci=0; ci<ncl; ci++) { // TODO: foreach
-                ATNConfig c = closureConfigs.get(ci);
-                if ( debug ) System.out.println("testing "+getTokenName(t)+" at "+c.toString());
-
-// BEGIN CC
-                List<Transition> configTransitions = null;
-// END CC
-
-                int n = c.state.getNumberOfTransitions();
-                for (int ti=0; ti<n; ti++) {               // for each transition
-                    Transition trans = c.state.transition(ti);
-                    ATNState target = getReachableTarget(trans, t);
-                    if ( target!=null ) {
-// BEGIN CC
-                        if (t == CaretToken.CARET_TOKEN_TYPE) {
-                            if (caretTransitions == null) {
-                                caretTransitions = new LinkedHashMap<ATNConfig, List<Transition>>();
-                            }
-
-                            if (configTransitions == null) {
-                                configTransitions = new ArrayList<Transition>();
-                                caretTransitions.put(c, configTransitions);
-                            }
-
-                            configTransitions.add(trans);
-                        }
-// END CC
-
-                        reachIntermediate.add(new ATNConfig(c, target));
-                    }
-                }
-            }
-
-            final boolean collectPredicates = false;
-            stepIntoGlobal = closure(reachIntermediate, reach, collectPredicates, dfa.isContextSensitive(), greedy, contextCache.isContextSensitive(), hasMoreContext, contextCache);
-
-            if (previous.useContext && stepIntoGlobal) {
-                reach.clear();
-
-                int nextContextElement = remainingGlobalContext.isEmpty() ? PredictionContext.EMPTY_STATE_KEY : remainingGlobalContext.invokingState;
-                if (contextElements == null) {
-                    contextElements = new ArrayList<Integer>();
-                }
-
-                if (remainingGlobalContext.isEmpty()) {
-                    remainingGlobalContext = null;
-                } else {
-                    remainingGlobalContext = remainingGlobalContext.parent;
-                }
-
-                contextElements.add(nextContextElement);
-                if (nextContextElement != PredictionContext.EMPTY_STATE_KEY) {
-                    for (int i = 0; i < closureConfigs.size(); i++) {
-                        closureConfigs.set(i, closureConfigs.get(i).appendContext(nextContextElement, contextCache));
-                    }
-                }
-            }
-        } while (useContext && stepIntoGlobal);
-
-        if (reach.isEmpty()) {
-            return null;
-        }
-
-        DFAState dfaState = null;
-        if (previous.s0 != null) {
-            dfaState = addDFAEdge(dfa, previous.s0.configset, t, contextElements, reach, contextCache);
-        }
-
-// BEGIN CC
-        _nextState = new SimulatorState<Token>(previous.outerContext, dfaState, useContext, (ParserRuleContext<Token>)remainingGlobalContext);
+        _nextState = super.computeReachSet(dfa, previous, t, greedy, contextCache);
         return _nextState;
-// END CC
     }
 
     protected abstract IntervalSet getWordlikeTokenTypes();
 
     @Override
-    public ATNState getReachableTarget(Transition trans, int ttype) {
+    public ATNState getReachableTarget(ATNConfig source, Transition trans, int ttype) {
         if (ttype == CaretToken.CARET_TOKEN_TYPE) {
+            ATNState target = null;
             if (trans instanceof AtomTransition) {
                 AtomTransition at = (AtomTransition)trans;
                 if (getWordlikeTokenTypes().contains(at.label)) {
-                    return at.target;
+                    target = at.target;
                 }
             } else if (trans instanceof SetTransition) {
                 SetTransition st = (SetTransition)trans;
@@ -218,7 +136,8 @@ public abstract class AbstractCompletionParserATNSimulator extends ParserATNSimu
                 // TODO: this could probably be done with an intersects method?
                 for (int t : getWordlikeTokenTypes().toArray()) {
                     if (!not && st.set.contains(t) || not && !st.set.contains(t)) {
-                        return st.target;
+                        target = st.target;
+                        break;
                     }
                 }
             } else if (trans instanceof RangeTransition) {
@@ -228,15 +147,26 @@ public abstract class AbstractCompletionParserATNSimulator extends ParserATNSimu
                 int lb = Arrays.binarySearch(wordlikeTokenTypes, rt.from);
                 int ub = Arrays.binarySearch(wordlikeTokenTypes, rt.to);
                 if (lb >= 0 || ub >= 0 || lb != ub) {
-                    return rt.target;
+                    target = rt.target;
                 }
             } else if (trans instanceof WildcardTransition) {
-                return trans.target;
+                target = trans.target;
             }
 
-            return null;
+            if (caretTransitions == null) {
+                caretTransitions = new LinkedHashMap<ATNConfig, List<Transition>>();
+            }
+
+            List<Transition> configTransitions = caretTransitions.get(source);
+            if (configTransitions == null) {
+                configTransitions = new ArrayList<Transition>();
+                caretTransitions.put(source, configTransitions);
+            }
+
+            configTransitions.add(trans);
+            return target;
         }
 
-        return super.getReachableTarget(trans, ttype);
+        return super.getReachableTarget(source, trans, ttype);
     }
 }
