@@ -23,9 +23,9 @@ public interface VersionedDocument {
 
     public @CheckForNull Document getDocument();
 
-    public @NonNull FileObject getFileObject();
+    public @CheckForNull FileObject getFileObject();
 
-    public @NonNull String getMimeType();
+    public @CheckForNull String getMimeType();
 
     public @CheckForNull Object getProperty(Object key);
 
