@@ -12,7 +12,6 @@ import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.Map;
 import org.antlr.v4.runtime.CharStream;
-import org.antlr.v4.runtime.CommonTokenFactory;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenFactory;
 import org.antlr.works.editor.antlr4.highlighting.TokenSourceWithStateV4;

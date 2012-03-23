@@ -8,7 +8,6 @@
  */
 package org.antlr.works.editor.grammar.codemodel.impl;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;

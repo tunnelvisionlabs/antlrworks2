@@ -8,41 +8,27 @@
  */
 package org.antlr.works.editor.grammar.debugger;
 
-import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.naming.BinaryRefAddr;
 import javax.swing.Action;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.EditorKit;
-import javax.swing.text.StyledDocument;
 import javax.swing.text.TextAction;
 import javax.xml.bind.DatatypeConverter;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.atn.LexerATNSimulator;
-import org.antlr.works.editor.antlr4.highlighting.DocumentCharStreamV4;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.netbeans.editor.BaseDocument;
 import org.netbeans.modules.editor.NbEditorKit;
-import org.openide.util.Exceptions;
 import org.openide.util.Parameters;
-import sun.beans.editors.IntegerEditor;
 
 /**
  *

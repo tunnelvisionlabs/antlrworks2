@@ -10,9 +10,7 @@ package org.antlr.works.editor.grammar.syndiag;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.font.TextAttribute;
-import java.text.AttributedCharacterIterator;
 import java.text.AttributedString;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.StyleConstants;

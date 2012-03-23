@@ -9,7 +9,6 @@
 package org.antlr.works.editor.grammar.codemodel.impl;
 
 import java.util.Collection;
-import java.util.Collections;
 
 /**
  *
