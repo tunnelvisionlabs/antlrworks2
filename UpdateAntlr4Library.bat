@@ -28,5 +28,8 @@ set ANTLR3_TOOL_WRAPPER_DIR=org-antlr\release\modules\ext
 set ANTLR4_RUNTIME_WRAPPER_DIR=org-antlr-v4-runtime\release\modules\ext
 set ANTLR4_TOOL_WRAPPER_DIR=org-antlr-v4\release\modules\ext
 
+mkdir %ANTLR4_RUNTIME_WRAPPER_DIR%
 copy %ANTLR4_RUNTIME_JAR% %ANTLR4_RUNTIME_WRAPPER_DIR%\antlr4_runtime.jar
+
+mkdir %ANTLR4_TOOL_WRAPPER_DIR%
 copy %ANTLR4_TOOL_JAR% %ANTLR4_TOOL_WRAPPER_DIR%\antlr4.jar
