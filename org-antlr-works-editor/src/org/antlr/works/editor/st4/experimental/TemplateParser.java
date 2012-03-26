@@ -140,6 +140,7 @@ public class TemplateParser extends Parser<Token> {
 		public GroupContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_group; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterGroup(this);
@@ -217,9 +218,9 @@ public class TemplateParser extends Parser<Token> {
 				_alt = getInterpreter().adaptivePredict(_input,3,_ctx);
 			} while ( _alt!=2 && _alt!=-1 );
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -237,6 +238,7 @@ public class TemplateParser extends Parser<Token> {
 		public OldStyleHeaderContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_oldStyleHeader; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterOldStyleHeader(this);
@@ -300,9 +302,9 @@ public class TemplateParser extends Parser<Token> {
 			}
 			setState(136); match(SEMI);
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -320,6 +322,7 @@ public class TemplateParser extends Parser<Token> {
 		public GroupNameContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_groupName; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterGroupName(this);
@@ -361,9 +364,9 @@ public class TemplateParser extends Parser<Token> {
 				_alt = getInterpreter().adaptivePredict(_input,7,_ctx);
 			}
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -379,6 +382,7 @@ public class TemplateParser extends Parser<Token> {
 		public DelimitersContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_delimiters; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterDelimiters(this);
@@ -406,9 +410,9 @@ public class TemplateParser extends Parser<Token> {
 			setState(153); match(COMMA);
 			setState(155); match(DelimitersCloseSpec_DELIMITER_STRING);
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -428,6 +432,7 @@ public class TemplateParser extends Parser<Token> {
 		public DefContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_def; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterDef(this);
@@ -465,9 +470,9 @@ public class TemplateParser extends Parser<Token> {
 					}
 					break;
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -501,6 +506,7 @@ public class TemplateParser extends Parser<Token> {
 		public TemplateDefContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_templateDef; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterTemplateDef(this);
@@ -584,9 +590,9 @@ public class TemplateParser extends Parser<Token> {
 					}
 					break;
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -606,6 +612,7 @@ public class TemplateParser extends Parser<Token> {
 		public FormalArgsContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_formalArgs; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterFormalArgs(this);
@@ -659,9 +666,9 @@ public class TemplateParser extends Parser<Token> {
 					}
 					break;
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -685,6 +692,7 @@ public class TemplateParser extends Parser<Token> {
 		public FormalArgContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_formalArg; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterFormalArg(this);
@@ -745,9 +753,9 @@ public class TemplateParser extends Parser<Token> {
 					break;
 			}
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -766,6 +774,7 @@ public class TemplateParser extends Parser<Token> {
 		public DictDefContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_dictDef; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterDictDef(this);
@@ -792,9 +801,9 @@ public class TemplateParser extends Parser<Token> {
 			setState(236); match(DEFINED);
 			setState(238); dict();
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -811,6 +820,7 @@ public class TemplateParser extends Parser<Token> {
 		public DictContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_dict; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterDict(this);
@@ -837,9 +847,9 @@ public class TemplateParser extends Parser<Token> {
 			setState(242); dictPairs();
 			setState(244); match(RBRACK);
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -862,6 +872,7 @@ public class TemplateParser extends Parser<Token> {
 		public DictPairsContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_dictPairs; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterDictPairs(this);
@@ -926,9 +937,9 @@ public class TemplateParser extends Parser<Token> {
 					}
 					break;
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -945,6 +956,7 @@ public class TemplateParser extends Parser<Token> {
 		public DefaultValuePairContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_defaultValuePair; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterDefaultValuePair(this);
@@ -971,9 +983,9 @@ public class TemplateParser extends Parser<Token> {
 			setState(269); match(COLON);
 			setState(271); keyValue();
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -993,6 +1005,7 @@ public class TemplateParser extends Parser<Token> {
 		public KeyValuePairContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_keyValuePair; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterKeyValuePair(this);
@@ -1019,9 +1032,9 @@ public class TemplateParser extends Parser<Token> {
 			setState(275); match(COLON);
 			setState(277); keyValue();
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -1050,6 +1063,7 @@ public class TemplateParser extends Parser<Token> {
 		public KeyValueContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_keyValue; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterKeyValue(this);
@@ -1122,9 +1136,9 @@ public class TemplateParser extends Parser<Token> {
 					}
 					break;
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -1141,6 +1155,7 @@ public class TemplateParser extends Parser<Token> {
 		public StringContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_string; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterString(this);
@@ -1165,9 +1180,9 @@ public class TemplateParser extends Parser<Token> {
 			{
 			setState(295); stringTemplate();
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -1188,6 +1203,7 @@ public class TemplateParser extends Parser<Token> {
 		public StringTemplateContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_stringTemplate; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterStringTemplate(this);
@@ -1214,9 +1230,9 @@ public class TemplateParser extends Parser<Token> {
 			setState(299); templateBody();
 			setState(301); match(QUOTE);
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -1235,6 +1251,7 @@ public class TemplateParser extends Parser<Token> {
 		public BigstringTemplateContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_bigstringTemplate; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterBigstringTemplate(this);
@@ -1261,9 +1278,9 @@ public class TemplateParser extends Parser<Token> {
 			setState(305); templateBody();
 			setState(307); match(BigStringTemplate_END);
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -1282,6 +1299,7 @@ public class TemplateParser extends Parser<Token> {
 		public BigstringTemplateNoNewlineContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_bigstringTemplateNoNewline; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterBigstringTemplateNoNewline(this);
@@ -1308,9 +1326,9 @@ public class TemplateParser extends Parser<Token> {
 			setState(311); templateBody();
 			setState(313); match(BigStringLineTemplate_END);
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -1332,6 +1350,7 @@ public class TemplateParser extends Parser<Token> {
 		public AnonymousTemplateContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_anonymousTemplate; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterAnonymousTemplate(this);
@@ -1367,9 +1386,9 @@ public class TemplateParser extends Parser<Token> {
 			setState(321); templateBody();
 			setState(323); match(RBRACE);
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -1391,6 +1410,7 @@ public class TemplateParser extends Parser<Token> {
 		public AnonymousTemplateParametersContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_anonymousTemplateParameters; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterAnonymousTemplateParameters(this);
@@ -1435,9 +1455,9 @@ public class TemplateParser extends Parser<Token> {
 			}
 			setState(336); match(PIPE);
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -1466,6 +1486,7 @@ public class TemplateParser extends Parser<Token> {
 		public TemplateBodyContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_templateBody; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterTemplateBody(this);
@@ -1547,9 +1568,9 @@ public class TemplateParser extends Parser<Token> {
 				_alt = getInterpreter().adaptivePredict(_input,23,_ctx);
 			}
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -1566,6 +1587,7 @@ public class TemplateParser extends Parser<Token> {
 		public EscapeContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_escape; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterEscape(this);
@@ -1592,9 +1614,9 @@ public class TemplateParser extends Parser<Token> {
 			setState(359); match(ESCAPE);
 			setState(361); match(CLOSE_DELIMITER);
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -1617,6 +1639,7 @@ public class TemplateParser extends Parser<Token> {
 		public ExprTagContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_exprTag; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterExprTag(this);
@@ -1653,9 +1676,9 @@ public class TemplateParser extends Parser<Token> {
 			}
 			setState(373); match(CLOSE_DELIMITER);
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -1682,6 +1705,7 @@ public class TemplateParser extends Parser<Token> {
 		public RegionContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_region; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterRegion(this);
@@ -1712,9 +1736,9 @@ public class TemplateParser extends Parser<Token> {
 			setState(385); match(REGION_END);
 			setState(387); match(CLOSE_DELIMITER);
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -1731,6 +1755,7 @@ public class TemplateParser extends Parser<Token> {
 		public SubtemplateContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_subtemplate; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterSubtemplate(this);
@@ -1755,9 +1780,9 @@ public class TemplateParser extends Parser<Token> {
 			{
 			setState(389); anonymousTemplate();
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -1803,6 +1828,7 @@ public class TemplateParser extends Parser<Token> {
 		public IfstatContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_ifstat; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterIfstat(this);
@@ -1870,9 +1896,9 @@ public class TemplateParser extends Parser<Token> {
 			setState(436); match(ENDIF);
 			setState(438); match(CLOSE_DELIMITER);
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -1893,6 +1919,7 @@ public class TemplateParser extends Parser<Token> {
 		public ConditionalContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_conditional; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterConditional(this);
@@ -1934,9 +1961,9 @@ public class TemplateParser extends Parser<Token> {
 				_alt = getInterpreter().adaptivePredict(_input,27,_ctx);
 			}
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -1957,6 +1984,7 @@ public class TemplateParser extends Parser<Token> {
 		public AndConditionalContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_andConditional; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterAndConditional(this);
@@ -1998,9 +2026,9 @@ public class TemplateParser extends Parser<Token> {
 				_alt = getInterpreter().adaptivePredict(_input,28,_ctx);
 			}
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -2021,6 +2049,7 @@ public class TemplateParser extends Parser<Token> {
 		public NotConditionalContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_notConditional; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterNotConditional(this);
@@ -2059,9 +2088,9 @@ public class TemplateParser extends Parser<Token> {
 					}
 					break;
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -2082,6 +2111,7 @@ public class TemplateParser extends Parser<Token> {
 		public ExprOptionsContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_exprOptions; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterExprOptions(this);
@@ -2123,9 +2153,9 @@ public class TemplateParser extends Parser<Token> {
 				_alt = getInterpreter().adaptivePredict(_input,30,_ctx);
 			}
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -2146,6 +2176,7 @@ public class TemplateParser extends Parser<Token> {
 		public OptionContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_option; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterOption(this);
@@ -2180,9 +2211,9 @@ public class TemplateParser extends Parser<Token> {
 					break;
 			}
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -2203,6 +2234,7 @@ public class TemplateParser extends Parser<Token> {
 		public ExprNoCommaContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_exprNoComma; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterExprNoComma(this);
@@ -2237,9 +2269,9 @@ public class TemplateParser extends Parser<Token> {
 					break;
 			}
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -2256,6 +2288,7 @@ public class TemplateParser extends Parser<Token> {
 		public ExprContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_expr; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterExpr(this);
@@ -2280,9 +2313,9 @@ public class TemplateParser extends Parser<Token> {
 			{
 			setState(497); mapExpr();
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -2316,6 +2349,7 @@ public class TemplateParser extends Parser<Token> {
 		public MapExprContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_mapExpr; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterMapExpr(this);
@@ -2403,9 +2437,9 @@ public class TemplateParser extends Parser<Token> {
 				_alt = getInterpreter().adaptivePredict(_input,36,_ctx);
 			}
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -2440,6 +2474,7 @@ public class TemplateParser extends Parser<Token> {
 		public MapTemplateRefContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_mapTemplateRef; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterMapTemplateRef(this);
@@ -2500,9 +2535,9 @@ public class TemplateParser extends Parser<Token> {
 					}
 					break;
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -2529,6 +2564,7 @@ public class TemplateParser extends Parser<Token> {
 		public MemberExprContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_memberExpr; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterMemberExpr(this);
@@ -2585,9 +2621,9 @@ public class TemplateParser extends Parser<Token> {
 				_alt = getInterpreter().adaptivePredict(_input,40,_ctx);
 			}
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -2616,6 +2652,7 @@ public class TemplateParser extends Parser<Token> {
 		public IncludeExprContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_includeExpr; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterIncludeExpr(this);
@@ -2689,9 +2726,9 @@ public class TemplateParser extends Parser<Token> {
 					}
 					break;
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -2732,6 +2769,7 @@ public class TemplateParser extends Parser<Token> {
 		public PrimaryContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_primary; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterPrimary(this);
@@ -2834,9 +2872,9 @@ public class TemplateParser extends Parser<Token> {
 					}
 					break;
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -2864,6 +2902,7 @@ public class TemplateParser extends Parser<Token> {
 		public ArgumentsContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_arguments; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterArguments(this);
@@ -2941,9 +2980,9 @@ public class TemplateParser extends Parser<Token> {
 					}
 					break;
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -2964,6 +3003,7 @@ public class TemplateParser extends Parser<Token> {
 		public ArgExprListContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_argExprList; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterArgExprList(this);
@@ -3005,9 +3045,9 @@ public class TemplateParser extends Parser<Token> {
 				_alt = getInterpreter().adaptivePredict(_input,48,_ctx);
 			}
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -3024,6 +3064,7 @@ public class TemplateParser extends Parser<Token> {
 		public ArgContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_arg; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterArg(this);
@@ -3048,9 +3089,9 @@ public class TemplateParser extends Parser<Token> {
 			{
 			setState(692); exprNoComma();
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -3071,6 +3112,7 @@ public class TemplateParser extends Parser<Token> {
 		public NamedArgContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_namedArg; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterNamedArg(this);
@@ -3097,9 +3139,9 @@ public class TemplateParser extends Parser<Token> {
 			setState(696); match(EQUALS);
 			setState(698); _localctx.value = arg();
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -3122,6 +3164,7 @@ public class TemplateParser extends Parser<Token> {
 		public ListContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_list; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterList(this);
@@ -3179,9 +3222,9 @@ public class TemplateParser extends Parser<Token> {
 					}
 					break;
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -3198,6 +3241,7 @@ public class TemplateParser extends Parser<Token> {
 		public ListElementContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_listElement; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof TemplateParserListener ) ((TemplateParserListener)listener).enterListElement(this);
@@ -3230,9 +3274,9 @@ public class TemplateParser extends Parser<Token> {
 					break;
 			}
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}

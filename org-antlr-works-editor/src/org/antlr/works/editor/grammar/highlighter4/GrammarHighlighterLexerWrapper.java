@@ -47,7 +47,7 @@ public class GrammarHighlighterLexerWrapper implements TokenSourceWithStateV4<To
     }
 
     @Override
-    public GrammarHighlighterLexerState getState() {
+    public GrammarHighlighterLexerState getCurrentState() {
         if (grammarLexer._modeStack == null) {
             return getCachedState(grammarLexer.isInOptions(), grammarLexer.isInTokens(), grammarLexer._mode, null);
         }

@@ -18,5 +18,5 @@ import org.antlr.v4.runtime.TokenSource;
 public interface TokenSourceWithStateV4<Symbol, T> extends TokenSource<Symbol> {
     public CharStream getCharStream();
 
-    public T getState();
+    public T getCurrentState();
 }

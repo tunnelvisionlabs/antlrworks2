@@ -139,6 +139,7 @@ public class GrammarParser extends Parser<Token> {
 		public GrammarSpecContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_grammarSpec; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterGrammarSpec(this);
@@ -207,9 +208,9 @@ public class GrammarParser extends Parser<Token> {
 			}
 			setState(168); match(EOF);
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -229,6 +230,7 @@ public class GrammarParser extends Parser<Token> {
 		public GrammarTypeContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_grammarType; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterGrammarType(this);
@@ -275,9 +277,9 @@ public class GrammarParser extends Parser<Token> {
 					break;
 			}
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -303,6 +305,7 @@ public class GrammarParser extends Parser<Token> {
 		public PrequelConstructContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_prequelConstruct; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterPrequelConstruct(this);
@@ -354,9 +357,9 @@ public class GrammarParser extends Parser<Token> {
 					}
 					break;
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -376,6 +379,7 @@ public class GrammarParser extends Parser<Token> {
 		public OptionsSpecContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_optionsSpec; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterOptionsSpec(this);
@@ -418,9 +422,9 @@ public class GrammarParser extends Parser<Token> {
 			}
 			setState(203); match(RBRACE);
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -441,6 +445,7 @@ public class GrammarParser extends Parser<Token> {
 		public OptionContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_option; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterOption(this);
@@ -467,9 +472,9 @@ public class GrammarParser extends Parser<Token> {
 			setState(207); match(ASSIGN);
 			setState(209); optionValue();
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -489,6 +494,7 @@ public class GrammarParser extends Parser<Token> {
 		public OptionValueContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_optionValue; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterOptionValue(this);
@@ -540,9 +546,9 @@ public class GrammarParser extends Parser<Token> {
 					}
 					break;
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -565,6 +571,7 @@ public class GrammarParser extends Parser<Token> {
 		public DelegateGrammarsContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_delegateGrammars; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterDelegateGrammars(this);
@@ -608,9 +615,9 @@ public class GrammarParser extends Parser<Token> {
 			}
 			setState(234); match(SEMI);
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -631,6 +638,7 @@ public class GrammarParser extends Parser<Token> {
 		public DelegateGrammarContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_delegateGrammar; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterDelegateGrammar(this);
@@ -670,9 +678,9 @@ public class GrammarParser extends Parser<Token> {
 					}
 					break;
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -691,6 +699,7 @@ public class GrammarParser extends Parser<Token> {
 		public TokensSpecContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_tokensSpec; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterTokensSpec(this);
@@ -736,9 +745,9 @@ public class GrammarParser extends Parser<Token> {
 			} while ( _alt!=2 && _alt!=-1 );
 			setState(254); match(RBRACE);
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -759,6 +768,7 @@ public class GrammarParser extends Parser<Token> {
 		public TokenSpecContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_tokenSpec; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterTokenSpec(this);
@@ -812,9 +822,9 @@ public class GrammarParser extends Parser<Token> {
 					}
 					break;
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -859,6 +869,7 @@ public class GrammarParser extends Parser<Token> {
 		public ActionBlockContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_actionBlock; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterActionBlock(this);
@@ -1038,9 +1049,9 @@ public class GrammarParser extends Parser<Token> {
 			}
 			setState(325); match(END_ACTION);
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -1066,6 +1077,7 @@ public class GrammarParser extends Parser<Token> {
 		public ActionExpressionContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_actionExpression; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterActionExpression(this);
@@ -1123,9 +1135,9 @@ public class GrammarParser extends Parser<Token> {
 			}
 			setState(345); _localctx.member = match(ACTION_WORD);
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -1159,6 +1171,7 @@ public class GrammarParser extends Parser<Token> {
 		public ActionScopeExpressionContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_actionScopeExpression; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterActionScopeExpression(this);
@@ -1296,9 +1309,9 @@ public class GrammarParser extends Parser<Token> {
 			}
 			setState(405); _localctx.member = match(ACTION_WORD);
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -1326,6 +1339,7 @@ public class GrammarParser extends Parser<Token> {
 		public ArgActionBlockContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_argActionBlock; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterArgActionBlock(this);
@@ -1374,9 +1388,9 @@ public class GrammarParser extends Parser<Token> {
 			}
 			setState(416); match(END_ARG_ACTION);
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -1407,6 +1421,7 @@ public class GrammarParser extends Parser<Token> {
 		public ArgActionParametersContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_argActionParameters; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterArgActionParameters(this);
@@ -1520,9 +1535,9 @@ public class GrammarParser extends Parser<Token> {
 			}
 			setState(461); match(END_ARG_ACTION);
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -1545,6 +1560,7 @@ public class GrammarParser extends Parser<Token> {
 		public ArgActionParameterContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_argActionParameter; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterArgActionParameter(this);
@@ -1594,9 +1610,9 @@ public class GrammarParser extends Parser<Token> {
 			}
 			setState(474); _localctx.name = match(ARG_ACTION_WORD);
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -1619,6 +1635,7 @@ public class GrammarParser extends Parser<Token> {
 		public ArgActionParameterTypeContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_argActionParameterType; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterArgActionParameterType(this);
@@ -1674,9 +1691,9 @@ public class GrammarParser extends Parser<Token> {
 				_alt = getInterpreter().adaptivePredict(_input,34,_ctx);
 			}
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -1698,6 +1715,7 @@ public class GrammarParser extends Parser<Token> {
 		public ArgActionParameterTypePartContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_argActionParameterTypePart; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterArgActionParameterTypePart(this);
@@ -1762,9 +1780,9 @@ public class GrammarParser extends Parser<Token> {
 					}
 					break;
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -1783,6 +1801,7 @@ public class GrammarParser extends Parser<Token> {
 		public IgnoredContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_ignored; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterIgnored(this);
@@ -1841,9 +1860,9 @@ public class GrammarParser extends Parser<Token> {
 					}
 					break;
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -1868,6 +1887,7 @@ public class GrammarParser extends Parser<Token> {
 		public ActionContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_action; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterAction(this);
@@ -1904,9 +1924,9 @@ public class GrammarParser extends Parser<Token> {
 			setState(532); id();
 			setState(534); actionBlock();
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -1925,6 +1945,7 @@ public class GrammarParser extends Parser<Token> {
 		public ActionScopeNameContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_actionScopeName; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterActionScopeName(this);
@@ -1969,9 +1990,9 @@ public class GrammarParser extends Parser<Token> {
 					}
 					break;
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -1993,6 +2014,7 @@ public class GrammarParser extends Parser<Token> {
 		public ModeSpecContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_modeSpec; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterModeSpec(this);
@@ -2039,9 +2061,9 @@ public class GrammarParser extends Parser<Token> {
 				_alt = getInterpreter().adaptivePredict(_input,41,_ctx);
 			} while ( _alt!=2 && _alt!=-1 );
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -2058,6 +2080,7 @@ public class GrammarParser extends Parser<Token> {
 		public RulesContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_rules; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRules(this);
@@ -2097,9 +2120,9 @@ public class GrammarParser extends Parser<Token> {
 				_alt = getInterpreter().adaptivePredict(_input,42,_ctx);
 			}
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -2119,6 +2142,7 @@ public class GrammarParser extends Parser<Token> {
 		public RuleSpecContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_ruleSpec; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRuleSpec(this);
@@ -2156,9 +2180,9 @@ public class GrammarParser extends Parser<Token> {
 					}
 					break;
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -2201,6 +2225,7 @@ public class GrammarParser extends Parser<Token> {
 		public ParserRuleSpecContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_parserRuleSpec; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterParserRuleSpec(this);
@@ -2284,9 +2309,9 @@ public class GrammarParser extends Parser<Token> {
 			setState(601); match(SEMI);
 			setState(603); exceptionGroup();
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -2306,6 +2331,7 @@ public class GrammarParser extends Parser<Token> {
 		public ExceptionGroupContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_exceptionGroup; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterExceptionGroup(this);
@@ -2354,9 +2380,9 @@ public class GrammarParser extends Parser<Token> {
 					break;
 			}
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -2377,6 +2403,7 @@ public class GrammarParser extends Parser<Token> {
 		public ExceptionHandlerContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_exceptionHandler; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterExceptionHandler(this);
@@ -2403,9 +2430,9 @@ public class GrammarParser extends Parser<Token> {
 			setState(618); argActionBlock();
 			setState(620); actionBlock();
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -2423,6 +2450,7 @@ public class GrammarParser extends Parser<Token> {
 		public FinallyClauseContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_finallyClause; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterFinallyClause(this);
@@ -2448,9 +2476,9 @@ public class GrammarParser extends Parser<Token> {
 			setState(622); match(FINALLY);
 			setState(624); actionBlock();
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -2467,6 +2495,7 @@ public class GrammarParser extends Parser<Token> {
 		public RulePrequelsContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_rulePrequels; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRulePrequels(this);
@@ -2506,9 +2535,9 @@ public class GrammarParser extends Parser<Token> {
 				_alt = getInterpreter().adaptivePredict(_input,52,_ctx);
 			}
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -2528,6 +2557,7 @@ public class GrammarParser extends Parser<Token> {
 		public RulePrequelContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_rulePrequel; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRulePrequel(this);
@@ -2565,9 +2595,9 @@ public class GrammarParser extends Parser<Token> {
 					}
 					break;
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -2585,6 +2615,7 @@ public class GrammarParser extends Parser<Token> {
 		public RuleReturnsContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_ruleReturns; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRuleReturns(this);
@@ -2610,9 +2641,9 @@ public class GrammarParser extends Parser<Token> {
 			setState(639); match(RETURNS);
 			setState(641); argActionParameters();
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -2634,6 +2665,7 @@ public class GrammarParser extends Parser<Token> {
 		public ThrowsSpecContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_throwsSpec; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterThrowsSpec(this);
@@ -2676,9 +2708,9 @@ public class GrammarParser extends Parser<Token> {
 				_alt = getInterpreter().adaptivePredict(_input,54,_ctx);
 			}
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -2696,6 +2728,7 @@ public class GrammarParser extends Parser<Token> {
 		public LocalsSpecContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_localsSpec; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterLocalsSpec(this);
@@ -2721,9 +2754,9 @@ public class GrammarParser extends Parser<Token> {
 			setState(656); match(LOCALS);
 			setState(658); argActionParameters();
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -2744,6 +2777,7 @@ public class GrammarParser extends Parser<Token> {
 		public RuleActionContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_ruleAction; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRuleAction(this);
@@ -2770,9 +2804,9 @@ public class GrammarParser extends Parser<Token> {
 			setState(662); id();
 			setState(664); actionBlock();
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -2789,6 +2823,7 @@ public class GrammarParser extends Parser<Token> {
 		public RuleModifiersContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_ruleModifiers; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRuleModifiers(this);
@@ -2832,9 +2867,9 @@ public class GrammarParser extends Parser<Token> {
 				_alt = getInterpreter().adaptivePredict(_input,55,_ctx);
 			} while ( _alt!=2 && _alt!=-1 );
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -2852,6 +2887,7 @@ public class GrammarParser extends Parser<Token> {
 		public RuleModifierContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_ruleModifier; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRuleModifier(this);
@@ -2903,9 +2939,9 @@ public class GrammarParser extends Parser<Token> {
 					}
 					break;
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -2922,6 +2958,7 @@ public class GrammarParser extends Parser<Token> {
 		public RuleBlockContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_ruleBlock; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRuleBlock(this);
@@ -2946,9 +2983,9 @@ public class GrammarParser extends Parser<Token> {
 			{
 			setState(682); ruleAltList();
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -2969,6 +3006,7 @@ public class GrammarParser extends Parser<Token> {
 		public RuleAltListContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_ruleAltList; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRuleAltList(this);
@@ -3010,9 +3048,9 @@ public class GrammarParser extends Parser<Token> {
 				_alt = getInterpreter().adaptivePredict(_input,57,_ctx);
 			}
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -3033,6 +3071,7 @@ public class GrammarParser extends Parser<Token> {
 		public LabeledAltContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_labeledAlt; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterLabeledAlt(this);
@@ -3067,9 +3106,9 @@ public class GrammarParser extends Parser<Token> {
 					break;
 			}
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -3092,6 +3131,7 @@ public class GrammarParser extends Parser<Token> {
 		public LexerRuleContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_lexerRule; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterLexerRule(this);
@@ -3137,9 +3177,9 @@ public class GrammarParser extends Parser<Token> {
 			setState(715); lexerRuleBlock();
 			setState(717); match(SEMI);
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -3156,6 +3196,7 @@ public class GrammarParser extends Parser<Token> {
 		public LexerRuleBlockContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_lexerRuleBlock; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterLexerRuleBlock(this);
@@ -3180,9 +3221,9 @@ public class GrammarParser extends Parser<Token> {
 			{
 			setState(719); lexerAltList();
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -3203,6 +3244,7 @@ public class GrammarParser extends Parser<Token> {
 		public LexerAltListContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_lexerAltList; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterLexerAltList(this);
@@ -3244,9 +3286,9 @@ public class GrammarParser extends Parser<Token> {
 				_alt = getInterpreter().adaptivePredict(_input,61,_ctx);
 			}
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -3266,6 +3308,7 @@ public class GrammarParser extends Parser<Token> {
 		public LexerAltContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_lexerAlt; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterLexerAlt(this);
@@ -3304,9 +3347,9 @@ public class GrammarParser extends Parser<Token> {
 					break;
 			}
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -3323,6 +3366,7 @@ public class GrammarParser extends Parser<Token> {
 		public LexerElementsContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_lexerElements; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterLexerElements(this);
@@ -3366,9 +3410,9 @@ public class GrammarParser extends Parser<Token> {
 				_alt = getInterpreter().adaptivePredict(_input,63,_ctx);
 			} while ( _alt!=2 && _alt!=-1 );
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -3398,6 +3442,7 @@ public class GrammarParser extends Parser<Token> {
 		public LexerElementContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_lexerElement; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterLexerElement(this);
@@ -3500,9 +3545,9 @@ public class GrammarParser extends Parser<Token> {
 					}
 					break;
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -3528,6 +3573,7 @@ public class GrammarParser extends Parser<Token> {
 		public LabeledLexerElementContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_labeledLexerElement; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterLabeledLexerElement(this);
@@ -3582,9 +3628,9 @@ public class GrammarParser extends Parser<Token> {
 					break;
 			}
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -3603,6 +3649,7 @@ public class GrammarParser extends Parser<Token> {
 		public LexerBlockContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_lexerBlock; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterLexerBlock(this);
@@ -3629,9 +3676,9 @@ public class GrammarParser extends Parser<Token> {
 			setState(794); lexerAltList();
 			setState(796); match(RPAREN);
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -3653,6 +3700,7 @@ public class GrammarParser extends Parser<Token> {
 		public LexerCommandsContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_lexerCommands; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterLexerCommands(this);
@@ -3695,9 +3743,9 @@ public class GrammarParser extends Parser<Token> {
 				_alt = getInterpreter().adaptivePredict(_input,71,_ctx);
 			}
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -3719,6 +3767,7 @@ public class GrammarParser extends Parser<Token> {
 		public LexerCommandContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_lexerCommand; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterLexerCommand(this);
@@ -3759,9 +3808,9 @@ public class GrammarParser extends Parser<Token> {
 					}
 					break;
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -3779,6 +3828,7 @@ public class GrammarParser extends Parser<Token> {
 		public LexerCommandExprContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_lexerCommandExpr; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterLexerCommandExpr(this);
@@ -3816,9 +3866,9 @@ public class GrammarParser extends Parser<Token> {
 					}
 					break;
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -3839,6 +3889,7 @@ public class GrammarParser extends Parser<Token> {
 		public AltListContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_altList; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterAltList(this);
@@ -3880,9 +3931,9 @@ public class GrammarParser extends Parser<Token> {
 				_alt = getInterpreter().adaptivePredict(_input,74,_ctx);
 			}
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -3899,6 +3950,7 @@ public class GrammarParser extends Parser<Token> {
 		public AlternativeContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_alternative; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterAlternative(this);
@@ -3935,9 +3987,9 @@ public class GrammarParser extends Parser<Token> {
 					}
 					break;
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -3954,6 +4006,7 @@ public class GrammarParser extends Parser<Token> {
 		public ElementsContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_elements; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterElements(this);
@@ -3997,9 +4050,9 @@ public class GrammarParser extends Parser<Token> {
 				_alt = getInterpreter().adaptivePredict(_input,76,_ctx);
 			} while ( _alt!=2 && _alt!=-1 );
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -4029,6 +4082,7 @@ public class GrammarParser extends Parser<Token> {
 		public ElementContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_element; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterElement(this);
@@ -4117,9 +4171,9 @@ public class GrammarParser extends Parser<Token> {
 					}
 					break;
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -4146,6 +4200,7 @@ public class GrammarParser extends Parser<Token> {
 		public LabeledElementContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_labeledElement; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterLabeledElement(this);
@@ -4200,9 +4255,9 @@ public class GrammarParser extends Parser<Token> {
 					break;
 			}
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -4222,6 +4277,7 @@ public class GrammarParser extends Parser<Token> {
 		public EbnfContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_ebnf; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterEbnf(this);
@@ -4260,9 +4316,9 @@ public class GrammarParser extends Parser<Token> {
 					break;
 			}
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -4279,6 +4335,7 @@ public class GrammarParser extends Parser<Token> {
 		public BlockSuffixContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_blockSuffix; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterBlockSuffix(this);
@@ -4303,9 +4360,9 @@ public class GrammarParser extends Parser<Token> {
 			{
 			setState(900); ebnfSuffix();
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -4322,6 +4379,7 @@ public class GrammarParser extends Parser<Token> {
 		public EbnfSuffixContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_ebnfSuffix; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterEbnfSuffix(this);
@@ -4366,9 +4424,9 @@ public class GrammarParser extends Parser<Token> {
 					}
 					break;
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -4399,6 +4457,7 @@ public class GrammarParser extends Parser<Token> {
 		public LexerAtomContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_lexerAtom; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterLexerAtom(this);
@@ -4473,9 +4532,9 @@ public class GrammarParser extends Parser<Token> {
 					}
 					break;
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -4505,6 +4564,7 @@ public class GrammarParser extends Parser<Token> {
 		public AtomContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_atom; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterAtom(this);
@@ -4572,9 +4632,9 @@ public class GrammarParser extends Parser<Token> {
 					}
 					break;
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -4595,6 +4655,7 @@ public class GrammarParser extends Parser<Token> {
 		public NotSetContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_notSet; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterNotSet(this);
@@ -4634,9 +4695,9 @@ public class GrammarParser extends Parser<Token> {
 					}
 					break;
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -4659,6 +4720,7 @@ public class GrammarParser extends Parser<Token> {
 		public BlockSetContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_blockSet; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterBlockSet(this);
@@ -4702,9 +4764,9 @@ public class GrammarParser extends Parser<Token> {
 			}
 			setState(967); match(RPAREN);
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -4726,6 +4788,7 @@ public class GrammarParser extends Parser<Token> {
 		public SetElementContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_setElement; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterSetElement(this);
@@ -4777,9 +4840,9 @@ public class GrammarParser extends Parser<Token> {
 					}
 					break;
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -4805,6 +4868,7 @@ public class GrammarParser extends Parser<Token> {
 		public BlockContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_block; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterBlock(this);
@@ -4865,9 +4929,9 @@ public class GrammarParser extends Parser<Token> {
 			setState(996); altList();
 			setState(998); match(RPAREN);
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -4885,6 +4949,7 @@ public class GrammarParser extends Parser<Token> {
 		public RulerefContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_ruleref; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRuleref(this);
@@ -4918,9 +4983,9 @@ public class GrammarParser extends Parser<Token> {
 					break;
 			}
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -4939,6 +5004,7 @@ public class GrammarParser extends Parser<Token> {
 		public RangeContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_range; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterRange(this);
@@ -4965,9 +5031,9 @@ public class GrammarParser extends Parser<Token> {
 			setState(1008); match(RANGE);
 			setState(1010); match(STRING_LITERAL);
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -4986,6 +5052,7 @@ public class GrammarParser extends Parser<Token> {
 		public TerminalContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_terminal; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterTerminal(this);
@@ -5041,9 +5108,9 @@ public class GrammarParser extends Parser<Token> {
 					}
 					break;
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -5066,6 +5133,7 @@ public class GrammarParser extends Parser<Token> {
 		public ElementOptionsContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_elementOptions; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterElementOptions(this);
@@ -5109,9 +5177,9 @@ public class GrammarParser extends Parser<Token> {
 			}
 			setState(1039); match(GT);
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -5133,6 +5201,7 @@ public class GrammarParser extends Parser<Token> {
 		public ElementOptionContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_elementOption; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterElementOption(this);
@@ -5186,9 +5255,9 @@ public class GrammarParser extends Parser<Token> {
 					}
 					break;
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -5205,6 +5274,7 @@ public class GrammarParser extends Parser<Token> {
 		public IdContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_id; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterId(this);
@@ -5249,9 +5319,9 @@ public class GrammarParser extends Parser<Token> {
 					}
 					break;
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}
@@ -5272,6 +5342,7 @@ public class GrammarParser extends Parser<Token> {
 		public QidContext(ParserRuleContext<Token> parent, int state) {
 			super(parent, state);
 		}
+		@Override public int getRuleIndex() { return RULE_qid; }
 		@Override
 		public void enterRule(ParseTreeListener<? super Token> listener) {
 			if ( listener instanceof GrammarParserListener ) ((GrammarParserListener)listener).enterQid(this);
@@ -5313,9 +5384,9 @@ public class GrammarParser extends Parser<Token> {
 				_alt = getInterpreter().adaptivePredict(_input,103,_ctx);
 			}
 			}
-			_localctx.stop = _input.LT(-1);
 		}
 		catch (RecognitionException re) {
+			_localctx.exception = re;
 			_errHandler.reportError(this, re);
 			_errHandler.recover(this, re);
 		}

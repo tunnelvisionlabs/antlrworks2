@@ -80,7 +80,7 @@ class GrammarTokensTaskTaggerSnapshot extends AbstractTokensTaskTaggerSnapshot<S
         }
 
         @Override
-        public SimpleLexerState getState() {
+        public SimpleLexerState getCurrentState() {
             return SimpleLexerState.createSimpleState(this);
         }
     }

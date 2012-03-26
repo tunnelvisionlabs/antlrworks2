@@ -43,7 +43,7 @@ public class TemplateHighlighterLexer implements TokenSourceWithStateV4<Token, T
     }
 
     @Override
-    public TemplateHighlighterLexerState getState() {
+    public TemplateHighlighterLexerState getCurrentState() {
         if (groupLexer._modeStack == null) {
             return getCachedState(groupLexer.getOpenDelimiter(), groupLexer.getCloseDelimiter(), groupLexer._mode, null);
         }

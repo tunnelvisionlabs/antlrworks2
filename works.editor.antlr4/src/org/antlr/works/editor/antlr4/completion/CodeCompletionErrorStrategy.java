@@ -99,7 +99,7 @@ public class CodeCompletionErrorStrategy<Symbol extends Token> extends DefaultEr
             CaretToken token = (CaretToken)recognizer.getInputStream().LT(1);
 
             AbstractCompletionParserATNSimulator interp = parser.getInterpreter();
-            int stateNumber = recognizer.getContext().s;
+            int stateNumber = recognizer.getState();
             ATNState state = interp.atn.states.get(stateNumber);
 
             PredictionContext context = PredictionContext.fromRuleContext(recognizer.getContext(), false);

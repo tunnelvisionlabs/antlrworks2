@@ -280,7 +280,7 @@ public abstract class AbstractTokensTaskTaggerSnapshot<TState extends LineStateI
                 boolean tokenEndsLine = tokenEndsAtEndOfLine(lexer, token);
                 if (updateOffsets && tokenEndsLine)
                 {
-                    TState stateAtEndOfLine = lexer.getState();
+                    TState stateAtEndOfLine = lexer.getCurrentState();
                     int line = snapshot.findLineNumber(token.getStopIndex() + 1);
                     lineStateChanged =
                         lineStates.get(line).getIsMultiLineToken()

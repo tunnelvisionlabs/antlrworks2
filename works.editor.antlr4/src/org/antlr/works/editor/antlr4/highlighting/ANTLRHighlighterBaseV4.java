@@ -214,7 +214,7 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
                 boolean tokenEndsLine = tokenEndsAtEndOfLine(lexer, token);
                 if (updateOffsets && tokenEndsLine)
                 {
-                    TState stateAtEndOfLine = lexer.getState();
+                    TState stateAtEndOfLine = lexer.getCurrentState();
                     int line = NbDocument.findLineNumber(document, token.getStopIndex());
                     lineStateChanged =
                         lineStates.get(line).getIsMultiLineToken()

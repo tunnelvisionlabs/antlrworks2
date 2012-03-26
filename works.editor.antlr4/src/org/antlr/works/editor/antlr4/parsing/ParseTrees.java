@@ -97,7 +97,7 @@ public final class ParseTrees {
 
         ParserRuleContext<?> currentContext = context;
         for (int element : stack) {
-            if (currentContext.ruleIndex != element) {
+            if (currentContext.getRuleIndex() != element) {
                 return false;
             }
 
@@ -133,10 +133,8 @@ public final class ParseTrees {
     }
 
     public static <T extends Token> RuleContext<T> findTopContext(Parser<T> parser, RuleContext<T> context, IntervalSet values, boolean checkTop) {
-        if (checkTop && context instanceof ParserRuleContext<?>) {
-            if (values.contains(((ParserRuleContext<?>)context).ruleIndex)) {
-                return context;
-            }
+        if (checkTop && values.contains(context.getRuleIndex())) {
+            return context;
         }
 
         if (context.isEmpty()) {
@@ -155,7 +153,7 @@ public final class ParseTrees {
     }
 
     public static <T extends Token> ParserRuleContext<T> findTopContext(ParserRuleContext<T> context, IntervalSet values, boolean checkTop) {
-        if (checkTop && values.contains(context.ruleIndex)) {
+        if (checkTop && values.contains(context.getRuleIndex())) {
             return context;
         }
 

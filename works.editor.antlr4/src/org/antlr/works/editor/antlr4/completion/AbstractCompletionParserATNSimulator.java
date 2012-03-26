@@ -68,6 +68,10 @@ public abstract class AbstractCompletionParserATNSimulator extends ParserATNSimu
         return caretToken;
     }
 
+    public Parser<Token> getParser() {
+        return parser;
+    }
+
     public void setFixedDecisions(List<MultipleDecisionData> decisionPoints, List<Integer> selections) {
         Parameters.notNull("decisionPoints", decisionPoints);
         Parameters.notNull("selections", selections);
