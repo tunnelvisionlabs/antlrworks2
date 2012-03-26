@@ -6,11 +6,12 @@
  *  distribution. For information about licensing, contact Sam Harwell at:
  *      sam@tunnelvisionlabs.com
  */
-lexer grammar GroupHighlighterLexerBase;
+lexer grammar GroupHighlighterLexer;
 
 options {
     language=Java;
     TokenLabelType=CommonToken;
+    abstract=true;
 }
 
 @header {/*

@@ -31,7 +31,7 @@ import org.antlr.v4.runtime.misc.IntervalSet;
  *
  * @author Sam Harwell
  */
-public class GroupHighlighterLexer extends GroupHighlighterLexerBase {
+public class GroupHighlighterLexer extends AbstractGroupHighlighterLexer {
     public static final char DEFAULT_OPEN_DELIMITER = '<';
     public static final char DEFAULT_CLOSE_DELIMITER = '>';
 

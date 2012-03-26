@@ -1,4 +1,4 @@
-// $ANTLR ANTLRVersion> TemplateLexerBase.java generatedTimestamp>
+// $ANTLR ANTLRVersion> AbstractTemplateLexer.java generatedTimestamp>
 /*
  *  Copyright (c) 2012 Sam Harwell, Tunnel Vision Laboratories LLC
  *  All rights reserved.
@@ -18,7 +18,7 @@ import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.misc.*;
 
-public class TemplateLexerBase extends Lexer {
+public abstract class AbstractTemplateLexer extends Lexer {
 	public static final int
 		OPEN_DELIMITER=3, CLOSE_DELIMITER=4, QUOTE=5, LPAREN=6, RPAREN=7, COMMA=8, 
 		DOT=9, COLON=10, DEFINED=11, EQUALS=12, AT=13, LBRACK=14, RBRACK=15, LBRACE=16, 
@@ -131,13 +131,13 @@ public class TemplateLexerBase extends Lexer {
 	};
 
 
-	public TemplateLexerBase(CharStream input) {
+	public AbstractTemplateLexer(CharStream input) {
 		super(input);
 		_interp = new LexerATNSimulator(this,_ATN);
 	}
 
 	@Override
-	public String getGrammarFileName() { return "TemplateLexerBase.g4"; }
+	public String getGrammarFileName() { return "TemplateLexer.g4"; }
 
 	@Override
 	public String[] getTokenNames() { return tokenNames; }

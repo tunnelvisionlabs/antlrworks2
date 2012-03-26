@@ -93,65 +93,65 @@ public class TemplateHighlighter extends ANTLRHighlighterBaseV4<TemplateHighligh
     @Override
     protected AttributeSet highlightToken(Token token) {
         switch (token.getType()) {
-        case GroupHighlighterLexerBase.DEFAULT:
-        case GroupHighlighterLexerBase.IMPORT:
-        case GroupHighlighterLexerBase.GROUP:
-        case GroupHighlighterLexerBase.TRUE:
-        case GroupHighlighterLexerBase.FALSE:
-        case GroupHighlighterLexerBase.DELIMITERS:
-        case GroupHighlighterLexerBase.IF:
-        case GroupHighlighterLexerBase.ELSEIF:
-        case GroupHighlighterLexerBase.ELSE:
-        case GroupHighlighterLexerBase.ENDIF:
-        case GroupHighlighterLexerBase.END:
+        case GroupHighlighterLexer.DEFAULT:
+        case GroupHighlighterLexer.IMPORT:
+        case GroupHighlighterLexer.GROUP:
+        case GroupHighlighterLexer.TRUE:
+        case GroupHighlighterLexer.FALSE:
+        case GroupHighlighterLexer.DELIMITERS:
+        case GroupHighlighterLexer.IF:
+        case GroupHighlighterLexer.ELSEIF:
+        case GroupHighlighterLexer.ELSE:
+        case GroupHighlighterLexer.ENDIF:
+        case GroupHighlighterLexer.END:
 
-        case GroupHighlighterLexerBase.SUPER:
-        case GroupHighlighterLexerBase.FIRST:
-        case GroupHighlighterLexerBase.LAST:
-        case GroupHighlighterLexerBase.REST:
-        case GroupHighlighterLexerBase.TRUNC:
-        case GroupHighlighterLexerBase.STRIP:
-        case GroupHighlighterLexerBase.TRIM:
-        case GroupHighlighterLexerBase.LENGTH:
-        case GroupHighlighterLexerBase.STRLEN:
-        case GroupHighlighterLexerBase.REVERSE:
+        case GroupHighlighterLexer.SUPER:
+        case GroupHighlighterLexer.FIRST:
+        case GroupHighlighterLexer.LAST:
+        case GroupHighlighterLexer.REST:
+        case GroupHighlighterLexer.TRUNC:
+        case GroupHighlighterLexer.STRIP:
+        case GroupHighlighterLexer.TRIM:
+        case GroupHighlighterLexer.LENGTH:
+        case GroupHighlighterLexer.STRLEN:
+        case GroupHighlighterLexer.REVERSE:
             return keywordAttributes;
 
-        case GroupHighlighterLexerBase.ID:
+        case GroupHighlighterLexer.ID:
             return identifierAttributes;
 
-        case GroupHighlighterLexerBase.LBRACE:
-        case GroupHighlighterLexerBase.RBRACE:
+        case GroupHighlighterLexer.LBRACE:
+        case GroupHighlighterLexer.RBRACE:
             return anonymousTemplateDelimiterAttributes;
 
-        case GroupHighlighterLexerBase.BIGSTRING:
-        case GroupHighlighterLexerBase.BIGSTRINGLINE:
-        case GroupHighlighterLexerBase.BigStringTemplate_END:
-        case GroupHighlighterLexerBase.BigStringLineTemplate_END:
+        case GroupHighlighterLexer.BIGSTRING:
+        case GroupHighlighterLexer.BIGSTRINGLINE:
+        case GroupHighlighterLexer.BigStringTemplate_END:
+        case GroupHighlighterLexer.BigStringLineTemplate_END:
             return bigStringDelimiterAttributes;
 
-        case GroupHighlighterLexerBase.STRING:
+        case GroupHighlighterLexer.STRING:
             return stringLiteralAttributes;
 
-        case GroupHighlighterLexerBase.LINE_COMMENT:
-        case GroupHighlighterLexerBase.COMMENT:
+        case GroupHighlighterLexer.LINE_COMMENT:
+        case GroupHighlighterLexer.COMMENT:
             return commentAttributes;
 
-//        case GroupHighlighterLexerBase.WS:
+//        case GroupHighlighterLexer.WS:
 //            return whitespaceAttributes;
-        case GroupHighlighterLexerBase.OPEN_DELIMITER:
-        case GroupHighlighterLexerBase.CLOSE_DELIMITER:
+        case GroupHighlighterLexer.OPEN_DELIMITER:
+        case GroupHighlighterLexer.CLOSE_DELIMITER:
             return expressionDelimiterAttributes;
 
-        case GroupHighlighterLexerBase.ESCAPE:
+        case GroupHighlighterLexer.ESCAPE:
             return escapeTagAttributes;
 
-        case GroupHighlighterLexerBase.AnonymousTemplate_ID:
-        case GroupHighlighterLexerBase.AnonymousTemplate_COMMA:
-        case GroupHighlighterLexerBase.TEXT:
+        case GroupHighlighterLexer.AnonymousTemplate_ID:
+        case GroupHighlighterLexer.AnonymousTemplate_COMMA:
+        case GroupHighlighterLexer.TEXT:
             return stringLiteralAttributes;
 
-        case GroupHighlighterLexerBase.REGION_ID:
+        case GroupHighlighterLexer.REGION_ID:
             return regionUseAttributes;
 
         default:

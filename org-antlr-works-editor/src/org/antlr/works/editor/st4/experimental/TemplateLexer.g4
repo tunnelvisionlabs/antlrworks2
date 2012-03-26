@@ -6,12 +6,13 @@
  *  distribution. For information about licensing, contact Sam Harwell at:
  *      sam@tunnelvisionlabs.com
  */
-lexer grammar TemplateLexerBase;
+lexer grammar TemplateLexer;
 
-//options {
+options {
 //    language=Java;
 //    TokenLabelType=CommonToken;
-//}
+    abstract = true;
+}
 
 @header {/*
  *  Copyright (c) 2012 Sam Harwell, Tunnel Vision Laboratories LLC

@@ -11,7 +11,7 @@ parser grammar TemplateParser;
 options {
     //language=Java;
     //TokenLabelType=CommonToken;
-    tokenVocab=TemplateLexerBase;
+    tokenVocab=TemplateLexer;
 }
 
 @header {/*
