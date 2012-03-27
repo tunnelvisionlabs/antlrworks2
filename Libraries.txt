@@ -1,5 +1,5 @@
 ANTLR 4 (Tool and Runtime):
-    * Referenced revision: d29afbbd9311daac18857b6eb0b2ec4ced390315
+    * Referenced revision: e8e8fd31f711258ecbd55cd0d9cce91cb47252a0
     * Maven build from source
     * Run UpdateAntlr4Library.bat to copy build output to local build folders
 ANTLR 3 (Tool and Runtime):

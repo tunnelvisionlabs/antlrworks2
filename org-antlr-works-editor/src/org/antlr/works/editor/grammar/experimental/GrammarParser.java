@@ -136,8 +136,8 @@ public class GrammarParser extends Parser<Token> {
 		public RulesContext rules() {
 		    return getRuleContext(RulesContext.class,0);
 		}
-		public GrammarSpecContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public GrammarSpecContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_grammarSpec; }
 		@Override
@@ -157,8 +157,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final GrammarSpecContext grammarSpec() throws RecognitionException {
-		GrammarSpecContext _localctx = new GrammarSpecContext(_ctx, 0);
-		enterRule(_localctx, RULE_grammarSpec);
+		GrammarSpecContext _localctx = new GrammarSpecContext(_ctx, getState());
+		enterRule(_localctx, 0, RULE_grammarSpec);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
@@ -227,8 +227,8 @@ public class GrammarParser extends Parser<Token> {
 		}
 		public TerminalNode<Token> LEXER() { return getToken(GrammarParser.LEXER, 0); }
 		public List<? extends TerminalNode<Token>> GRAMMAR() { return getTokens(GrammarParser.GRAMMAR); }
-		public GrammarTypeContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public GrammarTypeContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_grammarType; }
 		@Override
@@ -248,8 +248,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final GrammarTypeContext grammarType() throws RecognitionException {
-		GrammarTypeContext _localctx = new GrammarTypeContext(_ctx, 2);
-		enterRule(_localctx, RULE_grammarType);
+		GrammarTypeContext _localctx = new GrammarTypeContext(_ctx, getState());
+		enterRule(_localctx, 2, RULE_grammarType);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
@@ -302,8 +302,8 @@ public class GrammarParser extends Parser<Token> {
 		public OptionsSpecContext optionsSpec() {
 		    return getRuleContext(OptionsSpecContext.class,0);
 		}
-		public PrequelConstructContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public PrequelConstructContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_prequelConstruct; }
 		@Override
@@ -323,8 +323,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final PrequelConstructContext prequelConstruct() throws RecognitionException {
-		PrequelConstructContext _localctx = new PrequelConstructContext(_ctx, 4);
-		enterRule(_localctx, RULE_prequelConstruct);
+		PrequelConstructContext _localctx = new PrequelConstructContext(_ctx, getState());
+		enterRule(_localctx, 4, RULE_prequelConstruct);
 		try {
 			setState(190);
 			//_errHandler.sync(this);
@@ -376,8 +376,8 @@ public class GrammarParser extends Parser<Token> {
 		public OptionContext option() {
 		    return getRuleContext(OptionContext.class,0);
 		}
-		public OptionsSpecContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public OptionsSpecContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_optionsSpec; }
 		@Override
@@ -397,8 +397,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final OptionsSpecContext optionsSpec() throws RecognitionException {
-		OptionsSpecContext _localctx = new OptionsSpecContext(_ctx, 6);
-		enterRule(_localctx, RULE_optionsSpec);
+		OptionsSpecContext _localctx = new OptionsSpecContext(_ctx, getState());
+		enterRule(_localctx, 6, RULE_optionsSpec);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
@@ -442,8 +442,8 @@ public class GrammarParser extends Parser<Token> {
 		    return getRuleContext(OptionValueContext.class,0);
 		}
 		public TerminalNode<Token> ASSIGN() { return getToken(GrammarParser.ASSIGN, 0); }
-		public OptionContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public OptionContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_option; }
 		@Override
@@ -463,8 +463,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final OptionContext option() throws RecognitionException {
-		OptionContext _localctx = new OptionContext(_ctx, 8);
-		enterRule(_localctx, RULE_option);
+		OptionContext _localctx = new OptionContext(_ctx, getState());
+		enterRule(_localctx, 8, RULE_option);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
@@ -491,8 +491,8 @@ public class GrammarParser extends Parser<Token> {
 		public QidContext qid() {
 		    return getRuleContext(QidContext.class,0);
 		}
-		public OptionValueContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public OptionValueContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_optionValue; }
 		@Override
@@ -512,8 +512,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final OptionValueContext optionValue() throws RecognitionException {
-		OptionValueContext _localctx = new OptionValueContext(_ctx, 10);
-		enterRule(_localctx, RULE_optionValue);
+		OptionValueContext _localctx = new OptionValueContext(_ctx, getState());
+		enterRule(_localctx, 10, RULE_optionValue);
 		try {
 			setState(219);
 			//_errHandler.sync(this);
@@ -568,8 +568,8 @@ public class GrammarParser extends Parser<Token> {
 		public DelegateGrammarContext delegateGrammar(int i) {
 		    return getRuleContext(DelegateGrammarContext.class,i);
 		}
-		public DelegateGrammarsContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public DelegateGrammarsContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_delegateGrammars; }
 		@Override
@@ -589,8 +589,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final DelegateGrammarsContext delegateGrammars() throws RecognitionException {
-		DelegateGrammarsContext _localctx = new DelegateGrammarsContext(_ctx, 12);
-		enterRule(_localctx, RULE_delegateGrammars);
+		DelegateGrammarsContext _localctx = new DelegateGrammarsContext(_ctx, getState());
+		enterRule(_localctx, 12, RULE_delegateGrammars);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
@@ -635,8 +635,8 @@ public class GrammarParser extends Parser<Token> {
 		    return getRuleContext(IdContext.class,i);
 		}
 		public TerminalNode<Token> ASSIGN() { return getToken(GrammarParser.ASSIGN, 0); }
-		public DelegateGrammarContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public DelegateGrammarContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_delegateGrammar; }
 		@Override
@@ -656,8 +656,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final DelegateGrammarContext delegateGrammar() throws RecognitionException {
-		DelegateGrammarContext _localctx = new DelegateGrammarContext(_ctx, 14);
-		enterRule(_localctx, RULE_delegateGrammar);
+		DelegateGrammarContext _localctx = new DelegateGrammarContext(_ctx, getState());
+		enterRule(_localctx, 14, RULE_delegateGrammar);
 		try {
 			setState(244);
 			//_errHandler.sync(this);
@@ -696,8 +696,8 @@ public class GrammarParser extends Parser<Token> {
 		public TokenSpecContext tokenSpec() {
 		    return getRuleContext(TokenSpecContext.class,0);
 		}
-		public TokensSpecContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public TokensSpecContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_tokensSpec; }
 		@Override
@@ -717,8 +717,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final TokensSpecContext tokensSpec() throws RecognitionException {
-		TokensSpecContext _localctx = new TokensSpecContext(_ctx, 16);
-		enterRule(_localctx, RULE_tokensSpec);
+		TokensSpecContext _localctx = new TokensSpecContext(_ctx, getState());
+		enterRule(_localctx, 16, RULE_tokensSpec);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
@@ -765,8 +765,8 @@ public class GrammarParser extends Parser<Token> {
 		public TerminalNode<Token> SEMI() { return getToken(GrammarParser.SEMI, 0); }
 		public TerminalNode<Token> RULE_REF() { return getToken(GrammarParser.RULE_REF, 0); }
 		public TerminalNode<Token> ASSIGN() { return getToken(GrammarParser.ASSIGN, 0); }
-		public TokenSpecContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public TokenSpecContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_tokenSpec; }
 		@Override
@@ -786,8 +786,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final TokenSpecContext tokenSpec() throws RecognitionException {
-		TokenSpecContext _localctx = new TokenSpecContext(_ctx, 18);
-		enterRule(_localctx, RULE_tokenSpec);
+		TokenSpecContext _localctx = new TokenSpecContext(_ctx, getState());
+		enterRule(_localctx, 18, RULE_tokenSpec);
 		try {
 			setState(270);
 			//_errHandler.sync(this);
@@ -866,8 +866,8 @@ public class GrammarParser extends Parser<Token> {
 		public TerminalNode<Token> ACTION_LBRACK() { return getToken(GrammarParser.ACTION_LBRACK, 0); }
 		public TerminalNode<Token> ACTION_WORD() { return getToken(GrammarParser.ACTION_WORD, 0); }
 		public TerminalNode<Token> ACTION_EQUALS() { return getToken(GrammarParser.ACTION_EQUALS, 0); }
-		public ActionBlockContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public ActionBlockContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_actionBlock; }
 		@Override
@@ -887,8 +887,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final ActionBlockContext actionBlock() throws RecognitionException {
-		ActionBlockContext _localctx = new ActionBlockContext(_ctx, 20);
-		enterRule(_localctx, RULE_actionBlock);
+		ActionBlockContext _localctx = new ActionBlockContext(_ctx, getState());
+		enterRule(_localctx, 20, RULE_actionBlock);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
@@ -1074,8 +1074,8 @@ public class GrammarParser extends Parser<Token> {
 		    return getRuleContext(IgnoredContext.class,i);
 		}
 		public TerminalNode<Token> ACTION_WORD() { return getToken(GrammarParser.ACTION_WORD, 0); }
-		public ActionExpressionContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public ActionExpressionContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_actionExpression; }
 		@Override
@@ -1095,8 +1095,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final ActionExpressionContext actionExpression() throws RecognitionException {
-		ActionExpressionContext _localctx = new ActionExpressionContext(_ctx, 22);
-		enterRule(_localctx, RULE_actionExpression);
+		ActionExpressionContext _localctx = new ActionExpressionContext(_ctx, getState());
+		enterRule(_localctx, 22, RULE_actionExpression);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
@@ -1168,8 +1168,8 @@ public class GrammarParser extends Parser<Token> {
 		public TerminalNode<Token> ACTION_LBRACK() { return getToken(GrammarParser.ACTION_LBRACK, 0); }
 		public List<? extends TerminalNode<Token>> ACTION_WORD() { return getTokens(GrammarParser.ACTION_WORD); }
 		public TerminalNode<Token> ACTION_MINUS() { return getToken(GrammarParser.ACTION_MINUS, 0); }
-		public ActionScopeExpressionContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public ActionScopeExpressionContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_actionScopeExpression; }
 		@Override
@@ -1189,8 +1189,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final ActionScopeExpressionContext actionScopeExpression() throws RecognitionException {
-		ActionScopeExpressionContext _localctx = new ActionScopeExpressionContext(_ctx, 24);
-		enterRule(_localctx, RULE_actionScopeExpression);
+		ActionScopeExpressionContext _localctx = new ActionScopeExpressionContext(_ctx, getState());
+		enterRule(_localctx, 24, RULE_actionScopeExpression);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
@@ -1336,8 +1336,8 @@ public class GrammarParser extends Parser<Token> {
 		public TerminalNode<Token> ARG_ACTION_ELEMENT() { return getToken(GrammarParser.ARG_ACTION_ELEMENT, 0); }
 		public TerminalNode<Token> ARG_ACTION_TEXT() { return getToken(GrammarParser.ARG_ACTION_TEXT, 0); }
 		public TerminalNode<Token> ARG_ACTION_RPAREN() { return getToken(GrammarParser.ARG_ACTION_RPAREN, 0); }
-		public ArgActionBlockContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public ArgActionBlockContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_argActionBlock; }
 		@Override
@@ -1357,8 +1357,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final ArgActionBlockContext argActionBlock() throws RecognitionException {
-		ArgActionBlockContext _localctx = new ArgActionBlockContext(_ctx, 26);
-		enterRule(_localctx, RULE_argActionBlock);
+		ArgActionBlockContext _localctx = new ArgActionBlockContext(_ctx, getState());
+		enterRule(_localctx, 26, RULE_argActionBlock);
 		int _la;
 		try {
 			int _alt;
@@ -1418,8 +1418,8 @@ public class GrammarParser extends Parser<Token> {
 		}
 		public TerminalNode<Token> ARG_ACTION_COMMA() { return getToken(GrammarParser.ARG_ACTION_COMMA, 0); }
 		public TerminalNode<Token> BEGIN_ARG_ACTION() { return getToken(GrammarParser.BEGIN_ARG_ACTION, 0); }
-		public ArgActionParametersContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public ArgActionParametersContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_argActionParameters; }
 		@Override
@@ -1439,8 +1439,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final ArgActionParametersContext argActionParameters() throws RecognitionException {
-		ArgActionParametersContext _localctx = new ArgActionParametersContext(_ctx, 28);
-		enterRule(_localctx, RULE_argActionParameters);
+		ArgActionParametersContext _localctx = new ArgActionParametersContext(_ctx, getState());
+		enterRule(_localctx, 28, RULE_argActionParameters);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
@@ -1557,8 +1557,8 @@ public class GrammarParser extends Parser<Token> {
 		public ArgActionParameterTypeContext argActionParameterType() {
 		    return getRuleContext(ArgActionParameterTypeContext.class,0);
 		}
-		public ArgActionParameterContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public ArgActionParameterContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_argActionParameter; }
 		@Override
@@ -1578,8 +1578,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final ArgActionParameterContext argActionParameter() throws RecognitionException {
-		ArgActionParameterContext _localctx = new ArgActionParameterContext(_ctx, 30);
-		enterRule(_localctx, RULE_argActionParameter);
+		ArgActionParameterContext _localctx = new ArgActionParameterContext(_ctx, getState());
+		enterRule(_localctx, 30, RULE_argActionParameter);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
@@ -1632,8 +1632,8 @@ public class GrammarParser extends Parser<Token> {
 		public List<? extends ArgActionParameterTypePartContext> argActionParameterTypePart() {
 		    return getRuleContexts(ArgActionParameterTypePartContext.class);
 		}
-		public ArgActionParameterTypeContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public ArgActionParameterTypeContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_argActionParameterType; }
 		@Override
@@ -1653,8 +1653,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final ArgActionParameterTypeContext argActionParameterType() throws RecognitionException {
-		ArgActionParameterTypeContext _localctx = new ArgActionParameterTypeContext(_ctx, 32);
-		enterRule(_localctx, RULE_argActionParameterType);
+		ArgActionParameterTypeContext _localctx = new ArgActionParameterTypeContext(_ctx, getState());
+		enterRule(_localctx, 32, RULE_argActionParameterType);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
@@ -1712,8 +1712,8 @@ public class GrammarParser extends Parser<Token> {
 		}
 		public TerminalNode<Token> ARG_ACTION_LT() { return getToken(GrammarParser.ARG_ACTION_LT, 0); }
 		public TerminalNode<Token> ARG_ACTION_RPAREN() { return getToken(GrammarParser.ARG_ACTION_RPAREN, 0); }
-		public ArgActionParameterTypePartContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public ArgActionParameterTypePartContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_argActionParameterTypePart; }
 		@Override
@@ -1733,8 +1733,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final ArgActionParameterTypePartContext argActionParameterTypePart() throws RecognitionException {
-		ArgActionParameterTypePartContext _localctx = new ArgActionParameterTypePartContext(_ctx, 34);
-		enterRule(_localctx, RULE_argActionParameterTypePart);
+		ArgActionParameterTypePartContext _localctx = new ArgActionParameterTypePartContext(_ctx, getState());
+		enterRule(_localctx, 34, RULE_argActionParameterTypePart);
 		try {
 			setState(510);
 			//_errHandler.sync(this);
@@ -1798,8 +1798,8 @@ public class GrammarParser extends Parser<Token> {
 		public TerminalNode<Token> ACTION_WS() { return getToken(GrammarParser.ACTION_WS, 0); }
 		public TerminalNode<Token> ACTION_COMMENT() { return getToken(GrammarParser.ACTION_COMMENT, 0); }
 		public TerminalNode<Token> ACTION_NEWLINE() { return getToken(GrammarParser.ACTION_NEWLINE, 0); }
-		public IgnoredContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public IgnoredContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_ignored; }
 		@Override
@@ -1819,8 +1819,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final IgnoredContext ignored() throws RecognitionException {
-		IgnoredContext _localctx = new IgnoredContext(_ctx, 36);
-		enterRule(_localctx, RULE_ignored);
+		IgnoredContext _localctx = new IgnoredContext(_ctx, getState());
+		enterRule(_localctx, 36, RULE_ignored);
 		try {
 			setState(522);
 			//_errHandler.sync(this);
@@ -1884,8 +1884,8 @@ public class GrammarParser extends Parser<Token> {
 		public ActionScopeNameContext actionScopeName() {
 		    return getRuleContext(ActionScopeNameContext.class,0);
 		}
-		public ActionContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public ActionContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_action; }
 		@Override
@@ -1905,8 +1905,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final ActionContext action() throws RecognitionException {
-		ActionContext _localctx = new ActionContext(_ctx, 38);
-		enterRule(_localctx, RULE_action);
+		ActionContext _localctx = new ActionContext(_ctx, getState());
+		enterRule(_localctx, 38, RULE_action);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
@@ -1942,8 +1942,8 @@ public class GrammarParser extends Parser<Token> {
 		}
 		public TerminalNode<Token> PARSER() { return getToken(GrammarParser.PARSER, 0); }
 		public TerminalNode<Token> LEXER() { return getToken(GrammarParser.LEXER, 0); }
-		public ActionScopeNameContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public ActionScopeNameContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_actionScopeName; }
 		@Override
@@ -1963,8 +1963,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final ActionScopeNameContext actionScopeName() throws RecognitionException {
-		ActionScopeNameContext _localctx = new ActionScopeNameContext(_ctx, 40);
-		enterRule(_localctx, RULE_actionScopeName);
+		ActionScopeNameContext _localctx = new ActionScopeNameContext(_ctx, getState());
+		enterRule(_localctx, 40, RULE_actionScopeName);
 		try {
 			setState(542);
 			//_errHandler.sync(this);
@@ -2011,8 +2011,8 @@ public class GrammarParser extends Parser<Token> {
 		}
 		public TerminalNode<Token> SEMI() { return getToken(GrammarParser.SEMI, 0); }
 		public TerminalNode<Token> MODE() { return getToken(GrammarParser.MODE, 0); }
-		public ModeSpecContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public ModeSpecContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_modeSpec; }
 		@Override
@@ -2032,8 +2032,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final ModeSpecContext modeSpec() throws RecognitionException {
-		ModeSpecContext _localctx = new ModeSpecContext(_ctx, 42);
-		enterRule(_localctx, RULE_modeSpec);
+		ModeSpecContext _localctx = new ModeSpecContext(_ctx, getState());
+		enterRule(_localctx, 42, RULE_modeSpec);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
@@ -2077,8 +2077,8 @@ public class GrammarParser extends Parser<Token> {
 		public RuleSpecContext ruleSpec() {
 		    return getRuleContext(RuleSpecContext.class,0);
 		}
-		public RulesContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public RulesContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_rules; }
 		@Override
@@ -2098,8 +2098,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final RulesContext rules() throws RecognitionException {
-		RulesContext _localctx = new RulesContext(_ctx, 44);
-		enterRule(_localctx, RULE_rules);
+		RulesContext _localctx = new RulesContext(_ctx, getState());
+		enterRule(_localctx, 44, RULE_rules);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
@@ -2139,8 +2139,8 @@ public class GrammarParser extends Parser<Token> {
 		public LexerRuleContext lexerRule() {
 		    return getRuleContext(LexerRuleContext.class,0);
 		}
-		public RuleSpecContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public RuleSpecContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_ruleSpec; }
 		@Override
@@ -2160,8 +2160,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final RuleSpecContext ruleSpec() throws RecognitionException {
-		RuleSpecContext _localctx = new RuleSpecContext(_ctx, 46);
-		enterRule(_localctx, RULE_ruleSpec);
+		RuleSpecContext _localctx = new RuleSpecContext(_ctx, getState());
+		enterRule(_localctx, 46, RULE_ruleSpec);
 		try {
 			setState(567);
 			//_errHandler.sync(this);
@@ -2222,8 +2222,8 @@ public class GrammarParser extends Parser<Token> {
 		}
 		public TerminalNode<Token> SEMI() { return getToken(GrammarParser.SEMI, 0); }
 		public TerminalNode<Token> RULE_REF() { return getToken(GrammarParser.RULE_REF, 0); }
-		public ParserRuleSpecContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public ParserRuleSpecContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_parserRuleSpec; }
 		@Override
@@ -2243,8 +2243,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final ParserRuleSpecContext parserRuleSpec() throws RecognitionException {
-		ParserRuleSpecContext _localctx = new ParserRuleSpecContext(_ctx, 48);
-		enterRule(_localctx, RULE_parserRuleSpec);
+		ParserRuleSpecContext _localctx = new ParserRuleSpecContext(_ctx, getState());
+		enterRule(_localctx, 48, RULE_parserRuleSpec);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
@@ -2328,8 +2328,8 @@ public class GrammarParser extends Parser<Token> {
 		public ExceptionHandlerContext exceptionHandler() {
 		    return getRuleContext(ExceptionHandlerContext.class,0);
 		}
-		public ExceptionGroupContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public ExceptionGroupContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_exceptionGroup; }
 		@Override
@@ -2349,8 +2349,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final ExceptionGroupContext exceptionGroup() throws RecognitionException {
-		ExceptionGroupContext _localctx = new ExceptionGroupContext(_ctx, 50);
-		enterRule(_localctx, RULE_exceptionGroup);
+		ExceptionGroupContext _localctx = new ExceptionGroupContext(_ctx, getState());
+		enterRule(_localctx, 50, RULE_exceptionGroup);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
@@ -2400,8 +2400,8 @@ public class GrammarParser extends Parser<Token> {
 		    return getRuleContext(ArgActionBlockContext.class,0);
 		}
 		public TerminalNode<Token> CATCH() { return getToken(GrammarParser.CATCH, 0); }
-		public ExceptionHandlerContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public ExceptionHandlerContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_exceptionHandler; }
 		@Override
@@ -2421,8 +2421,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final ExceptionHandlerContext exceptionHandler() throws RecognitionException {
-		ExceptionHandlerContext _localctx = new ExceptionHandlerContext(_ctx, 52);
-		enterRule(_localctx, RULE_exceptionHandler);
+		ExceptionHandlerContext _localctx = new ExceptionHandlerContext(_ctx, getState());
+		enterRule(_localctx, 52, RULE_exceptionHandler);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
@@ -2447,8 +2447,8 @@ public class GrammarParser extends Parser<Token> {
 		    return getRuleContext(ActionBlockContext.class,0);
 		}
 		public TerminalNode<Token> FINALLY() { return getToken(GrammarParser.FINALLY, 0); }
-		public FinallyClauseContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public FinallyClauseContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_finallyClause; }
 		@Override
@@ -2468,8 +2468,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final FinallyClauseContext finallyClause() throws RecognitionException {
-		FinallyClauseContext _localctx = new FinallyClauseContext(_ctx, 54);
-		enterRule(_localctx, RULE_finallyClause);
+		FinallyClauseContext _localctx = new FinallyClauseContext(_ctx, getState());
+		enterRule(_localctx, 54, RULE_finallyClause);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
@@ -2492,8 +2492,8 @@ public class GrammarParser extends Parser<Token> {
 		public RulePrequelContext rulePrequel() {
 		    return getRuleContext(RulePrequelContext.class,0);
 		}
-		public RulePrequelsContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public RulePrequelsContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_rulePrequels; }
 		@Override
@@ -2513,8 +2513,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final RulePrequelsContext rulePrequels() throws RecognitionException {
-		RulePrequelsContext _localctx = new RulePrequelsContext(_ctx, 56);
-		enterRule(_localctx, RULE_rulePrequels);
+		RulePrequelsContext _localctx = new RulePrequelsContext(_ctx, getState());
+		enterRule(_localctx, 56, RULE_rulePrequels);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
@@ -2554,8 +2554,8 @@ public class GrammarParser extends Parser<Token> {
 		public RuleActionContext ruleAction() {
 		    return getRuleContext(RuleActionContext.class,0);
 		}
-		public RulePrequelContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public RulePrequelContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_rulePrequel; }
 		@Override
@@ -2575,8 +2575,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final RulePrequelContext rulePrequel() throws RecognitionException {
-		RulePrequelContext _localctx = new RulePrequelContext(_ctx, 58);
-		enterRule(_localctx, RULE_rulePrequel);
+		RulePrequelContext _localctx = new RulePrequelContext(_ctx, getState());
+		enterRule(_localctx, 58, RULE_rulePrequel);
 		try {
 			setState(637);
 			//_errHandler.sync(this);
@@ -2612,8 +2612,8 @@ public class GrammarParser extends Parser<Token> {
 		    return getRuleContext(ArgActionParametersContext.class,0);
 		}
 		public TerminalNode<Token> RETURNS() { return getToken(GrammarParser.RETURNS, 0); }
-		public RuleReturnsContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public RuleReturnsContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_ruleReturns; }
 		@Override
@@ -2633,8 +2633,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final RuleReturnsContext ruleReturns() throws RecognitionException {
-		RuleReturnsContext _localctx = new RuleReturnsContext(_ctx, 60);
-		enterRule(_localctx, RULE_ruleReturns);
+		RuleReturnsContext _localctx = new RuleReturnsContext(_ctx, getState());
+		enterRule(_localctx, 60, RULE_ruleReturns);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
@@ -2662,8 +2662,8 @@ public class GrammarParser extends Parser<Token> {
 		    return getRuleContexts(QidContext.class);
 		}
 		public TerminalNode<Token> COMMA() { return getToken(GrammarParser.COMMA, 0); }
-		public ThrowsSpecContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public ThrowsSpecContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_throwsSpec; }
 		@Override
@@ -2683,8 +2683,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final ThrowsSpecContext throwsSpec() throws RecognitionException {
-		ThrowsSpecContext _localctx = new ThrowsSpecContext(_ctx, 62);
-		enterRule(_localctx, RULE_throwsSpec);
+		ThrowsSpecContext _localctx = new ThrowsSpecContext(_ctx, getState());
+		enterRule(_localctx, 62, RULE_throwsSpec);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
@@ -2725,8 +2725,8 @@ public class GrammarParser extends Parser<Token> {
 		public ArgActionParametersContext argActionParameters() {
 		    return getRuleContext(ArgActionParametersContext.class,0);
 		}
-		public LocalsSpecContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public LocalsSpecContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_localsSpec; }
 		@Override
@@ -2746,8 +2746,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final LocalsSpecContext localsSpec() throws RecognitionException {
-		LocalsSpecContext _localctx = new LocalsSpecContext(_ctx, 64);
-		enterRule(_localctx, RULE_localsSpec);
+		LocalsSpecContext _localctx = new LocalsSpecContext(_ctx, getState());
+		enterRule(_localctx, 64, RULE_localsSpec);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
@@ -2774,8 +2774,8 @@ public class GrammarParser extends Parser<Token> {
 		    return getRuleContext(IdContext.class,0);
 		}
 		public TerminalNode<Token> AT() { return getToken(GrammarParser.AT, 0); }
-		public RuleActionContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public RuleActionContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_ruleAction; }
 		@Override
@@ -2795,8 +2795,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final RuleActionContext ruleAction() throws RecognitionException {
-		RuleActionContext _localctx = new RuleActionContext(_ctx, 66);
-		enterRule(_localctx, RULE_ruleAction);
+		RuleActionContext _localctx = new RuleActionContext(_ctx, getState());
+		enterRule(_localctx, 66, RULE_ruleAction);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
@@ -2820,8 +2820,8 @@ public class GrammarParser extends Parser<Token> {
 		public RuleModifierContext ruleModifier() {
 		    return getRuleContext(RuleModifierContext.class,0);
 		}
-		public RuleModifiersContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public RuleModifiersContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_ruleModifiers; }
 		@Override
@@ -2841,8 +2841,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final RuleModifiersContext ruleModifiers() throws RecognitionException {
-		RuleModifiersContext _localctx = new RuleModifiersContext(_ctx, 68);
-		enterRule(_localctx, RULE_ruleModifiers);
+		RuleModifiersContext _localctx = new RuleModifiersContext(_ctx, getState());
+		enterRule(_localctx, 68, RULE_ruleModifiers);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
@@ -2884,8 +2884,8 @@ public class GrammarParser extends Parser<Token> {
 		public TerminalNode<Token> PRIVATE() { return getToken(GrammarParser.PRIVATE, 0); }
 		public TerminalNode<Token> PUBLIC() { return getToken(GrammarParser.PUBLIC, 0); }
 		public TerminalNode<Token> FRAGMENT() { return getToken(GrammarParser.FRAGMENT, 0); }
-		public RuleModifierContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public RuleModifierContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_ruleModifier; }
 		@Override
@@ -2905,8 +2905,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final RuleModifierContext ruleModifier() throws RecognitionException {
-		RuleModifierContext _localctx = new RuleModifierContext(_ctx, 70);
-		enterRule(_localctx, RULE_ruleModifier);
+		RuleModifierContext _localctx = new RuleModifierContext(_ctx, getState());
+		enterRule(_localctx, 70, RULE_ruleModifier);
 		try {
 			setState(680);
 			//_errHandler.sync(this);
@@ -2955,8 +2955,8 @@ public class GrammarParser extends Parser<Token> {
 		public RuleAltListContext ruleAltList() {
 		    return getRuleContext(RuleAltListContext.class,0);
 		}
-		public RuleBlockContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public RuleBlockContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_ruleBlock; }
 		@Override
@@ -2976,8 +2976,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final RuleBlockContext ruleBlock() throws RecognitionException {
-		RuleBlockContext _localctx = new RuleBlockContext(_ctx, 72);
-		enterRule(_localctx, RULE_ruleBlock);
+		RuleBlockContext _localctx = new RuleBlockContext(_ctx, getState());
+		enterRule(_localctx, 72, RULE_ruleBlock);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
@@ -3003,8 +3003,8 @@ public class GrammarParser extends Parser<Token> {
 		    return getRuleContext(LabeledAltContext.class,i);
 		}
 		public TerminalNode<Token> OR() { return getToken(GrammarParser.OR, 0); }
-		public RuleAltListContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public RuleAltListContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_ruleAltList; }
 		@Override
@@ -3024,8 +3024,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final RuleAltListContext ruleAltList() throws RecognitionException {
-		RuleAltListContext _localctx = new RuleAltListContext(_ctx, 74);
-		enterRule(_localctx, RULE_ruleAltList);
+		RuleAltListContext _localctx = new RuleAltListContext(_ctx, getState());
+		enterRule(_localctx, 74, RULE_ruleAltList);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
@@ -3068,8 +3068,8 @@ public class GrammarParser extends Parser<Token> {
 		    return getRuleContext(AlternativeContext.class,0);
 		}
 		public TerminalNode<Token> RARROW() { return getToken(GrammarParser.RARROW, 0); }
-		public LabeledAltContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public LabeledAltContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_labeledAlt; }
 		@Override
@@ -3089,8 +3089,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final LabeledAltContext labeledAlt() throws RecognitionException {
-		LabeledAltContext _localctx = new LabeledAltContext(_ctx, 76);
-		enterRule(_localctx, RULE_labeledAlt);
+		LabeledAltContext _localctx = new LabeledAltContext(_ctx, getState());
+		enterRule(_localctx, 76, RULE_labeledAlt);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
@@ -3128,8 +3128,8 @@ public class GrammarParser extends Parser<Token> {
 		public LexerRuleBlockContext lexerRuleBlock() {
 		    return getRuleContext(LexerRuleBlockContext.class,0);
 		}
-		public LexerRuleContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public LexerRuleContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_lexerRule; }
 		@Override
@@ -3149,8 +3149,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final LexerRuleContext lexerRule() throws RecognitionException {
-		LexerRuleContext _localctx = new LexerRuleContext(_ctx, 78);
-		enterRule(_localctx, RULE_lexerRule);
+		LexerRuleContext _localctx = new LexerRuleContext(_ctx, getState());
+		enterRule(_localctx, 78, RULE_lexerRule);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
@@ -3193,8 +3193,8 @@ public class GrammarParser extends Parser<Token> {
 		public LexerAltListContext lexerAltList() {
 		    return getRuleContext(LexerAltListContext.class,0);
 		}
-		public LexerRuleBlockContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public LexerRuleBlockContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_lexerRuleBlock; }
 		@Override
@@ -3214,8 +3214,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final LexerRuleBlockContext lexerRuleBlock() throws RecognitionException {
-		LexerRuleBlockContext _localctx = new LexerRuleBlockContext(_ctx, 80);
-		enterRule(_localctx, RULE_lexerRuleBlock);
+		LexerRuleBlockContext _localctx = new LexerRuleBlockContext(_ctx, getState());
+		enterRule(_localctx, 80, RULE_lexerRuleBlock);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
@@ -3241,8 +3241,8 @@ public class GrammarParser extends Parser<Token> {
 		public List<? extends LexerAltContext> lexerAlt() {
 		    return getRuleContexts(LexerAltContext.class);
 		}
-		public LexerAltListContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public LexerAltListContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_lexerAltList; }
 		@Override
@@ -3262,8 +3262,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final LexerAltListContext lexerAltList() throws RecognitionException {
-		LexerAltListContext _localctx = new LexerAltListContext(_ctx, 82);
-		enterRule(_localctx, RULE_lexerAltList);
+		LexerAltListContext _localctx = new LexerAltListContext(_ctx, getState());
+		enterRule(_localctx, 82, RULE_lexerAltList);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
@@ -3305,8 +3305,8 @@ public class GrammarParser extends Parser<Token> {
 		public LexerCommandsContext lexerCommands() {
 		    return getRuleContext(LexerCommandsContext.class,0);
 		}
-		public LexerAltContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public LexerAltContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_lexerAlt; }
 		@Override
@@ -3326,8 +3326,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final LexerAltContext lexerAlt() throws RecognitionException {
-		LexerAltContext _localctx = new LexerAltContext(_ctx, 84);
-		enterRule(_localctx, RULE_lexerAlt);
+		LexerAltContext _localctx = new LexerAltContext(_ctx, getState());
+		enterRule(_localctx, 84, RULE_lexerAlt);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
@@ -3363,8 +3363,8 @@ public class GrammarParser extends Parser<Token> {
 		public LexerElementContext lexerElement() {
 		    return getRuleContext(LexerElementContext.class,0);
 		}
-		public LexerElementsContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public LexerElementsContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_lexerElements; }
 		@Override
@@ -3384,8 +3384,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final LexerElementsContext lexerElements() throws RecognitionException {
-		LexerElementsContext _localctx = new LexerElementsContext(_ctx, 86);
-		enterRule(_localctx, RULE_lexerElements);
+		LexerElementsContext _localctx = new LexerElementsContext(_ctx, getState());
+		enterRule(_localctx, 86, RULE_lexerElements);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
@@ -3439,8 +3439,8 @@ public class GrammarParser extends Parser<Token> {
 		public LexerAtomContext lexerAtom() {
 		    return getRuleContext(LexerAtomContext.class,0);
 		}
-		public LexerElementContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public LexerElementContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_lexerElement; }
 		@Override
@@ -3460,8 +3460,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final LexerElementContext lexerElement() throws RecognitionException {
-		LexerElementContext _localctx = new LexerElementContext(_ctx, 88);
-		enterRule(_localctx, RULE_lexerElement);
+		LexerElementContext _localctx = new LexerElementContext(_ctx, getState());
+		enterRule(_localctx, 88, RULE_lexerElement);
 		try {
 			setState(776);
 			//_errHandler.sync(this);
@@ -3570,8 +3570,8 @@ public class GrammarParser extends Parser<Token> {
 		}
 		public TerminalNode<Token> PLUS_ASSIGN() { return getToken(GrammarParser.PLUS_ASSIGN, 0); }
 		public TerminalNode<Token> ASSIGN() { return getToken(GrammarParser.ASSIGN, 0); }
-		public LabeledLexerElementContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public LabeledLexerElementContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_labeledLexerElement; }
 		@Override
@@ -3591,8 +3591,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final LabeledLexerElementContext labeledLexerElement() throws RecognitionException {
-		LabeledLexerElementContext _localctx = new LabeledLexerElementContext(_ctx, 90);
-		enterRule(_localctx, RULE_labeledLexerElement);
+		LabeledLexerElementContext _localctx = new LabeledLexerElementContext(_ctx, getState());
+		enterRule(_localctx, 90, RULE_labeledLexerElement);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
@@ -3646,8 +3646,8 @@ public class GrammarParser extends Parser<Token> {
 		    return getRuleContext(LexerAltListContext.class,0);
 		}
 		public TerminalNode<Token> LPAREN() { return getToken(GrammarParser.LPAREN, 0); }
-		public LexerBlockContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public LexerBlockContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_lexerBlock; }
 		@Override
@@ -3667,8 +3667,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final LexerBlockContext lexerBlock() throws RecognitionException {
-		LexerBlockContext _localctx = new LexerBlockContext(_ctx, 92);
-		enterRule(_localctx, RULE_lexerBlock);
+		LexerBlockContext _localctx = new LexerBlockContext(_ctx, getState());
+		enterRule(_localctx, 92, RULE_lexerBlock);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
@@ -3697,8 +3697,8 @@ public class GrammarParser extends Parser<Token> {
 		    return getRuleContext(LexerCommandContext.class,i);
 		}
 		public TerminalNode<Token> RARROW() { return getToken(GrammarParser.RARROW, 0); }
-		public LexerCommandsContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public LexerCommandsContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_lexerCommands; }
 		@Override
@@ -3718,8 +3718,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final LexerCommandsContext lexerCommands() throws RecognitionException {
-		LexerCommandsContext _localctx = new LexerCommandsContext(_ctx, 94);
-		enterRule(_localctx, RULE_lexerCommands);
+		LexerCommandsContext _localctx = new LexerCommandsContext(_ctx, getState());
+		enterRule(_localctx, 94, RULE_lexerCommands);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
@@ -3764,8 +3764,8 @@ public class GrammarParser extends Parser<Token> {
 		    return getRuleContext(LexerCommandExprContext.class,0);
 		}
 		public TerminalNode<Token> LPAREN() { return getToken(GrammarParser.LPAREN, 0); }
-		public LexerCommandContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public LexerCommandContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_lexerCommand; }
 		@Override
@@ -3785,8 +3785,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final LexerCommandContext lexerCommand() throws RecognitionException {
-		LexerCommandContext _localctx = new LexerCommandContext(_ctx, 96);
-		enterRule(_localctx, RULE_lexerCommand);
+		LexerCommandContext _localctx = new LexerCommandContext(_ctx, getState());
+		enterRule(_localctx, 96, RULE_lexerCommand);
 		try {
 			setState(821);
 			//_errHandler.sync(this);
@@ -3825,8 +3825,8 @@ public class GrammarParser extends Parser<Token> {
 		    return getRuleContext(IdContext.class,0);
 		}
 		public TerminalNode<Token> INT() { return getToken(GrammarParser.INT, 0); }
-		public LexerCommandExprContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public LexerCommandExprContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_lexerCommandExpr; }
 		@Override
@@ -3846,8 +3846,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(1)
 	public final LexerCommandExprContext lexerCommandExpr() throws RecognitionException {
-		LexerCommandExprContext _localctx = new LexerCommandExprContext(_ctx, 98);
-		enterRule(_localctx, RULE_lexerCommandExpr);
+		LexerCommandExprContext _localctx = new LexerCommandExprContext(_ctx, getState());
+		enterRule(_localctx, 98, RULE_lexerCommandExpr);
 		try {
 			setState(827);
 			//_errHandler.sync(this);
@@ -3886,8 +3886,8 @@ public class GrammarParser extends Parser<Token> {
 		    return getRuleContexts(AlternativeContext.class);
 		}
 		public TerminalNode<Token> OR() { return getToken(GrammarParser.OR, 0); }
-		public AltListContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public AltListContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_altList; }
 		@Override
@@ -3907,8 +3907,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final AltListContext altList() throws RecognitionException {
-		AltListContext _localctx = new AltListContext(_ctx, 100);
-		enterRule(_localctx, RULE_altList);
+		AltListContext _localctx = new AltListContext(_ctx, getState());
+		enterRule(_localctx, 100, RULE_altList);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
@@ -3947,8 +3947,8 @@ public class GrammarParser extends Parser<Token> {
 		public ElementsContext elements() {
 		    return getRuleContext(ElementsContext.class,0);
 		}
-		public AlternativeContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public AlternativeContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_alternative; }
 		@Override
@@ -3968,8 +3968,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final AlternativeContext alternative() throws RecognitionException {
-		AlternativeContext _localctx = new AlternativeContext(_ctx, 102);
-		enterRule(_localctx, RULE_alternative);
+		AlternativeContext _localctx = new AlternativeContext(_ctx, getState());
+		enterRule(_localctx, 102, RULE_alternative);
 		try {
 			setState(844);
 			//_errHandler.sync(this);
@@ -4003,8 +4003,8 @@ public class GrammarParser extends Parser<Token> {
 		public ElementContext element() {
 		    return getRuleContext(ElementContext.class,0);
 		}
-		public ElementsContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public ElementsContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_elements; }
 		@Override
@@ -4024,8 +4024,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final ElementsContext elements() throws RecognitionException {
-		ElementsContext _localctx = new ElementsContext(_ctx, 104);
-		enterRule(_localctx, RULE_elements);
+		ElementsContext _localctx = new ElementsContext(_ctx, getState());
+		enterRule(_localctx, 104, RULE_elements);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
@@ -4079,8 +4079,8 @@ public class GrammarParser extends Parser<Token> {
 		public LabeledElementContext labeledElement() {
 		    return getRuleContext(LabeledElementContext.class,0);
 		}
-		public ElementContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public ElementContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_element; }
 		@Override
@@ -4100,8 +4100,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final ElementContext element() throws RecognitionException {
-		ElementContext _localctx = new ElementContext(_ctx, 106);
-		enterRule(_localctx, RULE_element);
+		ElementContext _localctx = new ElementContext(_ctx, getState());
+		enterRule(_localctx, 106, RULE_element);
 		try {
 			setState(876);
 			//_errHandler.sync(this);
@@ -4197,8 +4197,8 @@ public class GrammarParser extends Parser<Token> {
 		}
 		public TerminalNode<Token> PLUS_ASSIGN() { return getToken(GrammarParser.PLUS_ASSIGN, 0); }
 		public TerminalNode<Token> ASSIGN() { return getToken(GrammarParser.ASSIGN, 0); }
-		public LabeledElementContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public LabeledElementContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_labeledElement; }
 		@Override
@@ -4218,8 +4218,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final LabeledElementContext labeledElement() throws RecognitionException {
-		LabeledElementContext _localctx = new LabeledElementContext(_ctx, 108);
-		enterRule(_localctx, RULE_labeledElement);
+		LabeledElementContext _localctx = new LabeledElementContext(_ctx, getState());
+		enterRule(_localctx, 108, RULE_labeledElement);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
@@ -4274,8 +4274,8 @@ public class GrammarParser extends Parser<Token> {
 		public BlockSuffixContext blockSuffix() {
 		    return getRuleContext(BlockSuffixContext.class,0);
 		}
-		public EbnfContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public EbnfContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_ebnf; }
 		@Override
@@ -4295,8 +4295,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final EbnfContext ebnf() throws RecognitionException {
-		EbnfContext _localctx = new EbnfContext(_ctx, 110);
-		enterRule(_localctx, RULE_ebnf);
+		EbnfContext _localctx = new EbnfContext(_ctx, getState());
+		enterRule(_localctx, 110, RULE_ebnf);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
@@ -4332,8 +4332,8 @@ public class GrammarParser extends Parser<Token> {
 		public EbnfSuffixContext ebnfSuffix() {
 		    return getRuleContext(EbnfSuffixContext.class,0);
 		}
-		public BlockSuffixContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public BlockSuffixContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_blockSuffix; }
 		@Override
@@ -4353,8 +4353,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final BlockSuffixContext blockSuffix() throws RecognitionException {
-		BlockSuffixContext _localctx = new BlockSuffixContext(_ctx, 112);
-		enterRule(_localctx, RULE_blockSuffix);
+		BlockSuffixContext _localctx = new BlockSuffixContext(_ctx, getState());
+		enterRule(_localctx, 112, RULE_blockSuffix);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
@@ -4376,8 +4376,8 @@ public class GrammarParser extends Parser<Token> {
 		public TerminalNode<Token> PLUS() { return getToken(GrammarParser.PLUS, 0); }
 		public TerminalNode<Token> STAR() { return getToken(GrammarParser.STAR, 0); }
 		public TerminalNode<Token> QUESTION() { return getToken(GrammarParser.QUESTION, 0); }
-		public EbnfSuffixContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public EbnfSuffixContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_ebnfSuffix; }
 		@Override
@@ -4397,8 +4397,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final EbnfSuffixContext ebnfSuffix() throws RecognitionException {
-		EbnfSuffixContext _localctx = new EbnfSuffixContext(_ctx, 114);
-		enterRule(_localctx, RULE_ebnfSuffix);
+		EbnfSuffixContext _localctx = new EbnfSuffixContext(_ctx, getState());
+		enterRule(_localctx, 114, RULE_ebnfSuffix);
 		try {
 			setState(908);
 			//_errHandler.sync(this);
@@ -4454,8 +4454,8 @@ public class GrammarParser extends Parser<Token> {
 		}
 		public TerminalNode<Token> DOT() { return getToken(GrammarParser.DOT, 0); }
 		public TerminalNode<Token> RULE_REF() { return getToken(GrammarParser.RULE_REF, 0); }
-		public LexerAtomContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public LexerAtomContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_lexerAtom; }
 		@Override
@@ -4475,8 +4475,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final LexerAtomContext lexerAtom() throws RecognitionException {
-		LexerAtomContext _localctx = new LexerAtomContext(_ctx, 116);
-		enterRule(_localctx, RULE_lexerAtom);
+		LexerAtomContext _localctx = new LexerAtomContext(_ctx, getState());
+		enterRule(_localctx, 116, RULE_lexerAtom);
 		try {
 			setState(926);
 			//_errHandler.sync(this);
@@ -4561,8 +4561,8 @@ public class GrammarParser extends Parser<Token> {
 		public RulerefContext ruleref() {
 		    return getRuleContext(RulerefContext.class,0);
 		}
-		public AtomContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public AtomContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_atom; }
 		@Override
@@ -4582,8 +4582,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final AtomContext atom() throws RecognitionException {
-		AtomContext _localctx = new AtomContext(_ctx, 118);
-		enterRule(_localctx, RULE_atom);
+		AtomContext _localctx = new AtomContext(_ctx, getState());
+		enterRule(_localctx, 118, RULE_atom);
 		try {
 			setState(942);
 			//_errHandler.sync(this);
@@ -4652,8 +4652,8 @@ public class GrammarParser extends Parser<Token> {
 		    return getRuleContext(BlockSetContext.class,0);
 		}
 		public TerminalNode<Token> NOT() { return getToken(GrammarParser.NOT, 0); }
-		public NotSetContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public NotSetContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_notSet; }
 		@Override
@@ -4673,8 +4673,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final NotSetContext notSet() throws RecognitionException {
-		NotSetContext _localctx = new NotSetContext(_ctx, 120);
-		enterRule(_localctx, RULE_notSet);
+		NotSetContext _localctx = new NotSetContext(_ctx, getState());
+		enterRule(_localctx, 120, RULE_notSet);
 		try {
 			setState(952);
 			//_errHandler.sync(this);
@@ -4717,8 +4717,8 @@ public class GrammarParser extends Parser<Token> {
 		}
 		public TerminalNode<Token> LPAREN() { return getToken(GrammarParser.LPAREN, 0); }
 		public TerminalNode<Token> OR() { return getToken(GrammarParser.OR, 0); }
-		public BlockSetContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public BlockSetContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_blockSet; }
 		@Override
@@ -4738,8 +4738,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final BlockSetContext blockSet() throws RecognitionException {
-		BlockSetContext _localctx = new BlockSetContext(_ctx, 122);
-		enterRule(_localctx, RULE_blockSet);
+		BlockSetContext _localctx = new BlockSetContext(_ctx, getState());
+		enterRule(_localctx, 122, RULE_blockSet);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
@@ -4785,8 +4785,8 @@ public class GrammarParser extends Parser<Token> {
 		}
 		public TerminalNode<Token> STRING_LITERAL() { return getToken(GrammarParser.STRING_LITERAL, 0); }
 		public TerminalNode<Token> TOKEN_REF() { return getToken(GrammarParser.TOKEN_REF, 0); }
-		public SetElementContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public SetElementContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_setElement; }
 		@Override
@@ -4806,8 +4806,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(1)
 	public final SetElementContext setElement() throws RecognitionException {
-		SetElementContext _localctx = new SetElementContext(_ctx, 124);
-		enterRule(_localctx, RULE_setElement);
+		SetElementContext _localctx = new SetElementContext(_ctx, getState());
+		enterRule(_localctx, 124, RULE_setElement);
 		try {
 			setState(977);
 			//_errHandler.sync(this);
@@ -4865,8 +4865,8 @@ public class GrammarParser extends Parser<Token> {
 		public RuleActionContext ruleAction() {
 		    return getRuleContext(RuleActionContext.class,0);
 		}
-		public BlockContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public BlockContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_block; }
 		@Override
@@ -4886,8 +4886,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final BlockContext block() throws RecognitionException {
-		BlockContext _localctx = new BlockContext(_ctx, 126);
-		enterRule(_localctx, RULE_block);
+		BlockContext _localctx = new BlockContext(_ctx, getState());
+		enterRule(_localctx, 126, RULE_block);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
@@ -4946,8 +4946,8 @@ public class GrammarParser extends Parser<Token> {
 		    return getRuleContext(ArgActionBlockContext.class,0);
 		}
 		public TerminalNode<Token> RULE_REF() { return getToken(GrammarParser.RULE_REF, 0); }
-		public RulerefContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public RulerefContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_ruleref; }
 		@Override
@@ -4967,8 +4967,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final RulerefContext ruleref() throws RecognitionException {
-		RulerefContext _localctx = new RulerefContext(_ctx, 128);
-		enterRule(_localctx, RULE_ruleref);
+		RulerefContext _localctx = new RulerefContext(_ctx, getState());
+		enterRule(_localctx, 128, RULE_ruleref);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
@@ -5001,8 +5001,8 @@ public class GrammarParser extends Parser<Token> {
 		public TerminalNode<Token> STRING_LITERAL(int i) {
 		    return getToken(GrammarParser.STRING_LITERAL, i);
 		}
-		public RangeContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public RangeContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_range; }
 		@Override
@@ -5022,8 +5022,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final RangeContext range() throws RecognitionException {
-		RangeContext _localctx = new RangeContext(_ctx, 130);
-		enterRule(_localctx, RULE_range);
+		RangeContext _localctx = new RangeContext(_ctx, getState());
+		enterRule(_localctx, 130, RULE_range);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
@@ -5049,8 +5049,8 @@ public class GrammarParser extends Parser<Token> {
 		    return getRuleContext(ElementOptionsContext.class,0);
 		}
 		public TerminalNode<Token> TOKEN_REF() { return getToken(GrammarParser.TOKEN_REF, 0); }
-		public TerminalContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public TerminalContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_terminal; }
 		@Override
@@ -5070,8 +5070,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final TerminalContext terminal() throws RecognitionException {
-		TerminalContext _localctx = new TerminalContext(_ctx, 132);
-		enterRule(_localctx, RULE_terminal);
+		TerminalContext _localctx = new TerminalContext(_ctx, getState());
+		enterRule(_localctx, 132, RULE_terminal);
 		try {
 			setState(1024);
 			//_errHandler.sync(this);
@@ -5130,8 +5130,8 @@ public class GrammarParser extends Parser<Token> {
 		public ElementOptionContext elementOption(int i) {
 		    return getRuleContext(ElementOptionContext.class,i);
 		}
-		public ElementOptionsContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public ElementOptionsContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_elementOptions; }
 		@Override
@@ -5151,8 +5151,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final ElementOptionsContext elementOptions() throws RecognitionException {
-		ElementOptionsContext _localctx = new ElementOptionsContext(_ctx, 134);
-		enterRule(_localctx, RULE_elementOptions);
+		ElementOptionsContext _localctx = new ElementOptionsContext(_ctx, getState());
+		enterRule(_localctx, 134, RULE_elementOptions);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
@@ -5198,8 +5198,8 @@ public class GrammarParser extends Parser<Token> {
 		    return getRuleContext(QidContext.class,0);
 		}
 		public TerminalNode<Token> ASSIGN() { return getToken(GrammarParser.ASSIGN, 0); }
-		public ElementOptionContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public ElementOptionContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_elementOption; }
 		@Override
@@ -5219,8 +5219,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final ElementOptionContext elementOption() throws RecognitionException {
-		ElementOptionContext _localctx = new ElementOptionContext(_ctx, 136);
-		enterRule(_localctx, RULE_elementOption);
+		ElementOptionContext _localctx = new ElementOptionContext(_ctx, getState());
+		enterRule(_localctx, 136, RULE_elementOption);
 		try {
 			setState(1053);
 			//_errHandler.sync(this);
@@ -5271,8 +5271,8 @@ public class GrammarParser extends Parser<Token> {
 		public TerminalNode<Token> TEMPLATE() { return getToken(GrammarParser.TEMPLATE, 0); }
 		public TerminalNode<Token> RULE_REF() { return getToken(GrammarParser.RULE_REF, 0); }
 		public TerminalNode<Token> TOKEN_REF() { return getToken(GrammarParser.TOKEN_REF, 0); }
-		public IdContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public IdContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_id; }
 		@Override
@@ -5292,8 +5292,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final IdContext id() throws RecognitionException {
-		IdContext _localctx = new IdContext(_ctx, 138);
-		enterRule(_localctx, RULE_id);
+		IdContext _localctx = new IdContext(_ctx, getState());
+		enterRule(_localctx, 138, RULE_id);
 		try {
 			setState(1061);
 			//_errHandler.sync(this);
@@ -5339,8 +5339,8 @@ public class GrammarParser extends Parser<Token> {
 		public IdContext id(int i) {
 		    return getRuleContext(IdContext.class,i);
 		}
-		public QidContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public QidContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_qid; }
 		@Override
@@ -5360,8 +5360,8 @@ public class GrammarParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final QidContext qid() throws RecognitionException {
-		QidContext _localctx = new QidContext(_ctx, 140);
-		enterRule(_localctx, RULE_qid);
+		QidContext _localctx = new QidContext(_ctx, getState());
+		enterRule(_localctx, 140, RULE_qid);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);

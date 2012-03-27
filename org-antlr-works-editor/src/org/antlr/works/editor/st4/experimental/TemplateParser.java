@@ -137,8 +137,8 @@ public class TemplateParser extends Parser<Token> {
 		public StringContext string() {
 		    return getRuleContext(StringContext.class,0);
 		}
-		public GroupContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public GroupContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_group; }
 		@Override
@@ -158,8 +158,8 @@ public class TemplateParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final GroupContext group() throws RecognitionException {
-		GroupContext _localctx = new GroupContext(_ctx, 0);
-		enterRule(_localctx, RULE_group);
+		GroupContext _localctx = new GroupContext(_ctx, getState());
+		enterRule(_localctx, 0, RULE_group);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
@@ -235,8 +235,8 @@ public class TemplateParser extends Parser<Token> {
 		    return getToken(TemplateParser.ID, i);
 		}
 		public List<? extends TerminalNode<Token>> ID() { return getTokens(TemplateParser.ID); }
-		public OldStyleHeaderContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public OldStyleHeaderContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_oldStyleHeader; }
 		@Override
@@ -256,8 +256,8 @@ public class TemplateParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final OldStyleHeaderContext oldStyleHeader() throws RecognitionException {
-		OldStyleHeaderContext _localctx = new OldStyleHeaderContext(_ctx, 2);
-		enterRule(_localctx, RULE_oldStyleHeader);
+		OldStyleHeaderContext _localctx = new OldStyleHeaderContext(_ctx, getState());
+		enterRule(_localctx, 2, RULE_oldStyleHeader);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
@@ -319,8 +319,8 @@ public class TemplateParser extends Parser<Token> {
 		    return getToken(TemplateParser.ID, i);
 		}
 		public List<? extends TerminalNode<Token>> ID() { return getTokens(TemplateParser.ID); }
-		public GroupNameContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public GroupNameContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_groupName; }
 		@Override
@@ -340,8 +340,8 @@ public class TemplateParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final GroupNameContext groupName() throws RecognitionException {
-		GroupNameContext _localctx = new GroupNameContext(_ctx, 4);
-		enterRule(_localctx, RULE_groupName);
+		GroupNameContext _localctx = new GroupNameContext(_ctx, getState());
+		enterRule(_localctx, 4, RULE_groupName);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
@@ -379,8 +379,8 @@ public class TemplateParser extends Parser<Token> {
 	public static class DelimitersContext extends ParserRuleContext<Token> {
 		public TerminalNode<Token> DelimitersOpenSpec_DELIMITER_STRING() { return getToken(TemplateParser.DelimitersOpenSpec_DELIMITER_STRING, 0); }
 		public TerminalNode<Token> DelimitersCloseSpec_DELIMITER_STRING() { return getToken(TemplateParser.DelimitersCloseSpec_DELIMITER_STRING, 0); }
-		public DelimitersContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public DelimitersContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_delimiters; }
 		@Override
@@ -400,8 +400,8 @@ public class TemplateParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final DelimitersContext delimiters() throws RecognitionException {
-		DelimitersContext _localctx = new DelimitersContext(_ctx, 6);
-		enterRule(_localctx, RULE_delimiters);
+		DelimitersContext _localctx = new DelimitersContext(_ctx, getState());
+		enterRule(_localctx, 6, RULE_delimiters);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
@@ -429,8 +429,8 @@ public class TemplateParser extends Parser<Token> {
 		public TemplateDefContext templateDef() {
 		    return getRuleContext(TemplateDefContext.class,0);
 		}
-		public DefContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public DefContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_def; }
 		@Override
@@ -450,8 +450,8 @@ public class TemplateParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final DefContext def() throws RecognitionException {
-		DefContext _localctx = new DefContext(_ctx, 8);
-		enterRule(_localctx, RULE_def);
+		DefContext _localctx = new DefContext(_ctx, getState());
+		enterRule(_localctx, 8, RULE_def);
 		try {
 			setState(161);
 			//_errHandler.sync(this);
@@ -503,8 +503,8 @@ public class TemplateParser extends Parser<Token> {
 		public FormalArgsContext formalArgs() {
 		    return getRuleContext(FormalArgsContext.class,0);
 		}
-		public TemplateDefContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public TemplateDefContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_templateDef; }
 		@Override
@@ -524,8 +524,8 @@ public class TemplateParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final TemplateDefContext templateDef() throws RecognitionException {
-		TemplateDefContext _localctx = new TemplateDefContext(_ctx, 10);
-		enterRule(_localctx, RULE_templateDef);
+		TemplateDefContext _localctx = new TemplateDefContext(_ctx, getState());
+		enterRule(_localctx, 10, RULE_templateDef);
 		try {
 			setState(201);
 			//_errHandler.sync(this);
@@ -609,8 +609,8 @@ public class TemplateParser extends Parser<Token> {
 		public FormalArgContext formalArg(int i) {
 		    return getRuleContext(FormalArgContext.class,i);
 		}
-		public FormalArgsContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public FormalArgsContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_formalArgs; }
 		@Override
@@ -630,8 +630,8 @@ public class TemplateParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final FormalArgsContext formalArgs() throws RecognitionException {
-		FormalArgsContext _localctx = new FormalArgsContext(_ctx, 12);
-		enterRule(_localctx, RULE_formalArgs);
+		FormalArgsContext _localctx = new FormalArgsContext(_ctx, getState());
+		enterRule(_localctx, 12, RULE_formalArgs);
 		try {
 			int _alt;
 			setState(216);
@@ -689,8 +689,8 @@ public class TemplateParser extends Parser<Token> {
 		public AnonymousTemplateContext anonymousTemplate() {
 		    return getRuleContext(AnonymousTemplateContext.class,0);
 		}
-		public FormalArgContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public FormalArgContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_formalArg; }
 		@Override
@@ -710,8 +710,8 @@ public class TemplateParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final FormalArgContext formalArg() throws RecognitionException {
-		FormalArgContext _localctx = new FormalArgContext(_ctx, 14);
-		enterRule(_localctx, RULE_formalArg);
+		FormalArgContext _localctx = new FormalArgContext(_ctx, getState());
+		enterRule(_localctx, 14, RULE_formalArg);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
@@ -771,8 +771,8 @@ public class TemplateParser extends Parser<Token> {
 		    return getRuleContext(DictContext.class,0);
 		}
 		public TerminalNode<Token> ID() { return getToken(TemplateParser.ID, 0); }
-		public DictDefContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public DictDefContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_dictDef; }
 		@Override
@@ -792,8 +792,8 @@ public class TemplateParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final DictDefContext dictDef() throws RecognitionException {
-		DictDefContext _localctx = new DictDefContext(_ctx, 16);
-		enterRule(_localctx, RULE_dictDef);
+		DictDefContext _localctx = new DictDefContext(_ctx, getState());
+		enterRule(_localctx, 16, RULE_dictDef);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
@@ -817,8 +817,8 @@ public class TemplateParser extends Parser<Token> {
 		public DictPairsContext dictPairs() {
 		    return getRuleContext(DictPairsContext.class,0);
 		}
-		public DictContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public DictContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_dict; }
 		@Override
@@ -838,8 +838,8 @@ public class TemplateParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final DictContext dict() throws RecognitionException {
-		DictContext _localctx = new DictContext(_ctx, 18);
-		enterRule(_localctx, RULE_dict);
+		DictContext _localctx = new DictContext(_ctx, getState());
+		enterRule(_localctx, 18, RULE_dict);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
@@ -869,8 +869,8 @@ public class TemplateParser extends Parser<Token> {
 		public DefaultValuePairContext defaultValuePair() {
 		    return getRuleContext(DefaultValuePairContext.class,0);
 		}
-		public DictPairsContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public DictPairsContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_dictPairs; }
 		@Override
@@ -890,8 +890,8 @@ public class TemplateParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final DictPairsContext dictPairs() throws RecognitionException {
-		DictPairsContext _localctx = new DictPairsContext(_ctx, 20);
-		enterRule(_localctx, RULE_dictPairs);
+		DictPairsContext _localctx = new DictPairsContext(_ctx, getState());
+		enterRule(_localctx, 20, RULE_dictPairs);
 		try {
 			int _alt;
 			setState(265);
@@ -953,8 +953,8 @@ public class TemplateParser extends Parser<Token> {
 		public KeyValueContext keyValue() {
 		    return getRuleContext(KeyValueContext.class,0);
 		}
-		public DefaultValuePairContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public DefaultValuePairContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_defaultValuePair; }
 		@Override
@@ -974,8 +974,8 @@ public class TemplateParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final DefaultValuePairContext defaultValuePair() throws RecognitionException {
-		DefaultValuePairContext _localctx = new DefaultValuePairContext(_ctx, 22);
-		enterRule(_localctx, RULE_defaultValuePair);
+		DefaultValuePairContext _localctx = new DefaultValuePairContext(_ctx, getState());
+		enterRule(_localctx, 22, RULE_defaultValuePair);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
@@ -1002,8 +1002,8 @@ public class TemplateParser extends Parser<Token> {
 		public KeyValueContext keyValue() {
 		    return getRuleContext(KeyValueContext.class,0);
 		}
-		public KeyValuePairContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public KeyValuePairContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_keyValuePair; }
 		@Override
@@ -1023,8 +1023,8 @@ public class TemplateParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final KeyValuePairContext keyValuePair() throws RecognitionException {
-		KeyValuePairContext _localctx = new KeyValuePairContext(_ctx, 24);
-		enterRule(_localctx, RULE_keyValuePair);
+		KeyValuePairContext _localctx = new KeyValuePairContext(_ctx, getState());
+		enterRule(_localctx, 24, RULE_keyValuePair);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
@@ -1060,8 +1060,8 @@ public class TemplateParser extends Parser<Token> {
 		public AnonymousTemplateContext anonymousTemplate() {
 		    return getRuleContext(AnonymousTemplateContext.class,0);
 		}
-		public KeyValueContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public KeyValueContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_keyValue; }
 		@Override
@@ -1081,8 +1081,8 @@ public class TemplateParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final KeyValueContext keyValue() throws RecognitionException {
-		KeyValueContext _localctx = new KeyValueContext(_ctx, 26);
-		enterRule(_localctx, RULE_keyValue);
+		KeyValueContext _localctx = new KeyValueContext(_ctx, getState());
+		enterRule(_localctx, 26, RULE_keyValue);
 		try {
 			setState(293);
 			//_errHandler.sync(this);
@@ -1152,8 +1152,8 @@ public class TemplateParser extends Parser<Token> {
 		public StringTemplateContext stringTemplate() {
 		    return getRuleContext(StringTemplateContext.class,0);
 		}
-		public StringContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public StringContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_string; }
 		@Override
@@ -1173,8 +1173,8 @@ public class TemplateParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final StringContext string() throws RecognitionException {
-		StringContext _localctx = new StringContext(_ctx, 28);
-		enterRule(_localctx, RULE_string);
+		StringContext _localctx = new StringContext(_ctx, getState());
+		enterRule(_localctx, 28, RULE_string);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
@@ -1200,8 +1200,8 @@ public class TemplateParser extends Parser<Token> {
 		public TerminalNode<Token> QUOTE(int i) {
 		    return getToken(TemplateParser.QUOTE, i);
 		}
-		public StringTemplateContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public StringTemplateContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_stringTemplate; }
 		@Override
@@ -1221,8 +1221,8 @@ public class TemplateParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final StringTemplateContext stringTemplate() throws RecognitionException {
-		StringTemplateContext _localctx = new StringTemplateContext(_ctx, 30);
-		enterRule(_localctx, RULE_stringTemplate);
+		StringTemplateContext _localctx = new StringTemplateContext(_ctx, getState());
+		enterRule(_localctx, 30, RULE_stringTemplate);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
@@ -1248,8 +1248,8 @@ public class TemplateParser extends Parser<Token> {
 		}
 		public TerminalNode<Token> BigStringTemplate_END() { return getToken(TemplateParser.BigStringTemplate_END, 0); }
 		public TerminalNode<Token> BIGSTRING() { return getToken(TemplateParser.BIGSTRING, 0); }
-		public BigstringTemplateContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public BigstringTemplateContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_bigstringTemplate; }
 		@Override
@@ -1269,8 +1269,8 @@ public class TemplateParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final BigstringTemplateContext bigstringTemplate() throws RecognitionException {
-		BigstringTemplateContext _localctx = new BigstringTemplateContext(_ctx, 32);
-		enterRule(_localctx, RULE_bigstringTemplate);
+		BigstringTemplateContext _localctx = new BigstringTemplateContext(_ctx, getState());
+		enterRule(_localctx, 32, RULE_bigstringTemplate);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
@@ -1296,8 +1296,8 @@ public class TemplateParser extends Parser<Token> {
 		    return getRuleContext(TemplateBodyContext.class,0);
 		}
 		public TerminalNode<Token> BigStringLineTemplate_END() { return getToken(TemplateParser.BigStringLineTemplate_END, 0); }
-		public BigstringTemplateNoNewlineContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public BigstringTemplateNoNewlineContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_bigstringTemplateNoNewline; }
 		@Override
@@ -1317,8 +1317,8 @@ public class TemplateParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final BigstringTemplateNoNewlineContext bigstringTemplateNoNewline() throws RecognitionException {
-		BigstringTemplateNoNewlineContext _localctx = new BigstringTemplateNoNewlineContext(_ctx, 34);
-		enterRule(_localctx, RULE_bigstringTemplateNoNewline);
+		BigstringTemplateNoNewlineContext _localctx = new BigstringTemplateNoNewlineContext(_ctx, getState());
+		enterRule(_localctx, 34, RULE_bigstringTemplateNoNewline);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
@@ -1347,8 +1347,8 @@ public class TemplateParser extends Parser<Token> {
 		    return getRuleContext(TemplateBodyContext.class,0);
 		}
 		public TerminalNode<Token> LBRACE() { return getToken(TemplateParser.LBRACE, 0); }
-		public AnonymousTemplateContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public AnonymousTemplateContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_anonymousTemplate; }
 		@Override
@@ -1368,8 +1368,8 @@ public class TemplateParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final AnonymousTemplateContext anonymousTemplate() throws RecognitionException {
-		AnonymousTemplateContext _localctx = new AnonymousTemplateContext(_ctx, 36);
-		enterRule(_localctx, RULE_anonymousTemplate);
+		AnonymousTemplateContext _localctx = new AnonymousTemplateContext(_ctx, getState());
+		enterRule(_localctx, 36, RULE_anonymousTemplate);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
@@ -1407,8 +1407,8 @@ public class TemplateParser extends Parser<Token> {
 		public TerminalNode<Token> PIPE() { return getToken(TemplateParser.PIPE, 0); }
 		public List<? extends TerminalNode<Token>> TEMPLATE_PARAMETER() { return getTokens(TemplateParser.TEMPLATE_PARAMETER); }
 		public TerminalNode<Token> COMMA() { return getToken(TemplateParser.COMMA, 0); }
-		public AnonymousTemplateParametersContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public AnonymousTemplateParametersContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_anonymousTemplateParameters; }
 		@Override
@@ -1428,8 +1428,8 @@ public class TemplateParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final AnonymousTemplateParametersContext anonymousTemplateParameters() throws RecognitionException {
-		AnonymousTemplateParametersContext _localctx = new AnonymousTemplateParametersContext(_ctx, 38);
-		enterRule(_localctx, RULE_anonymousTemplateParameters);
+		AnonymousTemplateParametersContext _localctx = new AnonymousTemplateParametersContext(_ctx, getState());
+		enterRule(_localctx, 38, RULE_anonymousTemplateParameters);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
@@ -1483,8 +1483,8 @@ public class TemplateParser extends Parser<Token> {
 		public EscapeContext escape() {
 		    return getRuleContext(EscapeContext.class,0);
 		}
-		public TemplateBodyContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public TemplateBodyContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_templateBody; }
 		@Override
@@ -1504,8 +1504,8 @@ public class TemplateParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final TemplateBodyContext templateBody() throws RecognitionException {
-		TemplateBodyContext _localctx = new TemplateBodyContext(_ctx, 40);
-		enterRule(_localctx, RULE_templateBody);
+		TemplateBodyContext _localctx = new TemplateBodyContext(_ctx, getState());
+		enterRule(_localctx, 40, RULE_templateBody);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
@@ -1584,8 +1584,8 @@ public class TemplateParser extends Parser<Token> {
 		public TerminalNode<Token> CLOSE_DELIMITER() { return getToken(TemplateParser.CLOSE_DELIMITER, 0); }
 		public TerminalNode<Token> ESCAPE() { return getToken(TemplateParser.ESCAPE, 0); }
 		public TerminalNode<Token> OPEN_DELIMITER() { return getToken(TemplateParser.OPEN_DELIMITER, 0); }
-		public EscapeContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public EscapeContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_escape; }
 		@Override
@@ -1605,8 +1605,8 @@ public class TemplateParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final EscapeContext escape() throws RecognitionException {
-		EscapeContext _localctx = new EscapeContext(_ctx, 42);
-		enterRule(_localctx, RULE_escape);
+		EscapeContext _localctx = new EscapeContext(_ctx, getState());
+		enterRule(_localctx, 42, RULE_escape);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
@@ -1636,8 +1636,8 @@ public class TemplateParser extends Parser<Token> {
 		    return getRuleContext(ExprContext.class,0);
 		}
 		public TerminalNode<Token> OPEN_DELIMITER() { return getToken(TemplateParser.OPEN_DELIMITER, 0); }
-		public ExprTagContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public ExprTagContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_exprTag; }
 		@Override
@@ -1657,8 +1657,8 @@ public class TemplateParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final ExprTagContext exprTag() throws RecognitionException {
-		ExprTagContext _localctx = new ExprTagContext(_ctx, 44);
-		enterRule(_localctx, RULE_exprTag);
+		ExprTagContext _localctx = new ExprTagContext(_ctx, getState());
+		enterRule(_localctx, 44, RULE_exprTag);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
@@ -1702,8 +1702,8 @@ public class TemplateParser extends Parser<Token> {
 		public TerminalNode<Token> CLOSE_DELIMITER(int i) {
 		    return getToken(TemplateParser.CLOSE_DELIMITER, i);
 		}
-		public RegionContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public RegionContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_region; }
 		@Override
@@ -1723,8 +1723,8 @@ public class TemplateParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final RegionContext region() throws RecognitionException {
-		RegionContext _localctx = new RegionContext(_ctx, 46);
-		enterRule(_localctx, RULE_region);
+		RegionContext _localctx = new RegionContext(_ctx, getState());
+		enterRule(_localctx, 46, RULE_region);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
@@ -1752,8 +1752,8 @@ public class TemplateParser extends Parser<Token> {
 		public AnonymousTemplateContext anonymousTemplate() {
 		    return getRuleContext(AnonymousTemplateContext.class,0);
 		}
-		public SubtemplateContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public SubtemplateContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_subtemplate; }
 		@Override
@@ -1773,8 +1773,8 @@ public class TemplateParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final SubtemplateContext subtemplate() throws RecognitionException {
-		SubtemplateContext _localctx = new SubtemplateContext(_ctx, 48);
-		enterRule(_localctx, RULE_subtemplate);
+		SubtemplateContext _localctx = new SubtemplateContext(_ctx, getState());
+		enterRule(_localctx, 48, RULE_subtemplate);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
@@ -1825,8 +1825,8 @@ public class TemplateParser extends Parser<Token> {
 		public List<? extends TerminalNode<Token>> LPAREN() { return getTokens(TemplateParser.LPAREN); }
 		public TerminalNode<Token> IF() { return getToken(TemplateParser.IF, 0); }
 		public TerminalNode<Token> ELSEIF() { return getToken(TemplateParser.ELSEIF, 0); }
-		public IfstatContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public IfstatContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_ifstat; }
 		@Override
@@ -1846,8 +1846,8 @@ public class TemplateParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final IfstatContext ifstat() throws RecognitionException {
-		IfstatContext _localctx = new IfstatContext(_ctx, 50);
-		enterRule(_localctx, RULE_ifstat);
+		IfstatContext _localctx = new IfstatContext(_ctx, getState());
+		enterRule(_localctx, 50, RULE_ifstat);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
@@ -1916,8 +1916,8 @@ public class TemplateParser extends Parser<Token> {
 		    return getRuleContexts(AndConditionalContext.class);
 		}
 		public TerminalNode<Token> OR() { return getToken(TemplateParser.OR, 0); }
-		public ConditionalContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public ConditionalContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_conditional; }
 		@Override
@@ -1937,8 +1937,8 @@ public class TemplateParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final ConditionalContext conditional() throws RecognitionException {
-		ConditionalContext _localctx = new ConditionalContext(_ctx, 52);
-		enterRule(_localctx, RULE_conditional);
+		ConditionalContext _localctx = new ConditionalContext(_ctx, getState());
+		enterRule(_localctx, 52, RULE_conditional);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
@@ -1981,8 +1981,8 @@ public class TemplateParser extends Parser<Token> {
 		    return getRuleContext(NotConditionalContext.class,i);
 		}
 		public TerminalNode<Token> AND() { return getToken(TemplateParser.AND, 0); }
-		public AndConditionalContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public AndConditionalContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_andConditional; }
 		@Override
@@ -2002,8 +2002,8 @@ public class TemplateParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final AndConditionalContext andConditional() throws RecognitionException {
-		AndConditionalContext _localctx = new AndConditionalContext(_ctx, 54);
-		enterRule(_localctx, RULE_andConditional);
+		AndConditionalContext _localctx = new AndConditionalContext(_ctx, getState());
+		enterRule(_localctx, 54, RULE_andConditional);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
@@ -2046,8 +2046,8 @@ public class TemplateParser extends Parser<Token> {
 		    return getRuleContext(NotConditionalContext.class,0);
 		}
 		public TerminalNode<Token> NOT() { return getToken(TemplateParser.NOT, 0); }
-		public NotConditionalContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public NotConditionalContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_notConditional; }
 		@Override
@@ -2067,8 +2067,8 @@ public class TemplateParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final NotConditionalContext notConditional() throws RecognitionException {
-		NotConditionalContext _localctx = new NotConditionalContext(_ctx, 56);
-		enterRule(_localctx, RULE_notConditional);
+		NotConditionalContext _localctx = new NotConditionalContext(_ctx, getState());
+		enterRule(_localctx, 56, RULE_notConditional);
 		try {
 			setState(468);
 			//_errHandler.sync(this);
@@ -2108,8 +2108,8 @@ public class TemplateParser extends Parser<Token> {
 		public List<? extends OptionContext> option() {
 		    return getRuleContexts(OptionContext.class);
 		}
-		public ExprOptionsContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public ExprOptionsContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_exprOptions; }
 		@Override
@@ -2129,8 +2129,8 @@ public class TemplateParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final ExprOptionsContext exprOptions() throws RecognitionException {
-		ExprOptionsContext _localctx = new ExprOptionsContext(_ctx, 58);
-		enterRule(_localctx, RULE_exprOptions);
+		ExprOptionsContext _localctx = new ExprOptionsContext(_ctx, getState());
+		enterRule(_localctx, 58, RULE_exprOptions);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
@@ -2173,8 +2173,8 @@ public class TemplateParser extends Parser<Token> {
 		public ExprNoCommaContext exprNoComma() {
 		    return getRuleContext(ExprNoCommaContext.class,0);
 		}
-		public OptionContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public OptionContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_option; }
 		@Override
@@ -2194,8 +2194,8 @@ public class TemplateParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final OptionContext option() throws RecognitionException {
-		OptionContext _localctx = new OptionContext(_ctx, 60);
-		enterRule(_localctx, RULE_option);
+		OptionContext _localctx = new OptionContext(_ctx, getState());
+		enterRule(_localctx, 60, RULE_option);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
@@ -2231,8 +2231,8 @@ public class TemplateParser extends Parser<Token> {
 		public MapTemplateRefContext mapTemplateRef() {
 		    return getRuleContext(MapTemplateRefContext.class,0);
 		}
-		public ExprNoCommaContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public ExprNoCommaContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_exprNoComma; }
 		@Override
@@ -2252,8 +2252,8 @@ public class TemplateParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final ExprNoCommaContext exprNoComma() throws RecognitionException {
-		ExprNoCommaContext _localctx = new ExprNoCommaContext(_ctx, 62);
-		enterRule(_localctx, RULE_exprNoComma);
+		ExprNoCommaContext _localctx = new ExprNoCommaContext(_ctx, getState());
+		enterRule(_localctx, 62, RULE_exprNoComma);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
@@ -2285,8 +2285,8 @@ public class TemplateParser extends Parser<Token> {
 		public MapExprContext mapExpr() {
 		    return getRuleContext(MapExprContext.class,0);
 		}
-		public ExprContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public ExprContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_expr; }
 		@Override
@@ -2306,8 +2306,8 @@ public class TemplateParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final ExprContext expr() throws RecognitionException {
-		ExprContext _localctx = new ExprContext(_ctx, 64);
-		enterRule(_localctx, RULE_expr);
+		ExprContext _localctx = new ExprContext(_ctx, getState());
+		enterRule(_localctx, 64, RULE_expr);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
@@ -2346,8 +2346,8 @@ public class TemplateParser extends Parser<Token> {
 		public TerminalNode<Token> COLON(int i) {
 		    return getToken(TemplateParser.COLON, i);
 		}
-		public MapExprContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public MapExprContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_mapExpr; }
 		@Override
@@ -2367,8 +2367,8 @@ public class TemplateParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final MapExprContext mapExpr() throws RecognitionException {
-		MapExprContext _localctx = new MapExprContext(_ctx, 66);
-		enterRule(_localctx, RULE_mapExpr);
+		MapExprContext _localctx = new MapExprContext(_ctx, getState());
+		enterRule(_localctx, 66, RULE_mapExpr);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
@@ -2471,8 +2471,8 @@ public class TemplateParser extends Parser<Token> {
 		    return getRuleContext(MapExprContext.class,0);
 		}
 		public List<? extends TerminalNode<Token>> LPAREN() { return getTokens(TemplateParser.LPAREN); }
-		public MapTemplateRefContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public MapTemplateRefContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_mapTemplateRef; }
 		@Override
@@ -2492,8 +2492,8 @@ public class TemplateParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final MapTemplateRefContext mapTemplateRef() throws RecognitionException {
-		MapTemplateRefContext _localctx = new MapTemplateRefContext(_ctx, 68);
-		enterRule(_localctx, RULE_mapTemplateRef);
+		MapTemplateRefContext _localctx = new MapTemplateRefContext(_ctx, getState());
+		enterRule(_localctx, 68, RULE_mapTemplateRef);
 		try {
 			setState(557);
 			//_errHandler.sync(this);
@@ -2561,8 +2561,8 @@ public class TemplateParser extends Parser<Token> {
 		    return getRuleContext(MapExprContext.class,0);
 		}
 		public TerminalNode<Token> LPAREN() { return getToken(TemplateParser.LPAREN, 0); }
-		public MemberExprContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public MemberExprContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_memberExpr; }
 		@Override
@@ -2582,8 +2582,8 @@ public class TemplateParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final MemberExprContext memberExpr() throws RecognitionException {
-		MemberExprContext _localctx = new MemberExprContext(_ctx, 70);
-		enterRule(_localctx, RULE_memberExpr);
+		MemberExprContext _localctx = new MemberExprContext(_ctx, getState());
+		enterRule(_localctx, 70, RULE_memberExpr);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
@@ -2649,8 +2649,8 @@ public class TemplateParser extends Parser<Token> {
 		public TerminalNode<Token> ID() { return getToken(TemplateParser.ID, 0); }
 		public TerminalNode<Token> DOT() { return getToken(TemplateParser.DOT, 0); }
 		public TerminalNode<Token> LPAREN() { return getToken(TemplateParser.LPAREN, 0); }
-		public IncludeExprContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public IncludeExprContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_includeExpr; }
 		@Override
@@ -2670,8 +2670,8 @@ public class TemplateParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final IncludeExprContext includeExpr() throws RecognitionException {
-		IncludeExprContext _localctx = new IncludeExprContext(_ctx, 72);
-		enterRule(_localctx, RULE_includeExpr);
+		IncludeExprContext _localctx = new IncludeExprContext(_ctx, getState());
+		enterRule(_localctx, 72, RULE_includeExpr);
 		try {
 			setState(618);
 			//_errHandler.sync(this);
@@ -2766,8 +2766,8 @@ public class TemplateParser extends Parser<Token> {
 		public TerminalNode<Token> TRUE() { return getToken(TemplateParser.TRUE, 0); }
 		public List<? extends TerminalNode<Token>> LPAREN() { return getTokens(TemplateParser.LPAREN); }
 		public TerminalNode<Token> STRING() { return getToken(TemplateParser.STRING, 0); }
-		public PrimaryContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public PrimaryContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_primary; }
 		@Override
@@ -2787,8 +2787,8 @@ public class TemplateParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final PrimaryContext primary() throws RecognitionException {
-		PrimaryContext _localctx = new PrimaryContext(_ctx, 74);
-		enterRule(_localctx, RULE_primary);
+		PrimaryContext _localctx = new PrimaryContext(_ctx, getState());
+		enterRule(_localctx, 74, RULE_primary);
 		try {
 			setState(654);
 			//_errHandler.sync(this);
@@ -2899,8 +2899,8 @@ public class TemplateParser extends Parser<Token> {
 		public List<? extends NamedArgContext> namedArg() {
 		    return getRuleContexts(NamedArgContext.class);
 		}
-		public ArgumentsContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public ArgumentsContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_arguments; }
 		@Override
@@ -2920,8 +2920,8 @@ public class TemplateParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final ArgumentsContext arguments() throws RecognitionException {
-		ArgumentsContext _localctx = new ArgumentsContext(_ctx, 76);
-		enterRule(_localctx, RULE_arguments);
+		ArgumentsContext _localctx = new ArgumentsContext(_ctx, getState());
+		enterRule(_localctx, 76, RULE_arguments);
 		try {
 			int _alt;
 			setState(679);
@@ -3000,8 +3000,8 @@ public class TemplateParser extends Parser<Token> {
 		    return getRuleContext(ArgContext.class,i);
 		}
 		public TerminalNode<Token> COMMA() { return getToken(TemplateParser.COMMA, 0); }
-		public ArgExprListContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public ArgExprListContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_argExprList; }
 		@Override
@@ -3021,8 +3021,8 @@ public class TemplateParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final ArgExprListContext argExprList() throws RecognitionException {
-		ArgExprListContext _localctx = new ArgExprListContext(_ctx, 78);
-		enterRule(_localctx, RULE_argExprList);
+		ArgExprListContext _localctx = new ArgExprListContext(_ctx, getState());
+		enterRule(_localctx, 78, RULE_argExprList);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
@@ -3061,8 +3061,8 @@ public class TemplateParser extends Parser<Token> {
 		public ExprNoCommaContext exprNoComma() {
 		    return getRuleContext(ExprNoCommaContext.class,0);
 		}
-		public ArgContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public ArgContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_arg; }
 		@Override
@@ -3082,8 +3082,8 @@ public class TemplateParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final ArgContext arg() throws RecognitionException {
-		ArgContext _localctx = new ArgContext(_ctx, 80);
-		enterRule(_localctx, RULE_arg);
+		ArgContext _localctx = new ArgContext(_ctx, getState());
+		enterRule(_localctx, 80, RULE_arg);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
@@ -3109,8 +3109,8 @@ public class TemplateParser extends Parser<Token> {
 		}
 		public TerminalNode<Token> EQUALS() { return getToken(TemplateParser.EQUALS, 0); }
 		public TerminalNode<Token> ID() { return getToken(TemplateParser.ID, 0); }
-		public NamedArgContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public NamedArgContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_namedArg; }
 		@Override
@@ -3130,8 +3130,8 @@ public class TemplateParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final NamedArgContext namedArg() throws RecognitionException {
-		NamedArgContext _localctx = new NamedArgContext(_ctx, 82);
-		enterRule(_localctx, RULE_namedArg);
+		NamedArgContext _localctx = new NamedArgContext(_ctx, getState());
+		enterRule(_localctx, 82, RULE_namedArg);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
@@ -3161,8 +3161,8 @@ public class TemplateParser extends Parser<Token> {
 		public List<? extends ListElementContext> listElement() {
 		    return getRuleContexts(ListElementContext.class);
 		}
-		public ListContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public ListContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_list; }
 		@Override
@@ -3182,8 +3182,8 @@ public class TemplateParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final ListContext list() throws RecognitionException {
-		ListContext _localctx = new ListContext(_ctx, 84);
-		enterRule(_localctx, RULE_list);
+		ListContext _localctx = new ListContext(_ctx, getState());
+		enterRule(_localctx, 84, RULE_list);
 		try {
 			int _alt;
 			setState(719);
@@ -3238,8 +3238,8 @@ public class TemplateParser extends Parser<Token> {
 		public ExprNoCommaContext exprNoComma() {
 		    return getRuleContext(ExprNoCommaContext.class,0);
 		}
-		public ListElementContext(ParserRuleContext<Token> parent, int state) {
-			super(parent, state);
+		public ListElementContext(ParserRuleContext<Token> parent, int invokingState) {
+			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_listElement; }
 		@Override
@@ -3259,8 +3259,8 @@ public class TemplateParser extends Parser<Token> {
 
 	@RuleVersion(0)
 	public final ListElementContext listElement() throws RecognitionException {
-		ListElementContext _localctx = new ListElementContext(_ctx, 86);
-		enterRule(_localctx, RULE_listElement);
+		ListElementContext _localctx = new ListElementContext(_ctx, getState());
+		enterRule(_localctx, 86, RULE_listElement);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
