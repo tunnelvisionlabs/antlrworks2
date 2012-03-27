@@ -409,7 +409,7 @@ public abstract class AbstractCompletionQuery extends AsyncCompletionQuery {
                     decisionData.inputIndex = parser.getInputStream().index();
                     decisionData.decision = 0;
                     if (ex.getCause() != null) {
-                        int stateNumber = parser.getInterpreter().getParser().getState();
+                        int stateNumber = ex.getCause().getOffendingState();
                         ATNState state = parser.getATN().states.get(stateNumber);
                         if (state instanceof StarLoopbackState) {
                             assert state.getNumberOfTransitions() == 1 && state.onlyHasEpsilonTransitions();
