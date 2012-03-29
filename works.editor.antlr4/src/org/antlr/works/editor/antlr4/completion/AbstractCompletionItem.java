@@ -61,9 +61,7 @@ public abstract class AbstractCompletionItem implements CompletionItem {
             return;
         }
 
-        AbstractCompletionQuery query = controller.getQuery();
-
-        TrackingPositionRegion applicableTo = query.getApplicableTo();
+        TrackingPositionRegion applicableTo = controller.getApplicableTo();
         if (applicableTo == null) {
             return;
         }
@@ -83,7 +81,7 @@ public abstract class AbstractCompletionItem implements CompletionItem {
             return;
         }
 
-        SnapshotPositionRegion replacementSpan = query.getApplicableTo().getRegion(snapshot);
+        SnapshotPositionRegion replacementSpan = applicableTo.getRegion(snapshot);
         substituteText(component, replacementSpan.getStart().getOffset(), replacementSpan.getLength(), getInsertPrefix().toString());
         BaseCompletionController.addRecentCompletion(getInsertPrefix().toString());
     }
@@ -141,7 +139,7 @@ public abstract class AbstractCompletionItem implements CompletionItem {
     }
 
     public boolean instantSubstitution(@NonNull JTextComponent component, @NonNull BaseCompletionController controller) {
-        if (controller.getQuery().getApplicableTo() == null) {
+        if (controller.getApplicableTo() == null) {
             return false;
         }
 

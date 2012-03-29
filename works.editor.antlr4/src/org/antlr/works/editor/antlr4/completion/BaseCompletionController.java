@@ -33,6 +33,7 @@ import org.netbeans.spi.editor.completion.CompletionController;
 import org.netbeans.spi.editor.completion.CompletionItem;
 import org.netbeans.spi.editor.completion.CompletionResultSet;
 import org.netbeans.spi.editor.completion.CompletionTask;
+import org.netbeans.spi.editor.completion.support.AsyncCompletionQuery;
 import org.netbeans.spi.editor.completion.support.AsyncCompletionTask;
 import org.openide.util.Parameters;
 
@@ -53,13 +54,20 @@ public class BaseCompletionController implements CompletionController {
     private static final List<String> recentCompletions = new ArrayList<String>();
 
     private final JTextComponent component;
-    private final AsyncCompletionTask task;
-    private final AbstractCompletionQuery query;
+    private final List<? extends CompletionTask> tasks;
+    private final List<AsyncCompletionQuery> queries;
 
-    public BaseCompletionController(@NonNull JTextComponent component, @NonNull CompletionTask task, int queryType) {
+    public BaseCompletionController(@NonNull JTextComponent component, @NonNull List<? extends CompletionTask> tasks, @NonNull List<Integer> queryTypes) {
         this.component = component;
-        this.task = (AsyncCompletionTask)task;
-        this.query = (AbstractCompletionQuery)this.task.getQuery();
+        this.tasks = tasks;
+        this.queries = new ArrayList<AsyncCompletionQuery>();
+        for (CompletionTask task : tasks) {
+            if (!(task instanceof AbstractCompletionQuery)) {
+                continue;
+            }
+
+            queries.add(((AsyncCompletionTask)task).getQuery());
+        }
     }
 
     static void addRecentCompletion(String completion) {
@@ -89,8 +97,22 @@ public class BaseCompletionController implements CompletionController {
         return getComponent().getDocument();
     }
 
-    protected AbstractCompletionQuery getQuery() {
-        return query;
+    protected List<? extends AsyncCompletionQuery> getQueries() {
+        return queries;
+    }
+
+    public TrackingPositionRegion getApplicableTo() {
+        AbstractCompletionQuery appliedQuery = null;
+        for (AsyncCompletionQuery query : queries) {
+            if (query instanceof AbstractCompletionQuery) {
+                TrackingPositionRegion span = ((AbstractCompletionQuery)query).getApplicableTo();
+                if (span != null) {
+                    return span;
+                }
+            }
+        }
+
+        return null;
     }
 
     @Override
@@ -203,7 +225,18 @@ public class BaseCompletionController implements CompletionController {
     }
 
     protected @NonNull String getCompletionPrefix() {
-        TrackingPositionRegion span = query.getApplicableTo();
+        TrackingPositionRegion span = null;
+        AbstractCompletionQuery appliedQuery = null;
+        for (AsyncCompletionQuery query : queries) {
+            if (query instanceof AbstractCompletionQuery) {
+                span = ((AbstractCompletionQuery)query).getApplicableTo();
+                if (span != null) {
+                    appliedQuery = (AbstractCompletionQuery)query;
+                    break;
+                }
+            }
+        }
+
         if (span != null) {
             VersionedDocument textBuffer = VersionedDocumentUtilities.getVersionedDocument(getDocument());
             return span.getText(textBuffer.getCurrentSnapshot());
@@ -215,7 +248,9 @@ public class BaseCompletionController implements CompletionController {
             try {
                 int[] block = Utilities.getIdentifierBlock(doc, caretOffset);
                 if (block != null) {
-                    if (!query.isExtend()) {
+                    // if appliedQuery is null, then the provider doesn't support
+                    // the new API so we use the old expected behavior and do not extend.
+                    if (appliedQuery == null || !appliedQuery.isExtend()) {
                         block[1] = caretOffset;
                     }
                     return doc.getText(block);
