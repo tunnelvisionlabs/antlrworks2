@@ -492,30 +492,7 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
                 }
             }
 
-            OffsetRegion applicableToSpan;
-            if (caretToken != null && caretToken.getOriginalToken() != null && caretToken.getOriginalToken().getChannel() == Token.DEFAULT_CHANNEL) {
-                applicableToSpan = OffsetRegion.fromBounds(caretToken.getStartIndex(), caretToken.getStopIndex() + 1);
-            } else {
-                SnapshotPositionRegion identifier = DocumentTextUtilities.getIdentifierBlock(new SnapshotPosition(snapshot, getCaretOffset()));
-                if (identifier != null) {
-                    applicableToSpan = identifier.getRegion();
-                } else {
-                    applicableToSpan = OffsetRegion.fromBounds(getCaretOffset(), getCaretOffset());
-                }
-            }
-
-            if (!isExtend() && applicableToSpan.contains(getCaretOffset())) {
-                applicableToSpan = OffsetRegion.fromBounds(applicableToSpan.getStart(), getCaretOffset());
-            }
-
-            if (!applicableToSpan.isEmpty()) {
-                // make sure this is a word
-                String applicableText = snapshot.subSequence(applicableToSpan.getStart(), applicableToSpan.getEnd()).toString();
-                if (!WORD_PATTERN.matcher(applicableText).matches()) {
-                    applicableToSpan = OffsetRegion.fromBounds(getCaretOffset(), getCaretOffset());
-                }
-            }
-
+            OffsetRegion applicableToSpan = getApplicableToSpan(snapshot, caretToken);
             applicableTo = snapshot.createTrackingRegion(applicableToSpan, TrackingPositionRegion.Bias.Inclusive);
         }
 
@@ -588,6 +565,34 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
             }
 
             return region;
+        }
+
+        private OffsetRegion getApplicableToSpan(DocumentSnapshot snapshot, CaretToken caretToken) {
+            OffsetRegion applicableToSpan;
+            if (caretToken != null && caretToken.getOriginalToken() != null && caretToken.getOriginalToken().getChannel() == Token.DEFAULT_CHANNEL) {
+                applicableToSpan = OffsetRegion.fromBounds(caretToken.getStartIndex(), caretToken.getStopIndex() + 1);
+            } else {
+                SnapshotPositionRegion identifier = DocumentTextUtilities.getIdentifierBlock(new SnapshotPosition(snapshot, getCaretOffset()));
+                if (identifier != null) {
+                    applicableToSpan = identifier.getRegion();
+                } else {
+                    applicableToSpan = OffsetRegion.fromBounds(getCaretOffset(), getCaretOffset());
+                }
+            }
+
+            if (!isExtend() && applicableToSpan.contains(getCaretOffset())) {
+                applicableToSpan = OffsetRegion.fromBounds(applicableToSpan.getStart(), getCaretOffset());
+            }
+
+            if (!applicableToSpan.isEmpty()) {
+                // make sure this is a word
+                String applicableText = snapshot.subSequence(applicableToSpan.getStart(), applicableToSpan.getEnd()).toString();
+                if (!WORD_PATTERN.matcher(applicableText).matches()) {
+                    applicableToSpan = OffsetRegion.fromBounds(getCaretOffset(), getCaretOffset());
+                }
+            }
+
+            return applicableToSpan;
         }
 
         @Override
