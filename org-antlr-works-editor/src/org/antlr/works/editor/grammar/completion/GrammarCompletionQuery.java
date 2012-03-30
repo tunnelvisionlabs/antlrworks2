@@ -140,11 +140,16 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
             possibleReference = true;
             possibleKeyword = true;
 
-            // Add context items (labels, etc). Use anchor points to optimize information gathering.
             if (document == null) {
                 return;
             }
 
+            ParserTaskManager taskManager = getParserTaskManager();
+            if (taskManager == null) {
+                return;
+            }
+
+            // Add context items (labels, etc). Use anchor points to optimize information gathering.
             VersionedDocument textBuffer = VersionedDocumentUtilities.getVersionedDocument(document);
             DocumentSnapshot snapshot = textBuffer.getCurrentSnapshot();
 
@@ -152,11 +157,6 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
             boolean definiteInAction;
             Map<RuleContext<Token>, CaretReachedException> parseTrees = null;
             CaretToken caretToken = null;
-
-            ParserTaskManager taskManager = getParserTaskManager();
-            if (taskManager == null) {
-                return;
-            }
 
             Collection<Description> rules = null;
 
