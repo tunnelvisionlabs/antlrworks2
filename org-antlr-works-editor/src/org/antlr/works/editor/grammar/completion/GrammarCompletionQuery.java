@@ -157,7 +157,7 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
             Map<RuleContext<Token>, CaretReachedException> parseTrees = null;
             CaretToken caretToken = null;
 
-            Collection<Description> rules = null;
+            final Collection<Description> rules = new ArrayList<Description>();
 
             ReferenceAnchors anchors = findNearestAnchors(taskManager, snapshot);
             int grammarType = anchors.getGrammarType();
@@ -419,8 +419,8 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
 
                                 if (grammarType != GrammarParser.LEXER) {
                                     // Add rules from the grammar
-                                    if (rules == null) {
-                                        rules = GrammarCompletionProvider.getRulesFromGrammar(taskManager, snapshot);
+                                    if (rules.isEmpty()) {
+                                        rules.addAll(GrammarCompletionProvider.getRulesFromGrammar(taskManager, snapshot));
                                     }
 
                                     for (Description rule : rules) {
@@ -481,8 +481,8 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
                 boolean tokenReferencesOnly = grammarType == GrammarParser.LEXER;
 
                 // Add rules from the grammar
-                if (rules == null) {
-                    rules = GrammarCompletionProvider.getRulesFromGrammar(taskManager, snapshot);
+                if (rules.isEmpty()) {
+                    rules.addAll(GrammarCompletionProvider.getRulesFromGrammar(taskManager, snapshot));
                 }
 
                 for (Description rule : rules) {
