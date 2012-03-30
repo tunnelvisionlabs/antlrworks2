@@ -319,16 +319,8 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
                         }
 
                         if (fileModel == null && !fileModelDataFailed) {
-                            Future<ParserData<FileModel>> futureFileModelData = taskManager.getData(snapshot, GrammarParserDataDefinitions.FILE_MODEL, EnumSet.of(ParserDataOptions.ALLOW_STALE, ParserDataOptions.SYNCHRONOUS));
-                            try {
-                                fileModel = futureFileModelData.get().getData();
-                            } catch (InterruptedException ex) {
-                                Exceptions.printStackTrace(ex);
-                                fileModelDataFailed = true;
-                            } catch (ExecutionException ex) {
-                                Exceptions.printStackTrace(ex);
-                                fileModelDataFailed = true;
-                            }
+                            fileModel = getFileModel(taskManager, snapshot);
+                            fileModelDataFailed = fileModel == null;
                         }
 
                         if (fileModel == null) {
@@ -533,6 +525,19 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
                         }
                     }
                 }
+            }
+        }
+
+        private FileModel getFileModel(ParserTaskManager taskManager, DocumentSnapshot snapshot) {
+            Future<ParserData<FileModel>> futureFileModelData = taskManager.getData(snapshot, GrammarParserDataDefinitions.FILE_MODEL, EnumSet.of(ParserDataOptions.ALLOW_STALE, ParserDataOptions.SYNCHRONOUS));
+            try {
+                return futureFileModelData.get().getData();
+            } catch (InterruptedException ex) {
+                Exceptions.printStackTrace(ex);
+                return null;
+            } catch (ExecutionException ex) {
+                Exceptions.printStackTrace(ex);
+                return null;
             }
         }
 
