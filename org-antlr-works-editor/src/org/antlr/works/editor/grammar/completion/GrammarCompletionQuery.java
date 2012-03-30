@@ -165,15 +165,7 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
             final Anchor previous = anchors.getPrevious();
 
             if (previous != null) {
-                Future<ParserData<Tagger<TokenTag<Token>>>> futureTokensData = taskManager.getData(snapshot, GrammarParserDataDefinitions.LEXER_TOKENS, EnumSet.of(ParserDataOptions.SYNCHRONOUS));
-                Tagger<TokenTag<Token>> tagger = null;
-                try {
-                    tagger = futureTokensData.get().getData();
-                } catch (InterruptedException ex) {
-                    Exceptions.printStackTrace(ex);
-                } catch (ExecutionException ex) {
-                    Exceptions.printStackTrace(ex);
-                }
+                Tagger<TokenTag<Token>> tagger = getTagger(taskManager, snapshot);
 
                 int regionEnd = Math.min(snapshot.length(), getCaretOffset() + 1);
                 OffsetRegion region;
@@ -580,6 +572,20 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
             }
 
             return new ReferenceAnchors(grammarType, previous, enclosing);
+        }
+
+        private Tagger<TokenTag<Token>> getTagger(ParserTaskManager taskManager, DocumentSnapshot snapshot) {
+            Future<ParserData<Tagger<TokenTag<Token>>>> futureTokensData = taskManager.getData(snapshot, GrammarParserDataDefinitions.LEXER_TOKENS, EnumSet.of(ParserDataOptions.SYNCHRONOUS));
+            Tagger<TokenTag<Token>> tagger = null;
+            try {
+                tagger = futureTokensData.get().getData();
+            } catch (InterruptedException ex) {
+                Exceptions.printStackTrace(ex);
+            } catch (ExecutionException ex) {
+                Exceptions.printStackTrace(ex);
+            }
+
+            return tagger;
         }
 
         @Override
