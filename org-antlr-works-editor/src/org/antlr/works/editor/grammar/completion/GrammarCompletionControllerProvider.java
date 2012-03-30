@@ -10,7 +10,6 @@ package org.antlr.works.editor.grammar.completion;
 
 import java.util.List;
 import javax.swing.text.JTextComponent;
-import org.antlr.works.editor.antlr4.completion.BaseCompletionController;
 import org.antlr.works.editor.grammar.GrammarEditorKit;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.netbeans.spi.editor.completion.CompletionController;
@@ -26,7 +25,7 @@ public class GrammarCompletionControllerProvider implements CompletionController
 
     @Override
     public CompletionController createController(JTextComponent component, List<? extends CompletionTask> tasks, List<Integer> queryTypes) {
-        return new BaseCompletionController(component, tasks, queryTypes);
+        return new GrammarCompletionController(component, tasks, queryTypes);
     }
 
 }
