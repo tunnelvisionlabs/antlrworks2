@@ -276,39 +276,8 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
 
                 Map<String, CompletionItem> intermediateResults = new HashMap<String, CompletionItem>();
                 if (parseTrees != null) {
-                    /*
-                    * KEYWORD ANALYSIS
-                    */
-                    IntervalSet remainingKeywords = new IntervalSet(KeywordCompletionItem.KEYWORD_TYPES);
-
-                    for (Map.Entry<RuleContext<Token>, CaretReachedException> entry : parseTrees.entrySet()) {
-                        CaretReachedException caretReachedException = entry.getValue();
-                        if (caretReachedException == null || caretReachedException.getTransitions() == null) {
-                            continue;
-                        }
-
-                        Map<ATNConfig, List<Transition>> transitions = caretReachedException.getTransitions();
-                        for (List<Transition> transitionList : transitions.values()) {
-                            for (Transition transition : transitionList) {
-                                if (transition.isEpsilon() || transition instanceof WildcardTransition || transition instanceof NotSetTransition) {
-                                    continue;
-                                }
-
-                                IntervalSet label = transition.label();
-                                if (label == null) {
-                                    continue;
-                                }
-
-                                for (int keyword : remainingKeywords.toArray()) {
-                                    if (label.contains(keyword)) {
-                                        remainingKeywords.remove(keyword);
-                                        KeywordCompletionItem item = KeywordCompletionItem.KEYWORD_ITEMS.get(keyword);
-                                        intermediateResults.put(item.getInsertPrefix().toString(), item);
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    // KEYWORD ANALYSIS
+                    analyzeKeywords(parseTrees, intermediateResults);
 
                     /*
                     * EXPRESSION ANALYSIS
@@ -532,6 +501,38 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
             }
 
             return region;
+        }
+
+        private void analyzeKeywords(Map<RuleContext<Token>, CaretReachedException> parseTrees, Map<String, CompletionItem> intermediateResults) {
+            IntervalSet remainingKeywords = new IntervalSet(KeywordCompletionItem.KEYWORD_TYPES);
+            for (Map.Entry<RuleContext<Token>, CaretReachedException> entry : parseTrees.entrySet()) {
+                CaretReachedException caretReachedException = entry.getValue();
+                if (caretReachedException == null || caretReachedException.getTransitions() == null) {
+                    continue;
+                }
+
+                Map<ATNConfig, List<Transition>> transitions = caretReachedException.getTransitions();
+                for (List<Transition> transitionList : transitions.values()) {
+                    for (Transition transition : transitionList) {
+                        if (transition.isEpsilon() || transition instanceof WildcardTransition || transition instanceof NotSetTransition) {
+                            continue;
+                        }
+
+                        IntervalSet label = transition.label();
+                        if (label == null) {
+                            continue;
+                        }
+
+                        for (int keyword : remainingKeywords.toArray()) {
+                            if (label.contains(keyword)) {
+                                remainingKeywords.remove(keyword);
+                                KeywordCompletionItem item = KeywordCompletionItem.KEYWORD_ITEMS.get(keyword);
+                                intermediateResults.put(item.getInsertPrefix().toString(), item);
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         private void addRootActionExpressions(Map<String, CompletionItem> intermediateResults, int grammarType) {
