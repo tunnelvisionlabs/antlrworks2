@@ -274,8 +274,9 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
                     }
                 }
 
-                Map<String, CompletionItem> intermediateResults = new HashMap<String, CompletionItem>();
                 if (parseTrees != null) {
+                    Map<String, CompletionItem> intermediateResults = new HashMap<String, CompletionItem>();
+
                     // KEYWORD ANALYSIS
                     analyzeKeywords(parseTrees, intermediateResults);
 
