@@ -20,7 +20,9 @@ public class ParserCache extends AbstractParserCache<Token, CodeCompletionGramma
 
     @Override
     protected CodeCompletionGrammarParser createParser(TokenStream<? extends Token> input) {
-        return new CodeCompletionGrammarParser(input);
+        CodeCompletionGrammarParser parser = new CodeCompletionGrammarParser(input);
+        parser.removeErrorListeners();
+        return parser;
     }
 
 }
