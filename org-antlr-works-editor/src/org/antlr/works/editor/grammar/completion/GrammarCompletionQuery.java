@@ -153,8 +153,6 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
             VersionedDocument textBuffer = VersionedDocumentUtilities.getVersionedDocument(document);
             DocumentSnapshot snapshot = textBuffer.getCurrentSnapshot();
 
-            boolean possibleInAction;
-            boolean definiteInAction;
             Map<RuleContext<Token>, CaretReachedException> parseTrees = null;
             CaretToken caretToken = null;
 
@@ -197,8 +195,6 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
 
                     boolean hasActionConfig = false;
                     boolean hasNonActionConfig = false;
-                    final boolean hasRewriteConfig = false;
-                    boolean hasNonRewriteConfig = false;
 
                     if (parseTrees != null) {
                         possibleDeclaration = false;
@@ -221,7 +217,6 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
                             Deque<Integer> stateWorkList = new ArrayDeque<Integer>();
                             for (ATNConfig c : transitions.keySet()) {
                                 boolean currentActionConfig = false;
-                                final boolean currentRewriteConfig = false;
                                 visited.clear();
                                 workList.clear();
                                 stateWorkList.clear();
@@ -244,14 +239,13 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
                                         currentActionConfig = true;
                                     }
 
-                                    if (currentActionConfig && currentRewriteConfig) {
+                                    if (currentActionConfig) {
                                         break;
                                     }
                                 }
 
                                 hasActionConfig |= currentActionConfig;
                                 hasNonActionConfig |= !currentActionConfig;
-                                hasNonRewriteConfig |= !currentRewriteConfig;
 
                                 for (Transition t : transitions.get(c)) {
                                     int ruleIndex = t.target.ruleIndex;
@@ -267,7 +261,7 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
                                     }
                                 }
 
-                                if (hasActionConfig && hasNonActionConfig && hasRewriteConfig && hasNonRewriteConfig) {
+                                if (hasActionConfig && hasNonActionConfig) {
                                     break declarationOrReferenceLoop;
                                 }
                             }
@@ -380,8 +374,8 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
                             LabelAnalyzer labelAnalyzer = new LabelAnalyzer(finalContext);
                             ParseTreeWalker.DEFAULT.walk(labelAnalyzer, parseTree);
 
-                            possibleInAction = labelAnalyzer.isInAction() || hasActionConfig;
-                            definiteInAction = labelAnalyzer.isInAction() || (hasActionConfig && !hasNonActionConfig);
+                            boolean possibleInAction = labelAnalyzer.isInAction() || hasActionConfig;
+                            boolean definiteInAction = labelAnalyzer.isInAction() || (hasActionConfig && !hasNonActionConfig);
                             possibleKeyword |= !definiteInAction;
                             possibleDeclaration &= !definiteInAction;
                             possibleReference &= !definiteInAction;
