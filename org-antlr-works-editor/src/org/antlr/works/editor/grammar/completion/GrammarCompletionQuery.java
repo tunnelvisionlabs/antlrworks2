@@ -172,10 +172,6 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
                 }
 
                 TaggerTokenSource<Token> taggerTokenSource = new TaggerTokenSource<Token>(tagger, new SnapshotPositionRegion(snapshot, region));
-
-//                CharStream input = new DocumentSnapshotCharStream(snapshot);
-//                input.seek(enclosing.getSpan().getStartPosition(snapshot).getOffset());
-//                GrammarLexer lexer = new GrammarLexer(input);
                 TokenSource<Token> tokenSource = new CodeCompletionTokenSource(getCaretOffset(), taggerTokenSource);
                 CommonTokenStream tokens = new CommonTokenStream(tokenSource);
 
@@ -277,10 +273,10 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
                 if (parseTrees != null) {
                     Map<String, CompletionItem> intermediateResults = new HashMap<String, CompletionItem>();
 
-                    // KEYWORD ANALYSIS
+                    // Keyword analysis
                     analyzeKeywords(parseTrees, intermediateResults);
 
-                    // EXPRESSION ANALYSIS
+                    // Expression analysis
                     grammarType = analyzeExpressions(taskManager, snapshot, hasActionConfig, hasNonActionConfig, grammarType, rules, parseTrees, intermediateResults);
 
                     results.addAll(intermediateResults.values());
