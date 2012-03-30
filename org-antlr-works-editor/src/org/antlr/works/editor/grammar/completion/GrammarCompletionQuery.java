@@ -430,40 +430,7 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
                                     }
                                 }
 
-                                switch (grammarType) {
-                                case GrammarParser.LEXER:
-                                    intermediateResults.put("$text", new KeywordCompletionItem("$text"));
-                                    intermediateResults.put("$type", new KeywordCompletionItem("$type"));
-                                    intermediateResults.put("$line", new KeywordCompletionItem("$line"));
-                                    intermediateResults.put("$index", new KeywordCompletionItem("$index"));
-                                    intermediateResults.put("$pos", new KeywordCompletionItem("$pos"));
-                                    intermediateResults.put("$channel", new KeywordCompletionItem("$channel"));
-                                    intermediateResults.put("$start", new KeywordCompletionItem("$start"));
-                                    intermediateResults.put("$stop", new KeywordCompletionItem("$stop"));
-                                    intermediateResults.put("$int", new KeywordCompletionItem("$int"));
-                                    break;
-
-                                case GrammarParser.PARSER:
-                                    intermediateResults.put("$text", new KeywordCompletionItem("$text"));
-                                    intermediateResults.put("$start", new KeywordCompletionItem("$start"));
-                                    intermediateResults.put("$stop", new KeywordCompletionItem("$stop"));
-                                    intermediateResults.put("$ctx", new KeywordCompletionItem("$ctx"));
-                                    break;
-
-                                default:
-                                    // if we're unsure about the type, include all possibilities to make sure we're covered
-                                    intermediateResults.put("$text", new KeywordCompletionItem("$text"));
-                                    intermediateResults.put("$type", new KeywordCompletionItem("$type"));
-                                    intermediateResults.put("$line", new KeywordCompletionItem("$line"));
-                                    intermediateResults.put("$index", new KeywordCompletionItem("$index"));
-                                    intermediateResults.put("$pos", new KeywordCompletionItem("$pos"));
-                                    intermediateResults.put("$channel", new KeywordCompletionItem("$channel"));
-                                    intermediateResults.put("$start", new KeywordCompletionItem("$start"));
-                                    intermediateResults.put("$stop", new KeywordCompletionItem("$stop"));
-                                    intermediateResults.put("$int", new KeywordCompletionItem("$int"));
-                                    intermediateResults.put("$ctx", new KeywordCompletionItem("$ctx"));
-                                    break;
-                                }
+                                addRootActionExpressions(intermediateResults, grammarType);
                             }
                         }
                     }
@@ -565,6 +532,43 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
             }
 
             return region;
+        }
+
+        private void addRootActionExpressions(Map<String, CompletionItem> intermediateResults, int grammarType) {
+            switch (grammarType) {
+            case GrammarParser.LEXER:
+                intermediateResults.put("$text", new KeywordCompletionItem("$text"));
+                intermediateResults.put("$type", new KeywordCompletionItem("$type"));
+                intermediateResults.put("$line", new KeywordCompletionItem("$line"));
+                intermediateResults.put("$index", new KeywordCompletionItem("$index"));
+                intermediateResults.put("$pos", new KeywordCompletionItem("$pos"));
+                intermediateResults.put("$channel", new KeywordCompletionItem("$channel"));
+                intermediateResults.put("$start", new KeywordCompletionItem("$start"));
+                intermediateResults.put("$stop", new KeywordCompletionItem("$stop"));
+                intermediateResults.put("$int", new KeywordCompletionItem("$int"));
+                break;
+
+            case GrammarParser.PARSER:
+                intermediateResults.put("$text", new KeywordCompletionItem("$text"));
+                intermediateResults.put("$start", new KeywordCompletionItem("$start"));
+                intermediateResults.put("$stop", new KeywordCompletionItem("$stop"));
+                intermediateResults.put("$ctx", new KeywordCompletionItem("$ctx"));
+                break;
+
+            default:
+                // if we're unsure about the type, include all possibilities to make sure we're covered
+                intermediateResults.put("$text", new KeywordCompletionItem("$text"));
+                intermediateResults.put("$type", new KeywordCompletionItem("$type"));
+                intermediateResults.put("$line", new KeywordCompletionItem("$line"));
+                intermediateResults.put("$index", new KeywordCompletionItem("$index"));
+                intermediateResults.put("$pos", new KeywordCompletionItem("$pos"));
+                intermediateResults.put("$channel", new KeywordCompletionItem("$channel"));
+                intermediateResults.put("$start", new KeywordCompletionItem("$start"));
+                intermediateResults.put("$stop", new KeywordCompletionItem("$stop"));
+                intermediateResults.put("$int", new KeywordCompletionItem("$int"));
+                intermediateResults.put("$ctx", new KeywordCompletionItem("$ctx"));
+                break;
+            }
         }
 
         private OffsetRegion getApplicableToSpan(DocumentSnapshot snapshot, CaretToken caretToken) {
