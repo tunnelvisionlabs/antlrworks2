@@ -167,14 +167,7 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
             if (previous != null) {
                 Tagger<TokenTag<Token>> tagger = getTagger(taskManager, snapshot);
 
-                int regionEnd = Math.min(snapshot.length(), getCaretOffset() + 1);
-                OffsetRegion region;
-                if (anchors.getEnclosing() != null) {
-                    region = OffsetRegion.fromBounds(anchors.getEnclosing().getSpan().getStartPosition(snapshot).getOffset(), regionEnd);
-                } else {
-                    region = OffsetRegion.fromBounds(previous.getSpan().getEndPosition(snapshot).getOffset(), regionEnd);
-                }
-
+                final OffsetRegion region = getParseRegion(snapshot, anchors);
                 if (LOGGER.isLoggable(Level.FINE)) {
                     LOGGER.log(Level.FINE, "Code completion from anchor region: {0}.", region);
                 }
@@ -586,6 +579,18 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
             }
 
             return tagger;
+        }
+
+        private OffsetRegion getParseRegion(DocumentSnapshot snapshot, ReferenceAnchors anchors) {
+            int regionEnd = Math.min(snapshot.length(), getCaretOffset() + 1);
+            OffsetRegion region;
+            if (anchors.getEnclosing() != null) {
+                region = OffsetRegion.fromBounds(anchors.getEnclosing().getSpan().getStartPosition(snapshot).getOffset(), regionEnd);
+            } else {
+                region = OffsetRegion.fromBounds(anchors.getPrevious().getSpan().getEndPosition(snapshot).getOffset(), regionEnd);
+            }
+
+            return region;
         }
 
         @Override
