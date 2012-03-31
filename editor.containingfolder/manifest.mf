@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module: org.tvl.editor.containingfolder
+OpenIDE-Module-Localizing-Bundle: org/tvl/editor/containingfolder/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0
+
