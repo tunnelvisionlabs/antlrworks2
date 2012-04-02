@@ -353,7 +353,7 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
             return "";
         }
 
-        return tokens.toString(context.start, context.stop);
+        return tokens.getText(context.start, context.stop);
     }
 
 }

@@ -507,7 +507,7 @@ public class GrammarLexer extends Lexer {
 	public void ID_action(RuleContext<Integer> _localctx, int actionIndex) {
 		switch ( actionIndex ) {
 			case 1 : 
-							if ( Character.isUpperCase(getInputStream().substring(_tokenStartCharIndex, _tokenStartCharIndex).charAt(0)) ) _type =  TOKEN_REF;
+							if ( Character.isUpperCase(getInputStream().getText(Interval.of(_tokenStartCharIndex, _tokenStartCharIndex)).charAt(0)) ) _type =  TOKEN_REF;
 							else _type =  RULE_REF;
 							 break;
 		}

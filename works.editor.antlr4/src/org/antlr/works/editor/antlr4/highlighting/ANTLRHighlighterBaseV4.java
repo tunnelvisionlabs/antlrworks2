@@ -409,7 +409,7 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
                 return true;
             }
 
-            int c = charStream.substring(token.getStopIndex() + 1, token.getStopIndex() + 1).charAt(0);
+            int c = charStream.getText(Interval.of(token.getStopIndex() + 1, token.getStopIndex() + 1)).charAt(0);
             return c == '\r' || c == '\n';
         }
 

@@ -28,6 +28,7 @@ import org.antlr.netbeans.editor.text.SnapshotPositionRegion;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenSource;
+import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.works.editor.antlr4.highlighting.TokenSourceWithStateV4;
 import org.netbeans.api.annotations.common.NonNull;
 import org.openide.util.Parameters;
@@ -424,7 +425,7 @@ public abstract class AbstractTokensTaskTaggerSnapshot<TState extends LineStateI
                 return true;
             }
 
-            int c = charStream.substring(token.getStopIndex() + 1, token.getStopIndex() + 1).charAt(0);
+            int c = charStream.getText(Interval.of(token.getStopIndex() + 1, token.getStopIndex() + 1)).charAt(0);
             return c == '\r' || c == '\n';
         }
 

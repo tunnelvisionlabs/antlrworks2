@@ -13,6 +13,7 @@ import javax.swing.text.StyledDocument;
 import org.antlr.netbeans.editor.text.OffsetRegion;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.misc.Interval;
 import org.openide.text.NbDocument;
 
 /**
@@ -43,7 +44,9 @@ public class DocumentCharStreamV4 implements CharStream {
     }
 
     @Override
-    public String substring(int startIndex, int endIndexInclusive) {
+    public String getText(Interval interval) {
+        int startIndex = interval.a;
+        int endIndexInclusive = interval.b;
         if (currentSnapshotLine != null) {
             if (startIndex >= currentSnapshotLineStartIndex && (endIndexInclusive + 1) <= currentSnapshotLineStartIndex + currentSnapshotLine.length()) {
                 return currentSnapshotLine.substring(startIndex - currentSnapshotLineStartIndex, endIndexInclusive - currentSnapshotLineStartIndex + 1);

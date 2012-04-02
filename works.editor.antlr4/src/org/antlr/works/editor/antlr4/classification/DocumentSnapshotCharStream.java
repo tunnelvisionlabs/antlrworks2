@@ -13,6 +13,7 @@ import org.antlr.netbeans.editor.text.DocumentSnapshotLine;
 import org.antlr.netbeans.editor.text.OffsetRegion;
 import org.antlr.netbeans.editor.text.SnapshotPositionRegion;
 import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.misc.Interval;
 import org.openide.util.Parameters;
 
 /**
@@ -106,7 +107,9 @@ public class DocumentSnapshotCharStream implements CharStream {
     }
 
     @Override
-    public String substring(int start, int stop) {
+    public String getText(Interval interval) {
+        int start = interval.a;
+        int stop = interval.b;
         if (currentSnapshotLine != null) {
             if (start >= currentSnapshotLineStartIndex && stop < currentSnapshotLineStartIndex + currentSnapshotLine.length()) {
                 return currentSnapshotLine.substring(start - currentSnapshotLineStartIndex, stop + 1 - currentSnapshotLineStartIndex);
