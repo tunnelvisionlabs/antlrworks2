@@ -52,6 +52,7 @@ import org.antlr.v4.runtime.atn.WildcardTransition;
 import org.antlr.v4.runtime.misc.IntervalSet;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import org.antlr.v4.tool.Rule;
 import org.antlr.works.editor.antlr4.classification.TaggerTokenSource;
 import org.antlr.works.editor.antlr4.completion.AbstractCompletionQuery;
 import org.antlr.works.editor.antlr4.completion.CaretReachedException;
@@ -130,6 +131,8 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleSpec, version=0),
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_actionBlock, version=0),
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=0),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommand, version=0),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommandExpr, version=1),
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleref, version=0),
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_terminal, version=0),
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_actionExpression, version=0),
@@ -213,6 +216,30 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
                             caretToken = ex.getCaretToken();
                         }
 
+                        RuleContext<Token> finalContext = entry.getValue().getFinalContext();
+                        if (finalContext != null && finalContext.getRuleIndex() == GrammarParser.RULE_id) {
+                            RuleContext<Token> parent = finalContext.getParent();
+                            int parentIndex = parent != null ? parent.getRuleIndex() : -1;
+                            switch (parentIndex) {
+                            case GrammarParser.RULE_lexerCommand:
+                                // this is a lexer command (keyword), which is not considered a declaration or reference
+                                break;
+
+                            case GrammarParser.RULE_lexerCommandExpr:
+                                // Reference to token, channel, or mode. Since channels and modes are not included
+                                // in reference analysis, consider this as a possible declaration to prevent unwanted
+                                // completion replacements.
+                                possibleDeclaration = true;
+                                possibleReference = true;
+                                break;
+
+                            default:
+                                // other instances of 'id' in the grammar are declarations
+                                possibleDeclaration = true;
+                                break;
+                            }
+                        }
+
                         Map<ATNConfig, List<Transition>> transitions = entry.getValue().getTransitions();
                         IdentityHashMap<PredictionContext, PredictionContext> visited = new IdentityHashMap<PredictionContext, PredictionContext>();
                         Deque<PredictionContext> workList = new ArrayDeque<PredictionContext>();
@@ -251,9 +278,7 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
 
                             for (Transition t : transitions.get(c)) {
                                 int ruleIndex = t.target.ruleIndex;
-                                if (ruleIndex == GrammarParser.RULE_id) {
-                                    possibleDeclaration = true;
-                                } else if (ruleIndex == GrammarParser.RULE_ruleref
+                                if (ruleIndex == GrammarParser.RULE_ruleref
                                     || ruleIndex == GrammarParser.RULE_terminal) {
                                     possibleReference = true;
                                 }
@@ -378,11 +403,27 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
             return region;
         }
 
+        @RuleDependencies({
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommand, version=0),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=0),
+        })
         private void analyzeKeywords(Map<RuleContext<Token>, CaretReachedException> parseTrees, Map<String, CompletionItem> intermediateResults) {
+            boolean maybeLexerCommand = false;
+
             IntervalSet remainingKeywords = new IntervalSet(KeywordCompletionItem.KEYWORD_TYPES);
             for (Map.Entry<RuleContext<Token>, CaretReachedException> entry : parseTrees.entrySet()) {
                 CaretReachedException caretReachedException = entry.getValue();
                 if (caretReachedException == null || caretReachedException.getTransitions() == null) {
+                    continue;
+                }
+
+                RuleContext<Token> finalContext = caretReachedException.getFinalContext();
+                if (finalContext.getRuleIndex() == GrammarParser.RULE_id) {
+                    RuleContext<Token> parent = finalContext.getParent();
+                    if (parent != null && parent.getRuleIndex() == GrammarParser.RULE_lexerCommand) {
+                        maybeLexerCommand = true;
+                    }
+
                     continue;
                 }
 
@@ -408,8 +449,16 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
                     }
                 }
             }
+
+            if (maybeLexerCommand) {
+                addLexerCommands(intermediateResults);
+            }
         }
 
+        @RuleDependencies({
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_actionExpression, version=0),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_actionScopeExpression, version=0),
+        })
         private int analyzeExpressions(ParserTaskManager taskManager,
                                        DocumentSnapshot snapshot,
                                        boolean hasActionConfig,
@@ -545,6 +594,14 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
             } catch (ExecutionException ex) {
                 Exceptions.printStackTrace(ex);
                 return null;
+            }
+        }
+
+        private void addLexerCommands(Map<String, CompletionItem> intermediateResults) {
+            for (String command : Rule.validLexerCommands) {
+                if (!intermediateResults.containsKey(command)) {
+                    intermediateResults.put(command, new KeywordCompletionItem(command));
+                }
             }
         }
 
