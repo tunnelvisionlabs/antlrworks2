@@ -111,10 +111,8 @@ BigStringTemplate_LANGLE=62
 DelimitersOpenSpec_COMMA=111
 STRING=27
 '!'=90
-'delimiters'=115
 'end'=88
 '::='=11
-'implements'=116
 '||'=91
 '&&'=92
 ';'=93

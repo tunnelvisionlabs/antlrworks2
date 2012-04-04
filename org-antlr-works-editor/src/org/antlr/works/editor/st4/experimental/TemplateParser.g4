@@ -34,9 +34,8 @@ group
     ;
 
 oldStyleHeader
-    :   'group' ID (':' ID)?
-        ('implements' ID (',' ID)*)?
-        ';'
+@version{1}
+    :   'group' ID (':' ID)? ';'
     ;
 
 groupName
@@ -44,7 +43,8 @@ groupName
     ;
 
 delimiters
-    :   'delimiters' DelimitersOpenSpec_DELIMITER_STRING ',' DelimitersCloseSpec_DELIMITER_STRING
+@version{1}
+    :   DELIMITERS DelimitersOpenSpec_DELIMITER_STRING ',' DelimitersCloseSpec_DELIMITER_STRING
     ;
 
 def

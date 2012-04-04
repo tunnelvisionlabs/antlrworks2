@@ -16,8 +16,8 @@ import java.util.List;
 import java.util.Map;
 import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.SymbolStream;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.atn.ATN;
 import org.antlr.v4.runtime.atn.ATNConfig;
 import org.antlr.v4.runtime.atn.ATNConfigSet;
@@ -49,7 +49,7 @@ public abstract class AbstractCompletionParserATNSimulator extends ParserATNSimu
     private List<Integer> selections;
 
     // state variables used for the custom implementation
-    private SymbolStream<? extends Token> _input;
+    private TokenStream<? extends Token> _input;
     private int _startIndex;
     private ParserRuleContext<Token> _outerContext;
     private SimulatorState<Token> _nextState;
@@ -81,7 +81,7 @@ public abstract class AbstractCompletionParserATNSimulator extends ParserATNSimu
     }
 
     @Override
-    public int adaptivePredict(SymbolStream<? extends Token> input, int decision, ParserRuleContext<Token> outerContext) {
+    public int adaptivePredict(TokenStream<? extends Token> input, int decision, ParserRuleContext<Token> outerContext) {
         _input = input;
         _startIndex = input.index();
         _outerContext = outerContext;
