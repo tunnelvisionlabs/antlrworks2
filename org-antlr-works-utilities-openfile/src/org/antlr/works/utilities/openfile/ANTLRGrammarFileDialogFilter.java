@@ -30,7 +30,7 @@ package org.antlr.works.utilities.openfile;
 import org.netbeans.modules.openfile.OpenFileDialogFilter;
 import org.openide.util.lookup.ServiceProvider;
 
-@ServiceProvider(service=org.netbeans.modules.openfile.OpenFileDialogFilter.class)
+@ServiceProvider(service=OpenFileDialogFilter.class)
 public class ANTLRGrammarFileDialogFilter extends OpenFileDialogFilter {
 
     @Override
