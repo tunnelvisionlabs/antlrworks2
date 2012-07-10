@@ -20,36 +20,36 @@ import org.antlr.v4.runtime.misc.*;
 
 public abstract class AbstractTemplateLexer extends Lexer {
 	public static final int
-		OPEN_DELIMITER=3, CLOSE_DELIMITER=4, QUOTE=5, LPAREN=6, RPAREN=7, COMMA=8, 
-		DOT=9, COLON=10, DEFINED=11, EQUALS=12, AT=13, LBRACK=14, RBRACK=15, LBRACE=16, 
-		RBRACE=17, GROUP=18, DEFAULT=19, IMPORT=20, TRUE=21, FALSE=22, DELIMITERS=23, 
-		WS=24, NEWLINE=25, ID=26, STRING=27, BIGSTRING=28, BIGSTRINGLINE=29, LINE_COMMENT=30, 
-		COMMENT=31, ANYCHAR=32, BlockComment_NEWLINE=33, CONTINUE_COMMENT=34, 
-		END_COMMENT=35, BLOCK_COMMENT_STAR=36, BlockComment_ANYCHAR=37, TemplateComment_NEWLINE=38, 
-		TemplateComment_CONTINUE_COMMENT=39, TemplateComment_END_COMMENT=40, TemplateComment_BLOCK_COMMENT_BANG=41, 
-		TemplateComment_ANYCHAR=42, AnonymousTemplate_RBRACE=43, AnonymousTemplate_NEWLINE=44, 
-		AnonymousTemplate_COMMENT=45, AnonymousTemplate_OPEN_DELIMITER=46, TEXT=47, 
-		ESCAPE_RBRACE=48, AnonymousTemplate_ANYCHAR=49, AnonymousTemplateParameters_WS=50, 
-		AnonymousTemplateParameters_NEWLINE=51, AnonymousTemplateParameters_COMMA=52, 
-		TEMPLATE_PARAMETER=53, PIPE=54, AnonymousTemplateParameters_ANYCHAR=55, 
-		BigStringTemplate_NEWLINE=56, BigStringTemplate_COMMENT=57, BigStringTemplate_OPEN_DELIMITER=58, 
-		BigStringTemplate_TEXT=59, BigStringTemplate_ESCAPE=60, BigStringTemplate_END=61, 
-		BigStringTemplate_LANGLE=62, BigStringTemplate_ANYCHAR=63, BigStringLineTemplate_NEWLINE=64, 
-		BigStringLineTemplate_COMMENT=65, BigStringLineTemplate_OPEN_DELIMITER=66, 
-		BigStringLineTemplate_TEXT=67, BigStringLineTemplate_ESCAPE=68, BigStringLineTemplate_END=69, 
-		BigStringLineTemplate_PERCENT=70, BigStringLineTemplate_ANYCHAR=71, TemplateExpression_NEWLINE=72, 
-		TemplateExpression_DOT=73, TemplateExpression_COMMA=74, TemplateExpression_COLON=75, 
-		TemplateExpression_LPAREN=76, TemplateExpression_RPAREN=77, TemplateExpression_LBRACK=78, 
-		TemplateExpression_RBRACK=79, TemplateExpression_EQUALS=80, TemplateExpression_LBRACE=81, 
-		TemplateExpression_WS=82, SUPER=83, IF=84, ELSEIF=85, ENDIF=86, ELSE=87, 
-		END=88, ELLIPSIS=89, NOT=90, OR=91, AND=92, SEMI=93, ESCAPE=94, REGION_END=95, 
-		REGION_ID=96, TemplateExpression_ID=97, TemplateExpression_CLOSE_DELIMITER=98, 
-		TemplateExpression_STRING=99, TemplateExpression_ANYCHAR=100, StringTemplate_NEWLINE=101, 
-		StringTemplate_COMMENT=102, StringTemplate_OPEN_DELIMITER=103, StringTemplate_TEXT=104, 
-		StringTemplate_ESCAPE=105, StringTemplate_END=106, StringTemplate_ANYCHAR=107, 
-		DelimitersOpenSpec_WS=108, DelimitersOpenSpec_NEWLINE=109, DelimitersOpenSpec_DELIMITER_STRING=110, 
-		DelimitersOpenSpec_COMMA=111, DelimitersCloseSpec_WS=112, DelimitersCloseSpec_NEWLINE=113, 
-		DelimitersCloseSpec_DELIMITER_STRING=114;
+		OPEN_DELIMITER=1, CLOSE_DELIMITER=2, QUOTE=3, LPAREN=4, RPAREN=5, COMMA=6, 
+		DOT=7, COLON=8, DEFINED=9, EQUALS=10, AT=11, LBRACK=12, RBRACK=13, LBRACE=14, 
+		RBRACE=15, GROUP=16, DEFAULT=17, IMPORT=18, TRUE=19, FALSE=20, DELIMITERS=21, 
+		WS=22, NEWLINE=23, ID=24, STRING=25, BIGSTRING=26, BIGSTRINGLINE=27, LINE_COMMENT=28, 
+		COMMENT=29, ANYCHAR=30, BlockComment_NEWLINE=31, CONTINUE_COMMENT=32, 
+		END_COMMENT=33, BLOCK_COMMENT_STAR=34, BlockComment_ANYCHAR=35, TemplateComment_NEWLINE=36, 
+		TemplateComment_CONTINUE_COMMENT=37, TemplateComment_END_COMMENT=38, TemplateComment_BLOCK_COMMENT_BANG=39, 
+		TemplateComment_ANYCHAR=40, AnonymousTemplate_RBRACE=41, AnonymousTemplate_NEWLINE=42, 
+		AnonymousTemplate_COMMENT=43, AnonymousTemplate_OPEN_DELIMITER=44, TEXT=45, 
+		ESCAPE_RBRACE=46, AnonymousTemplate_ANYCHAR=47, AnonymousTemplateParameters_WS=48, 
+		AnonymousTemplateParameters_NEWLINE=49, AnonymousTemplateParameters_COMMA=50, 
+		TEMPLATE_PARAMETER=51, PIPE=52, AnonymousTemplateParameters_ANYCHAR=53, 
+		BigStringTemplate_NEWLINE=54, BigStringTemplate_COMMENT=55, BigStringTemplate_OPEN_DELIMITER=56, 
+		BigStringTemplate_TEXT=57, BigStringTemplate_ESCAPE=58, BigStringTemplate_END=59, 
+		BigStringTemplate_LANGLE=60, BigStringTemplate_ANYCHAR=61, BigStringLineTemplate_NEWLINE=62, 
+		BigStringLineTemplate_COMMENT=63, BigStringLineTemplate_OPEN_DELIMITER=64, 
+		BigStringLineTemplate_TEXT=65, BigStringLineTemplate_ESCAPE=66, BigStringLineTemplate_END=67, 
+		BigStringLineTemplate_PERCENT=68, BigStringLineTemplate_ANYCHAR=69, TemplateExpression_NEWLINE=70, 
+		TemplateExpression_DOT=71, TemplateExpression_COMMA=72, TemplateExpression_COLON=73, 
+		TemplateExpression_LPAREN=74, TemplateExpression_RPAREN=75, TemplateExpression_LBRACK=76, 
+		TemplateExpression_RBRACK=77, TemplateExpression_EQUALS=78, TemplateExpression_LBRACE=79, 
+		TemplateExpression_WS=80, SUPER=81, IF=82, ELSEIF=83, ENDIF=84, ELSE=85, 
+		END=86, ELLIPSIS=87, NOT=88, OR=89, AND=90, SEMI=91, ESCAPE=92, REGION_END=93, 
+		REGION_ID=94, TemplateExpression_ID=95, TemplateExpression_CLOSE_DELIMITER=96, 
+		TemplateExpression_STRING=97, TemplateExpression_ANYCHAR=98, StringTemplate_NEWLINE=99, 
+		StringTemplate_COMMENT=100, StringTemplate_OPEN_DELIMITER=101, StringTemplate_TEXT=102, 
+		StringTemplate_ESCAPE=103, StringTemplate_END=104, StringTemplate_ANYCHAR=105, 
+		DelimitersOpenSpec_WS=106, DelimitersOpenSpec_NEWLINE=107, DelimitersOpenSpec_DELIMITER_STRING=108, 
+		DelimitersOpenSpec_COMMA=109, DelimitersCloseSpec_WS=110, DelimitersCloseSpec_NEWLINE=111, 
+		DelimitersCloseSpec_DELIMITER_STRING=112;
 	public static final int BlockComment = 1;
 	public static final int TemplateComment = 2;
 	public static final int AnonymousTemplate = 3;
@@ -67,7 +67,7 @@ public abstract class AbstractTemplateLexer extends Lexer {
 	};
 
 	public static final String[] tokenNames = {
-		"<INVALID>", "<INVALID>", "<INVALID>",
+		"<INVALID>",
 		"OPEN_DELIMITER", "CLOSE_DELIMITER", "QUOTE", "'('", "')'", "','", "'.'", 
 		"':'", "'::='", "'='", "'@'", "'['", "']'", "LBRACE", "'}'", "'group'", 
 		"'default'", "'import'", "'true'", "'false'", "DELIMITERS", "WS", "NEWLINE", 
@@ -921,7 +921,7 @@ public abstract class AbstractTemplateLexer extends Lexer {
 	}
 
 	public static final String _serializedATN =
-		"\2r\u0371\6\uffff\6\uffff\6\uffff\6\uffff\6\uffff\6\uffff\6\uffff\6\uffff"+
+		"\2p\u0371\6\uffff\6\uffff\6\uffff\6\uffff\6\uffff\6\uffff\6\uffff\6\uffff"+
 		"\6\uffff\6\uffff\6\uffff\2\0\7\0\2\1\7\1\2\2\7\2\2\3\7\3\2\4\7\4\2\5\7"+
 		"\5\2\6\7\6\2\7\7\7\2\b\7\b\2\t\7\t\2\n\7\n\2\13\7\13\2\f\7\f\2\r\7\r\2"+
 		"\16\7\16\2\17\7\17\2\20\7\20\2\21\7\21\2\22\7\22\2\23\7\23\2\24\7\24\2"+
@@ -969,21 +969,21 @@ public abstract class AbstractTemplateLexer extends Lexer {
 		"\tc\1c\1c\1c\1c\1d\1d\1d\1d\1e\1e\1e\1e\1f\0\1f\1f\1f\1f\1g\1g\1g\1g\1"+
 		"h\0\4h\bh\13h\fh\u0341\1h\1h\1i\0\1i\0\1i\0\3i\bi\1i\1i\1j\1j\1j\1j\1"+
 		"k\1k\1k\1k\1l\1l\1l\1l\1m\1m\1m\1m\1n\1n\1o\1o\1o\1o\1p\1p\1p\1p\1q\1"+
-		"q\1q\1q\1r\1r\1r\1rs\13\6\uffff\r\7\uffff\17\b\uffff\21\t\uffff\23\n\uffff"+
-		"\25\13\uffff\27\f\uffff\31\r\uffff\33\16\uffff\35\17\uffff\37\20\0!\21"+
-		"\uffff#\22\uffff%\23\uffff\'\24\uffff)\25\uffff+\26\uffff-\27\uffff/\30"+
-		"\1\61\31\2\63\32\uffff\65\33\3\67\34\49\35\5;\36\6=\37\7?\0\uffffA\0\uffff"+
-		"C\0\uffffE\0\uffffG\3\uffffI\4\uffffK \uffffM!\bO\"\tQ#\nS$\13U%\fW&\r"+
-		"Y\'\16[(\17])\20_*\21a+\22c,\23e-\24g.\25i/\uffffk\60\26m\61\27o\62\30"+
-		"q\63\31s\64\32u\65\uffffw\66\33y\67\34{8\35}9\36\177:\37\u0081; \u0083"+
-		"<!\u0085=\"\u0087>#\u0089?$\u008b@%\u008dA&\u008fB\'\u0091C(\u0093D)\u0095"+
-		"E*\u0097F+\u0099G,\u009bH-\u009dI.\u009fJ/\u00a1K\60\u00a3L\61\u00a5M"+
-		"\62\u00a7N\63\u00a9O\64\u00abP\65\u00adQ\66\u00afR\67\u00b1S\uffff\u00b3"+
-		"T\uffff\u00b5U\uffff\u00b7V\uffff\u00b9W\uffff\u00bbX\uffff\u00bdY\uffff"+
-		"\u00bfZ\uffff\u00c1[\uffff\u00c3\\\uffff\u00c5]\uffff\u00c7^\uffff\u00c9"+
-		"_\uffff\u00cb`\uffff\u00cda8\u00cfb9\u00d1c:\u00d3d;\u00d5e<\u00d7f=\u00d9"+
-		"g>\u00dbh?\u00ddi@\u00dfjA\u00e1kB\u00e3lC\u00e5mD\u00e7n\uffff\u00e9"+
-		"oE\u00ebpF\u00edqG\u00efrH\13\0\1\2\3\4\5\6\7\b\t\n\r\2\t\t  \3AZ__az"+
+		"q\1q\1q\1r\1r\1r\1rs\13\4\uffff\r\5\uffff\17\6\uffff\21\7\uffff\23\b\uffff"+
+		"\25\t\uffff\27\n\uffff\31\13\uffff\33\f\uffff\35\r\uffff\37\16\0!\17\uffff"+
+		"#\20\uffff%\21\uffff\'\22\uffff)\23\uffff+\24\uffff-\25\uffff/\26\1\61"+
+		"\27\2\63\30\uffff\65\31\3\67\32\49\33\5;\34\6=\35\7?\0\uffffA\0\uffff"+
+		"C\0\uffffE\0\uffffG\1\uffffI\2\uffffK\36\uffffM\37\bO \tQ!\nS\"\13U#\f"+
+		"W$\rY%\16[&\17]\'\20_(\21a)\22c*\23e+\24g,\25i-\uffffk.\26m/\27o\60\30"+
+		"q\61\31s\62\32u\63\uffffw\64\33y\65\34{\66\35}\67\36\1778\37\u00819 \u0083"+
+		":!\u0085;\"\u0087<#\u0089=$\u008b>%\u008d?&\u008f@\'\u0091A(\u0093B)\u0095"+
+		"C*\u0097D+\u0099E,\u009bF-\u009dG.\u009fH/\u00a1I\60\u00a3J\61\u00a5K"+
+		"\62\u00a7L\63\u00a9M\64\u00abN\65\u00adO\66\u00afP\67\u00b1Q\uffff\u00b3"+
+		"R\uffff\u00b5S\uffff\u00b7T\uffff\u00b9U\uffff\u00bbV\uffff\u00bdW\uffff"+
+		"\u00bfX\uffff\u00c1Y\uffff\u00c3Z\uffff\u00c5[\uffff\u00c7\\\uffff\u00c9"+
+		"]\uffff\u00cb^\uffff\u00cd_8\u00cf`9\u00d1a:\u00d3b;\u00d5c<\u00d7d=\u00d9"+
+		"e>\u00dbf?\u00ddg@\u00dfhA\u00e1iB\u00e3jC\u00e5kD\u00e7l\uffff\u00e9"+
+		"mE\u00ebnF\u00edoG\u00efpH\13\0\1\2\3\4\5\6\7\b\t\n\r\2\t\t  \3AZ__az"+
 		"\5--\609AZ__az\2\n\n\r\r\3\n\n\r\r\"\"\3\n\n\r\r**\3\n\n\r\r!!\5\n\n\r"+
 		"\r\\\\}}\ufff0\ufff0\5\n\n\r\r>>\\\\\ufff0\ufff0\5\n\n\r\r%%\\\\\ufff0"+
 		"\ufff0\1\ufff1\ufff1\2\"\"\\\\\5\n\n\r\r\"\"\\\\\ufff0\ufff0\u0347\0\13"+

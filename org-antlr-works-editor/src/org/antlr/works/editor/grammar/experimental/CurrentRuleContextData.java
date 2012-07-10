@@ -12,9 +12,9 @@ import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.v4.runtime.RuleDependencies;
 import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.LexerRuleContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.ParserRuleSpecContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.RuleSpecContext;
+import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.LexerRuleContext;
+import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.ParserRuleSpecContext;
+import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.RuleSpecContext;
 
 /**
  *

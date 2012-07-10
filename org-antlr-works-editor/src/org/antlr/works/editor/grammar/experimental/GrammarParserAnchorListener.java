@@ -23,9 +23,9 @@ import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.works.editor.antlr4.parsing.ParseTrees;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.GrammarTypeContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.RuleSpecContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParser.TokenSpecContext;
+import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.GrammarTypeContext;
+import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.RuleSpecContext;
+import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.TokenSpecContext;
 import org.netbeans.api.annotations.common.NonNull;
 import org.openide.util.Parameters;
 

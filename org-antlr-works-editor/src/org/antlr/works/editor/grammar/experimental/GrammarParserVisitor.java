@@ -12,145 +12,145 @@ import org.antlr.v4.runtime.tree.*;
 import org.antlr.v4.runtime.Token;
 
 public interface GrammarParserVisitor<Symbol extends Token, Result> extends ParseTreeVisitor<Symbol, Result> {
-	Result visitRuleSpec(GrammarParser.RuleSpecContext ctx);
+	Result visitRuleSpec(AbstractGrammarParser.RuleSpecContext ctx);
 
-	Result visitAtom(GrammarParser.AtomContext ctx);
+	Result visitAtom(AbstractGrammarParser.AtomContext ctx);
 
-	Result visitRulePrequels(GrammarParser.RulePrequelsContext ctx);
+	Result visitRulePrequels(AbstractGrammarParser.RulePrequelsContext ctx);
 
-	Result visitRuleBlock(GrammarParser.RuleBlockContext ctx);
+	Result visitRuleBlock(AbstractGrammarParser.RuleBlockContext ctx);
 
-	Result visitNotSet(GrammarParser.NotSetContext ctx);
+	Result visitNotSet(AbstractGrammarParser.NotSetContext ctx);
 
-	Result visitLexerCommands(GrammarParser.LexerCommandsContext ctx);
+	Result visitLexerCommands(AbstractGrammarParser.LexerCommandsContext ctx);
 
-	Result visitLexerAltList(GrammarParser.LexerAltListContext ctx);
+	Result visitLexerAltList(AbstractGrammarParser.LexerAltListContext ctx);
 
-	Result visitArgActionParameter(GrammarParser.ArgActionParameterContext ctx);
+	Result visitArgActionParameter(AbstractGrammarParser.ArgActionParameterContext ctx);
 
-	Result visitRuleModifier(GrammarParser.RuleModifierContext ctx);
+	Result visitRuleModifier(AbstractGrammarParser.RuleModifierContext ctx);
 
-	Result visitRuleAltList(GrammarParser.RuleAltListContext ctx);
+	Result visitRuleAltList(AbstractGrammarParser.RuleAltListContext ctx);
 
-	Result visitTerminal(GrammarParser.TerminalContext ctx);
+	Result visitTerminal(AbstractGrammarParser.TerminalContext ctx);
 
-	Result visitLexerCommand(GrammarParser.LexerCommandContext ctx);
+	Result visitLexerCommand(AbstractGrammarParser.LexerCommandContext ctx);
 
-	Result visitThrowsSpec(GrammarParser.ThrowsSpecContext ctx);
+	Result visitThrowsSpec(AbstractGrammarParser.ThrowsSpecContext ctx);
 
-	Result visitAction(GrammarParser.ActionContext ctx);
+	Result visitAction(AbstractGrammarParser.ActionContext ctx);
 
-	Result visitActionScopeExpression(GrammarParser.ActionScopeExpressionContext ctx);
+	Result visitActionScopeExpression(AbstractGrammarParser.ActionScopeExpressionContext ctx);
 
-	Result visitLocalsSpec(GrammarParser.LocalsSpecContext ctx);
+	Result visitLocalsSpec(AbstractGrammarParser.LocalsSpecContext ctx);
 
-	Result visitModeSpec(GrammarParser.ModeSpecContext ctx);
+	Result visitModeSpec(AbstractGrammarParser.ModeSpecContext ctx);
 
-	Result visitElements(GrammarParser.ElementsContext ctx);
+	Result visitElements(AbstractGrammarParser.ElementsContext ctx);
 
-	Result visitOption(GrammarParser.OptionContext ctx);
+	Result visitOption(AbstractGrammarParser.OptionContext ctx);
 
-	Result visitElement(GrammarParser.ElementContext ctx);
+	Result visitElement(AbstractGrammarParser.ElementContext ctx);
 
-	Result visitElementOptions(GrammarParser.ElementOptionsContext ctx);
+	Result visitElementOptions(AbstractGrammarParser.ElementOptionsContext ctx);
 
-	Result visitLexerElement(GrammarParser.LexerElementContext ctx);
+	Result visitLexerElement(AbstractGrammarParser.LexerElementContext ctx);
 
-	Result visitAlternative(GrammarParser.AlternativeContext ctx);
+	Result visitAlternative(AbstractGrammarParser.AlternativeContext ctx);
 
-	Result visitParserRuleSpec(GrammarParser.ParserRuleSpecContext ctx);
+	Result visitParserRuleSpec(AbstractGrammarParser.ParserRuleSpecContext ctx);
 
-	Result visitGrammarType(GrammarParser.GrammarTypeContext ctx);
+	Result visitGrammarType(AbstractGrammarParser.GrammarTypeContext ctx);
 
-	Result visitRuleAction(GrammarParser.RuleActionContext ctx);
+	Result visitRuleAction(AbstractGrammarParser.RuleActionContext ctx);
 
-	Result visitEbnfSuffix(GrammarParser.EbnfSuffixContext ctx);
+	Result visitEbnfSuffix(AbstractGrammarParser.EbnfSuffixContext ctx);
 
-	Result visitExceptionGroup(GrammarParser.ExceptionGroupContext ctx);
+	Result visitExceptionGroup(AbstractGrammarParser.ExceptionGroupContext ctx);
 
-	Result visitRulePrequel(GrammarParser.RulePrequelContext ctx);
+	Result visitRulePrequel(AbstractGrammarParser.RulePrequelContext ctx);
 
-	Result visitLexerBlock(GrammarParser.LexerBlockContext ctx);
+	Result visitLexerBlock(AbstractGrammarParser.LexerBlockContext ctx);
 
-	Result visitSetElement(GrammarParser.SetElementContext ctx);
+	Result visitSetElement(AbstractGrammarParser.SetElementContext ctx);
 
-	Result visitBlockSet(GrammarParser.BlockSetContext ctx);
+	Result visitBlockSet(AbstractGrammarParser.BlockSetContext ctx);
 
-	Result visitActionScopeName(GrammarParser.ActionScopeNameContext ctx);
+	Result visitActionScopeName(AbstractGrammarParser.ActionScopeNameContext ctx);
 
-	Result visitLabeledAlt(GrammarParser.LabeledAltContext ctx);
+	Result visitLabeledAlt(AbstractGrammarParser.LabeledAltContext ctx);
 
-	Result visitArgActionParameterType(GrammarParser.ArgActionParameterTypeContext ctx);
+	Result visitArgActionParameterType(AbstractGrammarParser.ArgActionParameterTypeContext ctx);
 
-	Result visitLexerAtom(GrammarParser.LexerAtomContext ctx);
+	Result visitLexerAtom(AbstractGrammarParser.LexerAtomContext ctx);
 
-	Result visitLabeledElement(GrammarParser.LabeledElementContext ctx);
+	Result visitLabeledElement(AbstractGrammarParser.LabeledElementContext ctx);
 
-	Result visitLexerRuleBlock(GrammarParser.LexerRuleBlockContext ctx);
+	Result visitLexerRuleBlock(AbstractGrammarParser.LexerRuleBlockContext ctx);
 
-	Result visitFinallyClause(GrammarParser.FinallyClauseContext ctx);
+	Result visitFinallyClause(AbstractGrammarParser.FinallyClauseContext ctx);
 
-	Result visitIgnored(GrammarParser.IgnoredContext ctx);
+	Result visitIgnored(AbstractGrammarParser.IgnoredContext ctx);
 
-	Result visitGrammarSpec(GrammarParser.GrammarSpecContext ctx);
+	Result visitGrammarSpec(AbstractGrammarParser.GrammarSpecContext ctx);
 
-	Result visitDelegateGrammar(GrammarParser.DelegateGrammarContext ctx);
+	Result visitDelegateGrammar(AbstractGrammarParser.DelegateGrammarContext ctx);
 
-	Result visitLexerElements(GrammarParser.LexerElementsContext ctx);
+	Result visitLexerElements(AbstractGrammarParser.LexerElementsContext ctx);
 
-	Result visitRange(GrammarParser.RangeContext ctx);
+	Result visitRange(AbstractGrammarParser.RangeContext ctx);
 
-	Result visitTokenSpec(GrammarParser.TokenSpecContext ctx);
+	Result visitTokenSpec(AbstractGrammarParser.TokenSpecContext ctx);
 
-	Result visitBlock(GrammarParser.BlockContext ctx);
+	Result visitBlock(AbstractGrammarParser.BlockContext ctx);
 
-	Result visitArgActionParameterTypePart(GrammarParser.ArgActionParameterTypePartContext ctx);
+	Result visitArgActionParameterTypePart(AbstractGrammarParser.ArgActionParameterTypePartContext ctx);
 
-	Result visitLexerRule(GrammarParser.LexerRuleContext ctx);
+	Result visitLexerRule(AbstractGrammarParser.LexerRuleContext ctx);
 
-	Result visitLabeledLexerElement(GrammarParser.LabeledLexerElementContext ctx);
+	Result visitLabeledLexerElement(AbstractGrammarParser.LabeledLexerElementContext ctx);
 
-	Result visitDelegateGrammars(GrammarParser.DelegateGrammarsContext ctx);
+	Result visitDelegateGrammars(AbstractGrammarParser.DelegateGrammarsContext ctx);
 
-	Result visitActionExpression(GrammarParser.ActionExpressionContext ctx);
+	Result visitActionExpression(AbstractGrammarParser.ActionExpressionContext ctx);
 
-	Result visitRuleref(GrammarParser.RulerefContext ctx);
+	Result visitRuleref(AbstractGrammarParser.RulerefContext ctx);
 
-	Result visitBlockSuffix(GrammarParser.BlockSuffixContext ctx);
+	Result visitBlockSuffix(AbstractGrammarParser.BlockSuffixContext ctx);
 
-	Result visitId(GrammarParser.IdContext ctx);
+	Result visitId(AbstractGrammarParser.IdContext ctx);
 
-	Result visitActionBlock(GrammarParser.ActionBlockContext ctx);
+	Result visitActionBlock(AbstractGrammarParser.ActionBlockContext ctx);
 
-	Result visitElementOption(GrammarParser.ElementOptionContext ctx);
+	Result visitElementOption(AbstractGrammarParser.ElementOptionContext ctx);
 
-	Result visitExceptionHandler(GrammarParser.ExceptionHandlerContext ctx);
+	Result visitExceptionHandler(AbstractGrammarParser.ExceptionHandlerContext ctx);
 
-	Result visitTokensSpec(GrammarParser.TokensSpecContext ctx);
+	Result visitTokensSpec(AbstractGrammarParser.TokensSpecContext ctx);
 
-	Result visitRuleReturns(GrammarParser.RuleReturnsContext ctx);
+	Result visitRuleReturns(AbstractGrammarParser.RuleReturnsContext ctx);
 
-	Result visitQid(GrammarParser.QidContext ctx);
+	Result visitQid(AbstractGrammarParser.QidContext ctx);
 
-	Result visitOptionsSpec(GrammarParser.OptionsSpecContext ctx);
+	Result visitOptionsSpec(AbstractGrammarParser.OptionsSpecContext ctx);
 
-	Result visitAltList(GrammarParser.AltListContext ctx);
+	Result visitAltList(AbstractGrammarParser.AltListContext ctx);
 
-	Result visitPrequelConstruct(GrammarParser.PrequelConstructContext ctx);
+	Result visitPrequelConstruct(AbstractGrammarParser.PrequelConstructContext ctx);
 
-	Result visitRules(GrammarParser.RulesContext ctx);
+	Result visitRules(AbstractGrammarParser.RulesContext ctx);
 
-	Result visitOptionValue(GrammarParser.OptionValueContext ctx);
+	Result visitOptionValue(AbstractGrammarParser.OptionValueContext ctx);
 
-	Result visitLexerAlt(GrammarParser.LexerAltContext ctx);
+	Result visitLexerAlt(AbstractGrammarParser.LexerAltContext ctx);
 
-	Result visitArgActionBlock(GrammarParser.ArgActionBlockContext ctx);
+	Result visitArgActionBlock(AbstractGrammarParser.ArgActionBlockContext ctx);
 
-	Result visitRuleModifiers(GrammarParser.RuleModifiersContext ctx);
+	Result visitRuleModifiers(AbstractGrammarParser.RuleModifiersContext ctx);
 
-	Result visitArgActionParameters(GrammarParser.ArgActionParametersContext ctx);
+	Result visitArgActionParameters(AbstractGrammarParser.ArgActionParametersContext ctx);
 
-	Result visitEbnf(GrammarParser.EbnfContext ctx);
+	Result visitEbnf(AbstractGrammarParser.EbnfContext ctx);
 
-	Result visitLexerCommandExpr(GrammarParser.LexerCommandExprContext ctx);
+	Result visitLexerCommandExpr(AbstractGrammarParser.LexerCommandExprContext ctx);
 }
