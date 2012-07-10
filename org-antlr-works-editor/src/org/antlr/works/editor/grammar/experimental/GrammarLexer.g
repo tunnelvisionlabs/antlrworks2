@@ -10,6 +10,7 @@ lexer grammar GrammarLexer;
 
 options {
     language = Java;
+    abstract = true;
 }
 
 tokens {
