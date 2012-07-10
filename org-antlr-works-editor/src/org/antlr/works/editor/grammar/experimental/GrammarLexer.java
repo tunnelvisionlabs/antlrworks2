@@ -22,4 +22,18 @@ public class GrammarLexer extends AbstractGrammarLexer {
         super(input);
     }
 
+    @Override
+    public Token emit() {
+        if (_type == ID) {
+            String firstChar = _input.getText(Interval.of(_tokenStartCharIndex, _tokenStartCharIndex));
+            if (Character.isUpperCase(firstChar.charAt(0))) {
+                _type = TOKEN_REF;
+            } else {
+                _type = RULE_REF;
+            }
+        }
+
+        return super.emit();
+    }
+
 }

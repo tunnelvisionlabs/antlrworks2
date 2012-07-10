@@ -153,7 +153,7 @@ BLOCK_COMMENT_BODY
 //    ;
 
 LINE_COMMENT
-    :   '//' ~('\r'|'\n')* {$channel = HIDDEN;}
+    :   '//' ~('\r'|'\n')* -> channel(HIDDEN)
     ;
 
 DOUBLE_QUOTE_STRING_LITERAL
@@ -413,11 +413,7 @@ RULE_REF
     */
 
 /** Allow unicode rule/token names */
-ID			:	NameStartChar NameChar*
-				{
-				if ( Character.isUpperCase(getInputStream().getText(Interval.of(_tokenStartCharIndex, _tokenStartCharIndex)).charAt(0)) ) $type = TOKEN_REF;
-				else $type = RULE_REF;
-				};
+ID			:	NameStartChar NameChar*;
 
 fragment
 NameChar    :   NameStartChar
