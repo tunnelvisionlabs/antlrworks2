@@ -62,11 +62,16 @@ public class BaseCompletionController implements CompletionController {
         this.tasks = tasks;
         this.queries = new ArrayList<AsyncCompletionQuery>();
         for (CompletionTask task : tasks) {
-            if (!(task instanceof AbstractCompletionQuery)) {
+            if (!(task instanceof AsyncCompletionTask)) {
                 continue;
             }
 
-            queries.add(((AsyncCompletionTask)task).getQuery());
+            AsyncCompletionQuery query = ((AsyncCompletionTask)task).getQuery();
+            if (query == null) {
+                continue;
+            }
+
+            queries.add(query);
         }
     }
 
