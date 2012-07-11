@@ -22,6 +22,8 @@
     <fontcolor name="parserrule" foreColor="FF6A5ACD" />
     <!-- Dark Blue -->
     <fontcolor name="lexerrule" foreColor="FF00008B" />
+    <!-- "Goldish" -->
+    <fontcolor name="lexerCommand" foreColor="FFA78300" />
     <!-- Teal -->
     <fontcolor name="validoption" foreColor="FF008080" />
     <!-- Dark Red -->

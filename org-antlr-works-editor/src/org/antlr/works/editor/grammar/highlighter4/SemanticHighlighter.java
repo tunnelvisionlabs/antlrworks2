@@ -27,16 +27,17 @@ import org.antlr.works.editor.antlr4.semantics.AbstractParseTreeSemanticHighligh
 import org.antlr.works.editor.antlr4.semantics.AbstractSemanticHighlighter;
 import org.antlr.works.editor.grammar.GrammarEditorKit;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
-import org.antlr.works.editor.grammar.experimental.GrammarParser;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.ArgActionParameterContext;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.BlockContext;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.ElementOptionContext;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.GrammarTypeContext;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.IdContext;
+import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.LexerCommandContext;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.LocalsSpecContext;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.OptionContext;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.RuleReturnsContext;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.RuleSpecContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser;
 import org.antlr.works.editor.grammar.experimental.GrammarParserBaseListener;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.editor.mimelookup.MimeLookup;
@@ -57,6 +58,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
     private final AttributeSet returnValueDeclarationAttributes;
     private final AttributeSet localDeclarationAttributes;
     private final AttributeSet invalidOptionAttributes;
+    private final AttributeSet lexerCommandAttributes;
 
     private SemanticHighlighter(@NonNull StyledDocument document) {
         super(document, GrammarParserDataDefinitions.REFERENCE_PARSE_TREE);
@@ -67,6 +69,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
         this.returnValueDeclarationAttributes = getFontAndColors(settings, "definition");
         this.localDeclarationAttributes = getFontAndColors(settings, "definition");
         this.invalidOptionAttributes = getFontAndColors(settings, "invalidoption");
+        this.lexerCommandAttributes = getFontAndColors(settings, "lexerCommand");
     }
 
     @Override
@@ -86,6 +89,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
         addHighlights(container, sourceSnapshot, currentSnapshot, listener.getReturnValueDeclarations(), returnValueDeclarationAttributes);
         addHighlights(container, sourceSnapshot, currentSnapshot, listener.getLocalsDeclarations(), localDeclarationAttributes);
         addHighlights(container, sourceSnapshot, currentSnapshot, listener.getInvalidOptions(), invalidOptionAttributes);
+        addHighlights(container, sourceSnapshot, currentSnapshot, listener.getLexerCommands(), lexerCommandAttributes);
         targetContainer.setHighlights(container);
     }
 
@@ -118,11 +122,13 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
             add("TokenLabelType");
             add("superClass");
             add("filter");
+            add("abstract");
         }};
         private static final Set<String> knownParserGrammarOptions = new HashSet<String>() {{
             add("tokenVocab");
             add("TokenLabelType");
             add("superClass");
+            add("abstract");
         }};
         private static final Set<String> knownCombinedGrammarOptions = new HashSet<String>() {{
             add("language");
@@ -130,6 +136,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
             add("TokenLabelType");
             add("superClass");
             add("filter");
+            add("abstract");
         }};
         private static final Set<String> knownTokenOptions = new HashSet<String>() {{
             add("assoc");
@@ -144,6 +151,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
         private final List<Token> returnValueDeclarations = new ArrayList<Token>();
         private final List<Token> localsDeclarations = new ArrayList<Token>();
         private final List<Token> invalidOptions = new ArrayList<Token>();
+        private final List<Token> lexerCommands = new ArrayList<Token>();
 
         private int grammarType;
         private int ruleLevel;
@@ -163,6 +171,10 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
 
         public List<Token> getInvalidOptions() {
             return invalidOptions;
+        }
+
+        public List<Token> getLexerCommands() {
+            return lexerCommands;
         }
 
         @Override
@@ -243,6 +255,22 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
         public void exitLocalsSpec(LocalsSpecContext ctx) {
             int context = memberContext.pop();
             assert context == GrammarParser.RULE_localsSpec;
+        }
+
+        @Override
+        @RuleDependencies({
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommand, version=0),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=0),
+        })
+        public void enterLexerCommand(LexerCommandContext ctx) {
+            IdContext idContext = ctx.id();
+            if (idContext == null || idContext.start == null) {
+                return;
+            }
+
+            if (idContext.start != null) {
+                lexerCommands.add(idContext.start);
+            }
         }
 
         @Override
