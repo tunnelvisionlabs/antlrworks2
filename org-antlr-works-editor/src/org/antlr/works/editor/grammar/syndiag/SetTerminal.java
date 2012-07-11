@@ -13,10 +13,12 @@ import java.awt.Graphics;
 import java.awt.font.TextAttribute;
 import java.text.AttributedString;
 import java.text.CharacterIterator;
+import java.util.Collections;
 import java.util.List;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.StyleConstants;
 import org.antlr.netbeans.editor.text.SnapshotPositionRegion;
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleDependencies;
 import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
@@ -38,6 +40,11 @@ public class SetTerminal extends Terminal {
         this(getAttributedLabel(elements, inverted), sourceSpan, inverted);
     }
 
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_argActionBlock, version=1)
+    public SetTerminal(GrammarParser.ArgActionBlockContext element, SnapshotPositionRegion sourceSpan) {
+        this(getAttributedLabel(Collections.singletonList(element), false), sourceSpan, false);
+    }
+
     private SetTerminal(AttributedString attributedLabel, SnapshotPositionRegion sourceSpan, boolean inverted) {
         super(getLabelText(attributedLabel), sourceSpan);
 
@@ -50,7 +57,7 @@ public class SetTerminal extends Terminal {
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_range, version=0),
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_setElement, version=1),
     })
-    private static AttributedString getAttributedLabel(List<GrammarParser.SetElementContext> elements, boolean inverted) {
+    private static AttributedString getAttributedLabel(List<? extends ParserRuleContext<Token>> elements, boolean inverted) {
         IntervalSet foregroundSpans = new IntervalSet();
         IntervalSet literalSpans = new IntervalSet();
         IntervalSet lexerRuleSpans = new IntervalSet();
@@ -68,32 +75,48 @@ public class SetTerminal extends Terminal {
                 foregroundSpans.add(builder.length() - 1);
             }
 
-            GrammarParser.SetElementContext context = elements.get(i);
-            if (context.TOKEN_REF() != null) {
-                String tokenName = context.TOKEN_REF().getText();
-                builder.append(tokenName);
-                lexerRuleSpans.add(builder.length() - tokenName.length(), builder.length() - 1);
-            } else if (context.STRING_LITERAL() != null) {
-                String text = context.STRING_LITERAL().getText();
-                builder.append(text);
-                literalSpans.add(builder.length() - text.length(), builder.length() - 1);
-            } else if (context.range() != null) {
-                GrammarParser.RangeContext rangeContext = context.range();
-                List<? extends TerminalNode<Token>> strings = rangeContext.STRING_LITERAL();
-                if (strings.size() == 2) {
-                    builder.append(strings.get(0).getText());
-                    literalSpans.add(builder.length() - strings.get(0).getText().length(), builder.length() - 1);
+            ParserRuleContext<Token> element = elements.get(i);
+            if (element instanceof GrammarParser.SetElementContext) {
+                GrammarParser.SetElementContext context = (GrammarParser.SetElementContext)element;
+                if (context.TOKEN_REF() != null) {
+                    String tokenName = context.TOKEN_REF().getText();
+                    builder.append(tokenName);
+                    lexerRuleSpans.add(builder.length() - tokenName.length(), builder.length() - 1);
+                } else if (context.STRING_LITERAL() != null) {
+                    String text = context.STRING_LITERAL().getText();
+                    builder.append(text);
+                    literalSpans.add(builder.length() - text.length(), builder.length() - 1);
+                } else if (context.range() != null) {
+                    GrammarParser.RangeContext rangeContext = context.range();
+                    List<? extends TerminalNode<Token>> strings = rangeContext.STRING_LITERAL();
+                    if (strings.size() == 2) {
+                        builder.append(strings.get(0).getText());
+                        literalSpans.add(builder.length() - strings.get(0).getText().length(), builder.length() - 1);
 
-                    builder.append("..");
-                    foregroundSpans.add(builder.length() - 2, builder.length() - 1);
+                        builder.append("..");
+                        foregroundSpans.add(builder.length() - 2, builder.length() - 1);
 
-                    builder.append(strings.get(1).getText());
-                    literalSpans.add(builder.length() - strings.get(1).getText().length(), builder.length() - 1);
+                        builder.append(strings.get(1).getText());
+                        literalSpans.add(builder.length() - strings.get(1).getText().length(), builder.length() - 1);
+                    } else {
+                        builder.append("???");
+                    }
+                } else if (context.argActionBlock() != null) {
+                    GrammarParser.ArgActionBlockContext argActionBlockContext = context.argActionBlock();
+                    String text = argActionBlockContext.getText();
+                    if (text.length() >= 2 && text.charAt(0) == '[' && text.charAt(text.length() - 1) == ']') {
+                        builder.append(text);
+                        foregroundSpans.add(builder.length() - text.length());
+                        literalSpans.add(builder.length() - text.length() + 1, builder.length() - 2);
+                        foregroundSpans.add(builder.length() - 1);
+                    } else {
+                        builder.append("???");
+                    }
                 } else {
                     builder.append("???");
                 }
-            } else if (context.argActionBlock() != null) {
-                GrammarParser.ArgActionBlockContext argActionBlockContext = context.argActionBlock();
+            } else if (element instanceof GrammarParser.ArgActionBlockContext) {
+                GrammarParser.ArgActionBlockContext argActionBlockContext = (GrammarParser.ArgActionBlockContext)element;
                 String text = argActionBlockContext.getText();
                 if (text.length() >= 2 && text.charAt(0) == '[' && text.charAt(text.length() - 1) == ']') {
                     builder.append(text);

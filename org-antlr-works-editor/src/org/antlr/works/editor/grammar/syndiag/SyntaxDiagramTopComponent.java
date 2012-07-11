@@ -406,6 +406,7 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_range, version=0),
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_notSet, version=0),
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_blockSet, version=0),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_argActionBlock, version=0),
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_setElement, version=1),
         })
         public void enterEveryAtom(ParserRuleContext<Token> ctx) {
@@ -428,6 +429,7 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
                 || ctx.children.get(0) instanceof GrammarParser.RulerefContext);
             boolean range = hasChild && ctx.children.get(0) instanceof GrammarParser.RangeContext;
             boolean notset = hasChild && ctx.children.get(0) instanceof GrammarParser.NotSetContext;
+            boolean charSet = hasChild && ctx.children.get(0) instanceof GrammarParser.ArgActionBlockContext;
 
             if (wildcard || reference) {
                 String text = ctx.start.getText();
@@ -468,6 +470,8 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
                 }
 
                 nodes.peek().add(new SetTerminal(elementContexts, sourceSpan, true));
+            } else if (charSet) {
+                nodes.peek().add(new SetTerminal((GrammarParser.ArgActionBlockContext)ctx.children.get(0), sourceSpan));
             } else {
                 nodes.peek().add(new Terminal("???", sourceSpan));
             }
