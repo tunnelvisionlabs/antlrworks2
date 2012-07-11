@@ -10,7 +10,10 @@ package org.antlr.works.editor.grammar.syndiag;
 
 import java.awt.Component;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Deque;
+import java.util.List;
 import java.util.Properties;
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
@@ -28,8 +31,7 @@ import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
-import org.antlr.works.editor.grammar.experimental.CurrentRuleContextData;
-import org.antlr.works.editor.grammar.experimental.GrammarParser;
+import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.AltListContext;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.AlternativeContext;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.AtomContext;
@@ -41,6 +43,8 @@ import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.LexerBl
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.LexerRuleContext;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.ParserRuleSpecContext;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.RuleAltListContext;
+import org.antlr.works.editor.grammar.experimental.CurrentRuleContextData;
+import org.antlr.works.editor.grammar.experimental.GrammarParser;
 import org.antlr.works.editor.grammar.experimental.GrammarParserBaseListener;
 import org.netbeans.api.annotations.common.NullAllowed;
 import org.netbeans.api.settings.ConvertAsProperties;
@@ -401,6 +405,8 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleref, version=0),
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_range, version=0),
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_notSet, version=0),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_blockSet, version=0),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_setElement, version=1),
         })
         public void enterEveryAtom(ParserRuleContext<Token> ctx) {
             if (outermostAtom != null) {
@@ -452,7 +458,16 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
 
                 nodes.peek().add(terminal);
             } else if (notset) {
-                nodes.peek().add(new Terminal("~(...)", sourceSpan));
+                GrammarParser.NotSetContext notSetContext = (GrammarParser.NotSetContext)ctx.children.get(0);
+
+                List<GrammarParser.SetElementContext> elementContexts;
+                if (notSetContext.setElement() != null) {
+                    elementContexts = Collections.singletonList(notSetContext.setElement());
+                } else {
+                    elementContexts = new ArrayList<AbstractGrammarParser.SetElementContext>(notSetContext.blockSet().setElement());
+                }
+
+                nodes.peek().add(new SetTerminal(elementContexts, sourceSpan, true));
             } else {
                 nodes.peek().add(new Terminal("???", sourceSpan));
             }

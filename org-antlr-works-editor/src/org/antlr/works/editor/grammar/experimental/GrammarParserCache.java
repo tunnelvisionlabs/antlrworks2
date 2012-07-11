@@ -18,6 +18,7 @@ import org.antlr.works.editor.grammar.completion.GrammarCompletionQuery;
 import org.antlr.works.editor.grammar.completion.LabelAnalyzer;
 import org.antlr.works.editor.grammar.highlighter4.SemanticHighlighter;
 import org.antlr.works.editor.grammar.semantics.SemanticAnalyzerListener;
+import org.antlr.works.editor.grammar.syndiag.SetTerminal;
 import org.antlr.works.editor.grammar.syndiag.SyntaxDiagramTopComponent;
 
 /**
@@ -60,6 +61,7 @@ public class GrammarParserCache extends AbstractParserCache<Token, GrammarParser
         RuleDependencyChecker.checkDependencies(SemanticAnalyzerListener.class);
         RuleDependencyChecker.checkDependencies(SemanticHighlighter.class);
         RuleDependencyChecker.checkDependencies(SyntaxDiagramTopComponent.class);
+        RuleDependencyChecker.checkDependencies(SetTerminal.class);
         dependenciesChecked = true;
     }
 }
