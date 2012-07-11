@@ -91,7 +91,7 @@ public class LabelAnalyzer extends GrammarParserBaseListener {
     }
 
     @Override
-    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_labeledAlt, version=0)
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_labeledAlt, version=1)
     public void enterLabeledAlt(LabeledAltContext ctx) {
         if (isCaretReached()) {
             return;

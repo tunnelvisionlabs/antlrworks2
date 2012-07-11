@@ -3065,10 +3065,10 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		public IdContext id() {
 		    return getRuleContext(IdContext.class,0);
 		}
+		public TerminalNode<Token> POUND() { return getToken(AbstractGrammarParser.POUND, 0); }
 		public AlternativeContext alternative() {
 		    return getRuleContext(AlternativeContext.class,0);
 		}
-		public TerminalNode<Token> RARROW() { return getToken(AbstractGrammarParser.RARROW, 0); }
 		public LabeledAltContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -3088,7 +3088,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		}
 	}
 
-	@RuleVersion(0)
+	@RuleVersion(1)
 	public final LabeledAltContext labeledAlt() throws RecognitionException {
 		LabeledAltContext _localctx = new LabeledAltContext(_ctx, getState());
 		enterRule(_localctx, 76, RULE_labeledAlt);
@@ -3101,7 +3101,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 			switch ( getInterpreter().adaptivePredict(_input,58,_ctx) ) {
 				case 1:
 					{
-					setState(697); match(RARROW);
+					setState(697); match(POUND);
 					setState(699); id();
 					}
 					break;
@@ -5647,7 +5647,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		"G\1\0\0\0\u02aa\u02ab\3J%\0\u02abI\1\0\0\0\u02ac\u02b4\3L&\0\u02ae\u02b0"+
 		"\5)\0\0\u02b0\u02b3\3L&\0\u02b2\u02ae\1\0\0\0\u02b3\u02b6\1\0\0\0\u02b4"+
 		"\u02b2\1\0\0\0\u02b4\u02b5\1\0\0\0\u02b5K\1\0\0\0\u02b6\u02b4\1\0\0\0"+
-		"\u02b7\u02bd\3f\63\0\u02b9\u02bb\5!\0\0\u02bb\u02be\3\u008aE\0\u02bd\u02b9"+
+		"\u02b7\u02bd\3f\63\0\u02b9\u02bb\5/\0\0\u02bb\u02be\3\u008aE\0\u02bd\u02b9"+
 		"\1\0\0\0\u02bd\u02be\1\0\0\0\u02beM\1\0\0\0\u02bf\u02c2\5\3\0\0\u02c1"+
 		"\u02bf\1\0\0\0\u02c1\u02c2\1\0\0\0\u02c2\u02c5\1\0\0\0\u02c3\u02c6\5\r"+
 		"\0\0\u02c5\u02c3\1\0\0\0\u02c5\u02c6\1\0\0\0\u02c6\u02c7\1\0\0\0\u02c7"+

@@ -511,7 +511,8 @@ ruleAltList
 	;
 	
 labeledAlt
-	:	alternative (RARROW id)?
+@version{1}
+	:	alternative (POUND id)?
 	;
 
 lexerRule

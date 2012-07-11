@@ -426,7 +426,7 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_labeledAlt, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_labeledAlt, version=1),
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=0),
     })
     public void enterLabeledAlt(LabeledAltContext ctx) {
