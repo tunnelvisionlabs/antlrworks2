@@ -105,6 +105,7 @@ public class GrammarCompletionProvider extends AbstractCompletionProvider {
         }
 
         switch (token.getType()) {
+        case GrammarLexer.LEXER_CHAR_SET:
         case GrammarLexer.ACTION_COMMENT:
             return false;
 
