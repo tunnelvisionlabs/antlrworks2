@@ -18,6 +18,11 @@
     <!--
         ANTLR
     -->
+    <fontcolor name="stringliteralescape" default="stringliteral">
+        <font style="bold" />
+    </fontcolor>
+    <fontcolor name="stringliteralescapeinvalid" default="stringliteralescape" waveUnderlined="FFCE7B00" />
+
     <!-- Slate Blue -->
     <fontcolor name="parserrule" foreColor="FF6A5ACD" />
     <!-- Dark Blue -->
@@ -33,8 +38,14 @@
     <fontcolor name="actioncomment" foreColor="FF4DA64D" />
     <!-- B3000000 -->
     <fontcolor name="actionliteral" foreColor="FF4D4D4D" />
+    <fontcolor name="actionliteralescape" default="actionliteral">
+        <font style="bold" />
+    </fontcolor>
     <!-- B3A31515 -->
     <fontcolor name="actionstringliteral" foreColor="FFBF5B5B" />
+    <fontcolor name="actionstringliteralescape" default="actionstringliteral">
+        <font style="bold" />
+    </fontcolor>
     <!-- B3008800 -->
     <fontcolor name="actionreference" foreColor="FF4DAC4D" />
     <fontcolor name="directive" foreColor="FF808080" />

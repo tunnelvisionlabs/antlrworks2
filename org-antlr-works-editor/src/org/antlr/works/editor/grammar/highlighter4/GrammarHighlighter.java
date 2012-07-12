@@ -54,6 +54,8 @@ public class GrammarHighlighter extends ANTLRHighlighterBaseV4<GrammarHighlighte
     private final AttributeSet keywordAttributes;
     private final AttributeSet commentAttributes;
     private final AttributeSet stringLiteralAttributes;
+    private final AttributeSet stringLiteralEscapeAttributes;
+    private final AttributeSet stringLiteralEscapeInvalidAttributes;
     private final AttributeSet numberLiteralAttributes;
     private final AttributeSet symbolDefinitionAttributes;
     private final AttributeSet symbolReferenceAttributes;
@@ -64,8 +66,10 @@ public class GrammarHighlighter extends ANTLRHighlighterBaseV4<GrammarHighlighte
     private final AttributeSet validOptionAttributes;
     private final AttributeSet invalidOptionAttributes;
     private final AttributeSet actionLiteralAttributes;
+    private final AttributeSet actionLiteralEscapeAttributes;
     private final AttributeSet actionCommentAttributes;
     private final AttributeSet actionStringLiteralAttributes;
+    private final AttributeSet actionStringLiteralEscapeAttributes;
     private final AttributeSet actionSymbolReferenceAttributes;
 
     private boolean legacyMode;
@@ -93,6 +97,8 @@ public class GrammarHighlighter extends ANTLRHighlighterBaseV4<GrammarHighlighte
         keywordAttributes = getFontAndColors(settings, "keyword");
         commentAttributes = getFontAndColors(settings, "comment");
         stringLiteralAttributes = getFontAndColors(settings, "stringliteral", true);
+        stringLiteralEscapeAttributes = getFontAndColors(settings, "stringliteralescape", true);
+        stringLiteralEscapeInvalidAttributes = getFontAndColors(settings, "stringliteralescapeinvalid", true);
         numberLiteralAttributes = getFontAndColors(settings, "number");
         symbolDefinitionAttributes = getFontAndColors(settings, "definition", true);
         symbolReferenceAttributes = getFontAndColors(settings, "reference");
@@ -103,8 +109,10 @@ public class GrammarHighlighter extends ANTLRHighlighterBaseV4<GrammarHighlighte
         validOptionAttributes = getFontAndColors(settings, "validoption");
         invalidOptionAttributes = getFontAndColors(settings, "invalidoption");
         actionLiteralAttributes = getFontAndColors(settings, "actionliteral");
+        actionLiteralEscapeAttributes = getFontAndColors(settings, "actionliteralescape");
         actionCommentAttributes = getFontAndColors(settings, "actioncomment");
         actionStringLiteralAttributes = getFontAndColors(settings, "actionstringliteral");
+        actionStringLiteralEscapeAttributes = getFontAndColors(settings, "actionstringliteralescape");
         actionSymbolReferenceAttributes = getFontAndColors(settings, "actionreference");
 
         legacyMode = GrammarEditorKit.isLegacyMode(document);
@@ -186,10 +194,14 @@ public class GrammarHighlighter extends ANTLRHighlighterBaseV4<GrammarHighlighte
 
         case GrammarHighlighterLexer.CHAR_LITERAL:
         case GrammarHighlighterLexer.STRING_LITERAL:
-        case GrammarHighlighterLexer.LexerCharSet_ESCAPE:
         case GrammarHighlighterLexer.LexerCharSet_TEXT:
-//        case GrammarHighlighterLexer.DOUBLE_ANGLE_STRING_LITERAL:
             return stringLiteralAttributes;
+
+        case GrammarHighlighterLexer.LexerCharSet_ESCAPE:
+            return stringLiteralEscapeAttributes;
+
+        case GrammarHighlighterLexer.LexerCharSet_INVALID_ESCAPE:
+            return stringLiteralEscapeInvalidAttributes;
 
         case GrammarHighlighterLexer.DIRECTIVE:
             return directiveAttributes;
@@ -212,6 +224,9 @@ public class GrammarHighlighter extends ANTLRHighlighterBaseV4<GrammarHighlighte
         case GrammarHighlighterLexer.ArgAction_TEXT:
         case GrammarHighlighterLexer.Action_TEXT:
             return actionLiteralAttributes;
+
+        case GrammarHighlighterLexer.Action_ESCAPE:
+            return actionLiteralEscapeAttributes;
 
         case GrammarHighlighterLexer.ArgAction_CHAR_LITERAL:
         case GrammarHighlighterLexer.Action_CHAR_LITERAL:

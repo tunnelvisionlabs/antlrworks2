@@ -326,7 +326,15 @@ mode LexerCharSet;
     LexerCharSet_NEWLINE : NEWLINE      -> type(NEWLINE), popMode;
 
     LexerCharSet_ESCAPE
-        :   '\\' .
+        :	'\\'
+            (	~('u' | '\r' | '\n')
+            |	'u' XDIGIT XDIGIT XDIGIT XDIGIT
+            )
+        ;
+
+    LexerCharSet_INVALID_ESCAPE
+        :   '\\'
+        |   '\\u' (XDIGIT (XDIGIT XDIGIT?)?)?
         ;
 
     LexerCharSet_TEXT
