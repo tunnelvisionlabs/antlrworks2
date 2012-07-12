@@ -13,6 +13,8 @@ import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.atn.ATN;
 import org.antlr.v4.runtime.atn.LexerATNSimulator;
+import org.antlr.v4.runtime.misc.Interval;
+import org.antlr.works.editor.grammar.experimental.GrammarLexer;
 
 /**
  *
@@ -21,6 +23,7 @@ import org.antlr.v4.runtime.atn.LexerATNSimulator;
 public class GrammarHighlighterLexer extends GrammarHighlighterLexerBase {
     private boolean inOptions;
     private boolean inTokens;
+    private int _ruleType;
 
     public GrammarHighlighterLexer(CharStream input) {
         super(input);
@@ -41,6 +44,28 @@ public class GrammarHighlighterLexer extends GrammarHighlighterLexerBase {
 
     public void setInTokens(boolean inTokens) {
         this.inTokens = inTokens;
+    }
+
+    public int getRuleType() {
+        return _ruleType;
+    }
+
+    public void setRuleType(int ruleType) {
+        assert ruleType == GrammarLexer.TOKEN_REF || ruleType == GrammarLexer.RULE_REF || ruleType == Token.INVALID_TYPE;
+        this._ruleType = ruleType;
+    }
+
+    public boolean isInLexerRule() {
+        return _ruleType == GrammarLexer.TOKEN_REF;
+    }
+
+    @Override
+    protected void handleBeginArgAction() {
+        if (isInLexerRule()) {
+            pushMode(LexerCharSet);
+        } else {
+            pushMode(ArgAction);
+        }
     }
 
     @Override
@@ -69,6 +94,22 @@ public class GrammarHighlighterLexer extends GrammarHighlighterLexerBase {
         case RCURLY:
             setInTokens(false);
             setInOptions(false);
+            break;
+
+        case SEMI:
+            setRuleType(Token.INVALID_TYPE);
+            break;
+
+        case IDENTIFIER:
+            if (_ruleType == Token.INVALID_TYPE) {
+                String firstChar = _input.getText(Interval.of(_tokenStartCharIndex, _tokenStartCharIndex));
+                if (Character.isUpperCase(firstChar.charAt(0))) {
+                    _ruleType = GrammarLexer.TOKEN_REF;
+                } else {
+                    _ruleType = GrammarLexer.RULE_REF;
+                }
+            }
+
             break;
 
         default:

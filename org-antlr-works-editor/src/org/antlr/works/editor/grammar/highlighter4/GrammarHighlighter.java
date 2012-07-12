@@ -186,6 +186,8 @@ public class GrammarHighlighter extends ANTLRHighlighterBaseV4<GrammarHighlighte
 
         case GrammarHighlighterLexer.CHAR_LITERAL:
         case GrammarHighlighterLexer.STRING_LITERAL:
+        case GrammarHighlighterLexer.LexerCharSet_ESCAPE:
+        case GrammarHighlighterLexer.LexerCharSet_TEXT:
 //        case GrammarHighlighterLexer.DOUBLE_ANGLE_STRING_LITERAL:
             return stringLiteralAttributes;
 

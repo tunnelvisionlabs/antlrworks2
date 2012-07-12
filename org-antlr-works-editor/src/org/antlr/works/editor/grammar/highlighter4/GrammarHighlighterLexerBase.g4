@@ -23,6 +23,10 @@ package org.antlr.works.editor.grammar.highlighter4;
 protected int getMultilineCommentType() {
     return _modeStack.peek()==DEFAULT_MODE ? ML_COMMENT : Action_ML_COMMENT;
 }
+
+protected void handleBeginArgAction() {
+    throw new UnsupportedOperationException();
+}
 }
 
 tokens {
@@ -103,7 +107,7 @@ RANGE : '..' ;
 
 NOT :	'~' ;
 
-LBRACK:	'['	;
+LBRACK:	'['	{handleBeginArgAction();};
 
 RBRACK:	']'	;
 
@@ -206,12 +210,16 @@ mode ArgAction;
 
     ArgAction_NEWLINE : NEWLINE         -> type(NEWLINE);
 
+    ArgAction_LBRACK
+        :   '['                         -> type(LBRACK), pushMode(ArgAction)
+        ;
+
     ArgAction_RBRACK
         :   ']'                         -> type(RBRACK), popMode
         ;
 
     ArgAction_TEXT
-        :   (   ~('{' | '}' | '/' | '\r' | '\n' | '$' | '\\' | '\'' | '"')
+        :   (   ~('[' | ']' | '{' | '}' | '/' | '\r' | '\n' | '$' | '\\' | '\'' | '"')
             )+
         ;
 
@@ -312,4 +320,21 @@ mode Action;
         ;
 
     Action_ANYCHAR : .                  -> type(ANYCHAR);
+
+mode LexerCharSet;
+
+    LexerCharSet_NEWLINE : NEWLINE      -> type(NEWLINE), popMode;
+
+    LexerCharSet_ESCAPE
+        :   '\\' .
+        ;
+
+    LexerCharSet_TEXT
+        :   (   ~('\\' | ']' | '\r' | '\n')
+            )+
+        ;
+
+    LexerCharSet_RBRACK
+        :   ']'                         -> type(RBRACK), popMode
+        ;
 

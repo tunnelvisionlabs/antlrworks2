@@ -11,6 +11,7 @@ package org.antlr.works.editor.grammar.highlighter4;
 import java.util.Arrays;
 import org.antlr.netbeans.editor.highlighting.LineStateInfo;
 import org.antlr.v4.runtime.Lexer;
+import org.antlr.v4.runtime.Token;
 
 /**
  *
@@ -23,16 +24,18 @@ public class GrammarHighlighterLexerState implements LineStateInfo<GrammarHighli
 
     private final boolean inOptions;
     private final boolean inTokens;
+    private final int ruleType;
     private final int mode;
     private final int[] modeStack;
 
     private GrammarHighlighterLexerState() {
-        this(false, false, Lexer.DEFAULT_MODE, null);
+        this(false, false, Token.INVALID_TYPE, Lexer.DEFAULT_MODE, null);
     }
 
-    public GrammarHighlighterLexerState(boolean inOptions, boolean inTokens, int mode, int[] modeStack) {
+    public GrammarHighlighterLexerState(boolean inOptions, boolean inTokens, int ruleType, int mode, int[] modeStack) {
         this.inOptions = inOptions;
         this.inTokens = inTokens;
+        this.ruleType = ruleType;
         this.mode = mode;
         this.modeStack = modeStack;
     }
@@ -51,6 +54,14 @@ public class GrammarHighlighterLexerState implements LineStateInfo<GrammarHighli
         }
 
         return inTokens;
+    }
+
+    public int getRuleType() {
+        if (getIsDirty() || getIsMultiLineToken()) {
+            throw new UnsupportedOperationException();
+        }
+
+        return ruleType;
     }
 
     public int getMode() {
@@ -100,6 +111,7 @@ public class GrammarHighlighterLexerState implements LineStateInfo<GrammarHighli
             && this.getIsMultiLineToken() == other.getIsMultiLineToken()
             && this.isInOptions() == other.isInOptions()
             && this.isInTokens() == other.isInTokens()
+            && this.getRuleType() == other.getRuleType()
             && this.getMode() == other.getMode()
             && Arrays.equals(this.getModeStack(), other.getModeStack());
     }
@@ -109,6 +121,7 @@ public class GrammarHighlighterLexerState implements LineStateInfo<GrammarHighli
         int hash = 5;
         hash = 31 * hash + (this.inOptions ? 1 : 0);
         hash = 31 * hash + (this.inTokens ? 1 : 0);
+        hash = 31 * hash + this.ruleType;
         hash = 31 * hash + this.mode;
         hash = 31 * hash + Arrays.hashCode(this.modeStack);
         return hash;

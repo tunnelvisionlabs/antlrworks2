@@ -49,7 +49,7 @@ public class GrammarHighlighterLexerWrapper implements TokenSourceWithStateV4<To
     @Override
     public GrammarHighlighterLexerState getCurrentState() {
         if (grammarLexer._modeStack == null) {
-            return getCachedState(grammarLexer.isInOptions(), grammarLexer.isInTokens(), grammarLexer._mode, null);
+            return getCachedState(grammarLexer.isInOptions(), grammarLexer.isInTokens(), grammarLexer.getRuleType(), grammarLexer._mode, null);
         }
 
         int[] modes = new int[grammarLexer._modeStack.size()];
@@ -58,11 +58,11 @@ public class GrammarHighlighterLexerWrapper implements TokenSourceWithStateV4<To
             modes[index++] = mode;
         }
 
-        return getCachedState(grammarLexer.isInOptions(), grammarLexer.isInTokens(), grammarLexer._mode, modes);
+        return getCachedState(grammarLexer.isInOptions(), grammarLexer.isInTokens(), grammarLexer.getRuleType(), grammarLexer._mode, modes);
     }
 
-    private static GrammarHighlighterLexerState getCachedState(boolean inOptions, boolean inTokens, int mode, int[] modeStack) {
-        GrammarHighlighterLexerState state = new GrammarHighlighterLexerState(inOptions, inTokens, mode, modeStack);
+    private static GrammarHighlighterLexerState getCachedState(boolean inOptions, boolean inTokens, int ruleType, int mode, int[] modeStack) {
+        GrammarHighlighterLexerState state = new GrammarHighlighterLexerState(inOptions, inTokens, ruleType, mode, modeStack);
 
         synchronized (sharedStates) {
             GrammarHighlighterLexerState cached = sharedStates.get(state);
@@ -79,6 +79,7 @@ public class GrammarHighlighterLexerWrapper implements TokenSourceWithStateV4<To
         grammarLexer._mode = state.getMode();
         grammarLexer.setInOptions(state.isInOptions());
         grammarLexer.setInTokens(state.isInTokens());
+        grammarLexer.setRuleType(state.getRuleType());
         if (state.getModeStack() != null && state.getModeStack().length > 0) {
             if (grammarLexer._modeStack == null) {
                 grammarLexer._modeStack = new ArrayDeque<Integer>();
