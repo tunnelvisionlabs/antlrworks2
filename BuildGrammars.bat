@@ -20,7 +20,7 @@ set ANTLR4_TOOL=-cp "%ANTLR4_CLASSPATH%" org.antlr.v4.Tool
 set SOURCE_ROOT=%CD%
 
 set CURRENT_SOURCE=%SOURCE_ROOT%\org-antlr-works-editor\src\org\antlr\works\editor\grammar\experimental
-start /D %CURRENT_SOURCE% /B "Title" "%JAVA_HOME%\bin\java.exe" %ANTLR4_TOOL% -visitor -Xforce-atn *.g
+start /D %CURRENT_SOURCE% /B "Title" "%JAVA_HOME%\bin\java.exe" %ANTLR4_TOOL% -visitor -Xforce-atn *.g4
 
 set CURRENT_SOURCE=%SOURCE_ROOT%\org-antlr-works-editor\src\org\antlr\works\editor\grammar\highlighter4
 start /D %CURRENT_SOURCE% /B "Title" "%JAVA_HOME%\bin\java.exe" %ANTLR4_TOOL% *.g4
