@@ -29,6 +29,7 @@ import org.antlr.v4.runtime.RuleDependencies;
 import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.ParseTree.TerminalNode;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser;
@@ -389,7 +390,7 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
          */
 
         @Override
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerAtom, version=0)
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerAtom, version=1)
         public void enterLexerAtom(LexerAtomContext ctx) {
             enterEveryAtom(ctx);
         }
@@ -406,8 +407,7 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_range, version=0),
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_notSet, version=0),
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_blockSet, version=0),
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_argActionBlock, version=0),
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_setElement, version=1),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_setElement, version=2),
         })
         public void enterEveryAtom(ParserRuleContext<Token> ctx) {
             if (outermostAtom != null) {
@@ -429,7 +429,9 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
                 || ctx.children.get(0) instanceof GrammarParser.RulerefContext);
             boolean range = hasChild && ctx.children.get(0) instanceof GrammarParser.RangeContext;
             boolean notset = hasChild && ctx.children.get(0) instanceof GrammarParser.NotSetContext;
-            boolean charSet = hasChild && ctx.children.get(0) instanceof GrammarParser.ArgActionBlockContext;
+            boolean charSet = hasChild
+                && ctx.children.get(0) instanceof ParseTree.TerminalNode<?>
+                && ((ParseTree.TerminalNode<Token>)ctx.children.get(0)).getSymbol().getType() == GrammarParser.LEXER_CHAR_SET;
 
             if (wildcard || reference) {
                 String text = ctx.start.getText();
@@ -471,14 +473,14 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
 
                 nodes.peek().add(new SetTerminal(elementContexts, sourceSpan, true));
             } else if (charSet) {
-                nodes.peek().add(new SetTerminal((GrammarParser.ArgActionBlockContext)ctx.children.get(0), sourceSpan));
+                nodes.peek().add(new SetTerminal((ParseTree.TerminalNode<Token>)ctx.children.get(0), sourceSpan));
             } else {
                 nodes.peek().add(new Terminal("???", sourceSpan));
             }
         }
 
         @Override
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerAtom, version=0)
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerAtom, version=1)
         public void exitLexerAtom(LexerAtomContext ctx) {
             if (outermostAtom == ctx) {
                 outermostAtom = null;

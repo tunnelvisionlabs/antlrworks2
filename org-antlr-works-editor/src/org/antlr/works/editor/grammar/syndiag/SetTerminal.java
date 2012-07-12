@@ -24,6 +24,7 @@ import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.misc.IntervalSet;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTree.TerminalNode;
 import org.antlr.works.editor.grammar.experimental.GrammarParser;
 
@@ -35,13 +36,12 @@ public class SetTerminal extends Terminal {
     private final AttributedString attributedLabel;
     private final boolean inverted;
 
-    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_setElement, version=1)
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_setElement, version=2)
     public SetTerminal(List<GrammarParser.SetElementContext> elements, SnapshotPositionRegion sourceSpan, boolean inverted) {
         this(getAttributedLabel(elements, inverted), sourceSpan, inverted);
     }
 
-    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_argActionBlock, version=0)
-    public SetTerminal(GrammarParser.ArgActionBlockContext element, SnapshotPositionRegion sourceSpan) {
+    public SetTerminal(ParseTree.TerminalNode<Token> element, SnapshotPositionRegion sourceSpan) {
         this(getAttributedLabel(Collections.singletonList(element), false), sourceSpan, false);
     }
 
@@ -53,11 +53,10 @@ public class SetTerminal extends Terminal {
     }
 
     @RuleDependencies({
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_argActionBlock, version=0),
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_range, version=0),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_setElement, version=1),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_setElement, version=2),
     })
-    private static AttributedString getAttributedLabel(List<? extends ParserRuleContext<Token>> elements, boolean inverted) {
+    private static AttributedString getAttributedLabel(List<? extends ParseTree<Token>> elements, boolean inverted) {
         IntervalSet foregroundSpans = new IntervalSet();
         IntervalSet literalSpans = new IntervalSet();
         IntervalSet lexerRuleSpans = new IntervalSet();
@@ -75,7 +74,7 @@ public class SetTerminal extends Terminal {
                 foregroundSpans.add(builder.length() - 1);
             }
 
-            ParserRuleContext<Token> element = elements.get(i);
+            ParseTree<Token> element = elements.get(i);
             if (element instanceof GrammarParser.SetElementContext) {
                 GrammarParser.SetElementContext context = (GrammarParser.SetElementContext)element;
                 if (context.TOKEN_REF() != null) {
@@ -86,6 +85,16 @@ public class SetTerminal extends Terminal {
                     String text = context.STRING_LITERAL().getText();
                     builder.append(text);
                     literalSpans.add(builder.length() - text.length(), builder.length() - 1);
+                } else if (context.LEXER_CHAR_SET() != null) {
+                    String text = context.LEXER_CHAR_SET().getText();
+                    if (text.length() >= 2 && text.charAt(0) == '[' && text.charAt(text.length() - 1) == ']') {
+                        builder.append(text);
+                        foregroundSpans.add(builder.length() - text.length());
+                        literalSpans.add(builder.length() - text.length() + 1, builder.length() - 2);
+                        foregroundSpans.add(builder.length() - 1);
+                    } else {
+                        builder.append("???");
+                    }
                 } else if (context.range() != null) {
                     GrammarParser.RangeContext rangeContext = context.range();
                     List<? extends TerminalNode<Token>> strings = rangeContext.STRING_LITERAL();
@@ -101,23 +110,12 @@ public class SetTerminal extends Terminal {
                     } else {
                         builder.append("???");
                     }
-                } else if (context.argActionBlock() != null) {
-                    GrammarParser.ArgActionBlockContext argActionBlockContext = context.argActionBlock();
-                    String text = argActionBlockContext.getText();
-                    if (text.length() >= 2 && text.charAt(0) == '[' && text.charAt(text.length() - 1) == ']') {
-                        builder.append(text);
-                        foregroundSpans.add(builder.length() - text.length());
-                        literalSpans.add(builder.length() - text.length() + 1, builder.length() - 2);
-                        foregroundSpans.add(builder.length() - 1);
-                    } else {
-                        builder.append("???");
-                    }
                 } else {
                     builder.append("???");
                 }
-            } else if (element instanceof GrammarParser.ArgActionBlockContext) {
-                GrammarParser.ArgActionBlockContext argActionBlockContext = (GrammarParser.ArgActionBlockContext)element;
-                String text = argActionBlockContext.getText();
+            } else if (element instanceof ParseTree.TerminalNode<?>) {
+                ParseTree.TerminalNode<Token> node = (ParseTree.TerminalNode<Token>)element;
+                String text = node.getText();
                 if (text.length() >= 2 && text.charAt(0) == '[' && text.charAt(text.length() - 1) == ']') {
                     builder.append(text);
                     foregroundSpans.add(builder.length() - text.length());

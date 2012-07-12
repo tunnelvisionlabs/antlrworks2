@@ -18,8 +18,20 @@ import org.antlr.v4.runtime.misc.Interval;
  */
 public class GrammarLexer extends AbstractGrammarLexer {
 
+    private int _ruleType;
+
     public GrammarLexer(CharStream input) {
         super(input);
+    }
+
+    @Override
+    protected void handleBeginArgAction() {
+        if (inLexerRule()) {
+            pushMode(LexerCharSet);
+            more();
+        } else {
+            pushMode(ArgAction);
+        }
     }
 
     @Override
@@ -31,9 +43,19 @@ public class GrammarLexer extends AbstractGrammarLexer {
             } else {
                 _type = RULE_REF;
             }
+
+            if (_ruleType == Token.INVALID_TYPE) {
+                _ruleType = _type;
+            }
+        } else if (_type == SEMI) {
+            _ruleType = Token.INVALID_TYPE;
         }
 
         return super.emit();
+    }
+
+    private boolean inLexerRule() {
+        return _ruleType == TOKEN_REF;
     }
 
 }

@@ -172,7 +172,7 @@ public class LabelAnalyzer extends GrammarParserBaseListener {
     }
 
     @Override
-    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_argActionBlock, version=0)
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_argActionBlock, version=1)
     public void enterArgActionBlock(ArgActionBlockContext ctx) {
         if (isCaretReached()) {
             return;
@@ -182,7 +182,7 @@ public class LabelAnalyzer extends GrammarParserBaseListener {
     }
 
     @Override
-    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_argActionBlock, version=0)
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_argActionBlock, version=1)
     public void exitArgActionBlock(ArgActionBlockContext ctx) {
         checkCaretReached(ctx);
 

@@ -16,6 +16,7 @@ options {
 tokens {
     TOKEN_REF;
     RULE_REF;
+    LEXER_CHAR_SET;
 }
 
 @header {/*
@@ -27,6 +28,10 @@ tokens {
  *      sam@tunnelvisionlabs.com
  */
 package org.antlr.works.editor.grammar.experimental;
+}
+
+@members {
+protected abstract void handleBeginArgAction();
 }
 
 // +=====================+
@@ -174,7 +179,7 @@ DOUBLE_ANGLE_STRING_LITERAL
 // all at once and sort them out later in the grammar analysis.
 //
 BEGIN_ARG_ACTION
-    :   '[' -> pushMode(ArgAction)
+    :   '[' {handleBeginArgAction();}
     ;
 
 ////@init
@@ -728,3 +733,17 @@ mode Action;
     END_ACTION
         :   '}' -> popMode
         ;
+
+mode LexerCharSet;
+
+    LEXER_CHAR_SET_BODY
+        :   (   ~('\\' | ']')
+            |   '\\' .
+            )+
+            -> more
+        ;
+
+    END_LEXER_CHAR_SET
+        :   ']' -> type(LEXER_CHAR_SET), popMode
+        ;
+

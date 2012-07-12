@@ -259,6 +259,7 @@ actionScopeExpression
     ;
 
 argActionBlock
+@version{1}
     :   BEGIN_ARG_ACTION
             (   ARG_ACTION_ELEMENT
             |   ARG_ACTION_TEXT
@@ -642,12 +643,12 @@ ebnfSuffix
 	;
 
 lexerAtom
+@version{1}
 	:	range
 	|	terminal
     |   RULE_REF
     |	notSet
-    |	argActionBlock
-    //|	LEXER_CHAR_SET
+    |	LEXER_CHAR_SET
 	|   // Wildcard '.' means any character in a lexer, any
 		// token in parser and any node or subtree in a tree parser
 		// Because the terminal rule is allowed to be the node
@@ -688,12 +689,11 @@ blockSet
     ;
 
 setElement
-@version{1}
+@version{2}
 	:	TOKEN_REF
 	|	STRING_LITERAL
 	|	range
-	|	argActionBlock
-	//|	LEXER_CHAR_SET
+	|	LEXER_CHAR_SET
 	;
 
 // -------------
