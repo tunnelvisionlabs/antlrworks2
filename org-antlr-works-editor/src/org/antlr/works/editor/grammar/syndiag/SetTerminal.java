@@ -40,7 +40,7 @@ public class SetTerminal extends Terminal {
         this(getAttributedLabel(elements, inverted), sourceSpan, inverted);
     }
 
-    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_argActionBlock, version=1)
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_argActionBlock, version=0)
     public SetTerminal(GrammarParser.ArgActionBlockContext element, SnapshotPositionRegion sourceSpan) {
         this(getAttributedLabel(Collections.singletonList(element), false), sourceSpan, false);
     }
