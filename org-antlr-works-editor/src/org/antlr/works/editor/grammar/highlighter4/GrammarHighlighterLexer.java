@@ -20,7 +20,7 @@ import org.antlr.works.editor.grammar.experimental.GrammarLexer;
  *
  * @author Sam Harwell
  */
-public class GrammarHighlighterLexer extends GrammarHighlighterLexerBase {
+public class GrammarHighlighterLexer extends AbstractGrammarHighlighterLexer {
     private boolean inOptions;
     private boolean inTokens;
     private int _ruleType;

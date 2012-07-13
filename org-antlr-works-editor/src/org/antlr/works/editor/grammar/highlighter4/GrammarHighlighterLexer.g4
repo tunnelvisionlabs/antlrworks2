@@ -6,7 +6,11 @@
  *  distribution. For information about licensing, contact Sam Harwell at:
  *      sam@tunnelvisionlabs.com
  */
-lexer grammar GrammarHighlighterLexerBase;
+lexer grammar GrammarHighlighterLexer;
+
+options {
+    abstract=true;
+}
 
 @header {/*
  *  Copyright (c) 2012 Sam Harwell, Tunnel Vision Laboratories LLC
@@ -24,9 +28,7 @@ protected int getMultilineCommentType() {
     return _modeStack.peek()==DEFAULT_MODE ? ML_COMMENT : Action_ML_COMMENT;
 }
 
-protected void handleBeginArgAction() {
-    throw new UnsupportedOperationException();
-}
+protected abstract void handleBeginArgAction();
 }
 
 tokens {

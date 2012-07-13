@@ -1,4 +1,4 @@
-// $ANTLR ANTLRVersion> GrammarHighlighterLexerBase.java generatedTimestamp>
+// $ANTLR ANTLRVersion> AbstractGrammarHighlighterLexer.java generatedTimestamp>
 /*
  *  Copyright (c) 2012 Sam Harwell, Tunnel Vision Laboratories LLC
  *  All rights reserved.
@@ -18,7 +18,7 @@ import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.misc.*;
 
-public class GrammarHighlighterLexerBase extends Lexer {
+public abstract class AbstractGrammarHighlighterLexer extends Lexer {
 	public static final int
 		InvalidGrammarOption=1, ValidGrammarOption=2, LEXER=3, PARSER=4, CATCH=5, 
 		FINALLY=6, GRAMMAR=7, PRIVATE=8, PROTECTED=9, PUBLIC=10, RETURNS=11, THROWS=12, 
@@ -95,18 +95,16 @@ public class GrammarHighlighterLexerBase extends Lexer {
 	    return _modeStack.peek()==DEFAULT_MODE ? ML_COMMENT : Action_ML_COMMENT;
 	}
 
-	protected void handleBeginArgAction() {
-	    throw new UnsupportedOperationException();
-	}
+	protected abstract void handleBeginArgAction();
 
 
-	public GrammarHighlighterLexerBase(CharStream input) {
+	public AbstractGrammarHighlighterLexer(CharStream input) {
 		super(input);
 		_interp = new LexerATNSimulator(this,_ATN);
 	}
 
 	@Override
-	public String getGrammarFileName() { return "GrammarHighlighterLexerBase.g4"; }
+	public String getGrammarFileName() { return "GrammarHighlighterLexer.g4"; }
 
 	@Override
 	public String[] getTokenNames() { return tokenNames; }
