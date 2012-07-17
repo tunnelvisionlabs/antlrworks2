@@ -64,13 +64,12 @@ import org.antlr.works.editor.antlr4.parsing.ParseTrees;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
 import org.antlr.works.editor.grammar.codemodel.AttributeModel;
 import org.antlr.works.editor.grammar.codemodel.FileModel;
-import org.antlr.works.editor.grammar.experimental.GrammarParser;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.ActionExpressionContext;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.ActionScopeExpressionContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser;
 import org.antlr.works.editor.grammar.experimental.GrammarParserAnchorListener;
 import org.netbeans.editor.BaseDocument;
 import org.netbeans.spi.editor.completion.CompletionItem;
-import org.netbeans.spi.editor.completion.CompletionResultSet;
 import org.openide.util.Exceptions;
 
 /**
@@ -96,7 +95,7 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
     }
 
     @Override
-    protected boolean isQueryContext(CompletionResultSet resultSet, Document doc, int caretOffset) {
+    protected boolean isQueryContext(Document doc, int caretOffset) {
         return getCompletionProvider().isContext(getComponent(), caretOffset, true, true);
     }
 

@@ -24,6 +24,7 @@ import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.Token;
 import org.antlr.works.editor.antlr4.completion.AbstractCompletionProvider;
+import org.antlr.works.editor.antlr4.completion.AbstractCompletionQuery;
 import org.antlr.works.editor.grammar.GoToSupport;
 import org.antlr.works.editor.grammar.GrammarEditorKit;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
@@ -34,7 +35,6 @@ import org.antlr.works.editor.grammar.experimental.GrammarLexer;
 import org.antlr.works.editor.grammar.navigation.GrammarNode;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.netbeans.spi.editor.completion.CompletionProvider;
-import org.netbeans.spi.editor.completion.support.AsyncCompletionQuery;
 import org.openide.util.NbBundle;
 
 /**
@@ -54,7 +54,7 @@ public class GrammarCompletionProvider extends AbstractCompletionProvider {
     private static String grammarCompletionSelectors = "";
 
     @Override
-    protected AsyncCompletionQuery createCompletionQuery(int queryType, int caretOffset, boolean extend) {
+    protected AbstractCompletionQuery createCompletionQuery(int queryType, int caretOffset, boolean extend) {
         return new GrammarCompletionQuery(this, queryType, caretOffset, true, extend);
     }
 

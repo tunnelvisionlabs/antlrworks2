@@ -8,6 +8,10 @@
  */
 package org.antlr.works.editor.antlr4.completion;
 
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.logging.Logger;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
@@ -16,7 +20,6 @@ import org.antlr.v4.runtime.Token;
 import org.netbeans.editor.Utilities;
 import org.netbeans.spi.editor.completion.CompletionProvider;
 import org.netbeans.spi.editor.completion.CompletionTask;
-import org.netbeans.spi.editor.completion.support.AsyncCompletionQuery;
 import org.netbeans.spi.editor.completion.support.AsyncCompletionTask;
 import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
@@ -95,6 +98,46 @@ public abstract class AbstractCompletionProvider implements CompletionProvider {
         return null;
     }
 
+    public Future<CompletionQueryResult> executeQuery(int queryType, JTextComponent component, int caretOffset, boolean extend) {
+        final AbstractCompletionQuery query = createCompletionQuery(queryType, caretOffset, extend);
+        query.prepareQuery(component);
+        final Future<Void> task = query.query(component.getDocument(), caretOffset);
+        if (task == null) {
+            return null;
+        }
+
+        return new Future<CompletionQueryResult>() {
+
+            @Override
+            public boolean cancel(boolean mayInterruptIfRunning) {
+                return task.cancel(mayInterruptIfRunning);
+            }
+
+            @Override
+            public boolean isCancelled() {
+                return task.isCancelled();
+            }
+
+            @Override
+            public boolean isDone() {
+                return task.isDone();
+            }
+
+            @Override
+            public CompletionQueryResult get() throws InterruptedException, ExecutionException {
+                task.get();
+                return new CompletionQueryResult(query);
+            }
+
+            @Override
+            public CompletionQueryResult get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
+                task.get(timeout, unit);
+                return new CompletionQueryResult(query);
+            }
+
+        };
+    }
+
     public abstract boolean autoPopupOnIdentifierPart();
 
     public boolean isIdentifierPart(String text) {
@@ -111,7 +154,7 @@ public abstract class AbstractCompletionProvider implements CompletionProvider {
 
     public abstract String getCompletionSelectors();
 
-    protected abstract AsyncCompletionQuery createCompletionQuery(int queryType, int caretOffset, boolean extend);
+    protected abstract AbstractCompletionQuery createCompletionQuery(int queryType, int caretOffset, boolean extend);
 
     public Token getContext(JTextComponent component, int offset) {
         return getContext(component.getDocument(), offset);

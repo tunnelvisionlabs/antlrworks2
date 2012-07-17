@@ -31,7 +31,6 @@ import org.antlr.netbeans.editor.text.VersionedDocumentUtilities;
 import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.v4.runtime.FailedPredicateException;
 import org.antlr.v4.runtime.Parser;
-import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.Token;
@@ -43,6 +42,7 @@ import org.antlr.v4.runtime.atn.PlusLoopbackState;
 import org.antlr.v4.runtime.atn.StarLoopEntryState;
 import org.antlr.v4.runtime.atn.StarLoopbackState;
 import org.antlr.v4.runtime.misc.IntervalSet;
+import org.netbeans.api.annotations.common.CheckForNull;
 import org.netbeans.api.editor.completion.Completion;
 import org.netbeans.editor.BaseDocument;
 import org.netbeans.spi.editor.completion.CompletionDocumentation;
@@ -78,16 +78,16 @@ public abstract class AbstractCompletionQuery extends AsyncCompletionQuery {
     private int caretOffset;
 
     private JTextComponent component;
-    private CompletionToolTip toolTip;
 
     protected List<CompletionItem> results;
     protected boolean possibleDeclaration;
 
     private CompletionDocumentation documentation;
+    private CompletionToolTip toolTip;
+    private int toolTipOffset;
     private String filterPrefix;
     private byte hasAdditionalItems;
     protected TrackingPositionRegion applicableTo;
-    private int toolTipOffset;
 
     protected AbstractCompletionQuery(AbstractCompletionProvider completionProvider, int queryType, int caretOffset, boolean hasTask, boolean extend) {
         this.completionProvider = completionProvider;
@@ -101,27 +101,39 @@ public abstract class AbstractCompletionQuery extends AsyncCompletionQuery {
         return completionProvider;
     }
 
-    public int getQueryType() {
+    public final int getQueryType() {
         return queryType;
     }
 
-    public boolean isExtend() {
+    public final boolean isExtend() {
         return extend;
     }
 
-    public int getCaretOffset() {
+    public final int getCaretOffset() {
         return caretOffset;
     }
 
-    public JTextComponent getComponent() {
+    public final JTextComponent getComponent() {
         return component;
     }
 
-    public boolean isExplicitQuery() {
+    public final boolean isExplicitQuery() {
         return (queryType & AbstractCompletionProvider.AUTO_QUERY_TYPE) == 0;
     }
 
-    public TrackingPositionRegion getApplicableTo() {
+    public final CompletionDocumentation getDocumentation() {
+        return documentation;
+    }
+
+    public final CompletionToolTip getToolTip() {
+        return toolTip;
+    }
+
+    public final int getToolTipOffset() {
+        return toolTipOffset;
+    }
+
+    public final TrackingPositionRegion getApplicableTo() {
         return applicableTo;
     }
 
@@ -162,52 +174,38 @@ public abstract class AbstractCompletionQuery extends AsyncCompletionQuery {
     })
     protected void query(CompletionResultSet resultSet, Document doc, int caretOffset) {
         try {
-            this.caretOffset = caretOffset;
-            if ((queryType & CompletionProvider.TOOLTIP_QUERY_TYPE) == CompletionProvider.TOOLTIP_QUERY_TYPE || isQueryContext(resultSet, doc, caretOffset)) {
-                results = null;
-                documentation = null;
-                if (toolTip != null) {
-                    toolTip.clearData();
+            Future<Void> value = query(doc, caretOffset);
+            if (value != null) {
+                if (!value.isDone()) {
+                    component.putClientProperty("completion-active", Boolean.FALSE);
+                    resultSet.setWaitText(Bundle.scanning_in_progress());
+                    value.get();
                 }
 
-                applicableTo = null;
-                if ((queryType & CompletionProvider.DOCUMENTATION_QUERY_TYPE) == CompletionProvider.DOCUMENTATION_QUERY_TYPE) {
+                if ((queryType & CompletionProvider.COMPLETION_QUERY_TYPE) != 0) {
+                    if (results != null) {
+                        resultSet.addAllItems(results);
+                    }
+
+                    handleDeclarationItem(resultSet);
+                    resultSet.setHasAdditionalItems(hasAdditionalItems != NO_ADDITIONAL_ITEMS);
+
+                    if (hasAdditionalItems == ADDITIONAL_IMPORTED_ITEMS) {
+                        resultSet.setHasAdditionalItemsText(Bundle.GCP_imported_items());
+                    } else if (hasAdditionalItems == ADDITIONAL_MEMBER_ITEMS) {
+                        resultSet.setHasAdditionalItemsText(Bundle.GCP_instance_members());
+                    }
+                } else if ((queryType & CompletionProvider.TOOLTIP_QUERY_TYPE) == CompletionProvider.TOOLTIP_QUERY_TYPE) {
+                    if (toolTip != null && toolTip.hasData()) {
+                        resultSet.setToolTip(toolTip);
+                    }
+                } else if ((queryType & CompletionProvider.DOCUMENTATION_QUERY_TYPE) == CompletionProvider.DOCUMENTATION_QUERY_TYPE) {
                     throw new UnsupportedOperationException("Not implemented yet.");
                 }
 
-                Future<Void> value = getParserTaskManager().scheduleHighPriority(getTask((BaseDocument)doc));
-                if (value != null) {
-                    if (!value.isDone()) {
-                        component.putClientProperty("completion-active", Boolean.FALSE);
-                        resultSet.setWaitText(Bundle.scanning_in_progress());
-                        value.get();
-                    }
-
-                    if ((queryType & CompletionProvider.COMPLETION_QUERY_TYPE) != 0) {
-                        if (results != null) {
-                            resultSet.addAllItems(results);
-                        }
-
-                        handleDeclarationItem(resultSet);
-                        resultSet.setHasAdditionalItems(hasAdditionalItems != NO_ADDITIONAL_ITEMS);
-
-                        if (hasAdditionalItems == ADDITIONAL_IMPORTED_ITEMS) {
-                            resultSet.setHasAdditionalItemsText(Bundle.GCP_imported_items());
-                        } else if (hasAdditionalItems == ADDITIONAL_MEMBER_ITEMS) {
-                            resultSet.setHasAdditionalItemsText(Bundle.GCP_instance_members());
-                        }
-                    } else if ((queryType & CompletionProvider.TOOLTIP_QUERY_TYPE) == CompletionProvider.TOOLTIP_QUERY_TYPE) {
-                        if (toolTip != null && toolTip.hasData()) {
-                            resultSet.setToolTip(toolTip);
-                        }
-                    } else if ((queryType & CompletionProvider.DOCUMENTATION_QUERY_TYPE) == CompletionProvider.DOCUMENTATION_QUERY_TYPE) {
-                        throw new UnsupportedOperationException("Not implemented yet.");
-                    }
-
-                    if (applicableTo != null) {
-                        VersionedDocument textBuffer = VersionedDocumentUtilities.getVersionedDocument(doc);
-                        resultSet.setAnchorOffset(applicableTo.getStartPosition(textBuffer.getCurrentSnapshot()).getOffset());
-                    }
+                if (applicableTo != null) {
+                    VersionedDocument textBuffer = VersionedDocumentUtilities.getVersionedDocument(doc);
+                    resultSet.setAnchorOffset(applicableTo.getStartPosition(textBuffer.getCurrentSnapshot()).getOffset());
                 }
             }
         } catch (Exception ex) {
@@ -219,7 +217,29 @@ public abstract class AbstractCompletionQuery extends AsyncCompletionQuery {
         }
     }
 
-    protected boolean isQueryContext(CompletionResultSet resultSet, Document doc, int caretOffset) {
+    @CheckForNull
+    protected Future<Void> query(Document doc, int caretOffset) {
+        this.caretOffset = caretOffset;
+        if ((queryType & CompletionProvider.TOOLTIP_QUERY_TYPE) == CompletionProvider.TOOLTIP_QUERY_TYPE || isQueryContext(doc, caretOffset)) {
+            results = null;
+            documentation = null;
+            if (toolTip != null) {
+                toolTip.clearData();
+            }
+
+            applicableTo = null;
+            if ((queryType & CompletionProvider.DOCUMENTATION_QUERY_TYPE) == CompletionProvider.DOCUMENTATION_QUERY_TYPE) {
+                throw new UnsupportedOperationException("Not implemented yet.");
+            }
+
+            Future<Void> value = getParserTaskManager().scheduleHighPriority(getTask((BaseDocument)doc));
+            return value;
+        }
+
+        return null;
+    }
+
+    protected boolean isQueryContext(Document doc, int caretOffset) {
         return getCompletionProvider().isContext(getComponent(), caretOffset, queryType);
     }
 
