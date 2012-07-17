@@ -17,15 +17,24 @@ import javax.swing.text.JTextComponent;
  */
 public class CompletionToolTip extends JToolTip {
 
+    private boolean _hasData;
+
     public CompletionToolTip(JTextComponent component) {
     }
 
+    @Override
+    public void setTipText(String tipText) {
+        super.setTipText(tipText);
+        _hasData = tipText != null && tipText.length() > 0;
+    }
+
     public boolean hasData() {
-        throw new UnsupportedOperationException("Not yet implemented.");
+        return _hasData;
     }
 
     public void clearData() {
-        throw new UnsupportedOperationException("Not yet implemented");
+        setTipText("");
+        _hasData = false;
     }
 
 }
