@@ -34,6 +34,16 @@
                             <attr name="position" intvalue="200"/>
                         </file>
                     </folder>
+
+                    <file name="SeparatorBeforeCut.instance">
+                        <attr name="instanceClass" stringvalue="javax.swing.JSeparator"/>
+                        <attr name="position" intvalue="1960"/>
+                    </file>
+
+                    <file name="SeparatorAfterPaste.instance">
+                        <attr name="instanceClass" stringvalue="javax.swing.JSeparator"/>
+                        <attr name="position" intvalue="4100"/>
+                    </file>
                 </folder>
 
                 <folder name="Toolbars">
