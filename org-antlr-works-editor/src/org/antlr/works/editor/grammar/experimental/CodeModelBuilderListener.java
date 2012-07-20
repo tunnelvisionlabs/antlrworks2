@@ -186,7 +186,7 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
     @Override
     @RuleDependencies({
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_tokenSpec, version=0),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=1),
     })
     public void enterTokenSpec(TokenSpecContext ctx) {
         IdContext id = ctx.id();
@@ -237,7 +237,7 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
     @Override
     @RuleDependencies({
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_labeledElement, version=0),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=1),
     })
     public void enterLabeledElement(LabeledElementContext ctx) {
         if (ctx.label != null) {
@@ -256,7 +256,7 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
     @Override
     @RuleDependencies({
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_option, version=0),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=1),
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_optionValue, version=0),
     })
     public void enterOption(OptionContext ctx) {

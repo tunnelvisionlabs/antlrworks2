@@ -61,6 +61,7 @@ import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.LexerAt
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.LexerBlockContext;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.LexerCommandContext;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.LexerCommandExprContext;
+import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.LexerCommandNameContext;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.LexerCommandsContext;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.LexerElementContext;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.LexerElementsContext;
@@ -432,7 +433,7 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
     @Override
     @RuleDependencies({
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_labeledAlt, version=1),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=1),
     })
     public void enterLabeledAlt(LabeledAltContext ctx) {
         if (ctx.getChildCount() == 3 && ctx.getChild(2) instanceof IdContext) {
@@ -583,7 +584,7 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
     @Override
     @RuleDependencies({
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_labeledLexerElement, version=0),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=1),
     })
     public void enterLabeledLexerElement(LabeledLexerElementContext ctx) {
         if (ctx.getChildCount() == 0 || !(ctx.getChild(0) instanceof IdContext)) {
@@ -631,10 +632,11 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=1),
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_grammarSpec, version=0),
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_modeSpec, version=0),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommand, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommand, version=1),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommandName, version=0),
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommandExpr, version=1),
     })
     public void enterId(IdContext ctx) {
@@ -655,12 +657,12 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
                 assert ctx.getParent().getParent() instanceof LexerCommandContext;
                 if (ctx.getParent().getParent() instanceof LexerCommandContext) {
                     LexerCommandContext commandContext = (LexerCommandContext)ctx.getParent().getParent();
-                    IdContext command = commandContext.id();
-                    if (command != null && command.start != null) {
-                        if ("pushMode".equals(command.start.getText()) || "mode".equals(command.start.getText())) {
+                    LexerCommandNameContext lexerCommandNameContext = commandContext.lexerCommandName();
+                    if (lexerCommandNameContext != null && lexerCommandNameContext.start != null) {
+                        if ("pushMode".equals(lexerCommandNameContext.start.getText()) || "mode".equals(lexerCommandNameContext.start.getText())) {
                             unresolvedModeReferences.add(ctx.start);
                             tokenDecorator.putProperty(ctx.start, GrammarTreeProperties.PROP_NODE_TYPE, NodeType.MODE_REF);
-                        } else if ("type".equals(command.start.getText())
+                        } else if ("type".equals(lexerCommandNameContext.start.getText())
                             && Character.isUpperCase(ctx.start.getText().charAt(0))) {
                             unresolvedReferences.add(ctx.start);
                             tokenDecorator.putProperty(ctx.start, GrammarTreeProperties.PROP_NODE_TYPE, NodeType.TOKEN_REF);
@@ -799,11 +801,11 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommand, version=0),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommand, version=1),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommandName, version=0),
     })
     public void enterLexerCommand(LexerCommandContext ctx) {
-        if (ctx.getChildCount() == 0 || !(ctx.getChild(0) instanceof IdContext)) {
+        if (ctx.getChildCount() == 0 || !(ctx.getChild(0) instanceof LexerCommandNameContext)) {
             return;
         }
 
@@ -812,6 +814,14 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
 
     @Override
     public void exitLexerCommand(LexerCommandContext ctx) {
+    }
+
+    @Override
+    public void enterLexerCommandName(LexerCommandNameContext ctx) {
+    }
+
+    @Override
+    public void exitLexerCommandName(LexerCommandNameContext ctx) {
     }
 
     @Override

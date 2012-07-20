@@ -129,8 +129,8 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
         @RuleDependencies({
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleSpec, version=0),
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_actionBlock, version=0),
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=0),
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommand, version=0),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=1),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommandName, version=0),
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommandExpr, version=1),
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleref, version=0),
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_terminal, version=0),
@@ -220,7 +220,7 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
                             RuleContext<Token> parent = finalContext.getParent();
                             int parentIndex = parent != null ? parent.getRuleIndex() : -1;
                             switch (parentIndex) {
-                            case GrammarParser.RULE_lexerCommand:
+                            case GrammarParser.RULE_lexerCommandName:
                                 // this is a lexer command (keyword), which is not considered a declaration or reference
                                 break;
 
@@ -403,8 +403,8 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
         }
 
         @RuleDependencies({
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommand, version=0),
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=0),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommandName, version=0),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=1),
         })
         private void analyzeKeywords(Map<RuleContext<Token>, CaretReachedException> parseTrees, Map<String, CompletionItem> intermediateResults) {
             boolean maybeLexerCommand = false;
@@ -419,7 +419,7 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
                 RuleContext<Token> finalContext = caretReachedException.getFinalContext();
                 if (finalContext.getRuleIndex() == GrammarParser.RULE_id) {
                     RuleContext<Token> parent = finalContext.getParent();
-                    if (parent != null && parent.getRuleIndex() == GrammarParser.RULE_lexerCommand) {
+                    if (parent != null && parent.getRuleIndex() == GrammarParser.RULE_lexerCommandName) {
                         maybeLexerCommand = true;
                     }
 

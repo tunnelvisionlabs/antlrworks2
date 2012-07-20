@@ -574,9 +574,15 @@ lexerCommands
 	;
 
 lexerCommand
-	:	id LPAREN lexerCommandExpr RPAREN
-    |   id
+@version{1}
+	:	lexerCommandName LPAREN lexerCommandExpr RPAREN
+    |   lexerCommandName
 	;
+
+lexerCommandName
+    :   id
+    |   MODE
+    ;
 
 lexerCommandExpr
 @version{1}
@@ -759,6 +765,7 @@ elementOption
 // reference, hence this rule is used to pick up whichever it is and rewrite
 // it as a generic ID token.
 id
+@version{1}
     : RULE_REF
     | TOKEN_REF
     | TEMPLATE // keyword

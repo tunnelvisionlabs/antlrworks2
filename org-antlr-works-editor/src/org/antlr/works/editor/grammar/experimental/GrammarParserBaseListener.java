@@ -146,6 +146,9 @@ public class GrammarParserBaseListener implements GrammarParserListener {
 	@Override public void enterRange(AbstractGrammarParser.RangeContext ctx) { }
 	@Override public void exitRange(AbstractGrammarParser.RangeContext ctx) { }
 
+	@Override public void enterLexerCommandName(AbstractGrammarParser.LexerCommandNameContext ctx) { }
+	@Override public void exitLexerCommandName(AbstractGrammarParser.LexerCommandNameContext ctx) { }
+
 	@Override public void enterTokenSpec(AbstractGrammarParser.TokenSpecContext ctx) { }
 	@Override public void exitTokenSpec(AbstractGrammarParser.TokenSpecContext ctx) { }
 

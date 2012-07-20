@@ -100,6 +100,8 @@ public interface GrammarParserVisitor<Symbol extends Token, Result> extends Pars
 
 	Result visitRange(AbstractGrammarParser.RangeContext ctx);
 
+	Result visitLexerCommandName(AbstractGrammarParser.LexerCommandNameContext ctx);
+
 	Result visitTokenSpec(AbstractGrammarParser.TokenSpecContext ctx);
 
 	Result visitBlock(AbstractGrammarParser.BlockContext ctx);

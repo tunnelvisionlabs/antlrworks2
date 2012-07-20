@@ -144,6 +144,9 @@ public interface GrammarParserListener extends ParseTreeListener<Token> {
 	void enterRange(AbstractGrammarParser.RangeContext ctx);
 	void exitRange(AbstractGrammarParser.RangeContext ctx);
 
+	void enterLexerCommandName(AbstractGrammarParser.LexerCommandNameContext ctx);
+	void exitLexerCommandName(AbstractGrammarParser.LexerCommandNameContext ctx);
+
 	void enterTokenSpec(AbstractGrammarParser.TokenSpecContext ctx);
 	void exitTokenSpec(AbstractGrammarParser.TokenSpecContext ctx);
 

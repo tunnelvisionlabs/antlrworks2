@@ -29,6 +29,7 @@ import org.antlr.works.editor.antlr4.semantics.AbstractParseTreeSemanticHighligh
 import org.antlr.works.editor.antlr4.semantics.AbstractSemanticHighlighter;
 import org.antlr.works.editor.grammar.GrammarEditorKit;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
+import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.ArgActionParameterContext;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.BlockContext;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.ElementOptionContext;
@@ -36,6 +37,7 @@ import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.Grammar
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.IdContext;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.LexerCommandContext;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.LexerCommandExprContext;
+import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.LexerCommandNameContext;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.LocalsSpecContext;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.ModeSpecContext;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.OptionContext;
@@ -277,7 +279,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
         @Override
         @RuleDependencies({
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_modeSpec, version=0),
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=0),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=1),
         })
         public void enterModeSpec(ModeSpecContext ctx) {
             IdContext idContext = ctx.id();
@@ -298,19 +300,19 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
 
         @Override
         @RuleDependencies({
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommand, version=0),
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=0),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommand, version=1),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommandName, version=0),
         })
         public void enterLexerCommand(LexerCommandContext ctx) {
-            IdContext idContext = ctx.id();
-            if (idContext == null || idContext.start == null) {
+            LexerCommandNameContext lexerCommandNameContext = ctx.lexerCommandName();
+            if (lexerCommandNameContext == null || lexerCommandNameContext.start == null) {
                 return;
             }
 
-            if (idContext.start != null) {
-                lexerCommands.add(idContext.start);
+            if (lexerCommandNameContext.start != null) {
+                lexerCommands.add(lexerCommandNameContext.start);
 
-                if ("pushMode".equals(idContext.start.getText()) || "mode".equals(idContext.start.getText())) {
+                if ("pushMode".equals(lexerCommandNameContext.start.getText()) || "mode".equals(lexerCommandNameContext.start.getText())) {
                     inNamedModeCommand++;
                 }
             }
@@ -318,13 +320,13 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
 
         @Override
         @RuleDependencies({
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommand, version=0),
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=0),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommand, version=1),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommandName, version=0),
         })
         public void exitLexerCommand(LexerCommandContext ctx) {
-            IdContext idContext = ctx.id();
-            if (idContext != null && idContext.start != null) {
-                if ("pushMode".equals(idContext.start.getText()) || "mode".equals(idContext.start.getText())) {
+            LexerCommandNameContext lexerCommandNameContext = ctx.lexerCommandName();
+            if (lexerCommandNameContext != null && lexerCommandNameContext.start != null) {
+                if ("pushMode".equals(lexerCommandNameContext.start.getText()) || "mode".equals(lexerCommandNameContext.start.getText())) {
                     inNamedModeCommand--;
                 }
             }
@@ -333,7 +335,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
         @Override
         @RuleDependencies({
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommandExpr, version=1),
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=0),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=1),
         })
         public void enterLexerCommandExpr(LexerCommandExprContext ctx) {
             if (inNamedModeCommand > 0) {
@@ -369,7 +371,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
         @Override
         @RuleDependencies({
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_option, version=0),
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=0),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=1),
         })
         public void enterOption(OptionContext ctx) {
             IdContext id = ctx.id();
@@ -404,7 +406,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
         @Override
         @RuleDependencies({
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_elementOption, version=0),
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=0),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=1),
         })
         public void enterElementOption(ElementOptionContext ctx) {
             IdContext id = ctx.id();
