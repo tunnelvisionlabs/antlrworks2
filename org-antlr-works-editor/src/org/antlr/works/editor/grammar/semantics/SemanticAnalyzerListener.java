@@ -106,8 +106,10 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
     private final ObjectDecorator<Token> tokenDecorator;
 
     private final Map<String, Token> declaredRules = new HashMap<String, Token>();
+    private final Map<String, Token> declaredModes = new HashMap<String, Token>();
 
     private final List<Token> unresolvedReferences = new ArrayList<Token>();
+    private final List<Token> unresolvedModeReferences = new ArrayList<Token>();
 
     public SemanticAnalyzerListener(@NonNull ObjectDecorator<Tree> treeDecorator, @NonNull ObjectDecorator<Token> tokenDecorator) {
         Parameters.notNull("treeDecorator", treeDecorator);
@@ -125,12 +127,15 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
     })
     public void visitTerminal(ParseTree.TerminalNode<? extends Token> node) {
         NodeType nodeType = treeDecorator.getProperty(node.getParent(), GrammarTreeProperties.PROP_NODE_TYPE);
+        if (nodeType == NodeType.UNDEFINED) {
+            nodeType = null;
+        }
 
         Token symbol = node.getSymbol();
-        int RuleIndex = node.getParent().getRuleContext().getRuleIndex();
+        int ruleIndex = node.getParent().getRuleContext().getRuleIndex();
         switch (symbol.getType()) {
         case GrammarParser.RULE_REF:
-            switch (RuleIndex) {
+            switch (ruleIndex) {
             case GrammarParser.RULE_parserRuleSpec:
                 nodeType = NodeType.RULE_DECL;
                 declaredRules.put(symbol.getText(), symbol);
@@ -144,7 +149,7 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
             break;
 
         case GrammarParser.TOKEN_REF:
-            switch (RuleIndex) {
+            switch (ruleIndex) {
             case GrammarParser.RULE_lexerRule:
                 nodeType = NodeType.TOKEN_DECL;
                 declaredRules.put(symbol.getText(), symbol);
@@ -505,6 +510,18 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
                 tokenDecorator.putProperty(token, GrammarTreeProperties.PROP_TARGET, decl);
             }
         }
+
+        for (Token token : unresolvedModeReferences) {
+            String text = token.getText();
+            if (text == null || text.isEmpty()) {
+                continue;
+            }
+
+            Token decl = declaredModes.get(text);
+            if (decl != null) {
+                tokenDecorator.putProperty(token, GrammarTreeProperties.PROP_TARGET, decl);
+            }
+        }
     }
 
     @Override
@@ -617,6 +634,8 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=0),
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_grammarSpec, version=0),
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_modeSpec, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommand, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommandExpr, version=1),
     })
     public void enterId(IdContext ctx) {
         if (ctx.start != null && ctx.parent != null) {
@@ -628,7 +647,26 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
                 break;
 
             case GrammarParser.RULE_modeSpec:
+                declaredModes.put(ctx.start.getText(), ctx.start);
                 tokenDecorator.putProperty(ctx.start, GrammarTreeProperties.PROP_NODE_TYPE, NodeType.MODE_DECL);
+                break;
+
+            case GrammarParser.RULE_lexerCommandExpr:
+                assert ctx.getParent().getParent() instanceof LexerCommandContext;
+                if (ctx.getParent().getParent() instanceof LexerCommandContext) {
+                    LexerCommandContext commandContext = (LexerCommandContext)ctx.getParent().getParent();
+                    IdContext command = commandContext.id();
+                    if (command != null && command.start != null) {
+                        if ("pushMode".equals(command.start.getText()) || "mode".equals(command.start.getText())) {
+                            unresolvedModeReferences.add(ctx.start);
+                            tokenDecorator.putProperty(ctx.start, GrammarTreeProperties.PROP_NODE_TYPE, NodeType.MODE_REF);
+                        } else if ("type".equals(command.start.getText())
+                            && Character.isUpperCase(ctx.start.getText().charAt(0))) {
+                            unresolvedReferences.add(ctx.start);
+                            tokenDecorator.putProperty(ctx.start, GrammarTreeProperties.PROP_NODE_TYPE, NodeType.TOKEN_REF);
+                        }
+                    }
+                }
                 break;
             }
 
