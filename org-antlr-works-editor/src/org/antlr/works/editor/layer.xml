@@ -26,6 +26,16 @@
                     </file>
                 </folder>
 
+                <folder name="Popup">
+                    <folder name="goto">
+                        <attr name="position" intvalue="500"/>
+                        <attr name="SystemFileSystem.localizingBundle" stringvalue="org.antlr.works.editor.Bundle"/>
+                        <file name="goto-declaration">
+                            <attr name="position" intvalue="200"/>
+                        </file>
+                    </folder>
+                </folder>
+
                 <folder name="Toolbars">
                     <folder name="Default">
                         <file name="Separator-before-comment.instance">
