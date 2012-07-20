@@ -11,8 +11,10 @@ package org.antlr.works.editor.grammar.highlighter4;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.StyledDocument;
@@ -33,7 +35,9 @@ import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.Element
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.GrammarTypeContext;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.IdContext;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.LexerCommandContext;
+import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.LexerCommandExprContext;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.LocalsSpecContext;
+import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.ModeSpecContext;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.OptionContext;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.RuleReturnsContext;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.RuleSpecContext;
@@ -59,6 +63,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
     private final AttributeSet localDeclarationAttributes;
     private final AttributeSet invalidOptionAttributes;
     private final AttributeSet lexerCommandAttributes;
+    private final AttributeSet lexerModeAttributes;
 
     private SemanticHighlighter(@NonNull StyledDocument document) {
         super(document, GrammarParserDataDefinitions.REFERENCE_PARSE_TREE);
@@ -70,6 +75,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
         this.localDeclarationAttributes = getFontAndColors(settings, "definition");
         this.invalidOptionAttributes = getFontAndColors(settings, "invalidoption");
         this.lexerCommandAttributes = getFontAndColors(settings, "lexerCommand");
+        this.lexerModeAttributes = getFontAndColors(settings, "lexerMode");
     }
 
     @Override
@@ -90,6 +96,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
         addHighlights(container, sourceSnapshot, currentSnapshot, listener.getLocalsDeclarations(), localDeclarationAttributes);
         addHighlights(container, sourceSnapshot, currentSnapshot, listener.getInvalidOptions(), invalidOptionAttributes);
         addHighlights(container, sourceSnapshot, currentSnapshot, listener.getLexerCommands(), lexerCommandAttributes);
+        addHighlights(container, sourceSnapshot, currentSnapshot, listener.getLexerModes(), lexerModeAttributes);
         targetContainer.setHighlights(container);
     }
 
@@ -152,10 +159,16 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
         private final List<Token> localsDeclarations = new ArrayList<Token>();
         private final List<Token> invalidOptions = new ArrayList<Token>();
         private final List<Token> lexerCommands = new ArrayList<Token>();
+        private final List<Token> lexerModes = new ArrayList<Token>();
+
+        private final Map<String, List<Token>> possibleLexerModes = new HashMap<String, List<Token>>();
+        private final HashSet<String> lexerModeNames = new HashSet<String>();
 
         private int grammarType;
         private int ruleLevel;
         private int blockLevel;
+
+        private int inNamedModeCommand;
 
         public List<Token> getParameterDeclarations() {
             return parameterDeclarations;
@@ -175,6 +188,10 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
 
         public List<Token> getLexerCommands() {
             return lexerCommands;
+        }
+
+        public List<Token> getLexerModes() {
+            return lexerModes;
         }
 
         @Override
@@ -259,6 +276,28 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
 
         @Override
         @RuleDependencies({
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_modeSpec, version=0),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=0),
+        })
+        public void enterModeSpec(ModeSpecContext ctx) {
+            IdContext idContext = ctx.id();
+            if (idContext == null || idContext.start == null) {
+                return;
+            }
+
+            if (idContext.start != null) {
+                lexerModes.add(idContext.start);
+                lexerModeNames.add(idContext.start.getText());
+
+                List<Token> references = possibleLexerModes.remove(idContext.start.getText());
+                if (references != null) {
+                    lexerModes.addAll(references);
+                }
+            }
+        }
+
+        @Override
+        @RuleDependencies({
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommand, version=0),
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=0),
         })
@@ -270,6 +309,48 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
 
             if (idContext.start != null) {
                 lexerCommands.add(idContext.start);
+
+                if ("pushMode".equals(idContext.start.getText()) || "mode".equals(idContext.start.getText())) {
+                    inNamedModeCommand++;
+                }
+            }
+        }
+
+        @Override
+        @RuleDependencies({
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommand, version=0),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=0),
+        })
+        public void exitLexerCommand(LexerCommandContext ctx) {
+            IdContext idContext = ctx.id();
+            if (idContext != null && idContext.start != null) {
+                if ("pushMode".equals(idContext.start.getText()) || "mode".equals(idContext.start.getText())) {
+                    inNamedModeCommand--;
+                }
+            }
+        }
+
+        @Override
+        @RuleDependencies({
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommandExpr, version=1),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=0),
+        })
+        public void enterLexerCommandExpr(LexerCommandExprContext ctx) {
+            if (inNamedModeCommand > 0) {
+                IdContext idContext = ctx.id();
+                if (idContext != null && idContext.start != null) {
+                    if (lexerModeNames.contains(idContext.start.getText())) {
+                        lexerModes.add(idContext.start);
+                    } else {
+                        List<Token> list = possibleLexerModes.get(idContext.start.getText());
+                        if (list == null) {
+                            list = new ArrayList<Token>(1);
+                            possibleLexerModes.put(idContext.start.getText(), list);
+                        }
+
+                        list.add(idContext.start);
+                    }
+                }
             }
         }
 

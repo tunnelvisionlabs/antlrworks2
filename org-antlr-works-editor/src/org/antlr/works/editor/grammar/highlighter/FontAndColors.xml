@@ -29,6 +29,9 @@
     <fontcolor name="lexerrule" foreColor="FF00008B" />
     <!-- "Goldish" -->
     <fontcolor name="lexerCommand" foreColor="FFA78300" />
+    <fontcolor name="lexerMode" default="identifier">
+        <font style="bold" />
+    </fontcolor>
     <!-- Teal -->
     <fontcolor name="validoption" foreColor="FF008080" />
     <!-- Dark Red -->
