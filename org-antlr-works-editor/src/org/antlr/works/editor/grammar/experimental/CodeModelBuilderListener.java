@@ -30,6 +30,7 @@ import org.antlr.works.editor.grammar.codemodel.impl.FileModelImpl;
 import org.antlr.works.editor.grammar.codemodel.impl.ImportDeclarationModelImpl;
 import org.antlr.works.editor.grammar.codemodel.impl.LabelModelImpl;
 import org.antlr.works.editor.grammar.codemodel.impl.LexerRuleModelImpl;
+import org.antlr.works.editor.grammar.codemodel.impl.ModeModelImpl;
 import org.antlr.works.editor.grammar.codemodel.impl.ParameterModelImpl;
 import org.antlr.works.editor.grammar.codemodel.impl.ParserRuleModelImpl;
 import org.antlr.works.editor.grammar.codemodel.impl.RuleModelImpl;
@@ -43,6 +44,7 @@ import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.IdConte
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.LabeledElementContext;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.LexerRuleContext;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.LocalsSpecContext;
+import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.ModeSpecContext;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.OptionContext;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.OptionValueContext;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.ParserRuleSpecContext;
@@ -68,7 +70,9 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
     // final result
     private FileModelImpl fileModel;
 
+    private final Deque<ModeModelImpl> modeModelStack = new ArrayDeque<ModeModelImpl>();
     private final Deque<RuleModelImpl> ruleModelStack = new ArrayDeque<RuleModelImpl>();
+    private final Deque<Collection<ModeModelImpl>> modeContainerStack = new ArrayDeque<Collection<ModeModelImpl>>();
     private final Deque<Collection<RuleModelImpl>> ruleContainerStack = new ArrayDeque<Collection<RuleModelImpl>>();
     private final Deque<Collection<ParameterModelImpl>> parameterContainerStack = new ArrayDeque<Collection<ParameterModelImpl>>();
     private final Deque<Collection<ParameterModelImpl>> returnValueContainerStack = new ArrayDeque<Collection<ParameterModelImpl>>();
@@ -102,6 +106,7 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
 
         FileObject fileObject = snapshot.getVersionedDocument().getFileObject();
         this.fileModel = new FileModelImpl(fileObject, project, packagePath);
+        this.modeContainerStack.push(this.fileModel.getModes());
         this.ruleContainerStack.push(this.fileModel.getRules());
     }
 
@@ -109,6 +114,7 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
     @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_grammarSpec, version=0)
     public void exitGrammarSpec(GrammarSpecContext ctx) {
         this.fileModel.freeze();
+        this.modeContainerStack.pop();
         this.ruleContainerStack.pop();
     }
 
@@ -122,7 +128,7 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
         if (ctx instanceof GrammarParser.ParserRuleSpecContext) {
             ruleModel = new ParserRuleModelImpl(ruleName, fileModel);
         } else if (ctx instanceof GrammarParser.LexerRuleContext) {
-            ruleModel = new LexerRuleModelImpl(ruleName, fileModel);
+            ruleModel = new LexerRuleModelImpl(ruleName, modeModelStack.peek(), fileModel);
         } else {
             throw new UnsupportedOperationException();
         }
@@ -208,6 +214,28 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
 
     @Override
     public void exitTokenSpec(TokenSpecContext ctx) {
+    }
+
+    @Override
+    @RuleDependencies({
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_modeSpec, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=1),
+    })
+    public void enterModeSpec(ModeSpecContext ctx) {
+        ModeModelImpl modeModel = new ModeModelImpl(ctx.id().start.getText(), fileModel);
+        modeContainerStack.peek().add(modeModel);
+        modeModelStack.push(modeModel);
+        ruleContainerStack.push(modeModel.getRules());
+    }
+
+    @Override
+    @RuleDependencies({
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_modeSpec, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=1),
+    })
+    public void exitModeSpec(ModeSpecContext ctx) {
+        modeModelStack.pop();
+        ruleContainerStack.pop();
     }
 
     @Override

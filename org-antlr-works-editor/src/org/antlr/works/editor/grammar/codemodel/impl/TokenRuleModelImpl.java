@@ -18,7 +18,7 @@ public class TokenRuleModelImpl extends LexerRuleModelImpl {
     private final String literal;
 
     public TokenRuleModelImpl(String name, String literal, FileModelImpl file) {
-        super(name, file);
+        super(name, null, file);
         this.literal = literal;
     }
 

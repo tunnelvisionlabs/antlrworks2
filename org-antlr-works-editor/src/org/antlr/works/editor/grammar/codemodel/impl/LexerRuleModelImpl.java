@@ -10,6 +10,7 @@ package org.antlr.works.editor.grammar.codemodel.impl;
 
 import java.util.Collection;
 import java.util.Collections;
+import org.antlr.works.editor.grammar.codemodel.ModeModel;
 import org.antlr.works.editor.grammar.codemodel.RuleKind;
 import org.antlr.works.editor.grammar.codemodel.RuleModel;
 import org.antlr.works.editor.grammar.codemodel.TokenData;
@@ -19,14 +20,21 @@ import org.antlr.works.editor.grammar.codemodel.TokenData;
  * @author Sam Harwell
  */
 public class LexerRuleModelImpl extends RuleModelImpl implements TokenData {
+    private final ModeModelImpl mode;
 
-    public LexerRuleModelImpl(String name, FileModelImpl file) {
+    public LexerRuleModelImpl(String name, ModeModelImpl mode, FileModelImpl file) {
         super(name, file);
+        this.mode = mode;
     }
 
     @Override
     public RuleKind getRuleKind() {
         return RuleKind.LEXER;
+    }
+
+    @Override
+    public ModeModel getMode() {
+        return mode;
     }
 
     @Override

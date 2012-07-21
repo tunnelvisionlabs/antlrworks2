@@ -15,27 +15,12 @@ import org.netbeans.api.annotations.common.NonNull;
  *
  * @author Sam Harwell
  */
-public interface FileModel extends CodeElementModel {
-
-    @NonNull
-    Collection<? extends ImportDeclarationModel> getImportDeclarations();
-
-    @NonNull
-    Collection<? extends TokenVocabDeclarationModel> getTokenVocabDeclaration();
-
-    @NonNull
-    Collection<? extends ModeModel> getModes();
-
-    @NonNull
-    Collection<? extends ModeModel> getModes(String name);
+public interface ModeModel extends CodeElementModel {
 
     @NonNull
     Collection<? extends RuleModel> getRules();
 
     @NonNull
     Collection<? extends RuleModel> getRules(String name);
-
-    @NonNull
-    TokenVocabModel getVocabulary();
 
 }

@@ -8,6 +8,7 @@
  */
 package org.antlr.works.editor.grammar.codemodel.impl;
 
+import org.antlr.works.editor.grammar.codemodel.ModeModel;
 import org.antlr.works.editor.grammar.codemodel.RuleKind;
 
 /**
@@ -23,6 +24,11 @@ public class ParserRuleModelImpl extends RuleModelImpl {
     @Override
     public RuleKind getRuleKind() {
         return RuleKind.PARSER;
+    }
+
+    @Override
+    public ModeModel getMode() {
+        return null;
     }
 
 }

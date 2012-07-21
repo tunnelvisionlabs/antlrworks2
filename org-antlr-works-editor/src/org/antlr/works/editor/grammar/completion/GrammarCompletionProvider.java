@@ -29,6 +29,7 @@ import org.antlr.works.editor.grammar.GoToSupport;
 import org.antlr.works.editor.grammar.GrammarEditorKit;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
 import org.antlr.works.editor.grammar.codemodel.FileModel;
+import org.antlr.works.editor.grammar.codemodel.ModeModel;
 import org.antlr.works.editor.grammar.codemodel.RuleModel;
 import org.antlr.works.editor.grammar.codemodel.TokenData;
 import org.antlr.works.editor.grammar.experimental.GrammarLexer;
@@ -154,6 +155,16 @@ public class GrammarCompletionProvider extends AbstractCompletionProvider {
                 }
 
                 rules.put(ruleModel.getName(), new GrammarNode.GrammarNodeDescription(ruleModel.getName()));
+            }
+
+            for (ModeModel modeModel : fileModel.getModes()) {
+                for (RuleModel ruleModel : modeModel.getRules()) {
+                    if (rules.containsKey(ruleModel.getName())) {
+                        continue;
+                    }
+
+                    rules.put(ruleModel.getName(), new GrammarNode.GrammarNodeDescription(ruleModel.getName()));
+                }
             }
 
             for (TokenData tokenData : fileModel.getVocabulary().getTokens()) {

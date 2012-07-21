@@ -10,6 +10,7 @@ package org.antlr.works.editor.grammar.codemodel.impl;
 
 import java.util.Collection;
 import org.antlr.works.editor.grammar.codemodel.FileModel;
+import org.antlr.works.editor.grammar.codemodel.ModeModel;
 import org.antlr.works.editor.grammar.codemodel.RuleModel;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;
@@ -21,12 +22,14 @@ import org.openide.filesystems.FileObject;
  * @author Sam Harwell
  */
 public class FileModelImpl extends AbstractCodeElementModel implements FileModel {
-    @NonNull
+    @NullAllowed
     private final FileObject fileObject;
     @NonNull
     private final FreezableArrayList<ImportDeclarationModelImpl> importDeclarations = new FreezableArrayList<ImportDeclarationModelImpl>();
     @NonNull
     private final FreezableArrayList<TokenVocabDeclarationModelImpl> tokenVocabDeclarations = new FreezableArrayList<TokenVocabDeclarationModelImpl>();
+    @NonNull
+    private final FreezableArrayList<ModeModelImpl> modes = new FreezableArrayList<ModeModelImpl>();
     @NonNull
     private final FreezableArrayList<RuleModelImpl> rules = new FreezableArrayList<RuleModelImpl>();
     @SuppressWarnings("unchecked")
@@ -50,6 +53,18 @@ public class FileModelImpl extends AbstractCodeElementModel implements FileModel
     @Override
     public Collection<TokenVocabDeclarationModelImpl> getTokenVocabDeclaration() {
         return tokenVocabDeclarations;
+    }
+
+    @NonNull
+    @Override
+    public Collection<ModeModelImpl> getModes() {
+        return modes;
+    }
+
+    @NonNull
+    @Override
+    public Collection<? extends ModeModel> getModes(String name) {
+        return CodeModelCacheImpl.findElementsByName(getModes(), name);
     }
 
     @NonNull
@@ -80,6 +95,7 @@ public class FileModelImpl extends AbstractCodeElementModel implements FileModel
     protected void freezeImpl() {
         importDeclarations.freeze();
         tokenVocabDeclarations.freeze();
+        modes.freeze();
         rules.freeze();
         super.freezeImpl();
     }

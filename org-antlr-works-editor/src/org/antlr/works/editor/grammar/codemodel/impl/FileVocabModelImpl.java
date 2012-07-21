@@ -14,6 +14,7 @@ import java.util.Map;
 import org.antlr.works.editor.grammar.codemodel.RuleKind;
 import org.antlr.works.editor.grammar.codemodel.TokenData;
 import org.antlr.works.editor.grammar.codemodel.TokenVocabModel;
+import org.netbeans.api.annotations.common.NonNull;
 
 /**
  *
@@ -21,8 +22,16 @@ import org.antlr.works.editor.grammar.codemodel.TokenVocabModel;
  */
 public class FileVocabModelImpl extends AbstractTokenVocabModel {
 
-    public FileVocabModelImpl(FileModelImpl file) {
+    public FileVocabModelImpl(@NonNull FileModelImpl file) {
         super(file.getName(), file);
+    }
+
+    @Override
+    @NonNull
+    public FileModelImpl getFile() {
+        FileModelImpl fileModel = super.getFile();
+        assert fileModel != null;
+        return fileModel;
     }
 
     @Override
@@ -57,6 +66,21 @@ public class FileVocabModelImpl extends AbstractTokenVocabModel {
 
             if (rule.getRuleKind() == RuleKind.LEXER) {
                 data.put(rule.getName(), new TokenDataImpl(rule.getName(), null, rule.getFile()));
+            }
+        }
+
+        // rules in the current grammar
+        for (ModeModelImpl mode : getFile().getModes()) {
+            for (RuleModelImpl rule : mode.getRules()) {
+                if (rule instanceof TokenData) {
+                    TokenData tokenData = (TokenData)rule;
+                    data.put(tokenData.getName(), tokenData);
+                    continue;
+                }
+
+                if (rule.getRuleKind() == RuleKind.LEXER) {
+                    data.put(rule.getName(), new TokenDataImpl(rule.getName(), null, rule.getFile()));
+                }
             }
         }
 

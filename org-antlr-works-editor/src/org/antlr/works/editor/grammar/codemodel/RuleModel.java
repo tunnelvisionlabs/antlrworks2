@@ -9,6 +9,7 @@
 package org.antlr.works.editor.grammar.codemodel;
 
 import java.util.Collection;
+import org.netbeans.api.annotations.common.CheckForNull;
 import org.netbeans.api.annotations.common.NonNull;
 
 /**
@@ -19,6 +20,9 @@ public interface RuleModel extends CodeElementModel {
 
     @NonNull
     RuleKind getRuleKind();
+
+    @CheckForNull
+    ModeModel getMode();
 
     @NonNull
     Collection<? extends ParameterModel> getParameters();
