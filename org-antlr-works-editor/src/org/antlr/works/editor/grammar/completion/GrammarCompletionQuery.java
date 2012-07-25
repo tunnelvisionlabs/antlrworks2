@@ -248,8 +248,8 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
                             visited.clear();
                             workList.clear();
                             stateWorkList.clear();
-                            workList.add(c.context);
-                            stateWorkList.add(c.state.stateNumber);
+                            workList.add(c.getContext());
+                            stateWorkList.add(c.getState().stateNumber);
                             while (!workList.isEmpty()) {
                                 PredictionContext context = workList.poll();
                                 int state = stateWorkList.poll();

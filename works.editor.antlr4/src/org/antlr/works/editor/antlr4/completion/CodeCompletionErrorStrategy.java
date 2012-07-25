@@ -109,7 +109,7 @@ public class CodeCompletionErrorStrategy<Symbol extends Token> extends DefaultEr
                 Transition transition = state.transition(i);
                 if (transition.isEpsilon()) {
                     ATNState target = transition.target;
-                    ATNConfig config = new ATNConfig(target, i + 1, context);
+                    ATNConfig config = ATNConfig.create(target, i + 1, context);
                     intermediate.add(config);
                 }
             }
@@ -122,7 +122,7 @@ public class CodeCompletionErrorStrategy<Symbol extends Token> extends DefaultEr
 
             if (!state.onlyHasEpsilonTransitions()) {
                 for (int i = 0; i < state.getNumberOfTransitions(); i++) {
-                    closure.add(new ATNConfig(state, 1, PredictionContext.fromRuleContext(recognizer.getContext())));
+                    closure.add(ATNConfig.create(state, 1, PredictionContext.fromRuleContext(recognizer.getContext())));
                 }
             }
 
@@ -133,9 +133,9 @@ public class CodeCompletionErrorStrategy<Symbol extends Token> extends DefaultEr
 
                 List<Transition> configTransitions = null;
 
-                int n = c.state.getNumberOfTransitions();
+                int n = c.getState().getNumberOfTransitions();
                 for (int ti = 0; ti < n; ti++) {               // for each transition
-                    Transition trans = c.state.transition(ti);
+                    Transition trans = c.getState().transition(ti);
                     ATNState target = interp.getReachableTarget(c, trans, CaretToken.CARET_TOKEN_TYPE);
                     if (target != null) {
                         if (transitions == null) {

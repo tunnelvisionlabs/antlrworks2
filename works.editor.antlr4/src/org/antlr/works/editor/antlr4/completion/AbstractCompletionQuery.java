@@ -422,7 +422,7 @@ public abstract class AbstractCompletionQuery extends AsyncCompletionQuery {
                 if (ex.getCause() != null) {
                     IntervalSet alts = new IntervalSet();
                     for (ATNConfig c : ex.getTransitions().keySet()) {
-                        alts.add(c.alt);
+                        alts.add(c.getAlt());
                     }
 
                     MultipleDecisionData decisionData = new MultipleDecisionData();
