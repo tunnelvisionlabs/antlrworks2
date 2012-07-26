@@ -15,11 +15,13 @@ import javax.swing.Action;
 import javax.swing.SwingUtilities;
 import javax.swing.text.StyledDocument;
 import org.antlr.netbeans.editor.navigation.Description;
+import org.netbeans.api.annotations.common.NonNull;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
 import org.openide.cookies.EditorCookie;
 import org.openide.cookies.LineCookie;
 import org.openide.cookies.OpenCookie;
+import org.openide.filesystems.FileObject;
 import org.openide.loaders.DataObject;
 import org.openide.text.Line;
 import org.openide.text.Line.ShowOpenType;
@@ -35,29 +37,51 @@ import org.openide.util.UserQuestionException;
  * @author Sam Harwell
  */
 @NbBundle.Messages({
-    "LBL_Goto=Go to source",
+    "LBL_Goto=Go to Source",
     "TXT_Question=Question"
 })
 public final class OpenAction extends AbstractAction {
 
     private final Description description;
 
-    public OpenAction(Description description) {
+    private final FileObject fileObject;
+    private final int offset;
+
+    public OpenAction(@NonNull Description description) {
         Parameters.notNull("description", description);
 
         this.description = description;
+        this.fileObject = null;
+        this.offset = 0;
         putValue(Action.NAME, Bundle.LBL_Goto());
+    }
+
+    public OpenAction(@NonNull FileObject fileObject, int offset) {
+        Parameters.notNull("fileObject", fileObject);
+
+        this.description = null;
+        this.fileObject = fileObject;
+        this.offset = offset;
+        putValue(Action.NAME, Bundle.LBL_Goto());
+    }
+
+    public FileObject getFileObject() {
+        return description != null ? description.getFileObject() : fileObject;
+    }
+
+    public int getOffset() {
+        return description != null ? description.getOffset() : offset;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         try {
-            DataObject od = DataObject.find(description.getFileObject());
+            DataObject od = DataObject.find(getFileObject());
             EditorCookie ec = od.getLookup().lookup(EditorCookie.class);
             LineCookie lc = od.getLookup().lookup(LineCookie.class);
 
-            if (ec != null && lc != null && description.getOffset() != -1) {
-                StyledDocument doc = null;
+            if (ec != null && lc != null && getOffset() != -1) {
+                StyledDocument doc;
                 try {
                     doc = ec.openDocument();
                 } catch (UserQuestionException uqe) {
@@ -73,9 +97,9 @@ public final class OpenAction extends AbstractAction {
                     doc = ec.openDocument();
                 }
                 if (doc != null) {
-                    int line = NbDocument.findLineNumber(doc, description.getOffset());
+                    int line = NbDocument.findLineNumber(doc, getOffset());
                     int lineOffset = NbDocument.findLineOffset(doc, line);
-                    int column = description.getOffset() - lineOffset;
+                    int column = getOffset() - lineOffset;
 
                     if (line != -1) {
                         Line l = lc.getLineSet().getCurrent(line);
