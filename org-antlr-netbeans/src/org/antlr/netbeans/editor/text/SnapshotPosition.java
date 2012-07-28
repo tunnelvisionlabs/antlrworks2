@@ -55,6 +55,24 @@ public final class SnapshotPosition implements Comparable<SnapshotPosition> {
         return offset < other.offset ? -1 : (offset > other.offset ? 1 : 0);
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 89 * hash + (this.snapshot != null ? this.snapshot.hashCode() : 0);
+        hash = 89 * hash + this.offset;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof SnapshotPosition)) {
+            return false;
+        }
+
+        SnapshotPosition other = (SnapshotPosition)obj;
+        return this.offset == other.offset && this.snapshot.equals(other.snapshot);
+    }
+
     public @NonNull SnapshotPosition add(int offset) {
         if (offset == 0) {
             return this;
