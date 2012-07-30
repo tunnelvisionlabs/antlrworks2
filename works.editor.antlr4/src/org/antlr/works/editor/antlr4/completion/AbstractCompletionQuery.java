@@ -41,6 +41,7 @@ import org.antlr.v4.runtime.atn.PlusBlockStartState;
 import org.antlr.v4.runtime.atn.PlusLoopbackState;
 import org.antlr.v4.runtime.atn.StarLoopEntryState;
 import org.antlr.v4.runtime.atn.StarLoopbackState;
+import org.antlr.v4.runtime.misc.IntegerList;
 import org.antlr.v4.runtime.misc.IntervalSet;
 import org.netbeans.api.annotations.common.CheckForNull;
 import org.netbeans.api.editor.completion.Completion;
@@ -364,7 +365,7 @@ public abstract class AbstractCompletionQuery extends AsyncCompletionQuery {
 
         protected Map<RuleContext<Token>, CaretReachedException> getParseTrees(CodeCompletionParser parser) {
             List<MultipleDecisionData> potentialAlternatives = new ArrayList<MultipleDecisionData>();
-            List<Integer> currentPath = new ArrayList<Integer>();
+            IntegerList currentPath = new IntegerList();
             Map<RuleContext<Token>, CaretReachedException> results = new IdentityHashMap<RuleContext<Token>, CaretReachedException>();
             // make sure the token stream is initialized before getting the index
             parser.getInputStream().LA(1);
@@ -386,7 +387,7 @@ public abstract class AbstractCompletionQuery extends AsyncCompletionQuery {
             return results;
         }
 
-        protected boolean incrementCurrentPath(List<MultipleDecisionData> potentialAlternatives, List<Integer> currentPath) {
+        protected boolean incrementCurrentPath(List<MultipleDecisionData> potentialAlternatives, IntegerList currentPath) {
             for (int i = currentPath.size() - 1; i >= 0; i--) {
                 if (currentPath.get(i) < potentialAlternatives.get(i).alternatives.length - 1) {
                     currentPath.set(i, currentPath.get(i) + 1);
@@ -394,13 +395,13 @@ public abstract class AbstractCompletionQuery extends AsyncCompletionQuery {
                 }
 
                 potentialAlternatives.remove(i);
-                currentPath.remove(i);
+                currentPath.removeAt(i);
             }
 
             return false;
         }
 
-        protected void tryParse(CodeCompletionParser parser, List<MultipleDecisionData> potentialAlternatives, List<Integer> currentPath, Map<RuleContext<Token>, CaretReachedException> results) {
+        protected void tryParse(CodeCompletionParser parser, List<MultipleDecisionData> potentialAlternatives, IntegerList currentPath, Map<RuleContext<Token>, CaretReachedException> results) {
             RuleContext<Token> parseTree;
             try {
                 parser.getInterpreter().setFixedDecisions(potentialAlternatives, currentPath);

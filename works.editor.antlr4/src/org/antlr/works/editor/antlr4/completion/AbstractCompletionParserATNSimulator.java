@@ -32,6 +32,7 @@ import org.antlr.v4.runtime.atn.SimulatorState;
 import org.antlr.v4.runtime.atn.Transition;
 import org.antlr.v4.runtime.atn.WildcardTransition;
 import org.antlr.v4.runtime.dfa.DFA;
+import org.antlr.v4.runtime.misc.IntegerList;
 import org.antlr.v4.runtime.misc.IntervalSet;
 import org.netbeans.api.annotations.common.NonNull;
 import org.openide.util.Parameters;
@@ -46,7 +47,7 @@ public abstract class AbstractCompletionParserATNSimulator extends ParserATNSimu
     private CaretToken caretToken;
 
     private List<MultipleDecisionData> decisionPoints;
-    private List<Integer> selections;
+    private IntegerList selections;
 
     // state variables used for the custom implementation
     private TokenStream<? extends Token> _input;
@@ -72,7 +73,7 @@ public abstract class AbstractCompletionParserATNSimulator extends ParserATNSimu
         return parser;
     }
 
-    public void setFixedDecisions(List<MultipleDecisionData> decisionPoints, List<Integer> selections) {
+    public void setFixedDecisions(List<MultipleDecisionData> decisionPoints, IntegerList selections) {
         Parameters.notNull("decisionPoints", decisionPoints);
         Parameters.notNull("selections", selections);
         this.decisionPoints = decisionPoints;
