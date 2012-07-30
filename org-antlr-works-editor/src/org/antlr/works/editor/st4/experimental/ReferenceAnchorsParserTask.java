@@ -87,7 +87,7 @@ public class ReferenceAnchorsParserTask implements ParserTask {
                     if (ex.getClass() == RuntimeException.class && ex.getCause() instanceof RecognitionException) {
                         // retry with default error handler
                         tokenStream.reset();
-                        parser.setTokenStream(tokenStream);
+                        parser.setInputStream(tokenStream);
                         parser.setErrorHandler(new DefaultErrorStrategy<Token>());
                         parseResult = parser.group();
                     } else {

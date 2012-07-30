@@ -8,13 +8,10 @@
  */
 package org.antlr.works.editor.antlr4.classification;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 import org.antlr.netbeans.editor.highlighting.LineStateInfo;
 import org.antlr.v4.runtime.Lexer;
+import org.antlr.v4.runtime.misc.IntegerList;
+import org.antlr.v4.runtime.misc.IntegerStack;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;
 
@@ -23,6 +20,8 @@ import org.netbeans.api.annotations.common.NullAllowed;
  * @author Sam Harwell
  */
 public class SimpleLexerState implements LineStateInfo<SimpleLexerState> {
+    private static final IntegerStack EMPTY_MODE_STACK = new IntegerStack();
+
     @NonNull
     public static final SimpleLexerState INITIAL = new SimpleLexerState();
     @NonNull
@@ -32,19 +31,19 @@ public class SimpleLexerState implements LineStateInfo<SimpleLexerState> {
 
     private final int mode;
     @NonNull
-    private final List<Integer> modeStack;
+    private final IntegerStack modeStack;
 
     public SimpleLexerState() {
         this.mode = Lexer.DEFAULT_MODE;
-        this.modeStack = Collections.emptyList();
+        this.modeStack = EMPTY_MODE_STACK;
     }
 
-    private SimpleLexerState(int mode, @NullAllowed Collection<Integer> modeStack) {
+    private SimpleLexerState(int mode, @NullAllowed IntegerStack modeStack) {
         this.mode = mode;
         if (modeStack == null || modeStack.isEmpty()) {
-            this.modeStack = Collections.emptyList();
+            this.modeStack = EMPTY_MODE_STACK;
         } else {
-            this.modeStack = new ArrayList<Integer>(modeStack);
+            this.modeStack = new IntegerStack(modeStack);
         }
     }
 
@@ -52,7 +51,7 @@ public class SimpleLexerState implements LineStateInfo<SimpleLexerState> {
         return create(lexer._mode, lexer._modeStack);
     }
 
-    private static SimpleLexerState create(int mode, @NullAllowed Collection<Integer> modeStack) {
+    private static SimpleLexerState create(int mode, @NullAllowed IntegerStack modeStack) {
         if (mode == Lexer.DEFAULT_MODE && (modeStack == null || modeStack.isEmpty())) {
             return INITIAL;
         }
@@ -84,7 +83,7 @@ public class SimpleLexerState implements LineStateInfo<SimpleLexerState> {
         return mode;
     }
 
-    public List<Integer> getModeStack() {
+    public IntegerStack getModeStack() {
         return modeStack;
     }
 
@@ -96,11 +95,8 @@ public class SimpleLexerState implements LineStateInfo<SimpleLexerState> {
         lexer._mode = this.getMode();
 
         if (!this.getModeStack().isEmpty()) {
-            if (lexer._modeStack == null) {
-                lexer._modeStack = new ArrayDeque<Integer>();
-            }
-
-            lexer._modeStack.addAll(this.getModeStack());
+            lexer._modeStack.clear();
+            lexer._modeStack.addAll(getModeStack());
         }
     }
 

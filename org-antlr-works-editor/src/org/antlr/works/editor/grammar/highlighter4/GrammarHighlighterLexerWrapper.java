@@ -8,7 +8,6 @@
  */
 package org.antlr.works.editor.grammar.highlighter4;
 
-import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.Map;
 import org.antlr.v4.runtime.CharStream;
@@ -52,13 +51,7 @@ public class GrammarHighlighterLexerWrapper implements TokenSourceWithStateV4<To
             return getCachedState(grammarLexer.isInOptions(), grammarLexer.isInTokens(), grammarLexer.getRuleType(), grammarLexer._mode, null);
         }
 
-        int[] modes = new int[grammarLexer._modeStack.size()];
-        int index = 0;
-        for (int mode : grammarLexer._modeStack) {
-            modes[index++] = mode;
-        }
-
-        return getCachedState(grammarLexer.isInOptions(), grammarLexer.isInTokens(), grammarLexer.getRuleType(), grammarLexer._mode, modes);
+        return getCachedState(grammarLexer.isInOptions(), grammarLexer.isInTokens(), grammarLexer.getRuleType(), grammarLexer._mode, grammarLexer._modeStack.toArray());
     }
 
     private static GrammarHighlighterLexerState getCachedState(boolean inOptions, boolean inTokens, int ruleType, int mode, int[] modeStack) {
@@ -74,24 +67,17 @@ public class GrammarHighlighterLexerWrapper implements TokenSourceWithStateV4<To
             return state;
         }
     }
+
     public void setState(CharStream input, GrammarHighlighterLexerState state) {
         grammarLexer.setInputStream(input);
         grammarLexer._mode = state.getMode();
         grammarLexer.setInOptions(state.isInOptions());
         grammarLexer.setInTokens(state.isInTokens());
         grammarLexer.setRuleType(state.getRuleType());
-        if (state.getModeStack() != null && state.getModeStack().length > 0) {
-            if (grammarLexer._modeStack == null) {
-                grammarLexer._modeStack = new ArrayDeque<Integer>();
-            } else {
-                grammarLexer._modeStack.clear();
-            }
 
-            for (int mode : state.getModeStack()) {
-                grammarLexer._modeStack.add(mode);
-            }
-        } else if (grammarLexer._modeStack != null) {
-            grammarLexer._modeStack.clear();
+        grammarLexer._modeStack.clear();
+        if (state.getModeStack() != null && state.getModeStack().length > 0) {
+            grammarLexer._modeStack.addAll(state.getModeStack());
         }
     }
 

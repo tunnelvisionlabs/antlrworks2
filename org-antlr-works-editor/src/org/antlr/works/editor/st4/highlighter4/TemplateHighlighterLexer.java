@@ -48,13 +48,7 @@ public class TemplateHighlighterLexer implements TokenSourceWithStateV4<Token, T
             return getCachedState(groupLexer.getOpenDelimiter(), groupLexer.getCloseDelimiter(), groupLexer._mode, null);
         }
 
-        int[] modes = new int[groupLexer._modeStack.size()];
-        int index = 0;
-        for (int mode : groupLexer._modeStack) {
-            modes[index++] = mode;
-        }
-
-        return getCachedState(groupLexer.getOpenDelimiter(), groupLexer.getCloseDelimiter(), groupLexer._mode, modes);
+        return getCachedState(groupLexer.getOpenDelimiter(), groupLexer.getCloseDelimiter(), groupLexer._mode, groupLexer._modeStack.toArray());
     }
 
     private static TemplateHighlighterLexerState getCachedState(char openDelimiter, char closeDelimiter, int mode, int[] modeStack) {
@@ -73,18 +67,9 @@ public class TemplateHighlighterLexer implements TokenSourceWithStateV4<Token, T
     public void setState(CharStream input, TemplateHighlighterLexerState state) {
         groupLexer.setInputStream(input);
         groupLexer._mode = state.getMode();
+        groupLexer._modeStack.clear();
         if (state.getModeStack() != null && state.getModeStack().length > 0) {
-            if (groupLexer._modeStack == null) {
-                groupLexer._modeStack = new ArrayDeque<Integer>();
-            } else {
-                groupLexer._modeStack.clear();
-            }
-
-            for (int mode : state.getModeStack()) {
-                groupLexer._modeStack.add(mode);
-            }
-        } else if (groupLexer._modeStack != null) {
-            groupLexer._modeStack.clear();
+            groupLexer._modeStack.addAll(state.getModeStack());
         }
 
         groupLexer.setDelimiters(state.getOpenDelimiter(), state.getCloseDelimiter());
