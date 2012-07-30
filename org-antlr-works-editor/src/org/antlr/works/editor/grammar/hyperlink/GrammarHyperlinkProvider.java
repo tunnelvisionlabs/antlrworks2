@@ -8,6 +8,7 @@
  */
 package org.antlr.works.editor.grammar.hyperlink;
 
+import java.lang.ref.WeakReference;
 import java.util.EnumSet;
 import java.util.Set;
 import javax.swing.text.Document;
@@ -29,6 +30,11 @@ import org.netbeans.lib.editor.hyperlink.spi.HyperlinkType;
 @MimeRegistration(mimeType=GrammarEditorKit.GRAMMAR_MIME_TYPE, service=HyperlinkProviderExt.class)
 public class GrammarHyperlinkProvider implements HyperlinkProviderExt {
 
+    private WeakReference<Document> _lastDocument;
+    private int _lastOffset;
+    private HyperlinkType _lastHyperlinkType;
+    private int[] _lastResult;
+
     @Override
     public Set<HyperlinkType> getSupportedHyperlinkTypes() {
         return EnumSet.of(HyperlinkType.GO_TO_DECLARATION, HyperlinkType.ALT_HYPERLINK);
@@ -41,6 +47,23 @@ public class GrammarHyperlinkProvider implements HyperlinkProviderExt {
 
     @Override
     public int[] getHyperlinkSpan(Document doc, int offset, HyperlinkType type) {
+        // The hyperlink operation calls isHyperlinkPoint before calling getHyperlinkSpan (both in the UI thread). Cache the result.
+        if (_lastDocument != null && _lastDocument.get() == doc) {
+            if (_lastOffset == offset && _lastHyperlinkType == type) {
+                if (_lastResult == null) {
+                    return null;
+                } else {
+                    return _lastResult.clone();
+                }
+            }
+        } else {
+            _lastDocument = new WeakReference<Document>(doc);
+        }
+
+        _lastOffset = offset;
+        _lastHyperlinkType = type;
+        _lastResult = null;
+
         if (!(doc instanceof StyledDocument)) {
             return null;
         }
@@ -50,7 +73,8 @@ public class GrammarHyperlinkProvider implements HyperlinkProviderExt {
             return null;
         }
 
-        return new int[] { span.getStart().getOffset(), span.getEnd().getOffset() };
+        _lastResult = new int[] { span.getStart().getOffset(), span.getEnd().getOffset() };
+        return _lastResult.clone();
     }
 
     @Override
