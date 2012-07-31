@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.lang.ref.Reference;
 import java.lang.ref.SoftReference;
 import java.lang.ref.WeakReference;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.event.DocumentEvent;
@@ -21,6 +22,7 @@ import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.netbeans.editor.text.VersionedDocument;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;
+import org.netbeans.api.queries.FileEncodingQuery;
 import org.netbeans.editor.BaseDocument;
 import org.netbeans.lib.editor.util.swing.DocumentUtilities;
 import org.netbeans.modules.editor.NbEditorUtilities;
@@ -119,7 +121,15 @@ public class NbVersionedDocument implements VersionedDocument {
             }
 
             try {
-                version = new NbDocumentVersion(this, latestVersionNumber + 1, new LineTextCache(fileObject.asText()));
+                String text;
+                Charset charset = FileEncodingQuery.getEncoding(fileObject);
+                if (charset != null) {
+                    text = fileObject.asText(charset.name());
+                } else {
+                    text = fileObject.asText();
+                }
+
+                version = new NbDocumentVersion(this, latestVersionNumber + 1, new LineTextCache(text));
                 latestVersion = new SoftReference<NbDocumentVersion>(version);
                 latestVersionNumber = version.getVersionNumber();
                 pendingChanges = new NbNormalizedDocumentChangeCollection();
