@@ -22,6 +22,7 @@ import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenFactory;
 import org.antlr.v4.runtime.TokenSource;
 import org.netbeans.api.annotations.common.NonNull;
+import org.openide.filesystems.FileObject;
 import org.openide.util.Parameters;
 
 /**
@@ -115,7 +116,12 @@ public class TaggerTokenSource<Symbol extends Token> implements TokenSource<Symb
 
     @Override
     public String getSourceName() {
-        return snapshot.getVersionedDocument().getFileObject().getName();
+        FileObject fileObject = snapshot.getVersionedDocument().getFileObject();
+        if (fileObject == null) {
+            return "Unknown Source File";
+        }
+
+        return fileObject.toURL().getFile();
     }
 
     @Override
