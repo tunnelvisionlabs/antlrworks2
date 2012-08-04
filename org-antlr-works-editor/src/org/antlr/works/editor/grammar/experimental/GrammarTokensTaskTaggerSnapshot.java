@@ -75,11 +75,6 @@ class GrammarTokensTaskTaggerSnapshot extends AbstractTokensTaskTaggerSnapshot<S
         }
 
         @Override
-        public CharStream getCharStream() {
-            return getInputStream();
-        }
-
-        @Override
         public SimpleLexerState getCurrentState() {
             return SimpleLexerState.createSimpleState(this);
         }

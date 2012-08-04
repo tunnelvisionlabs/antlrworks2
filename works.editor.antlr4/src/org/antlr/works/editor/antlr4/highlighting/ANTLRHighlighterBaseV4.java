@@ -402,7 +402,7 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
     }
 
     protected boolean tokenEndsAtEndOfLine(TokenSourceWithStateV4<Token, TState> lexer, Token token) {
-        CharStream charStream = lexer.getCharStream();
+        CharStream charStream = lexer.getInputStream();
         if (charStream != null) {
             int nextCharIndex = token.getStopIndex() + 1;
             if (nextCharIndex >= charStream.size()) {

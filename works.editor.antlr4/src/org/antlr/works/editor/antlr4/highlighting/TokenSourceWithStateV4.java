@@ -8,7 +8,6 @@
  */
 package org.antlr.works.editor.antlr4.highlighting;
 
-import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.TokenSource;
 
 /**
@@ -16,7 +15,5 @@ import org.antlr.v4.runtime.TokenSource;
  * @author Sam Harwell
  */
 public interface TokenSourceWithStateV4<Symbol, T> extends TokenSource<Symbol> {
-    public CharStream getCharStream();
-
     public T getCurrentState();
 }

@@ -33,11 +33,6 @@ public class TemplateHighlighterLexer implements TokenSourceWithStateV4<Token, T
     }
 
     @Override
-    public CharStream getCharStream() {
-        return groupLexer.getInputStream();
-    }
-
-    @Override
     public String getSourceName() {
         return "StringTemplate Highlighter";
     }

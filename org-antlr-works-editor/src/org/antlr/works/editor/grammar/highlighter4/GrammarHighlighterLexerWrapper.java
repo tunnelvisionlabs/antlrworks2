@@ -36,11 +36,6 @@ public class GrammarHighlighterLexerWrapper implements TokenSourceWithStateV4<To
     }
 
     @Override
-    public CharStream getCharStream() {
-        return grammarLexer.getInputStream();
-    }
-
-    @Override
     public String getSourceName() {
         return "Grammar Highlighter";
     }
