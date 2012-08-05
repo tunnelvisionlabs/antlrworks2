@@ -29,6 +29,7 @@ tokens {
     OPEN_DELIMITER;
     CLOSE_DELIMITER;
     QUOTE;
+    STRING;
 }
 
 LPAREN  : '(';

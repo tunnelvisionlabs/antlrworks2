@@ -34,6 +34,7 @@ protected abstract void handleBeginArgAction();
 tokens {
     InvalidGrammarOption;
     ValidGrammarOption;
+    LCURLY;
 }
 
 LEXER       : 'lexer';
