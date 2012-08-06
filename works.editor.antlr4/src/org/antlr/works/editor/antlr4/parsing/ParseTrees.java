@@ -22,7 +22,6 @@ import org.antlr.v4.runtime.atn.ATN;
 import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.misc.IntervalSet;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.ParseTree.TerminalNode;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;
 import org.openide.util.Parameters;
@@ -80,8 +79,8 @@ public final class ParseTrees {
 
         if (context instanceof ParserRuleContext<?>) {
             return getStopSymbol((ParserRuleContext<Symbol>)context);
-        } else if (context instanceof TerminalNode<?>) {
-            return ((TerminalNode<Symbol>)context).getSymbol();
+        } else if (context instanceof ParseTree.TerminalNode<?>) {
+            return ((ParseTree.TerminalNode<Symbol>)context).getSymbol();
         }
 
         return null;
@@ -202,13 +201,13 @@ public final class ParseTrees {
         return findTopContext((ParserRuleContext<T>)context.parent, values, true);
     }
 
-    public static <Symbol> TerminalNode<Symbol> findTerminalNode(Collection<? extends ParseTree<Symbol>> children, Symbol symbol) {
+    public static <Symbol> ParseTree.TerminalNode<Symbol> findTerminalNode(Collection<? extends ParseTree<Symbol>> children, Symbol symbol) {
         for (ParseTree<Symbol> element : children) {
-            if (!(element instanceof TerminalNode<?>)) {
+            if (!(element instanceof ParseTree.TerminalNode<?>)) {
                 continue;
             }
 
-            TerminalNode<Symbol> node = (TerminalNode<Symbol>)element;
+            ParseTree.TerminalNode<Symbol> node = (ParseTree.TerminalNode<Symbol>)element;
             if (node.getSymbol() == symbol) {
                 return node;
             }
