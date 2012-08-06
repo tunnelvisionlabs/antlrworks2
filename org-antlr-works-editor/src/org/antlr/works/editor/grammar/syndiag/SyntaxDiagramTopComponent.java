@@ -28,9 +28,8 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleDependencies;
 import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
-import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.ParseTree.TerminalNode;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.AltListContext;
@@ -430,8 +429,8 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
             boolean range = hasChild && ctx.children.get(0) instanceof GrammarParser.RangeContext;
             boolean notset = hasChild && ctx.children.get(0) instanceof GrammarParser.NotSetContext;
             boolean charSet = hasChild
-                && ctx.children.get(0) instanceof ParseTree.TerminalNode<?>
-                && ((ParseTree.TerminalNode<Token>)ctx.children.get(0)).getSymbol().getType() == GrammarParser.LEXER_CHAR_SET;
+                && ctx.children.get(0) instanceof TerminalNode<?>
+                && ((TerminalNode<Token>)ctx.children.get(0)).getSymbol().getType() == GrammarParser.LEXER_CHAR_SET;
 
             if (wildcard || reference) {
                 String text = ctx.start.getText();
@@ -449,8 +448,8 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
                 Terminal terminal = null;
                 GrammarParser.RangeContext rangeContext = (GrammarParser.RangeContext)ctx.children.get(0);
                 if (rangeContext.children != null && rangeContext.children.size() == 3) {
-                    Token start = ((ParseTree.TerminalNode<Token>)rangeContext.children.get(0)).getSymbol();
-                    Token end = ((ParseTree.TerminalNode<Token>)rangeContext.children.get(2)).getSymbol();
+                    Token start = ((TerminalNode<Token>)rangeContext.children.get(0)).getSymbol();
+                    Token end = ((TerminalNode<Token>)rangeContext.children.get(2)).getSymbol();
                     if (start != null && end != null) {
                         terminal = new RangeTerminal(start.getText(), end.getText(), sourceSpan);
                     }
@@ -473,7 +472,7 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
 
                 nodes.peek().add(new SetTerminal(elementContexts, sourceSpan, true));
             } else if (charSet) {
-                nodes.peek().add(new SetTerminal((ParseTree.TerminalNode<Token>)ctx.children.get(0), sourceSpan));
+                nodes.peek().add(new SetTerminal((TerminalNode<Token>)ctx.children.get(0), sourceSpan));
             } else {
                 nodes.peek().add(new Terminal("???", sourceSpan));
             }

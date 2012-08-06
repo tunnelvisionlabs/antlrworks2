@@ -17,8 +17,8 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleDependencies;
 import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
-import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.ParseTree.ErrorNode;
+import org.antlr.v4.runtime.tree.ErrorNode;
+import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.v4.runtime.tree.Tree;
 import org.antlr.works.editor.grammar.experimental.GrammarParser;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.ActionBlockContext;
@@ -126,7 +126,7 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerRule, version=0),
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_terminal, version=0),
     })
-    public void visitTerminal(ParseTree.TerminalNode<? extends Token> node) {
+    public void visitTerminal(TerminalNode<? extends Token> node) {
         NodeType nodeType = treeDecorator.getProperty(node.getParent(), GrammarTreeProperties.PROP_NODE_TYPE);
         if (nodeType == NodeType.UNDEFINED) {
             nodeType = null;

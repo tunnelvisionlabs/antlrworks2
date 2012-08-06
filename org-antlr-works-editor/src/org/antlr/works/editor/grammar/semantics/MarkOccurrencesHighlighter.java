@@ -37,8 +37,8 @@ import org.antlr.netbeans.parsing.spi.ParserDataOptions;
 import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.Token;
-import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.works.editor.antlr4.semantics.AbstractSemanticHighlighter;
 import org.antlr.works.editor.grammar.GrammarEditorKit;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
@@ -279,7 +279,7 @@ public class MarkOccurrencesHighlighter extends AbstractSemanticHighlighter<Curr
         }
 
         @Override
-        public void visitTerminal(ParseTree.TerminalNode<? extends Token> node) {
+        public void visitTerminal(TerminalNode<? extends Token> node) {
             if (referencedToken == null) {
                 return;
             }

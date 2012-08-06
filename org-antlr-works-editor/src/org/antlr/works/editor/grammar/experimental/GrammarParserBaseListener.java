@@ -11,7 +11,8 @@ package org.antlr.works.editor.grammar.experimental;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
-import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.TerminalNode;
+import org.antlr.v4.runtime.tree.ErrorNode;
 
 public class GrammarParserBaseListener implements GrammarParserListener {
 	@Override public void enterRuleSpec(AbstractGrammarParser.RuleSpecContext ctx) { }
@@ -232,6 +233,6 @@ public class GrammarParserBaseListener implements GrammarParserListener {
 
 	@Override public void enterEveryRule(ParserRuleContext<? extends Token> ctx) { }
 	@Override public void exitEveryRule(ParserRuleContext<? extends Token> ctx) { }
-	@Override public void visitTerminal(ParseTree.TerminalNode<? extends Token> node) { }
-	@Override public void visitErrorNode(ParseTree.ErrorNode<? extends Token> node) { }
+	@Override public void visitTerminal(TerminalNode<? extends Token> node) { }
+	@Override public void visitErrorNode(ErrorNode<? extends Token> node) { }
 }

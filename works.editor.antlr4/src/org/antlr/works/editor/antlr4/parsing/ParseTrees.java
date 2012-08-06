@@ -22,6 +22,7 @@ import org.antlr.v4.runtime.atn.ATN;
 import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.misc.IntervalSet;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.TerminalNode;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;
 import org.openide.util.Parameters;
@@ -79,24 +80,24 @@ public final class ParseTrees {
 
         if (context instanceof ParserRuleContext<?>) {
             return getStopSymbol((ParserRuleContext<Symbol>)context);
-        } else if (context instanceof ParseTree.TerminalNode<?>) {
-            return ((ParseTree.TerminalNode<Symbol>)context).getSymbol();
+        } else if (context instanceof TerminalNode<?>) {
+            return ((TerminalNode<Symbol>)context).getSymbol();
         }
 
         return null;
     }
 
-    public static <Symbol> ParseTree.TerminalNode<Symbol> getStartNode(ParseTree<Symbol> context) {
+    public static <Symbol> TerminalNode<Symbol> getStartNode(ParseTree<Symbol> context) {
         if (context == null) {
             return null;
         }
 
-        if (context instanceof ParseTree.TerminalNode<?>) {
-            return (ParseTree.TerminalNode<Symbol>)context;
+        if (context instanceof TerminalNode<?>) {
+            return (TerminalNode<Symbol>)context;
         }
 
         for (int i = 0; i < context.getChildCount(); i++) {
-            ParseTree.TerminalNode<Symbol> startNode = getStartNode(context.getChild(i));
+            TerminalNode<Symbol> startNode = getStartNode(context.getChild(i));
             if (startNode != null) {
                 return startNode;
             }
@@ -105,17 +106,17 @@ public final class ParseTrees {
         return null;
     }
 
-    public static <Symbol> ParseTree.TerminalNode<Symbol> getStopNode(ParseTree<Symbol> context) {
+    public static <Symbol> TerminalNode<Symbol> getStopNode(ParseTree<Symbol> context) {
         if (context == null) {
             return null;
         }
 
-        if (context instanceof ParseTree.TerminalNode<?>) {
-            return (ParseTree.TerminalNode<Symbol>)context;
+        if (context instanceof TerminalNode<?>) {
+            return (TerminalNode<Symbol>)context;
         }
 
         for (int i = context.getChildCount() - 1; i >= 0; i--) {
-            ParseTree.TerminalNode<Symbol> stopNode = getStopNode(context.getChild(i));
+            TerminalNode<Symbol> stopNode = getStopNode(context.getChild(i));
             if (stopNode != null) {
                 return stopNode;
             }
@@ -201,13 +202,13 @@ public final class ParseTrees {
         return findTopContext((ParserRuleContext<T>)context.parent, values, true);
     }
 
-    public static <Symbol> ParseTree.TerminalNode<Symbol> findTerminalNode(Collection<? extends ParseTree<Symbol>> children, Symbol symbol) {
+    public static <Symbol> TerminalNode<Symbol> findTerminalNode(Collection<? extends ParseTree<Symbol>> children, Symbol symbol) {
         for (ParseTree<Symbol> element : children) {
-            if (!(element instanceof ParseTree.TerminalNode<?>)) {
+            if (!(element instanceof TerminalNode<?>)) {
                 continue;
             }
 
-            ParseTree.TerminalNode<Symbol> node = (ParseTree.TerminalNode<Symbol>)element;
+            TerminalNode<Symbol> node = (TerminalNode<Symbol>)element;
             if (node.getSymbol() == symbol) {
                 return node;
             }

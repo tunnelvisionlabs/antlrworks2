@@ -18,14 +18,13 @@ import java.util.List;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.StyleConstants;
 import org.antlr.netbeans.editor.text.SnapshotPositionRegion;
-import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleDependencies;
 import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.misc.IntervalSet;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.ParseTree.TerminalNode;
+import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.works.editor.grammar.experimental.GrammarParser;
 
 /**
@@ -41,7 +40,7 @@ public class SetTerminal extends Terminal {
         this(getAttributedLabel(elements, inverted), sourceSpan, inverted);
     }
 
-    public SetTerminal(ParseTree.TerminalNode<Token> element, SnapshotPositionRegion sourceSpan) {
+    public SetTerminal(TerminalNode<Token> element, SnapshotPositionRegion sourceSpan) {
         this(getAttributedLabel(Collections.singletonList(element), false), sourceSpan, false);
     }
 
@@ -113,8 +112,8 @@ public class SetTerminal extends Terminal {
                 } else {
                     builder.append("???");
                 }
-            } else if (element instanceof ParseTree.TerminalNode<?>) {
-                ParseTree.TerminalNode<Token> node = (ParseTree.TerminalNode<Token>)element;
+            } else if (element instanceof TerminalNode<?>) {
+                TerminalNode<Token> node = (TerminalNode<Token>)element;
                 String text = node.getText();
                 if (text.length() >= 2 && text.charAt(0) == '[' && text.charAt(text.length() - 1) == ']') {
                     builder.append(text);
