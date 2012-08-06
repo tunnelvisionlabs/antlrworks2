@@ -87,6 +87,44 @@ public final class ParseTrees {
         return null;
     }
 
+    public static <Symbol> ParseTree.TerminalNode<Symbol> getStartNode(ParseTree<Symbol> context) {
+        if (context == null) {
+            return null;
+        }
+
+        if (context instanceof ParseTree.TerminalNode<?>) {
+            return (ParseTree.TerminalNode<Symbol>)context;
+        }
+
+        for (int i = 0; i < context.getChildCount(); i++) {
+            ParseTree.TerminalNode<Symbol> startNode = getStartNode(context.getChild(i));
+            if (startNode != null) {
+                return startNode;
+            }
+        }
+
+        return null;
+    }
+
+    public static <Symbol> ParseTree.TerminalNode<Symbol> getStopNode(ParseTree<Symbol> context) {
+        if (context == null) {
+            return null;
+        }
+
+        if (context instanceof ParseTree.TerminalNode<?>) {
+            return (ParseTree.TerminalNode<Symbol>)context;
+        }
+
+        for (int i = context.getChildCount() - 1; i >= 0; i--) {
+            ParseTree.TerminalNode<Symbol> stopNode = getStopNode(context.getChild(i));
+            if (stopNode != null) {
+                return stopNode;
+            }
+        }
+
+        return null;
+    }
+
     public static boolean isInContexts(@NonNull ParserRuleContext<?> context, boolean allowGaps, @NonNull int... stack) {
         Parameters.notNull("context", context);
         Parameters.notNull("stack", stack);
