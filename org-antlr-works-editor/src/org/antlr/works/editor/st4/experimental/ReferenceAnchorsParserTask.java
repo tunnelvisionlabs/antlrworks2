@@ -42,6 +42,7 @@ import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenSource;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.works.editor.antlr4.classification.TaggerTokenSource;
+import org.antlr.works.editor.antlr4.parsing.DescriptiveErrorListener;
 import org.antlr.works.editor.st4.StringTemplateEditorKit;
 import org.antlr.works.editor.st4.TemplateParserDataDefinitions;
 import org.antlr.works.editor.st4.codemodel.FileModel;
@@ -80,6 +81,7 @@ public class ReferenceAnchorsParserTask implements ParserTask {
                 ParserRuleContext<Token> parseResult;
                 TemplateParser parser = TemplateParserCache.DEFAULT.getParser(tokenStream);
                 try {
+                    parser.removeErrorListeners();
                     parser.setBuildParseTree(true);
                     parser.setErrorHandler(new BailErrorStrategy<Token>());
                     parseResult = parser.group();
@@ -87,6 +89,7 @@ public class ReferenceAnchorsParserTask implements ParserTask {
                     if (ex.getClass() == RuntimeException.class && ex.getCause() instanceof RecognitionException) {
                         // retry with default error handler
                         tokenStream.reset();
+                        parser.addErrorListener(DescriptiveErrorListener.INSTANCE);
                         parser.setInputStream(tokenStream);
                         parser.setErrorHandler(new DefaultErrorStrategy<Token>());
                         parseResult = parser.group();

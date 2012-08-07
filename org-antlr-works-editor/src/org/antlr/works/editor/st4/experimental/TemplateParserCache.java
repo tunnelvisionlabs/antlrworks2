@@ -12,6 +12,7 @@ import org.antlr.v4.runtime.DefaultErrorStrategy;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenStream;
 import org.antlr.works.editor.antlr4.completion.AbstractParserCache;
+import org.antlr.works.editor.antlr4.parsing.DescriptiveErrorListener;
 
 /**
  *
@@ -30,6 +31,8 @@ public class TemplateParserCache extends AbstractParserCache<Token, TemplatePars
     @Override
     public TemplateParser getParser(TokenStream<? extends Token> input) {
         TemplateParser result = super.getParser(input);
+        result.removeErrorListeners();
+        result.addErrorListener(DescriptiveErrorListener.INSTANCE);
         result.setBuildParseTree(false);
         result.setErrorHandler(new DefaultErrorStrategy<Token>());
         return result;

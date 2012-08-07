@@ -96,6 +96,7 @@ public class CurrentTemplateContextParserTask implements ParserTask {
                 CommonTokenStream tokens = new TaskTokenStream(lexer);
                 TemplateParser parser = TemplateParserCache.DEFAULT.getParser(tokens);
                 try {
+                    parser.removeErrorListeners();
                     parser.setBuildParseTree(true);
                     ruleContext = parser.group();
                 } finally {
