@@ -243,13 +243,13 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
                         IdentityHashMap<PredictionContext, PredictionContext> visited = new IdentityHashMap<PredictionContext, PredictionContext>();
                         Deque<PredictionContext> workList = new ArrayDeque<PredictionContext>();
                         Deque<Integer> stateWorkList = new ArrayDeque<Integer>();
-                        for (ATNConfig c : transitions.keySet()) {
+                        for (Map.Entry<ATNConfig, List<Transition>> transitionEntry : transitions.entrySet()) {
                             boolean currentActionConfig = false;
                             visited.clear();
                             workList.clear();
                             stateWorkList.clear();
-                            workList.add(c.getContext());
-                            stateWorkList.add(c.getState().stateNumber);
+                            workList.add(transitionEntry.getKey().getContext());
+                            stateWorkList.add(transitionEntry.getKey().getState().stateNumber);
                             while (!workList.isEmpty()) {
                                 PredictionContext context = workList.poll();
                                 int state = stateWorkList.poll();
@@ -275,7 +275,7 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
                             hasActionConfig |= currentActionConfig;
                             hasNonActionConfig |= !currentActionConfig;
 
-                            for (Transition t : transitions.get(c)) {
+                            for (Transition t : transitionEntry.getValue()) {
                                 int ruleIndex = t.target.ruleIndex;
                                 if (ruleIndex == GrammarParser.RULE_ruleref
                                     || ruleIndex == GrammarParser.RULE_terminal) {
