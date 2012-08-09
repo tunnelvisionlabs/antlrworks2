@@ -28,6 +28,7 @@ import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Interval;
 import org.netbeans.api.annotations.common.CheckForNull;
 import org.netbeans.api.annotations.common.NonNull;
+import org.netbeans.api.annotations.common.NullAllowed;
 import org.netbeans.spi.editor.highlighting.HighlightsSequence;
 import org.netbeans.spi.editor.highlighting.support.AbstractHighlightsContainer;
 import org.openide.text.NbDocument;
@@ -94,8 +95,20 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
         return new HighlightsList(highlights);
     }
 
+    /**
+     *
+     * @param startOffset
+     * @param endOffset
+     * @param highlights Processed highlights are returned in this list. The list is cleared before use. This argument can be {@code null} if this information is not needed.
+     * @param tokens Tokens created by the lexer are returned in this list. This may contain tokens which fall before {@code startOffset} and/or {@code endOffset}. The list is cleared before use. This argument can be {@code null} if this information is not needed.
+     * @param updateOffsets
+     * @param propagate
+     * @return Returns the affected line range, which may extend beyond lines containing {@code startOffset} and {@code endOffset} when multi-line tokens are encountered and/or {@code propagate} is {@code true}.
+     *      Returns {@code null} if no information is requested ({@code highlights} and {@code tokens} are {@code null} and {@code propagate} is {@code false}); if a previous call to {@code getHighlights} timed-out;
+     *      or if the call to {@link #createInputStream(OffsetRegion)} throws a {@link BadLocationException}.
+     */
     @CheckForNull
-    public Interval getHighlights(int startOffset, int endOffset, List<Highlight> highlights, List<Token> tokens, boolean updateOffsets, boolean propagate) {
+    public Interval getHighlights(int startOffset, int endOffset, @NullAllowed List<Highlight> highlights, @NullAllowed List<Token> tokens, boolean updateOffsets, boolean propagate) {
         if (highlights == null && tokens == null && !propagate) {
             return null;
         }
