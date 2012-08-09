@@ -235,8 +235,7 @@ public class FactorLabelForSetHintParserTask implements ParserTask {
 
             int startIndex = firstNode.getSymbol().getStartIndex();
             int stopIndex = lastNode.getSymbol().getStopIndex();
-
-            _rewriteRanges.add(firstNode.getSymbol().getStartIndex(), lastNode.getSymbol().getStopIndex());
+            _rewriteRanges.add(startIndex, stopIndex);
         }
 
         private void ignore(ParseTree<?> ctx) {
@@ -254,7 +253,7 @@ public class FactorLabelForSetHintParserTask implements ParserTask {
         public static final Definition INSTANCE = new Definition();
 
         public Definition() {
-            super("", INPUTS, OUTPUTS, ParserTaskScheduler.INPUT_SENSITIVE_TASK_SCHEDULER);
+            super("Grammar Factor Set Label Hint", INPUTS, OUTPUTS, ParserTaskScheduler.INPUT_SENSITIVE_TASK_SCHEDULER);
         }
     }
 
