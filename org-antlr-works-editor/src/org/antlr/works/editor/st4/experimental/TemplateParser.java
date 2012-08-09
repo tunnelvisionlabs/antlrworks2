@@ -85,14 +85,20 @@ public class TemplateParser extends Parser<Token> {
 		public OldStyleHeaderContext oldStyleHeader() {
 		    return getRuleContext(OldStyleHeaderContext.class,0);
 		}
-		public DefContext def() {
-		    return getRuleContext(DefContext.class,0);
+		public List<? extends DefContext> def() {
+		    return getRuleContexts(DefContext.class);
 		}
 		public DelimitersContext delimiters() {
 		    return getRuleContext(DelimitersContext.class,0);
 		}
-		public StringContext string() {
-		    return getRuleContext(StringContext.class,0);
+		public List<? extends StringContext> string() {
+		    return getRuleContexts(StringContext.class);
+		}
+		public StringContext string(int i) {
+		    return getRuleContext(StringContext.class,i);
+		}
+		public DefContext def(int i) {
+		    return getRuleContext(DefContext.class,i);
 		}
 		public GroupContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -1336,8 +1342,11 @@ public class TemplateParser extends Parser<Token> {
 		    return getToken(TemplateParser.TEMPLATE_PARAMETER, i);
 		}
 		public TerminalNode<Token> PIPE() { return getToken(TemplateParser.PIPE, 0); }
+		public TerminalNode<Token> COMMA(int i) {
+		    return getToken(TemplateParser.COMMA, i);
+		}
 		public List<? extends TerminalNode<Token>> TEMPLATE_PARAMETER() { return getTokens(TemplateParser.TEMPLATE_PARAMETER); }
-		public TerminalNode<Token> COMMA() { return getToken(TemplateParser.COMMA, 0); }
+		public List<? extends TerminalNode<Token>> COMMA() { return getTokens(TemplateParser.COMMA); }
 		public AnonymousTemplateParametersContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -1399,20 +1408,41 @@ public class TemplateParser extends Parser<Token> {
 	}
 
 	public static class TemplateBodyContext extends ParserRuleContext<Token> {
-		public ExprTagContext exprTag() {
-		    return getRuleContext(ExprTagContext.class,0);
+		public List<? extends RegionContext> region() {
+		    return getRuleContexts(RegionContext.class);
 		}
-		public RegionContext region() {
-		    return getRuleContext(RegionContext.class,0);
+		public TerminalNode<Token> TEXT(int i) {
+		    return getToken(TemplateParser.TEXT, i);
 		}
-		public TerminalNode<Token> NEWLINE() { return getToken(TemplateParser.NEWLINE, 0); }
-		public TerminalNode<Token> TEXT() { return getToken(TemplateParser.TEXT, 0); }
-		public TerminalNode<Token> COMMENT() { return getToken(TemplateParser.COMMENT, 0); }
-		public IfstatContext ifstat() {
-		    return getRuleContext(IfstatContext.class,0);
+		public IfstatContext ifstat(int i) {
+		    return getRuleContext(IfstatContext.class,i);
 		}
-		public EscapeContext escape() {
-		    return getRuleContext(EscapeContext.class,0);
+		public List<? extends TerminalNode<Token>> NEWLINE() { return getTokens(TemplateParser.NEWLINE); }
+		public ExprTagContext exprTag(int i) {
+		    return getRuleContext(ExprTagContext.class,i);
+		}
+		public EscapeContext escape(int i) {
+		    return getRuleContext(EscapeContext.class,i);
+		}
+		public List<? extends EscapeContext> escape() {
+		    return getRuleContexts(EscapeContext.class);
+		}
+		public List<? extends ExprTagContext> exprTag() {
+		    return getRuleContexts(ExprTagContext.class);
+		}
+		public List<? extends TerminalNode<Token>> TEXT() { return getTokens(TemplateParser.TEXT); }
+		public List<? extends TerminalNode<Token>> COMMENT() { return getTokens(TemplateParser.COMMENT); }
+		public TerminalNode<Token> NEWLINE(int i) {
+		    return getToken(TemplateParser.NEWLINE, i);
+		}
+		public List<? extends IfstatContext> ifstat() {
+		    return getRuleContexts(IfstatContext.class);
+		}
+		public TerminalNode<Token> COMMENT(int i) {
+		    return getToken(TemplateParser.COMMENT, i);
+		}
+		public RegionContext region(int i) {
+		    return getRuleContext(RegionContext.class,i);
 		}
 		public TemplateBodyContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
@@ -1728,6 +1758,9 @@ public class TemplateParser extends Parser<Token> {
 		public TerminalNode<Token> RPAREN(int i) {
 		    return getToken(TemplateParser.RPAREN, i);
 		}
+		public TerminalNode<Token> ELSEIF(int i) {
+		    return getToken(TemplateParser.ELSEIF, i);
+		}
 		public TerminalNode<Token> OPEN_DELIMITER(int i) {
 		    return getToken(TemplateParser.OPEN_DELIMITER, i);
 		}
@@ -1755,7 +1788,7 @@ public class TemplateParser extends Parser<Token> {
 		}
 		public List<? extends TerminalNode<Token>> LPAREN() { return getTokens(TemplateParser.LPAREN); }
 		public TerminalNode<Token> IF() { return getToken(TemplateParser.IF, 0); }
-		public TerminalNode<Token> ELSEIF() { return getToken(TemplateParser.ELSEIF, 0); }
+		public List<? extends TerminalNode<Token>> ELSEIF() { return getTokens(TemplateParser.ELSEIF); }
 		public IfstatContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -1846,7 +1879,10 @@ public class TemplateParser extends Parser<Token> {
 		public List<? extends AndConditionalContext> andConditional() {
 		    return getRuleContexts(AndConditionalContext.class);
 		}
-		public TerminalNode<Token> OR() { return getToken(TemplateParser.OR, 0); }
+		public TerminalNode<Token> OR(int i) {
+		    return getToken(TemplateParser.OR, i);
+		}
+		public List<? extends TerminalNode<Token>> OR() { return getTokens(TemplateParser.OR); }
 		public ConditionalContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -1911,7 +1947,10 @@ public class TemplateParser extends Parser<Token> {
 		public NotConditionalContext notConditional(int i) {
 		    return getRuleContext(NotConditionalContext.class,i);
 		}
-		public TerminalNode<Token> AND() { return getToken(TemplateParser.AND, 0); }
+		public List<? extends TerminalNode<Token>> AND() { return getTokens(TemplateParser.AND); }
+		public TerminalNode<Token> AND(int i) {
+		    return getToken(TemplateParser.AND, i);
+		}
 		public AndConditionalContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -2035,7 +2074,10 @@ public class TemplateParser extends Parser<Token> {
 		public OptionContext option(int i) {
 		    return getRuleContext(OptionContext.class,i);
 		}
-		public TerminalNode<Token> COMMA() { return getToken(TemplateParser.COMMA, 0); }
+		public TerminalNode<Token> COMMA(int i) {
+		    return getToken(TemplateParser.COMMA, i);
+		}
+		public List<? extends TerminalNode<Token>> COMMA() { return getTokens(TemplateParser.COMMA); }
 		public List<? extends OptionContext> option() {
 		    return getRuleContexts(OptionContext.class);
 		}
@@ -2479,19 +2521,31 @@ public class TemplateParser extends Parser<Token> {
 	}
 
 	public static class MemberExprContext extends ParserRuleContext<Token> {
-		public TerminalNode<Token> RPAREN() { return getToken(TemplateParser.RPAREN, 0); }
+		public List<? extends TerminalNode<Token>> RPAREN() { return getTokens(TemplateParser.RPAREN); }
+		public MapExprContext mapExpr(int i) {
+		    return getRuleContext(MapExprContext.class,i);
+		}
+		public TerminalNode<Token> RPAREN(int i) {
+		    return getToken(TemplateParser.RPAREN, i);
+		}
+		public TerminalNode<Token> ID(int i) {
+		    return getToken(TemplateParser.ID, i);
+		}
 		public TerminalNode<Token> DOT(int i) {
 		    return getToken(TemplateParser.DOT, i);
 		}
 		public IncludeExprContext includeExpr() {
 		    return getRuleContext(IncludeExprContext.class,0);
 		}
-		public TerminalNode<Token> ID() { return getToken(TemplateParser.ID, 0); }
-		public List<? extends TerminalNode<Token>> DOT() { return getTokens(TemplateParser.DOT); }
-		public MapExprContext mapExpr() {
-		    return getRuleContext(MapExprContext.class,0);
+		public TerminalNode<Token> LPAREN(int i) {
+		    return getToken(TemplateParser.LPAREN, i);
 		}
-		public TerminalNode<Token> LPAREN() { return getToken(TemplateParser.LPAREN, 0); }
+		public List<? extends TerminalNode<Token>> ID() { return getTokens(TemplateParser.ID); }
+		public List<? extends TerminalNode<Token>> DOT() { return getTokens(TemplateParser.DOT); }
+		public List<? extends MapExprContext> mapExpr() {
+		    return getRuleContexts(MapExprContext.class);
+		}
+		public List<? extends TerminalNode<Token>> LPAREN() { return getTokens(TemplateParser.LPAREN); }
 		public MemberExprContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -2927,10 +2981,13 @@ public class TemplateParser extends Parser<Token> {
 		public List<? extends ArgContext> arg() {
 		    return getRuleContexts(ArgContext.class);
 		}
+		public TerminalNode<Token> COMMA(int i) {
+		    return getToken(TemplateParser.COMMA, i);
+		}
 		public ArgContext arg(int i) {
 		    return getRuleContext(ArgContext.class,i);
 		}
-		public TerminalNode<Token> COMMA() { return getToken(TemplateParser.COMMA, 0); }
+		public List<? extends TerminalNode<Token>> COMMA() { return getTokens(TemplateParser.COMMA); }
 		public ArgExprListContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -3087,8 +3144,11 @@ public class TemplateParser extends Parser<Token> {
 		public ListElementContext listElement(int i) {
 		    return getRuleContext(ListElementContext.class,i);
 		}
+		public TerminalNode<Token> COMMA(int i) {
+		    return getToken(TemplateParser.COMMA, i);
+		}
 		public TerminalNode<Token> LBRACK() { return getToken(TemplateParser.LBRACK, 0); }
-		public TerminalNode<Token> COMMA() { return getToken(TemplateParser.COMMA, 0); }
+		public List<? extends TerminalNode<Token>> COMMA() { return getTokens(TemplateParser.COMMA); }
 		public List<? extends ListElementContext> listElement() {
 		    return getRuleContexts(ListElementContext.class);
 		}
