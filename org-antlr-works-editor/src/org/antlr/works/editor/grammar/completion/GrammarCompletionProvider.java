@@ -52,7 +52,7 @@ public class GrammarCompletionProvider extends AbstractCompletionProvider {
     private static final Logger LOGGER = Logger.getLogger(GrammarCompletionProvider.class.getName());
 
     private static String grammarCompletionAutoPopupTriggers = "$";
-    private static String grammarCompletionSelectors = "";
+    private static String grammarCompletionSelectors = " :;[]<>";
 
     @Override
     protected AbstractCompletionQuery createCompletionQuery(int queryType, int caretOffset, boolean extend) {
