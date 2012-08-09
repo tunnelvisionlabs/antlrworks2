@@ -24,13 +24,13 @@ public class TemplateParserCache extends AbstractParserCache<Token, TemplatePars
     @Override
     protected TemplateParser createParser(TokenStream<? extends Token> input) {
         TemplateParser parser = new TemplateParser(input);
-        parser.getInterpreter().disable_global_context = true;
         return parser;
     }
 
     @Override
     public TemplateParser getParser(TokenStream<? extends Token> input) {
         TemplateParser result = super.getParser(input);
+        result.getInterpreter().disable_global_context = false;
         result.removeErrorListeners();
         result.addErrorListener(DescriptiveErrorListener.INSTANCE);
         result.setBuildParseTree(false);

@@ -28,8 +28,11 @@ import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.netbeans.parsing.spi.ParserTaskProvider;
 import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
 import org.antlr.netbeans.parsing.spi.SingletonParserTaskProvider;
+import org.antlr.v4.runtime.BailErrorStrategy;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.DefaultErrorStrategy;
+import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenSource;
 import org.antlr.works.editor.antlr4.classification.DocumentSnapshotCharStream;
@@ -96,9 +99,22 @@ public class CurrentTemplateContextParserTask implements ParserTask {
                 CommonTokenStream tokens = new TaskTokenStream(lexer);
                 TemplateParser parser = TemplateParserCache.DEFAULT.getParser(tokens);
                 try {
+                    parser.getInterpreter().disable_global_context = true;
                     parser.removeErrorListeners();
                     parser.setBuildParseTree(true);
+                    parser.setErrorHandler(new BailErrorStrategy<Token>());
                     ruleContext = parser.group();
+                } catch (RuntimeException ex) {
+                    if (ex.getClass() == RuntimeException.class && ex.getCause() instanceof RecognitionException) {
+                        // retry with default error handler
+                        tokens.reset();
+                        parser.getInterpreter().disable_global_context = false;
+                        parser.setInputStream(tokens);
+                        parser.setErrorHandler(new DefaultErrorStrategy<Token>());
+                        ruleContext = parser.group();
+                    } else {
+                        throw ex;
+                    }
                 } finally {
                     TemplateParserCache.DEFAULT.putParser(parser);
                 }

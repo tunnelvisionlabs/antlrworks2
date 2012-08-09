@@ -81,6 +81,7 @@ public class ReferenceAnchorsParserTask implements ParserTask {
                 ParserRuleContext<Token> parseResult;
                 TemplateParser parser = TemplateParserCache.DEFAULT.getParser(tokenStream);
                 try {
+                    parser.getInterpreter().disable_global_context = true;
                     parser.removeErrorListeners();
                     parser.setBuildParseTree(true);
                     parser.setErrorHandler(new BailErrorStrategy<Token>());
@@ -89,6 +90,7 @@ public class ReferenceAnchorsParserTask implements ParserTask {
                     if (ex.getClass() == RuntimeException.class && ex.getCause() instanceof RecognitionException) {
                         // retry with default error handler
                         tokenStream.reset();
+                        parser.getInterpreter().disable_global_context = false;
                         parser.addErrorListener(DescriptiveErrorListener.INSTANCE);
                         parser.setInputStream(tokenStream);
                         parser.setErrorHandler(new DefaultErrorStrategy<Token>());

@@ -28,8 +28,11 @@ import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.netbeans.parsing.spi.ParserTaskProvider;
 import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
 import org.antlr.netbeans.parsing.spi.SingletonParserTaskProvider;
+import org.antlr.v4.runtime.BailErrorStrategy;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.DefaultErrorStrategy;
+import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenSource;
@@ -97,8 +100,22 @@ public class CurrentRuleContextParserTask implements ParserTask {
                         CommonTokenStream tokens = new TaskTokenStream(lexer);
                         GrammarParser parser = GrammarParserCache.DEFAULT.getParser(tokens);
                         try {
+                            parser.getInterpreter().disable_global_context = true;
+                            parser.removeErrorListeners();
                             parser.setBuildParseTree(true);
+                            parser.setErrorHandler(new BailErrorStrategy<Token>());
                             ruleContext = parser.ruleSpec();
+                        } catch (RuntimeException ex) {
+                            if (ex.getClass() == RuntimeException.class && ex.getCause() instanceof RecognitionException) {
+                                // retry with default error handler
+                                tokens.reset();
+                                parser.getInterpreter().disable_global_context = false;
+                                parser.setInputStream(tokens);
+                                parser.setErrorHandler(new DefaultErrorStrategy<Token>());
+                                ruleContext = parser.ruleSpec();
+                            } else {
+                                throw ex;
+                            }
                         } finally {
                             GrammarParserCache.DEFAULT.putParser(parser);
                         }
