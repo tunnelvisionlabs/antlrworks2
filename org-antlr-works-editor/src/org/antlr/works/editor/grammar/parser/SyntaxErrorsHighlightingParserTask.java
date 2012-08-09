@@ -90,7 +90,10 @@ public class SyntaxErrorsHighlightingParserTask implements ParserTask {
             if (document != null) {
                 HintsController.setErrors(document, "antlr3-syntax", errors);
             } else {
-                HintsController.setErrors(context.getDocument().getFileObject(), "antlr3-syntax", errors);
+                FileObject fileObject = context.getDocument().getFileObject();
+                if (fileObject != null) {
+                    HintsController.setErrors(fileObject, "antlr3-syntax", errors);
+                }
             }
         } catch (RuntimeException ex) {
             Exceptions.printStackTrace(ex);
