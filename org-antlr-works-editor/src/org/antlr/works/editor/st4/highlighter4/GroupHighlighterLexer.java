@@ -182,91 +182,108 @@ public class GroupHighlighterLexer extends AbstractGroupHighlighterLexer {
 
             for (int i = 0; i < state.getNumberOfTransitions(); i++) {
                 Transition t = state.transition(i);
-                Transition updated = null;
-                if (t instanceof RuleTransition) {
-                    continue;
-                } else if (t instanceof AtomTransition) {
-                    AtomTransition atomTransition = (AtomTransition)t;
-                    int newLabel;
-                    if (atomTransition.label == OPEN_DELIMITER_PLACEHOLDER) {
-                        newLabel = openDelimiter;
-                    } else if (atomTransition.label == CLOSE_DELIMITER_PLACEHOLDER) {
-                        newLabel = closeDelimiter;
-                    } else {
-                        continue;
-                    }
-
-                    updated = new AtomTransition(t.target, newLabel);
-                } else if (t instanceof NotSetTransition) {
-                    NotSetTransition notSetTransition = (NotSetTransition)t;
-                    int removeLabel;
-                    int addLabel;
-                    if (notSetTransition.set.contains(OPEN_DELIMITER_PLACEHOLDER)) {
-                        removeLabel = OPEN_DELIMITER_PLACEHOLDER;
-                        addLabel = openDelimiter;
-                    } else if (notSetTransition.set.contains(CLOSE_DELIMITER_PLACEHOLDER)) {
-                        removeLabel = CLOSE_DELIMITER_PLACEHOLDER;
-                        addLabel = closeDelimiter;
-                    } else {
-                        continue;
-                    }
-
-                    IntervalSet set = new IntervalSet(notSetTransition.set);
-                    set.remove(removeLabel);
-                    set.add(addLabel);
-                    set.setReadonly(true);
-
-                    updated = new NotSetTransition(t.target, set);
-                } else if (t instanceof SetTransition) {
-                    SetTransition setTransition = (SetTransition)t;
-                    int removeLabel;
-                    int addLabel;
-                    if (setTransition.set.contains(OPEN_DELIMITER_PLACEHOLDER)) {
-                        removeLabel = OPEN_DELIMITER_PLACEHOLDER;
-                        addLabel = openDelimiter;
-                    } else if (setTransition.set.contains(CLOSE_DELIMITER_PLACEHOLDER)) {
-                        removeLabel = CLOSE_DELIMITER_PLACEHOLDER;
-                        addLabel = closeDelimiter;
-                    } else {
-                        continue;
-                    }
-
-                    IntervalSet set = new IntervalSet(setTransition.set);
-                    set.remove(removeLabel);
-                    set.add(addLabel);
-                    set.setReadonly(true);
-
-                    updated = createSetTransition(t.target, set);
-                } else if (t instanceof RangeTransition) {
-                    RangeTransition rangeTransition = (RangeTransition)t;
-                    int removeLabel;
-                    int addLabel;
-                    if (rangeTransition.from <= OPEN_DELIMITER_PLACEHOLDER && rangeTransition.to >= OPEN_DELIMITER_PLACEHOLDER) {
-                        removeLabel = OPEN_DELIMITER_PLACEHOLDER;
-                        addLabel = openDelimiter;
-                    } else if (rangeTransition.from <= OPEN_DELIMITER_PLACEHOLDER && rangeTransition.to >= OPEN_DELIMITER_PLACEHOLDER) {
-                        removeLabel = CLOSE_DELIMITER_PLACEHOLDER;
-                        addLabel = closeDelimiter;
-                    } else {
-                        continue;
-                    }
-
-                    IntervalSet set = IntervalSet.of(rangeTransition.from, rangeTransition.to);
-                    set.remove(removeLabel);
-                    set.add(addLabel);
-                    set.setReadonly(true);
-
-                    updated = createSetTransition(t.target, set);
-                }
-
+                Transition updated = updateTransition(t, openDelimiter, closeDelimiter);
                 if (updated != null) {
                     state.setTransition(i, updated);
+                }
+            }
+
+            if (!state.isOptimized()) {
+                continue;
+            }
+
+            for (int i = 0; i < state.getNumberOfOptimizedTransitions(); i++) {
+                Transition t = state.getOptimizedTransition(i);
+                Transition updated = updateTransition(t, openDelimiter, closeDelimiter);
+                if (updated != null) {
+                    state.setOptimizedTransition(i, updated);
                 }
             }
         }
 
         delimiterToATN.put(key, atn);
         return atn;
+    }
+
+    private static Transition updateTransition(Transition t, char openDelimiter, char closeDelimiter) {
+        Transition updated = null;
+        if (t instanceof RuleTransition) {
+            return null;
+        } else if (t instanceof AtomTransition) {
+            AtomTransition atomTransition = (AtomTransition)t;
+            int newLabel;
+            if (atomTransition.label == OPEN_DELIMITER_PLACEHOLDER) {
+                newLabel = openDelimiter;
+            } else if (atomTransition.label == CLOSE_DELIMITER_PLACEHOLDER) {
+                newLabel = closeDelimiter;
+            } else {
+                return null;
+            }
+
+            updated = new AtomTransition(t.target, newLabel);
+        } else if (t instanceof NotSetTransition) {
+            NotSetTransition notSetTransition = (NotSetTransition)t;
+            int removeLabel;
+            int addLabel;
+            if (notSetTransition.set.contains(OPEN_DELIMITER_PLACEHOLDER)) {
+                removeLabel = OPEN_DELIMITER_PLACEHOLDER;
+                addLabel = openDelimiter;
+            } else if (notSetTransition.set.contains(CLOSE_DELIMITER_PLACEHOLDER)) {
+                removeLabel = CLOSE_DELIMITER_PLACEHOLDER;
+                addLabel = closeDelimiter;
+            } else {
+                return null;
+            }
+
+            IntervalSet set = new IntervalSet(notSetTransition.set);
+            set.remove(removeLabel);
+            set.add(addLabel);
+            set.setReadonly(true);
+
+            updated = new NotSetTransition(t.target, set);
+        } else if (t instanceof SetTransition) {
+            SetTransition setTransition = (SetTransition)t;
+            int removeLabel;
+            int addLabel;
+            if (setTransition.set.contains(OPEN_DELIMITER_PLACEHOLDER)) {
+                removeLabel = OPEN_DELIMITER_PLACEHOLDER;
+                addLabel = openDelimiter;
+            } else if (setTransition.set.contains(CLOSE_DELIMITER_PLACEHOLDER)) {
+                removeLabel = CLOSE_DELIMITER_PLACEHOLDER;
+                addLabel = closeDelimiter;
+            } else {
+                return null;
+            }
+
+            IntervalSet set = new IntervalSet(setTransition.set);
+            set.remove(removeLabel);
+            set.add(addLabel);
+            set.setReadonly(true);
+
+            updated = createSetTransition(t.target, set);
+        } else if (t instanceof RangeTransition) {
+            RangeTransition rangeTransition = (RangeTransition)t;
+            int removeLabel;
+            int addLabel;
+            if (rangeTransition.from <= OPEN_DELIMITER_PLACEHOLDER && rangeTransition.to >= OPEN_DELIMITER_PLACEHOLDER) {
+                removeLabel = OPEN_DELIMITER_PLACEHOLDER;
+                addLabel = openDelimiter;
+            } else if (rangeTransition.from <= OPEN_DELIMITER_PLACEHOLDER && rangeTransition.to >= OPEN_DELIMITER_PLACEHOLDER) {
+                removeLabel = CLOSE_DELIMITER_PLACEHOLDER;
+                addLabel = closeDelimiter;
+            } else {
+                return null;
+            }
+
+            IntervalSet set = IntervalSet.of(rangeTransition.from, rangeTransition.to);
+            set.remove(removeLabel);
+            set.add(addLabel);
+            set.setReadonly(true);
+
+            updated = createSetTransition(t.target, set);
+        }
+
+        return updated;
     }
 
     private static Transition createSetTransition(ATNState target, IntervalSet set) {

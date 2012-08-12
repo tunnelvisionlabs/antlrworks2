@@ -437,9 +437,8 @@ public abstract class AbstractCompletionQuery extends AsyncCompletionQuery {
                             assert state.transition(0).target instanceof StarLoopEntryState;
                             state = state.transition(0).target;
                         } else if (state instanceof PlusBlockStartState && ((PlusBlockStartState)state).decision == -1) {
-                            state = parser.getATN().states.get(state.stateNumber + 2);
+                            state = ((PlusBlockStartState)state).loopBackState;
                             assert state instanceof PlusLoopbackState;
-                            assert state.transition(0).target.stateNumber == state.stateNumber - 2;
                         }
 
                         if (state instanceof DecisionState) {
