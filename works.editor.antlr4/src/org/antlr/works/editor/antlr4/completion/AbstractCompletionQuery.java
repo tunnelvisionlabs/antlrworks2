@@ -447,7 +447,11 @@ public abstract class AbstractCompletionQuery extends AsyncCompletionQuery {
                                 LOGGER.log(Level.FINE, "No decision number found for state {0}.", state.stateNumber);
                             }
                         } else {
-                            LOGGER.log(Level.FINE, "No decision number found for state {0}.", state.stateNumber);
+                            if (state != null) {
+                                LOGGER.log(Level.FINE, "No decision number found for state {0}.", state.stateNumber);
+                            } else {
+                                LOGGER.log(Level.FINE, "No decision number found for state <null>.");
+                            }
                             // continuing is likely to never terminate
                             return;
                         }
