@@ -122,7 +122,7 @@ public class CodeCompletionErrorStrategy<Symbol extends Token> extends DefaultEr
 
             if (!state.onlyHasEpsilonTransitions()) {
                 for (int i = 0; i < state.getNumberOfTransitions(); i++) {
-                    closure.add(ATNConfig.create(state, 1, PredictionContext.fromRuleContext(recognizer.getContext())));
+                    closure.add(ATNConfig.create(state, i + 1, PredictionContext.fromRuleContext(recognizer.getContext())));
                 }
             }
 
