@@ -58,7 +58,6 @@ import org.antlr.works.editor.antlr4.completion.AbstractCompletionQuery;
 import org.antlr.works.editor.antlr4.completion.CaretReachedException;
 import org.antlr.works.editor.antlr4.completion.CaretToken;
 import org.antlr.works.editor.antlr4.completion.CodeCompletionErrorStrategy;
-import org.antlr.works.editor.antlr4.completion.CodeCompletionParser;
 import org.antlr.works.editor.antlr4.completion.CodeCompletionTokenSource;
 import org.antlr.works.editor.antlr4.parsing.ParseTrees;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
@@ -188,7 +187,7 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
 
                     switch (previous.getRule()) {
                     case GrammarParser.RULE_ruleSpec:
-                        parseTrees = getParseTrees(parser);
+                        parseTrees = GrammarForestParser.INSTANCE.getParseTrees(parser);
                         break;
 
                     default:
@@ -694,11 +693,6 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
             }
 
             return applicableToSpan;
-        }
-
-        @Override
-        protected RuleContext<Token> parseImpl(CodeCompletionParser parser) {
-            return ((CodeCompletionGrammarParser)parser).rules();
         }
 
     }
