@@ -87,6 +87,7 @@ public abstract class AbstractCompletionParserATNSimulator extends ParserATNSimu
         _startIndex = input.index();
         _outerContext = outerContext;
         _nextState = null;
+        caretTransitions = null;
 
         if (decisionPoints != null) {
             int index = input.index();

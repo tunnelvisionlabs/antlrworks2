@@ -117,7 +117,7 @@ public abstract class AbstractForestParser implements ForestParser {
 
                     if (state instanceof DecisionState) {
                         decisionData.decision = ((DecisionState)state).decision;
-                        if (decisionData.decision <= 0) {
+                        if (decisionData.decision < 0) {
                             LOGGER.log(Level.FINE, "No decision number found for state {0}.", state.stateNumber);
                         }
                     } else {
@@ -130,6 +130,9 @@ public abstract class AbstractForestParser implements ForestParser {
                         return;
                     }
                 }
+
+                assert alts.getMinElement() >= 1;
+                assert alts.getMaxElement() <= parser.getATN().decisionToState.get(decisionData.decision).getNumberOfTransitions();
                 decisionData.alternatives = alts.toArray();
                 potentialAlternatives.add(decisionData);
                 currentPath.add(-1);
