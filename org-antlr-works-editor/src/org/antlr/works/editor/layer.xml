@@ -380,6 +380,13 @@
                             <attr name="position" intvalue="100"/>
                         </file>
                     </folder>
+                    <folder name="x-stringtemplate4">
+                        <file name="TabsAndIndents.instance">
+                            <attr name="instanceOf" stringvalue="org.netbeans.modules.options.editor.spi.PreferencesCustomizer$Factory"/>
+                            <attr name="instanceCreate" methodvalue="org.antlr.works.editor.st4.formatting.ui.FormatTabsIndents.getController"/>
+                            <attr name="position" intvalue="100"/>
+                        </file>
+                    </folder>
                 </folder>
             </folder>
         </folder>
