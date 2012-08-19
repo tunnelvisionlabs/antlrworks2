@@ -9,6 +9,7 @@
 package org.antlr.works.editor.grammar.formatting;
 
 import java.util.prefs.Preferences;
+import org.antlr.netbeans.editor.formatting.CategorySupport;
 import org.antlr.netbeans.editor.formatting.FormatOptions;
 
 /**
@@ -18,6 +19,17 @@ import org.antlr.netbeans.editor.formatting.FormatOptions;
 public class GrammarFormatOptions extends FormatOptions {
 
     public static CodeStyleFactory codeStyleFactory;
+
+    public static final CategorySupport.PreviewFormatter PREVIEW_FORMATTER =
+        new CategorySupport.PreviewFormatter() {
+
+        @Override
+        public String reformat(String text, Preferences preferences) {
+            //GrammarCodeStyle codeStyle = codeStyleFactory.create(preferences);
+            //return GrammarReformatTask.reformat(text, codeStyle);
+            return text;
+        }
+    };
 
     public static interface CodeStyleFactory {
         public GrammarCodeStyle create(Preferences preferences);

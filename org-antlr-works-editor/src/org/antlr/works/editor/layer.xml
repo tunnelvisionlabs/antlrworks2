@@ -370,6 +370,19 @@
                 <file name="x-stringtemplate4" url="st4/StringTemplateFileTypeTemplate.stg"/>
             </folder>
         </folder>
+        <folder name="Editor">
+            <folder name="Formatting">
+                <folder name="text">
+                    <folder name="x-antlr3">
+                        <file name="TabsAndIndents.instance">
+                            <attr name="instanceOf" stringvalue="org.netbeans.modules.options.editor.spi.PreferencesCustomizer$Factory"/>
+                            <attr name="instanceCreate" methodvalue="org.antlr.works.editor.grammar.formatting.ui.FormatTabsIndents.getController"/>
+                            <attr name="position" intvalue="100"/>
+                        </file>
+                    </folder>
+                </folder>
+            </folder>
+        </folder>
     </folder>
     <folder name="Services">
         <folder name="MIMEResolver">
