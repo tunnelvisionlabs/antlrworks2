@@ -52,9 +52,9 @@ public abstract class AbstractForestParser implements ForestParser {
             }
         }
 
-        if (LOGGER.isLoggable(Level.FINE)) {
+        if (LOGGER.isLoggable(Level.FINEST)) {
             for (Map.Entry<RuleContext<Token>, CaretReachedException> entry : results.entrySet()) {
-                LOGGER.log(Level.FINE, entry.getKey().toStringTree((Parser)parser));
+                LOGGER.log(Level.FINEST, entry.getKey().toStringTree((Parser)parser));
             }
         }
 
@@ -118,13 +118,13 @@ public abstract class AbstractForestParser implements ForestParser {
                     if (state instanceof DecisionState) {
                         decisionData.decision = ((DecisionState)state).decision;
                         if (decisionData.decision < 0) {
-                            LOGGER.log(Level.FINE, "No decision number found for state {0}.", state.stateNumber);
+                            LOGGER.log(Level.WARNING, "No decision number found for state {0}.", state.stateNumber);
                         }
                     } else {
                         if (state != null) {
-                            LOGGER.log(Level.FINE, "No decision number found for state {0}.", state.stateNumber);
+                            LOGGER.log(Level.WARNING, "No decision number found for state {0}.", state.stateNumber);
                         } else {
-                            LOGGER.log(Level.FINE, "No decision number found for state <null>.");
+                            LOGGER.log(Level.WARNING, "No decision number found for state <null>.");
                         }
                         // continuing is likely to never terminate
                         return;
