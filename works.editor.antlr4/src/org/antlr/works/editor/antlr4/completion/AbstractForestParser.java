@@ -52,6 +52,8 @@ public abstract class AbstractForestParser implements ForestParser {
             }
         }
 
+        LOGGER.log(Level.FINE, "Forest parser constructed {0} parse trees.", results.size());
+
         if (LOGGER.isLoggable(Level.FINEST)) {
             for (Map.Entry<RuleContext<Token>, CaretReachedException> entry : results.entrySet()) {
                 LOGGER.log(Level.FINEST, entry.getKey().toStringTree((Parser)parser));
