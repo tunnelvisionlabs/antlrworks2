@@ -217,6 +217,7 @@
                 <package>org.antlr.netbeans.editor.commenting</package>
                 <package>org.antlr.netbeans.editor.completion</package>
                 <package>org.antlr.netbeans.editor.fold</package>
+                <package>org.antlr.netbeans.editor.formatting</package>
                 <package>org.antlr.netbeans.editor.highlighting</package>
                 <package>org.antlr.netbeans.editor.navigation</package>
                 <package>org.antlr.netbeans.editor.navigation.actions</package>
