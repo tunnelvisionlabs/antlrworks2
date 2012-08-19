@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 import org.antlr.v4.runtime.FailedPredicateException;
 import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.RecognitionException;
+import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.atn.ATNConfig;
@@ -98,8 +99,23 @@ public abstract class AbstractForestParser implements ForestParser {
 
             if (ex.getCause() != null) {
                 IntervalSet alts = new IntervalSet();
+                IntervalSet semanticAlts = new IntervalSet();
                 for (ATNConfig c : ex.getTransitions().keySet()) {
+                    if (semanticAlts.contains(c.getAlt())) {
+                        continue;
+                    }
+
                     alts.add(c.getAlt());
+
+                    @SuppressWarnings("unchecked")
+                    Recognizer<Token, ?> recognizer = parser instanceof Recognizer ? (Recognizer<Token, ?>)parser : null;
+                    if (recognizer == null || c.getSemanticContext().eval(recognizer, ex.getFinalContext())) {
+                        semanticAlts.add(c.getAlt());
+                    }
+                }
+
+                if (alts.size() != semanticAlts.size()) {
+                    LOGGER.log(Level.FINER, "Forest decision {0} reduced to {1} by predicate evaluation.", new Object[] { alts, semanticAlts });
                 }
 
                 MultipleDecisionData decisionData = new MultipleDecisionData();
@@ -133,9 +149,9 @@ public abstract class AbstractForestParser implements ForestParser {
                     }
                 }
 
-                assert alts.getMinElement() >= 1;
-                assert alts.getMaxElement() <= parser.getATN().decisionToState.get(decisionData.decision).getNumberOfTransitions();
-                decisionData.alternatives = alts.toArray();
+                assert semanticAlts.getMinElement() >= 1;
+                assert semanticAlts.getMaxElement() <= parser.getATN().decisionToState.get(decisionData.decision).getNumberOfTransitions();
+                decisionData.alternatives = semanticAlts.toArray();
                 potentialAlternatives.add(decisionData);
                 currentPath.add(-1);
             }
