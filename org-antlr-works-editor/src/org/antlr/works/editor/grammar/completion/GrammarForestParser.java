@@ -17,7 +17,7 @@ import org.antlr.works.editor.antlr4.completion.CodeCompletionParser;
  *
  * @author Sam Harwell
  */
-class GrammarForestParser extends AbstractForestParser {
+public class GrammarForestParser extends AbstractForestParser {
     public static final GrammarForestParser INSTANCE = new GrammarForestParser();
 
     protected GrammarForestParser() {
