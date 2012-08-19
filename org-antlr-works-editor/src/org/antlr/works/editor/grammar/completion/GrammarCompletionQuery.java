@@ -79,8 +79,6 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
     // -J-Dorg.antlr.works.editor.grammar.completion.GrammarCompletionQuery.level=FINE
     private static final Logger LOGGER = Logger.getLogger(GrammarCompletionQuery.class.getName());
 
-    private static final ParserCache parserCache = new ParserCache();
-
     private boolean possibleReference;
     private boolean possibleKeyword;
 
@@ -178,7 +176,7 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
                 TokenSource<Token> tokenSource = new CodeCompletionTokenSource(getCaretOffset(), taggerTokenSource);
                 CommonTokenStream tokens = new CommonTokenStream(tokenSource);
 
-                CodeCompletionGrammarParser parser = parserCache.getParser(tokens);
+                CodeCompletionGrammarParser parser = ParserCache.DEFAULT.getParser(tokens);
                 ATN atn = null;
                 try {
                     parser.setBuildParseTree(true);
@@ -195,7 +193,7 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
                         break;
                     }
                 } finally {
-                    parserCache.putParser(parser);
+                    ParserCache.DEFAULT.putParser(parser);
                 }
 
                 boolean hasActionConfig = false;

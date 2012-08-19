@@ -17,6 +17,10 @@ import org.antlr.works.editor.antlr4.completion.AbstractParserCache;
  * @author Sam Harwell
  */
 public class ParserCache extends AbstractParserCache<Token, CodeCompletionGrammarParser> {
+    public static final ParserCache DEFAULT = new ParserCache();
+
+    private ParserCache() {
+    }
 
     @Override
     protected CodeCompletionGrammarParser createParser(TokenStream<? extends Token> input) {
