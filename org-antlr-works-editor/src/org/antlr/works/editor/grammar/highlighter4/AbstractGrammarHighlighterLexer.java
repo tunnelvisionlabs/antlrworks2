@@ -107,9 +107,6 @@ public abstract class AbstractGrammarHighlighterLexer extends Lexer {
 	@Override
 	public String[] getModeNames() { return modeNames; }
 
-	@Override
-	public ATN getATN() { return _ATN; }
-
 
 	@Override
 	public void action(RuleContext<Integer> _localctx, int ruleIndex, int actionIndex) {

@@ -113,9 +113,6 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 	@Override
 	public String[] getRuleNames() { return ruleNames; }
 
-	@Override
-	public ATN getATN() { return _ATN; }
-
 	public AbstractGrammarParser(TokenStream<? extends Token> input) {
 		super(input);
 		_interp = new ParserATNSimulator<Token>(this,_ATN);

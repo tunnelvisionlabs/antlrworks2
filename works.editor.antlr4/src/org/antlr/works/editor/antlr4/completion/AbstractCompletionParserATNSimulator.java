@@ -53,7 +53,6 @@ public abstract class AbstractCompletionParserATNSimulator extends ParserATNSimu
     private TokenStream<? extends Token> _input;
     private int _startIndex;
     private ParserRuleContext<Token> _outerContext;
-    private SimulatorState<Token> _nextState;
 
     public AbstractCompletionParserATNSimulator(@NonNull Parser<Token> parser, ATN atn) {
         super(parser, atn);
@@ -86,7 +85,6 @@ public abstract class AbstractCompletionParserATNSimulator extends ParserATNSimu
         _input = input;
         _startIndex = input.index();
         _outerContext = outerContext;
-        _nextState = null;
         caretTransitions = null;
 
         if (decisionPoints != null) {
@@ -108,7 +106,7 @@ public abstract class AbstractCompletionParserATNSimulator extends ParserATNSimu
         int t = _input.LA(1);
         if (t == CaretToken.CARET_TOKEN_TYPE) {
             caretToken = (CaretToken)_input.LT(1);
-            throw noViableAlt(_input, _outerContext, _nextState.s0.configset, _startIndex);
+            throw noViableAlt(_input, _outerContext, (ATNConfigSet)configs, _startIndex);
         }
 
         return result;
@@ -117,12 +115,6 @@ public abstract class AbstractCompletionParserATNSimulator extends ParserATNSimu
     @Override
     protected void closure(ATNConfigSet sourceConfigs, ATNConfigSet configs, boolean collectPredicates, boolean greedy, boolean loopsSimulateTailRecursion, boolean hasMoreContext, PredictionContextCache contextCache) {
         super.closure(sourceConfigs, configs, collectPredicates, greedy, loopsSimulateTailRecursion, hasMoreContext, contextCache);
-    }
-
-    @Override
-    protected SimulatorState<Token> computeReachSet(DFA dfa, SimulatorState<Token> previous, int t, boolean greedy, PredictionContextCache contextCache) {
-        _nextState = super.computeReachSet(dfa, previous, t, greedy, contextCache);
-        return _nextState;
     }
 
     protected abstract IntervalSet getWordlikeTokenTypes();

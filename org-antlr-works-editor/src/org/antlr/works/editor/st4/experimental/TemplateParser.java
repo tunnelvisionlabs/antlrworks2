@@ -74,9 +74,6 @@ public class TemplateParser extends Parser<Token> {
 	@Override
 	public String[] getRuleNames() { return ruleNames; }
 
-	@Override
-	public ATN getATN() { return _ATN; }
-
 	public TemplateParser(TokenStream<? extends Token> input) {
 		super(input);
 		_interp = new ParserATNSimulator<Token>(this,_ATN);
