@@ -530,10 +530,8 @@ lexerAltList
 	;
 
 lexerAlt
-	:	lexerElements
-		(	lexerCommands
-		|
-		)
+@version{1}
+	:	lexerElements? lexerCommands?
 	;
 
 lexerElements
@@ -541,18 +539,9 @@ lexerElements
     ;
 
 lexerElement
-	:	labeledLexerElement
-		(	ebnfSuffix
-		|
-		)
-	|	lexerAtom
-		(	ebnfSuffix
-		|
-		)
-	|	lexerBlock
-		(	ebnfSuffix
-		|
-		)
+	:	labeledLexerElement ebnfSuffix?
+	|	lexerAtom ebnfSuffix?
+	|	lexerBlock ebnfSuffix?
 	|	actionBlock QUESTION? // actions only allowed at end of outer alt actually,
                               // but preds can be anywhere
 	;

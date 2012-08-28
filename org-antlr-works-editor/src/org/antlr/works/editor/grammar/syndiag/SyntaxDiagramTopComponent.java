@@ -363,7 +363,7 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
         }
 
         @Override
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerAlt, version=0)
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerAlt, version=1)
         public void enterLexerAlt(LexerAltContext ctx) {
             enterAlternative();
         }
@@ -375,7 +375,7 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
         }
 
         @Override
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerAlt, version=0)
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerAlt, version=1)
         public void exitLexerAlt(LexerAltContext ctx) {
             exitAlternative();
         }
