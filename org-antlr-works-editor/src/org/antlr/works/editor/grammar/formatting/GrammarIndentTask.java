@@ -37,6 +37,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenSource;
+import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.RuleNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
@@ -211,7 +212,7 @@ public class GrammarIndentTask implements IndentTask {
                     continue;
                 }
 
-                int indentationLevel = getIndent(firstNodeOnLine);
+                int indentationLevel = getIndent(firstNodeOnLine, context.lineStartOffset(context.endOffset()));
 
                 List<Map.Entry<RuleContext<Token>, CaretReachedException>> indentList =
                     indentLevels.get(indentationLevel);
@@ -400,15 +401,9 @@ public class GrammarIndentTask implements IndentTask {
         return codeStyle;
     }
 
-    private int getIndent(final ParseTree<Token> firstNodeOnLine) throws BadLocationException {
-        int nodeLineStart = -1;
-
+    private int getIndent(final ParseTree<Token> firstNodeOnLine, int lineStartOffset) throws BadLocationException {
         for (ParseTree<Token> current = firstNodeOnLine; current != null; current = current.getParent()) {
             if (current instanceof TerminalNode) {
-                if (nodeLineStart == -1) {
-                    nodeLineStart = context.lineStartOffset(((TerminalNode<Token>)current).getSymbol().getStartIndex());
-                }
-
                 continue;
             }
 
@@ -417,10 +412,6 @@ public class GrammarIndentTask implements IndentTask {
             }
 
             ParserRuleContext<Token> ruleContext = (ParserRuleContext<Token>)((RuleNode<Token>)current).getRuleContext();
-            if (nodeLineStart == -1) {
-                nodeLineStart = context.lineStartOffset(ruleContext.start.getStartIndex());
-            }
-
             switch (ruleContext.getRuleIndex()) {
             case GrammarParser.RULE_parserRuleSpec:
             {
@@ -432,14 +423,14 @@ public class GrammarIndentTask implements IndentTask {
                 // get the indent of the line where the block starts
                 int blockLineOffset = context.lineStartOffset(ruleContext.start.getStartIndex());
                 int blockIndent = context.lineIndent(blockLineOffset);
-                if (nodeLineStart == blockLineOffset) {
+                if (lineStartOffset == blockLineOffset) {
                     return blockIndent;
                 }
 
                 // get the indent of the line where the colon is
                 int colonLineOffset = context.lineStartOffset(colon.getSymbol().getStartIndex());
                 int colonIndent = context.lineIndent(colonLineOffset);
-                if (nodeLineStart == colonLineOffset) {
+                if (lineStartOffset == colonLineOffset) {
                     if (firstNodeOnLine != colon) {
                         continue;
                     }
@@ -447,7 +438,16 @@ public class GrammarIndentTask implements IndentTask {
                     return blockIndent + getCodeStyle().getIndentSize();
                 }
 
-                return colonIndent;
+                //int effectiveIndent = (colonLineOffset == blockLineOffset) ? blockLineOffset
+                if (firstNodeOnLine instanceof TerminalNode) {
+                    // indent + 1 unless the new line is a new alt or end of rule
+                    int firstType = ((TerminalNode<Token>)firstNodeOnLine).getSymbol().getType();
+                    if (firstType == GrammarParser.OR || firstType == GrammarParser.SEMI) {
+                        return colonIndent;
+                    }
+                }
+
+                return colonIndent + getCodeStyle().getIndentSize();
             }
 
             case GrammarParser.RULE_lexerRule:
@@ -460,14 +460,14 @@ public class GrammarIndentTask implements IndentTask {
                 // get the indent of the line where the block starts
                 int blockLineOffset = context.lineStartOffset(ruleContext.start.getStartIndex());
                 int blockIndent = context.lineIndent(blockLineOffset);
-                if (nodeLineStart == blockLineOffset) {
+                if (lineStartOffset == blockLineOffset) {
                     return blockIndent;
                 }
 
                 // get the indent of the line where the colon is
                 int colonLineOffset = context.lineStartOffset(colon.getSymbol().getStartIndex());
                 int colonIndent = context.lineIndent(colonLineOffset);
-                if (nodeLineStart == colonLineOffset) {
+                if (lineStartOffset == colonLineOffset) {
                     if (firstNodeOnLine != colon) {
                         continue;
                     }
@@ -483,7 +483,7 @@ public class GrammarIndentTask implements IndentTask {
                 // get the indent of the line where the block starts
                 int blockLineOffset = context.lineStartOffset(ruleContext.start.getStartIndex());
                 int blockIndent = context.lineIndent(blockLineOffset);
-                if (nodeLineStart == blockLineOffset) {
+                if (lineStartOffset == blockLineOffset) {
                     return blockIndent;
                 }
 
@@ -494,6 +494,10 @@ public class GrammarIndentTask implements IndentTask {
             case GrammarParser.RULE_optionsSpec:
             {
                 TerminalNode<Token> firstToken = ParseTrees.getStartNode(ruleContext);
+                if (firstToken == null || firstToken.getSymbol() == null) {
+                    continue;
+                }
+
                 if (firstToken.getSymbol().getType() != GrammarParser.TOKENS && firstToken.getSymbol().getType() != GrammarParser.OPTIONS) {
                     continue;
                 }
@@ -501,13 +505,13 @@ public class GrammarIndentTask implements IndentTask {
                 // get the indent of the line where the block starts
                 int blockLineOffset = context.lineStartOffset(ruleContext.start.getStartIndex());
                 int blockIndent = context.lineIndent(blockLineOffset);
-                if (nodeLineStart == blockLineOffset) {
+                if (lineStartOffset == blockLineOffset) {
                     return blockIndent;
                 }
 
                 // find the line with the brace
                 int braceLineOffset = context.lineStartOffset(firstToken.getSymbol().getStopIndex() + 1);
-                if (nodeLineStart <= braceLineOffset) {
+                if (lineStartOffset <= braceLineOffset) {
                     return blockIndent;
                 }
 
@@ -519,6 +523,44 @@ public class GrammarIndentTask implements IndentTask {
                 }
 
                 return blockIndent + getCodeStyle().getIndentSize();
+            }
+
+            case GrammarParser.RULE_lexerBlock:
+            case GrammarParser.RULE_blockSet:
+            case GrammarParser.RULE_block:
+            {
+                TerminalNode<Token> lparen = ruleContext.getToken(GrammarParser.LPAREN, 0);
+                if (lparen == null) {
+                    continue;
+                }
+
+                // get the indent of the line containing the (
+                int parenLineOffset = context.lineStartOffset(lparen.getSymbol().getStartIndex());
+                int parenLineIndent = context.lineIndent(parenLineOffset);
+                if (lineStartOffset == parenLineOffset) {
+                    return parenLineIndent;
+                }
+
+                // get the indent of the paren character itself
+                String beginningOfLineText = lparen.getSymbol().getTokenSource().getInputStream().getText(new Interval(lparen.getSymbol().getStartIndex() - lparen.getSymbol().getCharPositionInLine(), lparen.getSymbol().getStartIndex() - 1));
+                int parenIndent = 0;
+                for (int i = 0; i < beginningOfLineText.length(); i++) {
+                    if (beginningOfLineText.charAt(i) == '\t') {
+                        parenIndent = getCodeStyle().getIndentSize() * (parenIndent / getCodeStyle().getIndentSize() + 1);
+                    } else {
+                        parenIndent++;
+                    }
+                }
+
+                if (firstNodeOnLine instanceof TerminalNode) {
+                    // indent + 1 unless the new line is a new alt or end of block
+                    int firstType = ((TerminalNode<Token>)firstNodeOnLine).getSymbol().getType();
+                    if (firstType == GrammarParser.OR || firstType == GrammarParser.RPAREN) {
+                        return parenIndent;
+                    }
+                }
+
+                return parenIndent + getCodeStyle().getIndentSize();
             }
 
             default:
