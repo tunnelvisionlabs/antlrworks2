@@ -164,7 +164,22 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
             int grammarType = anchors.getGrammarType();
             final Anchor previous = anchors.getPrevious();
 
+            GrammarForestParser forestParser;
             if (previous != null) {
+                switch (previous.getRule()) {
+                case GrammarParser.RULE_ruleSpec:
+                    forestParser = GrammarForestParser.RULES;
+                    break;
+
+                default:
+                    forestParser = null;
+                    break;
+                }
+            } else {
+                forestParser = GrammarForestParser.GRAMMAR_SPEC;
+            }
+
+            if (forestParser != null) {
                 Tagger<TokenTag<Token>> tagger = getTagger(taskManager, snapshot);
 
                 final OffsetRegion region = getParseRegion(snapshot, anchors);
@@ -182,16 +197,7 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
                     parser.setBuildParseTree(true);
                     parser.setErrorHandler(new CodeCompletionErrorStrategy<Token>());
                     atn = parser.getATN();
-
-                    switch (previous.getRule()) {
-                    case GrammarParser.RULE_ruleSpec:
-                        parseTrees = GrammarForestParser.INSTANCE.getParseTrees(parser);
-                        break;
-
-                    default:
-                        parseTrees = null;
-                        break;
-                    }
+                    parseTrees = forestParser.getParseTrees(parser);
                 } finally {
                     ParserCache.DEFAULT.putParser(parser);
                 }
@@ -419,8 +425,10 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
             OffsetRegion region;
             if (anchors.getEnclosing() != null) {
                 region = OffsetRegion.fromBounds(anchors.getEnclosing().getSpan().getStartPosition(snapshot).getOffset(), regionEnd);
-            } else {
+            } else if (anchors.getPrevious() != null) {
                 region = OffsetRegion.fromBounds(anchors.getPrevious().getSpan().getEndPosition(snapshot).getOffset(), regionEnd);
+            } else {
+                region = OffsetRegion.fromBounds(0, regionEnd);
             }
 
             return region;

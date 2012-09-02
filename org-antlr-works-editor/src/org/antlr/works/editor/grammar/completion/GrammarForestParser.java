@@ -11,20 +11,43 @@ package org.antlr.works.editor.grammar.completion;
 import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.works.editor.antlr4.completion.AbstractForestParser;
+import org.antlr.works.editor.grammar.experimental.GrammarParser;
 
 /**
  *
  * @author Sam Harwell
  */
 public class GrammarForestParser extends AbstractForestParser<CodeCompletionGrammarParser> {
-    public static final GrammarForestParser INSTANCE = new GrammarForestParser();
+    public static final GrammarForestParser RULES = new GrammarForestParser(GrammarParser.RULE_rules);
+    public static final GrammarForestParser GRAMMAR_SPEC = new GrammarForestParser(GrammarParser.RULE_grammarSpec);
 
-    protected GrammarForestParser() {
+    private final int _startRule;
+
+    protected GrammarForestParser(int startRule) {
+        switch (startRule) {
+        case GrammarParser.RULE_rules:
+        case GrammarParser.RULE_grammarSpec:
+            break;
+
+        default:
+            throw new IllegalArgumentException("Unknown start rule.");
+        }
+
+        _startRule = startRule;
     }
 
     @Override
     protected RuleContext<Token> parseImpl(CodeCompletionGrammarParser parser) {
-        return parser.rules();
+        switch (_startRule) {
+        case GrammarParser.RULE_rules:
+            return parser.rules();
+
+        case GrammarParser.RULE_grammarSpec:
+            return parser.grammarSpec();
+
+        default:
+            throw new UnsupportedOperationException();
+        }
     }
 
 }

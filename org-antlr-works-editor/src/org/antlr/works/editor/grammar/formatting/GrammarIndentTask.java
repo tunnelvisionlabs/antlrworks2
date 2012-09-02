@@ -145,10 +145,6 @@ public class GrammarIndentTask implements IndentTask {
         int grammarType = anchors.getGrammarType();
         final Anchor previous = anchors.getPrevious();
 
-        if (previous == null) {
-            return false;
-        }
-
         Future<ParserData<Tagger<TokenTag<Token>>>> futureTokensData = taskManager.getData(snapshot, GrammarParserDataDefinitions.LEXER_TOKENS, EnumSet.of(ParserDataOptions.SYNCHRONOUS));
         Tagger<TokenTag<Token>> tagger = null;
         try {
@@ -163,9 +159,11 @@ public class GrammarIndentTask implements IndentTask {
         OffsetRegion region;
         if (anchors.getEnclosing() != null) {
             region = OffsetRegion.fromBounds(anchors.getEnclosing().getSpan().getStartPosition(snapshot).getOffset(), regionEnd);
-        } else {
+        } else if (previous != null) {
             // at least for now, include the previous span due to the way error handling places bounds on an anchor
             region = OffsetRegion.fromBounds(previous.getSpan().getStartPosition(snapshot).getOffset(), regionEnd);
+        } else {
+            region = OffsetRegion.fromBounds(0, regionEnd);
         }
 
         if (LOGGER.isLoggable(Level.FINE)) {
@@ -182,16 +180,25 @@ public class GrammarIndentTask implements IndentTask {
             parser.setBuildParseTree(true);
             parser.setErrorHandler(new CodeCompletionErrorStrategy<Token>());
 
-            switch (previous.getRule()) {
-            case GrammarParser.RULE_ruleSpec:
-                parseTrees = GrammarForestParser.INSTANCE.getParseTrees(parser);
-                break;
+            GrammarForestParser forestParser;
+            if (previous != null) {
+                switch (previous.getRule()) {
+                case GrammarParser.RULE_ruleSpec:
+                    forestParser = GrammarForestParser.RULES;
+                    break;
 
-            default:
-                parseTrees = null;
-                break;
+                default:
+                    forestParser = null;
+                }
+            } else {
+                forestParser = GrammarForestParser.GRAMMAR_SPEC;
             }
 
+            if (forestParser == null) {
+                return false;
+            }
+            
+            parseTrees = forestParser.getParseTrees(parser);
             if (parseTrees == null) {
                 return false;
             }
