@@ -1,5 +1,0 @@
-Manifest-Version: 1.0
-OpenIDE-Module: org.antlr.works.utilities.openfile
-OpenIDE-Module-Localizing-Bundle: org/antlr/works/utilities/openfile/Bundle.properties
-OpenIDE-Module-Specification-Version: 1.0
-

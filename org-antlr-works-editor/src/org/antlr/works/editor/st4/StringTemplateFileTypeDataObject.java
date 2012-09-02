@@ -28,7 +28,8 @@ import org.openide.windows.TopComponent;
     position=100,
     displayName="#StringTemplateResolver",
     extension={"st", "stg"},
-    mimeType=StringTemplateEditorKit.TEMPLATE_MIME_TYPE)
+    mimeType=StringTemplateEditorKit.TEMPLATE_MIME_TYPE,
+    showInFileChooser="#StringTemplateResolver")
 public class StringTemplateFileTypeDataObject extends MultiDataObject {
 
     public StringTemplateFileTypeDataObject(FileObject pf, MultiFileLoader loader) throws DataObjectExistsException, IOException {
