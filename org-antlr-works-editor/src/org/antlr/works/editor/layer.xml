@@ -355,13 +355,6 @@
                         <attr name="position" intvalue="1200"/>
                     </file>
                 </folder>
-                <folder name="Factories">
-                    <file name="StringTemplateFileTypeDataLoader.instance">
-                        <attr name="dataObjectClass" stringvalue="org.antlr.works.editor.st4.StringTemplateFileTypeDataObject"/>
-                        <attr name="instanceCreate" methodvalue="org.openide.loaders.DataLoaderPool.factory"/>
-                        <attr name="mimeType" stringvalue="text/x-stringtemplate4"/>
-                    </file>
-                </folder>
             </folder>
         </folder>
     </folder>
@@ -391,14 +384,6 @@
                     </folder>
                 </folder>
             </folder>
-        </folder>
-    </folder>
-    <folder name="Services">
-        <folder name="MIMEResolver">
-            <file name="StringTemplateFileTypeResolver.xml" url="st4/StringTemplateFileTypeResolver.xml">
-                <attr name="displayName" bundlevalue="org.antlr.works.editor.Bundle#Services/MIMEResolver/StringTemplateFileTypeResolver.xml"/>
-                <attr name="position" intvalue="102"/>
-            </file>
         </folder>
     </folder>
     <folder name="Templates">
