@@ -51,6 +51,7 @@ import org.netbeans.lib.editor.util.ListenerList;
 import org.openide.filesystems.FileObject;
 import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
+import org.openide.util.NbBundle;
 import org.openide.util.Parameters;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -58,6 +59,10 @@ import org.openide.util.lookup.ServiceProvider;
  *
  * @author Sam Harwell
  */
+@NbBundle.Messages({
+    "taskFailedException=Task execution failed with exception.",
+    "taskFailedError=Task execution failed with error.",
+})
 @ServiceProvider(service=ParserTaskManager.class)
 public class ParserTaskManagerImpl implements ParserTaskManager {
     // -J-Dorg.antlr.netbeans.parsing.spi.impl.ParserTaskManagerImpl.level=FINE
@@ -161,6 +166,7 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
             }
         }
 
+        callable = decorateCallable(callable);
         return lowPriorityExecutor.schedule(callable, 0, TimeUnit.NANOSECONDS);
     }
 
@@ -247,6 +253,7 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
     @Override
     public <T> ScheduledFuture<ParserData<T>> scheduleData(ParseContext context, ParserDataDefinition<T> data, long delay, TimeUnit timeUnit) {
         Callable<ParserData<T>> callable = createCallable(context, data);
+        callable = decorateCallable(callable);
         return lowPriorityExecutor.schedule(callable, delay, timeUnit);
     }
 
@@ -278,6 +285,7 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
     @Override
     public ScheduledFuture<Collection<? extends ParserData<?>>> scheduleTask(@NonNull ParseContext context, @NonNull ParserTaskProvider provider, long delay, @NonNull TimeUnit timeUnit) {
         Callable<Collection<? extends ParserData<?>>> callable = createCallable(context, provider);
+        callable = decorateCallable(callable);
         return lowPriorityExecutor.schedule(callable, delay, timeUnit);
     }
 
@@ -299,6 +307,7 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
     public <T> ScheduledFuture<T> scheduleLowPriority(Callable<T> callable) {
         Parameters.notNull("callable", callable);
 
+        callable = decorateCallable(callable);
         return lowPriorityExecutor.schedule(callable, 0, TimeUnit.MILLISECONDS);
     }
 
@@ -306,7 +315,30 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
     public <T> ScheduledFuture<T> scheduleHighPriority(Callable<T> callable) {
         Parameters.notNull("callable", callable);
 
+        callable = decorateCallable(callable);
         return highPriorityExecutor.schedule(callable, 0, TimeUnit.MILLISECONDS);
+    }
+
+    protected <T> Callable<T> decorateCallable(@NonNull final Callable<T> callable) {
+        if (callable instanceof UpdateCallable) {
+            return callable;
+        }
+
+        return new Callable<T>() {
+
+            @Override
+            public T call() throws Exception {
+                try {
+                    return callable.call();
+                } catch (Exception ex) {
+                    LOGGER.log(Level.WARNING, Bundle.taskFailedException(), ex);
+                    throw ex;
+                } catch (Error ex) {
+                    LOGGER.log(Level.WARNING, Bundle.taskFailedException(), ex);
+                    throw ex;
+                }
+            }
+        };
     }
 
     @Override
@@ -589,6 +621,22 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
             this.outer = outer;
             this.context = context;
         }
+
+        @Override
+        public final Result call() throws Exception {
+            try {
+                return callImpl();
+            } catch (Exception ex) {
+                LOGGER.log(Level.WARNING, Bundle.taskFailedException(), ex);
+                throw ex;
+            } catch (Error ex) {
+                LOGGER.log(Level.WARNING, Bundle.taskFailedException(), ex);
+                throw ex;
+            }
+        }
+
+        protected abstract Result callImpl() throws Exception;
+
     }
 
     private static class UpdateDataCallable<T> extends UpdateCallable<ParserData<T>> {
@@ -601,7 +649,7 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
 
         @Override
         @SuppressWarnings("unchecked")
-        public ParserData<T> call() throws Exception {
+        protected ParserData<T> callImpl() throws Exception {
             VersionedDocument document = context.getDocument();
             DocumentSnapshot snapshot = context.getSnapshot();
             if (snapshot == null) {
@@ -661,7 +709,7 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
 
         @Override
         @SuppressWarnings("unchecked")
-        public Collection<? extends ParserData<?>> call() throws Exception {
+        protected Collection<? extends ParserData<?>> callImpl() throws Exception {
             VersionedDocument document = context.getDocument();
             final ParserTask task = provider.createTask(document);
             DocumentSnapshot snapshot = context.getSnapshot();
