@@ -116,9 +116,8 @@ public class CodeCompletionErrorStrategy<Symbol extends Token> extends DefaultEr
 
             final boolean collectPredicates = false;
             final boolean greedy = true;
-            final boolean loopsSimulateTailRecursion = false;
             final boolean hasMoreContext = true;
-            interp.closure(intermediate, closure, collectPredicates, greedy, loopsSimulateTailRecursion, hasMoreContext, PredictionContextCache.UNCACHED);
+            interp.closure(intermediate, closure, collectPredicates, greedy, hasMoreContext, PredictionContextCache.UNCACHED);
 
             if (!state.onlyHasEpsilonTransitions()) {
                 for (int i = 0; i < state.getNumberOfTransitions(); i++) {
