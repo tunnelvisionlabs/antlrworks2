@@ -84,12 +84,13 @@ public abstract class AbstractCompletionProvider implements CompletionProvider {
     public CompletionTask createTask(int queryType, JTextComponent component) {
         if ((queryType & COMPLETION_QUERY_TYPE) != 0 || (queryType & TOOLTIP_QUERY_TYPE) != 0 || (queryType & DOCUMENTATION_QUERY_TYPE) != 0) {
             int caretOffset = component.getSelectionStart();
-            boolean extend = false;
+            boolean extend;
             try {
                 int[] identifier = Utilities.getIdentifierBlock(component, caretOffset);
                 extend = identifier != null && caretOffset > identifier[0] && caretOffset <= identifier[1];
             } catch (BadLocationException ex) {
-                Exceptions.printStackTrace(ex);
+                // this happens when the caret is before the first word of the document
+                extend = false;
             }
 
             return new AsyncCompletionTask(createCompletionQuery(queryType, caretOffset, extend), component);
