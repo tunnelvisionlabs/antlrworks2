@@ -16,8 +16,8 @@ import org.antlr.v4.runtime.Token;
  *
  * @author Sam Harwell
  */
-public interface ForestParser {
+public interface ForestParser<TParser> {
 
-    public Map<RuleContext<Token>, CaretReachedException> getParseTrees(CodeCompletionParser parser);
+    public Map<RuleContext<Token>, CaretReachedException> getParseTrees(TParser parser);
 
 }

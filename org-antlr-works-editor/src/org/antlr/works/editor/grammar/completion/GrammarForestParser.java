@@ -11,21 +11,20 @@ package org.antlr.works.editor.grammar.completion;
 import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.works.editor.antlr4.completion.AbstractForestParser;
-import org.antlr.works.editor.antlr4.completion.CodeCompletionParser;
 
 /**
  *
  * @author Sam Harwell
  */
-public class GrammarForestParser extends AbstractForestParser {
+public class GrammarForestParser extends AbstractForestParser<CodeCompletionGrammarParser> {
     public static final GrammarForestParser INSTANCE = new GrammarForestParser();
 
     protected GrammarForestParser() {
     }
 
     @Override
-    protected RuleContext<Token> parseImpl(CodeCompletionParser parser) {
-        return ((CodeCompletionGrammarParser)parser).rules();
+    protected RuleContext<Token> parseImpl(CodeCompletionGrammarParser parser) {
+        return parser.rules();
     }
 
 }

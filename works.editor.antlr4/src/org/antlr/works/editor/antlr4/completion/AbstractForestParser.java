@@ -34,11 +34,11 @@ import org.antlr.v4.runtime.misc.IntervalSet;
  *
  * @author Sam Harwell
  */
-public abstract class AbstractForestParser implements ForestParser {
+public abstract class AbstractForestParser<TParser extends CodeCompletionParser> implements ForestParser<TParser> {
     protected static final Logger LOGGER = Logger.getLogger(AbstractForestParser.class.getName());
 
     @Override
-    public Map<RuleContext<Token>, CaretReachedException> getParseTrees(CodeCompletionParser parser) {
+    public Map<RuleContext<Token>, CaretReachedException> getParseTrees(TParser parser) {
         List<MultipleDecisionData> potentialAlternatives = new ArrayList<MultipleDecisionData>();
         IntegerList currentPath = new IntegerList();
         Map<RuleContext<Token>, CaretReachedException> results = new IdentityHashMap<RuleContext<Token>, CaretReachedException>();
@@ -78,7 +78,7 @@ public abstract class AbstractForestParser implements ForestParser {
         return false;
     }
 
-    protected void tryParse(CodeCompletionParser parser, List<MultipleDecisionData> potentialAlternatives, IntegerList currentPath, Map<RuleContext<Token>, CaretReachedException> results) {
+    protected void tryParse(TParser parser, List<MultipleDecisionData> potentialAlternatives, IntegerList currentPath, Map<RuleContext<Token>, CaretReachedException> results) {
         RuleContext<Token> parseTree;
         try {
             parser.getInterpreter().setFixedDecisions(potentialAlternatives, currentPath);
@@ -163,6 +163,6 @@ public abstract class AbstractForestParser implements ForestParser {
         }
     }
 
-    protected abstract RuleContext<Token> parseImpl(CodeCompletionParser parser);
+    protected abstract RuleContext<Token> parseImpl(TParser parser);
 
 }
