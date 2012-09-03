@@ -28,7 +28,8 @@ import org.openide.windows.TopComponent;
     position=100,
     displayName="#GrammarResolver",
     extension={"g", "g3", "g4"},
-    mimeType=GrammarEditorKit.GRAMMAR_MIME_TYPE)
+    mimeType=GrammarEditorKit.GRAMMAR_MIME_TYPE,
+    showInFileChooser="#GrammarResolver")
 public class GrammarDataObject extends MultiDataObject {
 
     public GrammarDataObject(FileObject pf, MultiFileLoader loader) throws DataObjectExistsException, IOException {
