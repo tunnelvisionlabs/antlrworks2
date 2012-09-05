@@ -57,6 +57,9 @@ import org.openide.util.Exceptions;
  */
 public class GroupSetElementsHintParserTask implements ParserTask {
 
+    private GroupSetElementsHintParserTask() {
+    }
+
     @Override
     public ParserTaskDefinition getDefinition() {
         return Definition.INSTANCE;

@@ -71,6 +71,9 @@ import org.openide.util.Exceptions;
  */
 public class FactorLabelForSetHintParserTask implements ParserTask {
 
+    private FactorLabelForSetHintParserTask() {
+    }
+
     @Override
     public ParserTaskDefinition getDefinition() {
         return Definition.INSTANCE;
