@@ -9,6 +9,7 @@
 package org.antlr.works.editor.antlr4.parsing;
 
 import java.util.ArrayList;
+import java.util.BitSet;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -22,7 +23,9 @@ import org.antlr.v4.runtime.atn.ATN;
 import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.misc.IntervalSet;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.RuleNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
+import org.netbeans.api.annotations.common.CheckForNull;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;
 import org.openide.util.Parameters;
@@ -251,6 +254,60 @@ public final class ParseTrees {
         }
 
         return ancestors;
+    }
+
+    @CheckForNull
+    public static <T> RuleNode<T> findAncestor(@NonNull ParseTree<T> tree, int ruleIndex) {
+        for (ParseTree<T> current = tree; current != null; current = current.getParent()) {
+            if (!(current instanceof RuleNode)) {
+                continue;
+            }
+
+            RuleNode<T> ruleNode = (RuleNode<T>)current;
+            if (ruleNode.getRuleContext().getRuleIndex() == ruleIndex) {
+                return ruleNode;
+            }
+        }
+
+        return null;
+    }
+
+    @CheckForNull
+    public static <T> RuleNode<T> findAncestor(@NonNull ParseTree<T> tree, @NonNull BitSet ruleIndexes) {
+        for (ParseTree<T> current = tree; current != null; current = current.getParent()) {
+            if (!(current instanceof RuleNode)) {
+                continue;
+            }
+
+            RuleNode<T> ruleNode = (RuleNode<T>)current;
+            int ruleIndex = ruleNode.getRuleContext().getRuleIndex();
+            if (ruleIndex < 0) {
+                continue;
+            }
+
+            if (ruleIndexes.get(ruleIndex)) {
+                return ruleNode;
+            }
+        }
+
+        return null;
+    }
+
+    @CheckForNull
+    public static <T, ContextClass> ContextClass findAncestor(@NonNull ParseTree<T> tree, @NonNull Class<ContextClass> nodeType) {
+        for (ParseTree<T> current = tree; current != null; current = current.getParent()) {
+            if (!(current instanceof RuleNode)) {
+                continue;
+            }
+
+            RuleNode<T> ruleNode = (RuleNode<T>)current;
+            RuleContext<T> ruleContext = ruleNode.getRuleContext();
+            if (nodeType.isInstance(ruleContext)) {
+                return nodeType.cast(ruleContext);
+            }
+        }
+
+        return null;
     }
 
     private ParseTrees() {
