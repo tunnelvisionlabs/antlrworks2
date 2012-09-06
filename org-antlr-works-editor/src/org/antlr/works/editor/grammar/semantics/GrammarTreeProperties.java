@@ -19,6 +19,8 @@ public final class GrammarTreeProperties {
 
     public static final ObjectProperty<NodeType> PROP_NODE_TYPE = new ObjectProperty<NodeType>("node-type", NodeType.UNDEFINED);
     public static final ObjectProperty<Token> PROP_TARGET = new ObjectProperty<Token>("target");
+    public static final ObjectProperty<Boolean> PROP_IMPLICIT_DEF = new ObjectProperty<Boolean>("implicit-def", false);
+    public static final ObjectProperty<Boolean> PROP_MISSING_DEF = new ObjectProperty<Boolean>("missing-def", false);
 
     private GrammarTreeProperties() {
     }

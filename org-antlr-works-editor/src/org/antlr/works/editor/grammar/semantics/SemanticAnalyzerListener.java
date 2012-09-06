@@ -523,8 +523,28 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
             }
 
             Token decl = declaredRules.get(text);
+            if (decl == null) {
+                switch (token.getType()) {
+                case GrammarParser.RULE_REF:
+                case GrammarParser.TOKEN_REF:
+                    // allow implicit def. determine validity later
+                    break;
+
+                default:
+                    continue;
+                }
+
+                // implicit definition
+                decl = token;
+                declaredRules.put(text, decl);
+                tokenDecorator.putProperty(token, GrammarTreeProperties.PROP_MISSING_DEF, true);
+            }
+
             if (decl != null) {
                 tokenDecorator.putProperty(token, GrammarTreeProperties.PROP_TARGET, decl);
+                if (decl != token && tokenDecorator.getProperty(decl, GrammarTreeProperties.PROP_MISSING_DEF)) {
+                    tokenDecorator.putProperty(token, GrammarTreeProperties.PROP_MISSING_DEF, true);
+                }
             }
         }
 
@@ -535,6 +555,23 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
             }
 
             Token decl = declaredTokens.get(text);
+            if (decl == null) {
+                switch (token.getType()) {
+                case GrammarParser.TOKEN_REF:
+                    // allow implicit def. determine validity later
+                    break;
+
+                default:
+                    assert token.getType() != GrammarParser.RULE_REF;
+                    continue;
+                }
+
+                // implicit definition
+                decl = token;
+                declaredTokens.put(text, decl);
+                tokenDecorator.putProperty(token, GrammarTreeProperties.PROP_IMPLICIT_DEF, true);
+            }
+
             if (decl != null) {
                 tokenDecorator.putProperty(token, GrammarTreeProperties.PROP_TARGET, decl);
             }
