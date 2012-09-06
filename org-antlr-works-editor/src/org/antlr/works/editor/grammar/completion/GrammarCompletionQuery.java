@@ -347,7 +347,7 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
 
                 // Add rules from the grammar
                 if (rules.isEmpty()) {
-                    rules.addAll(GrammarCompletionProvider.getRulesFromGrammar(taskManager, snapshot));
+                    rules.addAll(GrammarCompletionProvider.getRulesFromGrammar(taskManager, snapshot, !tokenReferencesOnly));
                 }
 
                 for (Description rule : rules) {
@@ -597,7 +597,7 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
                         if (grammarType != GrammarParser.LEXER) {
                             // Add rules from the grammar
                             if (rules.isEmpty()) {
-                                rules.addAll(GrammarCompletionProvider.getRulesFromGrammar(taskManager, snapshot));
+                                rules.addAll(GrammarCompletionProvider.getRulesFromGrammar(taskManager, snapshot, true));
                             }
 
                             for (Description rule : rules) {

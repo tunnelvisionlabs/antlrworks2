@@ -283,7 +283,7 @@ public class GrammarHighlighter extends ANTLRHighlighterBaseV4<GrammarHighlighte
 
             ParserTaskManager taskManager = Lookup.getDefault().lookup(ParserTaskManager.class);
             VersionedDocument versionedDocument = VersionedDocumentUtilities.getVersionedDocument(document);
-            Collection<Description> rules = GrammarCompletionProvider.getRulesFromGrammar(taskManager, versionedDocument.getCurrentSnapshot());
+            Collection<Description> rules = GrammarCompletionProvider.getRulesFromGrammar(taskManager, versionedDocument.getCurrentSnapshot(), false);
 
             Description target = null;
             for (Description rule : rules) {

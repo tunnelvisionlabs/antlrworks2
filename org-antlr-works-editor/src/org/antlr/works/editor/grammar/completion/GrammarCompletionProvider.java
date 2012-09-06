@@ -29,6 +29,7 @@ import org.antlr.works.editor.grammar.GoToSupport;
 import org.antlr.works.editor.grammar.GrammarEditorKit;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
 import org.antlr.works.editor.grammar.codemodel.FileModel;
+import org.antlr.works.editor.grammar.codemodel.LexerRuleModel;
 import org.antlr.works.editor.grammar.codemodel.ModeModel;
 import org.antlr.works.editor.grammar.codemodel.RuleModel;
 import org.antlr.works.editor.grammar.codemodel.TokenData;
@@ -127,7 +128,7 @@ public class GrammarCompletionProvider extends AbstractCompletionProvider {
         }
     }
 
-    public static Collection<Description> getRulesFromGrammar(ParserTaskManager taskManager, DocumentSnapshot snapshot) {
+    public static Collection<Description> getRulesFromGrammar(ParserTaskManager taskManager, DocumentSnapshot snapshot, boolean ignoreLexerOnlyRules) {
         Map<String, Description> rules = new HashMap<String, Description>();
 
         Description rootDescription = GrammarParserDataDefinitions.tryGetData(taskManager, snapshot, GrammarParserDataDefinitions.NAVIGATOR_ROOT, EnumSet.of(ParserDataOptions.SYNCHRONOUS));
@@ -150,6 +151,11 @@ public class GrammarCompletionProvider extends AbstractCompletionProvider {
         FileModel fileModel = GrammarParserDataDefinitions.tryGetData(taskManager, snapshot, GrammarParserDataDefinitions.FILE_MODEL, EnumSet.of(ParserDataOptions.SYNCHRONOUS));
         if (fileModel != null) {
             for (RuleModel ruleModel : fileModel.getRules()) {
+                if (ignoreLexerOnlyRules && ruleModel instanceof LexerRuleModel && ((LexerRuleModel)ruleModel).getTokenData() == null) {
+                    rules.remove(ruleModel.getName());
+                    continue;
+                }
+
                 if (rules.containsKey(ruleModel.getName())) {
                     continue;
                 }
@@ -157,13 +163,15 @@ public class GrammarCompletionProvider extends AbstractCompletionProvider {
                 rules.put(ruleModel.getName(), new GrammarNode.GrammarNodeDescription(ruleModel.getName()));
             }
 
-            for (ModeModel modeModel : fileModel.getModes()) {
-                for (RuleModel ruleModel : modeModel.getRules()) {
-                    if (rules.containsKey(ruleModel.getName())) {
-                        continue;
-                    }
+            if (!ignoreLexerOnlyRules) {
+                for (ModeModel modeModel : fileModel.getModes()) {
+                    for (RuleModel ruleModel : modeModel.getRules()) {
+                        if (rules.containsKey(ruleModel.getName())) {
+                            continue;
+                        }
 
-                    rules.put(ruleModel.getName(), new GrammarNode.GrammarNodeDescription(ruleModel.getName()));
+                        rules.put(ruleModel.getName(), new GrammarNode.GrammarNodeDescription(ruleModel.getName()));
+                    }
                 }
             }
 
