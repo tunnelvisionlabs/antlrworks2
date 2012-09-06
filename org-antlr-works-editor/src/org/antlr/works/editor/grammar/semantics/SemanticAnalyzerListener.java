@@ -18,6 +18,7 @@ import org.antlr.v4.runtime.RuleDependencies;
 import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ErrorNode;
+import org.antlr.v4.runtime.tree.RuleNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.v4.runtime.tree.Tree;
 import org.antlr.works.editor.antlr4.parsing.ParseTrees;
@@ -173,6 +174,27 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
                     unresolvedRuleReferences.add(symbol);
                 } else {
                     unresolvedTokenReferences.add(symbol);
+                }
+
+                break;
+            }
+            break;
+
+        case GrammarParser.STRING_LITERAL:
+            switch (ruleIndex) {
+            case GrammarParser.RULE_terminal:
+                RuleNode<? extends Token> ruleNode = ParseTrees.findAncestor(node, GrammarParser.RULE_parserRuleSpec);
+                if (ruleNode != null) {
+                    nodeType = NodeType.TOKEN_REF;
+                    unresolvedTokenReferences.add(symbol);
+                } else {
+                    ruleNode = ParseTrees.findAncestor(node, GrammarParser.RULE_lexerRule);
+                    if (ruleNode != null && LiteralLexerRuleVisitor.INSTANCE.visit(ruleNode)) {
+                        LexerRuleContext context = (LexerRuleContext)ruleNode.getRuleContext();
+                        if (context.name != null) {
+                            declaredRules.put(symbol.getText(), context.name);
+                        }
+                    }
                 }
 
                 break;
@@ -531,6 +553,7 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
                     break;
 
                 default:
+                    assert token.getType() != GrammarParser.STRING_LITERAL;
                     continue;
                 }
 
@@ -557,6 +580,7 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
             Token decl = declaredTokens.get(text);
             if (decl == null) {
                 switch (token.getType()) {
+                case GrammarParser.STRING_LITERAL:
                 case GrammarParser.TOKEN_REF:
                     // allow implicit def. determine validity later
                     break;
