@@ -22,11 +22,13 @@ import org.antlr.works.editor.grammar.codemodel.TokenData;
  */
 public class LexerRuleModelImpl extends RuleModelImpl implements LexerRuleModel {
     private final ModeModelImpl mode;
+    private final boolean generateTokenType;
     private final String literal;
 
-    public LexerRuleModelImpl(String name, ModeModelImpl mode, String literal, FileModelImpl file) {
+    public LexerRuleModelImpl(String name, ModeModelImpl mode, boolean generateTokenType, String literal, FileModelImpl file) {
         super(name, file);
         this.mode = mode;
+        this.generateTokenType = generateTokenType;
         this.literal = literal;
     }
 
@@ -42,6 +44,10 @@ public class LexerRuleModelImpl extends RuleModelImpl implements LexerRuleModel 
 
     @Override
     public TokenData getTokenData() {
+        if (!generateTokenType) {
+            return null;
+        }
+
         return new TokenData() {
 
             @Override

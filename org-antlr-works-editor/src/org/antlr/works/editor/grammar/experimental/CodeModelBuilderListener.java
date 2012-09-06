@@ -53,6 +53,8 @@ import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.RuleRet
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.TokenSpecContext;
 import org.antlr.works.editor.grammar.semantics.LiteralLexerRuleValueVisitor;
 import org.antlr.works.editor.grammar.semantics.LiteralLexerRuleVisitor;
+import org.antlr.works.editor.grammar.semantics.SemanticAnalyzerListener;
+import org.antlr.works.editor.grammar.semantics.SuppressTokenTypeVisitor;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;
 import org.netbeans.api.project.FileOwnerQuery;
@@ -130,13 +132,14 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
         if (ctx instanceof GrammarParser.ParserRuleSpecContext) {
             ruleModel = new ParserRuleModelImpl(ruleName, fileModel);
         } else if (ctx instanceof GrammarParser.LexerRuleContext) {
+            boolean generateTokenType = !SuppressTokenTypeVisitor.INSTANCE.visit(ctx);
             String literal = null;
-            if (LiteralLexerRuleVisitor.INSTANCE.visit(ctx)) {
+            if (generateTokenType && LiteralLexerRuleVisitor.INSTANCE.visit(ctx)) {
                 TerminalNode<Token> terminal = LiteralLexerRuleValueVisitor.INSTANCE.visit(ctx);
                 literal = terminal != null ? terminal.getSymbol().getText() : null;
             }
 
-            ruleModel = new LexerRuleModelImpl(ruleName, modeModelStack.peek(), literal, fileModel);
+            ruleModel = new LexerRuleModelImpl(ruleName, modeModelStack.peek(), generateTokenType, literal, fileModel);
         } else {
             throw new UnsupportedOperationException();
         }

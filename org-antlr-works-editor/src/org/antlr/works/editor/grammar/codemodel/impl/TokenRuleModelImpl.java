@@ -17,7 +17,7 @@ import org.antlr.works.editor.grammar.codemodel.RuleKind;
 public class TokenRuleModelImpl extends LexerRuleModelImpl {
 
     public TokenRuleModelImpl(String name, String literal, FileModelImpl file) {
-        super(name, null, literal, file);
+        super(name, null, true, literal, file);
     }
 
     @Override
