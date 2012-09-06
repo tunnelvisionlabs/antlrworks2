@@ -20,6 +20,7 @@ import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.v4.runtime.tree.Tree;
+import org.antlr.works.editor.antlr4.parsing.ParseTrees;
 import org.antlr.works.editor.grammar.experimental.GrammarParser;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.ActionBlockContext;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.ActionContext;
@@ -107,9 +108,11 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
     private final ObjectDecorator<Token> tokenDecorator;
 
     private final Map<String, Token> declaredRules = new HashMap<String, Token>();
+    private final Map<String, Token> declaredTokens = new HashMap<String, Token>();
     private final Map<String, Token> declaredModes = new HashMap<String, Token>();
 
-    private final List<Token> unresolvedReferences = new ArrayList<Token>();
+    private final List<Token> unresolvedRuleReferences = new ArrayList<Token>();
+    private final List<Token> unresolvedTokenReferences = new ArrayList<Token>();
     private final List<Token> unresolvedModeReferences = new ArrayList<Token>();
 
     public SemanticAnalyzerListener(@NonNull ObjectDecorator<Tree> treeDecorator, @NonNull ObjectDecorator<Token> tokenDecorator) {
@@ -144,7 +147,7 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
 
             case GrammarParser.RULE_ruleref:
                 nodeType = NodeType.RULE_REF;
-                unresolvedReferences.add(symbol);
+                unresolvedRuleReferences.add(symbol);
                 break;
             }
             break;
@@ -152,13 +155,26 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
         case GrammarParser.TOKEN_REF:
             switch (ruleIndex) {
             case GrammarParser.RULE_lexerRule:
+            {
+                LexerRuleContext lexerRule = ParseTrees.findAncestor(node, LexerRuleContext.class);
+                if (lexerRule == null || !SuppressTokenTypeVisitor.INSTANCE.visit(lexerRule)) {
+                    declaredTokens.put(symbol.getText(), symbol);
+                }
+
                 nodeType = NodeType.TOKEN_DECL;
                 declaredRules.put(symbol.getText(), symbol);
                 break;
+            }
 
             case GrammarParser.RULE_terminal:
                 nodeType = NodeType.TOKEN_REF;
-                unresolvedReferences.add(symbol);
+                boolean inLexerRule = ParseTrees.findAncestor(node, GrammarParser.RULE_lexerRule) != null;
+                if (inLexerRule) {
+                    unresolvedRuleReferences.add(symbol);
+                } else {
+                    unresolvedTokenReferences.add(symbol);
+                }
+
                 break;
             }
             break;
@@ -500,13 +516,25 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
     @Override
     @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_grammarSpec, version=0)
     public void exitGrammarSpec(GrammarSpecContext ctx) {
-        for (Token token : unresolvedReferences) {
+        for (Token token : unresolvedRuleReferences) {
             String text = token.getText();
             if (text == null || text.isEmpty()) {
                 continue;
             }
 
             Token decl = declaredRules.get(text);
+            if (decl != null) {
+                tokenDecorator.putProperty(token, GrammarTreeProperties.PROP_TARGET, decl);
+            }
+        }
+
+        for (Token token : unresolvedTokenReferences) {
+            String text = token.getText();
+            if (text == null || text.isEmpty()) {
+                continue;
+            }
+
+            Token decl = declaredTokens.get(text);
             if (decl != null) {
                 tokenDecorator.putProperty(token, GrammarTreeProperties.PROP_TARGET, decl);
             }
@@ -665,7 +693,7 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
                             tokenDecorator.putProperty(ctx.start, GrammarTreeProperties.PROP_NODE_TYPE, NodeType.MODE_REF);
                         } else if ("type".equals(lexerCommandNameContext.start.getText())
                             && Character.isUpperCase(ctx.start.getText().charAt(0))) {
-                            unresolvedReferences.add(ctx.start);
+                            unresolvedTokenReferences.add(ctx.start);
                             tokenDecorator.putProperty(ctx.start, GrammarTreeProperties.PROP_NODE_TYPE, NodeType.TOKEN_REF);
                         }
                     }
