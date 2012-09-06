@@ -51,6 +51,8 @@ import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.ParserR
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.QidContext;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.RuleReturnsContext;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.TokenSpecContext;
+import org.antlr.works.editor.grammar.semantics.LiteralLexerRuleValueVisitor;
+import org.antlr.works.editor.grammar.semantics.LiteralLexerRuleVisitor;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;
 import org.netbeans.api.project.FileOwnerQuery;
@@ -128,7 +130,13 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
         if (ctx instanceof GrammarParser.ParserRuleSpecContext) {
             ruleModel = new ParserRuleModelImpl(ruleName, fileModel);
         } else if (ctx instanceof GrammarParser.LexerRuleContext) {
-            ruleModel = new LexerRuleModelImpl(ruleName, modeModelStack.peek(), fileModel);
+            String literal = null;
+            if (LiteralLexerRuleVisitor.INSTANCE.visit(ctx)) {
+                TerminalNode<Token> terminal = LiteralLexerRuleValueVisitor.INSTANCE.visit(ctx);
+                literal = terminal != null ? terminal.getSymbol().getText() : null;
+            }
+
+            ruleModel = new LexerRuleModelImpl(ruleName, modeModelStack.peek(), literal, fileModel);
         } else {
             throw new UnsupportedOperationException();
         }

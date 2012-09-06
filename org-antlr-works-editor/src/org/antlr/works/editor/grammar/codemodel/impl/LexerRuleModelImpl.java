@@ -22,10 +22,12 @@ import org.antlr.works.editor.grammar.codemodel.TokenData;
  */
 public class LexerRuleModelImpl extends RuleModelImpl implements LexerRuleModel {
     private final ModeModelImpl mode;
+    private final String literal;
 
-    public LexerRuleModelImpl(String name, ModeModelImpl mode, FileModelImpl file) {
+    public LexerRuleModelImpl(String name, ModeModelImpl mode, String literal, FileModelImpl file) {
         super(name, file);
         this.mode = mode;
+        this.literal = literal;
     }
 
     @Override
@@ -49,7 +51,7 @@ public class LexerRuleModelImpl extends RuleModelImpl implements LexerRuleModel 
 
             @Override
             public String getLiteral() {
-                throw new UnsupportedOperationException("Not supported yet.");
+                return literal;
             }
 
             @Override
