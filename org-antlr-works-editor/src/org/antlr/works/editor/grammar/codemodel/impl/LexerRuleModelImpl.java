@@ -10,6 +10,7 @@ package org.antlr.works.editor.grammar.codemodel.impl;
 
 import java.util.Collection;
 import java.util.Collections;
+import org.antlr.works.editor.grammar.codemodel.LexerRuleModel;
 import org.antlr.works.editor.grammar.codemodel.ModeModel;
 import org.antlr.works.editor.grammar.codemodel.RuleKind;
 import org.antlr.works.editor.grammar.codemodel.RuleModel;
@@ -19,7 +20,7 @@ import org.antlr.works.editor.grammar.codemodel.TokenData;
  *
  * @author Sam Harwell
  */
-public class LexerRuleModelImpl extends RuleModelImpl implements TokenData {
+public class LexerRuleModelImpl extends RuleModelImpl implements LexerRuleModel {
     private final ModeModelImpl mode;
 
     public LexerRuleModelImpl(String name, ModeModelImpl mode, FileModelImpl file) {
@@ -38,13 +39,25 @@ public class LexerRuleModelImpl extends RuleModelImpl implements TokenData {
     }
 
     @Override
-    public String getLiteral() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+    public TokenData getTokenData() {
+        return new TokenData() {
 
-    @Override
-    public Collection<? extends RuleModel> resolve() {
-        return Collections.singletonList(this);
+            @Override
+            public String getName() {
+                return LexerRuleModelImpl.this.getName();
+            }
+
+            @Override
+            public String getLiteral() {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+
+            @Override
+            public Collection<? extends RuleModel> resolve() {
+                return Collections.singletonList(LexerRuleModelImpl.this);
+            }
+
+        };
     }
 
 }

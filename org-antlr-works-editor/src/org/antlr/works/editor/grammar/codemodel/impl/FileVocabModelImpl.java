@@ -11,7 +11,9 @@ package org.antlr.works.editor.grammar.codemodel.impl;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import org.antlr.works.editor.grammar.codemodel.RuleKind;
+import org.antlr.works.editor.grammar.codemodel.LexerRuleModel;
+import org.antlr.works.editor.grammar.codemodel.ModeModel;
+import org.antlr.works.editor.grammar.codemodel.RuleModel;
 import org.antlr.works.editor.grammar.codemodel.TokenData;
 import org.antlr.works.editor.grammar.codemodel.TokenVocabModel;
 import org.netbeans.api.annotations.common.NonNull;
@@ -57,29 +59,27 @@ public class FileVocabModelImpl extends AbstractTokenVocabModel {
         }
 
         // rules in the current grammar
-        for (RuleModelImpl rule : getFile().getRules()) {
-            if (rule instanceof TokenData) {
-                TokenData tokenData = (TokenData)rule;
-                data.put(tokenData.getName(), tokenData);
+        for (RuleModel rule : getFile().getRules()) {
+            if (!(rule instanceof LexerRuleModel)) {
                 continue;
             }
 
-            if (rule.getRuleKind() == RuleKind.LEXER) {
-                data.put(rule.getName(), new TokenDataImpl(rule.getName(), null, rule.getFile()));
+            TokenData tokenData = ((LexerRuleModel)rule).getTokenData();
+            if (tokenData != null) {
+                data.put(tokenData.getName(), tokenData);
             }
         }
 
-        // rules in the current grammar
-        for (ModeModelImpl mode : getFile().getModes()) {
-            for (RuleModelImpl rule : mode.getRules()) {
-                if (rule instanceof TokenData) {
-                    TokenData tokenData = (TokenData)rule;
-                    data.put(tokenData.getName(), tokenData);
+        // rules in modes in the current grammar
+        for (ModeModel mode : getFile().getModes()) {
+            for (RuleModel rule : mode.getRules()) {
+                if (!(rule instanceof LexerRuleModel)) {
                     continue;
                 }
 
-                if (rule.getRuleKind() == RuleKind.LEXER) {
-                    data.put(rule.getName(), new TokenDataImpl(rule.getName(), null, rule.getFile()));
+                TokenData tokenData = ((LexerRuleModel)rule).getTokenData();
+                if (tokenData != null) {
+                    data.put(tokenData.getName(), tokenData);
                 }
             }
         }
