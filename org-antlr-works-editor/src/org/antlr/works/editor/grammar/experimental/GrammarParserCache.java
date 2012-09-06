@@ -18,7 +18,10 @@ import org.antlr.works.editor.grammar.completion.ActionExpressionAnalyzer;
 import org.antlr.works.editor.grammar.completion.GrammarCompletionQuery;
 import org.antlr.works.editor.grammar.completion.LabelAnalyzer;
 import org.antlr.works.editor.grammar.highlighter4.SemanticHighlighter;
+import org.antlr.works.editor.grammar.semantics.LiteralLexerRuleValueVisitor;
+import org.antlr.works.editor.grammar.semantics.LiteralLexerRuleVisitor;
 import org.antlr.works.editor.grammar.semantics.SemanticAnalyzerListener;
+import org.antlr.works.editor.grammar.semantics.SuppressTokenTypeVisitor;
 import org.antlr.works.editor.grammar.syndiag.SetTerminal;
 import org.antlr.works.editor.grammar.syndiag.SyntaxDiagramTopComponent;
 
@@ -60,7 +63,10 @@ public class GrammarParserCache extends AbstractParserCache<Token, GrammarParser
         RuleDependencyChecker.checkDependencies(CurrentRuleContextData.class);
         RuleDependencyChecker.checkDependencies(CurrentRuleContextParserTask.class);
         RuleDependencyChecker.checkDependencies(GrammarParserAnchorListener.class);
+        RuleDependencyChecker.checkDependencies(LiteralLexerRuleValueVisitor.class);
+        RuleDependencyChecker.checkDependencies(LiteralLexerRuleVisitor.class);
         RuleDependencyChecker.checkDependencies(ReferenceAnchorsParserTask.class);
+        RuleDependencyChecker.checkDependencies(SuppressTokenTypeVisitor.class);
         RuleDependencyChecker.checkDependencies(SemanticAnalyzerListener.class);
         RuleDependencyChecker.checkDependencies(SemanticHighlighter.class);
         RuleDependencyChecker.checkDependencies(SyntaxDiagramTopComponent.class);
