@@ -26,10 +26,10 @@ package org.antlr.works.editor.st4.experimental;
 }
 
 tokens {
-    OPEN_DELIMITER;
-    CLOSE_DELIMITER;
-    QUOTE;
-    STRING;
+    OPEN_DELIMITER,
+    CLOSE_DELIMITER,
+    QUOTE,
+    STRING,
 }
 
 LPAREN  : '(';

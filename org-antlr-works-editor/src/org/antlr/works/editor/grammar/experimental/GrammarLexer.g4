@@ -14,9 +14,9 @@ options {
 }
 
 tokens {
-    TOKEN_REF;
-    RULE_REF;
-    LEXER_CHAR_SET;
+    TOKEN_REF,
+    RULE_REF,
+    LEXER_CHAR_SET,
 }
 
 @header {/*

@@ -36,7 +36,7 @@ public abstract class AbstractGrammarLexer extends Lexer {
 		ACTION_LBRACK=74, ACTION_RBRACK=75, ACTION_EQUALS=76, ACTION_COMMA=77, 
 		ACTION_COLON2=78, ACTION_COLON=79, ACTION_MINUS=80, ACTION_ESCAPE=81, 
 		ACTION_WORD=82, ACTION_REFERENCE=83, ACTION_COMMENT=84, ACTION_LITERAL=85, 
-		ACTION_TEXT=86, ACTION_WS=87, ACTION_NEWLINE=88, END_ACTION=89;
+		ACTION_TEXT=86, ACTION_WS=87, ACTION_NEWLINE=88, END_ACTION=89, END_LEXER_CHAR_SET=90;
 	public static final int ArgAction = 1;
 	public static final int Action = 2;
 	public static final int LexerCharSet = 3;
@@ -48,19 +48,20 @@ public abstract class AbstractGrammarLexer extends Lexer {
 		"<INVALID>",
 		"TOKEN_REF", "RULE_REF", "LEXER_CHAR_SET", "DOC_COMMENT", "BLOCK_COMMENT", 
 		"LINE_COMMENT", "DOUBLE_QUOTE_STRING_LITERAL", "DOUBLE_ANGLE_STRING_LITERAL", 
-		"'['", "'{'", "OPTIONS", "TOKENS", "'import'", "'fragment'", "'lexer'", 
-		"'parser'", "'grammar'", "'protected'", "'public'", "'private'", "'returns'", 
-		"'locals'", "'throws'", "'catch'", "'finally'", "'template'", "'mode'", 
-		"':'", "'::'", "','", "';'", "'('", "')'", "'->'", "'<'", "'>'", "'='", 
-		"'?'", "'*'", "'+'", "'+='", "'|'", "'$'", "'.'", "'..'", "'...'", "'@'", 
-		"'#'", "'~'", "'}'", "ID", "INT", "STRING_LITERAL", "WS", "ERRCHAR", "ARG_ACTION_LT", 
-		"ARG_ACTION_GT", "ARG_ACTION_LPAREN", "ARG_ACTION_RPAREN", "ARG_ACTION_EQUALS", 
-		"ARG_ACTION_COMMA", "ARG_ACTION_ESCAPE", "ARG_ACTION_WORD", "ARG_ACTION_ELEMENT", 
-		"ARG_ACTION_TEXT", "ARG_ACTION_WS", "ARG_ACTION_NEWLINE", "']'", "ACTION_DOT", 
-		"ACTION_LT", "ACTION_GT", "ACTION_LPAREN", "ACTION_RPAREN", "ACTION_LBRACK", 
-		"ACTION_RBRACK", "ACTION_EQUALS", "ACTION_COMMA", "ACTION_COLON2", "ACTION_COLON", 
-		"'-'", "ACTION_ESCAPE", "ACTION_WORD", "ACTION_REFERENCE", "ACTION_COMMENT", 
-		"ACTION_LITERAL", "ACTION_TEXT", "ACTION_WS", "ACTION_NEWLINE", "END_ACTION"
+		"BEGIN_ARG_ACTION", "'{'", "OPTIONS", "TOKENS", "'import'", "'fragment'", 
+		"'lexer'", "'parser'", "'grammar'", "'protected'", "'public'", "'private'", 
+		"'returns'", "'locals'", "'throws'", "'catch'", "'finally'", "'template'", 
+		"'mode'", "COLON", "COLONCOLON", "COMMA", "';'", "LPAREN", "RPAREN", "'->'", 
+		"LT", "GT", "ASSIGN", "'?'", "'*'", "'+'", "'+='", "'|'", "'$'", "DOT", 
+		"'..'", "'...'", "'@'", "'#'", "'~'", "RBRACE", "ID", "INT", "STRING_LITERAL", 
+		"WS", "ERRCHAR", "ARG_ACTION_LT", "ARG_ACTION_GT", "ARG_ACTION_LPAREN", 
+		"ARG_ACTION_RPAREN", "ARG_ACTION_EQUALS", "ARG_ACTION_COMMA", "ARG_ACTION_ESCAPE", 
+		"ARG_ACTION_WORD", "ARG_ACTION_ELEMENT", "ARG_ACTION_TEXT", "ARG_ACTION_WS", 
+		"ARG_ACTION_NEWLINE", "END_ARG_ACTION", "ACTION_DOT", "'<'", "'>'", "'('", 
+		"')'", "ACTION_LBRACK", "ACTION_RBRACK", "'='", "','", "ACTION_COLON2", 
+		"ACTION_COLON", "'-'", "ACTION_ESCAPE", "ACTION_WORD", "ACTION_REFERENCE", 
+		"ACTION_COMMENT", "ACTION_LITERAL", "ACTION_TEXT", "ACTION_WS", "ACTION_NEWLINE", 
+		"END_ACTION", "']'"
 	};
 	public static final String[] ruleNames = {
 		"DOC_COMMENT", "BLOCK_COMMENT", "COMMENT", "BLOCK_COMMENT_BODY", "LINE_COMMENT", 
@@ -734,7 +735,7 @@ public abstract class AbstractGrammarLexer extends Lexer {
 	}
 
 	public static final String _serializedATN =
-		"\2Y\u02b0\6\uffff\6\uffff\6\uffff\6\uffff\2\0\7\0\2\1\7\1\2\2\7\2\2\3"+
+		"\2Z\u02b0\6\uffff\6\uffff\6\uffff\6\uffff\2\0\7\0\2\1\7\1\2\2\7\2\2\3"+
 		"\7\3\2\4\7\4\2\5\7\5\2\6\7\6\2\7\7\7\2\b\7\b\2\t\7\t\2\n\7\n\2\13\7\13"+
 		"\2\f\7\f\2\r\7\r\2\16\7\16\2\17\7\17\2\20\7\20\2\21\7\21\2\22\7\22\2\23"+
 		"\7\23\2\24\7\24\2\25\7\25\2\26\7\26\2\27\7\27\2\30\7\30\2\31\7\31\2\32"+
@@ -792,24 +793,24 @@ public abstract class AbstractGrammarLexer extends Lexer {
 		"I\uffff\u00acJ\uffff\u00aeK\uffff\u00b0L\uffff\u00b2M\uffff\u00b4N\uffff"+
 		"\u00b6O\uffff\u00b8P\uffff\u00baQ\uffff\u00bcR\uffff\u00beS\uffff\u00c0"+
 		"T\uffff\u00c2U\uffff\u00c4V\uffff\u00c6W\uffff\u00c8X\uffff\u00caY\7\u00cc"+
-		"\0\b\u00ce\0\t\4\0\1\2\3\26\2\n\n\r\r\1\"\"\5\609__\u00b7\u00b7\u0300"+
-		"\u036f\u203f\u2040\rAZaz\u00c0\u00d6\u00d8\u00f6\u00f8\u02ff\u0370\u037d"+
-		"\u037f\u1fff\u200c\u200d\u2070\u218f\u2c00\u2fef\u3001\ud7ff\uf900\ufdcf"+
-		"\ufdf0\ufffd\1\'\'\1\"\"\2\'\'\\\\\3\609AFaf\b\"\"\'\'\\\\bbffnnrrtt\3"+
-		"\t\n\f\r  \2\n\n\r\r\3\t\t\f\f  \3\t\n\f\r  \5$$\609AZ__az\4\609AZ__a"+
-		"z\r\t\n\r\r  \"\"$$\'),,\609<>AZ\\]__az\2\t\t  \4\609AZ__az\2**//\f\t"+
-		"\n\r\r  \"\"$$\'),:<>A]__a{}}\2\t\t  \1\\]\u02c6\0\4\1\0\0\0\0\6\1\0\0"+
-		"\0\0\f\1\0\0\0\0\16\1\0\0\0\0\20\1\0\0\0\0\22\1\0\0\0\0\24\1\0\0\0\0\26"+
-		"\1\0\0\0\0\30\1\0\0\0\0\32\1\0\0\0\0\34\1\0\0\0\0\36\1\0\0\0\0 \1\0\0"+
-		"\0\0\"\1\0\0\0\0$\1\0\0\0\0&\1\0\0\0\0(\1\0\0\0\0*\1\0\0\0\0,\1\0\0\0"+
-		"\0.\1\0\0\0\0\60\1\0\0\0\0\62\1\0\0\0\0\64\1\0\0\0\0\66\1\0\0\0\08\1\0"+
-		"\0\0\0:\1\0\0\0\0<\1\0\0\0\0>\1\0\0\0\0@\1\0\0\0\0B\1\0\0\0\0D\1\0\0\0"+
-		"\0F\1\0\0\0\0H\1\0\0\0\0J\1\0\0\0\0L\1\0\0\0\0N\1\0\0\0\0P\1\0\0\0\0R"+
-		"\1\0\0\0\0T\1\0\0\0\0V\1\0\0\0\0X\1\0\0\0\0Z\1\0\0\0\0\\\1\0\0\0\0^\1"+
-		"\0\0\0\0`\1\0\0\0\0b\1\0\0\0\0d\1\0\0\0\0f\1\0\0\0\0r\1\0\0\0\0t\1\0\0"+
-		"\0\0|\1\0\0\0\0\u0084\1\0\0\0\1\u0086\1\0\0\0\1\u0088\1\0\0\0\1\u008a"+
-		"\1\0\0\0\1\u008c\1\0\0\0\1\u008e\1\0\0\0\1\u0090\1\0\0\0\1\u0092\1\0\0"+
-		"\0\1\u0094\1\0\0\0\1\u0096\1\0\0\0\1\u0098\1\0\0\0\1\u009a\1\0\0\0\1\u009c"+
+		"\0\b\u00ceZ\t\4\0\1\2\3\26\2\n\n\r\r\1\"\"\5\609__\u00b7\u00b7\u0300\u036f"+
+		"\u203f\u2040\rAZaz\u00c0\u00d6\u00d8\u00f6\u00f8\u02ff\u0370\u037d\u037f"+
+		"\u1fff\u200c\u200d\u2070\u218f\u2c00\u2fef\u3001\ud7ff\uf900\ufdcf\ufdf0"+
+		"\ufffd\1\'\'\1\"\"\2\'\'\\\\\3\609AFaf\b\"\"\'\'\\\\bbffnnrrtt\3\t\n\f"+
+		"\r  \2\n\n\r\r\3\t\t\f\f  \3\t\n\f\r  \5$$\609AZ__az\4\609AZ__az\r\t\n"+
+		"\r\r  \"\"$$\'),,\609<>AZ\\]__az\2\t\t  \4\609AZ__az\2**//\f\t\n\r\r "+
+		" \"\"$$\'),:<>A]__a{}}\2\t\t  \1\\]\u02c6\0\4\1\0\0\0\0\6\1\0\0\0\0\f"+
+		"\1\0\0\0\0\16\1\0\0\0\0\20\1\0\0\0\0\22\1\0\0\0\0\24\1\0\0\0\0\26\1\0"+
+		"\0\0\0\30\1\0\0\0\0\32\1\0\0\0\0\34\1\0\0\0\0\36\1\0\0\0\0 \1\0\0\0\0"+
+		"\"\1\0\0\0\0$\1\0\0\0\0&\1\0\0\0\0(\1\0\0\0\0*\1\0\0\0\0,\1\0\0\0\0.\1"+
+		"\0\0\0\0\60\1\0\0\0\0\62\1\0\0\0\0\64\1\0\0\0\0\66\1\0\0\0\08\1\0\0\0"+
+		"\0:\1\0\0\0\0<\1\0\0\0\0>\1\0\0\0\0@\1\0\0\0\0B\1\0\0\0\0D\1\0\0\0\0F"+
+		"\1\0\0\0\0H\1\0\0\0\0J\1\0\0\0\0L\1\0\0\0\0N\1\0\0\0\0P\1\0\0\0\0R\1\0"+
+		"\0\0\0T\1\0\0\0\0V\1\0\0\0\0X\1\0\0\0\0Z\1\0\0\0\0\\\1\0\0\0\0^\1\0\0"+
+		"\0\0`\1\0\0\0\0b\1\0\0\0\0d\1\0\0\0\0f\1\0\0\0\0r\1\0\0\0\0t\1\0\0\0\0"+
+		"|\1\0\0\0\0\u0084\1\0\0\0\1\u0086\1\0\0\0\1\u0088\1\0\0\0\1\u008a\1\0"+
+		"\0\0\1\u008c\1\0\0\0\1\u008e\1\0\0\0\1\u0090\1\0\0\0\1\u0092\1\0\0\0\1"+
+		"\u0094\1\0\0\0\1\u0096\1\0\0\0\1\u0098\1\0\0\0\1\u009a\1\0\0\0\1\u009c"+
 		"\1\0\0\0\1\u009e\1\0\0\0\2\u00a0\1\0\0\0\2\u00a2\1\0\0\0\2\u00a4\1\0\0"+
 		"\0\2\u00a6\1\0\0\0\2\u00a8\1\0\0\0\2\u00aa\1\0\0\0\2\u00ac\1\0\0\0\2\u00ae"+
 		"\1\0\0\0\2\u00b0\1\0\0\0\2\u00b2\1\0\0\0\2\u00b4\1\0\0\0\2\u00b6\1\0\0"+

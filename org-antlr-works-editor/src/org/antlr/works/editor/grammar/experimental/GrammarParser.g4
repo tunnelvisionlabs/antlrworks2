@@ -27,41 +27,41 @@ options {
 // nodes for the AST we are generating. The tokens section is where we
 // specify any such tokens
 tokens {
-    RULE;
-	PREC_RULE; // flip to this if we find that it's left-recursive
-    RULES;
-    RULEMODIFIERS;
-    RULEACTIONS;
-    BLOCK;
-    OPTIONAL;
-    CLOSURE;
-    POSITIVE_CLOSURE;
-    RANGE;
-    SET;
-    CHAR_RANGE;
-    EPSILON;
-    ALT;
-    ALTLIST;
-    ID;
-    ARG;
-    ARGLIST;
-    RET;
-	COMBINED;
-    INITACTION;
-    LABEL;                // $x used in rewrite rules
-    TEMPLATE;
-    WILDCARD;
+    RULE,
+	PREC_RULE, // flip to this if we find that it's left-recursive
+    RULES,
+    RULEMODIFIERS,
+    RULEACTIONS,
+    BLOCK,
+    OPTIONAL,
+    CLOSURE,
+    POSITIVE_CLOSURE,
+    RANGE,
+    SET,
+    CHAR_RANGE,
+    EPSILON,
+    ALT,
+    ALTLIST,
+    ID,
+    ARG,
+    ARGLIST,
+    RET,
+	COMBINED,
+    INITACTION,
+    LABEL,                // $x used in rewrite rules
+    TEMPLATE,
+    WILDCARD,
     // A generic node indicating a list of something when we don't
     // really need to distinguish what we have a list of as the AST
     // will 'kinow' by context.
     //
-    LIST;
-    ELEMENT_OPTIONS;      // TOKEN<options>
-    RESULT;
+    LIST,
+    ELEMENT_OPTIONS,      // TOKEN<options>
+    RESULT,
 
     // lexer action stuff
-    LEXER_ALT_ACTION;
-    LEXER_ACTION_CALL; // ID(foo)
+    LEXER_ALT_ACTION,
+    LEXER_ACTION_CALL, // ID(foo)
 }
 
 // Include the copyright in this source and also the generated source

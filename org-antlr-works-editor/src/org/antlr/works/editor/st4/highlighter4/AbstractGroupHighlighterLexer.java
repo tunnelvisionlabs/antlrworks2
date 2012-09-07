@@ -53,12 +53,13 @@ public abstract class AbstractGroupHighlighterLexer extends Lexer {
 		"OPEN_DELIMITER", "CLOSE_DELIMITER", "'('", "')'", "','", "'.'", "':'", 
 		"'::='", "'='", "'@'", "']'", "'['", "LBRACE", "'}'", "'group'", "'default'", 
 		"'import'", "'true'", "'false'", "DELIMITERS", "WS", "NEWLINE", "ID", 
-		"'\"'", "'<<'", "'<%'", "LINE_COMMENT", "'/*'", "ANYCHAR", "AnonymousTemplate_ID", 
+		"STRING", "'<<'", "'<%'", "LINE_COMMENT", "'/*'", "ANYCHAR", "AnonymousTemplate_ID", 
 		"AnonymousTemplate_COMMA", "TEXT", "TEMPLATE_PARAMETER", "'|'", "'>>'", 
 		"'%>'", "'super'", "'if'", "'elseif'", "'endif'", "'else'", "'end'", "FIRST", 
 		"LAST", "REST", "TRUNC", "STRIP", "TRIM", "LENGTH", "STRLEN", "REVERSE", 
 		"'...'", "NOT", "'||'", "'&&'", "';'", "ESCAPE", "REGION_ID", "DelimitersOpenSpec_DELIMITER_STRING", 
-		"DelimitersCloseSpec_DELIMITER_STRING", "'*/'", "'*'", "'!'", "'>'", "'%'"
+		"DelimitersCloseSpec_DELIMITER_STRING", "'*/'", "'*'", "TemplateComment_BLOCK_COMMENT_BANG", 
+		"'>'", "'%'"
 	};
 	public static final String[] ruleNames = {
 		"LPAREN", "RPAREN", "COMMA", "DOT", "COLON", "DEFINED", "EQUALS", "AT", 

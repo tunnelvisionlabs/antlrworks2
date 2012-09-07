@@ -26,8 +26,8 @@ package org.antlr.works.editor.st4.highlighter4;
 }
 
 tokens {
-    OPEN_DELIMITER;
-    CLOSE_DELIMITER;
+    OPEN_DELIMITER,
+    CLOSE_DELIMITER,
 }
 
 LPAREN  : '(';
