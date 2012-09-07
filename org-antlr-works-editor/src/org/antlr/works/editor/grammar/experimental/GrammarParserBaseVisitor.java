@@ -103,8 +103,6 @@ public class GrammarParserBaseVisitor<Result> extends AbstractParseTreeVisitor<T
 
 	@Override public Result visitLexerCommandName(AbstractGrammarParser.LexerCommandNameContext ctx) { return visitChildren(ctx); }
 
-	@Override public Result visitTokenSpec(AbstractGrammarParser.TokenSpecContext ctx) { return visitChildren(ctx); }
-
 	@Override public Result visitBlock(AbstractGrammarParser.BlockContext ctx) { return visitChildren(ctx); }
 
 	@Override public Result visitArgActionParameterTypePart(AbstractGrammarParser.ArgActionParameterTypePartContext ctx) { return visitChildren(ctx); }

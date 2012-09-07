@@ -209,16 +209,8 @@ delegateGrammar
  *  {tree} parser.
  */
 tokensSpec
-	: TOKENS tokenSpec+ RBRACE
-	;
-
-tokenSpec
-	:	id
-		(	ASSIGN STRING_LITERAL
-		|
-		)
-		SEMI
-	|	RULE_REF // INVALID! (an error alt)
+@version{1}
+	: TOKENS id (COMMA id)* COMMA? RBRACE
 	;
 
 actionBlock

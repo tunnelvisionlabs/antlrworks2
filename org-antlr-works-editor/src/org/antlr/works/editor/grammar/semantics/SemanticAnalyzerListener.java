@@ -93,7 +93,6 @@ import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.RulesCo
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.SetElementContext;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.TerminalContext;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.ThrowsSpecContext;
-import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.TokenSpecContext;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.TokensSpecContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParserListener;
 import org.netbeans.api.annotations.common.NonNull;
@@ -639,14 +638,6 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
     }
 
     @Override
-    public void enterTokenSpec(TokenSpecContext ctx) {
-    }
-
-    @Override
-    public void exitTokenSpec(TokenSpecContext ctx) {
-    }
-
-    @Override
     public void enterBlock(BlockContext ctx) {
     }
 
@@ -723,7 +714,7 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
     @RuleDependencies({
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=1),
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_grammarSpec, version=0),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_tokenSpec, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_tokensSpec, version=1),
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_modeSpec, version=0),
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommand, version=1),
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommandName, version=0),
@@ -761,7 +752,7 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
                 }
                 break;
 
-            case GrammarParser.RULE_tokenSpec:
+            case GrammarParser.RULE_tokensSpec:
                 tokenDecorator.putProperty(ctx.start, GrammarTreeProperties.PROP_NODE_TYPE, NodeType.TOKEN_DECL);
                 declaredRules.put(ctx.start.getText(), ctx.start);
                 break;

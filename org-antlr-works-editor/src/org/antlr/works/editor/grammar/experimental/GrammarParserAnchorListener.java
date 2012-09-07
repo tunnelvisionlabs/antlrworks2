@@ -25,7 +25,6 @@ import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.works.editor.antlr4.parsing.ParseTrees;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.GrammarTypeContext;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.RuleSpecContext;
-import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.TokenSpecContext;
 import org.netbeans.api.annotations.common.NonNull;
 import org.openide.util.Parameters;
 
@@ -103,18 +102,6 @@ public class GrammarParserAnchorListener extends GrammarParserBaseListener {
     @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleSpec, version=0)
     public void exitRuleSpec(RuleSpecContext ctx) {
         exitAnchor(ctx, GrammarParser.RULE_ruleSpec);
-    }
-
-    @Override
-    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_tokenSpec, version=0)
-    public void enterTokenSpec(TokenSpecContext ctx) {
-        enterAnchor(ctx);
-    }
-
-    @Override
-    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_tokenSpec, version=0)
-    public void exitTokenSpec(TokenSpecContext ctx) {
-        exitAnchor(ctx, GrammarParser.RULE_tokenSpec);
     }
 
     private void enterAnchor(ParserRuleContext<Token> ctx) {

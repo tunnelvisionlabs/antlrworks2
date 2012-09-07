@@ -50,7 +50,7 @@ import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.OptionV
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.ParserRuleSpecContext;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.QidContext;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.RuleReturnsContext;
-import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.TokenSpecContext;
+import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.TokensSpecContext;
 import org.antlr.works.editor.grammar.semantics.LiteralLexerRuleValueVisitor;
 import org.antlr.works.editor.grammar.semantics.LiteralLexerRuleVisitor;
 import org.antlr.works.editor.grammar.semantics.SemanticAnalyzerListener;
@@ -202,29 +202,25 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_tokenSpec, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_tokensSpec, version=1),
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=1),
     })
-    public void enterTokenSpec(TokenSpecContext ctx) {
-        IdContext id = ctx.id();
-        if (id == null) {
-            return;
-        }
+    public void enterTokensSpec(TokensSpecContext ctx) {
+        for (IdContext id : ctx.id()) {
+            Token token = id.start;
+            if (token == null) {
+                continue;
+            }
 
-        String tokenName = ctx.id().start.getText();
-        String literal = null;
-        TerminalNode<Token> literalNode = ctx.STRING_LITERAL();
-        if (literalNode != null) {
-            literal = literalNode.getSymbol().getText();
-            literal = literal.substring(1, literal.length() - 1);
+            String tokenName = token.getText();
+            RuleModelImpl ruleModel = new TokenRuleModelImpl(tokenName, null, fileModel);
+            ruleContainerStack.peek().add(ruleModel);
         }
-
-        RuleModelImpl ruleModel = new TokenRuleModelImpl(ctx.id().start.getText(), literal, fileModel);
-        ruleContainerStack.peek().add(ruleModel);
     }
 
     @Override
-    public void exitTokenSpec(TokenSpecContext ctx) {
+    public void exitTokensSpec(TokensSpecContext ctx) {
+        super.exitTokensSpec(ctx);
     }
 
     @Override
