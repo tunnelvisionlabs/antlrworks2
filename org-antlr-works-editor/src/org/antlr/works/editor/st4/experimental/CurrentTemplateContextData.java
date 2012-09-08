@@ -9,6 +9,7 @@
 package org.antlr.works.editor.st4.experimental;
 
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
+import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.works.editor.st4.experimental.TemplateParser.GroupContext;
 import org.netbeans.api.annotations.common.CheckForNull;
 import org.netbeans.api.annotations.common.NonNull;
@@ -22,8 +23,10 @@ public class CurrentTemplateContextData {
     @NonNull
     private final DocumentSnapshot snapshot;
     @NullAllowed
+    @RuleDependency(recognizer=TemplateParser.class, rule=TemplateParser.RULE_group, version=0)
     private final GroupContext context;
 
+    @RuleDependency(recognizer=TemplateParser.class, rule=TemplateParser.RULE_group, version=0)
     public CurrentTemplateContextData(@NonNull DocumentSnapshot snapshot, @NullAllowed GroupContext context) {
         this.snapshot = snapshot;
         this.context = context;
@@ -35,6 +38,7 @@ public class CurrentTemplateContextData {
     }
 
     @CheckForNull
+    @RuleDependency(recognizer=TemplateParser.class, rule=TemplateParser.RULE_group, version=0)
     public GroupContext getContext() {
         return context;
     }

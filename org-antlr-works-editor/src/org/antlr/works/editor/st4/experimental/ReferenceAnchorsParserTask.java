@@ -38,6 +38,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.DefaultErrorStrategy;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RecognitionException;
+import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenSource;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
@@ -65,6 +66,7 @@ public class ReferenceAnchorsParserTask implements ParserTask {
     }
 
     @Override
+    @RuleDependency(recognizer=TemplateParser.class, rule=TemplateParser.RULE_group, version=0)
     public void parse(ParserTaskManager taskManager, ParseContext context, DocumentSnapshot snapshot, Collection<ParserDataDefinition<?>> requestedData, ParserResultHandler results) throws InterruptedException, ExecutionException {
         synchronized (lock) {
             ParserData<ParserRuleContext<Token>> parseTreeResult = taskManager.getData(snapshot, TemplateParserDataDefinitions.REFERENCE_PARSE_TREE, EnumSet.of(ParserDataOptions.NO_UPDATE)).get();
@@ -78,7 +80,7 @@ public class ReferenceAnchorsParserTask implements ParserTask {
         //        input.setSourceName((String)document.getDocument().getProperty(Document.TitleProperty));
         //        GrammarLexer lexer = new GrammarLexer(input);
                 InterruptableTokenStream tokenStream = new InterruptableTokenStream(tokenSource);
-                ParserRuleContext<Token> parseResult;
+                TemplateParser.GroupContext parseResult;
                 TemplateParser parser = TemplateParserCache.DEFAULT.getParser(tokenStream);
                 try {
                     parser.getInterpreter().disable_global_context = true;

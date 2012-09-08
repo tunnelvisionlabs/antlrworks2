@@ -19,6 +19,7 @@ import javax.swing.text.StyledDocument;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.netbeans.parsing.spi.ParserData;
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
@@ -26,6 +27,7 @@ import org.antlr.works.editor.antlr4.semantics.AbstractParseTreeSemanticHighligh
 import org.antlr.works.editor.antlr4.semantics.AbstractSemanticHighlighter;
 import org.antlr.works.editor.st4.StringTemplateEditorKit;
 import org.antlr.works.editor.st4.TemplateParserDataDefinitions;
+import org.antlr.works.editor.st4.experimental.TemplateParser;
 import org.antlr.works.editor.st4.experimental.TemplateParser.AnonymousTemplateContext;
 import org.antlr.works.editor.st4.experimental.TemplateParser.AnonymousTemplateParametersContext;
 import org.antlr.works.editor.st4.experimental.TemplateParser.DictDefContext;
@@ -175,6 +177,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
         }
 
         @Override
+        @RuleDependency(recognizer=TemplateParser.class, rule=TemplateParser.RULE_dictDef, version=0)
         public void enterDictDef(DictDefContext ctx) {
             if (ctx.name != null) {
                 dictionaryDeclarations.add(ctx.name);
@@ -182,6 +185,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
         }
 
         @Override
+        @RuleDependency(recognizer=TemplateParser.class, rule=TemplateParser.RULE_templateDef, version=0)
         public void enterTemplateDef(TemplateDefContext ctx) {
             parameters.push(new HashSet<String>());
 
@@ -204,11 +208,13 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
         }
 
         @Override
+        @RuleDependency(recognizer=TemplateParser.class, rule=TemplateParser.RULE_templateDef, version=0)
         public void exitTemplateDef(TemplateDefContext ctx) {
             parameters.pop();
         }
 
         @Override
+        @RuleDependency(recognizer=TemplateParser.class, rule=TemplateParser.RULE_formalArg, version=0)
         public void enterFormalArg(FormalArgContext ctx) {
             if (ctx.name != null) {
                 parameterDeclarations.add(ctx.name);
@@ -219,16 +225,19 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
         }
 
         @Override
+        @RuleDependency(recognizer=TemplateParser.class, rule=TemplateParser.RULE_anonymousTemplate, version=0)
         public void enterAnonymousTemplate(AnonymousTemplateContext ctx) {
             parameters.push(new HashSet<String>());
         }
 
         @Override
+        @RuleDependency(recognizer=TemplateParser.class, rule=TemplateParser.RULE_anonymousTemplate, version=0)
         public void exitAnonymousTemplate(AnonymousTemplateContext ctx) {
             parameters.pop();
         }
 
         @Override
+        @RuleDependency(recognizer=TemplateParser.class, rule=TemplateParser.RULE_anonymousTemplateParameters, version=0)
         public void enterAnonymousTemplateParameters(AnonymousTemplateParametersContext ctx) {
             if (ctx.names != null) {
                 parameterDeclarations.addAll(ctx.names);
@@ -241,6 +250,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
         }
 
         @Override
+        @RuleDependency(recognizer=TemplateParser.class, rule=TemplateParser.RULE_option, version=0)
         public void enterOption(OptionContext ctx) {
             if (ctx.name != null) {
                 options.add(ctx.name);
@@ -248,6 +258,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
         }
 
         @Override
+        @RuleDependency(recognizer=TemplateParser.class, rule=TemplateParser.RULE_includeExpr, version=0)
         public void enterIncludeExpr(IncludeExprContext ctx) {
             if (ctx.templateName != null) {
                 if (ctx.AT() != null) {
@@ -263,6 +274,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
         }
 
         @Override
+        @RuleDependency(recognizer=TemplateParser.class, rule=TemplateParser.RULE_primary, version=0)
         public void enterPrimary(PrimaryContext ctx) {
             TerminalNode<Token> id = ctx.ID();
             if (id != null) {
@@ -276,6 +288,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
         }
 
         @Override
+        //@RuleDependency(recognizer=TemplateParser.class, rule=TemplateParser.RULE_group, version=0)
         public void exitGroup(GroupContext ctx) {
         }
     }
