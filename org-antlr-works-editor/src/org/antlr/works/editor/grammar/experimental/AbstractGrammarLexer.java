@@ -36,7 +36,7 @@ public abstract class AbstractGrammarLexer extends Lexer {
 		ACTION_LBRACK=73, ACTION_RBRACK=74, ACTION_EQUALS=75, ACTION_COMMA=76, 
 		ACTION_COLON2=77, ACTION_COLON=78, ACTION_MINUS=79, ACTION_ESCAPE=80, 
 		ACTION_WORD=81, ACTION_REFERENCE=82, ACTION_COMMENT=83, ACTION_LITERAL=84, 
-		ACTION_TEXT=85, ACTION_WS=86, ACTION_NEWLINE=87, END_ACTION=88, END_LEXER_CHAR_SET=89;
+		ACTION_TEXT=85, ACTION_WS=86, ACTION_NEWLINE=87, END_ACTION=88;
 	public static final int ArgAction = 1;
 	public static final int Action = 2;
 	public static final int LexerCharSet = 3;
@@ -57,11 +57,11 @@ public abstract class AbstractGrammarLexer extends Lexer {
 		"WS", "ERRCHAR", "ARG_ACTION_LT", "ARG_ACTION_GT", "ARG_ACTION_LPAREN", 
 		"ARG_ACTION_RPAREN", "ARG_ACTION_EQUALS", "ARG_ACTION_COMMA", "ARG_ACTION_ESCAPE", 
 		"ARG_ACTION_WORD", "ARG_ACTION_ELEMENT", "ARG_ACTION_TEXT", "ARG_ACTION_WS", 
-		"ARG_ACTION_NEWLINE", "END_ARG_ACTION", "ACTION_DOT", "'<'", "'>'", "'('", 
-		"')'", "ACTION_LBRACK", "ACTION_RBRACK", "'='", "','", "ACTION_COLON2", 
-		"ACTION_COLON", "'-'", "ACTION_ESCAPE", "ACTION_WORD", "ACTION_REFERENCE", 
-		"ACTION_COMMENT", "ACTION_LITERAL", "ACTION_TEXT", "ACTION_WS", "ACTION_NEWLINE", 
-		"END_ACTION", "']'"
+		"ARG_ACTION_NEWLINE", "END_ARG_ACTION", "ACTION_DOT", "ACTION_LT", "ACTION_GT", 
+		"ACTION_LPAREN", "ACTION_RPAREN", "ACTION_LBRACK", "ACTION_RBRACK", "ACTION_EQUALS", 
+		"ACTION_COMMA", "ACTION_COLON2", "ACTION_COLON", "'-'", "ACTION_ESCAPE", 
+		"ACTION_WORD", "ACTION_REFERENCE", "ACTION_COMMENT", "ACTION_LITERAL", 
+		"ACTION_TEXT", "ACTION_WS", "ACTION_NEWLINE", "END_ACTION"
 	};
 	public static final String[] ruleNames = {
 		"DOC_COMMENT", "BLOCK_COMMENT", "COMMENT", "BLOCK_COMMENT_BODY", "LINE_COMMENT", 
@@ -729,7 +729,7 @@ public abstract class AbstractGrammarLexer extends Lexer {
 	}
 
 	public static final String _serializedATN =
-		"\2Y\u02aa\6\uffff\6\uffff\6\uffff\6\uffff\2\0\7\0\2\1\7\1\2\2\7\2\2\3"+
+		"\2X\u02aa\6\uffff\6\uffff\6\uffff\6\uffff\2\0\7\0\2\1\7\1\2\2\7\2\2\3"+
 		"\7\3\2\4\7\4\2\5\7\5\2\6\7\6\2\7\7\7\2\b\7\b\2\t\7\t\2\n\7\n\2\13\7\13"+
 		"\2\f\7\f\2\r\7\r\2\16\7\16\2\17\7\17\2\20\7\20\2\21\7\21\2\22\7\22\2\23"+
 		"\7\23\2\24\7\24\2\25\7\25\2\26\7\26\2\27\7\27\2\30\7\30\2\31\7\31\2\32"+
@@ -787,7 +787,7 @@ public abstract class AbstractGrammarLexer extends Lexer {
 		"I\uffff\u00acJ\uffff\u00aeK\uffff\u00b0L\uffff\u00b2M\uffff\u00b4N\uffff"+
 		"\u00b6O\uffff\u00b8P\uffff\u00baQ\uffff\u00bcR\uffff\u00beS\uffff\u00c0"+
 		"T\uffff\u00c2U\uffff\u00c4V\uffff\u00c6W\uffff\u00c8X\7\u00ca\0\b\u00cc"+
-		"Y\t\4\0\1\2\3\26\2\n\n\r\r\1\"\"\5\609__\u00b7\u00b7\u0300\u036f\u203f"+
+		"\0\t\4\0\1\2\3\26\2\n\n\r\r\1\"\"\5\609__\u00b7\u00b7\u0300\u036f\u203f"+
 		"\u2040\rAZaz\u00c0\u00d6\u00d8\u00f6\u00f8\u02ff\u0370\u037d\u037f\u1fff"+
 		"\u200c\u200d\u2070\u218f\u2c00\u2fef\u3001\ud7ff\uf900\ufdcf\ufdf0\ufffd"+
 		"\1\'\'\1\"\"\2\'\'\\\\\3\609AFaf\b\"\"\'\'\\\\bbffnnrrtt\3\t\n\f\r  \2"+

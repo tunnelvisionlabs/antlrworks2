@@ -34,7 +34,7 @@ public abstract class AbstractGrammarHighlighterLexer extends Lexer {
 		ArgAction_ESCAPE=67, ArgAction_REFERENCE=68, Action_COMMENT=69, Action_ML_COMMENT=70, 
 		Action_TEXT=71, Action_CHAR_LITERAL=72, Action_STRING_LITERAL=73, Action_ESCAPE=74, 
 		Action_REFERENCE=75, LexerCharSet_ESCAPE=76, LexerCharSet_INVALID_ESCAPE=77, 
-		LexerCharSet_TEXT=78, LexerCharSet_RBRACK=79;
+		LexerCharSet_TEXT=78;
 	public static final int BlockComment = 1;
 	public static final int ArgAction = 2;
 	public static final int NonActionBrace = 3;
@@ -60,7 +60,7 @@ public abstract class AbstractGrammarHighlighterLexer extends Lexer {
 		"ArgAction_ESCAPE", "ArgAction_REFERENCE", "Action_COMMENT", "Action_ML_COMMENT", 
 		"Action_TEXT", "Action_CHAR_LITERAL", "Action_STRING_LITERAL", "Action_ESCAPE", 
 		"Action_REFERENCE", "LexerCharSet_ESCAPE", "LexerCharSet_INVALID_ESCAPE", 
-		"LexerCharSet_TEXT", "']'"
+		"LexerCharSet_TEXT"
 	};
 	public static final String[] ruleNames = {
 		"LEXER", "PARSER", "CATCH", "FINALLY", "GRAMMAR", "PRIVATE", "PROTECTED", 
@@ -711,7 +711,7 @@ public abstract class AbstractGrammarHighlighterLexer extends Lexer {
 	}
 
 	public static final String _serializedATN =
-		"\2O\u028d\6\uffff\6\uffff\6\uffff\6\uffff\6\uffff\6\uffff\2\0\7\0\2\1"+
+		"\2N\u028d\6\uffff\6\uffff\6\uffff\6\uffff\6\uffff\6\uffff\2\0\7\0\2\1"+
 		"\7\1\2\2\7\2\2\3\7\3\2\4\7\4\2\5\7\5\2\6\7\6\2\7\7\7\2\b\7\b\2\t\7\t\2"+
 		"\n\7\n\2\13\7\13\2\f\7\f\2\r\7\r\2\16\7\16\2\17\7\17\2\20\7\20\2\21\7"+
 		"\21\2\22\7\22\2\23\7\23\2\24\7\24\2\25\7\25\2\26\7\26\2\27\7\27\2\30\7"+
@@ -763,7 +763,7 @@ public abstract class AbstractGrammarHighlighterLexer extends Lexer {
 		"\u009e\0\20\u00a0\0\21\u00a2\0\22\u00a4E\uffff\u00a6F\23\u00a8\0\24\u00aa"+
 		"\0\25\u00acG\uffff\u00aeH\uffff\u00b0I\uffff\u00b2J\uffff\u00b4K\uffff"+
 		"\u00b6\0\26\u00b8\0\27\u00ba\0\30\u00bcL\uffff\u00beM\uffff\u00c0N\uffff"+
-		"\u00c2O\31\6\0\1\2\3\4\5\22\3AZ__az\4\609AZ__az\2\t\t  \2\n\n\r\r\4\n"+
+		"\u00c2\0\31\6\0\1\2\3\4\5\22\3AZ__az\4\609AZ__az\2\t\t  \2\n\n\r\r\4\n"+
 		"\n\r\r\'\'\\\\\4\n\n\r\r\"\"\\\\\3\t\n\r\r  \3\609AFaf\3\n\n\r\r**\t\n"+
 		"\n\r\r\"\"$$\'\'//[]{{}}\t\"\"\'\'>>\\]bbffnnrrtt\3$$//\\\\\2\n\n\r\r"+
 		"\t\n\n\r\r\"\"$$\'\'//\\\\{{}}\t\"\"\'\'>>\\\\bbffnnrrtt\3$$//\\\\\3\n"+
