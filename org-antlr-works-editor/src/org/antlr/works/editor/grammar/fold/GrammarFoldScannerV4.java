@@ -148,6 +148,10 @@ public class GrammarFoldScannerV4 extends AbstractFoldScanner<CompiledModel> {
             return null;
         }
 
+        if (stopToken.getStopIndex() + 1 > snapshot.length()) {
+            return null;
+        }
+
         SnapshotPositionRegion region = new SnapshotPositionRegion(snapshot, OffsetRegion.fromBounds(startToken.getStartIndex(), stopToken.getStopIndex() + 1));
         FoldInfo fold = new FoldInfo(region, blockHint);
         return fold;
