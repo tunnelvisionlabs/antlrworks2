@@ -223,7 +223,7 @@ public class TemplateLexer extends AbstractTemplateLexer {
             if (rangeTransition.from <= OPEN_DELIMITER_PLACEHOLDER && rangeTransition.to >= OPEN_DELIMITER_PLACEHOLDER) {
                 removeLabel = OPEN_DELIMITER_PLACEHOLDER;
                 addLabel = openDelimiter;
-            } else if (rangeTransition.from <= OPEN_DELIMITER_PLACEHOLDER && rangeTransition.to >= OPEN_DELIMITER_PLACEHOLDER) {
+            } else if (rangeTransition.from <= CLOSE_DELIMITER_PLACEHOLDER && rangeTransition.to >= CLOSE_DELIMITER_PLACEHOLDER) {
                 removeLabel = CLOSE_DELIMITER_PLACEHOLDER;
                 addLabel = closeDelimiter;
             } else {
