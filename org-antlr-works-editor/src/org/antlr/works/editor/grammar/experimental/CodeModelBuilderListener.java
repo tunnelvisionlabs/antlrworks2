@@ -24,6 +24,7 @@ import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.misc.Interval;
+import org.antlr.v4.runtime.misc.Utils;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.works.editor.antlr4.parsing.ParseTrees;
 import org.antlr.works.editor.grammar.codemodel.impl.FileModelImpl;
@@ -229,7 +230,17 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=1),
     })
     public void enterModeSpec(ModeSpecContext ctx) {
-        ModeModelImpl modeModel = new ModeModelImpl(ctx.id().start.getText(), fileModel);
+        String name = null;
+        IdContext nameId = ctx.id();
+        if (nameId != null) {
+            name = nameId.start.getText();
+        }
+
+        if (name == null || name.isEmpty()) {
+            name = "?mode?";
+        }
+
+        ModeModelImpl modeModel = new ModeModelImpl(name, fileModel);
         modeContainerStack.peek().add(modeModel);
         modeModelStack.push(modeModel);
         ruleContainerStack.push(modeModel.getRules());
