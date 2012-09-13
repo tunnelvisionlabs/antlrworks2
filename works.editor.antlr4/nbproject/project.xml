@@ -112,6 +112,7 @@
             <public-packages>
                 <package>org.antlr.works.editor.antlr4.classification</package>
                 <package>org.antlr.works.editor.antlr4.completion</package>
+                <package>org.antlr.works.editor.antlr4.fold</package>
                 <package>org.antlr.works.editor.antlr4.highlighting</package>
                 <package>org.antlr.works.editor.antlr4.parsing</package>
                 <package>org.antlr.works.editor.antlr4.semantics</package>
