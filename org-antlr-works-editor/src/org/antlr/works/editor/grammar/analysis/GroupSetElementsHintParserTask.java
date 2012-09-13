@@ -197,6 +197,9 @@ public class GroupSetElementsHintParserTask implements ParserTask {
                 if (interval.length() > 1) {
                     TerminalNode<Token> firstNode = ParseTrees.getStartNode(alternatives.get(interval.a));
                     TerminalNode<Token> lastNode = ParseTrees.getStopNode(alternatives.get(interval.b));
+                    if (firstNode == null || lastNode == null) {
+                        continue;
+                    }
 
                     int startIndex = firstNode.getSymbol().getStartIndex();
                     int stopIndex = lastNode.getSymbol().getStopIndex();
