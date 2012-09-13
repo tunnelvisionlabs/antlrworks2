@@ -38,7 +38,7 @@ public class AntlrSyntaxErrorV4 extends SyntaxError {
         if (offendingToken != null) {
             int startOffset = offendingToken.getStartIndex();
             int endOffset = offendingToken.getStopIndex() + 1;
-            if (startOffset < 0 || endOffset < startOffset) {
+            if (startOffset < 0 || endOffset + 1 < startOffset) {
                 return new SnapshotPositionRegion(snapshot, 0, 0);
             }
 
