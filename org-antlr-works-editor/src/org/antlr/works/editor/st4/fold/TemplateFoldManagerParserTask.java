@@ -10,17 +10,11 @@ package org.antlr.works.editor.st4.fold;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-import org.antlr.netbeans.editor.fold.AbstractFoldScanner;
-import org.antlr.netbeans.editor.text.DocumentSnapshot;
-import org.antlr.netbeans.parsing.spi.ParseContext;
+import org.antlr.netbeans.editor.fold.AbstractFoldManagerParserTask;
 import org.antlr.netbeans.parsing.spi.ParserData;
 import org.antlr.netbeans.parsing.spi.ParserDataDefinition;
-import org.antlr.netbeans.parsing.spi.ParserResultHandler;
 import org.antlr.netbeans.parsing.spi.ParserTask;
 import org.antlr.netbeans.parsing.spi.ParserTaskDefinition;
-import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.netbeans.parsing.spi.ParserTaskProvider;
 import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
 import org.antlr.netbeans.parsing.spi.SingletonParserTaskProvider;
@@ -33,9 +27,13 @@ import org.netbeans.api.editor.mimelookup.MimeRegistration;
  *
  * @author Sam Harwell
  */
-public class TemplateFoldManagerParserTask implements ParserTask {
+public class TemplateFoldManagerParserTask extends AbstractFoldManagerParserTask<CompiledModel> {
 
     private final TemplateFoldScanner templateFoldScanner = new TemplateFoldScanner();
+
+    private TemplateFoldManagerParserTask() {
+        super(TemplateParserDataDefinitions.COMPILED_MODEL);
+    }
 
     @Override
     public ParserTaskDefinition getDefinition() {
@@ -43,17 +41,15 @@ public class TemplateFoldManagerParserTask implements ParserTask {
     }
 
     @Override
-    public void parse(ParserTaskManager taskManager, ParseContext context, DocumentSnapshot snapshot, Collection<ParserDataDefinition<?>> requestedData, ParserResultHandler results)
-        throws InterruptedException, ExecutionException {
+    protected Runnable getScanner(final ParserData<CompiledModel> model) {
+        return new Runnable() {
 
-        Future<ParserData<CompiledModel>> futureData = taskManager.getData(snapshot, context.getComponent(), TemplateParserDataDefinitions.COMPILED_MODEL);
-        ParserData<CompiledModel> parserData = futureData.get();
-        AbstractFoldScanner<CompiledModel> scanner = getScanner();
-        scanner.run(parserData);
-    }
+            @Override
+            public void run() {
+                templateFoldScanner.run(model);
+            }
 
-    private TemplateFoldScanner getScanner() {
-        return templateFoldScanner;
+        };
     }
 
     private static final class Definition extends ParserTaskDefinition {

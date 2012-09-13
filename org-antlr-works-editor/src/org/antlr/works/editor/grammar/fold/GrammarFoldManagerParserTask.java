@@ -10,19 +10,14 @@ package org.antlr.works.editor.grammar.fold;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
+import org.antlr.netbeans.editor.fold.AbstractFoldManagerParserTask;
 import org.antlr.netbeans.editor.fold.AbstractFoldScanner;
-import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.netbeans.editor.text.VersionedDocument;
 import org.antlr.netbeans.parsing.spi.DocumentParserTaskProvider;
-import org.antlr.netbeans.parsing.spi.ParseContext;
 import org.antlr.netbeans.parsing.spi.ParserData;
 import org.antlr.netbeans.parsing.spi.ParserDataDefinition;
-import org.antlr.netbeans.parsing.spi.ParserResultHandler;
 import org.antlr.netbeans.parsing.spi.ParserTask;
 import org.antlr.netbeans.parsing.spi.ParserTaskDefinition;
-import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.netbeans.parsing.spi.ParserTaskProvider;
 import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
 import org.antlr.works.editor.grammar.GrammarEditorKit;
@@ -35,11 +30,15 @@ import org.netbeans.api.editor.mimelookup.MimeRegistration;
  *
  * @author Sam Harwell
  */
-public class GrammarFoldManagerParserTask implements ParserTask {
+public class GrammarFoldManagerParserTask extends AbstractFoldManagerParserTask<CompiledModel> {
 
     private final AbstractFoldScanner<CompiledModel> v3 = new GrammarFoldScannerV3();
     private final AbstractFoldScanner<CompiledModel> v4 = new GrammarFoldScannerV4();
     private final Object lock = new Object();
+
+    private GrammarFoldManagerParserTask() {
+        super(GrammarParserDataDefinitions.COMPILED_MODEL);
+    }
 
     @Override
     public ParserTaskDefinition getDefinition() {
@@ -47,23 +46,21 @@ public class GrammarFoldManagerParserTask implements ParserTask {
     }
 
     @Override
-    public void parse(ParserTaskManager taskManager, ParseContext context, DocumentSnapshot snapshot, Collection<ParserDataDefinition<?>> requestedData, ParserResultHandler results)
-        throws InterruptedException, ExecutionException {
+    protected Runnable getScanner(final ParserData<CompiledModel> parseResult) {
+        return new Runnable() {
 
-        Future<ParserData<CompiledModel>> futureData = taskManager.getData(snapshot, context.getComponent(), GrammarParserDataDefinitions.COMPILED_MODEL);
-        ParserData<CompiledModel> parserData = futureData.get();
-        AbstractFoldScanner<CompiledModel> scanner = getScanner(parserData.getData());
-        synchronized (lock) {
-            scanner.run(parserData);
-        }
-    }
+            @Override
+            public void run() {
+                synchronized (lock) {
+                    if (parseResult.getData() instanceof CompiledModelV3) {
+                        v3.run(parseResult);
+                    } else {
+                        v4.run(parseResult);
+                    }
+                }
+            }
 
-    private AbstractFoldScanner<CompiledModel> getScanner(CompiledModel model) {
-        if (model instanceof CompiledModelV3) {
-            return v3;
-        } else {
-            return v4;
-        }
+        };
     }
 
     private static final class Definition extends ParserTaskDefinition {
