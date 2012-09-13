@@ -15,8 +15,6 @@ import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.netbeans.editor.text.OffsetRegion;
 import org.antlr.netbeans.editor.text.SnapshotPositionRegion;
 import org.antlr.netbeans.parsing.spi.ParserData;
-import org.antlr.runtime.CommonToken;
-import org.antlr.runtime.tree.CommonTree;
 import org.antlr.works.editor.st4.parser.CompiledFileModel;
 import org.antlr.works.editor.st4.parser.CompiledModel;
 import org.antlr.works.editor.st4.parser.TemplateGroupRuleReturnScope;
@@ -65,21 +63,6 @@ public class TemplateFoldScanner extends AbstractFoldScanner<CompiledModel> {
         }
 
         return folds;
-    }
-
-    private static FoldInfo createFold(CommonTree child, String blockHint, DocumentSnapshot snapshot, CommonToken[] tokens) {
-        CommonToken startToken = tokens[child.getTokenStartIndex()];
-        CommonToken stopToken = tokens[child.getTokenStopIndex()];
-
-        int startLine = snapshot.findLineNumber(startToken.getStartIndex());
-        int stopLine = snapshot.findLineNumber(stopToken.getStopIndex());
-        if (startLine >= stopLine) {
-            return null;
-        }
-
-        SnapshotPositionRegion region = new SnapshotPositionRegion(snapshot, OffsetRegion.fromBounds(startToken.getStartIndex(), stopToken.getStopIndex() + 1));
-        FoldInfo fold = new FoldInfo(region, blockHint);
-        return fold;
     }
 
 }

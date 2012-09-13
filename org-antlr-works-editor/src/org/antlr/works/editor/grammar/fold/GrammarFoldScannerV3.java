@@ -11,7 +11,6 @@ package org.antlr.works.editor.grammar.fold;
 import java.util.ArrayList;
 import java.util.List;
 import org.antlr.grammar.v3.ANTLRParser;
-import org.antlr.netbeans.editor.fold.AbstractFoldScanner;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.netbeans.editor.text.OffsetRegion;
 import org.antlr.netbeans.editor.text.SnapshotPositionRegion;
@@ -19,6 +18,7 @@ import org.antlr.netbeans.parsing.spi.ParserData;
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.CommonTree;
+import org.antlr.works.editor.antlr3.fold.AbstractAntlrFoldScanner;
 import org.antlr.works.editor.grammar.parser.CompiledModel;
 import org.antlr.works.editor.grammar.parser.CompiledModelV3;
 
@@ -26,7 +26,7 @@ import org.antlr.works.editor.grammar.parser.CompiledModelV3;
  *
  * @author Sam Harwell
  */
-public class GrammarFoldScannerV3 extends AbstractFoldScanner<CompiledModel> {
+public class GrammarFoldScannerV3 extends AbstractAntlrFoldScanner<CompiledModel> {
 
     @Override
     protected List<FoldInfo> calculateFolds(ParserData<CompiledModel> baseResult) {
@@ -66,27 +66,10 @@ public class GrammarFoldScannerV3 extends AbstractFoldScanner<CompiledModel> {
                         blockHint = "options {...}";
                     }
 
-                    CommonToken startToken = result3.getResult().getTokens()[child.getTokenStartIndex()];
-                    CommonToken stopToken = result3.getResult().getTokens()[child.getTokenStopIndex()];
-
-                    if (startToken.getType() == ANTLRParser.DOC_COMMENT) {
-                        for (int index = child.getTokenStartIndex(); index <= child.getTokenStopIndex(); index++) {
-                            startToken = result3.getResult().getTokens()[index];
-                            if (startToken.getType() != ANTLRParser.DOC_COMMENT && startToken.getChannel() != Token.HIDDEN_CHANNEL) {
-                                break;
-                            }
-                        }
+                    FoldInfo info = createFold(child, blockHint, snapshot, result3.getResult().getTokens());
+                    if (info != null) {
+                        folds.add(info);
                     }
-
-                    int startLine = snapshot.findLineNumber(startToken.getStartIndex());
-                    int stopLine = snapshot.findLineNumber(stopToken.getStopIndex());
-                    if (startLine >= stopLine) {
-                        continue;
-                    }
-
-                    SnapshotPositionRegion region = new SnapshotPositionRegion(snapshot, OffsetRegion.fromBounds(startToken.getStartIndex(), stopToken.getStopIndex() + 1));
-                    FoldInfo info = new FoldInfo(region, blockHint);
-                    folds.add(info);
                 }
             }
 
@@ -125,6 +108,21 @@ public class GrammarFoldScannerV3 extends AbstractFoldScanner<CompiledModel> {
         }
 
         return folds;
+    }
+
+    @Override
+    protected CommonToken getStartToken(CommonTree child, DocumentSnapshot snapshot, CommonToken[] tokens) {
+        CommonToken startToken = super.getStartToken(child, snapshot, tokens);
+        if (startToken.getType() == ANTLRParser.DOC_COMMENT) {
+            for (int index = child.getTokenStartIndex(); index <= child.getTokenStopIndex(); index++) {
+                startToken = tokens[index];
+                if (startToken.getType() != ANTLRParser.DOC_COMMENT && startToken.getChannel() != Token.HIDDEN_CHANNEL) {
+                    break;
+                }
+            }
+        }
+
+        return startToken;
     }
 
 }

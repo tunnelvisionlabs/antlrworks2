@@ -11,17 +11,18 @@ package org.antlr.works.editor.grammar.fold;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import org.antlr.netbeans.editor.fold.AbstractFoldScanner;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.netbeans.editor.text.OffsetRegion;
 import org.antlr.netbeans.editor.text.SnapshotPositionRegion;
 import org.antlr.netbeans.parsing.spi.ParserData;
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.Token;
+import org.antlr.runtime.tree.CommonTree;
 import org.antlr.v4.parse.ANTLRParser;
 import org.antlr.v4.runtime.misc.IntervalSet;
 import org.antlr.v4.tool.ast.GrammarAST;
 import org.antlr.v4.tool.ast.GrammarRootAST;
+import org.antlr.works.editor.antlr3.fold.AbstractAntlrFoldScanner;
 import org.antlr.works.editor.grammar.parser.CompiledModel;
 import org.antlr.works.editor.grammar.parser.CompiledModelV4;
 
@@ -29,7 +30,7 @@ import org.antlr.works.editor.grammar.parser.CompiledModelV4;
  *
  * @author Sam Harwell
  */
-public class GrammarFoldScannerV4 extends AbstractFoldScanner<CompiledModel> {
+public class GrammarFoldScannerV4 extends AbstractAntlrFoldScanner<CompiledModel> {
 
     @Override
     protected List<FoldInfo> calculateFolds(ParserData<CompiledModel> baseResult) {
@@ -129,10 +130,9 @@ public class GrammarFoldScannerV4 extends AbstractFoldScanner<CompiledModel> {
         return folds;
     }
 
-    private static FoldInfo createFold(GrammarAST child, String blockHint, DocumentSnapshot snapshot, CommonToken[] tokens) {
-        CommonToken startToken = tokens[child.getTokenStartIndex()];
-        CommonToken stopToken = tokens[child.getTokenStopIndex()];
-
+    @Override
+    protected CommonToken getStartToken(CommonTree child, DocumentSnapshot snapshot, CommonToken[] tokens) {
+        CommonToken startToken = super.getStartToken(child, snapshot, tokens);
         if (startToken.getType() == ANTLRParser.DOC_COMMENT) {
             for (int index = child.getTokenStartIndex(); index <= child.getTokenStopIndex(); index++) {
                 startToken = tokens[index];
@@ -142,19 +142,7 @@ public class GrammarFoldScannerV4 extends AbstractFoldScanner<CompiledModel> {
             }
         }
 
-        int startLine = snapshot.findLineNumber(startToken.getStartIndex());
-        int stopLine = snapshot.findLineNumber(stopToken.getStopIndex());
-        if (startLine >= stopLine) {
-            return null;
-        }
-
-        if (stopToken.getStopIndex() + 1 > snapshot.length()) {
-            return null;
-        }
-
-        SnapshotPositionRegion region = new SnapshotPositionRegion(snapshot, OffsetRegion.fromBounds(startToken.getStartIndex(), stopToken.getStopIndex() + 1));
-        FoldInfo fold = new FoldInfo(region, blockHint);
-        return fold;
+        return startToken;
     }
 
 }
