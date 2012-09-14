@@ -12,9 +12,11 @@ import java.awt.Image;
 import java.awt.datatransfer.Transferable;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.swing.Action;
 import org.antlr.netbeans.editor.navigation.actions.OpenAction;
 import org.netbeans.api.annotations.common.NonNull;
@@ -158,7 +160,10 @@ public abstract class NavigatorNode extends AbstractNode {
     public void updateRecursively(Description newDescription) {
         Children children = getChildren();
         if (children instanceof ElementChildren) {
-            HashSet<Description> oldChildren = new HashSet<Description>(description.getChildren());
+            Set<Description> oldChildren = Collections.emptySet();
+            if (description.getChildren() != null) {
+                oldChildren = new HashSet<Description>(description.getChildren());
+            }
 
             // Create a hashtable which maps Description to node.
             // We will then identify the nodes by the description. The trick is
@@ -169,13 +174,18 @@ public abstract class NavigatorNode extends AbstractNode {
                 oldD2node.put(((NavigatorNode)node).description, (NavigatorNode)node);
             }
 
+            Collection<Description> newChildren = newDescription.getChildren();
+            if (newChildren == null) {
+                newChildren = Collections.emptyList();
+            }
+
             // Now refresh keys
-            ((ElementChildren)children).resetKeys(newDescription.getChildren(), getUI().getFilters());
+            ((ElementChildren)children).resetKeys(newChildren, getUI().getFilters());
 
             // Reread nodes
             nodes = children.getNodes(true);
 
-            for (Description newSub : newDescription.getChildren()) {
+            for (Description newSub : newChildren) {
                 NavigatorNode node = oldD2node.get(newSub);
                 if (node != null) { // filtered out
                     if (!oldChildren.contains(newSub) && node.getChildren() != Children.LEAF) {
