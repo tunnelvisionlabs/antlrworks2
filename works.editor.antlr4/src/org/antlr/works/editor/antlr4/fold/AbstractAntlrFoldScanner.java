@@ -25,7 +25,7 @@ import org.netbeans.api.annotations.common.NonNull;
 public abstract class AbstractAntlrFoldScanner<SemanticData> extends AbstractFoldScanner<SemanticData> {
 
     @CheckForNull
-    protected FoldInfo createFold(@NonNull ParserRuleContext<Token> child, @NonNull String blockHint, @NonNull DocumentSnapshot snapshot) {
+    protected FoldInfo createFold(@NonNull ParserRuleContext<? extends Token> child, @NonNull String blockHint, @NonNull DocumentSnapshot snapshot) {
         Token startToken = getStartToken(child, snapshot);
         if (startToken == null) {
             return null;
@@ -52,12 +52,12 @@ public abstract class AbstractAntlrFoldScanner<SemanticData> extends AbstractFol
     }
 
     @CheckForNull
-    protected Token getStartToken(@NonNull ParserRuleContext<Token> child, @NonNull DocumentSnapshot snapshot) {
+    protected Token getStartToken(@NonNull ParserRuleContext<? extends Token> child, @NonNull DocumentSnapshot snapshot) {
         return child.getStart();
     }
 
     @CheckForNull
-    protected Token getStopToken(@NonNull ParserRuleContext<Token> child, @NonNull DocumentSnapshot snapshot) {
+    protected Token getStopToken(@NonNull ParserRuleContext<? extends Token> child, @NonNull DocumentSnapshot snapshot) {
         Token result = child.getStop();
         if (result != null) {
             return result;
