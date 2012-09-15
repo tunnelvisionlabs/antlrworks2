@@ -77,7 +77,7 @@ public class Description {
     }
 
     public String getSortText() {
-        return getName();
+        return getName().toUpperCase();
     }
 
     public String getHtmlHeader() {
