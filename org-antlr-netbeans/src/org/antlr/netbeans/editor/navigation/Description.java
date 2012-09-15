@@ -44,6 +44,14 @@ public class Description {
         this.name = name;
     }
 
+    public static String htmlEscape(String text) {
+        if (text == null || text.isEmpty()) {
+            return "";
+        }
+
+        return text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
+    }
+
     public Collection<Description> getChildren() {
         return children;
     }
@@ -78,7 +86,7 @@ public class Description {
         }
 
         if (isInherited()) {
-            return String.format("<font color='%s'>%s</font>", INHERITED_COLOR, getName());
+            return String.format("<font color='%s'>%s</font>", INHERITED_COLOR, htmlEscape(getName()));
         }
 
         return null;

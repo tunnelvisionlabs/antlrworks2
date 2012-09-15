@@ -85,7 +85,7 @@ public class TemplateScanner {
 
                     TemplateNode.TemplateDescription description = new TemplateNode.TemplateDescription(sig);
                     description.setOffset(snapshot, rootDescription.getFileObject(), sourceInterval.a);
-                    description.setHtmlHeader(String.format("%s.%s<font color='808080'>()</font>", templateInfo.getEnclosingTemplateName(), templateInfo.getNameToken().getText()));
+                    description.setHtmlHeader(String.format("%s.%s<font color='808080'>()</font>", Description.htmlEscape(templateInfo.getEnclosingTemplateName()), Description.htmlEscape(templateInfo.getNameToken().getText())));
                     rootDescription.getChildren().add(description);
                 }
                 else
@@ -97,7 +97,7 @@ public class TemplateScanner {
 
                     TemplateNode.TemplateDescription description = new TemplateNode.TemplateDescription(sig);
                     description.setOffset(snapshot, rootDescription.getFileObject(), sourceInterval.a);
-                    description.setHtmlHeader(String.format("%s<font color='808080'>(%s)</font>", name, Misc.join(argumentNames.iterator(), ", ")));
+                    description.setHtmlHeader(String.format("%s<font color='808080'>(%s)</font>", Description.htmlEscape(name), Description.htmlEscape(Misc.join(argumentNames.iterator(), ", "))));
                     rootDescription.getChildren().add(description);
                 }
             }
