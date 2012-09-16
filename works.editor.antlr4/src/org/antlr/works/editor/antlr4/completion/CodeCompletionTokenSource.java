@@ -59,7 +59,7 @@ public class CodeCompletionTokenSource implements TokenSource<Token> {
             return token;
         }
 
-        return emitEOF();
+        throw new UnsupportedOperationException("Attempted to look past the caret.");
     }
 
     @Override
