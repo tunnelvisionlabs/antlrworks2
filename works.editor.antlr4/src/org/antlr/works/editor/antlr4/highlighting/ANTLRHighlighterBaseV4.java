@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.AttributeSet;
@@ -40,6 +42,9 @@ import org.openide.util.Parameters;
  * @author Sam Harwell
  */
 public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState>> extends AbstractHighlightsContainer {
+    // -J-Dorg.antlr.works.editor.antlr4.highlighting.ANTLRHighlighterBaseV4.level=FINE
+    private static final Logger LOGGER = Logger.getLogger(ANTLRHighlighterBaseV4.class.getName());
+
     private static final boolean FULL_CHECKS = false;
     private static final boolean FIX_HIGHLIGHTER_UPDATE_BUG = false;
 
@@ -108,11 +113,12 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
      *      or if the call to {@link #createInputStream(OffsetRegion)} throws a {@link BadLocationException}.
      */
     @CheckForNull
-    public Interval getHighlights(int startOffset, int endOffset, @NullAllowed List<Highlight> highlights, @NullAllowed List<Token> tokens, boolean updateOffsets, boolean propagate) {
+    public Interval getHighlights(final int startOffset, int endOffset, @NullAllowed List<Highlight> highlights, @NullAllowed List<Token> tokens, boolean updateOffsets, boolean propagate) {
         if (highlights == null && tokens == null && !propagate) {
             return null;
         }
 
+        final int requestedEndOffset = endOffset;
         if (endOffset == Integer.MAX_VALUE) {
             endOffset = document.getLength();
         }
@@ -129,6 +135,10 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
 
         if (failedTimeout) {
             return null;
+        }
+
+        if (LOGGER.isLoggable(Level.FINER)) {
+            LOGGER.log(Level.FINE, "Recalculating line offsets; requested [{0}..{1}), adjusted to [{2})", new Object[] { startOffset, requestedEndOffset, span });
         }
 
         int firstUpdatedLine;
@@ -518,6 +528,10 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
             int newOffset = e.getOffset();
             int newLength = e.getLength();
 
+            if (LOGGER.isLoggable(Level.FINER)) {
+                LOGGER.log(Level.FINE, "Received changed update: [{0}..{1}) to [{2}..{3}) ({4} lines)", new Object[] { oldOffset, oldOffset + oldLength, newOffset, newOffset + newLength, lineCountDelta });
+            }
+
             processChange(lineCountDelta, oldOffset, oldLength, newOffset, newLength);
             processAfterChange();
         }
@@ -530,6 +544,10 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
             int newOffset = e.getOffset();
             int newLength = e.getLength();
 
+            if (LOGGER.isLoggable(Level.FINER)) {
+                LOGGER.log(Level.FINE, "Received insert update: [{0}..{1}) to [{2}..{3}) ({4} lines)", new Object[] { oldOffset, oldOffset + oldLength, newOffset, newOffset + newLength, lineCountDelta });
+            }
+
             processChange(lineCountDelta, oldOffset, oldLength, newOffset, newLength);
             processAfterChange();
         }
@@ -541,6 +559,10 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
             int oldLength = e.getLength();
             int newOffset = e.getOffset();
             int newLength = 0;
+
+            if (LOGGER.isLoggable(Level.FINER)) {
+                LOGGER.log(Level.FINE, "Received remove update: [{0}..{1}) to [{2}..{3}) ({4} lines)", new Object[] { oldOffset, oldOffset + oldLength, newOffset, newOffset + newLength, lineCountDelta });
+            }
 
             processChange(lineCountDelta, oldOffset, oldLength, newOffset, newLength);
             processAfterChange();
