@@ -28,6 +28,7 @@ import org.antlr.netbeans.editor.text.OffsetRegion;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Interval;
+import org.antlr.v4.runtime.misc.Utils;
 import org.netbeans.api.annotations.common.CheckForNull;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;
@@ -210,8 +211,12 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
                                 if (!lineStates.get(i).getIsMultiLineToken() || lineStateChanged)
                                     extendMultiLineSpanToLine = i + 1;
 
-                                if (inBounds || propagate)
-                                    setLineState(i, lineStates.get(i).createMultiLineState());
+                                if (inBounds || propagate) {
+                                    if (setLineState(i, lineStates.get(i).createMultiLineState())) {
+                                        firstUpdatedLine = Math.min(firstUpdatedLine, i);
+                                        lastUpdatedLine = Math.max(lastUpdatedLine, i + 1);
+                                    }
+                                }
                             }
                         }
 //                    }
@@ -229,8 +234,12 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
                         if (!lineStates.get(i).getIsMultiLineToken())
                             extendMultiLineSpanToLine = i + 1;
 
-                        if (inBounds || propagate)
-                            setLineState(i, lineStates.get(i).createMultiLineState());
+                        if (inBounds || propagate) {
+                            if (setLineState(i, lineStates.get(i).createMultiLineState())) {
+                                firstUpdatedLine = Math.min(firstUpdatedLine, i);
+                                lastUpdatedLine = Math.max(lastUpdatedLine, i + 1);
+                            }
+                        }
                     }
                 }
 
@@ -245,8 +254,12 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
 
                     // even if the state didn't change, we call SetLineState to make sure the _first/_lastChangedLine values get updated.
                     // have to check bounds for this one or the editor might not get an update (if the token ends a line)
-                    if (updateOffsets && (inBounds || propagate))
-                        setLineState(line, stateAtEndOfLine);
+                    if (updateOffsets && (inBounds || propagate)) {
+                        if (setLineState(line, stateAtEndOfLine)) {
+                            firstUpdatedLine = Math.min(firstUpdatedLine, line);
+                            lastUpdatedLine = Math.max(lastUpdatedLine, line + 1);
+                        }
+                    }
 
                     if (lineStateChanged)
                     {
@@ -271,7 +284,7 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
                 boolean canBreak = !propagate || !spanExtended;
                 if (propagate && spanExtended) {
                     span = OffsetRegion.fromBounds(span.getStart(), extendedSpan.getEnd());
-                    lastUpdatedLine = NbDocument.findLineNumber(document, span.getEnd());
+                    lastUpdatedLine = Math.max(lastUpdatedLine, NbDocument.findLineNumber(document, span.getEnd()));
                     spanExtended = false;
                 }
 
@@ -300,6 +313,8 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
             }
         }
 
+        lastUpdatedLine = Math.min(lastUpdatedLine, NbDocument.findLineRootElement(document).getElementCount() - 1);
+
         if (updateOffsets && extendMultiLineSpanToLine > 0 && !propagate) {
             int endPosition = extendMultiLineSpanToLine < NbDocument.findLineRootElement(document).getElementCount() - 1 ? NbDocument.findLineOffset(document, extendMultiLineSpanToLine + 1) : document.getLength();
             if (endPosition > extendedSpan.getEnd()) {
@@ -320,12 +335,12 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
         return new Interval(firstUpdatedLine, lastUpdatedLine);
     }
 
-    protected void setLineState(int line, TState state) {
+    protected boolean setLineState(int line, TState state) {
         synchronized (lock) {
             checkDirtyLineBounds();
 
             assert firstDirtyLine == null || line <= firstDirtyLine || state.getIsDirty();
-            lineStates.set(line, state);
+            TState previous = lineStates.set(line, state);
             if (!state.getIsDirty() && firstDirtyLine != null && firstDirtyLine.equals(line)) {
                 firstDirtyLine++;
             }
@@ -337,7 +352,13 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
             }
 
             checkDirtyLineBounds();
+
+            if (Utils.equals(previous, state)) {
+                return false;
+            }
         }
+
+        return true;
     }
 
     private void checkDirtyLineBounds() {
