@@ -103,7 +103,7 @@ public class SimpleLexerState implements LineStateInfo<SimpleLexerState> {
     @Override
     public int hashCode() {
         if (this == INITIAL) {
-            return 0;
+            return 1;
         } else if (getIsDirty()) {
             return -1;
         } else if (getIsMultiLineToken()) {
@@ -127,7 +127,9 @@ public class SimpleLexerState implements LineStateInfo<SimpleLexerState> {
         }
 
         SimpleLexerState other = (SimpleLexerState)obj;
-        return this.mode == other.mode
+        return this.getIsDirty() == other.getIsDirty()
+            && this.getIsMultiLineToken() == other.getIsMultiLineToken()
+            && this.mode == other.mode
             && this.modeStack.equals(other.modeStack);
     }
 }
