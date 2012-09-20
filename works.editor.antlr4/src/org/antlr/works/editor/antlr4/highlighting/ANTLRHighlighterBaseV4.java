@@ -160,16 +160,12 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
 
                     @Override
                     public boolean hasNext() {
-                        if (_complete) {
-                            return false;
-                        }
-
-                        if (buffer.isEmpty()) {
+                        if (!_complete && buffer.isEmpty()) {
                             scan();
                         }
 
                         assert !buffer.isEmpty() || _complete;
-                        return !_complete;
+                        return !buffer.isEmpty();
                     }
 
                     @Override
@@ -384,7 +380,7 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
             LOGGER.log(Level.FINE, "Recalculating line offsets; requested [{0}..{1}), adjusted to [{2})", new Object[] { startOffset, requestedEndOffset, span });
         }
 
-        int firstUpdatedLine;
+        int firstUpdatedLine = Integer.MAX_VALUE;
         int lastUpdatedLine;
         boolean spanExtended = false;
         int extendMultiLineSpanToLine = 0;
@@ -396,7 +392,6 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
             ParseRequest<TState> request = adjustParseSpan(span);
             TState startState = request.getState();
             span = request.getRegion();
-            firstUpdatedLine = NbDocument.findLineNumber(document, span.getStart());
             lastUpdatedLine = NbDocument.findLineNumber(document, span.getEnd());
 
             CharStream input;
@@ -575,6 +570,10 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
             int firstLine = NbDocument.findLineNumber(document, span.getEnd());
             int lastLine = NbDocument.findLineNumber(document, extendedSpan.getEnd()) - 1;
             forceRehighlightLines(firstLine, lastLine, false);
+        }
+
+        if (firstUpdatedLine > lastUpdatedLine) {
+            return null;
         }
 
         return new Interval(firstUpdatedLine, lastUpdatedLine);
@@ -903,8 +902,8 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
                     Interval propagatedChangedLines = getHighlights(startOffset, endOffset, null, null, true, true);
                     assert firstDirtyLine == null && lastDirtyLine == null;
                     if (propagatedChangedLines != null) {
-                        forceRehighlightLines(propagatedChangedLines.a, propagatedChangedLines.b, false);
-                        return;
+                        startRehighlightLine = Math.min(startRehighlightLine, propagatedChangedLines.a);
+                        endRehighlightLine = Math.max(endRehighlightLine, propagatedChangedLines.b);
                     }
                 }
 
