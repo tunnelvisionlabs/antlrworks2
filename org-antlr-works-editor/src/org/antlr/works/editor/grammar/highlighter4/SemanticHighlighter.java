@@ -19,17 +19,18 @@ import java.util.Set;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.StyledDocument;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
+import org.antlr.netbeans.editor.text.OffsetRegion;
 import org.antlr.netbeans.parsing.spi.ParserData;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleDependencies;
 import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.misc.Tuple2;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.works.editor.antlr4.semantics.AbstractParseTreeSemanticHighlighter;
 import org.antlr.works.editor.antlr4.semantics.AbstractSemanticHighlighter;
 import org.antlr.works.editor.grammar.GrammarEditorKit;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
-import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.ArgActionParameterContext;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.BlockContext;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.ElementOptionContext;
@@ -92,13 +93,16 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
 
     @Override
     protected void updateHighlights(OffsetsBag targetContainer, DocumentSnapshot sourceSnapshot, DocumentSnapshot currentSnapshot, SemanticAnalyzerListener listener) {
+        List<Tuple2<OffsetRegion, AttributeSet>> intermediateContainer = new ArrayList<Tuple2<OffsetRegion, AttributeSet>>();
+        addHighlights(intermediateContainer, sourceSnapshot, currentSnapshot, listener.getParameterDeclarations(), parameterDeclarationAttributes);
+        addHighlights(intermediateContainer, sourceSnapshot, currentSnapshot, listener.getReturnValueDeclarations(), returnValueDeclarationAttributes);
+        addHighlights(intermediateContainer, sourceSnapshot, currentSnapshot, listener.getLocalsDeclarations(), localDeclarationAttributes);
+        addHighlights(intermediateContainer, sourceSnapshot, currentSnapshot, listener.getInvalidOptions(), invalidOptionAttributes);
+        addHighlights(intermediateContainer, sourceSnapshot, currentSnapshot, listener.getLexerCommands(), lexerCommandAttributes);
+        addHighlights(intermediateContainer, sourceSnapshot, currentSnapshot, listener.getLexerModes(), lexerModeAttributes);
+
         OffsetsBag container = new OffsetsBag(currentSnapshot.getVersionedDocument().getDocument());
-        addHighlights(container, sourceSnapshot, currentSnapshot, listener.getParameterDeclarations(), parameterDeclarationAttributes);
-        addHighlights(container, sourceSnapshot, currentSnapshot, listener.getReturnValueDeclarations(), returnValueDeclarationAttributes);
-        addHighlights(container, sourceSnapshot, currentSnapshot, listener.getLocalsDeclarations(), localDeclarationAttributes);
-        addHighlights(container, sourceSnapshot, currentSnapshot, listener.getInvalidOptions(), invalidOptionAttributes);
-        addHighlights(container, sourceSnapshot, currentSnapshot, listener.getLexerCommands(), lexerCommandAttributes);
-        addHighlights(container, sourceSnapshot, currentSnapshot, listener.getLexerModes(), lexerModeAttributes);
+        fillHighlights(container, intermediateContainer);
         targetContainer.setHighlights(container);
     }
 

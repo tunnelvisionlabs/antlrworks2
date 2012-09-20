@@ -37,6 +37,8 @@ import org.antlr.netbeans.parsing.spi.ParserDataOptions;
 import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.misc.Tuple;
+import org.antlr.v4.runtime.misc.Tuple2;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.works.editor.antlr4.semantics.AbstractSemanticHighlighter;
@@ -135,20 +137,25 @@ public class MarkOccurrencesHighlighter extends AbstractSemanticHighlighter<Curr
     private final List<SnapshotPosition> markPositions = new ArrayList<SnapshotPosition>();
 
     @Override
-    protected void addHighlights(OffsetsBag container, DocumentSnapshot sourceSnapshot, DocumentSnapshot currentSnapshot, Collection<Token> tokens, AttributeSet attributes) {
+    protected void addHighlights(List<Tuple2<OffsetRegion, AttributeSet>> intermediateContainer, DocumentSnapshot sourceSnapshot, DocumentSnapshot currentSnapshot, Collection<Token> tokens, AttributeSet attributes) {
         for (Token token : tokens) {
             TrackingPositionRegion trackingRegion = sourceSnapshot.createTrackingRegion(OffsetRegion.fromBounds(token.getStartIndex(), token.getStopIndex() + 1), TrackingPositionRegion.Bias.Forward);
             SnapshotPositionRegion region = trackingRegion.getRegion(currentSnapshot);
-            container.addHighlight(region.getStart().getOffset(), region.getEnd().getOffset(), attributes);
+            intermediateContainer.add(Tuple.create(region.getRegion(), attributes));
             markPositions.add(region.getStart());
         }
     }
 
     protected void updateHighlights(OffsetsBag container, DocumentSnapshot sourceSnapshot, DocumentSnapshot currentSnapshot, MarkOccurrencesListener listener) {
-        OffsetsBag updateBag = new OffsetsBag(currentSnapshot.getVersionedDocument().getDocument());
         markPositions.clear();
-        addHighlights(updateBag, sourceSnapshot, currentSnapshot, listener.getMarkedOccurrences(), markOccurrencesAttributes);
+
+        List<Tuple2<OffsetRegion, AttributeSet>> intermediateContainer = new ArrayList<Tuple2<OffsetRegion, AttributeSet>>(listener.getMarkedOccurrences().size());
+        addHighlights(intermediateContainer, sourceSnapshot, currentSnapshot, listener.getMarkedOccurrences(), markOccurrencesAttributes);
+
+        OffsetsBag updateBag = new OffsetsBag(currentSnapshot.getVersionedDocument().getDocument());
+        fillHighlights(updateBag, intermediateContainer);
         container.setHighlights(updateBag);
+
         Collection<Mark> marks = MarkOccurrencesMarkProvider.createMarks(currentSnapshot.getVersionedDocument(), markPositions, ERROR_STRIPE_COLOR, Bundle.LBL_ERROR_STRIPE_TOOLTIP());
         MarkOccurrencesMarkProvider markProvider = markProviderCreator.createMarkProvider(component);
         markProvider.setOccurrences(marks);

@@ -11,7 +11,10 @@ package org.antlr.works.editor.antlr4.semantics;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
@@ -34,6 +37,8 @@ import org.antlr.netbeans.parsing.spi.ParserDataEvent;
 import org.antlr.netbeans.parsing.spi.ParserDataListener;
 import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.misc.Tuple;
+import org.antlr.v4.runtime.misc.Tuple2;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.editor.EditorRegistry;
 import org.netbeans.api.editor.settings.FontColorSettings;
@@ -169,7 +174,7 @@ public abstract class AbstractSemanticHighlighter<SemanticData> extends Abstract
 
     protected abstract Callable<Void> createAnalyzerTask(final ParserData<? extends SemanticData> parserData);
 
-    protected void addHighlights(OffsetsBag container, DocumentSnapshot sourceSnapshot, DocumentSnapshot currentSnapshot, Collection<Token> tokens, AttributeSet attributes) {
+    protected void addHighlights(List<Tuple2<OffsetRegion, AttributeSet>> intermediateContainer, DocumentSnapshot sourceSnapshot, DocumentSnapshot currentSnapshot, Collection<Token> tokens, AttributeSet attributes) {
         for (Token token : tokens) {
             int startIndex = token.getStartIndex();
             int stopIndex = token.getStopIndex();
@@ -179,7 +184,27 @@ public abstract class AbstractSemanticHighlighter<SemanticData> extends Abstract
 
             TrackingPositionRegion trackingRegion = sourceSnapshot.createTrackingRegion(OffsetRegion.fromBounds(startIndex, stopIndex + 1), Bias.Forward);
             SnapshotPositionRegion region = trackingRegion.getRegion(currentSnapshot);
-            container.addHighlight(region.getStart().getOffset(), region.getEnd().getOffset(), attributes);
+            intermediateContainer.add(Tuple.create(region.getRegion(), attributes));
+        }
+    }
+
+    protected void fillHighlights(OffsetsBag targetContainer, List<Tuple2<OffsetRegion, AttributeSet>> highlights) {
+        Collections.sort(highlights, new Comparator<Tuple2<OffsetRegion, AttributeSet>>() {
+
+            @Override
+            public int compare(Tuple2<OffsetRegion, AttributeSet> o1, Tuple2<OffsetRegion, AttributeSet> o2) {
+                int diff = o1.getItem1().getStart() - o2.getItem1().getStart();
+                if (diff != 0) {
+                    return diff;
+                }
+
+                return o1.getItem1().getEnd() - o2.getItem1().getEnd();
+            }
+
+        });
+
+        for (Tuple2<OffsetRegion, AttributeSet> highlight : highlights) {
+            targetContainer.addHighlight(highlight.getItem1().getStart(), highlight.getItem1().getEnd(), highlight.getItem2());
         }
     }
 

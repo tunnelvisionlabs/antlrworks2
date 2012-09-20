@@ -17,10 +17,12 @@ import java.util.Set;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.StyledDocument;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
+import org.antlr.netbeans.editor.text.OffsetRegion;
 import org.antlr.netbeans.parsing.spi.ParserData;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.misc.Tuple2;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.works.editor.antlr4.semantics.AbstractParseTreeSemanticHighlighter;
@@ -93,17 +95,21 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
 
     @Override
     protected void updateHighlights(OffsetsBag targetContainer, DocumentSnapshot sourceSnapshot, DocumentSnapshot currentSnapshot, SemanticAnalyzerListener listener) {
+        List<Tuple2<OffsetRegion, AttributeSet>> intermediateContainer = new ArrayList<Tuple2<OffsetRegion, AttributeSet>>();
+
+        addHighlights(intermediateContainer, sourceSnapshot, currentSnapshot, listener.getTemplateDeclarations(), templateDeclarationAttributes);
+        addHighlights(intermediateContainer, sourceSnapshot, currentSnapshot, listener.getTemplateUses(), templateUseAttributes);
+        addHighlights(intermediateContainer, sourceSnapshot, currentSnapshot, listener.getRegionDeclarations(), regionDeclarationAttributes);
+        addHighlights(intermediateContainer, sourceSnapshot, currentSnapshot, listener.getRegionUses(), regionUseAttributes);
+        addHighlights(intermediateContainer, sourceSnapshot, currentSnapshot, listener.getDictionaryDeclarations(), dictionaryDeclarationAttributes);
+        addHighlights(intermediateContainer, sourceSnapshot, currentSnapshot, listener.getDictionaryUses(), dictionaryUseAttributes);
+        addHighlights(intermediateContainer, sourceSnapshot, currentSnapshot, listener.getParameterDeclarations(), parameterDeclarationAttributes);
+        addHighlights(intermediateContainer, sourceSnapshot, currentSnapshot, listener.getParameterUses(), parameterUseAttributes);
+        addHighlights(intermediateContainer, sourceSnapshot, currentSnapshot, listener.getAttributeUses(), attributeUseAttributes);
+        addHighlights(intermediateContainer, sourceSnapshot, currentSnapshot, listener.getOptions(), expressionOptionAttributes);
+
         OffsetsBag container = new OffsetsBag(currentSnapshot.getVersionedDocument().getDocument());
-        addHighlights(container, sourceSnapshot, currentSnapshot, listener.getTemplateDeclarations(), templateDeclarationAttributes);
-        addHighlights(container, sourceSnapshot, currentSnapshot, listener.getTemplateUses(), templateUseAttributes);
-        addHighlights(container, sourceSnapshot, currentSnapshot, listener.getRegionDeclarations(), regionDeclarationAttributes);
-        addHighlights(container, sourceSnapshot, currentSnapshot, listener.getRegionUses(), regionUseAttributes);
-        addHighlights(container, sourceSnapshot, currentSnapshot, listener.getDictionaryDeclarations(), dictionaryDeclarationAttributes);
-        addHighlights(container, sourceSnapshot, currentSnapshot, listener.getDictionaryUses(), dictionaryUseAttributes);
-        addHighlights(container, sourceSnapshot, currentSnapshot, listener.getParameterDeclarations(), parameterDeclarationAttributes);
-        addHighlights(container, sourceSnapshot, currentSnapshot, listener.getParameterUses(), parameterUseAttributes);
-        addHighlights(container, sourceSnapshot, currentSnapshot, listener.getAttributeUses(), attributeUseAttributes);
-        addHighlights(container, sourceSnapshot, currentSnapshot, listener.getOptions(), expressionOptionAttributes);
+        fillHighlights(container, intermediateContainer);
         targetContainer.setHighlights(container);
     }
 
