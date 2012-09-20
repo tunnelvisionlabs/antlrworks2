@@ -8,9 +8,12 @@
  */
 package org.antlr.works.editor.antlr4.highlighting;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Deque;
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -96,9 +99,244 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
 
     @Override
     public HighlightsSequence getHighlights(int startOffset, int endOffset) {
-        List<Highlight> highlights = new ArrayList<Highlight>();
-        getHighlights(startOffset, endOffset, highlights, null, true, false);
+        Iterable<Highlight> highlights = getHighlightsIncremental(startOffset, endOffset, true);
         return new HighlightsList(highlights);
+    }
+
+    @NonNull
+    public Iterable<Highlight> getHighlightsIncremental(final int startOffset, final int endOffset, final boolean updateOffsets) {
+        if (failedTimeout) {
+            return Collections.emptyList();
+        }
+
+        final int adjustedEndOffset = Math.min(document.getLength(), endOffset);
+        return new Iterable<Highlight>() {
+
+            @Override
+            public Iterator<Highlight> iterator() {
+                return new Iterator<Highlight>() {
+
+                    private final Deque<Highlight> buffer = new ArrayDeque<Highlight>();
+
+                    private Highlight _current;
+                    private boolean _complete;
+                    private OffsetRegion span;
+                    private boolean spanExtended = false;
+                    private int extendMultiLineSpanToLine = 0;
+                    private OffsetRegion extendedSpan;
+                    private OffsetRegion requestedSpan;
+
+                    private ParseRequest<TState> request;
+                    private TState startState;
+                    private CharStream input;
+
+                    private Token previousToken = null;
+                    //private int previousTokenLine = 0;
+                    private boolean previousTokenEndsLine = false;
+
+                    /* this is held outside the loop because only tokens which end at the end of a line
+                     * impact its value.
+                     */
+                    private boolean lineStateChanged = false;
+
+                    {
+                        span = OffsetRegion.fromBounds(startOffset, adjustedEndOffset);
+                        if (LOGGER.isLoggable(Level.FINER)) {
+                            LOGGER.log(Level.FINE, "Recalculating line offsets (lazy); requested [{0}..{1}), adjusted to [{2})", new Object[] { startOffset, adjustedEndOffset, span });
+                        }
+
+                        extendedSpan = span;
+                        requestedSpan = span;
+                        request = adjustParseSpan(span);
+                        span = request.getRegion();
+                        startState = request.getState();
+
+                        try {
+                            input = createInputStream(span);
+                        } catch (BadLocationException ex) {
+                            _complete = true;
+                        }
+                    }
+
+                    @Override
+                    public boolean hasNext() {
+                        if (_complete) {
+                            return false;
+                        }
+
+                        if (buffer.isEmpty()) {
+                            scan();
+                        }
+
+                        assert !buffer.isEmpty() || _complete;
+                        return !_complete;
+                    }
+
+                    @Override
+                    public Highlight next() {
+                        _current = buffer.poll();
+                        return _current;
+                    }
+
+                    @Override
+                    public void remove() {
+                        throw new UnsupportedOperationException("The iterator is read only.");
+                    }
+
+                    /** Read the next few tokens into the buffer. */
+                    private void scan() {
+
+                        synchronized (lock) {
+                            TokenSourceWithStateV4<Token, TState> lexer = createLexer(input, startState);
+                            while (true)
+                            {
+                                // TODO: perform this under a read lock
+                                Token token = lexer.nextToken();
+
+                                // The latter is true for EOF token with span.getEnd() at the end of the document
+                                boolean inBounds = token.getStartIndex() < span.getEnd()
+                                    || token.getStopIndex() < span.getEnd();
+
+                                int startLineCurrent;
+                                if (token.getType() == Token.EOF)
+                                    startLineCurrent = NbDocument.findLineRootElement(document).getElementCount();
+                                else
+                                    startLineCurrent = NbDocument.findLineNumber(document, token.getStartIndex());
+
+            //                    if (previousToken == null || previousTokenLine < startLineCurrent - 1)
+            //                    {
+                                    // endLinePrevious is the line number the previous token ended on
+                                    int endLinePrevious;
+                                    if (previousToken != null)
+                                        endLinePrevious = NbDocument.findLineNumber(document, previousToken.getStopIndex());
+                                    else
+                                        endLinePrevious = NbDocument.findLineNumber(document, span.getStart()) - 1;
+
+                                    if (updateOffsets && (startLineCurrent > endLinePrevious + 1 || (startLineCurrent == endLinePrevious + 1 && !previousTokenEndsLine)))
+                                    {
+                                        int firstMultilineLine = endLinePrevious;
+                                        if (previousToken == null || previousTokenEndsLine)
+                                            firstMultilineLine++;
+
+                                        for (int i = firstMultilineLine; i < startLineCurrent; i++)
+                                        {
+                                            if (!lineStates.get(i).getIsMultiLineToken() || lineStateChanged)
+                                                extendMultiLineSpanToLine = i + 1;
+
+                                            if (inBounds)
+                                                setLineState(i, lineStates.get(i).createMultiLineState());
+                                        }
+                                    }
+            //                    }
+
+                                if (token.getType() == Token.EOF) {
+                                    _complete = true;
+                                    break;
+                                }
+
+                                if (updateOffsets && isMultiLineToken(lexer, token))
+                                {
+                                    int startLine = NbDocument.findLineNumber(document, token.getStartIndex());
+                                    int stopLine = NbDocument.findLineNumber(document, token.getStopIndex());
+                                    for (int i = startLine; i < stopLine; i++)
+                                    {
+                                        if (!lineStates.get(i).getIsMultiLineToken())
+                                            extendMultiLineSpanToLine = i + 1;
+
+                                        if (inBounds)
+                                            setLineState(i, lineStates.get(i).createMultiLineState());
+                                    }
+                                }
+
+                                boolean tokenEndsLine = tokenEndsAtEndOfLine(lexer, token);
+                                if (updateOffsets && tokenEndsLine)
+                                {
+                                    TState stateAtEndOfLine = lexer.getCurrentState();
+                                    int line = NbDocument.findLineNumber(document, token.getStopIndex());
+                                    lineStateChanged =
+                                        lineStates.get(line).getIsMultiLineToken()
+                                        || !lineStates.get(line).equals(stateAtEndOfLine);
+
+                                    // even if the state didn't change, we call SetLineState to make sure the _first/_lastChangedLine values get updated.
+                                    // have to check bounds for this one or the editor might not get an update (if the token ends a line)
+                                    if (updateOffsets && inBounds)
+                                        setLineState(line, stateAtEndOfLine);
+
+                                    if (lineStateChanged)
+                                    {
+                                        if (line < NbDocument.findLineRootElement(document).getElementCount() - 1)
+                                        {
+                                            /* update the span's end position or the line state change won't be reflected
+                                             * in the editor
+                                             */
+                                            int endPosition = line < NbDocument.findLineRootElement(document).getElementCount() - 2 ? NbDocument.findLineOffset(document, line + 2) : document.getLength();
+                                            if (endPosition > extendedSpan.getEnd())
+                                            {
+                                                spanExtended = true;
+                                                extendedSpan = OffsetRegion.fromBounds(extendedSpan.getStart(), endPosition);
+                                            }
+                                        }
+                                    }
+                                }
+
+                                previousToken = token;
+                                previousTokenEndsLine = tokenEndsLine;
+
+                                if (spanExtended) {
+                                    span = OffsetRegion.fromBounds(span.getStart(), extendedSpan.getEnd());
+                                    spanExtended = false;
+                                }
+
+                                if (token.getStartIndex() >= span.getEnd()) {
+                                    _complete = true;
+                                    break;
+                                }
+
+                                if (token.getStopIndex() < requestedSpan.getStart()) {
+                                    continue;
+                                }
+
+                                Collection<Highlight> tokenClassificationSpans = getHighlightsForToken(token);
+                                if (tokenClassificationSpans != null) {
+                                    buffer.addAll(tokenClassificationSpans);
+                                }
+
+                                if (!inBounds) {
+                                    _complete = true;
+                                    break;
+                                }
+
+                                if (!buffer.isEmpty() && startLineCurrent > endLinePrevious) {
+                                    break;
+                                }
+                            }
+
+                            if (!_complete) {
+                                startState = lexer.getCurrentState();
+                            }
+                        }
+
+                        if (updateOffsets && extendMultiLineSpanToLine > 0) {
+                            int endPosition = extendMultiLineSpanToLine < NbDocument.findLineRootElement(document).getElementCount() - 1 ? NbDocument.findLineOffset(document, extendMultiLineSpanToLine + 1) : document.getLength();
+                            if (endPosition > extendedSpan.getEnd()) {
+                                spanExtended = true;
+                                extendedSpan = OffsetRegion.fromBounds(extendedSpan.getStart(), endPosition);
+                            }
+                        }
+
+                        if (updateOffsets && spanExtended) {
+                            /* Subtract 1 from each of these because the spans include the line break on their last
+                             * line, forcing it to appear as the first position on the following line.
+                             */
+                            int firstLine = NbDocument.findLineNumber(document, span.getEnd());
+                            int lastLine = NbDocument.findLineNumber(document, extendedSpan.getEnd()) - 1;
+                            forceRehighlightLines(firstLine, lastLine, false);
+                        }
+                    }
+                };
+            }
+
+        };
     }
 
     /**
