@@ -26,7 +26,7 @@ import org.openide.util.NbBundle;
 @NbBundle.Messages({
     "LBL_ParseTreeDefinition=Parse Tree (Development)"
 })
-@NavigatorPanel.Registration(mimeType=StringTemplateEditorKit.TEMPLATE_MIME_TYPE, position = 100, displayName = "#LBL_ParseTreeDefinition")
+@NavigatorPanel.Registration(mimeType=StringTemplateEditorKit.TEMPLATE_MIME_TYPE, position = 9999, displayName = "#LBL_ParseTreeDefinition")
 public class TemplateParseTreeNavigatorPanel extends TreeNavigatorPanel {
 
     private static volatile TemplateParseTreeNavigatorPanel INSTANCE;
