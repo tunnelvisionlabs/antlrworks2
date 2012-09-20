@@ -329,7 +329,7 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
              */
             int firstLine = NbDocument.findLineNumber(document, span.getEnd());
             int lastLine = NbDocument.findLineNumber(document, extendedSpan.getEnd()) - 1;
-            forceRehighlightLines(firstLine, lastLine);
+            forceRehighlightLines(firstLine, lastLine, false);
         }
 
         return new Interval(firstUpdatedLine, lastUpdatedLine);
@@ -515,10 +515,16 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
     }
 
     public void forceRehighlightLines(int startLine, int endLineInclusive) {
+        forceRehighlightLines(startLine, endLineInclusive, true);
+    }
+
+    protected void forceRehighlightLines(int startLine, int endLineInclusive, boolean setDirtyLines) {
         checkDirtyLineBounds();
 
-        firstDirtyLine = firstDirtyLine != null ? Math.min(firstDirtyLine, startLine) : startLine;
-        lastDirtyLine = lastDirtyLine != null ? Math.max(lastDirtyLine, endLineInclusive) : endLineInclusive;
+        if (setDirtyLines) {
+            firstDirtyLine = firstDirtyLine != null ? Math.min(firstDirtyLine, startLine) : startLine;
+            lastDirtyLine = lastDirtyLine != null ? Math.max(lastDirtyLine, endLineInclusive) : endLineInclusive;
+        }
 
         int start = NbDocument.findLineOffset(document, startLine);
         int end = (endLineInclusive == lineStates.size() - 1) ? document.getLength() : NbDocument.findLineOffset(document, endLineInclusive + 1);
@@ -650,13 +656,14 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
                     }
 
                     Interval propagatedChangedLines = getHighlights(startOffset, endOffset, null, null, true, true);
+                    assert firstDirtyLine == null && lastDirtyLine == null;
                     if (propagatedChangedLines != null) {
-                        forceRehighlightLines(propagatedChangedLines.a, propagatedChangedLines.b);
+                        forceRehighlightLines(propagatedChangedLines.a, propagatedChangedLines.b, false);
                         return;
                     }
                 }
 
-                forceRehighlightLines(startRehighlightLine, endRehighlightLine);
+                forceRehighlightLines(startRehighlightLine, endRehighlightLine, false);
             }
         }
     }
