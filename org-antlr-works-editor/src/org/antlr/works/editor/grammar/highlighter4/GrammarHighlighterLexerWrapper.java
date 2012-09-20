@@ -49,6 +49,11 @@ public class GrammarHighlighterLexerWrapper implements TokenSourceWithStateV4<To
         return getCachedState(grammarLexer.isInOptions(), grammarLexer.isInTokens(), grammarLexer.getRuleType(), grammarLexer._mode, grammarLexer._modeStack.toArray());
     }
 
+    @Override
+    public void close() {
+        // this lexer uses the normal shared ATN so there's need to do something special here
+    }
+
     private static GrammarHighlighterLexerState getCachedState(boolean inOptions, boolean inTokens, int ruleType, int mode, int[] modeStack) {
         GrammarHighlighterLexerState state = new GrammarHighlighterLexerState(inOptions, inTokens, ruleType, mode, modeStack);
 

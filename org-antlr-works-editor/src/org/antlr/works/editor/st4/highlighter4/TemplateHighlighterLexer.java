@@ -46,6 +46,11 @@ public class TemplateHighlighterLexer implements TokenSourceWithStateV4<Token, T
         return getCachedState(groupLexer.getOpenDelimiter(), groupLexer.getCloseDelimiter(), groupLexer._mode, groupLexer._modeStack.toArray());
     }
 
+    @Override
+    public void close() {
+        // TODO: return this lexer to the lexer cache
+    }
+
     private static TemplateHighlighterLexerState getCachedState(char openDelimiter, char closeDelimiter, int mode, int[] modeStack) {
         TemplateHighlighterLexerState state = new TemplateHighlighterLexerState(openDelimiter, closeDelimiter, mode, modeStack);
 

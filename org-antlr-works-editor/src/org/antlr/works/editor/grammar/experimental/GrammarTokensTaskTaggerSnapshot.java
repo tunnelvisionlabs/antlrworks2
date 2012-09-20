@@ -78,5 +78,11 @@ class GrammarTokensTaskTaggerSnapshot extends AbstractTokensTaskTaggerSnapshot<S
         public SimpleLexerState getCurrentState() {
             return SimpleLexerState.createSimpleState(this);
         }
+
+        @Override
+        public void close() {
+            // this lexer uses the normal shared ATN so there's need to do something special here
+        }
+
     }
 }

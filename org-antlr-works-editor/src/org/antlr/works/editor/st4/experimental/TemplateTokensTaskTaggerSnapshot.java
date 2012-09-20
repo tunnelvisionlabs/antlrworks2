@@ -78,5 +78,10 @@ class TemplateTokensTaskTaggerSnapshot extends AbstractTokensTaskTaggerSnapshot<
         public SimpleLexerState getCurrentState() {
             return SimpleLexerState.createSimpleState(this);
         }
+
+        @Override
+        public void close() {
+            // TODO: return this lexer to the lexer cache
+        }
     }
 }

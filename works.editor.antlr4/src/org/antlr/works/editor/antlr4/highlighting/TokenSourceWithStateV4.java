@@ -8,12 +8,18 @@
  */
 package org.antlr.works.editor.antlr4.highlighting;
 
+import java.io.Closeable;
 import org.antlr.v4.runtime.TokenSource;
 
 /**
  *
  * @author Sam Harwell
  */
-public interface TokenSourceWithStateV4<Symbol, T> extends TokenSource<Symbol> {
-    public T getCurrentState();
+public interface TokenSourceWithStateV4<Symbol, T> extends TokenSource<Symbol>, Closeable {
+
+    T getCurrentState();
+
+    @Override
+    void close();
+
 }
