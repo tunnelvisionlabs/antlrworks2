@@ -328,4 +328,27 @@ public class BaseCompletionController implements CompletionController {
 
         return null;
     }
+
+    public static @CheckForNull Pattern getLetterOrderPattern(@NonNull String prefix, boolean caseSensitive) {
+        Parameters.notNull("prefix", prefix);
+        if (prefix.isEmpty()) {
+            return null;
+        }
+
+        StringBuilder pattern = new StringBuilder();
+        for (int i = 0; i < prefix.length(); i++) {
+            if (i > 0) {
+                pattern.append(".*");
+            }
+
+            char ch = prefix.charAt(i);
+            if (Character.isLetterOrDigit(ch)) {
+                pattern.append(ch);
+            } else {
+                pattern.append('\\').append(ch);;
+            }
+        }
+
+        return Pattern.compile(pattern.toString(), caseSensitive ? 0 : Pattern.CASE_INSENSITIVE);
+    }
 }

@@ -320,6 +320,7 @@ public abstract class AbstractCompletionQuery extends AsyncCompletionQuery {
         }
 
         Pattern prefixBoundaryPattern = BaseCompletionController.getPrefixBoundaryPattern(prefix, false);
+        Pattern letterOrderPattern = BaseCompletionController.getLetterOrderPattern(prefix, false);
         String lowercasePrefix = prefix.toLowerCase(Locale.getDefault());
         List<CompletionItem> result = new ArrayList<CompletionItem>();
         for (CompletionItem item : data) {
@@ -327,6 +328,8 @@ public abstract class AbstractCompletionQuery extends AsyncCompletionQuery {
             if (insertPrefix.toLowerCase(Locale.getDefault()).contains(lowercasePrefix)) {
                 result.add(item);
             } else if (prefixBoundaryPattern != null && prefixBoundaryPattern.matcher(insertPrefix).matches()) {
+                result.add(item);
+            } else if (letterOrderPattern != null && letterOrderPattern.matcher(insertPrefix).find()) {
                 result.add(item);
             }
         }

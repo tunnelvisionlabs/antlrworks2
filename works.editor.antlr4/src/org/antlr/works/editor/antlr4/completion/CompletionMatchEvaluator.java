@@ -21,12 +21,13 @@ import org.openide.util.Parameters;
  * @author Sam Harwell
  */
 public class CompletionMatchEvaluator {
-    public static final int EXACT_CASE_SENSITIVE = 0x0800;
-    public static final int EXACT = 0x0400;
-    public static final int PREFIX_CASE_SENSITIVE = 0x0200;
-    public static final int PREFIX = 0x0100;
-    public static final int SUBSTRING = 0x0080;
-    public static final int WORD = 0x0040;
+    public static final int EXACT_CASE_SENSITIVE = 0x1000;
+    public static final int EXACT = 0x0800;
+    public static final int PREFIX_CASE_SENSITIVE = 0x0400;
+    public static final int PREFIX = 0x0200;
+    public static final int SUBSTRING = 0x0100;
+    public static final int WORD = 0x0080;
+    public static final int LETTER_ORDER = 0x0040;
     public static final int VALID = 0x0020;
     public static final int RECENTLY_USED_MASK = 0x001E;
     public static final int CASE_SENSITIVE = 0x0001;
@@ -41,6 +42,10 @@ public class CompletionMatchEvaluator {
     private final Pattern caseSensitiveWordMatch;
     @NullAllowed
     private final Pattern caseInsensitiveWordMatch;
+    @NullAllowed
+    private final Pattern caseSensitiveLetterOrderMatch;
+    @NullAllowed
+    private final Pattern caseInsensitiveLetterOrderMatch;
 
     static {
         recentCompletionsCollator = Collator.getInstance(Locale.getDefault());
@@ -54,6 +59,8 @@ public class CompletionMatchEvaluator {
         this.lowerCaseEvaluatedText = evaluatedText.toLowerCase(Locale.getDefault());
         this.caseSensitiveWordMatch = BaseCompletionController.getPrefixBoundaryPattern(evaluatedText, true);
         this.caseInsensitiveWordMatch = BaseCompletionController.getPrefixBoundaryPattern(evaluatedText, false);
+        this.caseSensitiveLetterOrderMatch = BaseCompletionController.getLetterOrderPattern(evaluatedText, true);
+        this.caseInsensitiveLetterOrderMatch = BaseCompletionController.getLetterOrderPattern(evaluatedText, false);
     }
 
     public int getMatchStrength(@NonNull CompletionItem completionItem) {
@@ -63,6 +70,7 @@ public class CompletionMatchEvaluator {
         CompletionMatchResult prefix = isPrefixMatch(completionItem);
         CompletionMatchResult substring = isSubstringMatch(completionItem);
         CompletionMatchResult word = isWordBoundaryMatch(completionItem);
+        CompletionMatchResult letterOrder = isLetterOrderMatch(completionItem);
         CompletionMatchResult valid = isValidMatch(completionItem);
         int recent = getRecentlyUsed(completionItem);
 
@@ -75,6 +83,8 @@ public class CompletionMatchEvaluator {
             caseSensitive = substring == CompletionMatchResult.MatchCaseSensitive;
         } else if (word != CompletionMatchResult.None) {
             caseSensitive = word == CompletionMatchResult.MatchCaseSensitive;
+        } else if (letterOrder != CompletionMatchResult.None) {
+            caseSensitive = letterOrder == CompletionMatchResult.MatchCaseSensitive;
         } else if (valid != CompletionMatchResult.None) {
             caseSensitive = valid == CompletionMatchResult.MatchCaseSensitive;
         } else {
@@ -105,6 +115,10 @@ public class CompletionMatchEvaluator {
 
         if (word != CompletionMatchResult.None) {
             strength |= WORD;
+        }
+
+        if (letterOrder != CompletionMatchResult.None) {
+            strength |= LETTER_ORDER;
         }
 
         if (valid != CompletionMatchResult.None) {
@@ -192,6 +206,25 @@ public class CompletionMatchEvaluator {
         String insertText = completionItem.getInsertPrefix().toString();
         if (caseInsensitiveWordMatch.matcher(insertText).matches()) {
             if (caseSensitiveWordMatch.matcher(insertText).matches()) {
+                return CompletionMatchResult.MatchCaseSensitive;
+            }
+
+            return CompletionMatchResult.Match;
+        }
+
+        return CompletionMatchResult.None;
+    }
+
+    public @NonNull CompletionMatchResult isLetterOrderMatch(@NonNull CompletionItem completionItem) {
+        Parameters.notNull("completionItem", completionItem);
+
+        if (evaluatedText.isEmpty() || caseSensitiveLetterOrderMatch == null || caseInsensitiveLetterOrderMatch == null) {
+            return CompletionMatchResult.None;
+        }
+
+        String insertText = completionItem.getInsertPrefix().toString();
+        if (caseInsensitiveLetterOrderMatch.matcher(insertText).find()) {
+            if (caseSensitiveLetterOrderMatch.matcher(insertText).find()) {
                 return CompletionMatchResult.MatchCaseSensitive;
             }
 
