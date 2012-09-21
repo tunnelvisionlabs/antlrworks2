@@ -28,6 +28,7 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 import org.netbeans.api.annotations.common.CheckForNull;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;
+import org.openide.util.NotImplementedException;
 import org.openide.util.Parameters;
 
 /**
@@ -104,6 +105,24 @@ public final class ParseTrees {
             if (startNode != null) {
                 return startNode;
             }
+        }
+
+        return null;
+    }
+
+    public static <Symbol extends Token> Symbol getStartSymbol(ParseTree<Symbol> context) {
+        TerminalNode<Symbol> node = getStartNode(context);
+        if (node != null) {
+            return node.getSymbol();
+        }
+
+        if (!(context instanceof RuleNode)) {
+            return null;
+        }
+
+        RuleContext<Symbol> ruleContext = ((RuleNode<Symbol>)context).getRuleContext();
+        if (ruleContext instanceof ParserRuleContext) {
+            return ((ParserRuleContext<Symbol>)ruleContext).getStart();
         }
 
         return null;
@@ -308,6 +327,168 @@ public final class ParseTrees {
         }
 
         return null;
+    }
+
+    /**
+     * Gets whether or not {@code tree} is an epsilon non-terminal in the parse
+     * tree. An epsilon tree is a node which does not contain any
+     * {@link TerminalNode} descendants.
+     *
+     * @param tree A node in a parse tree.
+     * @return {@code true} if {@code tree} is an epsilon node in the parse
+     * tree, otherwise {@code false}.
+     */
+    public static boolean isEpsilon(@NonNull ParseTree<?> tree) {
+        if (tree instanceof TerminalNode) {
+            return false;
+        }
+        
+        Interval sourceInterval = tree.getSourceInterval();
+        if (sourceInterval == null) {
+            throw new IllegalArgumentException();
+        }
+        
+        return sourceInterval.b < sourceInterval.a;
+    }
+
+    /**
+     * Gets whether or not {@code a} starts after the start of {@code b}.
+     *
+     * @param a The first tree.
+     * @param b The second tree.
+     * @return {@code true} if {@code a} starts after the start of {@code b}, otherwise {@code false}.
+     */
+    public static boolean startsAfterStartOf(@NonNull ParseTree<? extends Token> a, @NonNull ParseTree<? extends Token> b) {
+        //TerminalNode<? extends Token> startNodeA = getStartNode(a);
+        //TerminalNode<? extends Token> startNodeB = getStartNode(b);
+        //if (startNodeA == null || startNodeB == null) {
+        //    throw new NotImplementedException();
+        //}
+
+        Interval sourceIntervalA = a.getSourceInterval();
+        Interval sourceIntervalB = b.getSourceInterval();
+        if (sourceIntervalA == null || sourceIntervalB == null) {
+            throw new NotImplementedException();
+        }
+
+        //if (sourceIntervalA.a == sourceIntervalB.a) {
+        //    if (isAncestorOf(a, b)) {
+        //        return true;
+        //    }
+        //
+        //    if (isEpsilon(a) || isEpsilon(b)) {
+        //        // b could be a child of a later sibling of some ancestor of a
+        //        throw new NotImplementedException();
+        //    }
+        //}
+
+        return sourceIntervalA.a > sourceIntervalB.a;
+    }
+
+    /**
+     * Gets whether or not {@code a} starts before the start of {@code b}.
+     *
+     * @param a The first tree.
+     * @param b The second tree.
+     * @return {@code true} if {@code a} starts before the start of {@code b}, otherwise {@code false}.
+     */
+    public static boolean startsBeforeStartOf(@NonNull ParseTree<? extends Token> a, @NonNull ParseTree<? extends Token> b) {
+        Interval sourceIntervalA = a.getSourceInterval();
+        Interval sourceIntervalB = b.getSourceInterval();
+        if (sourceIntervalA == null || sourceIntervalB == null) {
+            throw new NotImplementedException();
+        }
+
+        return sourceIntervalA.a < sourceIntervalB.a;
+    }
+
+    /**
+     * Gets whether or not {@code a} ends after the end of {@code b}.
+     *
+     * @param a The first tree.
+     * @param b The second tree.
+     * @return {@code true} if {@code a} ends after the end of {@code b}, otherwise {@code false}.
+     */
+    public static boolean endsAfterEndOf(@NonNull ParseTree<? extends Token> a, @NonNull ParseTree<? extends Token> b) {
+        Interval sourceIntervalA = a.getSourceInterval();
+        Interval sourceIntervalB = b.getSourceInterval();
+        if (sourceIntervalA == null || sourceIntervalB == null) {
+            throw new NotImplementedException();
+        }
+
+        return sourceIntervalA.b > sourceIntervalB.b;
+    }
+
+    /**
+     * Gets whether or not {@code a} ends before the end of {@code b}.
+     *
+     * @param a The first tree.
+     * @param b The second tree.
+     * @return {@code true} if {@code a} ends before the end of {@code b}, otherwise {@code false}.
+     */
+    public static boolean endsBeforeEndOf(@NonNull ParseTree<? extends Token> a, @NonNull ParseTree<? extends Token> b) {
+        Interval sourceIntervalA = a.getSourceInterval();
+        Interval sourceIntervalB = b.getSourceInterval();
+        if (sourceIntervalA == null || sourceIntervalB == null) {
+            throw new NotImplementedException();
+        }
+
+        return sourceIntervalA.b < sourceIntervalB.b;
+    }
+
+    /**
+     * Gets whether or not {@code a} is an ancestor of or equal to {@code b}.
+     *
+     * @param a The first tree.
+     * @param b The second tree.
+     * @return {@code true} if {@code a} is an ancestor of or is equal to {@code b}, otherwise {@code false}.
+     */
+    public static boolean isAncestorOf(@NonNull ParseTree<? extends Token> a, @NonNull ParseTree<? extends Token> b) {
+        for (ParseTree<? extends Token> current = b; current != null; current = current.getParent()) {
+            if (current.equals(a)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Gets whether or not the first symbol of {@code tree} is the first
+     * non-whitespace symbol on a line.
+     *
+     * @param tree The parse tree to test.
+     * @return {@code true} if the only characters appearing before the first
+     * token of {@code tree} on the line where {@code tree} starts are
+     * whitespace characters according to {@link Character#isWhitespace}.
+     */
+    public static boolean elementStartsLine(ParseTree<? extends Token> tree) {
+        TerminalNode<? extends Token> symbol = ParseTrees.getStartNode(tree);
+        if (symbol == null) {
+            throw new NotImplementedException();
+        }
+
+        return elementStartsLine(symbol.getSymbol());
+    }
+
+    /**
+     * Gets whether or not {@code token} is the first non-whitespace symbol on a
+     * line.
+     *
+     * @param tree The token to test.
+     * @return {@code true} if the only characters appearing before
+     * {@code token} on the same line are whitespace characters according to
+     * {@link Character#isWhitespace}.
+     */
+    public static boolean elementStartsLine(Token token) {
+        String beginningOfLineText = token.getTokenSource().getInputStream().getText(new Interval(token.getStartIndex() - token.getCharPositionInLine(), token.getStartIndex() - 1));
+        for (int i = 0; i < beginningOfLineText.length(); i++) {
+            if (!Character.isWhitespace(beginningOfLineText.charAt(i))) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private ParseTrees() {
