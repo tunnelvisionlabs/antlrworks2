@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module: org.tvl.netbeans.editor.actions
+OpenIDE-Module-Localizing-Bundle: org/tvl/netbeans/editor/actions/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0
+
