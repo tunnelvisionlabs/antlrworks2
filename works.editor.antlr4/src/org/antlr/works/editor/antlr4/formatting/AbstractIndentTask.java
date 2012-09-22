@@ -131,9 +131,7 @@ public abstract class AbstractIndentTask implements IndentTask {
             region = OffsetRegion.fromBounds(0, regionEnd);
         }
 
-        if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.log(Level.FINE, "Reindent from anchor region: {0}.", region);
-        }
+        LOGGER.log(Level.FINE, "Reindent from anchor region: {0}.", region);
 
         TaggerTokenSource<Token> taggerTokenSource = new TaggerTokenSource<Token>(tagger, new SnapshotPositionRegion(getSnapshot(), region));
         TokenSource<Token> tokenSource = new CodeCompletionTokenSource(endPosition.getOffset(), taggerTokenSource);
@@ -351,6 +349,14 @@ public abstract class AbstractIndentTask implements IndentTask {
                 } else {
                     elementIndent++;
                 }
+            }
+
+            if (ParseTrees.getStartSymbol(firstNodeOnLine) == startToken) {
+                LOGGER.log(Level.WARNING, "Attempting to indent a line relative to an element on that line.");
+            }
+
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.log(Level.FINE, "Indent {0} relative to {1} (offset {2}) => {3}", new Object[] { firstNodeOnLine, alignmentElement.getItem1(), alignmentElement.getItem2(), elementIndent + alignmentElement.getItem2() });
             }
 
             return elementIndent + alignmentElement.getItem2();
