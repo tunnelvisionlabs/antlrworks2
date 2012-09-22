@@ -126,7 +126,7 @@ public class BaseCompletionController implements CompletionController {
     }
 
     @Override
-    public Selection getSelection(List<? extends CompletionItem> items) {
+    public Selection getSelection(List<? extends CompletionItem> items, List<? extends CompletionItem> declarationItems) {
         Comparator<CompletionItem> comparator = getComparator(CompletionResultSet.TEXT_SORT_TYPE);
 
         String completionPrefix = getCompletionPrefix();
@@ -156,7 +156,8 @@ public class BaseCompletionController implements CompletionController {
             if (bestMatch != null) {
                 int index = items.indexOf(bestMatch);
                 boolean selected =
-                    (!(bestMatch instanceof AbstractCompletionItem) || ((AbstractCompletionItem)bestMatch).allowInitialSelection())
+                    declarationItems.isEmpty()
+                    && (!(bestMatch instanceof AbstractCompletionItem) || ((AbstractCompletionItem)bestMatch).allowInitialSelection())
                     && evaluatedText != null && !evaluatedText.isEmpty();
 
                 boolean unique = !completionPrefix.isEmpty()

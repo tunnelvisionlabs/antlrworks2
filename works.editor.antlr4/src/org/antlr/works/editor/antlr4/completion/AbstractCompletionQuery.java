@@ -305,7 +305,7 @@ public abstract class AbstractCompletionQuery extends AsyncCompletionQuery {
             DocumentSnapshot snapshot = textBuffer.getCurrentSnapshot();
             SnapshotPositionRegion applicableSpan = getApplicableTo().getRegion(snapshot);
             if (applicableSpan.getLength() > 0) {
-                resultSet.addItem(createDeclarationCompletionItem(component.getDocument(), getApplicableTo()));
+                resultSet.addDeclarationItem(createDeclarationCompletionItem(component.getDocument(), getApplicableTo()));
             }
         }
     }
