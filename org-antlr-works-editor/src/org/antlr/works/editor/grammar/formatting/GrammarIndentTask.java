@@ -97,8 +97,6 @@ public class GrammarIndentTask extends AbstractIndentTask {
         // the last anchor starting before the caret
         Anchor previous = null;
         if (anchors != null) {
-            Anchor next = null;
-
             /*
              * parse the current rule
              */
@@ -114,7 +112,6 @@ public class GrammarIndentTask extends AbstractIndentTask {
                         enclosing = anchor;
                     }
                 } else {
-                    next = anchor;
                     break;
                 }
             }
