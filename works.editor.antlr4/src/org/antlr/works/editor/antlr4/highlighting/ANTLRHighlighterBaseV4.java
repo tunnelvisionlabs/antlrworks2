@@ -121,7 +121,6 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
                     private boolean _complete;
                     private OffsetRegion span;
                     private boolean spanExtended = false;
-                    private int extendMultiLineSpanToLine = 0;
                     private OffsetRegion extendedSpan;
                     private OffsetRegion requestedSpan;
 
@@ -217,9 +216,6 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
 
                                             for (int i = firstMultilineLine; i < startLineCurrent; i++)
                                             {
-                                                if (!lineStates.get(i).getIsMultiLineToken() || lineStateChanged)
-                                                    extendMultiLineSpanToLine = i + 1;
-
                                                 if (inBounds)
                                                     setLineState(i, lineStates.get(i).createMultiLineState());
                                             }
@@ -237,9 +233,6 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
                                         int stopLine = NbDocument.findLineNumber(document, token.getStopIndex());
                                         for (int i = startLine; i < stopLine; i++)
                                         {
-                                            if (!lineStates.get(i).getIsMultiLineToken())
-                                                extendMultiLineSpanToLine = i + 1;
-
                                             if (inBounds)
                                                 setLineState(i, lineStates.get(i).createMultiLineState());
                                         }
@@ -314,23 +307,6 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
                             } finally {
                                 lexer.close();
                             }
-                        }
-
-                        if (updateOffsets && extendMultiLineSpanToLine > 0) {
-                            int endPosition = extendMultiLineSpanToLine < NbDocument.findLineRootElement(document).getElementCount() - 1 ? NbDocument.findLineOffset(document, extendMultiLineSpanToLine + 1) : document.getLength();
-                            if (endPosition > extendedSpan.getEnd()) {
-                                spanExtended = true;
-                                extendedSpan = OffsetRegion.fromBounds(extendedSpan.getStart(), endPosition);
-                            }
-                        }
-
-                        if (updateOffsets && spanExtended) {
-                            /* Subtract 1 from each of these because the spans include the line break on their last
-                             * line, forcing it to appear as the first position on the following line.
-                             */
-                            int firstLine = NbDocument.findLineNumber(document, span.getEnd());
-                            int lastLine = NbDocument.findLineNumber(document, extendedSpan.getEnd()) - 1;
-                            forceRehighlightLines(firstLine, lastLine, false);
                         }
                     }
                 };
