@@ -27,6 +27,8 @@ import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleContext;
+import org.antlr.v4.runtime.RuleDependencies;
+import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.atn.ATNConfig;
 import org.antlr.v4.runtime.atn.NotSetTransition;
@@ -137,6 +139,7 @@ public class GrammarIndentTask extends AbstractIndentTask {
     }
 
     @Override
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleSpec, version=0)
     protected Map<RuleContext<Token>, CaretReachedException> getParseTrees(CommonTokenStream tokens, ReferenceAnchors anchors) {
         parser = ParserCache.DEFAULT.getParser(tokens);
 
@@ -166,6 +169,24 @@ public class GrammarIndentTask extends AbstractIndentTask {
     }
 
     @Override
+    @RuleDependencies({
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_parserRuleSpec, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleAltList, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerRule, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerAltList, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_altList, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_blockSet, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerBlock, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_block, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_optionsSpec, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_tokensSpec, version=1),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_modeSpec, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_delegateGrammars, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_actionBlock, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_elements, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerElements, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_delegateGrammar, version=0),
+    })
     protected Set<AlignmentRequirement> getAlignmentRequirement(
         Map.Entry<RuleContext<Token>, CaretReachedException> parseTree,
         ParseTree<? extends Token> targetElement,
@@ -278,6 +299,26 @@ public class GrammarIndentTask extends AbstractIndentTask {
     }
 
     @Override
+    @RuleDependencies({
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_elements, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerElements, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleAltList, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerAltList, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_altList, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_blockSet, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerBlock, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_block, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_parserRuleSpec, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerRule, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_optionsSpec, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_option, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_tokensSpec, version=1),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_actionBlock, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_delegateGrammars, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_delegateGrammar, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_modeSpec, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleSpec, version=0),
+    })
     protected Tuple2<? extends ParseTree<? extends Token>, Integer> getAlignmentElement(
         Map.Entry<RuleContext<Token>, CaretReachedException> parseTree,
         ParseTree<? extends Token> targetElement,
