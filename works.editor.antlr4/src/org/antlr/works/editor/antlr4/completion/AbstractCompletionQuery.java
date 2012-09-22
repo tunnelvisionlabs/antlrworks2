@@ -138,6 +138,7 @@ public abstract class AbstractCompletionQuery extends AsyncCompletionQuery {
                 }
             }
 
+            LOGGER.log(Level.FINE, "Hiding the completion query in AbstractCompletionQuery.preQueryUpdate().");
             Completion.get().hideCompletion();
         }
     }
@@ -279,6 +280,7 @@ public abstract class AbstractCompletionQuery extends AsyncCompletionQuery {
                         handleDeclarationItem(resultSet);
                         resultSet.setHasAdditionalItems(hasAdditionalItems > 0);
                     } else {
+                        LOGGER.log(Level.FINE, "Hiding the completion query in AbstractCompletionQuery.filter().");
                         Completion.get().hideDocumentation();
                         Completion.get().hideCompletion();
                     }
