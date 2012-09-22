@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.text.BadLocationException;
 import org.antlr.netbeans.editor.classification.TokenTag;
 import org.antlr.netbeans.editor.highlighting.LineStateInfo;
@@ -38,6 +40,8 @@ import org.openide.util.Parameters;
  * @author Sam Harwell
  */
 public abstract class AbstractTokensTaskTaggerSnapshot<TState extends LineStateInfo<TState>> extends AbstractTagger<TokenTag<Token>> {
+    // -J-Dorg.antlr.works.editor.antlr4.classification.AbstractTokensTaskTaggerSnapshot.level=FINE
+    private static final Logger LOGGER = Logger.getLogger(AbstractTokensTaskTaggerSnapshot.class.getName());
 
     @NonNull
     private final DocumentSnapshot snapshot;
@@ -204,6 +208,7 @@ public abstract class AbstractTokensTaskTaggerSnapshot<TState extends LineStateI
             try {
                 input = createInputStream(span);
             } catch (BadLocationException ex) {
+                LOGGER.log(Level.WARNING, ex.getMessage(), ex);
                 return tags;
             }
 

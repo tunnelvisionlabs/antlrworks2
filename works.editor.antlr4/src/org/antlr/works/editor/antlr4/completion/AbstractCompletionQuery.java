@@ -36,7 +36,6 @@ import org.netbeans.spi.editor.completion.CompletionItem;
 import org.netbeans.spi.editor.completion.CompletionProvider;
 import org.netbeans.spi.editor.completion.CompletionResultSet;
 import org.netbeans.spi.editor.completion.support.AsyncCompletionQuery;
-import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
 import org.openide.util.Parameters;
@@ -196,9 +195,7 @@ public abstract class AbstractCompletionQuery extends AsyncCompletionQuery {
                 }
             }
         } catch (Exception ex) {
-            if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.log(Level.FINE, "An exception occurred while processing a completion query.", ex);
-            }
+            LOGGER.log(Level.WARNING, "An exception occurred while processing a completion query.", ex);
         } finally {
             resultSet.finish();
         }
@@ -261,6 +258,7 @@ public abstract class AbstractCompletionQuery extends AsyncCompletionQuery {
                     filterPrefix = newOffset > toolTipOffset ? component.getDocument().getText(newOffset, caretOffset - newOffset) : null;
                 }
             } catch (BadLocationException e) {
+                LOGGER.log(Level.WARNING, e.getMessage(), e);
             }
 
             return (filterPrefix != null && filterPrefix.indexOf(',') == -1 && filterPrefix.indexOf('(') == -1 && filterPrefix.indexOf(')') == -1);
@@ -293,7 +291,7 @@ public abstract class AbstractCompletionQuery extends AsyncCompletionQuery {
                 resultSet.setAnchorOffset(applicableTo.getStartPosition(textBuffer.getCurrentSnapshot()).getOffset());
             }
         } catch (Exception ex) {
-            Exceptions.printStackTrace(ex);
+            LOGGER.log(Level.WARNING, ex.getMessage(), ex);
         }
 
         resultSet.finish();

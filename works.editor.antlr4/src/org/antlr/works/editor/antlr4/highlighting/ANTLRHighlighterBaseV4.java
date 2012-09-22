@@ -38,7 +38,6 @@ import org.netbeans.api.annotations.common.NullAllowed;
 import org.netbeans.spi.editor.highlighting.HighlightsSequence;
 import org.netbeans.spi.editor.highlighting.support.AbstractHighlightsContainer;
 import org.openide.text.NbDocument;
-import org.openide.util.Exceptions;
 import org.openide.util.Parameters;
 
 /**
@@ -154,6 +153,7 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
                         try {
                             input = createInputStream(span);
                         } catch (BadLocationException ex) {
+                            LOGGER.log(Level.WARNING, ex.getMessage(), ex);
                             _complete = true;
                         }
                     }
@@ -398,6 +398,7 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
             try {
                 input = createInputStream(span);
             } catch (BadLocationException ex) {
+                LOGGER.log(Level.WARNING, ex.getMessage(), ex);
                 return null;
             }
 
@@ -709,7 +710,7 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
             char c = document.getText(token.getStopIndex() + 1, 1).charAt(0);
             return c == '\r' || c == '\n';
         } catch (BadLocationException ex) {
-            Exceptions.printStackTrace(ex);
+            LOGGER.log(Level.WARNING, ex.getMessage(), ex);
             return false;
         }
 

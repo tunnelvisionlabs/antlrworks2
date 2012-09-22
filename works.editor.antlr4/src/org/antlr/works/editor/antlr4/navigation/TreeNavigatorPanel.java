@@ -170,7 +170,7 @@ public abstract class TreeNavigatorPanel implements NavigatorPanel {
 
             getBag(doc).setHighlights(bag);
         } catch (DataObjectNotFoundException ex) {
-            LOGGER.log(Level.FINE, null, ex);
+            LOGGER.log(Level.WARNING, ex.getMessage(), ex);
         }
     }
 

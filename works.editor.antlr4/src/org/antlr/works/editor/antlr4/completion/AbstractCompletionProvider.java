@@ -12,6 +12,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
@@ -21,7 +22,6 @@ import org.netbeans.editor.Utilities;
 import org.netbeans.spi.editor.completion.CompletionProvider;
 import org.netbeans.spi.editor.completion.CompletionTask;
 import org.netbeans.spi.editor.completion.support.AsyncCompletionTask;
-import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 
 /**
@@ -90,6 +90,7 @@ public abstract class AbstractCompletionProvider implements CompletionProvider {
                 extend = identifier != null && caretOffset > identifier[0] && caretOffset <= identifier[1];
             } catch (BadLocationException ex) {
                 // this happens when the caret is before the first word of the document
+                LOGGER.log(Level.WARNING, ex.getMessage(), ex);
                 extend = false;
             }
 

@@ -13,6 +13,8 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
@@ -35,6 +37,8 @@ import org.netbeans.spi.editor.completion.support.CompletionUtilities;
  * @author Sam Harwell
  */
 public abstract class AbstractCompletionItem implements CompletionItem {
+    // -J-Dorg.antlr.works.editor.antlr4.completion.AbstractCompletionItem.level=FINE
+    private static final Logger LOGGER = Logger.getLogger(AbstractCompletionItem.class.getName());
 
     public static final String COLOR_END = "</font>"; //NOI18N
     public static final String STRIKE = "<s>"; //NOI18N
@@ -198,6 +202,7 @@ public abstract class AbstractCompletionItem implements CompletionItem {
 //                    component.setCaretPosition(offset + replacement.length());
                 } catch (BadLocationException e) {
                     // Can't update
+                    LOGGER.log(Level.WARNING, e.getMessage(), e);
                 }
             }
         });

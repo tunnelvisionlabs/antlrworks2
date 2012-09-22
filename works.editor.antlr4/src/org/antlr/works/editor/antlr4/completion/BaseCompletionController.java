@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.text.BadLocationException;
@@ -42,6 +44,8 @@ import org.openide.util.Parameters;
  * @author Sam Harwell
  */
 public class BaseCompletionController implements CompletionController {
+    // -J-Dorg.antlr.works.editor.antlr4.completion.BaseCompletionController.level=FINE
+    private static final Logger LOGGER = Logger.getLogger(BaseCompletionController.class.getName());
 
     /** ^([A-Z][a-z]*){2,}$ */
     private static final Pattern WORD_BOUNDARY_PREFIX =
@@ -262,6 +266,7 @@ public class BaseCompletionController implements CompletionController {
                     return doc.getText(block);
                 }
             } catch (BadLocationException ble) {
+                LOGGER.log(Level.WARNING, ble.getMessage(), ble);
             }
         }
 

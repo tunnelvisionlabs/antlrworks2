@@ -8,6 +8,8 @@
  */
 package org.antlr.works.editor.antlr4.highlighting;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.StyledDocument;
 import org.antlr.netbeans.editor.text.OffsetRegion;
@@ -21,6 +23,9 @@ import org.openide.text.NbDocument;
  * @author Sam Harwell
  */
 public class DocumentCharStreamV4 implements CharStream {
+    // -J-Dorg.antlr.works.editor.antlr4.highlighting.DocumentCharStreamV4.level=FINE
+    private static final Logger LOGGER = Logger.getLogger(DocumentCharStreamV4.class.getName());
+
     private boolean explicitCache;
 
     private int currentSnapshotLineStartIndex;
@@ -55,6 +60,7 @@ public class DocumentCharStreamV4 implements CharStream {
         try {
             return document.getText(startIndex, endIndexInclusive - startIndex + 1).toString();
         } catch (BadLocationException ex) {
+            LOGGER.log(Level.WARNING, ex.getMessage(), ex);
             return null;
         }
     }
@@ -98,6 +104,7 @@ public class DocumentCharStreamV4 implements CharStream {
         try {
             return document.getText(actualIndex, 1).charAt(0);
         } catch (BadLocationException ex) {
+            LOGGER.log(Level.WARNING, ex.getMessage(), ex);
             return Token.EOF;
         }
     }
@@ -150,6 +157,7 @@ public class DocumentCharStreamV4 implements CharStream {
                 try {
                     currentSnapshotLine = document.getText(currentSnapshotLineStartIndex, endIndex - currentSnapshotLineStartIndex).toString();
                 } catch (BadLocationException ex) {
+                    LOGGER.log(Level.WARNING, ex.getMessage(), ex);
                 }
             } else {
                 currentSnapshotLine = null;
