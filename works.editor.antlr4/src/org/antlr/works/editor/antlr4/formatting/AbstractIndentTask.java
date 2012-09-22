@@ -173,7 +173,11 @@ public abstract class AbstractIndentTask implements IndentTask {
             indentList.add(parseTree);
         }
 
-        int indentLevel = !indentLevels.isEmpty() ? indentLevels.firstKey() : 0;
+        if (indentLevels.isEmpty()) {
+            return false;
+        }
+
+        int indentLevel = indentLevels.firstKey();
         if (indentLevels.size() > 1) {
             // TODO: resolve multiple possibilities
         }
