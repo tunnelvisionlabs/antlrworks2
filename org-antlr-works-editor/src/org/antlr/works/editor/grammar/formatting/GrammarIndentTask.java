@@ -11,6 +11,7 @@ package org.antlr.works.editor.grammar.formatting;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -21,6 +22,7 @@ import org.antlr.netbeans.editor.completion.Anchor;
 import org.antlr.netbeans.editor.completion.ReferenceAnchors;
 import org.antlr.netbeans.editor.tagging.Tagger;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
+import org.antlr.netbeans.editor.text.SnapshotPosition;
 import org.antlr.netbeans.parsing.spi.ParserData;
 import org.antlr.netbeans.parsing.spi.ParserDataOptions;
 import org.antlr.netbeans.parsing.spi.ParserTaskManager;
@@ -47,8 +49,11 @@ import org.antlr.works.editor.antlr4.parsing.ParseTrees;
 import org.antlr.works.editor.grammar.GrammarEditorKit;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
 import org.antlr.works.editor.grammar.completion.CodeCompletionGrammarParser;
+import org.antlr.works.editor.grammar.completion.CompletionParserATNSimulator;
 import org.antlr.works.editor.grammar.completion.GrammarForestParser;
 import org.antlr.works.editor.grammar.completion.ParserCache;
+import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.LabeledAltContext;
+import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.LexerAltContext;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.LexerRuleContext;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.OptionsSpecContext;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.ParserRuleSpecContext;
@@ -161,11 +166,77 @@ public class GrammarIndentTask extends AbstractIndentTask {
             return null;
         }
 
-        Map<RuleContext<Token>, CaretReachedException> parseTrees = forestParser.getParseTrees(parser);
-        return parseTrees;
+        CompletionParserATNSimulator originalInterpreter = parser.getInterpreter();
+        try {
+            parser.setInterpreter(new CompletionParserATNSimulator(parser, GrammarParser._ATN) {
+
+                IntervalSet wordlikeTokenTypes;
+
+                {
+                    wordlikeTokenTypes = IntervalSet.of(0, GrammarParser._ATN.maxTokenType);
+                    //wordlikeTokenTypes.remove(GrammarParser.OR);
+                    //wordlikeTokenTypes.remove(GrammarParser.RPAREN);
+                    //wordlikeTokenTypes.remove(GrammarParser.RBRACE);
+                    //wordlikeTokenTypes.remove(GrammarParser.END_ACTION);
+                    //wordlikeTokenTypes.remove(GrammarParser.END_ARG_ACTION);
+                    //wordlikeTokenTypes.remove(GrammarParser.OPTIONS);
+                    //wordlikeTokenTypes.remove(GrammarParser.AT);
+                    //wordlikeTokenTypes.remove(GrammarParser.ASSIGN);
+                    //wordlikeTokenTypes.remove(GrammarParser.SEMI);
+                    //wordlikeTokenTypes.remove(GrammarParser.COMMA);
+                    //wordlikeTokenTypes.remove(GrammarParser.MODE);
+                }
+
+                @Override
+                protected IntervalSet getWordlikeTokenTypes() {
+                    return wordlikeTokenTypes;
+                }
+
+            });
+
+            Map<RuleContext<Token>, CaretReachedException> parseTrees = forestParser.getParseTrees(parser);
+            return parseTrees;
+        } finally {
+            parser.setInterpreter(originalInterpreter);
+        }
     }
 
     @Override
+    protected void fallbackReindent() throws BadLocationException {
+        List<Anchor> anchors = getDynamicAnchorPoints();
+        SnapshotPosition contextEndPosition = new SnapshotPosition(getSnapshot(), getContext().endOffset());
+        SnapshotPosition endPosition = contextEndPosition.getContainingLine().getEndIncludingLineBreak();
+        SnapshotPosition endPositionOnLine = contextEndPosition.getContainingLine().getEnd();
+        int endOffset = endPosition.getOffset();
+
+        if (anchors != null) {
+            Anchor previous = null;
+            Anchor enclosing = null;
+
+            for (Anchor anchor : anchors) {
+                if (anchor.getSpan().getStartPosition(getSnapshot()).getOffset() < endOffset) {
+                    previous = anchor;
+                }
+
+                if (anchor.getSpan().getStartPosition(getSnapshot()).getOffset() <= endOffset) {
+                    if (anchor.getSpan().getEndPosition(getSnapshot()).getOffset() > endOffset) {
+                        enclosing = anchor;
+                    }
+                } else {
+                    break;
+                }
+            }
+
+            if (previous != null) {
+                int anchorLineStartOffset = getContext().lineStartOffset(previous.getSpan().getStartPosition(getSnapshot()).getOffset());
+                getContext().modifyIndent(getContext().lineStartOffset(getContext().endOffset()), getContext().lineIndent(anchorLineStartOffset));
+                return;
+            }
+        }
+
+        super.fallbackReindent();
+    }
+
     @RuleDependencies({
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_parserRuleSpec, version=0),
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleAltList, version=0),
@@ -183,13 +254,26 @@ public class GrammarIndentTask extends AbstractIndentTask {
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_elements, version=0),
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerElements, version=0),
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_delegateGrammar, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerAlt, version=1),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_labeledAlt, version=1),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_rules, version=0),
+        //@RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommands, version=0),
     })
     protected Set<AlignmentRequirement> getAlignmentRequirement(
         Map.Entry<RuleContext<Token>, CaretReachedException> parseTree,
-        ParseTree<? extends Token> targetElement,
+        @NonNull ParseTree<? extends Token> targetElement,
         ParseTree<? extends Token> ancestor)
     {
-        if (ancestor == targetElement && !(targetElement instanceof TerminalNode)) {
+        TerminalNode<? extends Token> ancestorStart = ParseTrees.getStartNode(ancestor);
+        if (ancestorStart == null) {
+            return EnumSet.of(AlignmentRequirement.USE_ANCESTOR);
+        }
+
+        if (targetElement instanceof TerminalNode) {
+            if (ancestorStart == targetElement) {
+                return EnumSet.of(AlignmentRequirement.USE_ANCESTOR);
+            }
+        } else if (ancestor == targetElement) {
             // special handling for predicted tokens that don't actually exist yet
             CaretReachedException ex = parseTree.getValue();
             if (ex != null && ex.getTransitions() != null) {
@@ -218,7 +302,10 @@ public class GrammarIndentTask extends AbstractIndentTask {
                             || label.contains(GrammarParser.AT)
                             || label.contains(GrammarParser.ASSIGN)
                             || label.contains(GrammarParser.SEMI)
-                            || label.contains(GrammarParser.COMMA);
+                            || label.contains(GrammarParser.COMMA)
+                            || label.contains(GrammarParser.MODE)
+                            || label.contains(GrammarParser.RARROW)
+                            || label.contains(GrammarParser.POUND);
                         boolean containsInvalidSelf =
                             label.contains(GrammarParser.LPAREN)
                             || label.contains(GrammarParser.BEGIN_ACTION)
@@ -264,7 +351,24 @@ public class GrammarIndentTask extends AbstractIndentTask {
         case GrammarParser.RULE_actionBlock:
         case GrammarParser.RULE_elements:
         case GrammarParser.RULE_lexerElements:
+        case GrammarParser.RULE_rules:
+        //case GrammarParser.RULE_lexerCommands:
             return EnumSet.of(AlignmentRequirement.PRIOR_SIBLING);
+
+        case GrammarParser.RULE_lexerAlt:
+            LexerAltContext lexerAltContext = getTypedRuleContext(ancestor, LexerAltContext.class);
+            if (lexerAltContext != null && lexerAltContext.lexerCommands() != null && ParseTrees.isAncestorOf(lexerAltContext.lexerCommands(), targetElement)) {
+                return EnumSet.of(AlignmentRequirement.PRIOR_SIBLING);
+            } else {
+                return EnumSet.of(AlignmentRequirement.USE_ANCESTOR);
+            }
+
+        case GrammarParser.RULE_labeledAlt:
+            if (getTerminalNodeType(targetElement) == GrammarParser.POUND) {
+                return EnumSet.of(AlignmentRequirement.PRIOR_SIBLING);
+            } else {
+                return EnumSet.of(AlignmentRequirement.USE_ANCESTOR);
+            }
 
         case GrammarParser.RULE_delegateGrammar:
             return EnumSet.noneOf(AlignmentRequirement.class);
@@ -315,6 +419,9 @@ public class GrammarIndentTask extends AbstractIndentTask {
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_delegateGrammar, version=0),
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_modeSpec, version=0),
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleSpec, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerAlt, version=1),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_labeledAlt, version=1),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_rules, version=0),
     })
     protected Tuple2<? extends ParseTree<? extends Token>, Integer> getAlignmentElement(
         Map.Entry<RuleContext<Token>, CaretReachedException> parseTree,
@@ -440,15 +547,19 @@ public class GrammarIndentTask extends AbstractIndentTask {
             return Tuple.create(container, getCodeStyle().getIndentSize());
 
         case GrammarParser.RULE_lexerRule:
-            if (getTerminalNodeType(targetElement) == GrammarParser.AT) {
-                return Tuple.create(container, 0);
-            }
-
             LexerRuleContext lexerRuleContext = getTypedRuleContext(container, LexerRuleContext.class);
             if (lexerRuleContext == null) {
                 return null;
             }
-            
+
+            if (lexerRuleContext.name == null) {
+                return null;
+            }
+
+            if (getTerminalNodeType(targetElement) == GrammarParser.AT) {
+                return Tuple.create(container, 0);
+            }
+
             if (lexerRuleContext.COLON() != null) {
                 if (ParseTrees.startsBeforeStartOf(lexerRuleContext.COLON(), targetElement)) {
                     switch (getTerminalNodeType(targetElement)) {
@@ -463,6 +574,34 @@ public class GrammarIndentTask extends AbstractIndentTask {
             }
 
             return Tuple.create(container, getCodeStyle().getIndentSize());
+
+        case GrammarParser.RULE_lexerAlt:
+            LexerAltContext lexerAltContext = getTypedRuleContext(container, LexerAltContext.class);
+            assert lexerAltContext != null && lexerAltContext.lexerCommands() != null && ParseTrees.isAncestorOf(lexerAltContext.lexerCommands(), targetElement);
+            if (lexerAltContext.lexerElements() == null) {
+                return null;
+            }
+
+            return Tuple.create(lexerAltContext.lexerElements(), 0);
+
+        case GrammarParser.RULE_labeledAlt:
+            assert getTerminalNodeType(targetElement) == GrammarParser.POUND;
+            LabeledAltContext labeledAltContext = getTypedRuleContext(container, LabeledAltContext.class);
+            if (labeledAltContext == null || labeledAltContext.alternative() == null) {
+                return null;
+            }
+
+            return Tuple.create(labeledAltContext.alternative(), 0);
+
+        case GrammarParser.RULE_rules:
+            for (int i = priorSiblings.size() - 2; i >= 0; i--) {
+                ParseTree<? extends Token> sibling = priorSiblings.get(i);
+                if (i == 0 || ParseTrees.elementStartsLine(sibling)) {
+                    return Tuple.create(sibling, 0);
+                }
+            }
+
+            return null;
 
         case GrammarParser.RULE_optionsSpec:
             // use previous option if any, otherwise use the block.
