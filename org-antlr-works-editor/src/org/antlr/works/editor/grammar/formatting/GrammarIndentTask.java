@@ -59,7 +59,6 @@ import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.netbeans.modules.editor.indent.spi.Context;
 import org.netbeans.modules.editor.indent.spi.IndentTask;
 import org.netbeans.modules.editor.indent.spi.IndentTask.Factory;
-import org.openide.util.Exceptions;
 import org.openide.util.NotImplementedException;
 
 /**
@@ -127,6 +126,7 @@ public class GrammarIndentTask extends AbstractIndentTask {
         try {
             tagger = futureTokensData != null ? futureTokensData.get().getData() : null;
         } catch (InterruptedException ex) {
+            // Warning because a timeout keeps the UI responsive but still indicates a broken auto-indent feature
             LOGGER.log(Level.WARNING, "An exception occurred while getting the token tagger.", ex);
         } catch (ExecutionException ex) {
             LOGGER.log(Level.WARNING, "An exception occurred while getting the token tagger.", ex);
@@ -551,16 +551,16 @@ public class GrammarIndentTask extends AbstractIndentTask {
 
     @Override
     protected List<Anchor> getDynamicAnchorPoints() {
-        List<Anchor> anchors;
+        List<Anchor> anchors = null;
         Future<ParserData<List<Anchor>>> result =
             getTaskManager().getData(getSnapshot(), GrammarParserDataDefinitions.DYNAMIC_ANCHOR_POINTS, EnumSet.of(ParserDataOptions.SYNCHRONOUS));
         try {
             anchors = result != null ? result.get().getData() : null;
         } catch (InterruptedException ex) {
-            anchors = null;
+            // Warning because a timeout keeps the UI responsive but still indicates a broken auto-indent feature
+            LOGGER.log(Level.WARNING, "An exception occurred while getting the dynamic anchor points.", ex);
         } catch (ExecutionException ex) {
-            Exceptions.printStackTrace(ex);
-            anchors = null;
+            LOGGER.log(Level.WARNING, "An exception occurred while getting the dynamic anchor points.", ex);
         }
 
         return anchors;
