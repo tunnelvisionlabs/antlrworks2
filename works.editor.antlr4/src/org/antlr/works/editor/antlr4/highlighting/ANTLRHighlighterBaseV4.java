@@ -122,11 +122,11 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
                     private OffsetRegion span;
                     private boolean spanExtended = false;
                     private OffsetRegion extendedSpan;
-                    private OffsetRegion requestedSpan;
+                    private final OffsetRegion requestedSpan;
 
-                    private ParseRequest<TState> request;
+                    private final ParseRequest<TState> request;
                     private TState startState;
-                    private CharStream input;
+                    private final CharStream input;
 
                     private Token previousToken = null;
                     //private int previousTokenLine = 0;
@@ -149,12 +149,15 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
                         span = request.getRegion();
                         startState = request.getState();
 
+                        CharStream inputStream = null;
                         try {
-                            input = createInputStream(span);
+                            inputStream = createInputStream(span);
                         } catch (BadLocationException ex) {
                             LOGGER.log(Level.WARNING, ex.getMessage(), ex);
                             _complete = true;
                         }
+
+                        input = inputStream;
                     }
 
                     @Override
