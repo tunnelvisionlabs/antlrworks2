@@ -213,7 +213,8 @@ public abstract class AbstractCompletionQuery extends AsyncCompletionQuery {
 
             applicableTo = null;
             if ((queryType & CompletionProvider.DOCUMENTATION_QUERY_TYPE) == CompletionProvider.DOCUMENTATION_QUERY_TYPE) {
-                throw new UnsupportedOperationException("Not implemented yet.");
+                LOGGER.log(Level.WARNING, "Documentation query support is not yet implemented.");
+                return null;
             }
 
             Future<Void> value = getParserTaskManager().scheduleHighPriority(getTask((BaseDocument)doc));
