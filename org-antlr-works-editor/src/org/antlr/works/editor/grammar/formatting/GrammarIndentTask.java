@@ -11,7 +11,6 @@ package org.antlr.works.editor.grammar.formatting;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -52,13 +51,28 @@ import org.antlr.works.editor.grammar.completion.CodeCompletionGrammarParser;
 import org.antlr.works.editor.grammar.completion.CompletionParserATNSimulator;
 import org.antlr.works.editor.grammar.completion.GrammarForestParser;
 import org.antlr.works.editor.grammar.completion.ParserCache;
+import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.ActionBlockContext;
+import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.AltListContext;
+import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.BlockContext;
+import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.BlockSetContext;
+import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.DelegateGrammarContext;
+import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.DelegateGrammarsContext;
+import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.ElementsContext;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.LabeledAltContext;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.LexerAltContext;
+import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.LexerAltListContext;
+import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.LexerBlockContext;
+import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.LexerElementsContext;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.LexerRuleContext;
+import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.ModeSpecContext;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.OptionsSpecContext;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.ParserRuleSpecContext;
+import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.RuleAltListContext;
+import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.RulesContext;
+import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.TokensSpecContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser;
 import org.antlr.works.editor.grammar.experimental.GrammarParserAnchorListener;
+import org.antlr.works.editor.grammar.experimental.GrammarParserBaseVisitor;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.netbeans.modules.editor.indent.spi.Context;
@@ -237,6 +251,7 @@ public class GrammarIndentTask extends AbstractIndentTask {
         super.fallbackReindent();
     }
 
+    @Override
     @RuleDependencies({
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_parserRuleSpec, version=0),
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleAltList, version=0),
@@ -379,43 +394,64 @@ public class GrammarIndentTask extends AbstractIndentTask {
     }
 
     @Override
-    @RuleDependencies({
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_elements, version=0),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerElements, version=0),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleAltList, version=0),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerAltList, version=0),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_altList, version=0),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_blockSet, version=0),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerBlock, version=0),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_block, version=0),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_parserRuleSpec, version=0),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerRule, version=0),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_optionsSpec, version=0),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_option, version=0),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_tokensSpec, version=1),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_actionBlock, version=0),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_delegateGrammars, version=0),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_delegateGrammar, version=0),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_modeSpec, version=0),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleSpec, version=0),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerAlt, version=1),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_labeledAlt, version=1),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_rules, version=0),
-    })
     protected Tuple2<? extends ParseTree<? extends Token>, Integer> getAlignmentElement(
         Map.Entry<RuleContext<Token>, CaretReachedException> parseTree,
         ParseTree<? extends Token> targetElement,
         ParseTree<? extends Token> container,
         List<? extends ParseTree<? extends Token>> priorSiblings)
     {
-        assert container instanceof RuleNode;
+        AlignmentElementVisitor visitor = new AlignmentElementVisitor(parseTree, targetElement, priorSiblings);
+        return visitor.visit(container);
+    }
 
-        RuleNode<? extends Token> ruleNode = (RuleNode<? extends Token>)container;
-        RuleContext<? extends Token> ruleContext = (RuleContext<? extends Token>)ruleNode.getRuleContext();
+    @Override
+    protected List<Anchor> getDynamicAnchorPoints() {
+        List<Anchor> anchors = null;
+        Future<ParserData<List<Anchor>>> result =
+            getTaskManager().getData(getSnapshot(), GrammarParserDataDefinitions.DYNAMIC_ANCHOR_POINTS, EnumSet.of(ParserDataOptions.SYNCHRONOUS));
+        try {
+            anchors = result != null ? result.get().getData() : null;
+        } catch (InterruptedException ex) {
+            // Warning because a timeout keeps the UI responsive but still indicates a broken auto-indent feature
+            LOGGER.log(Level.WARNING, "An exception occurred while getting the dynamic anchor points.", ex);
+        } catch (ExecutionException ex) {
+            LOGGER.log(Level.WARNING, "An exception occurred while getting the dynamic anchor points.", ex);
+        }
 
-        switch (ruleContext.getRuleIndex()) {
-        case GrammarParser.RULE_elements:
-        case GrammarParser.RULE_lexerElements:
+        return anchors;
+    }
+
+    @Override
+    protected GrammarCodeStyle getCodeStyle() {
+        if (codeStyle == null) {
+            codeStyle = GrammarCodeStyle.getDefault(getContext().document());
+        }
+
+        return codeStyle;
+    }
+
+    protected class AlignmentElementVisitor extends GrammarParserBaseVisitor<Tuple2<? extends ParseTree<? extends Token>, Integer>> {
+
+        private final Map.Entry<RuleContext<Token>, CaretReachedException> parseTree;
+        private final ParseTree<? extends Token> targetElement;
+        private final List<? extends ParseTree<? extends Token>> priorSiblings;
+
+        public AlignmentElementVisitor(Map.Entry<RuleContext<Token>, CaretReachedException> parseTree, ParseTree<? extends Token> targetElement, List<? extends ParseTree<? extends Token>> priorSiblings) {
+            this.parseTree = parseTree;
+            this.targetElement = targetElement;
+            this.priorSiblings = priorSiblings;
+        }
+
+        @Override
+        public Tuple2<? extends ParseTree<? extends Token>, Integer> visitChildren(RuleNode<? extends Token> node) {
+            throw new UnsupportedOperationException("This visitor is designed for top-level nodes only.");
+        }
+
+        @RuleDependencies({
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_elements, version=0),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerElements, version=0),
+        })
+        private Tuple2<? extends ParseTree<? extends Token>, Integer> visitElements() {
             // the non-terminals under these rules are straightforward
             int firstElementIndex = -1;
             for (int i = 0; i < priorSiblings.size(); i++) {
@@ -439,13 +475,17 @@ public class GrammarIndentTask extends AbstractIndentTask {
 
             // handle at the parent
             return null;
+        }
 
-        case GrammarParser.RULE_ruleAltList:
-        case GrammarParser.RULE_lexerAltList:
-        case GrammarParser.RULE_altList:
-        case GrammarParser.RULE_blockSet:
-        case GrammarParser.RULE_lexerBlock:
-        case GrammarParser.RULE_block:
+        @RuleDependencies({
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleAltList, version=0),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerAltList, version=0),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_altList, version=0),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_blockSet, version=0),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerBlock, version=0),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_block, version=0),
+        })
+        private Tuple2<? extends ParseTree<? extends Token>, Integer> visitGenericBlock(ParserRuleContext<? extends Token> container) {
             if (targetElement == ParseTrees.getStartNode(container)) {
                 return null;
             }
@@ -499,80 +539,138 @@ public class GrammarIndentTask extends AbstractIndentTask {
 
             // handle at the parent
             return null;
+        }
 
-        case GrammarParser.RULE_parserRuleSpec:
+        @Override
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_elements, version=0)
+        public Tuple2<? extends ParseTree<? extends Token>, Integer> visitElements(ElementsContext ctx) {
+            return visitElements();
+        }
+
+        @Override
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerElements, version=0)
+        public Tuple2<? extends ParseTree<? extends Token>, Integer> visitLexerElements(LexerElementsContext ctx) {
+            return visitElements();
+        }
+
+        @Override
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleAltList, version=0)
+        public Tuple2<? extends ParseTree<? extends Token>, Integer> visitRuleAltList(RuleAltListContext ctx) {
+            return visitGenericBlock(ctx);
+        }
+
+        @Override
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerAltList, version=0)
+        public Tuple2<? extends ParseTree<? extends Token>, Integer> visitLexerAltList(LexerAltListContext ctx) {
+            return visitGenericBlock(ctx);
+        }
+
+        @Override
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_altList, version=0)
+        public Tuple2<? extends ParseTree<? extends Token>, Integer> visitAltList(AltListContext ctx) {
+            return visitGenericBlock(ctx);
+        }
+
+        @Override
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_blockSet, version=0)
+        public Tuple2<? extends ParseTree<? extends Token>, Integer> visitBlockSet(BlockSetContext ctx) {
+            return visitGenericBlock(ctx);
+        }
+
+        @Override
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerBlock, version=0)
+        public Tuple2<? extends ParseTree<? extends Token>, Integer> visitLexerBlock(LexerBlockContext ctx) {
+            return visitGenericBlock(ctx);
+        }
+
+        @Override
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_block, version=0)
+        public Tuple2<? extends ParseTree<? extends Token>, Integer> visitBlock(BlockContext ctx) {
+            return visitGenericBlock(ctx);
+        }
+
+        @Override
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_parserRuleSpec, version=0)
+        public Tuple2<? extends ParseTree<? extends Token>, Integer> visitParserRuleSpec(ParserRuleSpecContext ctx) {
             if (ParseTrees.getTerminalNodeType(targetElement) == GrammarParser.AT) {
-                return Tuple.create(container, 0);
+                return Tuple.create(ctx, 0);
             }
 
-            ParserRuleSpecContext parserRuleSpecContext = ParseTrees.getTypedRuleContext(container, ParserRuleSpecContext.class);
-            if (parserRuleSpecContext == null) {
-                return null;
-            }
-            
-            if (parserRuleSpecContext.COLON() != null) {
-                if (ParseTrees.startsBeforeStartOf(parserRuleSpecContext.COLON(), targetElement)) {
+            if (ctx.COLON() != null) {
+                if (ParseTrees.startsBeforeStartOf(ctx.COLON(), targetElement)) {
                     switch (ParseTrees.getTerminalNodeType(targetElement)) {
                     case GrammarParser.SEMI:
                     case GrammarParser.OR:
-                        return Tuple.create(parserRuleSpecContext.COLON(), 0);
-                        
+                        return Tuple.create(ctx.COLON(), 0);
+
                     default:
-                        return Tuple.create(parserRuleSpecContext.COLON(), getCodeStyle().getIndentSize());
+                        return Tuple.create(ctx.COLON(), getCodeStyle().getIndentSize());
                     }
                 }
             }
 
-            return Tuple.create(container, getCodeStyle().getIndentSize());
+            return Tuple.create(ctx, getCodeStyle().getIndentSize());
+        }
 
-        case GrammarParser.RULE_lexerRule:
-            LexerRuleContext lexerRuleContext = ParseTrees.getTypedRuleContext(container, LexerRuleContext.class);
-            if (lexerRuleContext == null) {
-                return null;
-            }
-
-            if (lexerRuleContext.name == null) {
+        @Override
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerRule, version=0)
+        public Tuple2<? extends ParseTree<? extends Token>, Integer> visitLexerRule(LexerRuleContext ctx) {
+            if (ctx.name == null) {
                 return null;
             }
 
             if (ParseTrees.getTerminalNodeType(targetElement) == GrammarParser.AT) {
-                return Tuple.create(container, 0);
+                return Tuple.create(ctx, 0);
             }
 
-            if (lexerRuleContext.COLON() != null) {
-                if (ParseTrees.startsBeforeStartOf(lexerRuleContext.COLON(), targetElement)) {
+            if (ctx.COLON() != null) {
+                if (ParseTrees.startsBeforeStartOf(ctx.COLON(), targetElement)) {
                     switch (ParseTrees.getTerminalNodeType(targetElement)) {
                     case GrammarParser.SEMI:
                     case GrammarParser.OR:
-                        return Tuple.create(lexerRuleContext.COLON(), 0);
-                        
+                        return Tuple.create(ctx.COLON(), 0);
+
                     default:
-                        return Tuple.create(lexerRuleContext.COLON(), getCodeStyle().getIndentSize());
+                        return Tuple.create(ctx.COLON(), getCodeStyle().getIndentSize());
                     }
                 }
             }
 
-            return Tuple.create(container, getCodeStyle().getIndentSize());
+            return Tuple.create(ctx, getCodeStyle().getIndentSize());
+        }
 
-        case GrammarParser.RULE_lexerAlt:
-            LexerAltContext lexerAltContext = ParseTrees.getTypedRuleContext(container, LexerAltContext.class);
-            assert lexerAltContext != null && lexerAltContext.lexerCommands() != null && ParseTrees.isAncestorOf(lexerAltContext.lexerCommands(), targetElement);
-            if (lexerAltContext.lexerElements() == null) {
+        @Override
+        @RuleDependencies({
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerAlt, version=1),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerElements, version=0),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommands, version=0),
+        })
+        public Tuple2<? extends ParseTree<? extends Token>, Integer> visitLexerAlt(LexerAltContext ctx) {
+            assert ctx.lexerCommands() != null && ParseTrees.isAncestorOf(ctx.lexerCommands(), targetElement);
+            if (ctx.lexerElements() == null) {
                 return null;
             }
 
-            return Tuple.create(lexerAltContext.lexerElements(), 0);
+            return Tuple.create(ctx.lexerElements(), 0);
+        }
 
-        case GrammarParser.RULE_labeledAlt:
+        @Override
+        @RuleDependencies({
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_labeledAlt, version=1),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_alternative, version=0),
+        })
+        public Tuple2<? extends ParseTree<? extends Token>, Integer> visitLabeledAlt(LabeledAltContext ctx) {
             assert ParseTrees.getTerminalNodeType(targetElement) == GrammarParser.POUND;
-            LabeledAltContext labeledAltContext = ParseTrees.getTypedRuleContext(container, LabeledAltContext.class);
-            if (labeledAltContext == null || labeledAltContext.alternative() == null) {
+            if (ctx.alternative() == null) {
                 return null;
             }
 
-            return Tuple.create(labeledAltContext.alternative(), 0);
+            return Tuple.create(ctx.alternative(), 0);
+        }
 
-        case GrammarParser.RULE_rules:
+        @Override
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_rules, version=0)
+        public Tuple2<? extends ParseTree<? extends Token>, Integer> visitRules(RulesContext ctx) {
             for (int i = priorSiblings.size() - 2; i >= 0; i--) {
                 ParseTree<? extends Token> sibling = priorSiblings.get(i);
                 if (i == 0 || ParseTrees.elementStartsLine(sibling)) {
@@ -581,12 +679,18 @@ public class GrammarIndentTask extends AbstractIndentTask {
             }
 
             return null;
+        }
 
-        case GrammarParser.RULE_optionsSpec:
+        @Override
+        @RuleDependencies({
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_optionsSpec, version=0),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_option, version=0),
+        })
+        public Tuple2<? extends ParseTree<? extends Token>, Integer> visitOptionsSpec(OptionsSpecContext ctx) {
             // use previous option if any, otherwise use the block.
             // special handling for closing }
-            if (targetElement == ((OptionsSpecContext)ruleContext).RBRACE()) {
-                return Tuple.create(container, 0);
+            if (targetElement == ctx.RBRACE()) {
+                return Tuple.create(ctx, 0);
             }
 
             int firstOptionIndex = -1;
@@ -617,16 +721,18 @@ public class GrammarIndentTask extends AbstractIndentTask {
                 }
             }
 
-            return Tuple.create(container, getCodeStyle().getIndentSize());
+            return Tuple.create(ctx, getCodeStyle().getIndentSize());
+        }
 
-        case GrammarParser.RULE_tokensSpec:
-        case GrammarParser.RULE_actionBlock:
-            if (container.getChildCount() == 0 || targetElement == container.getChild(0)) {
+        @Override
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_tokensSpec, version=1)
+        public Tuple2<? extends ParseTree<? extends Token>, Integer> visitTokensSpec(TokensSpecContext ctx) {
+            if (ctx.getChildCount() == 0 || targetElement == ctx.getChild(0)) {
                 return null;
             }
 
             if (ParseTrees.getTerminalNodeType(targetElement) == GrammarParser.RBRACE) {
-                return Tuple.create(container, 0);
+                return Tuple.create(ctx, 0);
             }
 
             // align to the previous element
@@ -638,15 +744,48 @@ public class GrammarIndentTask extends AbstractIndentTask {
                 }
             }
 
-            return Tuple.create(container, getCodeStyle().getIndentSize());
+            return Tuple.create(ctx, getCodeStyle().getIndentSize());
+        }
 
-        case GrammarParser.RULE_delegateGrammars:
+        @Override
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_actionBlock, version=0)
+        public Tuple2<? extends ParseTree<? extends Token>, Integer> visitActionBlock(ActionBlockContext ctx) {
+            if (ctx.getChildCount() == 0 || targetElement == ctx.getChild(0)) {
+                return null;
+            }
+
+            if (ParseTrees.getTerminalNodeType(targetElement) == GrammarParser.RBRACE) {
+                return Tuple.create(ctx, 0);
+            }
+
+            // align to the previous element
+            for (int i = priorSiblings.size() - 2; i >= 0; i--) {
+                ParseTree<? extends Token> sibling = priorSiblings.get(i);
+                // stop at the first id rule, index 0 is the TOKENS terminal itself
+                if (i == 1 || ParseTrees.elementStartsLine(sibling)) {
+                    return Tuple.create(sibling, 0);
+                }
+            }
+
+            return Tuple.create(ctx, getCodeStyle().getIndentSize());
+        }
+
+        @Override
+        public Tuple2<? extends ParseTree<? extends Token>, Integer> visitDelegateGrammar(DelegateGrammarContext ctx) {
             throw new NotImplementedException();
+        }
 
-        case GrammarParser.RULE_delegateGrammar:
+        @Override
+        public Tuple2<? extends ParseTree<? extends Token>, Integer> visitDelegateGrammars(DelegateGrammarsContext ctx) {
             throw new NotImplementedException();
+        }
 
-        case GrammarParser.RULE_modeSpec:
+        @Override
+        @RuleDependencies({
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_modeSpec, version=0),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleSpec, version=0),
+        })
+        public Tuple2<? extends ParseTree<? extends Token>, Integer> visitModeSpec(ModeSpecContext ctx) {
             // use the preceeding rule (if any), otherwise relative to mode
             for (int i = priorSiblings.size() - 2; i >= 0; i--) {
                 ParseTree<? extends Token> sibling = priorSiblings.get(i);
@@ -660,37 +799,8 @@ public class GrammarIndentTask extends AbstractIndentTask {
                 }
             }
 
-            return Tuple.create(container, getCodeStyle().getIndentSize());
-
-        default:
-            throw new UnsupportedOperationException("Unexpected ancestor node type.");
+            return Tuple.create(ctx, getCodeStyle().getIndentSize());
         }
-    }
-
-    @Override
-    protected List<Anchor> getDynamicAnchorPoints() {
-        List<Anchor> anchors = null;
-        Future<ParserData<List<Anchor>>> result =
-            getTaskManager().getData(getSnapshot(), GrammarParserDataDefinitions.DYNAMIC_ANCHOR_POINTS, EnumSet.of(ParserDataOptions.SYNCHRONOUS));
-        try {
-            anchors = result != null ? result.get().getData() : null;
-        } catch (InterruptedException ex) {
-            // Warning because a timeout keeps the UI responsive but still indicates a broken auto-indent feature
-            LOGGER.log(Level.WARNING, "An exception occurred while getting the dynamic anchor points.", ex);
-        } catch (ExecutionException ex) {
-            LOGGER.log(Level.WARNING, "An exception occurred while getting the dynamic anchor points.", ex);
-        }
-
-        return anchors;
-    }
-
-    @Override
-    protected GrammarCodeStyle getCodeStyle() {
-        if (codeStyle == null) {
-            codeStyle = GrammarCodeStyle.getDefault(getContext().document());
-        }
-
-        return codeStyle;
     }
 
     private static final class GrammarReferenceAnchors extends ReferenceAnchors {
