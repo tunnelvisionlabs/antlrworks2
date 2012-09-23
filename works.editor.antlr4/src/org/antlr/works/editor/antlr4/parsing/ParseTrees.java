@@ -491,6 +491,51 @@ public final class ParseTrees {
         return true;
     }
 
+    /**
+     * Gets the symbol type of a parse tree terminal node. If the node is not a
+     * terminal node, this method returns {@link Token#INVALID_TYPE}.
+     *
+     * @param node The parse tree node.
+     * @return The symbol type of the terminal node. If {@code node} does not
+     * implement {@link TerminalNode}, this method returns
+     * {@link Token#INVALID_TYPE}.
+     */
+    @CheckForNull
+    public static int getTerminalNodeType(@NonNull ParseTree<? extends Token> node) {
+        if (!(node instanceof TerminalNode)) {
+            return Token.INVALID_TYPE;
+        }
+
+        return ((TerminalNode<? extends Token>)node).getSymbol().getType();
+    }
+
+    /**
+     * Gets a typed rule context from a parse tree node. If {@code node} is a
+     * {@link RuleNode}, this method gets the {@link RuleContext} instance from
+     * the node and attempts to cast the result to {@code clazz}. If
+     * {@code node} is not a {@code RuleNode}, or if the context is not of type
+     * {@code clazz}, this method returns {@code null}.
+     *
+     * @param <T> The specific rule context type.
+     * @param node The parse tree node.
+     * @param clazz The specific rule context type.
+     * @return A typed rule context object, or {@code null} if the parse tree
+     * node does not represent a rule node of this specific type.
+     */
+    @CheckForNull
+    public static <T extends ParserRuleContext<?>> T getTypedRuleContext(@NonNull ParseTree<? extends Token> node, @NonNull Class<T> clazz) {
+        if (!(node instanceof RuleNode)) {
+            return null;
+        }
+
+        RuleContext<? extends Token> ruleContext = ((RuleNode<? extends Token>)node).getRuleContext();
+        if (clazz.isInstance(ruleContext)) {
+            return clazz.cast(ruleContext);
+        }
+
+        return null;
+    }
+
     private ParseTrees() {
     }
 

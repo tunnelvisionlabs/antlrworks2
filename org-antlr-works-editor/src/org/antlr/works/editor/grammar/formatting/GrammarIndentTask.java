@@ -356,7 +356,7 @@ public class GrammarIndentTask extends AbstractIndentTask {
             return EnumSet.of(AlignmentRequirement.PRIOR_SIBLING);
 
         case GrammarParser.RULE_lexerAlt:
-            LexerAltContext lexerAltContext = getTypedRuleContext(ancestor, LexerAltContext.class);
+            LexerAltContext lexerAltContext = ParseTrees.getTypedRuleContext(ancestor, LexerAltContext.class);
             if (lexerAltContext != null && lexerAltContext.lexerCommands() != null && ParseTrees.isAncestorOf(lexerAltContext.lexerCommands(), targetElement)) {
                 return EnumSet.of(AlignmentRequirement.PRIOR_SIBLING);
             } else {
@@ -364,7 +364,7 @@ public class GrammarIndentTask extends AbstractIndentTask {
             }
 
         case GrammarParser.RULE_labeledAlt:
-            if (getTerminalNodeType(targetElement) == GrammarParser.POUND) {
+            if (ParseTrees.getTerminalNodeType(targetElement) == GrammarParser.POUND) {
                 return EnumSet.of(AlignmentRequirement.PRIOR_SIBLING);
             } else {
                 return EnumSet.of(AlignmentRequirement.USE_ANCESTOR);
@@ -376,27 +376,6 @@ public class GrammarIndentTask extends AbstractIndentTask {
         default:
             return EnumSet.of(AlignmentRequirement.USE_ANCESTOR);
         }
-    }
-
-    protected int getTerminalNodeType(@NonNull ParseTree<? extends Token> node) {
-        if (!(node instanceof TerminalNode)) {
-            return Token.INVALID_TYPE;
-        }
-
-        return ((TerminalNode<? extends Token>)node).getSymbol().getType();
-    }
-
-    protected <T extends ParserRuleContext<? extends Token>> T getTypedRuleContext(ParseTree<? extends Token> node, Class<? extends T> clazz) {
-        if (!(node instanceof RuleNode)) {
-            return null;
-        }
-
-        RuleContext<? extends Token> ruleContext = ((RuleNode<? extends Token>)node).getRuleContext();
-        if (clazz.isInstance(ruleContext)) {
-            return clazz.cast(ruleContext);
-        }
-
-        return null;
     }
 
     @Override
@@ -471,12 +450,12 @@ public class GrammarIndentTask extends AbstractIndentTask {
                 return null;
             }
 
-            if (getTerminalNodeType(targetElement) == GrammarParser.RPAREN) {
+            if (ParseTrees.getTerminalNodeType(targetElement) == GrammarParser.RPAREN) {
                 return Tuple.create(container, 0);
             }
 
             // OR lines up with previous OR
-            boolean orNode = getTerminalNodeType(targetElement) == GrammarParser.OR;
+            boolean orNode = ParseTrees.getTerminalNodeType(targetElement) == GrammarParser.OR;
             if (orNode) {
                 for (int i = priorSiblings.size() - 2; i >= 0; i--) {
                     ParseTree<? extends Token> sibling = priorSiblings.get(i);
@@ -489,7 +468,7 @@ public class GrammarIndentTask extends AbstractIndentTask {
                     }
                 }
 
-                if (getTerminalNodeType(ParseTrees.getStartNode(container)) != GrammarParser.LPAREN) {
+                if (ParseTrees.getTerminalNodeType(ParseTrees.getStartNode(container)) != GrammarParser.LPAREN) {
                     // handle at the parent so it aligns at the (
                     return null;
                 }
@@ -522,18 +501,18 @@ public class GrammarIndentTask extends AbstractIndentTask {
             return null;
 
         case GrammarParser.RULE_parserRuleSpec:
-            if (getTerminalNodeType(targetElement) == GrammarParser.AT) {
+            if (ParseTrees.getTerminalNodeType(targetElement) == GrammarParser.AT) {
                 return Tuple.create(container, 0);
             }
 
-            ParserRuleSpecContext parserRuleSpecContext = getTypedRuleContext(container, ParserRuleSpecContext.class);
+            ParserRuleSpecContext parserRuleSpecContext = ParseTrees.getTypedRuleContext(container, ParserRuleSpecContext.class);
             if (parserRuleSpecContext == null) {
                 return null;
             }
             
             if (parserRuleSpecContext.COLON() != null) {
                 if (ParseTrees.startsBeforeStartOf(parserRuleSpecContext.COLON(), targetElement)) {
-                    switch (getTerminalNodeType(targetElement)) {
+                    switch (ParseTrees.getTerminalNodeType(targetElement)) {
                     case GrammarParser.SEMI:
                     case GrammarParser.OR:
                         return Tuple.create(parserRuleSpecContext.COLON(), 0);
@@ -547,7 +526,7 @@ public class GrammarIndentTask extends AbstractIndentTask {
             return Tuple.create(container, getCodeStyle().getIndentSize());
 
         case GrammarParser.RULE_lexerRule:
-            LexerRuleContext lexerRuleContext = getTypedRuleContext(container, LexerRuleContext.class);
+            LexerRuleContext lexerRuleContext = ParseTrees.getTypedRuleContext(container, LexerRuleContext.class);
             if (lexerRuleContext == null) {
                 return null;
             }
@@ -556,13 +535,13 @@ public class GrammarIndentTask extends AbstractIndentTask {
                 return null;
             }
 
-            if (getTerminalNodeType(targetElement) == GrammarParser.AT) {
+            if (ParseTrees.getTerminalNodeType(targetElement) == GrammarParser.AT) {
                 return Tuple.create(container, 0);
             }
 
             if (lexerRuleContext.COLON() != null) {
                 if (ParseTrees.startsBeforeStartOf(lexerRuleContext.COLON(), targetElement)) {
-                    switch (getTerminalNodeType(targetElement)) {
+                    switch (ParseTrees.getTerminalNodeType(targetElement)) {
                     case GrammarParser.SEMI:
                     case GrammarParser.OR:
                         return Tuple.create(lexerRuleContext.COLON(), 0);
@@ -576,7 +555,7 @@ public class GrammarIndentTask extends AbstractIndentTask {
             return Tuple.create(container, getCodeStyle().getIndentSize());
 
         case GrammarParser.RULE_lexerAlt:
-            LexerAltContext lexerAltContext = getTypedRuleContext(container, LexerAltContext.class);
+            LexerAltContext lexerAltContext = ParseTrees.getTypedRuleContext(container, LexerAltContext.class);
             assert lexerAltContext != null && lexerAltContext.lexerCommands() != null && ParseTrees.isAncestorOf(lexerAltContext.lexerCommands(), targetElement);
             if (lexerAltContext.lexerElements() == null) {
                 return null;
@@ -585,8 +564,8 @@ public class GrammarIndentTask extends AbstractIndentTask {
             return Tuple.create(lexerAltContext.lexerElements(), 0);
 
         case GrammarParser.RULE_labeledAlt:
-            assert getTerminalNodeType(targetElement) == GrammarParser.POUND;
-            LabeledAltContext labeledAltContext = getTypedRuleContext(container, LabeledAltContext.class);
+            assert ParseTrees.getTerminalNodeType(targetElement) == GrammarParser.POUND;
+            LabeledAltContext labeledAltContext = ParseTrees.getTypedRuleContext(container, LabeledAltContext.class);
             if (labeledAltContext == null || labeledAltContext.alternative() == null) {
                 return null;
             }
@@ -623,7 +602,7 @@ public class GrammarIndentTask extends AbstractIndentTask {
                 }
             }
 
-            boolean semi = getTerminalNodeType(targetElement) == GrammarParser.SEMI;
+            boolean semi = ParseTrees.getTerminalNodeType(targetElement) == GrammarParser.SEMI;
             for (int i = priorSiblings.size() - 2; i >= 0; i--) {
                 ParseTree<? extends Token> sibling = priorSiblings.get(i);
                 if (!(sibling instanceof RuleNode)) {
@@ -646,7 +625,7 @@ public class GrammarIndentTask extends AbstractIndentTask {
                 return null;
             }
 
-            if (getTerminalNodeType(targetElement) == GrammarParser.RBRACE) {
+            if (ParseTrees.getTerminalNodeType(targetElement) == GrammarParser.RBRACE) {
                 return Tuple.create(container, 0);
             }
 
