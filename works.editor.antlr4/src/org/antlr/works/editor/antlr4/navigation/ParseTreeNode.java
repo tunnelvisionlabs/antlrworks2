@@ -13,6 +13,7 @@ import java.util.concurrent.Callable;
 import org.antlr.netbeans.editor.text.OffsetRegion;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleContext;
+import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.RuleNode;
@@ -44,9 +45,9 @@ public class ParseTreeNode extends AbstractNode implements OffsetProvider {
     public static final Image ERROR_IMAGE = ImageUtilities.loadImage(ERROR_IMAGE_PATH);
 
     @NonNull
-    private final ParseTree<?> _tree;
+    private final ParseTree<? extends Token> _tree;
 
-    public ParseTreeNode(@NonNull ParseTree<?> tree) {
+    public ParseTreeNode(@NonNull ParseTree<? extends Token> tree) {
         super(Children.LEAF);
         _tree = tree;
 
@@ -106,18 +107,18 @@ public class ParseTreeNode extends AbstractNode implements OffsetProvider {
 
     @Override
     public OffsetRegion getSpan() {
-        TerminalNode<?> startNode = ParseTrees.getStartNode(_tree);
+        TerminalNode<? extends Token> startNode = ParseTrees.getStartNode(_tree);
         if (startNode == null) {
             return null;
         }
 
-        TerminalNode<?> stopNode = ParseTrees.getStopNode(_tree);
+        TerminalNode<? extends Token> stopNode = ParseTrees.getStopNode(_tree);
         if (stopNode == null) {
             // rule matched epsilon
-            return new OffsetRegion(startNode.getSourceInterval().a, 0);
+            return new OffsetRegion(startNode.getSymbol().getStartIndex(), 0);
         }
 
-        return OffsetRegion.fromBounds(startNode.getSourceInterval().a, stopNode.getSourceInterval().b + 1);
+        return OffsetRegion.fromBounds(startNode.getSymbol().getStartIndex(), stopNode.getSymbol().getStopIndex() + 1);
     }
 
     @Override
@@ -135,7 +136,7 @@ public class ParseTreeNode extends AbstractNode implements OffsetProvider {
         return null;
     }
 
-    protected ParseTreeNode createChildNode(ParseTree<?> tree) {
+    protected ParseTreeNode createChildNode(ParseTree<? extends Token> tree) {
         return new ParseTreeNode(tree);
     }
 
