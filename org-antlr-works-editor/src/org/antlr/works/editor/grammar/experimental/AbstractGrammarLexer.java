@@ -1,4 +1,5 @@
 // $ANTLR ANTLRVersion> AbstractGrammarLexer.java generatedTimestamp>
+package org.antlr.works.editor.grammar.experimental;
 /*
  *  Copyright (c) 2012 Sam Harwell, Tunnel Vision Laboratories LLC
  *  All rights reserved.
@@ -7,7 +8,6 @@
  *  distribution. For information about licensing, contact Sam Harwell at:
  *      sam@tunnelvisionlabs.com
  */
-package org.antlr.works.editor.grammar.experimental;
 
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;

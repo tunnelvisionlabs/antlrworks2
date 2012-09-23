@@ -27,7 +27,6 @@ tokens {
  *  distribution. For information about licensing, contact Sam Harwell at:
  *      sam@tunnelvisionlabs.com
  */
-package org.antlr.works.editor.grammar.experimental;
 }
 
 @members {
@@ -644,6 +643,9 @@ mode ArgAction;
         |   ACTION_CHAR_LITERAL
         ;
 
+	/**
+	 * This covers a group of characters which don't match any of the above rules.
+	 */
     ARG_ACTION_TEXT
         :   ~(  '\'' | '"'
             |   ']'

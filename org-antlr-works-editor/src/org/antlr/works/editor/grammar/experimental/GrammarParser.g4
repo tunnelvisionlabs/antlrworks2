@@ -74,7 +74,6 @@ tokens {
  *  distribution. For information about licensing, contact Sam Harwell at:
  *      sam@tunnelvisionlabs.com
  */
-package org.antlr.works.editor.grammar.experimental;
 }
 
 // The main entry point for parsing a V3 grammar from top to toe. This is

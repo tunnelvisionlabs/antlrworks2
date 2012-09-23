@@ -1,3 +1,4 @@
+package org.antlr.works.editor.st4.experimental;
 /*
  *  Copyright (c) 2012 Sam Harwell, Tunnel Vision Laboratories LLC
  *  All rights reserved.
@@ -6,7 +7,6 @@
  *  distribution. For information about licensing, contact Sam Harwell at:
  *      sam@tunnelvisionlabs.com
  */
-package org.antlr.works.editor.st4.experimental;
 
 import org.antlr.v4.runtime.tree.*;
 import org.antlr.v4.runtime.Token;

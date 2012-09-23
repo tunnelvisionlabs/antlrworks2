@@ -20,15 +20,15 @@ set ANTLR4_TOOL=-cp "%ANTLR4_CLASSPATH%" org.antlr.v4.Tool
 set SOURCE_ROOT=%CD%
 
 set CURRENT_SOURCE=%SOURCE_ROOT%\org-antlr-works-editor\src\org\antlr\works\editor\grammar\experimental
-start /D %CURRENT_SOURCE% /B "Title" "%JAVA_HOME%\bin\java.exe" %ANTLR4_TOOL% -visitor -Xforce-atn *.g4
+start /D %CURRENT_SOURCE% /B "Title" "%JAVA_HOME%\bin\java.exe" %ANTLR4_TOOL% -package org.antlr.works.editor.grammar.experimental -visitor -Xforce-atn *.g4
 
 set CURRENT_SOURCE=%SOURCE_ROOT%\org-antlr-works-editor\src\org\antlr\works\editor\grammar\highlighter4
-start /D %CURRENT_SOURCE% /B "Title" "%JAVA_HOME%\bin\java.exe" %ANTLR4_TOOL% *.g4
+start /D %CURRENT_SOURCE% /B "Title" "%JAVA_HOME%\bin\java.exe" %ANTLR4_TOOL% -package org.antlr.works.editor.grammar.highlighter4 *.g4
 
 set CURRENT_SOURCE=%SOURCE_ROOT%\org-antlr-works-editor\src\org\antlr\works\editor\st4\experimental
-start /D %CURRENT_SOURCE% /B "Title" "%JAVA_HOME%\bin\java.exe" %ANTLR4_TOOL% -visitor -Xforce-atn *.g4
+start /D %CURRENT_SOURCE% /B "Title" "%JAVA_HOME%\bin\java.exe" %ANTLR4_TOOL% -package org.antlr.works.editor.st4.experimental -visitor -Xforce-atn *.g4
 
 set CURRENT_SOURCE=%SOURCE_ROOT%\org-antlr-works-editor\src\org\antlr\works\editor\st4\highlighter4
-start /D %CURRENT_SOURCE% /WAIT /B "Title" "%JAVA_HOME%\bin\java.exe" %ANTLR4_TOOL% *.g4
+start /D %CURRENT_SOURCE% /WAIT /B "Title" "%JAVA_HOME%\bin\java.exe" %ANTLR4_TOOL% -package org.antlr.works.editor.st4.highlighter4 *.g4
 
 cd %SOURCE_ROOT%
