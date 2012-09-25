@@ -89,14 +89,16 @@ public class ImplicitTokenDefinitionHintParserTask implements ParserTask {
 
         Set<String> declaredTokens = new HashSet<String>();
         declaredTokens.add("EOF");
-        FileModel fileModel = GrammarParserDataDefinitions.tryGetData(taskManager, snapshot, GrammarParserDataDefinitions.FILE_MODEL, EnumSet.of(ParserDataOptions.SYNCHRONOUS));
-        if (fileModel != null) {
-            for (TokenData tokenData : fileModel.getVocabulary().getTokens()) {
-                declaredTokens.add(tokenData.getName());
-                String literal = tokenData.getLiteral();
-                if (literal != null) {
-                    declaredTokens.add(literal);
-                }
+        FileModel fileModel = GrammarParserDataDefinitions.tryGetData(taskManager, snapshot, GrammarParserDataDefinitions.FILE_MODEL, EnumSet.of(ParserDataOptions.NO_UPDATE, ParserDataOptions.SYNCHRONOUS));
+        if (fileModel == null) {
+            return;
+        }
+
+        for (TokenData tokenData : fileModel.getVocabulary().getTokens()) {
+            declaredTokens.add(tokenData.getName());
+            String literal = tokenData.getLiteral();
+            if (literal != null) {
+                declaredTokens.add(literal);
             }
         }
 
@@ -116,7 +118,7 @@ public class ImplicitTokenDefinitionHintParserTask implements ParserTask {
     }
 
     private static <T> T getCachedData(ParserTaskManager taskManager, ParseContext context, DocumentSnapshot snapshot, ParserDataDefinition<T> definition) throws InterruptedException, ExecutionException {
-        Future<ParserData<T>> futureData = taskManager.getData(snapshot, context.getComponent(), definition);
+        Future<ParserData<T>> futureData = taskManager.getData(snapshot, context.getComponent(), definition, EnumSet.of(ParserDataOptions.NO_UPDATE, ParserDataOptions.SYNCHRONOUS));
         ParserData<T> parserData = futureData != null ? futureData.get() : null;
         T data = parserData != null ? parserData.getData() : null;
         return data;
