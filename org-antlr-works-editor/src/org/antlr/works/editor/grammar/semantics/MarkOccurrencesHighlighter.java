@@ -204,15 +204,21 @@ public class MarkOccurrencesHighlighter extends AbstractSemanticHighlighter<Curr
         ParserTaskManager taskManager = Lookup.getDefault().lookup(ParserTaskManager.class);
         DocumentSnapshot snapshot = position.getSnapshot();
         int offset = position.getOffset();
-        Future<ParserData<Tagger<TokenTag<Token>>>> futureTokensData = taskManager.getData(snapshot, GrammarParserDataDefinitions.LEXER_TOKENS, EnumSet.of(ParserDataOptions.SYNCHRONOUS));
+
+        Future<ParserData<Tagger<TokenTag<Token>>>> futureTokensData = taskManager.getData(snapshot, GrammarParserDataDefinitions.LEXER_TOKENS, EnumSet.of(ParserDataOptions.NO_UPDATE, ParserDataOptions.SYNCHRONOUS));
         Tagger<TokenTag<Token>> tagger;
         try {
-            tagger = futureTokensData.get().getData();
+            ParserData<Tagger<TokenTag<Token>>> tokensData = futureTokensData != null ? futureTokensData.get() : null;
+            tagger = tokensData != null ? tokensData.getData() : null;
         } catch (InterruptedException ex) {
             Exceptions.printStackTrace(ex);
             return null;
         } catch (ExecutionException ex) {
             Exceptions.printStackTrace(ex);
+            return null;
+        }
+
+        if (tagger == null) {
             return null;
         }
 

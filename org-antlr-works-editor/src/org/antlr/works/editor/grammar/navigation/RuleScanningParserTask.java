@@ -69,7 +69,7 @@ public class RuleScanningParserTask implements ParserTask {
                     options = EnumSet.of(ParserDataOptions.NO_UPDATE, ParserDataOptions.SYNCHRONOUS);
                 }
 
-                Future<ParserData<CompiledModel>> futureData = taskManager.getData(snapshot, context.getComponent(), GrammarParserDataDefinitions.COMPILED_MODEL, EnumSet.of(ParserDataOptions.NO_UPDATE, ParserDataOptions.SYNCHRONOUS));
+                Future<ParserData<CompiledModel>> futureData = taskManager.getData(snapshot, context.getComponent(), GrammarParserDataDefinitions.COMPILED_MODEL, options);
                 ParserData<CompiledModel> parserData = futureData != null ? futureData.get() : null;
                 CompiledModel model = parserData != null ? parserData.getData() : null;
                 if (model != null) {
