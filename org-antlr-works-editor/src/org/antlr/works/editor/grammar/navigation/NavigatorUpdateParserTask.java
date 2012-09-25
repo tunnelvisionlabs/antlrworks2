@@ -72,7 +72,7 @@ public class NavigatorUpdateParserTask implements ParserTask {
                 return;
             }
 
-            Future<ParserData<Description>> futureData = taskManager.getData(snapshot, GrammarParserDataDefinitions.NAVIGATOR_ROOT, EnumSet.of(ParserDataOptions.NO_UPDATE));
+            Future<ParserData<Description>> futureData = taskManager.getData(snapshot, GrammarParserDataDefinitions.NAVIGATOR_ROOT, EnumSet.of(ParserDataOptions.NO_UPDATE, ParserDataOptions.SYNCHRONOUS));
             ParserData<Description> parserData = futureData.get();
             if (parserData == null) {
                 return;
@@ -80,7 +80,7 @@ public class NavigatorUpdateParserTask implements ParserTask {
 
             Description root = parserData.getData();
 
-            Future<ParserData<CurrentRuleContextData>> futureContextData = taskManager.getData(snapshot, GrammarParserDataDefinitions.CURRENT_RULE_CONTEXT, EnumSet.of(ParserDataOptions.NO_UPDATE));
+            Future<ParserData<CurrentRuleContextData>> futureContextData = taskManager.getData(snapshot, GrammarParserDataDefinitions.CURRENT_RULE_CONTEXT, EnumSet.of(ParserDataOptions.NO_UPDATE, ParserDataOptions.SYNCHRONOUS));
             ParserData<CurrentRuleContextData> parserContextData = futureContextData.get();
             CurrentRuleContextData context = null;
             if (parserContextData != null) {

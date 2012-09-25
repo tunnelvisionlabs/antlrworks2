@@ -11,6 +11,7 @@ package org.antlr.works.editor.grammar.semantics;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumSet;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
@@ -58,7 +59,7 @@ public class SemanticAnalyzerParserTask implements ParserTask {
 
         if (requestedData.contains(GrammarParserDataDefinitions.ANNOTATED_PARSE_TREE)) {
             synchronized (lock) {
-                ParserData<GrammarAnnotatedParseTree> parseTreeResult = getTaskManager().getData(snapshot, GrammarParserDataDefinitions.ANNOTATED_PARSE_TREE, EnumSet.of(ParserDataOptions.NO_UPDATE)).get();
+                ParserData<GrammarAnnotatedParseTree> parseTreeResult = getTaskManager().getData(snapshot, GrammarParserDataDefinitions.ANNOTATED_PARSE_TREE, EnumSet.of(ParserDataOptions.NO_UPDATE, ParserDataOptions.SYNCHRONOUS)).get();
                 if (parseTreeResult != null) {
                     results.addResult(parseTreeResult);
                     return;
@@ -66,7 +67,7 @@ public class SemanticAnalyzerParserTask implements ParserTask {
 
                 ParserRuleContext<Token> referenceParseTree = null;
                 try {
-                    Future<ParserData<ParserRuleContext<Token>>> futureRefParseTreeData = getTaskManager().getData(snapshot, GrammarParserDataDefinitions.REFERENCE_PARSE_TREE);
+                    Future<ParserData<ParserRuleContext<Token>>> futureRefParseTreeData = getTaskManager().getData(snapshot, GrammarParserDataDefinitions.REFERENCE_PARSE_TREE, EnumSet.of(ParserDataOptions.SYNCHRONOUS));
                     ParserData<ParserRuleContext<Token>> refParseTreeData = futureRefParseTreeData != null ? futureRefParseTreeData.get() : null;
                     referenceParseTree = refParseTreeData != null ? refParseTreeData.getData() : null;
                 } catch (InterruptedException ex) {

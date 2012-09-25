@@ -113,12 +113,11 @@ public class MarkOccurrencesHighlighter extends AbstractSemanticHighlighter<Curr
         FileModel fileModel = null;
         GrammarAnnotatedParseTree annotatedParseTree = null;
         try {
-            Future<ParserData<FileModel>> futureFileModelData = getTaskManager().getData(parserData.getSnapshot(), GrammarParserDataDefinitions.FILE_MODEL);
-            Future<ParserData<GrammarAnnotatedParseTree>> futureAnnotatedParseTreeData = getTaskManager().getData(parserData.getSnapshot(), GrammarParserDataDefinitions.ANNOTATED_PARSE_TREE);
+            Future<ParserData<FileModel>> futureFileModelData = getTaskManager().getData(parserData.getSnapshot(), GrammarParserDataDefinitions.FILE_MODEL, EnumSet.of(ParserDataOptions.NO_UPDATE, ParserDataOptions.SYNCHRONOUS));
+            ParserData<FileModel> fileModelData = futureFileModelData != null ? futureFileModelData.get() : null;
+            fileModel = fileModelData != null ? fileModelData.getData() : null;
 
-            ParserData<FileModel> annotatedFileModelData = futureFileModelData != null ? futureFileModelData.get() : null;
-            fileModel = annotatedFileModelData != null ? annotatedFileModelData.getData() : null;
-
+            Future<ParserData<GrammarAnnotatedParseTree>> futureAnnotatedParseTreeData = getTaskManager().getData(parserData.getSnapshot(), GrammarParserDataDefinitions.ANNOTATED_PARSE_TREE, EnumSet.of(ParserDataOptions.NO_UPDATE, ParserDataOptions.SYNCHRONOUS));
             ParserData<GrammarAnnotatedParseTree> annotatedParseTreeData = futureAnnotatedParseTreeData != null ? futureAnnotatedParseTreeData.get() : null;
             annotatedParseTree = annotatedParseTreeData != null ? annotatedParseTreeData.getData() : null;
         } catch (InterruptedException ex) {

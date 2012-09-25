@@ -53,15 +53,23 @@ public class RuleScanningParserTask implements ParserTask {
     public void parse(ParserTaskManager taskManager, ParseContext context, DocumentSnapshot snapshot, Collection<ParserDataDefinition<?>> requestedData, ParserResultHandler results)
         throws InterruptedException, ExecutionException {
 
+        boolean explicitRequest = ParserTaskScheduler.MANUAL_TASK_SCHEDULER.isAssignableFrom(context.getScheduler().getClass());
         if (requestedData.contains(GrammarParserDataDefinitions.NAVIGATOR_ROOT)) {
             synchronized (lock) {
-                ParserData<Description> data = taskManager.getData(snapshot, GrammarParserDataDefinitions.NAVIGATOR_ROOT, EnumSet.of(ParserDataOptions.NO_UPDATE)).get();
+                ParserData<Description> data = taskManager.getData(snapshot, GrammarParserDataDefinitions.NAVIGATOR_ROOT, EnumSet.of(ParserDataOptions.NO_UPDATE, ParserDataOptions.SYNCHRONOUS)).get();
                 if (data != null) {
                     results.addResult(data);
                     return;
                 }
 
-                Future<ParserData<CompiledModel>> futureData = taskManager.getData(snapshot, context.getComponent(), GrammarParserDataDefinitions.COMPILED_MODEL);
+                EnumSet<ParserDataOptions> options;
+                if (explicitRequest) {
+                    options = EnumSet.of(ParserDataOptions.SYNCHRONOUS);
+                } else {
+                    options = EnumSet.of(ParserDataOptions.NO_UPDATE, ParserDataOptions.SYNCHRONOUS);
+                }
+
+                Future<ParserData<CompiledModel>> futureData = taskManager.getData(snapshot, context.getComponent(), GrammarParserDataDefinitions.COMPILED_MODEL, EnumSet.of(ParserDataOptions.NO_UPDATE, ParserDataOptions.SYNCHRONOUS));
                 ParserData<CompiledModel> parserData = futureData != null ? futureData.get() : null;
                 CompiledModel model = parserData != null ? parserData.getData() : null;
                 if (model != null) {
