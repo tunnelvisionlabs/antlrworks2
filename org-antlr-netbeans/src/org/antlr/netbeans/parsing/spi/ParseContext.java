@@ -23,67 +23,53 @@ import org.openide.util.Parameters;
  * @author Sam Harwell
  */
 public class ParseContext {
+    @NonNull
+    private final ParserTaskScheduler scheduler;
+    @NonNull
     private final VersionedDocument document;
+
     private final DocumentSnapshot snapshot;
     private final SnapshotPosition position;
     private final Reference<JTextComponent> component;
-    private final ParserTaskScheduler scheduler;
 
-    public ParseContext(VersionedDocument document) {
-        this(null, document, null, null, null);
-    }
-
-    public ParseContext(VersionedDocument document, JTextComponent component) {
-        this(null, document, null, null, component);
-    }
-
-    public ParseContext(DocumentSnapshot snapshot) {
-        this(null, snapshot.getVersionedDocument(), snapshot, null, null);
-    }
-
-    public ParseContext(DocumentSnapshot snapshot, JTextComponent component) {
-        this(null, snapshot.getVersionedDocument(), snapshot, null, component);
-    }
-
-    public ParseContext(@NonNull SnapshotPosition position) {
-        this(null, position.getSnapshot().getVersionedDocument(), position.getSnapshot(), position, null);
-    }
-
-    public ParseContext(@NonNull SnapshotPosition position, JTextComponent component) {
-        this(null, position.getSnapshot().getVersionedDocument(), position.getSnapshot(), position, component);
-    }
-
-    public ParseContext(ParserTaskScheduler scheduler, VersionedDocument document) {
+    public ParseContext(@NonNull ParserTaskScheduler scheduler, VersionedDocument document) {
         this(scheduler, document, null, null, null);
     }
 
-    public ParseContext(ParserTaskScheduler scheduler, VersionedDocument document, JTextComponent component) {
+    public ParseContext(@NonNull ParserTaskScheduler scheduler, VersionedDocument document, JTextComponent component) {
         this(scheduler, document, null, null, component);
     }
 
-    public ParseContext(ParserTaskScheduler scheduler, DocumentSnapshot snapshot) {
+    public ParseContext(@NonNull ParserTaskScheduler scheduler, DocumentSnapshot snapshot) {
         this(scheduler, snapshot.getVersionedDocument(), snapshot, null, null);
     }
 
-    public ParseContext(ParserTaskScheduler scheduler, DocumentSnapshot snapshot, JTextComponent component) {
+    public ParseContext(@NonNull ParserTaskScheduler scheduler, DocumentSnapshot snapshot, JTextComponent component) {
         this(scheduler, snapshot.getVersionedDocument(), snapshot, null, component);
     }
 
-    public ParseContext(ParserTaskScheduler scheduler, @NonNull SnapshotPosition position) {
+    public ParseContext(@NonNull ParserTaskScheduler scheduler, @NonNull SnapshotPosition position) {
         this(scheduler, position.getSnapshot().getVersionedDocument(), position.getSnapshot(), position, null);
     }
 
-    public ParseContext(ParserTaskScheduler scheduler, @NonNull SnapshotPosition position, JTextComponent component) {
+    public ParseContext(@NonNull ParserTaskScheduler scheduler, @NonNull SnapshotPosition position, JTextComponent component) {
         this(scheduler, position.getSnapshot().getVersionedDocument(), position.getSnapshot(), position, component);
     }
 
-    public ParseContext(ParserTaskScheduler scheduler, VersionedDocument document, DocumentSnapshot snapshot, SnapshotPosition position, JTextComponent component) {
+    public ParseContext(@NonNull ParserTaskScheduler scheduler, VersionedDocument document, DocumentSnapshot snapshot, SnapshotPosition position, JTextComponent component) {
+        Parameters.notNull("scheduler", scheduler);
         Parameters.notNull("document", document);
+
+        this.scheduler = scheduler;
         this.document = document;
         this.snapshot = snapshot;
         this.position = position;
         this.component = new WeakReference<JTextComponent>(component);
-        this.scheduler = scheduler;
+    }
+
+    @NonNull
+    public ParserTaskScheduler getScheduler() {
+        return scheduler;
     }
 
     @NonNull
@@ -104,11 +90,6 @@ public class ParseContext {
     @CheckForNull
     public JTextComponent getComponent() {
         return component.get();
-    }
-
-    @CheckForNull
-    public ParserTaskScheduler getScheduler() {
-        return scheduler;
     }
 
     @Override

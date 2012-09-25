@@ -155,7 +155,7 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
             return new CompletedFuture<ParserData<T>>(cachedData, null);
         }
 
-        ParseContext context = new ParseContext(snapshot, component);
+        ParseContext context = new ParseContext(TaskSchedulers.getScheduler(ManualParserTaskScheduler.class), snapshot, component);
         Callable<ParserData<T>> callable = createCallable(context, definition);
         if (options.contains(ParserDataOptions.SYNCHRONOUS) || isParserThread()) {
             try {

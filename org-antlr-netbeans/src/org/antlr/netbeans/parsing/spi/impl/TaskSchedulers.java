@@ -29,4 +29,14 @@ public class TaskSchedulers {
     public static Collection<? extends ParserTaskScheduler> getSchedulers() {
         return taskSchedulers;
     }
+
+    public static <T extends ParserTaskScheduler> T getScheduler(Class<T> clazz) {
+        for (ParserTaskScheduler scheduler : taskSchedulers) {
+            if (scheduler.getClass() == clazz) {
+                return clazz.cast(scheduler);
+            }
+        }
+
+        return null;
+    }
 }
