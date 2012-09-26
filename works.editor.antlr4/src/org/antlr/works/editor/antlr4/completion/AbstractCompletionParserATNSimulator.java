@@ -10,7 +10,6 @@ package org.antlr.works.editor.antlr4.completion;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +31,7 @@ import org.antlr.v4.runtime.atn.SimulatorState;
 import org.antlr.v4.runtime.atn.Transition;
 import org.antlr.v4.runtime.atn.WildcardTransition;
 import org.antlr.v4.runtime.dfa.DFA;
+import org.antlr.v4.runtime.dfa.DFAState;
 import org.antlr.v4.runtime.misc.IntegerList;
 import org.antlr.v4.runtime.misc.IntervalSet;
 import org.netbeans.api.annotations.common.NonNull;
@@ -53,6 +53,9 @@ public abstract class AbstractCompletionParserATNSimulator extends ParserATNSimu
     private TokenStream<? extends Token> _input;
     private int _startIndex;
     private ParserRuleContext<Token> _outerContext;
+
+    /** Avoid throwing an exception when the caret is found while computing the start state. */
+    private boolean _computingStartState;
 
     public AbstractCompletionParserATNSimulator(@NonNull Parser<Token> parser, ATN atn) {
         super(parser, atn);
@@ -100,16 +103,24 @@ public abstract class AbstractCompletionParserATNSimulator extends ParserATNSimu
     }
 
     @Override
-    public int getUniqueAlt(Collection<ATNConfig> configs) {
-        int result = super.getUniqueAlt(configs);
+    public SimulatorState<Token> computeStartState(DFA dfa, ParserRuleContext<Token> globalContext, boolean useContext) {
+        _computingStartState = true;
+        try {
+            return super.computeStartState(dfa, globalContext, useContext);
+        } finally {
+            _computingStartState = false;
+        }
+    }
 
+    @Override
+    protected DFAState createDFAState(ATNConfigSet configs) {
         int t = _input.LA(1);
-        if (t == CaretToken.CARET_TOKEN_TYPE) {
+        if (t == CaretToken.CARET_TOKEN_TYPE && !_computingStartState) {
             caretToken = (CaretToken)_input.LT(1);
-            throw noViableAlt(_input, _outerContext, (ATNConfigSet)configs, _startIndex);
+            throw noViableAlt(_input, _outerContext, configs, _startIndex);
         }
 
-        return result;
+        return super.createDFAState(configs);
     }
 
     @Override
