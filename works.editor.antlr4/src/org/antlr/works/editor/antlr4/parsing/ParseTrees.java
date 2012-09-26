@@ -37,7 +37,7 @@ import org.openide.util.Parameters;
  */
 public final class ParseTrees {
 
-    public static <T extends Token> Interval getSourceInterval(@NonNull ParserRuleContext<? extends T> context) {
+    public static Interval getSourceInterval(@NonNull ParserRuleContext<?> context) {
         Parameters.notNull("context", context);
         int startIndex = context.start.getStartIndex();
         Token stopSymbol = getStopSymbol(context);
@@ -60,6 +60,32 @@ public final class ParseTrees {
 
         stopIndex = Math.max(stopIndex, startIndex - 1);
         return new Interval(startIndex, stopIndex);
+    }
+
+    public static Interval getSourceInterval(@NonNull ParseTree<? extends Token> context) {
+        Parameters.notNull("context", context);
+
+        if (context instanceof TerminalNode) {
+            TerminalNode<? extends Token> terminalNode = (TerminalNode<? extends Token>)context;
+            Token token = terminalNode.getSymbol();
+            return new Interval(token.getStartIndex(), token.getStopIndex());
+        } else if (context instanceof RuleNode) {
+            RuleNode<? extends Token> ruleNode = (RuleNode<? extends Token>)context;
+            RuleContext<? extends Token> ruleContext = ruleNode.getRuleContext();
+            if (ruleContext instanceof ParserRuleContext) {
+                return getSourceInterval((ParserRuleContext<?>)ruleContext);
+            } else {
+                Token startSymbol = getStartSymbol(context);
+                Token stopSymbol = getStopSymbol(context);
+                if (startSymbol == null || stopSymbol == null) {
+                    return Interval.INVALID;
+                }
+
+                return new Interval(startSymbol.getStartIndex(), stopSymbol.getStopIndex());
+            }
+        } else {
+            return Interval.INVALID;
+        }
     }
 
     public static <T extends Token> T getStopSymbol(@NonNull ParserRuleContext<T> context) {
