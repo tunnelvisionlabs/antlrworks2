@@ -9,6 +9,8 @@
 package org.antlr.works.editor.antlr4.semantics;
 
 import java.util.concurrent.Callable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
 import javax.swing.text.StyledDocument;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
@@ -21,13 +23,14 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.editor.BaseDocument;
 import org.netbeans.spi.editor.highlighting.support.OffsetsBag;
-import org.openide.util.Exceptions;
 
 /**
  *
  * @author Sam Harwell
  */
 public abstract class AbstractParseTreeSemanticHighlighter<Listener extends ParseTreeListener<Token>, Data> extends AbstractSemanticHighlighter<Data> {
+    // -J-Dorg.antlr.works.editor.antlr4.semantics.AbstractParseTreeSemanticHighlighter.level=FINE
+    private static final Logger LOGGER = Logger.getLogger(AbstractParseTreeSemanticHighlighter.class.getName());
 
     protected AbstractParseTreeSemanticHighlighter(@NonNull StyledDocument document, ParserDataDefinition<Data> semanticDataDefinition) {
         super(document, semanticDataDefinition);
@@ -56,7 +59,7 @@ public abstract class AbstractParseTreeSemanticHighlighter<Listener extends Pars
                 try {
                     ParseTreeWalker.DEFAULT.walk(listener, getParseTree(parserData));
                 } catch (RuntimeException ex) {
-                    Exceptions.printStackTrace(ex);
+                    LOGGER.log(Level.WARNING, "An exception occurred while walking the parse tree.", ex);
                     throw ex;
                 }
 

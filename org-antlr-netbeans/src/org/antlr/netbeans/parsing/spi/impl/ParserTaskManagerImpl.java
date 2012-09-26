@@ -49,7 +49,6 @@ import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.editor.mimelookup.MimeLookup;
 import org.netbeans.lib.editor.util.ListenerList;
 import org.openide.filesystems.FileObject;
-import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
 import org.openide.util.Parameters;
@@ -161,7 +160,7 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
             try {
                 return new CompletedFuture<ParserData<T>>(callable.call(), null);
             } catch (Exception ex) {
-                Exceptions.printStackTrace(ex);
+                LOGGER.log(Level.WARNING, "An exception occurred while handling a parse request.", ex);
                 return new CompletedFuture<ParserData<T>>(null, ex);
             }
         }

@@ -10,12 +10,13 @@ package org.antlr.netbeans.editor.commenting;
 
 import java.awt.event.ActionEvent;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.JTextComponent;
 import org.antlr.netbeans.editor.DocumentSpan;
 import org.antlr.netbeans.editor.SelectionHelper;
 import org.netbeans.editor.ext.ExtKit;
-import org.openide.util.Exceptions;
 import org.openide.util.Parameters;
 
 /**
@@ -23,6 +24,8 @@ import org.openide.util.Parameters;
  * @author Sam Harwell
  */
 public class ExtendedCommentAction extends ExtKit.CommentAction {
+    // -J-Dorg.antlr.netbeans.editor.commenting.ExtendedCommentAction.level=FINE
+    private static final Logger LOGGER = Logger.getLogger(ExtendedCommentAction.class.getName());
 
     private final Commenter commenter;
 
@@ -47,7 +50,7 @@ public class ExtendedCommentAction extends ExtKit.CommentAction {
                 SelectionHelper.setSelection(target, updatedSelection);
             }
         } catch (BadLocationException ex) {
-            Exceptions.printStackTrace(ex);
+            LOGGER.log(Level.WARNING, "An exception occurred while commenting code.", ex);
         }
     }
 

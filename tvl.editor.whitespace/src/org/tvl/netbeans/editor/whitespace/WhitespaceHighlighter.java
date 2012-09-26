@@ -9,6 +9,8 @@
 package org.tvl.netbeans.editor.whitespace;
 
 import java.awt.Color;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.AttributeSet;
@@ -28,7 +30,6 @@ import org.netbeans.spi.editor.highlighting.HighlightsLayerFactory;
 import org.netbeans.spi.editor.highlighting.HighlightsSequence;
 import org.netbeans.spi.editor.highlighting.ZOrder;
 import org.netbeans.spi.editor.highlighting.support.AbstractHighlightsContainer;
-import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.openide.util.Parameters;
 import org.openide.util.WeakListeners;
@@ -38,6 +39,9 @@ import org.openide.util.WeakListeners;
  * @author Sam Harwell
  */
 public class WhitespaceHighlighter extends AbstractHighlightsContainer {
+    // -J-Dorg.tvl.netbeans.editor.whitespace.WhitespaceHighlighter.level=FINE
+    private static final Logger LOGGER = Logger.getLogger(WhitespaceHighlighter.class.getName());
+
     private final StyledDocument document;
     private final AttributeSet attributes;
 
@@ -264,7 +268,7 @@ public class WhitespaceHighlighter extends AbstractHighlightsContainer {
                 currentBlockOffset = blockStart;
                 return true;
             } catch (BadLocationException ex) {
-                Exceptions.printStackTrace(ex);
+                LOGGER.log(Level.WARNING, "An exception occurred.", ex);
                 finished = true;
                 return false;
             }

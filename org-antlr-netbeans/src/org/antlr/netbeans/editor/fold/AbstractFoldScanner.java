@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
 import javax.swing.text.BadLocationException;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
@@ -26,13 +28,14 @@ import org.netbeans.api.editor.fold.FoldHierarchy;
 import org.netbeans.api.editor.fold.FoldType;
 import org.netbeans.spi.editor.fold.FoldHierarchyTransaction;
 import org.netbeans.spi.editor.fold.FoldOperation;
-import org.openide.util.Exceptions;
 
 /**
  *
  * @author Sam Harwell
  */
 public abstract class AbstractFoldScanner<SemanticData> {
+    // -J-Dorg.antlr.netbeans.editor.fold.AbstractFoldScanner.level=FINE
+    private static final Logger LOGGER = Logger.getLogger(AbstractFoldScanner.class.getName());
 
     @SuppressWarnings("fallthrough")
     public void run(ParserData<SemanticData> parseResult) {
@@ -132,7 +135,7 @@ public abstract class AbstractFoldScanner<SemanticData> {
                                 Fold fold = operation.addToHierarchy(foldType, description, collapsed, startOffset, endOffset, startGuardedLength, endGuardedLength, foldInfo, transaction);
                                 foldManager.currentFolds.add(fold);
                             } catch (BadLocationException ex) {
-                                Exceptions.printStackTrace(ex);
+                                LOGGER.log(Level.WARNING, "An exception occurred while updating code folding.", ex);
                             }
                         }
                     }

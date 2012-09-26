@@ -10,6 +10,8 @@ package org.antlr.netbeans.editor.navigation.actions;
 
 import java.awt.event.ActionEvent;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.SwingUtilities;
@@ -27,7 +29,6 @@ import org.openide.text.Line;
 import org.openide.text.Line.ShowOpenType;
 import org.openide.text.Line.ShowVisibilityType;
 import org.openide.text.NbDocument;
-import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 import org.openide.util.Parameters;
 import org.openide.util.UserQuestionException;
@@ -41,6 +42,8 @@ import org.openide.util.UserQuestionException;
     "TXT_Question=Question"
 })
 public final class OpenAction extends AbstractAction {
+    // -J-Dorg.antlr.netbeans.editor.navigation.actions.OpenAction.level=FINE
+    private static final Logger LOGGER = Logger.getLogger(OpenAction.class.getName());
 
     private final Description description;
 
@@ -118,7 +121,7 @@ public final class OpenAction extends AbstractAction {
                 doOpen(oc);
             }
         } catch (IOException ex) {
-            Exceptions.printStackTrace(ex);
+            LOGGER.log(Level.WARNING, "An exception occurred while opening a file.", ex);
         }
     }
 

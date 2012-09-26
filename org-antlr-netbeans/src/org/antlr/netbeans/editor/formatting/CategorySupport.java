@@ -18,6 +18,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
@@ -34,7 +36,6 @@ import org.netbeans.api.editor.settings.SimpleValueNames;
 import org.netbeans.modules.options.editor.spi.PreferencesCustomizer;
 import org.netbeans.modules.options.editor.spi.PreviewProvider;
 import org.openide.text.CloneableEditorSupport;
-import org.openide.util.Exceptions;
 import org.openide.util.HelpCtx;
 import org.openide.util.NbBundle;
 
@@ -48,6 +49,8 @@ import org.openide.util.NbBundle;
     "AD_Preview=",
 })
 public class CategorySupport implements ActionListener, DocumentListener, PreviewProvider, PreferencesCustomizer {
+    // -J-Dorg.antlr.netbeans.editor.formatting.CategorySupport.level=FINE
+    private static final Logger LOGGER = Logger.getLogger(CategorySupport.class.getName());
 
     public static final String OPTION_ID = "org.antlr.netbeans.editor.formatting.FormatOptions.ID";
 
@@ -219,10 +222,10 @@ public class CategorySupport implements ActionListener, DocumentListener, Previe
                 CategorySupport categorySupport = new CategorySupport(mimeType, preferences, id, panelClass.newInstance(), previewText, formatter);
                 return categorySupport;
             } catch (InstantiationException ex) {
-                Exceptions.printStackTrace(ex);
+                LOGGER.log(Level.WARNING, "An exception occurred attempting to customize preferences.", ex);
                 return null;
             } catch (IllegalAccessException ex) {
-                Exceptions.printStackTrace(ex);
+                LOGGER.log(Level.WARNING, "An exception occurred attempting to customize preferences.", ex);
                 return null;
             }
         }

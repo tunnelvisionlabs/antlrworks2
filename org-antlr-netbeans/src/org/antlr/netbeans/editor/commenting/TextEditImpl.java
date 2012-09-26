@@ -12,12 +12,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.text.BadLocationException;
 import org.antlr.netbeans.editor.DocumentPoint;
 import org.antlr.netbeans.editor.DocumentSpan;
 import org.antlr.netbeans.editor.TextEdit;
 import org.netbeans.editor.BaseDocument;
-import org.openide.util.Exceptions;
 import org.openide.util.Parameters;
 
 /**
@@ -25,6 +26,9 @@ import org.openide.util.Parameters;
  * @author Sam Harwell
  */
 class TextEditImpl implements TextEdit {
+    // -J-Dorg.antlr.netbeans.editor.commenting.TextEditImpl.level=FINE
+    private static final Logger LOGGER = Logger.getLogger(TextEditImpl.class.getName());
+
     final BaseDocument document;
     private final List<Change> changes = new ArrayList<Change>();
 
@@ -56,7 +60,7 @@ class TextEditImpl implements TextEdit {
                             document.insertString(change.offset, change.newText, null);
                         }
                     } catch (BadLocationException ex) {
-                        Exceptions.printStackTrace(ex);
+                        LOGGER.log(Level.WARNING, "An exception occurred while applying text changes.", ex);
                     }
                 }
             }

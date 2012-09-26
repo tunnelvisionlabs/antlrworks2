@@ -15,6 +15,8 @@ import java.lang.ref.WeakReference;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
@@ -35,6 +37,8 @@ import org.openide.util.Parameters;
  * @author Sam Harwell
  */
 public class NbVersionedDocument implements VersionedDocument {
+    // -J-Dorg.antlr.netbeans.editor.text.impl.NbVersionedDocument.level=FINE
+    private static final Logger LOGGER = Logger.getLogger(NbVersionedDocument.class.getName());
 
     private static final WeakReference<NbDocumentVersion> NullVersion = new WeakReference<NbDocumentVersion>(null);
 
@@ -135,7 +139,7 @@ public class NbVersionedDocument implements VersionedDocument {
                 pendingChanges = new NbNormalizedDocumentChangeCollection();
                 return version;
             } catch (IOException ex) {
-                Exceptions.printStackTrace(ex);
+                LOGGER.log(Level.WARNING, "An exception occurred while tracking versioned document changes.", ex);
                 throw new UnsupportedOperationException(ex);
             }
         }
@@ -153,7 +157,7 @@ public class NbVersionedDocument implements VersionedDocument {
                     try {
                         version = new NbDocumentVersion(this, latestVersionNumber + 1, new LineTextCache(document.getText(0, document.getLength())));
                     } catch (BadLocationException ex) {
-                        Exceptions.printStackTrace(ex);
+                        LOGGER.log(Level.WARNING, "An exception occurred while tracking versioned document changes.", ex);
                         throw new IllegalStateException("Shouldn't be reachable.", ex);
                     }
                 } else if (true) {

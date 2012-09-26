@@ -14,6 +14,8 @@ import java.awt.Rectangle;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.JEditorPane;
 import javax.swing.SwingUtilities;
@@ -21,7 +23,6 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.EditorKit;
 import javax.swing.text.html.HTMLEditorKit;
-import org.openide.util.Exceptions;
 
 /**
  *  HTML documentation view.
@@ -31,6 +32,8 @@ import org.openide.util.Exceptions;
  *  @since   03/2002
  */
 class HTMLDocView extends JEditorPane {
+    // -J-Dorg.antlr.netbeans.editor.navigation.HTMLDocView.level=FINE
+    private static final Logger LOGGER = Logger.getLogger(HTMLDocView.class.getName());
     
     private HTMLEditorKit htmlKit;
     
@@ -65,9 +68,9 @@ class HTMLDocView extends JEditorPane {
                         scrollRectToVisible(new Rectangle(0,0,0,0));
                     }
                 }catch(IOException ioe){
-                    Exceptions.printStackTrace(ioe);
+                    LOGGER.log(Level.WARNING, "An exception occurred while setting HTML content.", ioe);
                 }catch(BadLocationException ble){
-                    Exceptions.printStackTrace(ble);
+                    LOGGER.log(Level.WARNING, "An exception occurred while setting HTML content.", ble);
                 }
             }
         });
