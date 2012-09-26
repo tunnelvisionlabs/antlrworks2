@@ -33,7 +33,7 @@ import org.openide.util.NbBundle;
     "GCP-instance-members="
 })
 public abstract class AbstractCompletionProvider implements CompletionProvider {
-    // -J-Dorg.antlr.works.editor.grammar.GrammarCompletionProvider.level=FINE
+    // -J-Dorg.antlr.works.editor.antlr4.completion.AbstractCompletionProvider.level=FINE
     private static final Logger LOGGER = Logger.getLogger(AbstractCompletionProvider.class.getName());
 
     public static final int AUTO_QUERY_TYPE = 0x00010000;

@@ -58,6 +58,7 @@ import org.openide.util.Parameters;
  * @author Sam Harwell
  */
 public abstract class AbstractSemanticHighlighter<SemanticData> extends AbstractHighlightsContainer {
+    // -J-Dorg.antlr.works.editor.antlr4.semantics.AbstractSemanticHighlighter.level=FINE
     private static final Logger LOGGER = Logger.getLogger(AbstractSemanticHighlighter.class.getName());
 
     private final StyledDocument document;

@@ -45,7 +45,7 @@ import org.openide.util.Parameters;
  * @author Sam Harwell
  */
 public abstract class AbstractCompletionQuery extends AsyncCompletionQuery {
-    // -J-Dorg.antlr.works.editor.grammar.GrammarCompletionQuery.level=FINE
+    // -J-Dorg.antlr.works.editor.antlr4.completion.AbstractCompletionQuery.level=FINE
     private static final Logger LOGGER = Logger.getLogger(AbstractCompletionQuery.class.getName());
 
     private static final int NO_ADDITIONAL_ITEMS = 0;
