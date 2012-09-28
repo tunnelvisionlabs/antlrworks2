@@ -56,6 +56,7 @@ MODE        : 'mode';
 LOCALS      : 'locals';
 
 // v3 only
+TEMPLATE    : 'template';
 TREE        : 'tree';
 SCOPE       : 'scope';
 
