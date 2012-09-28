@@ -195,15 +195,15 @@ mode BlockComment;
     BlockComment_NEWLINE : NEWLINE -> type(NEWLINE);
 
     CONTINUE_ML_COMMENT
-        :   ~('\r' | '\n' | '*')+   {$type = getMultilineCommentType();}
+        :   ~('\r' | '\n' | '*')+   {setType(getMultilineCommentType());}
         ;
 
     END_ML_COMMENT
-        :   '*/'                    {$type = getMultilineCommentType(); popMode();}
+        :   '*/'                    {setType(getMultilineCommentType()); popMode();}
         ;
 
     ML_COMMENT_STAR
-        :   '*'                     {$type = getMultilineCommentType();}
+        :   '*'                     {setType(getMultilineCommentType());}
         ;
 
     BlockComment_ANYCHAR : .            -> type(ANYCHAR);

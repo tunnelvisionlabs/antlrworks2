@@ -322,7 +322,7 @@ public abstract class AbstractGrammarHighlighterLexer extends Lexer {
 	}
 	public void END_ML_COMMENT_action(RuleContext<Integer> _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 2 : _type =  getMultilineCommentType(); popMode(); break;
+			case 2 : setType(getMultilineCommentType()); popMode(); break;
 		}
 	}
 	public void STAR_action(RuleContext<Integer> _localctx, int actionIndex) {
@@ -469,7 +469,7 @@ public abstract class AbstractGrammarHighlighterLexer extends Lexer {
 	}
 	public void ML_COMMENT_STAR_action(RuleContext<Integer> _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 3 : _type =  getMultilineCommentType(); break;
+			case 3 : setType(getMultilineCommentType()); break;
 		}
 	}
 	public void COMMENT_action(RuleContext<Integer> _localctx, int actionIndex) {
@@ -655,7 +655,7 @@ public abstract class AbstractGrammarHighlighterLexer extends Lexer {
 	}
 	public void CONTINUE_ML_COMMENT_action(RuleContext<Integer> _localctx, int actionIndex) {
 		switch ( actionIndex ) {
-			case 1 : _type =  getMultilineCommentType(); break;
+			case 1 : setType(getMultilineCommentType()); break;
 		}
 	}
 	public void OR_action(RuleContext<Integer> _localctx, int actionIndex) {
