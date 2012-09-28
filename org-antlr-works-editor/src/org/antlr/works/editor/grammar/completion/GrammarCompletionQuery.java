@@ -639,15 +639,7 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
         private void addRootActionExpressions(Map<String, CompletionItem> intermediateResults, int grammarType) {
             switch (grammarType) {
             case GrammarParser.LEXER:
-                intermediateResults.put("$text", new KeywordCompletionItem("$text"));
-                intermediateResults.put("$type", new KeywordCompletionItem("$type"));
-                intermediateResults.put("$line", new KeywordCompletionItem("$line"));
-                intermediateResults.put("$index", new KeywordCompletionItem("$index"));
-                intermediateResults.put("$pos", new KeywordCompletionItem("$pos"));
-                intermediateResults.put("$channel", new KeywordCompletionItem("$channel"));
-                intermediateResults.put("$start", new KeywordCompletionItem("$start"));
-                intermediateResults.put("$stop", new KeywordCompletionItem("$stop"));
-                intermediateResults.put("$int", new KeywordCompletionItem("$int"));
+                // lexer actions were removed
                 break;
 
             case GrammarParser.PARSER:
@@ -660,14 +652,8 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
             default:
                 // if we're unsure about the type, include all possibilities to make sure we're covered
                 intermediateResults.put("$text", new KeywordCompletionItem("$text"));
-                intermediateResults.put("$type", new KeywordCompletionItem("$type"));
-                intermediateResults.put("$line", new KeywordCompletionItem("$line"));
-                intermediateResults.put("$index", new KeywordCompletionItem("$index"));
-                intermediateResults.put("$pos", new KeywordCompletionItem("$pos"));
-                intermediateResults.put("$channel", new KeywordCompletionItem("$channel"));
                 intermediateResults.put("$start", new KeywordCompletionItem("$start"));
                 intermediateResults.put("$stop", new KeywordCompletionItem("$stop"));
-                intermediateResults.put("$int", new KeywordCompletionItem("$int"));
                 intermediateResults.put("$ctx", new KeywordCompletionItem("$ctx"));
                 break;
             }
