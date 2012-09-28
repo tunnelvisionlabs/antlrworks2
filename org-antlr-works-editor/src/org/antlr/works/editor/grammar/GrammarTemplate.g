@@ -1,12 +1,12 @@
 parser grammar GrammarTemplate;
 
 options {
-    language=Java;
+    abstract=true;
 }
 
 tokens {
-    LITERAL="literal";
-    PSEUDO_TOKEN;
+    LITERAL,
+    PSEUDO_TOKEN,
 }
 
 compileUnit
