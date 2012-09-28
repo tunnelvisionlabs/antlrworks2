@@ -45,7 +45,6 @@ public class CompletionParserATNSimulator extends AbstractCompletionParserATNSim
             add(GrammarLexer.THROWS);
             add(GrammarLexer.CATCH);
             add(GrammarLexer.FINALLY);
-            add(GrammarLexer.TEMPLATE);
             add(GrammarLexer.MODE);
             // atoms
             add(GrammarLexer.RULE_REF);

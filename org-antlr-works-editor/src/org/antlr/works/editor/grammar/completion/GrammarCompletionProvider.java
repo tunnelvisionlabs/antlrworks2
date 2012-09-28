@@ -113,7 +113,6 @@ public class GrammarCompletionProvider extends AbstractCompletionProvider {
 
         case GrammarLexer.STRING_LITERAL:
         case GrammarLexer.DOUBLE_QUOTE_STRING_LITERAL:
-        case GrammarLexer.DOUBLE_ANGLE_STRING_LITERAL:
             return allowInStrings;
 
         case GrammarLexer.ARG_ACTION_WORD:
