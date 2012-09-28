@@ -166,7 +166,7 @@ delegateGrammar
  */
 tokensSpec
 @version{1}
-	:	TOKENS id (COMMA id)* COMMA? RBRACE
+	:	TOKENS (id (COMMA id)*)? COMMA? RBRACE
 	;
 
 actionBlock
