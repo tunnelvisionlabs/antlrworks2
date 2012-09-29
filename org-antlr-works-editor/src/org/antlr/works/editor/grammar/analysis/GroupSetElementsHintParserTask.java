@@ -87,7 +87,7 @@ public class GroupSetElementsHintParserTask implements ParserTask {
         List<ErrorDescription> hints = new ArrayList<ErrorDescription>();
         for (Interval interval : listener.getRewriteRanges()) {
             try {
-                hints.add(ErrorDescriptionFactory.createErrorDescription(Severity.WARNING, "Group terminals into set", document, document.createPosition(interval.a), document.createPosition(interval.b + 1)));
+                hints.add(ErrorDescriptionFactory.createErrorDescription(Severity.HINT, "Group terminals into set", document, document.createPosition(interval.a), document.createPosition(interval.b + 1)));
             } catch (BadLocationException ex) {
                 Exceptions.printStackTrace(ex);
             }
