@@ -514,8 +514,8 @@ public final class ParseTrees {
      * @param b The second tree.
      * @return {@code true} if {@code a} is an ancestor of or is equal to {@code b}, otherwise {@code false}.
      */
-    public static boolean isAncestorOf(@NonNull ParseTree<? extends Token> a, @NonNull ParseTree<? extends Token> b) {
-        for (ParseTree<? extends Token> current = b; current != null; current = current.getParent()) {
+    public static boolean isAncestorOf(@NonNull ParseTree<?> a, @NonNull ParseTree<?> b) {
+        for (ParseTree<?> current = b; current != null; current = current.getParent()) {
             if (current.equals(a)) {
                 return true;
             }
