@@ -25,7 +25,7 @@ public class DocumentSnapshotToken extends CommonToken {
         super(source, type, channel, start, stop);
         CharStream inputStream = source.getInputStream();
         if (!(inputStream instanceof DocumentSnapshotCharStream)) {
-            throw new IllegalArgumentException("Expected a TokenSource backed by a DocumentSnapshotCharStream.");
+            throw new IllegalArgumentException(String.format("Expected a %s backed by a %s.", TokenSource.class.getSimpleName(), DocumentSnapshotCharStream.class.getSimpleName()));
         }
 
         DocumentSnapshotCharStream charStream = (DocumentSnapshotCharStream)inputStream;
