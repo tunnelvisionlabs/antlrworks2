@@ -88,6 +88,11 @@ public abstract class AbstractIndentTask implements IndentTask {
     }
 
     public final DocumentSnapshot getSnapshot() {
+        if (_snapshot == null) {
+            VersionedDocument versionedDocument = VersionedDocumentUtilities.getVersionedDocument(getContext().document());
+            _snapshot = versionedDocument.getCurrentSnapshot();
+        }
+
         return _snapshot;
     }
 
@@ -109,9 +114,6 @@ public abstract class AbstractIndentTask implements IndentTask {
         }
 
         StyledDocument document = (StyledDocument)getContext().document();
-        VersionedDocument versionedDocument = VersionedDocumentUtilities.getVersionedDocument(getContext().document());
-        _snapshot = versionedDocument.getCurrentSnapshot();
-
         SnapshotPosition contextEndPosition = new SnapshotPosition(getSnapshot(), getContext().endOffset());
         SnapshotPosition endPosition = contextEndPosition.getContainingLine().getEndIncludingLineBreak();
         SnapshotPosition endPositionOnLine = contextEndPosition.getContainingLine().getEnd();
@@ -120,6 +122,10 @@ public abstract class AbstractIndentTask implements IndentTask {
         final Anchor previous = anchors.getPrevious();
 
         Tagger<TokenTag<Token>> tagger = getTagger();
+        if (tagger == null) {
+            return false;
+        }
+
         int regionEnd = Math.min(getSnapshot().length(), endPosition.getOffset() + 1);
         OffsetRegion region;
         if (anchors.getEnclosing() != null) {

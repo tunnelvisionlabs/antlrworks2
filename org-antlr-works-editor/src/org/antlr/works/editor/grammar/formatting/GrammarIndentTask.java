@@ -95,6 +95,10 @@ public class GrammarIndentTask extends AbstractIndentTask {
 
     @Override
     public boolean smartReindent() throws BadLocationException {
+        if (GrammarEditorKit.isLegacyMode(getContext().document())) {
+            return false;
+        }
+
         try {
             return super.smartReindent();
         } finally {
