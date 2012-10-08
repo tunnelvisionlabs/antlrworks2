@@ -947,10 +947,9 @@ public abstract class AbstractGrammarHighlighterLexer extends Lexer {
 		"\u0281\1\0\0\0\u028e\u00c1\1\0\0\0\u028f\u0291\b\21\0\0\u0290\u028f\1"+
 		"\0\0\0\u0291\u0292\1\0\0\0\u0292\u0290\1\0\0\0\u0292\u0293\1\0\0\0\u0293"+
 		"\u00c3\1\0\0\0\u0294\u0295\5]\0\0\u0295\u0296\1\0\0\0\u0296\u0297\6_\31"+
-		"\0\u0297\u00c5\1\0\0\0\37\0\1\1\1\2\1\3\1\4\1\5\1\u019f\1\u01a7\1\u01ad"+
-		"\1\u01b8\1\u01bb\1\u01c5\1\u01d1\1\u01d3\1\u01d7\1\u01dd\1\u01df\1\u01e3"+
-		"\1\u01e8\1\u01f6\1\u0215\1\u0223\1\u0245\1\u0258\1\u0266\1\u027e\1\u0287"+
-		"\1\u0289\1\u028b\1\u028d\1\u0292\1";
+		"\0\u0297\u00c5\1\0\0\0\37\0\1\2\3\4\5\u019f\u01a7\u01ad\u01b8\u01bb\u01c5"+
+		"\u01d1\u01d3\u01d7\u01dd\u01df\u01e3\u01e8\u01f6\u0215\u0223\u0245\u0258"+
+		"\u0266\u027e\u0287\u0289\u028b\u028d\u0292";
 	public static final ATN _ATN =
 		ATNSimulator.deserialize(_serializedATN.toCharArray());
 	static {
