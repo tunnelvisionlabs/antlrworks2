@@ -67,6 +67,7 @@ import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.ActionE
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.ActionScopeExpressionContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser;
 import org.antlr.works.editor.grammar.experimental.GrammarParserAnchorListener;
+import org.antlr.works.editor.grammar.experimental.GrammarReferenceAnchors;
 import org.netbeans.editor.BaseDocument;
 import org.netbeans.spi.editor.completion.CompletionItem;
 import org.openide.util.Exceptions;
@@ -160,7 +161,7 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
 
             final Collection<Description> rules = new ArrayList<Description>();
 
-            ReferenceAnchors anchors = findNearestAnchors(taskManager, snapshot);
+            GrammarReferenceAnchors anchors = findNearestAnchors(taskManager, snapshot);
             int grammarType = anchors.getGrammarType();
             final Anchor previous = anchors.getPrevious();
 
@@ -361,7 +362,7 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
             applicableTo = snapshot.createTrackingRegion(applicableToSpan, TrackingPositionRegion.Bias.Inclusive);
         }
 
-        private ReferenceAnchors findNearestAnchors(ParserTaskManager taskManager, DocumentSnapshot snapshot) {
+        private GrammarReferenceAnchors findNearestAnchors(ParserTaskManager taskManager, DocumentSnapshot snapshot) {
             List<Anchor> anchors;
             Future<ParserData<List<Anchor>>> result =
                 taskManager.getData(snapshot, GrammarParserDataDefinitions.DYNAMIC_ANCHOR_POINTS, EnumSet.of(ParserDataOptions.SYNCHRONOUS));
@@ -403,7 +404,7 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
                 }
             }
 
-            return new ReferenceAnchors(grammarType, previous, enclosing);
+            return new GrammarReferenceAnchors(grammarType, previous, enclosing);
         }
 
         private Tagger<TokenTag<Token>> getTagger(ParserTaskManager taskManager, DocumentSnapshot snapshot) {
@@ -420,7 +421,7 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
             return tagger;
         }
 
-        private OffsetRegion getParseRegion(DocumentSnapshot snapshot, ReferenceAnchors anchors) {
+        private OffsetRegion getParseRegion(DocumentSnapshot snapshot, GrammarReferenceAnchors anchors) {
             int regionEnd = Math.min(snapshot.length(), getCaretOffset() + 1);
             OffsetRegion region;
             if (anchors.getEnclosing() != null) {
@@ -687,29 +688,5 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
             return applicableToSpan;
         }
 
-    }
-
-    private static final class ReferenceAnchors {
-        private final int grammarType;
-        private final Anchor previous;
-        private final Anchor enclosing;
-
-        public ReferenceAnchors(int grammarType, Anchor previous, Anchor enclosing) {
-            this.grammarType = grammarType;
-            this.previous = previous;
-            this.enclosing = enclosing;
-        }
-
-        public int getGrammarType() {
-            return grammarType;
-        }
-
-        public Anchor getPrevious() {
-            return previous;
-        }
-
-        public Anchor getEnclosing() {
-            return enclosing;
-        }
     }
 }

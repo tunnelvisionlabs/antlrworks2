@@ -73,6 +73,7 @@ import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.TokensS
 import org.antlr.works.editor.grammar.experimental.GrammarParser;
 import org.antlr.works.editor.grammar.experimental.GrammarParserAnchorListener;
 import org.antlr.works.editor.grammar.experimental.GrammarParserBaseVisitor;
+import org.antlr.works.editor.grammar.experimental.GrammarReferenceAnchors;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.netbeans.modules.editor.indent.spi.Context;
@@ -805,21 +806,6 @@ public class GrammarIndentTask extends AbstractIndentTask {
 
             return Tuple.create(ctx, getCodeStyle().getIndentSize());
         }
-    }
-
-    private static final class GrammarReferenceAnchors extends ReferenceAnchors {
-
-        private final int grammarType;
-
-        public GrammarReferenceAnchors(int grammarType, Anchor previous, Anchor enclosing) {
-            super(previous, enclosing);
-            this.grammarType = grammarType;
-        }
-
-        public int getGrammarType() {
-            return grammarType;
-        }
-
     }
 
     @MimeRegistration(mimeType=GrammarEditorKit.GRAMMAR_MIME_TYPE, service=IndentTask.Factory.class)
