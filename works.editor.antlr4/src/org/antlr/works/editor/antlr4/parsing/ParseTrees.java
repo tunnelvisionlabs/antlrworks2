@@ -278,7 +278,7 @@ public final class ParseTrees {
             assert startNode != null;
 
             stopSymbol = startNode.getSymbol();
-            if (stopSymbol.getStartIndex() > symbol.getStopIndex()) {
+            if (stopSymbol == null || stopSymbol.getStartIndex() > symbol.getStopIndex()) {
                 break;
             }
 
