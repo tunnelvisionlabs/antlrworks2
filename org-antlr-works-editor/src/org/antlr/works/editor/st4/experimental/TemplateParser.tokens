@@ -63,8 +63,8 @@ BigStringTemplate_END=34
 '='=11
 'group'=17
 '@'=12
-')'=6
 '.'=8
+')'=6
 '%'=53
 'import'=19
 'super'=36
