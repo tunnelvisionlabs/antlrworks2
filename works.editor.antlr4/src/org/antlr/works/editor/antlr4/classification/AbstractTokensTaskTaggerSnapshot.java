@@ -348,9 +348,11 @@ public abstract class AbstractTokensTaskTaggerSnapshot<TState extends LineStateI
             /* Subtract 1 from each of these because the spans include the line break on their last
              * line, forcing it to appear as the first position on the following line.
              */
+            assert extendedSpan.getEnd() > span.getEnd();
             int firstLine = snapshot.findLineNumber(span.getEnd());
             int lastLine = snapshot.findLineNumber(extendedSpan.getEnd()) - 1;
-            forceRehighlightLines(firstLine, lastLine);
+            // when considering the last line of a document, span and extendedSpan may end on the same line
+            forceRehighlightLines(firstLine, Math.max(firstLine, lastLine));
         }
 
         return tags;
