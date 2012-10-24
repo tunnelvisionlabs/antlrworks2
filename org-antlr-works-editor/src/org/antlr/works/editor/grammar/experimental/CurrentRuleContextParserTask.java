@@ -36,6 +36,7 @@ import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenSource;
+import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.antlr.works.editor.antlr4.classification.DocumentSnapshotCharStream;
 import org.antlr.works.editor.grammar.GrammarEditorKit;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
@@ -105,8 +106,8 @@ public class CurrentRuleContextParserTask implements ParserTask {
                             parser.setBuildParseTree(true);
                             parser.setErrorHandler(new BailErrorStrategy<Token>());
                             ruleContext = parser.ruleSpec();
-                        } catch (RuntimeException ex) {
-                            if (ex.getClass() == RuntimeException.class && ex.getCause() instanceof RecognitionException) {
+                        } catch (ParseCancellationException ex) {
+                            if (ex.getCause() instanceof RecognitionException) {
                                 // retry with default error handler
                                 tokens.reset();
                                 parser.getInterpreter().disable_global_context = false;

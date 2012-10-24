@@ -41,6 +41,7 @@ import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenSource;
+import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.works.editor.antlr4.classification.TaggerTokenSource;
 import org.antlr.works.editor.antlr4.parsing.DescriptiveErrorListener;
@@ -88,8 +89,8 @@ public class ReferenceAnchorsParserTask implements ParserTask {
                     parser.setBuildParseTree(true);
                     parser.setErrorHandler(new BailErrorStrategy<Token>());
                     parseResult = parser.group();
-                } catch (RuntimeException ex) {
-                    if (ex.getClass() == RuntimeException.class && ex.getCause() instanceof RecognitionException) {
+                } catch (ParseCancellationException ex) {
+                    if (ex.getCause() instanceof RecognitionException) {
                         // retry with default error handler
                         tokenStream.reset();
                         parser.getInterpreter().disable_global_context = false;
