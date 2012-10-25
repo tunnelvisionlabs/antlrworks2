@@ -191,15 +191,7 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
 
     @Override
     public void reschedule(VersionedDocument document, JTextComponent component, Class<? extends ParserTaskScheduler> schedulerClass) {
-        Collection<? extends ParserTaskScheduler> schedulers = Lookup.getDefault().lookupAll(ParserTaskScheduler.class);
-        ParserTaskScheduler scheduler = null;
-        for (ParserTaskScheduler i : schedulers) {
-            if (i.getClass() == schedulerClass) {
-                scheduler = i;
-                break;
-            }
-        }
-
+        ParserTaskScheduler scheduler = TaskSchedulers.getScheduler(schedulerClass);
         if (scheduler != null) {
             @SuppressWarnings("rawtypes")
             Collection<? extends ParserDataDefinition> data = MimeLookup.getLookup(document.getMimeType()).lookupAll(ParserDataDefinition.class);
@@ -216,15 +208,7 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
 
     @Override
     public void reschedule(VersionedDocument document, JTextComponent component, long delay, TimeUnit timeUnit, Class<? extends ParserTaskScheduler> schedulerClass) {
-        Collection<? extends ParserTaskScheduler> schedulers = Lookup.getDefault().lookupAll(ParserTaskScheduler.class);
-        ParserTaskScheduler scheduler = null;
-        for (ParserTaskScheduler i : schedulers) {
-            if (i.getClass() == schedulerClass) {
-                scheduler = i;
-                break;
-            }
-        }
-
+        ParserTaskScheduler scheduler = TaskSchedulers.getScheduler(schedulerClass);
         if (scheduler != null) {
             @SuppressWarnings("rawtypes")
             Collection<? extends ParserDataDefinition> data = MimeLookup.getLookup(document.getMimeType()).lookupAll(ParserDataDefinition.class);
