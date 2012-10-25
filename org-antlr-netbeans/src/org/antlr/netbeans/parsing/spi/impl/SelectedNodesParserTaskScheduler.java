@@ -53,7 +53,7 @@ public class SelectedNodesParserTaskScheduler extends ParserTaskScheduler {
                     if (fileObject.isValid() && EditorSettings.getDefault().getAllMimeTypes().contains(fileObject.getMIMEType())) {
                         VersionedDocument versionedDocument = VersionedDocumentUtilities.getVersionedDocument(fileObject);
                         if (versionedDocument != null) {
-                            ParseContext context = new ParseContext(SelectedNodesParserTaskScheduler.this, versionedDocument);
+                            ParseContext context = new ParseContext(SelectedNodesParserTaskScheduler.this.getClass(), versionedDocument);
                             schedule(context);
                             return null;
                         }

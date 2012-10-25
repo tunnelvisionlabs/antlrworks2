@@ -24,7 +24,7 @@ import org.openide.util.Parameters;
  */
 public class ParseContext {
     @NonNull
-    private final ParserTaskScheduler scheduler;
+    private final Class<? extends ParserTaskScheduler> scheduler;
     @NonNull
     private final VersionedDocument document;
 
@@ -32,31 +32,31 @@ public class ParseContext {
     private final SnapshotPosition position;
     private final Reference<JTextComponent> component;
 
-    public ParseContext(@NonNull ParserTaskScheduler scheduler, VersionedDocument document) {
+    public ParseContext(@NonNull Class<? extends ParserTaskScheduler> scheduler, VersionedDocument document) {
         this(scheduler, document, null, null, null);
     }
 
-    public ParseContext(@NonNull ParserTaskScheduler scheduler, VersionedDocument document, JTextComponent component) {
+    public ParseContext(@NonNull Class<? extends ParserTaskScheduler> scheduler, VersionedDocument document, JTextComponent component) {
         this(scheduler, document, null, null, component);
     }
 
-    public ParseContext(@NonNull ParserTaskScheduler scheduler, DocumentSnapshot snapshot) {
+    public ParseContext(@NonNull Class<? extends ParserTaskScheduler> scheduler, DocumentSnapshot snapshot) {
         this(scheduler, snapshot.getVersionedDocument(), snapshot, null, null);
     }
 
-    public ParseContext(@NonNull ParserTaskScheduler scheduler, DocumentSnapshot snapshot, JTextComponent component) {
+    public ParseContext(@NonNull Class<? extends ParserTaskScheduler> scheduler, DocumentSnapshot snapshot, JTextComponent component) {
         this(scheduler, snapshot.getVersionedDocument(), snapshot, null, component);
     }
 
-    public ParseContext(@NonNull ParserTaskScheduler scheduler, @NonNull SnapshotPosition position) {
+    public ParseContext(@NonNull Class<? extends ParserTaskScheduler> scheduler, @NonNull SnapshotPosition position) {
         this(scheduler, position.getSnapshot().getVersionedDocument(), position.getSnapshot(), position, null);
     }
 
-    public ParseContext(@NonNull ParserTaskScheduler scheduler, @NonNull SnapshotPosition position, JTextComponent component) {
+    public ParseContext(@NonNull Class<? extends ParserTaskScheduler> scheduler, @NonNull SnapshotPosition position, JTextComponent component) {
         this(scheduler, position.getSnapshot().getVersionedDocument(), position.getSnapshot(), position, component);
     }
 
-    public ParseContext(@NonNull ParserTaskScheduler scheduler, VersionedDocument document, DocumentSnapshot snapshot, SnapshotPosition position, JTextComponent component) {
+    public ParseContext(@NonNull Class<? extends ParserTaskScheduler> scheduler, VersionedDocument document, DocumentSnapshot snapshot, SnapshotPosition position, JTextComponent component) {
         Parameters.notNull("scheduler", scheduler);
         Parameters.notNull("document", document);
 
@@ -68,7 +68,7 @@ public class ParseContext {
     }
 
     @NonNull
-    public ParserTaskScheduler getScheduler() {
+    public Class<? extends ParserTaskScheduler> getScheduler() {
         return scheduler;
     }
 

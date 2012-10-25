@@ -59,6 +59,6 @@ public class CurrentDocumentParserTaskScheduler extends CurrentEditorParserTaskS
     }
 
     protected ParseContext createParseContext(VersionedDocument versionedDocument, JTextComponent editor) {
-        return new ParseContext(this, versionedDocument, editor);
+        return new ParseContext(getClass(), versionedDocument, editor);
     }
 }

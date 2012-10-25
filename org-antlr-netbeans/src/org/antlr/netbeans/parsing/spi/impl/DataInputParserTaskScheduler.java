@@ -73,7 +73,7 @@ public class DataInputParserTaskScheduler extends ParserTaskScheduler {
                 }
             }
 
-            ParseContext context = new ParseContext(DataInputParserTaskScheduler.this, event.getData().getSnapshot());
+            ParseContext context = new ParseContext(DataInputParserTaskScheduler.this.getClass(), event.getData().getSnapshot());
             schedule(context, tasks);
         }
 

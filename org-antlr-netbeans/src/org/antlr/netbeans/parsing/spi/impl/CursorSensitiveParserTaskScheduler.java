@@ -50,7 +50,7 @@ public class CursorSensitiveParserTaskScheduler extends CurrentDocumentParserTas
         int offset = caret.getDot();
 
         SnapshotPosition position = new SnapshotPosition(versionedDocument.getCurrentSnapshot(), offset);
-        return new ParseContext(this, position, editor);
+        return new ParseContext(getClass(), position, editor);
     }
 
     private class CaretListenerImpl implements CaretListener {
@@ -69,7 +69,7 @@ public class CursorSensitiveParserTaskScheduler extends CurrentDocumentParserTas
             }
 
             SnapshotPosition position = new SnapshotPosition(snapshot, e.getDot());
-            ParseContext context = new ParseContext(CursorSensitiveParserTaskScheduler.this, position, getCurrentEditor());
+            ParseContext context = new ParseContext(CursorSensitiveParserTaskScheduler.this.getClass(), position, getCurrentEditor());
             schedule(context);
         }
     }

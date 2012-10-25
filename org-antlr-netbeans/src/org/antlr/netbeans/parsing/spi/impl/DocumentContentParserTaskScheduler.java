@@ -64,7 +64,7 @@ public class DocumentContentParserTaskScheduler extends ParserTaskScheduler {
                         documents.put(document, components);
                         document.addDocumentListener(documentListener);
                         VersionedDocument versionedDocument = VersionedDocumentUtilities.getVersionedDocument(document);
-                        ParseContext context = new ParseContext(DocumentContentParserTaskScheduler.this, versionedDocument);
+                        ParseContext context = new ParseContext(DocumentContentParserTaskScheduler.this.getClass(), versionedDocument);
                         schedule(context);
                     }
                 }
@@ -96,21 +96,21 @@ public class DocumentContentParserTaskScheduler extends ParserTaskScheduler {
         @Override
         public void insertUpdate(DocumentEvent e) {
             VersionedDocument document = VersionedDocumentUtilities.getVersionedDocument(e.getDocument());
-            ParseContext context = new ParseContext(DocumentContentParserTaskScheduler.this, document);
+            ParseContext context = new ParseContext(DocumentContentParserTaskScheduler.this.getClass(), document);
             schedule(context);
         }
 
         @Override
         public void removeUpdate(DocumentEvent e) {
             VersionedDocument document = VersionedDocumentUtilities.getVersionedDocument(e.getDocument());
-            ParseContext context = new ParseContext(DocumentContentParserTaskScheduler.this, document);
+            ParseContext context = new ParseContext(DocumentContentParserTaskScheduler.this.getClass(), document);
             schedule(context);
         }
 
         @Override
         public void changedUpdate(DocumentEvent e) {
             VersionedDocument document = VersionedDocumentUtilities.getVersionedDocument(e.getDocument());
-            ParseContext context = new ParseContext(DocumentContentParserTaskScheduler.this, document);
+            ParseContext context = new ParseContext(DocumentContentParserTaskScheduler.this.getClass(), document);
             schedule(context);
         }
 

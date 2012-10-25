@@ -53,7 +53,7 @@ public class RuleScanningParserTask implements ParserTask {
     public void parse(ParserTaskManager taskManager, ParseContext context, DocumentSnapshot snapshot, Collection<ParserDataDefinition<?>> requestedData, ParserResultHandler results)
         throws InterruptedException, ExecutionException {
 
-        boolean explicitRequest = ParserTaskScheduler.MANUAL_TASK_SCHEDULER.isAssignableFrom(context.getScheduler().getClass());
+        boolean explicitRequest = ParserTaskScheduler.MANUAL_TASK_SCHEDULER.isAssignableFrom(context.getScheduler());
         if (requestedData.contains(GrammarParserDataDefinitions.NAVIGATOR_ROOT)) {
             synchronized (lock) {
                 ParserData<Description> data = taskManager.getData(snapshot, GrammarParserDataDefinitions.NAVIGATOR_ROOT, EnumSet.of(ParserDataOptions.NO_UPDATE, ParserDataOptions.SYNCHRONOUS)).get();
