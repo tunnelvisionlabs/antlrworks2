@@ -99,21 +99,21 @@ public class ParseContext {
         }
 
         ParseContext other = (ParseContext)obj;
-        return (this.document == other.document || (this.document != null && this.document.equals(other.document)))
+        return this.document.equals(other.document)
             && (this.snapshot == other.snapshot || (this.snapshot != null && this.snapshot.equals(other.snapshot)))
             && (this.position == other.position || (this.position != null && this.position.equals(other.position)))
             && (this.component == other.component || (this.component != null && this.component.equals(other.component)))
-            && (this.schedulerClass == other.schedulerClass || (this.schedulerClass != null && this.schedulerClass.equals(other.schedulerClass)));
+            && this.schedulerClass.equals(other.schedulerClass);
     }
 
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 43 * hash + (this.document != null ? this.document.hashCode() : 0);
+        hash = 43 * hash + this.document.hashCode();
         hash = 43 * hash + (this.snapshot != null ? this.snapshot.hashCode() : 0);
         hash = 43 * hash + (this.position != null ? this.position.hashCode() : 0);
         hash = 43 * hash + (this.component != null ? this.component.hashCode() : 0);
-        hash = 43 * hash + (this.schedulerClass != null ? this.schedulerClass.hashCode() : 0);
+        hash = 43 * hash + this.schedulerClass.hashCode();
         return hash;
     }
 
