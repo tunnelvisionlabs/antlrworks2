@@ -148,7 +148,7 @@ public abstract class ParserTaskScheduler {
             return;
         }
 
-        assert context.getScheduler() == getClass();
+        assert context.getSchedulerClass() == getClass();
 
         // Schedule data updates
         String mimeType = context.getDocument().getMimeType();
@@ -206,7 +206,7 @@ public abstract class ParserTaskScheduler {
             return;
         }
 
-        assert context.getScheduler() == getClass();
+        assert context.getSchedulerClass() == getClass();
 
         // Schedule task updates
         Set<ParserTaskProvider> currentScheduledProviders = new HashSet<ParserTaskProvider>();

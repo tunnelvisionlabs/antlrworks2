@@ -24,7 +24,7 @@ import org.openide.util.Parameters;
  */
 public class ParseContext {
     @NonNull
-    private final Class<? extends ParserTaskScheduler> scheduler;
+    private final Class<? extends ParserTaskScheduler> schedulerClass;
     @NonNull
     private final VersionedDocument document;
 
@@ -56,11 +56,11 @@ public class ParseContext {
         this(scheduler, position.getSnapshot().getVersionedDocument(), position.getSnapshot(), position, component);
     }
 
-    public ParseContext(@NonNull Class<? extends ParserTaskScheduler> scheduler, VersionedDocument document, DocumentSnapshot snapshot, SnapshotPosition position, JTextComponent component) {
-        Parameters.notNull("scheduler", scheduler);
+    public ParseContext(@NonNull Class<? extends ParserTaskScheduler> schedulerClass, VersionedDocument document, DocumentSnapshot snapshot, SnapshotPosition position, JTextComponent component) {
+        Parameters.notNull("schedulerClass", schedulerClass);
         Parameters.notNull("document", document);
 
-        this.scheduler = scheduler;
+        this.schedulerClass = schedulerClass;
         this.document = document;
         this.snapshot = snapshot;
         this.position = position;
@@ -68,8 +68,8 @@ public class ParseContext {
     }
 
     @NonNull
-    public Class<? extends ParserTaskScheduler> getScheduler() {
-        return scheduler;
+    public Class<? extends ParserTaskScheduler> getSchedulerClass() {
+        return schedulerClass;
     }
 
     @NonNull
@@ -103,7 +103,7 @@ public class ParseContext {
             && (this.snapshot == other.snapshot || (this.snapshot != null && this.snapshot.equals(other.snapshot)))
             && (this.position == other.position || (this.position != null && this.position.equals(other.position)))
             && (this.component == other.component || (this.component != null && this.component.equals(other.component)))
-            && (this.scheduler == other.scheduler || (this.scheduler != null && this.scheduler.equals(other.scheduler)));
+            && (this.schedulerClass == other.schedulerClass || (this.schedulerClass != null && this.schedulerClass.equals(other.schedulerClass)));
     }
 
     @Override
@@ -113,7 +113,7 @@ public class ParseContext {
         hash = 43 * hash + (this.snapshot != null ? this.snapshot.hashCode() : 0);
         hash = 43 * hash + (this.position != null ? this.position.hashCode() : 0);
         hash = 43 * hash + (this.component != null ? this.component.hashCode() : 0);
-        hash = 43 * hash + (this.scheduler != null ? this.scheduler.hashCode() : 0);
+        hash = 43 * hash + (this.schedulerClass != null ? this.schedulerClass.hashCode() : 0);
         return hash;
     }
 
