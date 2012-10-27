@@ -23,6 +23,7 @@ import org.netbeans.modules.editor.indent.api.Indent;
 import org.openide.util.NbBundle;
 
 /**
+ * Insert a blank line above the current line, and place the caret there.
  *
  * @author Sam Harwell
  */
@@ -34,7 +35,6 @@ public class InsertLineAboveAction extends BaseAction {
     // -J-Dorg.tvl.netbeans.editor.actions.InsertLineAboveAction.level=FINE
     private static final Logger LOGGER = Logger.getLogger(InsertLineAboveAction.class.getName());
 
-    /** Insert a blank line above the current line, and place the caret there. */
     public static final String insertLineAboveAction = "insert-line-above"; // NOI18N
 
     public InsertLineAboveAction() {
@@ -49,7 +49,7 @@ public class InsertLineAboveAction extends BaseAction {
             return;
         }
 
-        final BaseDocument doc = (BaseDocument) target.getDocument();
+        final BaseDocument doc = (BaseDocument)target.getDocument();
         final Indent indenter = Indent.get(doc);
         indenter.lock();
         doc.runAtomicAsUser(new Runnable() {
@@ -80,5 +80,4 @@ public class InsertLineAboveAction extends BaseAction {
     protected Class<?> getShortDescriptionBundleClass() {
         return InsertLineAboveAction.class;
     }
-
 }

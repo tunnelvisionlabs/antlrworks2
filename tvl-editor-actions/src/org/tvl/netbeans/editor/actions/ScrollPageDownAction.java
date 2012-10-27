@@ -18,6 +18,9 @@ import org.netbeans.editor.Utilities;
 import org.openide.util.NbBundle;
 
 /**
+ * This action scrolls the editor view one page down, without affecting the
+ * caret position. It is equivalent to a single click on the scroll bar in the
+ * space between the up arrow at the top and the slider.
  *
  * @author Sam Harwell
  */
@@ -27,7 +30,6 @@ import org.openide.util.NbBundle;
 @EditorActionRegistration(name = ScrollPageDownAction.scrollPageDownAction)
 public class ScrollPageDownAction extends BaseAction {
 
-    /** Scroll window one page down */
     public static final String scrollPageDownAction = "scroll-page-down"; // NOI18N
 
     public ScrollPageDownAction() {
@@ -48,5 +50,4 @@ public class ScrollPageDownAction extends BaseAction {
     protected Class<?> getShortDescriptionBundleClass() {
         return ScrollPageDownAction.class;
     }
-
 }

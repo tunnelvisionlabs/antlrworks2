@@ -18,6 +18,9 @@ import org.netbeans.editor.Utilities;
 import org.openide.util.NbBundle;
 
 /**
+ * This action scrolls the editor view one page up, without affecting the caret
+ * position. It is equivalent to a single click on the scroll bar in the space
+ * between the slider and the down arrow at the bottom.
  *
  * @author Sam Harwell
  */
@@ -27,7 +30,6 @@ import org.openide.util.NbBundle;
 @EditorActionRegistration(name = ScrollPageUpAction.scrollPageUpAction)
 public class ScrollPageUpAction extends BaseAction {
 
-    /** Scroll window one page up */
     public static final String scrollPageUpAction = "scroll-page-up"; // NOI18N
 
     public ScrollPageUpAction() {
@@ -48,5 +50,4 @@ public class ScrollPageUpAction extends BaseAction {
     protected Class<?> getShortDescriptionBundleClass() {
         return ScrollPageUpAction.class;
     }
-
 }
