@@ -16,12 +16,11 @@ public class PlusBlock extends Block {
 
     public static int POSITIVE_LOOPBACK_HEIGHT = 20;
 
-    public PlusBlock() {
-        this(0);
-    }
+    private final boolean _greedy;
 
-    public PlusBlock(int gutterBelowHeight) {
-        super(POSITIVE_LOOPBACK_HEIGHT, gutterBelowHeight);
+    public PlusBlock(boolean greedy) {
+        super(greedy ? POSITIVE_LOOPBACK_HEIGHT : 0, greedy ? 0 : POSITIVE_LOOPBACK_HEIGHT);
+        _greedy = greedy;
     }
 
 	@Override
@@ -40,7 +39,13 @@ public class PlusBlock extends Block {
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             }
 
-            int loopbackPositionY = getY() + getInsets().top / 2;
+            int loopbackPositionY;
+            if (_greedy) {
+                loopbackPositionY = getY() + getTopGutterHeight() / 2;
+            }
+            else {
+                loopbackPositionY = getHeight() - getBottomGutterHeight() / 2;
+            }
 
             int leftJoinLineX = getLeftJoinLineX();
             int rightJoinLineX = getRightJoinLineX();
@@ -56,7 +61,12 @@ public class PlusBlock extends Block {
             g.drawLine(rightJoinLineX, loopbackPositionY, rightJoinLineX, topOfJoinLineY);
 
             if (g2 != null) {
-                Diagram.drawArrow(leftJoinLineX, topOfJoinLineY, Math.PI / 2, g2);
+                if (_greedy) {
+                    Diagram.drawArrow(leftJoinLineX, topOfJoinLineY, Math.PI / 2, g2);
+                }
+                else {
+                    Diagram.drawArrow(leftJoinLineX, topOfJoinLineY, -Math.PI / 2, g2);
+                }
             }
         } finally {
             if (g2 != null) {

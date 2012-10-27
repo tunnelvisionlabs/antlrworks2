@@ -264,9 +264,9 @@ public class GrammarIndentTask extends AbstractIndentTask {
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerAltList, version=0),
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_altList, version=0),
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_blockSet, version=0),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerBlock, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerBlock, version=1),
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_block, version=0),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_optionsSpec, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_optionsSpec, version=1),
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_tokensSpec, version=1),
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_modeSpec, version=0),
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_delegateGrammars, version=0),
@@ -487,7 +487,7 @@ public class GrammarIndentTask extends AbstractIndentTask {
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerAltList, version=0),
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_altList, version=0),
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_blockSet, version=0),
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerBlock, version=0),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerBlock, version=1),
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_block, version=0),
         })
         private Tuple2<? extends ParseTree<? extends Token>, Integer> visitGenericBlock(ParserRuleContext<? extends Token> container) {
@@ -583,7 +583,7 @@ public class GrammarIndentTask extends AbstractIndentTask {
         }
 
         @Override
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerBlock, version=0)
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerBlock, version=1)
         public Tuple2<? extends ParseTree<? extends Token>, Integer> visitLexerBlock(LexerBlockContext ctx) {
             return visitGenericBlock(ctx);
         }
@@ -688,7 +688,7 @@ public class GrammarIndentTask extends AbstractIndentTask {
 
         @Override
         @RuleDependencies({
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_optionsSpec, version=0),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_optionsSpec, version=1),
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_option, version=0),
         })
         public Tuple2<? extends ParseTree<? extends Token>, Integer> visitOptionsSpec(OptionsSpecContext ctx) {

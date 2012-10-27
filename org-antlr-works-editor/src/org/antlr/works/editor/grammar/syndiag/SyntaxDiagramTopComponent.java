@@ -323,7 +323,7 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
         }
 
         @Override
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerBlock, version=0)
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerBlock, version=1)
         public void enterLexerBlock(LexerBlockContext ctx) {
             enterBlock();
         }
@@ -347,7 +347,7 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
         }
 
         @Override
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerBlock, version=0)
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerBlock, version=1)
         public void exitLexerBlock(LexerBlockContext ctx) {
             exitBlock();
         }
@@ -499,9 +499,11 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
          */
 
         @Override
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ebnfSuffix, version=0)
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ebnfSuffix, version=1)
         public void enterEbnfSuffix(EbnfSuffixContext ctx) {
             Block block;
+
+            boolean greedy = ctx.getChildCount() <= 1;
 
             switch (ctx.start.getType()) {
             case GrammarParser.QUESTION:
@@ -512,8 +514,15 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
                     last.remove(last.getComponentCount() - 1);
                     Alt alt = new Alt();
                     alt.add(lastChild);
-                    block.add(alt);
-                    block.add(new Alt());
+
+                    if (greedy) {
+                        block.add(alt);
+                        block.add(new Alt());
+                    } else {
+                        block.add(new Alt());
+                        block.add(alt);
+                    }
+
                     last.add(block);
                     break;
                 }
@@ -521,7 +530,7 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
             case GrammarParser.STAR:
             case GrammarParser.PLUS:
                 {
-                    block = new PlusBlock();
+                    block = new PlusBlock(greedy);
                     JComponent last = nodes.peek();
                     Component lastChild = last.getComponent(last.getComponentCount() - 1);
                     last.remove(last.getComponentCount() - 1);
@@ -532,8 +541,15 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
                         Block optionalBlock = new Block();
                         alt = new Alt();
                         alt.add(block);
-                        optionalBlock.add(alt);
-                        optionalBlock.add(new Alt());
+
+                        if (greedy) {
+                            optionalBlock.add(alt);
+                            optionalBlock.add(new Alt());
+                        } else {
+                            optionalBlock.add(new Alt());
+                            optionalBlock.add(alt);
+                        }
+
                         block = optionalBlock;
                     }
 

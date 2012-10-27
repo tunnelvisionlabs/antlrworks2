@@ -119,6 +119,7 @@ prequelConstruct
 
 // A list of options that affect analysis and/or code generation
 optionsSpec
+@version{1}
 	:	OPTIONS (option SEMI)* RBRACE
 	;
 
@@ -502,7 +503,8 @@ labeledLexerElement
 	;
 
 lexerBlock
-	:	LPAREN lexerAltList RPAREN
+@version{1}
+	:	LPAREN (optionsSpec COLON)? lexerAltList RPAREN
 	;
 
 // channel=HIDDEN, skip, more, mode(INSIDE), push(INSIDE), pop
@@ -580,9 +582,10 @@ blockSuffix
 	;
 
 ebnfSuffix
-	:	QUESTION
-	|	STAR
-	|	PLUS
+@version{1}
+	:	QUESTION QUESTION?
+	|	STAR QUESTION?
+	|	PLUS QUESTION?
 	;
 
 lexerAtom
