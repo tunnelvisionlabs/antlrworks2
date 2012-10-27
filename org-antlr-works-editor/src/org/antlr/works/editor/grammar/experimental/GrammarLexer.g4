@@ -56,11 +56,11 @@ protected abstract void handleBeginArgAction();
 // from ordinary multi-line comments
 
 DOC_COMMENT
-	:	'/**' .* '*/'
+	:	'/**' .*? '*/'
 	;
 
 BLOCK_COMMENT
-	:	'/*' .* '*/' -> channel(HIDDEN)
+	:	'/*' .*? '*/' -> channel(HIDDEN)
 	;
 
 LINE_COMMENT
