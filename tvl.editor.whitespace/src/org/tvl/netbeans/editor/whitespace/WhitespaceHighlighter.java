@@ -125,7 +125,7 @@ public class WhitespaceHighlighter extends AbstractHighlightsContainer {
 
     protected static class HighlightsSequenceImpl implements HighlightsSequence {
         private static final int BLOCK_SIZE = 1024;
-        private static final AttributeSet newlineAttributes;
+        private static final AttributeSet NEWLINE_ATTRIBUTES;
 
         private final StyledDocument document;
         private final int startOffset;
@@ -145,7 +145,7 @@ public class WhitespaceHighlighter extends AbstractHighlightsContainer {
         static {
             MutableAttributeSet attributes = new SimpleAttributeSet();
             attributes.addAttribute(StyleConstants.Foreground, new Color(0, 0, 0, 0));
-            newlineAttributes = attributes.copyAttributes();
+            NEWLINE_ATTRIBUTES = attributes.copyAttributes();
         }
 
         private HighlightsSequenceImpl(@NonNull StyledDocument document, int startOffset, int endOffset, @NonNull AttributeSet attributes) {
@@ -235,7 +235,7 @@ public class WhitespaceHighlighter extends AbstractHighlightsContainer {
 
         @Override
         public AttributeSet getAttributes() {
-            return currentNewline ? newlineAttributes : attributes;
+            return currentNewline ? NEWLINE_ATTRIBUTES : attributes;
         }
 
         private boolean nextBlock() {
