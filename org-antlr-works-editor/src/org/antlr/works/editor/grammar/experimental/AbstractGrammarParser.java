@@ -151,13 +151,12 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(143);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,0,_ctx) ) {
-				case 1:
-					{
-					setState(142); match(DOC_COMMENT);
-					}
-					break;
+			case 1:
+				{
+				setState(142); match(DOC_COMMENT);
+				}
+				break;
 			}
 			setState(145); grammarType();
 			setState(146); id();
@@ -241,27 +240,26 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(168);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,3,_ctx) ) {
-				case 1:
-					{
-					setState(163); match(LEXER);
-					setState(164); match(GRAMMAR);
-					}
-					break;
+			case 1:
+				{
+				setState(163); match(LEXER);
+				setState(164); match(GRAMMAR);
+				}
+				break;
 
-				case 2:
-					{
-					setState(165); match(PARSER);
-					setState(166); match(GRAMMAR);
-					}
-					break;
+			case 2:
+				{
+				setState(165); match(PARSER);
+				setState(166); match(GRAMMAR);
+				}
+				break;
 
-				case 3:
-					{
-					setState(167); match(GRAMMAR);
-					}
-					break;
+			case 3:
+				{
+				setState(167); match(GRAMMAR);
+				}
+				break;
 			}
 			}
 		}
@@ -314,35 +312,34 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		enterRule(_localctx, 4, RULE_prequelConstruct);
 		try {
 			setState(174);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,4,_ctx) ) {
-				case 1:
-					enterOuterAlt(_localctx, 1);
-					{
-					setState(170); optionsSpec();
-					}
-					break;
+			case 1:
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(170); optionsSpec();
+				}
+				break;
 
-				case 2:
-					enterOuterAlt(_localctx, 2);
-					{
-					setState(171); delegateGrammars();
-					}
-					break;
+			case 2:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(171); delegateGrammars();
+				}
+				break;
 
-				case 3:
-					enterOuterAlt(_localctx, 3);
-					{
-					setState(172); tokensSpec();
-					}
-					break;
+			case 3:
+				enterOuterAlt(_localctx, 3);
+				{
+				setState(172); tokensSpec();
+				}
+				break;
 
-				case 4:
-					enterOuterAlt(_localctx, 4);
-					{
-					setState(173); action();
-					}
-					break;
+			case 4:
+				enterOuterAlt(_localctx, 4);
+				{
+				setState(173); action();
+				}
+				break;
 			}
 		}
 		catch (RecognitionException re) {
@@ -509,35 +506,34 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		enterRule(_localctx, 10, RULE_optionValue);
 		try {
 			setState(195);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,6,_ctx) ) {
-				case 1:
-					enterOuterAlt(_localctx, 1);
-					{
-					setState(191); qid();
-					}
-					break;
+			case 1:
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(191); qid();
+				}
+				break;
 
-				case 2:
-					enterOuterAlt(_localctx, 2);
-					{
-					setState(192); match(STRING_LITERAL);
-					}
-					break;
+			case 2:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(192); match(STRING_LITERAL);
+				}
+				break;
 
-				case 3:
-					enterOuterAlt(_localctx, 3);
-					{
-					setState(193); match(INT);
-					}
-					break;
+			case 3:
+				enterOuterAlt(_localctx, 3);
+				{
+				setState(193); match(INT);
+				}
+				break;
 
-				case 4:
-					enterOuterAlt(_localctx, 4);
-					{
-					setState(194); match(STAR);
-					}
-					break;
+			case 4:
+				enterOuterAlt(_localctx, 4);
+				{
+				setState(194); match(STAR);
+				}
+				break;
 			}
 		}
 		catch (RecognitionException re) {
@@ -656,23 +652,22 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		enterRule(_localctx, 14, RULE_delegateGrammar);
 		try {
 			setState(213);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,8,_ctx) ) {
-				case 1:
-					enterOuterAlt(_localctx, 1);
-					{
-					setState(208); id();
-					setState(209); match(ASSIGN);
-					setState(210); id();
-					}
-					break;
+			case 1:
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(208); id();
+				setState(209); match(ASSIGN);
+				setState(210); id();
+				}
+				break;
 
-				case 2:
-					enterOuterAlt(_localctx, 2);
-					{
-					setState(212); id();
-					}
-					break;
+			case 2:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(212); id();
+				}
+				break;
 			}
 		}
 		catch (RecognitionException re) {
@@ -728,38 +723,36 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 			{
 			setState(215); match(TOKENS);
 			setState(224);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,10,_ctx) ) {
-				case 1:
-					{
-					setState(216); id();
-					setState(221);
+			case 1:
+				{
+				setState(216); id();
+				setState(221);
+				_errHandler.sync(this);
+				_alt = getInterpreter().adaptivePredict(_input,9,_ctx);
+				while ( _alt!=2 && _alt!=-1 ) {
+					if ( _alt==1 ) {
+						{
+						{
+						setState(217); match(COMMA);
+						setState(218); id();
+						}
+						} 
+					}
+					setState(223);
 					_errHandler.sync(this);
 					_alt = getInterpreter().adaptivePredict(_input,9,_ctx);
-					while ( _alt!=2 && _alt!=-1 ) {
-						if ( _alt==1 ) {
-							{
-							{
-							setState(217); match(COMMA);
-							setState(218); id();
-							}
-							} 
-						}
-						setState(223);
-						_errHandler.sync(this);
-						_alt = getInterpreter().adaptivePredict(_input,9,_ctx);
-					}
-					}
-					break;
+				}
+				}
+				break;
 			}
 			setState(227);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,11,_ctx) ) {
-				case 1:
-					{
-					setState(226); match(COMMA);
-					}
-					break;
+			case 1:
+				{
+				setState(226); match(COMMA);
+				}
+				break;
 			}
 			setState(229); match(RBRACE);
 			}
@@ -911,145 +904,144 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 				if ( _alt==1 ) {
 					{
 					setState(255);
-					//_errHandler.sync(this);
 					switch ( getInterpreter().adaptivePredict(_input,12,_ctx) ) {
-						case 1:
-							{
-							setState(232); actionBlock();
-							}
-							break;
+					case 1:
+						{
+						setState(232); actionBlock();
+						}
+						break;
 
-						case 2:
-							{
-							setState(233); actionExpression();
-							}
-							break;
+					case 2:
+						{
+						setState(233); actionExpression();
+						}
+						break;
 
-						case 3:
-							{
-							setState(234); actionScopeExpression();
-							}
-							break;
+					case 3:
+						{
+						setState(234); actionScopeExpression();
+						}
+						break;
 
-						case 4:
-							{
-							setState(235); match(ACTION_WS);
-							}
-							break;
+					case 4:
+						{
+						setState(235); match(ACTION_WS);
+						}
+						break;
 
-						case 5:
-							{
-							setState(236); match(ACTION_NEWLINE);
-							}
-							break;
+					case 5:
+						{
+						setState(236); match(ACTION_NEWLINE);
+						}
+						break;
 
-						case 6:
-							{
-							setState(237); match(ACTION_COMMENT);
-							}
-							break;
+					case 6:
+						{
+						setState(237); match(ACTION_COMMENT);
+						}
+						break;
 
-						case 7:
-							{
-							setState(238); match(ACTION_LITERAL);
-							}
-							break;
+					case 7:
+						{
+						setState(238); match(ACTION_LITERAL);
+						}
+						break;
 
-						case 8:
-							{
-							setState(239); match(ACTION_TEXT);
-							}
-							break;
+					case 8:
+						{
+						setState(239); match(ACTION_TEXT);
+						}
+						break;
 
-						case 9:
-							{
-							setState(240); match(ACTION_LT);
-							}
-							break;
+					case 9:
+						{
+						setState(240); match(ACTION_LT);
+						}
+						break;
 
-						case 10:
-							{
-							setState(241); match(ACTION_GT);
-							}
-							break;
+					case 10:
+						{
+						setState(241); match(ACTION_GT);
+						}
+						break;
 
-						case 11:
-							{
-							setState(242); match(ACTION_LPAREN);
-							}
-							break;
+					case 11:
+						{
+						setState(242); match(ACTION_LPAREN);
+						}
+						break;
 
-						case 12:
-							{
-							setState(243); match(ACTION_RPAREN);
-							}
-							break;
+					case 12:
+						{
+						setState(243); match(ACTION_RPAREN);
+						}
+						break;
 
-						case 13:
-							{
-							setState(244); match(ACTION_LBRACK);
-							}
-							break;
+					case 13:
+						{
+						setState(244); match(ACTION_LBRACK);
+						}
+						break;
 
-						case 14:
-							{
-							setState(245); match(ACTION_RBRACK);
-							}
-							break;
+					case 14:
+						{
+						setState(245); match(ACTION_RBRACK);
+						}
+						break;
 
-						case 15:
-							{
-							setState(246); match(ACTION_EQUALS);
-							}
-							break;
+					case 15:
+						{
+						setState(246); match(ACTION_EQUALS);
+						}
+						break;
 
-						case 16:
-							{
-							setState(247); match(ACTION_COMMA);
-							}
-							break;
+					case 16:
+						{
+						setState(247); match(ACTION_COMMA);
+						}
+						break;
 
-						case 17:
-							{
-							setState(248); match(ACTION_ESCAPE);
-							}
-							break;
+					case 17:
+						{
+						setState(248); match(ACTION_ESCAPE);
+						}
+						break;
 
-						case 18:
-							{
-							setState(249); match(ACTION_WORD);
-							}
-							break;
+					case 18:
+						{
+						setState(249); match(ACTION_WORD);
+						}
+						break;
 
-						case 19:
-							{
-							setState(250); match(ACTION_REFERENCE);
-							}
-							break;
+					case 19:
+						{
+						setState(250); match(ACTION_REFERENCE);
+						}
+						break;
 
-						case 20:
-							{
-							setState(251); match(ACTION_COLON);
-							}
-							break;
+					case 20:
+						{
+						setState(251); match(ACTION_COLON);
+						}
+						break;
 
-						case 21:
-							{
-							setState(252); match(ACTION_COLON2);
-							}
-							break;
+					case 21:
+						{
+						setState(252); match(ACTION_COLON2);
+						}
+						break;
 
-						case 22:
-							{
-							setState(253); match(ACTION_MINUS);
-							}
-							break;
+					case 22:
+						{
+						setState(253); match(ACTION_MINUS);
+						}
+						break;
 
-						case 23:
-							{
-							setState(254); match(ACTION_DOT);
-							}
-							break;
+					case 23:
+						{
+						setState(254); match(ACTION_DOT);
+						}
+						break;
 					}
 					} 
 				}
@@ -1222,84 +1214,82 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 				_alt = getInterpreter().adaptivePredict(_input,16,_ctx);
 			}
 			setState(315);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,22,_ctx) ) {
-				case 1:
-					{
-					setState(285); match(ACTION_LBRACK);
-					setState(289);
+			case 1:
+				{
+				setState(285); match(ACTION_LBRACK);
+				setState(289);
+				_errHandler.sync(this);
+				_alt = getInterpreter().adaptivePredict(_input,17,_ctx);
+				while ( _alt!=2 && _alt!=-1 ) {
+					if ( _alt==1 ) {
+						{
+						{
+						setState(286); ignored();
+						}
+						} 
+					}
+					setState(291);
 					_errHandler.sync(this);
 					_alt = getInterpreter().adaptivePredict(_input,17,_ctx);
-					while ( _alt!=2 && _alt!=-1 ) {
-						if ( _alt==1 ) {
-							{
-							{
-							setState(286); ignored();
-							}
-							} 
-						}
-						setState(291);
-						_errHandler.sync(this);
-						_alt = getInterpreter().adaptivePredict(_input,17,_ctx);
-					}
-					setState(299);
-					//_errHandler.sync(this);
-					switch ( getInterpreter().adaptivePredict(_input,19,_ctx) ) {
-						case 1:
-							{
-							setState(292); _localctx.neg = match(ACTION_MINUS);
-							setState(296);
-							_errHandler.sync(this);
-							_alt = getInterpreter().adaptivePredict(_input,18,_ctx);
-							while ( _alt!=2 && _alt!=-1 ) {
-								if ( _alt==1 ) {
-									{
-									{
-									setState(293); ignored();
-									}
-									} 
-								}
-								setState(298);
-								_errHandler.sync(this);
-								_alt = getInterpreter().adaptivePredict(_input,18,_ctx);
-							}
-							}
-							break;
-					}
-					setState(301); _localctx.index = match(ACTION_WORD);
-					setState(305);
+				}
+				setState(299);
+				switch ( getInterpreter().adaptivePredict(_input,19,_ctx) ) {
+				case 1:
+					{
+					setState(292); _localctx.neg = match(ACTION_MINUS);
+					setState(296);
 					_errHandler.sync(this);
-					_alt = getInterpreter().adaptivePredict(_input,20,_ctx);
+					_alt = getInterpreter().adaptivePredict(_input,18,_ctx);
 					while ( _alt!=2 && _alt!=-1 ) {
 						if ( _alt==1 ) {
 							{
 							{
-							setState(302); ignored();
+							setState(293); ignored();
 							}
 							} 
 						}
-						setState(307);
+						setState(298);
 						_errHandler.sync(this);
-						_alt = getInterpreter().adaptivePredict(_input,20,_ctx);
-					}
-					setState(308); match(ACTION_RBRACK);
-					setState(312);
-					_errHandler.sync(this);
-					_alt = getInterpreter().adaptivePredict(_input,21,_ctx);
-					while ( _alt!=2 && _alt!=-1 ) {
-						if ( _alt==1 ) {
-							{
-							{
-							setState(309); ignored();
-							}
-							} 
-						}
-						setState(314);
-						_errHandler.sync(this);
-						_alt = getInterpreter().adaptivePredict(_input,21,_ctx);
+						_alt = getInterpreter().adaptivePredict(_input,18,_ctx);
 					}
 					}
 					break;
+				}
+				setState(301); _localctx.index = match(ACTION_WORD);
+				setState(305);
+				_errHandler.sync(this);
+				_alt = getInterpreter().adaptivePredict(_input,20,_ctx);
+				while ( _alt!=2 && _alt!=-1 ) {
+					if ( _alt==1 ) {
+						{
+						{
+						setState(302); ignored();
+						}
+						} 
+					}
+					setState(307);
+					_errHandler.sync(this);
+					_alt = getInterpreter().adaptivePredict(_input,20,_ctx);
+				}
+				setState(308); match(ACTION_RBRACK);
+				setState(312);
+				_errHandler.sync(this);
+				_alt = getInterpreter().adaptivePredict(_input,21,_ctx);
+				while ( _alt!=2 && _alt!=-1 ) {
+					if ( _alt==1 ) {
+						{
+						{
+						setState(309); ignored();
+						}
+						} 
+					}
+					setState(314);
+					_errHandler.sync(this);
+					_alt = getInterpreter().adaptivePredict(_input,21,_ctx);
+				}
+				}
+				break;
 			}
 			setState(317); _localctx.op = match(ACTION_COLON2);
 			setState(321);
@@ -1511,76 +1501,75 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 				_alt = getInterpreter().adaptivePredict(_input,25,_ctx);
 			}
 			setState(368);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,30,_ctx) ) {
-				case 1:
-					{
-					setState(342); _localctx.argActionParameter = argActionParameter();
-					_localctx.parameters.add(_localctx.argActionParameter);
-					setState(346);
+			case 1:
+				{
+				setState(342); _localctx.argActionParameter = argActionParameter();
+				_localctx.parameters.add(_localctx.argActionParameter);
+				setState(346);
+				_errHandler.sync(this);
+				_alt = getInterpreter().adaptivePredict(_input,26,_ctx);
+				while ( _alt!=2 && _alt!=-1 ) {
+					if ( _alt==1 ) {
+						{
+						{
+						setState(343); ignored();
+						}
+						} 
+					}
+					setState(348);
 					_errHandler.sync(this);
 					_alt = getInterpreter().adaptivePredict(_input,26,_ctx);
-					while ( _alt!=2 && _alt!=-1 ) {
-						if ( _alt==1 ) {
-							{
-							{
-							setState(343); ignored();
-							}
-							} 
-						}
-						setState(348);
+				}
+				setState(365);
+				_errHandler.sync(this);
+				_alt = getInterpreter().adaptivePredict(_input,29,_ctx);
+				while ( _alt!=2 && _alt!=-1 ) {
+					if ( _alt==1 ) {
+						{
+						{
+						setState(349); match(ARG_ACTION_COMMA);
+						setState(353);
 						_errHandler.sync(this);
-						_alt = getInterpreter().adaptivePredict(_input,26,_ctx);
-					}
-					setState(365);
-					_errHandler.sync(this);
-					_alt = getInterpreter().adaptivePredict(_input,29,_ctx);
-					while ( _alt!=2 && _alt!=-1 ) {
-						if ( _alt==1 ) {
-							{
-							{
-							setState(349); match(ARG_ACTION_COMMA);
-							setState(353);
+						_alt = getInterpreter().adaptivePredict(_input,27,_ctx);
+						while ( _alt!=2 && _alt!=-1 ) {
+							if ( _alt==1 ) {
+								{
+								{
+								setState(350); ignored();
+								}
+								} 
+							}
+							setState(355);
 							_errHandler.sync(this);
 							_alt = getInterpreter().adaptivePredict(_input,27,_ctx);
-							while ( _alt!=2 && _alt!=-1 ) {
-								if ( _alt==1 ) {
-									{
-									{
-									setState(350); ignored();
-									}
-									} 
+						}
+						setState(356); _localctx.argActionParameter = argActionParameter();
+						_localctx.parameters.add(_localctx.argActionParameter);
+						setState(360);
+						_errHandler.sync(this);
+						_alt = getInterpreter().adaptivePredict(_input,28,_ctx);
+						while ( _alt!=2 && _alt!=-1 ) {
+							if ( _alt==1 ) {
+								{
+								{
+								setState(357); ignored();
 								}
-								setState(355);
-								_errHandler.sync(this);
-								_alt = getInterpreter().adaptivePredict(_input,27,_ctx);
+								} 
 							}
-							setState(356); _localctx.argActionParameter = argActionParameter();
-							_localctx.parameters.add(_localctx.argActionParameter);
-							setState(360);
+							setState(362);
 							_errHandler.sync(this);
 							_alt = getInterpreter().adaptivePredict(_input,28,_ctx);
-							while ( _alt!=2 && _alt!=-1 ) {
-								if ( _alt==1 ) {
-									{
-									{
-									setState(357); ignored();
-									}
-									} 
-								}
-								setState(362);
-								_errHandler.sync(this);
-								_alt = getInterpreter().adaptivePredict(_input,28,_ctx);
-							}
-							}
-							} 
 						}
-						setState(367);
-						_errHandler.sync(this);
-						_alt = getInterpreter().adaptivePredict(_input,29,_ctx);
+						}
+						} 
 					}
-					}
-					break;
+					setState(367);
+					_errHandler.sync(this);
+					_alt = getInterpreter().adaptivePredict(_input,29,_ctx);
+				}
+				}
+				break;
 			}
 			setState(370); match(END_ARG_ACTION);
 			}
@@ -1637,13 +1626,12 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(373);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,31,_ctx) ) {
-				case 1:
-					{
-					setState(372); _localctx.type = argActionParameterType();
-					}
-					break;
+			case 1:
+				{
+				setState(372); _localctx.type = argActionParameterType();
+				}
+				break;
 			}
 			setState(378);
 			_errHandler.sync(this);
@@ -1792,48 +1780,45 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		enterRule(_localctx, 32, RULE_argActionParameterTypePart);
 		try {
 			setState(407);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,37,_ctx) ) {
+			case 1:
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(396); match(ARG_ACTION_WORD);
+				}
+				break;
+
+			case 2:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(397); match(ARG_ACTION_LT);
+				setState(399);
+				switch ( getInterpreter().adaptivePredict(_input,35,_ctx) ) {
 				case 1:
-					enterOuterAlt(_localctx, 1);
 					{
-					setState(396); match(ARG_ACTION_WORD);
+					setState(398); argActionParameterType();
 					}
 					break;
+				}
+				setState(401); match(ARG_ACTION_GT);
+				}
+				break;
 
-				case 2:
-					enterOuterAlt(_localctx, 2);
+			case 3:
+				enterOuterAlt(_localctx, 3);
+				{
+				setState(402); match(ARG_ACTION_LPAREN);
+				setState(404);
+				switch ( getInterpreter().adaptivePredict(_input,36,_ctx) ) {
+				case 1:
 					{
-					setState(397); match(ARG_ACTION_LT);
-					setState(399);
-					//_errHandler.sync(this);
-					switch ( getInterpreter().adaptivePredict(_input,35,_ctx) ) {
-						case 1:
-							{
-							setState(398); argActionParameterType();
-							}
-							break;
-					}
-					setState(401); match(ARG_ACTION_GT);
+					setState(403); argActionParameterType();
 					}
 					break;
-
-				case 3:
-					enterOuterAlt(_localctx, 3);
-					{
-					setState(402); match(ARG_ACTION_LPAREN);
-					setState(404);
-					//_errHandler.sync(this);
-					switch ( getInterpreter().adaptivePredict(_input,36,_ctx) ) {
-						case 1:
-							{
-							setState(403); argActionParameterType();
-							}
-							break;
-					}
-					setState(406); match(ARG_ACTION_RPAREN);
-					}
-					break;
+				}
+				setState(406); match(ARG_ACTION_RPAREN);
+				}
+				break;
 			}
 		}
 		catch (RecognitionException re) {
@@ -1940,14 +1925,13 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 			{
 			setState(411); match(AT);
 			setState(415);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,38,_ctx) ) {
-				case 1:
-					{
-					setState(412); actionScopeName();
-					setState(413); match(COLONCOLON);
-					}
-					break;
+			case 1:
+				{
+				setState(412); actionScopeName();
+				setState(413); match(COLONCOLON);
+				}
+				break;
 			}
 			setState(417); id();
 			setState(418); actionBlock();
@@ -1995,28 +1979,27 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		enterRule(_localctx, 38, RULE_actionScopeName);
 		try {
 			setState(423);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,39,_ctx) ) {
-				case 1:
-					enterOuterAlt(_localctx, 1);
-					{
-					setState(420); id();
-					}
-					break;
+			case 1:
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(420); id();
+				}
+				break;
 
-				case 2:
-					enterOuterAlt(_localctx, 2);
-					{
-					setState(421); match(LEXER);
-					}
-					break;
+			case 2:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(421); match(LEXER);
+				}
+				break;
 
-				case 3:
-					enterOuterAlt(_localctx, 3);
-					{
-					setState(422); match(PARSER);
-					}
-					break;
+			case 3:
+				enterOuterAlt(_localctx, 3);
+				{
+				setState(422); match(PARSER);
+				}
+				break;
 			}
 		}
 		catch (RecognitionException re) {
@@ -2076,16 +2059,16 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,40,_ctx);
 			do {
-				switch ( _alt ) {
-					case 1:
-						{
-						{
-						setState(428); ruleSpec();
-						}
-						}
-						break;
-					default :
-						throw new NoViableAltException(this);
+				switch (_alt) {
+				case 1:
+					{
+					{
+					setState(428); ruleSpec();
+					}
+					}
+					break;
+				default:
+					throw new NoViableAltException(this);
 				}
 				setState(431); 
 				_errHandler.sync(this);
@@ -2198,21 +2181,20 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		enterRule(_localctx, 44, RULE_ruleSpec);
 		try {
 			setState(441);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,42,_ctx) ) {
-				case 1:
-					enterOuterAlt(_localctx, 1);
-					{
-					setState(439); parserRuleSpec();
-					}
-					break;
+			case 1:
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(439); parserRuleSpec();
+				}
+				break;
 
-				case 2:
-					enterOuterAlt(_localctx, 2);
-					{
-					setState(440); lexerRule();
-					}
-					break;
+			case 2:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(440); lexerRule();
+				}
+				break;
 			}
 		}
 		catch (RecognitionException re) {
@@ -2283,59 +2265,53 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(444);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,43,_ctx) ) {
-				case 1:
-					{
-					setState(443); match(DOC_COMMENT);
-					}
-					break;
+			case 1:
+				{
+				setState(443); match(DOC_COMMENT);
+				}
+				break;
 			}
 			setState(447);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,44,_ctx) ) {
-				case 1:
-					{
-					setState(446); ruleModifiers();
-					}
-					break;
+			case 1:
+				{
+				setState(446); ruleModifiers();
+				}
+				break;
 			}
 			setState(449); _localctx.name = match(RULE_REF);
 			setState(451);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,45,_ctx) ) {
-				case 1:
-					{
-					setState(450); argActionParameters();
-					}
-					break;
+			case 1:
+				{
+				setState(450); argActionParameters();
+				}
+				break;
 			}
 			setState(454);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,46,_ctx) ) {
-				case 1:
-					{
-					setState(453); ruleReturns();
-					}
-					break;
+			case 1:
+				{
+				setState(453); ruleReturns();
+				}
+				break;
 			}
 			setState(457);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,47,_ctx) ) {
-				case 1:
-					{
-					setState(456); throwsSpec();
-					}
-					break;
+			case 1:
+				{
+				setState(456); throwsSpec();
+				}
+				break;
 			}
 			setState(460);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,48,_ctx) ) {
-				case 1:
-					{
-					setState(459); localsSpec();
-					}
-					break;
+			case 1:
+				{
+				setState(459); localsSpec();
+				}
+				break;
 			}
 			setState(462); rulePrequels();
 			setState(463); match(COLON);
@@ -2408,13 +2384,12 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 				_alt = getInterpreter().adaptivePredict(_input,49,_ctx);
 			}
 			setState(475);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,50,_ctx) ) {
-				case 1:
-					{
-					setState(474); finallyClause();
-					}
-					break;
+			case 1:
+				{
+				setState(474); finallyClause();
+				}
+				break;
 			}
 			}
 		}
@@ -2619,21 +2594,20 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		enterRule(_localctx, 56, RULE_rulePrequel);
 		try {
 			setState(492);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,52,_ctx) ) {
-				case 1:
-					enterOuterAlt(_localctx, 1);
-					{
-					setState(490); optionsSpec();
-					}
-					break;
+			case 1:
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(490); optionsSpec();
+				}
+				break;
 
-				case 2:
-					enterOuterAlt(_localctx, 2);
-					{
-					setState(491); ruleAction();
-					}
-					break;
+			case 2:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(491); ruleAction();
+				}
+				break;
 			}
 		}
 		catch (RecognitionException re) {
@@ -2897,16 +2871,16 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,54,_ctx);
 			do {
-				switch ( _alt ) {
-					case 1:
-						{
-						{
-						setState(513); ruleModifier();
-						}
-						}
-						break;
-					default :
-						throw new NoViableAltException(this);
+				switch (_alt) {
+				case 1:
+					{
+					{
+					setState(513); ruleModifier();
+					}
+					}
+					break;
+				default:
+					throw new NoViableAltException(this);
 				}
 				setState(516); 
 				_errHandler.sync(this);
@@ -3125,14 +3099,13 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 			{
 			setState(530); alternative();
 			setState(533);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,56,_ctx) ) {
-				case 1:
-					{
-					setState(531); match(POUND);
-					setState(532); id();
-					}
-					break;
+			case 1:
+				{
+				setState(531); match(POUND);
+				setState(532); id();
+				}
+				break;
 			}
 			}
 		}
@@ -3184,22 +3157,20 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(536);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,57,_ctx) ) {
-				case 1:
-					{
-					setState(535); match(DOC_COMMENT);
-					}
-					break;
+			case 1:
+				{
+				setState(535); match(DOC_COMMENT);
+				}
+				break;
 			}
 			setState(539);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,58,_ctx) ) {
-				case 1:
-					{
-					setState(538); match(FRAGMENT);
-					}
-					break;
+			case 1:
+				{
+				setState(538); match(FRAGMENT);
+				}
+				break;
 			}
 			setState(541); _localctx.name = match(TOKEN_REF);
 			setState(542); match(COLON);
@@ -3364,22 +3335,20 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(557);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,60,_ctx) ) {
-				case 1:
-					{
-					setState(556); lexerElements();
-					}
-					break;
+			case 1:
+				{
+				setState(556); lexerElements();
+				}
+				break;
 			}
 			setState(560);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,61,_ctx) ) {
-				case 1:
-					{
-					setState(559); lexerCommands();
-					}
-					break;
+			case 1:
+				{
+				setState(559); lexerCommands();
+				}
+				break;
 			}
 			}
 		}
@@ -3432,16 +3401,16 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,62,_ctx);
 			do {
-				switch ( _alt ) {
-					case 1:
-						{
-						{
-						setState(562); lexerElement();
-						}
-						}
-						break;
-					default :
-						throw new NoViableAltException(this);
+				switch (_alt) {
+				case 1:
+					{
+					{
+					setState(562); lexerElement();
+					}
+					}
+					break;
+				default:
+					throw new NoViableAltException(this);
 				}
 				setState(565); 
 				_errHandler.sync(this);
@@ -3502,71 +3471,66 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		enterRule(_localctx, 86, RULE_lexerElement);
 		try {
 			setState(583);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,67,_ctx) ) {
+			case 1:
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(567); labeledLexerElement();
+				setState(569);
+				switch ( getInterpreter().adaptivePredict(_input,63,_ctx) ) {
 				case 1:
-					enterOuterAlt(_localctx, 1);
 					{
-					setState(567); labeledLexerElement();
-					setState(569);
-					//_errHandler.sync(this);
-					switch ( getInterpreter().adaptivePredict(_input,63,_ctx) ) {
-						case 1:
-							{
-							setState(568); ebnfSuffix();
-							}
-							break;
-					}
+					setState(568); ebnfSuffix();
 					}
 					break;
+				}
+				}
+				break;
 
-				case 2:
-					enterOuterAlt(_localctx, 2);
+			case 2:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(571); lexerAtom();
+				setState(573);
+				switch ( getInterpreter().adaptivePredict(_input,64,_ctx) ) {
+				case 1:
 					{
-					setState(571); lexerAtom();
-					setState(573);
-					//_errHandler.sync(this);
-					switch ( getInterpreter().adaptivePredict(_input,64,_ctx) ) {
-						case 1:
-							{
-							setState(572); ebnfSuffix();
-							}
-							break;
-					}
+					setState(572); ebnfSuffix();
 					}
 					break;
+				}
+				}
+				break;
 
-				case 3:
-					enterOuterAlt(_localctx, 3);
+			case 3:
+				enterOuterAlt(_localctx, 3);
+				{
+				setState(575); lexerBlock();
+				setState(577);
+				switch ( getInterpreter().adaptivePredict(_input,65,_ctx) ) {
+				case 1:
 					{
-					setState(575); lexerBlock();
-					setState(577);
-					//_errHandler.sync(this);
-					switch ( getInterpreter().adaptivePredict(_input,65,_ctx) ) {
-						case 1:
-							{
-							setState(576); ebnfSuffix();
-							}
-							break;
-					}
+					setState(576); ebnfSuffix();
 					}
 					break;
+				}
+				}
+				break;
 
-				case 4:
-					enterOuterAlt(_localctx, 4);
+			case 4:
+				enterOuterAlt(_localctx, 4);
+				{
+				setState(579); actionBlock();
+				setState(581);
+				switch ( getInterpreter().adaptivePredict(_input,66,_ctx) ) {
+				case 1:
 					{
-					setState(579); actionBlock();
-					setState(581);
-					//_errHandler.sync(this);
-					switch ( getInterpreter().adaptivePredict(_input,66,_ctx) ) {
-						case 1:
-							{
-							setState(580); match(QUESTION);
-							}
-							break;
-					}
+					setState(580); match(QUESTION);
 					}
 					break;
+				}
+				}
+				break;
 			}
 		}
 		catch (RecognitionException re) {
@@ -3629,19 +3593,18 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 			}
 			consume();
 			setState(589);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,68,_ctx) ) {
-				case 1:
-					{
-					setState(587); lexerAtom();
-					}
-					break;
+			case 1:
+				{
+				setState(587); lexerAtom();
+				}
+				break;
 
-				case 2:
-					{
-					setState(588); block();
-					}
-					break;
+			case 2:
+				{
+				setState(588); block();
+				}
+				break;
 			}
 			}
 		}
@@ -3694,14 +3657,13 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 			{
 			setState(591); match(LPAREN);
 			setState(595);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,69,_ctx) ) {
-				case 1:
-					{
-					setState(592); optionsSpec();
-					setState(593); match(COLON);
-					}
-					break;
+			case 1:
+				{
+				setState(592); optionsSpec();
+				setState(593); match(COLON);
+				}
+				break;
 			}
 			setState(597); lexerAltList();
 			setState(598); match(RPAREN);
@@ -3822,24 +3784,23 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		enterRule(_localctx, 94, RULE_lexerCommand);
 		try {
 			setState(615);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,71,_ctx) ) {
-				case 1:
-					enterOuterAlt(_localctx, 1);
-					{
-					setState(609); lexerCommandName();
-					setState(610); match(LPAREN);
-					setState(611); lexerCommandExpr();
-					setState(612); match(RPAREN);
-					}
-					break;
+			case 1:
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(609); lexerCommandName();
+				setState(610); match(LPAREN);
+				setState(611); lexerCommandExpr();
+				setState(612); match(RPAREN);
+				}
+				break;
 
-				case 2:
-					enterOuterAlt(_localctx, 2);
-					{
-					setState(614); lexerCommandName();
-					}
-					break;
+			case 2:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(614); lexerCommandName();
+				}
+				break;
 			}
 		}
 		catch (RecognitionException re) {
@@ -3883,21 +3844,20 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		enterRule(_localctx, 96, RULE_lexerCommandName);
 		try {
 			setState(619);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,72,_ctx) ) {
-				case 1:
-					enterOuterAlt(_localctx, 1);
-					{
-					setState(617); id();
-					}
-					break;
+			case 1:
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(617); id();
+				}
+				break;
 
-				case 2:
-					enterOuterAlt(_localctx, 2);
-					{
-					setState(618); match(MODE);
-					}
-					break;
+			case 2:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(618); match(MODE);
+				}
+				break;
 			}
 		}
 		catch (RecognitionException re) {
@@ -3941,21 +3901,20 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		enterRule(_localctx, 98, RULE_lexerCommandExpr);
 		try {
 			setState(623);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,73,_ctx) ) {
-				case 1:
-					enterOuterAlt(_localctx, 1);
-					{
-					setState(621); id();
-					}
-					break;
+			case 1:
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(621); id();
+				}
+				break;
 
-				case 2:
-					enterOuterAlt(_localctx, 2);
-					{
-					setState(622); match(INT);
-					}
-					break;
+			case 2:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(622); match(INT);
+				}
+				break;
 			}
 		}
 		catch (RecognitionException re) {
@@ -4066,20 +4025,19 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		enterRule(_localctx, 102, RULE_alternative);
 		try {
 			setState(635);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,75,_ctx) ) {
-				case 1:
-					enterOuterAlt(_localctx, 1);
-					{
-					setState(633); elements();
-					}
-					break;
+			case 1:
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(633); elements();
+				}
+				break;
 
-				case 2:
-					enterOuterAlt(_localctx, 2);
-					{
-					}
-					break;
+			case 2:
+				enterOuterAlt(_localctx, 2);
+				{
+				}
+				break;
 			}
 		}
 		catch (RecognitionException re) {
@@ -4131,16 +4089,16 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,76,_ctx);
 			do {
-				switch ( _alt ) {
-					case 1:
-						{
-						{
-						setState(637); element();
-						}
-						}
-						break;
-					default :
-						throw new NoViableAltException(this);
+				switch (_alt) {
+				case 1:
+					{
+					{
+					setState(637); element();
+					}
+					}
+					break;
+				default:
+					throw new NoViableAltException(this);
 				}
 				setState(640); 
 				_errHandler.sync(this);
@@ -4201,72 +4159,68 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		enterRule(_localctx, 106, RULE_element);
 		try {
 			setState(657);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,80,_ctx) ) {
+			case 1:
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(642); labeledElement();
+				setState(645);
+				switch ( getInterpreter().adaptivePredict(_input,77,_ctx) ) {
 				case 1:
-					enterOuterAlt(_localctx, 1);
 					{
-					setState(642); labeledElement();
-					setState(645);
-					//_errHandler.sync(this);
-					switch ( getInterpreter().adaptivePredict(_input,77,_ctx) ) {
-						case 1:
-							{
-							setState(643); ebnfSuffix();
-							}
-							break;
-
-						case 2:
-							{
-							}
-							break;
-					}
+					setState(643); ebnfSuffix();
 					}
 					break;
 
 				case 2:
-					enterOuterAlt(_localctx, 2);
 					{
-					setState(647); atom();
-					setState(650);
-					//_errHandler.sync(this);
-					switch ( getInterpreter().adaptivePredict(_input,78,_ctx) ) {
-						case 1:
-							{
-							setState(648); ebnfSuffix();
-							}
-							break;
-
-						case 2:
-							{
-							}
-							break;
 					}
+					break;
+				}
+				}
+				break;
+
+			case 2:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(647); atom();
+				setState(650);
+				switch ( getInterpreter().adaptivePredict(_input,78,_ctx) ) {
+				case 1:
+					{
+					setState(648); ebnfSuffix();
 					}
 					break;
 
-				case 3:
-					enterOuterAlt(_localctx, 3);
+				case 2:
 					{
-					setState(652); ebnf();
 					}
 					break;
+				}
+				}
+				break;
 
-				case 4:
-					enterOuterAlt(_localctx, 4);
+			case 3:
+				enterOuterAlt(_localctx, 3);
+				{
+				setState(652); ebnf();
+				}
+				break;
+
+			case 4:
+				enterOuterAlt(_localctx, 4);
+				{
+				setState(653); actionBlock();
+				setState(655);
+				switch ( getInterpreter().adaptivePredict(_input,79,_ctx) ) {
+				case 1:
 					{
-					setState(653); actionBlock();
-					setState(655);
-					//_errHandler.sync(this);
-					switch ( getInterpreter().adaptivePredict(_input,79,_ctx) ) {
-						case 1:
-							{
-							setState(654); match(QUESTION);
-							}
-							break;
-					}
+					setState(654); match(QUESTION);
 					}
 					break;
+				}
+				}
+				break;
 			}
 		}
 		catch (RecognitionException re) {
@@ -4330,19 +4284,18 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 			}
 			consume();
 			setState(663);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,81,_ctx) ) {
-				case 1:
-					{
-					setState(661); atom();
-					}
-					break;
+			case 1:
+				{
+				setState(661); atom();
+				}
+				break;
 
-				case 2:
-					{
-					setState(662); block();
-					}
-					break;
+			case 2:
+				{
+				setState(662); block();
+				}
+				break;
 			}
 			}
 		}
@@ -4392,18 +4345,17 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 			{
 			setState(665); block();
 			setState(668);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,82,_ctx) ) {
-				case 1:
-					{
-					setState(666); blockSuffix();
-					}
-					break;
+			case 1:
+				{
+				setState(666); blockSuffix();
+				}
+				break;
 
-				case 2:
-					{
-					}
-					break;
+			case 2:
+				{
+				}
+				break;
 			}
 			}
 		}
@@ -4494,55 +4446,51 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		enterRule(_localctx, 114, RULE_ebnfSuffix);
 		try {
 			setState(684);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,86,_ctx) ) {
+			case 1:
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(672); match(QUESTION);
+				setState(674);
+				switch ( getInterpreter().adaptivePredict(_input,83,_ctx) ) {
 				case 1:
-					enterOuterAlt(_localctx, 1);
 					{
-					setState(672); match(QUESTION);
-					setState(674);
-					//_errHandler.sync(this);
-					switch ( getInterpreter().adaptivePredict(_input,83,_ctx) ) {
-						case 1:
-							{
-							setState(673); match(QUESTION);
-							}
-							break;
-					}
+					setState(673); match(QUESTION);
 					}
 					break;
+				}
+				}
+				break;
 
-				case 2:
-					enterOuterAlt(_localctx, 2);
+			case 2:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(676); match(STAR);
+				setState(678);
+				switch ( getInterpreter().adaptivePredict(_input,84,_ctx) ) {
+				case 1:
 					{
-					setState(676); match(STAR);
-					setState(678);
-					//_errHandler.sync(this);
-					switch ( getInterpreter().adaptivePredict(_input,84,_ctx) ) {
-						case 1:
-							{
-							setState(677); match(QUESTION);
-							}
-							break;
-					}
+					setState(677); match(QUESTION);
 					}
 					break;
+				}
+				}
+				break;
 
-				case 3:
-					enterOuterAlt(_localctx, 3);
+			case 3:
+				enterOuterAlt(_localctx, 3);
+				{
+				setState(680); match(PLUS);
+				setState(682);
+				switch ( getInterpreter().adaptivePredict(_input,85,_ctx) ) {
+				case 1:
 					{
-					setState(680); match(PLUS);
-					setState(682);
-					//_errHandler.sync(this);
-					switch ( getInterpreter().adaptivePredict(_input,85,_ctx) ) {
-						case 1:
-							{
-							setState(681); match(QUESTION);
-							}
-							break;
-					}
+					setState(681); match(QUESTION);
 					}
 					break;
+				}
+				}
+				break;
 			}
 		}
 		catch (RecognitionException re) {
@@ -4597,58 +4545,56 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		enterRule(_localctx, 116, RULE_lexerAtom);
 		try {
 			setState(695);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,88,_ctx) ) {
+			case 1:
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(686); range();
+				}
+				break;
+
+			case 2:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(687); terminal();
+				}
+				break;
+
+			case 3:
+				enterOuterAlt(_localctx, 3);
+				{
+				setState(688); match(RULE_REF);
+				}
+				break;
+
+			case 4:
+				enterOuterAlt(_localctx, 4);
+				{
+				setState(689); notSet();
+				}
+				break;
+
+			case 5:
+				enterOuterAlt(_localctx, 5);
+				{
+				setState(690); match(LEXER_CHAR_SET);
+				}
+				break;
+
+			case 6:
+				enterOuterAlt(_localctx, 6);
+				{
+				setState(691); match(DOT);
+				setState(693);
+				switch ( getInterpreter().adaptivePredict(_input,87,_ctx) ) {
 				case 1:
-					enterOuterAlt(_localctx, 1);
 					{
-					setState(686); range();
+					setState(692); elementOptions();
 					}
 					break;
-
-				case 2:
-					enterOuterAlt(_localctx, 2);
-					{
-					setState(687); terminal();
-					}
-					break;
-
-				case 3:
-					enterOuterAlt(_localctx, 3);
-					{
-					setState(688); match(RULE_REF);
-					}
-					break;
-
-				case 4:
-					enterOuterAlt(_localctx, 4);
-					{
-					setState(689); notSet();
-					}
-					break;
-
-				case 5:
-					enterOuterAlt(_localctx, 5);
-					{
-					setState(690); match(LEXER_CHAR_SET);
-					}
-					break;
-
-				case 6:
-					enterOuterAlt(_localctx, 6);
-					{
-					setState(691); match(DOT);
-					setState(693);
-					//_errHandler.sync(this);
-					switch ( getInterpreter().adaptivePredict(_input,87,_ctx) ) {
-						case 1:
-							{
-							setState(692); elementOptions();
-							}
-							break;
-					}
-					}
-					break;
+				}
+				}
+				break;
 			}
 		}
 		catch (RecognitionException re) {
@@ -4704,51 +4650,49 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		enterRule(_localctx, 118, RULE_atom);
 		try {
 			setState(705);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,90,_ctx) ) {
+			case 1:
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(697); range();
+				}
+				break;
+
+			case 2:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(698); terminal();
+				}
+				break;
+
+			case 3:
+				enterOuterAlt(_localctx, 3);
+				{
+				setState(699); ruleref();
+				}
+				break;
+
+			case 4:
+				enterOuterAlt(_localctx, 4);
+				{
+				setState(700); notSet();
+				}
+				break;
+
+			case 5:
+				enterOuterAlt(_localctx, 5);
+				{
+				setState(701); match(DOT);
+				setState(703);
+				switch ( getInterpreter().adaptivePredict(_input,89,_ctx) ) {
 				case 1:
-					enterOuterAlt(_localctx, 1);
 					{
-					setState(697); range();
+					setState(702); elementOptions();
 					}
 					break;
-
-				case 2:
-					enterOuterAlt(_localctx, 2);
-					{
-					setState(698); terminal();
-					}
-					break;
-
-				case 3:
-					enterOuterAlt(_localctx, 3);
-					{
-					setState(699); ruleref();
-					}
-					break;
-
-				case 4:
-					enterOuterAlt(_localctx, 4);
-					{
-					setState(700); notSet();
-					}
-					break;
-
-				case 5:
-					enterOuterAlt(_localctx, 5);
-					{
-					setState(701); match(DOT);
-					setState(703);
-					//_errHandler.sync(this);
-					switch ( getInterpreter().adaptivePredict(_input,89,_ctx) ) {
-						case 1:
-							{
-							setState(702); elementOptions();
-							}
-							break;
-					}
-					}
-					break;
+				}
+				}
+				break;
 			}
 		}
 		catch (RecognitionException re) {
@@ -4795,23 +4739,22 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		enterRule(_localctx, 120, RULE_notSet);
 		try {
 			setState(711);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,91,_ctx) ) {
-				case 1:
-					enterOuterAlt(_localctx, 1);
-					{
-					setState(707); match(NOT);
-					setState(708); setElement();
-					}
-					break;
+			case 1:
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(707); match(NOT);
+				setState(708); setElement();
+				}
+				break;
 
-				case 2:
-					enterOuterAlt(_localctx, 2);
-					{
-					setState(709); match(NOT);
-					setState(710); blockSet();
-					}
-					break;
+			case 2:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(709); match(NOT);
+				setState(710); blockSet();
+				}
+				break;
 			}
 		}
 		catch (RecognitionException re) {
@@ -4929,35 +4872,34 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		enterRule(_localctx, 124, RULE_setElement);
 		try {
 			setState(728);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,93,_ctx) ) {
-				case 1:
-					enterOuterAlt(_localctx, 1);
-					{
-					setState(724); match(TOKEN_REF);
-					}
-					break;
+			case 1:
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(724); match(TOKEN_REF);
+				}
+				break;
 
-				case 2:
-					enterOuterAlt(_localctx, 2);
-					{
-					setState(725); match(STRING_LITERAL);
-					}
-					break;
+			case 2:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(725); match(STRING_LITERAL);
+				}
+				break;
 
-				case 3:
-					enterOuterAlt(_localctx, 3);
-					{
-					setState(726); range();
-					}
-					break;
+			case 3:
+				enterOuterAlt(_localctx, 3);
+				{
+				setState(726); range();
+				}
+				break;
 
-				case 4:
-					enterOuterAlt(_localctx, 4);
-					{
-					setState(727); match(LEXER_CHAR_SET);
-					}
-					break;
+			case 4:
+				enterOuterAlt(_localctx, 4);
+				{
+				setState(727); match(LEXER_CHAR_SET);
+				}
+				break;
 			}
 		}
 		catch (RecognitionException re) {
@@ -5016,37 +4958,35 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 			{
 			setState(730); match(LPAREN);
 			setState(741);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,96,_ctx) ) {
+			case 1:
+				{
+				setState(732);
+				switch ( getInterpreter().adaptivePredict(_input,94,_ctx) ) {
 				case 1:
 					{
-					setState(732);
-					//_errHandler.sync(this);
-					switch ( getInterpreter().adaptivePredict(_input,94,_ctx) ) {
-						case 1:
-							{
-							setState(731); optionsSpec();
-							}
-							break;
-					}
-					setState(737);
-					_errHandler.sync(this);
-					_alt = getInterpreter().adaptivePredict(_input,95,_ctx);
-					while ( _alt!=2 && _alt!=-1 ) {
-						if ( _alt==1 ) {
-							{
-							{
-							setState(734); ruleAction();
-							}
-							} 
-						}
-						setState(739);
-						_errHandler.sync(this);
-						_alt = getInterpreter().adaptivePredict(_input,95,_ctx);
-					}
-					setState(740); match(COLON);
+					setState(731); optionsSpec();
 					}
 					break;
+				}
+				setState(737);
+				_errHandler.sync(this);
+				_alt = getInterpreter().adaptivePredict(_input,95,_ctx);
+				while ( _alt!=2 && _alt!=-1 ) {
+					if ( _alt==1 ) {
+						{
+						{
+						setState(734); ruleAction();
+						}
+						} 
+					}
+					setState(739);
+					_errHandler.sync(this);
+					_alt = getInterpreter().adaptivePredict(_input,95,_ctx);
+				}
+				setState(740); match(COLON);
+				}
+				break;
 			}
 			setState(743); altList();
 			setState(744); match(RPAREN);
@@ -5096,13 +5036,12 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 			{
 			setState(746); match(RULE_REF);
 			setState(748);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,97,_ctx) ) {
-				case 1:
-					{
-					setState(747); argActionBlock();
-					}
-					break;
+			case 1:
+				{
+				setState(747); argActionBlock();
+				}
+				break;
 			}
 			}
 		}
@@ -5196,39 +5135,36 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		enterRule(_localctx, 132, RULE_terminal);
 		try {
 			setState(762);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,100,_ctx) ) {
+			case 1:
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(754); match(TOKEN_REF);
+				setState(756);
+				switch ( getInterpreter().adaptivePredict(_input,98,_ctx) ) {
 				case 1:
-					enterOuterAlt(_localctx, 1);
 					{
-					setState(754); match(TOKEN_REF);
-					setState(756);
-					//_errHandler.sync(this);
-					switch ( getInterpreter().adaptivePredict(_input,98,_ctx) ) {
-						case 1:
-							{
-							setState(755); elementOptions();
-							}
-							break;
-					}
+					setState(755); elementOptions();
 					}
 					break;
+				}
+				}
+				break;
 
-				case 2:
-					enterOuterAlt(_localctx, 2);
+			case 2:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(758); match(STRING_LITERAL);
+				setState(760);
+				switch ( getInterpreter().adaptivePredict(_input,99,_ctx) ) {
+				case 1:
 					{
-					setState(758); match(STRING_LITERAL);
-					setState(760);
-					//_errHandler.sync(this);
-					switch ( getInterpreter().adaptivePredict(_input,99,_ctx) ) {
-						case 1:
-							{
-							setState(759); elementOptions();
-							}
-							break;
-					}
+					setState(759); elementOptions();
 					}
 					break;
+				}
+				}
+				break;
 			}
 		}
 		catch (RecognitionException re) {
@@ -5348,37 +5284,35 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		enterRule(_localctx, 136, RULE_elementOption);
 		try {
 			setState(782);
-			//_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,103,_ctx) ) {
+			case 1:
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(775); qid();
+				}
+				break;
+
+			case 2:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(776); id();
+				setState(777); match(ASSIGN);
+				setState(780);
+				switch ( getInterpreter().adaptivePredict(_input,102,_ctx) ) {
 				case 1:
-					enterOuterAlt(_localctx, 1);
 					{
-					setState(775); qid();
+					setState(778); qid();
 					}
 					break;
 
 				case 2:
-					enterOuterAlt(_localctx, 2);
 					{
-					setState(776); id();
-					setState(777); match(ASSIGN);
-					setState(780);
-					//_errHandler.sync(this);
-					switch ( getInterpreter().adaptivePredict(_input,102,_ctx) ) {
-						case 1:
-							{
-							setState(778); qid();
-							}
-							break;
-
-						case 2:
-							{
-							setState(779); match(STRING_LITERAL);
-							}
-							break;
-					}
+					setState(779); match(STRING_LITERAL);
 					}
 					break;
+				}
+				}
+				break;
 			}
 		}
 		catch (RecognitionException re) {
@@ -5823,8 +5757,5 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 	public static final ATN _ATN =
 		ATNSimulator.deserialize(_serializedATN.toCharArray());
 	static {
-		//org.antlr.v4.tool.DOTGenerator dot = new org.antlr.v4.tool.DOTGenerator(null);
-		//System.out.println(dot.getDOT(_ATN.decisionToState.get(0), ruleNames, false));
-		//System.out.println(dot.getDOT(_ATN.ruleToStartState[2], ruleNames, false));
 	}
 }

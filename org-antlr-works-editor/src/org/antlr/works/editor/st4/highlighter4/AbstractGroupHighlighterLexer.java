@@ -117,840 +117,840 @@ public abstract class AbstractGroupHighlighterLexer extends Lexer {
 
 	@Override
 	public void action(RuleContext<Integer> _localctx, int ruleIndex, int actionIndex) {
-		switch ( ruleIndex ) {
-			case 0 : LPAREN_action(_localctx, actionIndex); break;
+		switch (ruleIndex) {
+		case 0 : LPAREN_action(_localctx, actionIndex); break;
 
-			case 1 : RPAREN_action(_localctx, actionIndex); break;
+		case 1 : RPAREN_action(_localctx, actionIndex); break;
 
-			case 2 : COMMA_action(_localctx, actionIndex); break;
+		case 2 : COMMA_action(_localctx, actionIndex); break;
 
-			case 3 : DOT_action(_localctx, actionIndex); break;
+		case 3 : DOT_action(_localctx, actionIndex); break;
 
-			case 4 : COLON_action(_localctx, actionIndex); break;
+		case 4 : COLON_action(_localctx, actionIndex); break;
 
-			case 5 : DEFINED_action(_localctx, actionIndex); break;
+		case 5 : DEFINED_action(_localctx, actionIndex); break;
 
-			case 6 : EQUALS_action(_localctx, actionIndex); break;
+		case 6 : EQUALS_action(_localctx, actionIndex); break;
 
-			case 7 : AT_action(_localctx, actionIndex); break;
+		case 7 : AT_action(_localctx, actionIndex); break;
 
-			case 8 : LBRACK_action(_localctx, actionIndex); break;
+		case 8 : LBRACK_action(_localctx, actionIndex); break;
 
-			case 9 : RBRACK_action(_localctx, actionIndex); break;
+		case 9 : RBRACK_action(_localctx, actionIndex); break;
 
-			case 10 : LBRACE_action(_localctx, actionIndex); break;
+		case 10 : LBRACE_action(_localctx, actionIndex); break;
 
-			case 11 : RBRACE_action(_localctx, actionIndex); break;
+		case 11 : RBRACE_action(_localctx, actionIndex); break;
 
-			case 12 : GROUP_action(_localctx, actionIndex); break;
+		case 12 : GROUP_action(_localctx, actionIndex); break;
 
-			case 13 : DEFAULT_action(_localctx, actionIndex); break;
+		case 13 : DEFAULT_action(_localctx, actionIndex); break;
 
-			case 14 : IMPORT_action(_localctx, actionIndex); break;
+		case 14 : IMPORT_action(_localctx, actionIndex); break;
 
-			case 15 : TRUE_action(_localctx, actionIndex); break;
+		case 15 : TRUE_action(_localctx, actionIndex); break;
 
-			case 16 : FALSE_action(_localctx, actionIndex); break;
+		case 16 : FALSE_action(_localctx, actionIndex); break;
 
-			case 17 : DELIMITERS_action(_localctx, actionIndex); break;
+		case 17 : DELIMITERS_action(_localctx, actionIndex); break;
 
-			case 18 : WS_action(_localctx, actionIndex); break;
+		case 18 : WS_action(_localctx, actionIndex); break;
 
-			case 19 : NEWLINE_action(_localctx, actionIndex); break;
+		case 19 : NEWLINE_action(_localctx, actionIndex); break;
 
-			case 20 : ID_action(_localctx, actionIndex); break;
+		case 20 : ID_action(_localctx, actionIndex); break;
 
-			case 21 : STRING_action(_localctx, actionIndex); break;
+		case 21 : STRING_action(_localctx, actionIndex); break;
 
-			case 22 : BIGSTRING_action(_localctx, actionIndex); break;
+		case 22 : BIGSTRING_action(_localctx, actionIndex); break;
 
-			case 23 : BIGSTRINGLINE_action(_localctx, actionIndex); break;
+		case 23 : BIGSTRINGLINE_action(_localctx, actionIndex); break;
 
-			case 24 : LINE_COMMENT_action(_localctx, actionIndex); break;
+		case 24 : LINE_COMMENT_action(_localctx, actionIndex); break;
 
-			case 25 : COMMENT_action(_localctx, actionIndex); break;
+		case 25 : COMMENT_action(_localctx, actionIndex); break;
 
-			case 26 : ANONYMOUS_PARAMETERS_action(_localctx, actionIndex); break;
+		case 26 : ANONYMOUS_PARAMETERS_action(_localctx, actionIndex); break;
 
-			case 27 : DELIMITERS_SPEC_action(_localctx, actionIndex); break;
+		case 27 : DELIMITERS_SPEC_action(_localctx, actionIndex); break;
 
-			case 28 : DELIMITER_STRING_action(_localctx, actionIndex); break;
+		case 28 : DELIMITER_STRING_action(_localctx, actionIndex); break;
 
-			case 29 : WS_CHAR_action(_localctx, actionIndex); break;
+		case 29 : WS_CHAR_action(_localctx, actionIndex); break;
 
-			case 30 : OPEN_DELIMITER_action(_localctx, actionIndex); break;
+		case 30 : OPEN_DELIMITER_action(_localctx, actionIndex); break;
 
-			case 31 : CLOSE_DELIMITER_action(_localctx, actionIndex); break;
+		case 31 : CLOSE_DELIMITER_action(_localctx, actionIndex); break;
 
-			case 32 : ANYCHAR_action(_localctx, actionIndex); break;
+		case 32 : ANYCHAR_action(_localctx, actionIndex); break;
 
-			case 33 : BlockComment_NEWLINE_action(_localctx, actionIndex); break;
+		case 33 : BlockComment_NEWLINE_action(_localctx, actionIndex); break;
 
-			case 34 : CONTINUE_COMMENT_action(_localctx, actionIndex); break;
+		case 34 : CONTINUE_COMMENT_action(_localctx, actionIndex); break;
 
-			case 35 : END_COMMENT_action(_localctx, actionIndex); break;
+		case 35 : END_COMMENT_action(_localctx, actionIndex); break;
 
-			case 36 : BLOCK_COMMENT_STAR_action(_localctx, actionIndex); break;
+		case 36 : BLOCK_COMMENT_STAR_action(_localctx, actionIndex); break;
 
-			case 37 : BlockComment_ANYCHAR_action(_localctx, actionIndex); break;
+		case 37 : BlockComment_ANYCHAR_action(_localctx, actionIndex); break;
 
-			case 38 : TemplateComment_NEWLINE_action(_localctx, actionIndex); break;
+		case 38 : TemplateComment_NEWLINE_action(_localctx, actionIndex); break;
 
-			case 39 : TemplateComment_CONTINUE_COMMENT_action(_localctx, actionIndex); break;
+		case 39 : TemplateComment_CONTINUE_COMMENT_action(_localctx, actionIndex); break;
 
-			case 40 : TemplateComment_END_COMMENT_action(_localctx, actionIndex); break;
+		case 40 : TemplateComment_END_COMMENT_action(_localctx, actionIndex); break;
 
-			case 41 : TemplateComment_BLOCK_COMMENT_BANG_action(_localctx, actionIndex); break;
+		case 41 : TemplateComment_BLOCK_COMMENT_BANG_action(_localctx, actionIndex); break;
 
-			case 42 : TemplateComment_ANYCHAR_action(_localctx, actionIndex); break;
+		case 42 : TemplateComment_ANYCHAR_action(_localctx, actionIndex); break;
 
-			case 43 : AnonymousTemplate_ID_action(_localctx, actionIndex); break;
+		case 43 : AnonymousTemplate_ID_action(_localctx, actionIndex); break;
 
-			case 44 : AnonymousTemplate_WS_action(_localctx, actionIndex); break;
+		case 44 : AnonymousTemplate_WS_action(_localctx, actionIndex); break;
 
-			case 45 : AnonymousTemplate_RBRACE_action(_localctx, actionIndex); break;
+		case 45 : AnonymousTemplate_RBRACE_action(_localctx, actionIndex); break;
 
-			case 46 : AnonymousTemplate_COMMA_action(_localctx, actionIndex); break;
+		case 46 : AnonymousTemplate_COMMA_action(_localctx, actionIndex); break;
 
-			case 47 : AnonymousTemplate_NEWLINE_action(_localctx, actionIndex); break;
+		case 47 : AnonymousTemplate_NEWLINE_action(_localctx, actionIndex); break;
 
-			case 48 : AnonymousTemplate_COMMENT_action(_localctx, actionIndex); break;
+		case 48 : AnonymousTemplate_COMMENT_action(_localctx, actionIndex); break;
 
-			case 49 : AnonymousTemplate_OPEN_DELIMITER_action(_localctx, actionIndex); break;
+		case 49 : AnonymousTemplate_OPEN_DELIMITER_action(_localctx, actionIndex); break;
 
-			case 50 : TEXT_action(_localctx, actionIndex); break;
+		case 50 : TEXT_action(_localctx, actionIndex); break;
 
-			case 51 : ESCAPE_RBRACE_action(_localctx, actionIndex); break;
+		case 51 : ESCAPE_RBRACE_action(_localctx, actionIndex); break;
 
-			case 52 : AnonymousTemplate_ANYCHAR_action(_localctx, actionIndex); break;
+		case 52 : AnonymousTemplate_ANYCHAR_action(_localctx, actionIndex); break;
 
-			case 53 : AnonymousTemplateParameters_WS_action(_localctx, actionIndex); break;
+		case 53 : AnonymousTemplateParameters_WS_action(_localctx, actionIndex); break;
 
-			case 54 : AnonymousTemplateParameters_NEWLINE_action(_localctx, actionIndex); break;
+		case 54 : AnonymousTemplateParameters_NEWLINE_action(_localctx, actionIndex); break;
 
-			case 55 : AnonymousTemplateParameters_COMMA_action(_localctx, actionIndex); break;
+		case 55 : AnonymousTemplateParameters_COMMA_action(_localctx, actionIndex); break;
 
-			case 56 : TEMPLATE_PARAMETER_action(_localctx, actionIndex); break;
+		case 56 : TEMPLATE_PARAMETER_action(_localctx, actionIndex); break;
 
-			case 57 : PIPE_action(_localctx, actionIndex); break;
+		case 57 : PIPE_action(_localctx, actionIndex); break;
 
-			case 58 : AnonymousTemplateParameters_ANYCHAR_action(_localctx, actionIndex); break;
+		case 58 : AnonymousTemplateParameters_ANYCHAR_action(_localctx, actionIndex); break;
 
-			case 59 : BigStringTemplate_NEWLINE_action(_localctx, actionIndex); break;
+		case 59 : BigStringTemplate_NEWLINE_action(_localctx, actionIndex); break;
 
-			case 60 : BigStringTemplate_COMMENT_action(_localctx, actionIndex); break;
+		case 60 : BigStringTemplate_COMMENT_action(_localctx, actionIndex); break;
 
-			case 61 : BigStringTemplate_OPEN_DELIMITER_action(_localctx, actionIndex); break;
+		case 61 : BigStringTemplate_OPEN_DELIMITER_action(_localctx, actionIndex); break;
 
-			case 62 : BigStringTemplate_TEXT_action(_localctx, actionIndex); break;
+		case 62 : BigStringTemplate_TEXT_action(_localctx, actionIndex); break;
 
-			case 63 : BigStringTemplate_ESCAPE_action(_localctx, actionIndex); break;
+		case 63 : BigStringTemplate_ESCAPE_action(_localctx, actionIndex); break;
 
-			case 64 : BigStringTemplate_END_action(_localctx, actionIndex); break;
+		case 64 : BigStringTemplate_END_action(_localctx, actionIndex); break;
 
-			case 65 : BigStringTemplate_LANGLE_action(_localctx, actionIndex); break;
+		case 65 : BigStringTemplate_LANGLE_action(_localctx, actionIndex); break;
 
-			case 66 : BigStringTemplate_ANYCHAR_action(_localctx, actionIndex); break;
+		case 66 : BigStringTemplate_ANYCHAR_action(_localctx, actionIndex); break;
 
-			case 67 : BigStringLineTemplate_NEWLINE_action(_localctx, actionIndex); break;
+		case 67 : BigStringLineTemplate_NEWLINE_action(_localctx, actionIndex); break;
 
-			case 68 : BigStringLineTemplate_COMMENT_action(_localctx, actionIndex); break;
+		case 68 : BigStringLineTemplate_COMMENT_action(_localctx, actionIndex); break;
 
-			case 69 : BigStringLineTemplate_OPEN_DELIMITER_action(_localctx, actionIndex); break;
+		case 69 : BigStringLineTemplate_OPEN_DELIMITER_action(_localctx, actionIndex); break;
 
-			case 70 : BigStringLineTemplate_TEXT_action(_localctx, actionIndex); break;
+		case 70 : BigStringLineTemplate_TEXT_action(_localctx, actionIndex); break;
 
-			case 71 : BigStringLineTemplate_ESCAPE_action(_localctx, actionIndex); break;
+		case 71 : BigStringLineTemplate_ESCAPE_action(_localctx, actionIndex); break;
 
-			case 72 : BigStringLineTemplate_END_action(_localctx, actionIndex); break;
+		case 72 : BigStringLineTemplate_END_action(_localctx, actionIndex); break;
 
-			case 73 : BigStringLineTemplate_PERCENT_action(_localctx, actionIndex); break;
+		case 73 : BigStringLineTemplate_PERCENT_action(_localctx, actionIndex); break;
 
-			case 74 : BigStringLineTemplate_ANYCHAR_action(_localctx, actionIndex); break;
+		case 74 : BigStringLineTemplate_ANYCHAR_action(_localctx, actionIndex); break;
 
-			case 75 : TemplateExpression_NEWLINE_action(_localctx, actionIndex); break;
+		case 75 : TemplateExpression_NEWLINE_action(_localctx, actionIndex); break;
 
-			case 76 : TemplateExpression_AT_action(_localctx, actionIndex); break;
+		case 76 : TemplateExpression_AT_action(_localctx, actionIndex); break;
 
-			case 77 : TemplateExpression_DOT_action(_localctx, actionIndex); break;
+		case 77 : TemplateExpression_DOT_action(_localctx, actionIndex); break;
 
-			case 78 : TemplateExpression_COMMA_action(_localctx, actionIndex); break;
+		case 78 : TemplateExpression_COMMA_action(_localctx, actionIndex); break;
 
-			case 79 : TemplateExpression_COLON_action(_localctx, actionIndex); break;
+		case 79 : TemplateExpression_COLON_action(_localctx, actionIndex); break;
 
-			case 80 : TemplateExpression_LPAREN_action(_localctx, actionIndex); break;
+		case 80 : TemplateExpression_LPAREN_action(_localctx, actionIndex); break;
 
-			case 81 : TemplateExpression_RPAREN_action(_localctx, actionIndex); break;
+		case 81 : TemplateExpression_RPAREN_action(_localctx, actionIndex); break;
 
-			case 82 : TemplateExpression_LBRACK_action(_localctx, actionIndex); break;
+		case 82 : TemplateExpression_LBRACK_action(_localctx, actionIndex); break;
 
-			case 83 : TemplateExpression_RBRACK_action(_localctx, actionIndex); break;
+		case 83 : TemplateExpression_RBRACK_action(_localctx, actionIndex); break;
 
-			case 84 : TemplateExpression_EQUALS_action(_localctx, actionIndex); break;
+		case 84 : TemplateExpression_EQUALS_action(_localctx, actionIndex); break;
 
-			case 85 : TemplateExpression_LBRACE_action(_localctx, actionIndex); break;
+		case 85 : TemplateExpression_LBRACE_action(_localctx, actionIndex); break;
 
-			case 86 : TemplateExpression_WS_action(_localctx, actionIndex); break;
+		case 86 : TemplateExpression_WS_action(_localctx, actionIndex); break;
 
-			case 87 : SUPER_action(_localctx, actionIndex); break;
+		case 87 : SUPER_action(_localctx, actionIndex); break;
 
-			case 88 : IF_action(_localctx, actionIndex); break;
+		case 88 : IF_action(_localctx, actionIndex); break;
 
-			case 89 : ELSEIF_action(_localctx, actionIndex); break;
+		case 89 : ELSEIF_action(_localctx, actionIndex); break;
 
-			case 90 : ENDIF_action(_localctx, actionIndex); break;
+		case 90 : ENDIF_action(_localctx, actionIndex); break;
 
-			case 91 : ELSE_action(_localctx, actionIndex); break;
+		case 91 : ELSE_action(_localctx, actionIndex); break;
 
-			case 92 : END_action(_localctx, actionIndex); break;
+		case 92 : END_action(_localctx, actionIndex); break;
 
-			case 93 : FIRST_action(_localctx, actionIndex); break;
+		case 93 : FIRST_action(_localctx, actionIndex); break;
 
-			case 94 : LAST_action(_localctx, actionIndex); break;
+		case 94 : LAST_action(_localctx, actionIndex); break;
 
-			case 95 : REST_action(_localctx, actionIndex); break;
+		case 95 : REST_action(_localctx, actionIndex); break;
 
-			case 96 : TRUNC_action(_localctx, actionIndex); break;
+		case 96 : TRUNC_action(_localctx, actionIndex); break;
 
-			case 97 : STRIP_action(_localctx, actionIndex); break;
+		case 97 : STRIP_action(_localctx, actionIndex); break;
 
-			case 98 : TRIM_action(_localctx, actionIndex); break;
+		case 98 : TRIM_action(_localctx, actionIndex); break;
 
-			case 99 : LENGTH_action(_localctx, actionIndex); break;
+		case 99 : LENGTH_action(_localctx, actionIndex); break;
 
-			case 100 : STRLEN_action(_localctx, actionIndex); break;
+		case 100 : STRLEN_action(_localctx, actionIndex); break;
 
-			case 101 : REVERSE_action(_localctx, actionIndex); break;
+		case 101 : REVERSE_action(_localctx, actionIndex); break;
 
-			case 102 : ELLIPSIS_action(_localctx, actionIndex); break;
+		case 102 : ELLIPSIS_action(_localctx, actionIndex); break;
 
-			case 103 : NOT_action(_localctx, actionIndex); break;
+		case 103 : NOT_action(_localctx, actionIndex); break;
 
-			case 104 : OR_action(_localctx, actionIndex); break;
+		case 104 : OR_action(_localctx, actionIndex); break;
 
-			case 105 : AND_action(_localctx, actionIndex); break;
+		case 105 : AND_action(_localctx, actionIndex); break;
 
-			case 106 : SEMI_action(_localctx, actionIndex); break;
+		case 106 : SEMI_action(_localctx, actionIndex); break;
 
-			case 107 : ESCAPE_action(_localctx, actionIndex); break;
+		case 107 : ESCAPE_action(_localctx, actionIndex); break;
 
-			case 108 : REGION_ID_action(_localctx, actionIndex); break;
+		case 108 : REGION_ID_action(_localctx, actionIndex); break;
 
-			case 109 : TemplateExpression_ID_action(_localctx, actionIndex); break;
+		case 109 : TemplateExpression_ID_action(_localctx, actionIndex); break;
 
-			case 110 : TemplateExpression_CLOSE_DELIMITER_action(_localctx, actionIndex); break;
+		case 110 : TemplateExpression_CLOSE_DELIMITER_action(_localctx, actionIndex); break;
 
-			case 111 : TemplateExpression_STRING_action(_localctx, actionIndex); break;
+		case 111 : TemplateExpression_STRING_action(_localctx, actionIndex); break;
 
-			case 112 : TemplateExpression_ANYCHAR_action(_localctx, actionIndex); break;
+		case 112 : TemplateExpression_ANYCHAR_action(_localctx, actionIndex); break;
 
-			case 113 : StringTemplate_NEWLINE_action(_localctx, actionIndex); break;
+		case 113 : StringTemplate_NEWLINE_action(_localctx, actionIndex); break;
 
-			case 114 : StringTemplate_COMMENT_action(_localctx, actionIndex); break;
+		case 114 : StringTemplate_COMMENT_action(_localctx, actionIndex); break;
 
-			case 115 : StringTemplate_OPEN_DELIMITER_action(_localctx, actionIndex); break;
+		case 115 : StringTemplate_OPEN_DELIMITER_action(_localctx, actionIndex); break;
 
-			case 116 : StringTemplate_TEXT_action(_localctx, actionIndex); break;
+		case 116 : StringTemplate_TEXT_action(_localctx, actionIndex); break;
 
-			case 117 : StringTemplate_ESCAPE_action(_localctx, actionIndex); break;
+		case 117 : StringTemplate_ESCAPE_action(_localctx, actionIndex); break;
 
-			case 118 : StringTemplate_END_action(_localctx, actionIndex); break;
+		case 118 : StringTemplate_END_action(_localctx, actionIndex); break;
 
-			case 119 : StringTemplate_ANYCHAR_action(_localctx, actionIndex); break;
+		case 119 : StringTemplate_ANYCHAR_action(_localctx, actionIndex); break;
 
-			case 120 : DelimitersOpenSpec_WS_action(_localctx, actionIndex); break;
+		case 120 : DelimitersOpenSpec_WS_action(_localctx, actionIndex); break;
 
-			case 121 : DelimitersOpenSpec_NEWLINE_action(_localctx, actionIndex); break;
+		case 121 : DelimitersOpenSpec_NEWLINE_action(_localctx, actionIndex); break;
 
-			case 122 : DelimitersOpenSpec_DELIMITER_STRING_action(_localctx, actionIndex); break;
+		case 122 : DelimitersOpenSpec_DELIMITER_STRING_action(_localctx, actionIndex); break;
 
-			case 123 : DelimitersOpenSpec_COMMA_action(_localctx, actionIndex); break;
+		case 123 : DelimitersOpenSpec_COMMA_action(_localctx, actionIndex); break;
 
-			case 124 : DelimitersCloseSpec_WS_action(_localctx, actionIndex); break;
+		case 124 : DelimitersCloseSpec_WS_action(_localctx, actionIndex); break;
 
-			case 125 : DelimitersCloseSpec_NEWLINE_action(_localctx, actionIndex); break;
+		case 125 : DelimitersCloseSpec_NEWLINE_action(_localctx, actionIndex); break;
 
-			case 126 : DelimitersCloseSpec_DELIMITER_STRING_action(_localctx, actionIndex); break;
+		case 126 : DelimitersCloseSpec_DELIMITER_STRING_action(_localctx, actionIndex); break;
 		}
 	}
 	public void StringTemplate_NEWLINE_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 59 : _type = NEWLINE;  break;
+		switch (actionIndex) {
+		case 59: _type = NEWLINE;  break;
 		}
 	}
 	public void AnonymousTemplate_WS_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 17 : _type = WS;  break;
+		switch (actionIndex) {
+		case 17: _type = WS;  break;
 		}
 	}
 	public void BigStringLineTemplate_PERCENT_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 41 : _type = TEXT;  break;
+		switch (actionIndex) {
+		case 41: _type = TEXT;  break;
 		}
 	}
 	public void REST_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void EQUALS_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void NOT_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void AnonymousTemplateParameters_NEWLINE_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 25 : _type = NEWLINE;  break;
+		switch (actionIndex) {
+		case 25: _type = NEWLINE;  break;
 		}
 	}
 	public void TemplateExpression_ANYCHAR_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 58 : _type = ANYCHAR;  break;
+		switch (actionIndex) {
+		case 58: _type = ANYCHAR;  break;
 		}
 	}
 	public void STRLEN_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void TemplateExpression_CLOSE_DELIMITER_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 56 : _type = CLOSE_DELIMITER; popMode();  break;
+		switch (actionIndex) {
+		case 56: _type = CLOSE_DELIMITER; popMode();  break;
 		}
 	}
 	public void RPAREN_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void IMPORT_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void ESCAPE_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void TemplateComment_CONTINUE_COMMENT_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 13 : _type = COMMENT;  break;
+		switch (actionIndex) {
+		case 13: _type = COMMENT;  break;
 		}
 	}
 	public void DELIMITER_STRING_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void BigStringLineTemplate_OPEN_DELIMITER_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 38 : _type = OPEN_DELIMITER; pushMode(TemplateExpression);  break;
+		switch (actionIndex) {
+		case 38: _type = OPEN_DELIMITER; pushMode(TemplateExpression);  break;
 		}
 	}
 	public void TRUNC_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void TemplateExpression_RPAREN_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 49 : _type = RPAREN;  break;
+		switch (actionIndex) {
+		case 49: _type = RPAREN;  break;
 		}
 	}
 	public void BIGSTRING_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 4 : pushMode(BigStringTemplate);  break;
+		switch (actionIndex) {
+		case 4: pushMode(BigStringTemplate);  break;
 		}
 	}
 	public void ENDIF_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void ANYCHAR_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void CLOSE_DELIMITER_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void SUPER_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void TemplateExpression_LBRACE_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 53 : _type = LBRACE; pushMode(AnonymousTemplate);  break;
+		switch (actionIndex) {
+		case 53: _type = LBRACE; pushMode(AnonymousTemplate);  break;
 		}
 	}
 	public void LAST_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void TemplateExpression_ID_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 55 : _type = ID;  break;
+		switch (actionIndex) {
+		case 55: _type = ID;  break;
 		}
 	}
 	public void COMMENT_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 6 : pushMode(BlockComment);  break;
+		switch (actionIndex) {
+		case 6: pushMode(BlockComment);  break;
 		}
 	}
 	public void DelimitersCloseSpec_WS_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 69 : _type = WS;  break;
+		switch (actionIndex) {
+		case 69: _type = WS;  break;
 		}
 	}
 	public void TemplateExpression_LBRACK_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 50 : _type = LBRACK;  break;
+		switch (actionIndex) {
+		case 50: _type = LBRACK;  break;
 		}
 	}
 	public void RBRACK_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void BigStringTemplate_ANYCHAR_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 35 : _type = ANYCHAR;  break;
+		switch (actionIndex) {
+		case 35: _type = ANYCHAR;  break;
 		}
 	}
 	public void TemplateExpression_AT_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 44 : _type = AT;  break;
+		switch (actionIndex) {
+		case 44: _type = AT;  break;
 		}
 	}
 	public void RBRACE_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void LINE_COMMENT_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void OPEN_DELIMITER_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void ANONYMOUS_PARAMETERS_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void AnonymousTemplate_COMMENT_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 20 : _type = COMMENT; pushMode(TemplateComment);  break;
+		switch (actionIndex) {
+		case 20: _type = COMMENT; pushMode(TemplateComment);  break;
 		}
 	}
 	public void DEFINED_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void ELSE_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void ELLIPSIS_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void DelimitersOpenSpec_WS_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 66 : _type = WS;  break;
+		switch (actionIndex) {
+		case 66: _type = WS;  break;
 		}
 	}
 	public void BigStringLineTemplate_END_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 1 : popMode(); break;
+		switch (actionIndex) {
+		case 1: popMode(); break;
 		}
 	}
 	public void AnonymousTemplate_ID_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void GROUP_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void BigStringTemplate_ESCAPE_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 32 : _type = TEXT;  break;
+		switch (actionIndex) {
+		case 32: _type = TEXT;  break;
 		}
 	}
 	public void AnonymousTemplate_COMMA_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void WS_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void BIGSTRINGLINE_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 5 : pushMode(BigStringLineTemplate);  break;
+		switch (actionIndex) {
+		case 5: pushMode(BigStringLineTemplate);  break;
 		}
 	}
 	public void AnonymousTemplateParameters_WS_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 24 : _type = WS;  break;
+		switch (actionIndex) {
+		case 24: _type = WS;  break;
 		}
 	}
 	public void AnonymousTemplateParameters_ANYCHAR_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 27 : _type = ANYCHAR;  break;
+		switch (actionIndex) {
+		case 27: _type = ANYCHAR;  break;
 		}
 	}
 	public void OR_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void TRIM_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void TemplateExpression_COLON_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 47 : _type = COLON;  break;
+		switch (actionIndex) {
+		case 47: _type = COLON;  break;
 		}
 	}
 	public void REVERSE_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void END_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void FALSE_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void DelimitersCloseSpec_NEWLINE_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 70 : _type = NEWLINE;  break;
+		switch (actionIndex) {
+		case 70: _type = NEWLINE;  break;
 		}
 	}
 	public void BlockComment_NEWLINE_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 7 : _type = NEWLINE;  break;
+		switch (actionIndex) {
+		case 7: _type = NEWLINE;  break;
 		}
 	}
 	public void BigStringTemplate_END_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 33 : popMode();  break;
+		switch (actionIndex) {
+		case 33: popMode();  break;
 		}
 	}
 	public void DELIMITERS_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void TemplateExpression_LPAREN_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 48 : _type = LPAREN;  break;
+		switch (actionIndex) {
+		case 48: _type = LPAREN;  break;
 		}
 	}
 	public void TemplateComment_BLOCK_COMMENT_BANG_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 15 : _type = COMMENT;  break;
+		switch (actionIndex) {
+		case 15: _type = COMMENT;  break;
 		}
 	}
 	public void TemplateComment_END_COMMENT_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 14 : _type = COMMENT; popMode();  break;
+		switch (actionIndex) {
+		case 14: _type = COMMENT; popMode();  break;
 		}
 	}
 	public void BigStringTemplate_COMMENT_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 29 : _type = COMMENT; pushMode(TemplateComment);  break;
+		switch (actionIndex) {
+		case 29: _type = COMMENT; pushMode(TemplateComment);  break;
 		}
 	}
 	public void LBRACK_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void StringTemplate_COMMENT_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 60 : _type = COMMENT; pushMode(TemplateComment);  break;
+		switch (actionIndex) {
+		case 60: _type = COMMENT; pushMode(TemplateComment);  break;
 		}
 	}
 	public void END_COMMENT_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 9 : _type = COMMENT; popMode();  break;
+		switch (actionIndex) {
+		case 9: _type = COMMENT; popMode();  break;
 		}
 	}
 	public void BigStringTemplate_OPEN_DELIMITER_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 30 : _type = OPEN_DELIMITER; pushMode(TemplateExpression);  break;
+		switch (actionIndex) {
+		case 30: _type = OPEN_DELIMITER; pushMode(TemplateExpression);  break;
 		}
 	}
 	public void LBRACE_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 2 : pushMode(AnonymousTemplate);  break;
+		switch (actionIndex) {
+		case 2: pushMode(AnonymousTemplate);  break;
 		}
 	}
 	public void BigStringLineTemplate_NEWLINE_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 36 : _type = NEWLINE;  break;
+		switch (actionIndex) {
+		case 36: _type = NEWLINE;  break;
 		}
 	}
 	public void StringTemplate_ANYCHAR_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 65 : _type = ANYCHAR;  break;
+		switch (actionIndex) {
+		case 65: _type = ANYCHAR;  break;
 		}
 	}
 	public void AND_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void ID_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void BigStringLineTemplate_ANYCHAR_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 42 : _type = ANYCHAR;  break;
+		switch (actionIndex) {
+		case 42: _type = ANYCHAR;  break;
 		}
 	}
 	public void TemplateComment_ANYCHAR_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 16 : _type = ANYCHAR;  break;
+		switch (actionIndex) {
+		case 16: _type = ANYCHAR;  break;
 		}
 	}
 	public void LENGTH_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void LPAREN_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void TemplateExpression_EQUALS_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 52 : _type = EQUALS;  break;
+		switch (actionIndex) {
+		case 52: _type = EQUALS;  break;
 		}
 	}
 	public void IF_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void StringTemplate_ESCAPE_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 63 : _type = TEXT;  break;
+		switch (actionIndex) {
+		case 63: _type = TEXT;  break;
 		}
 	}
 	public void AT_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void AnonymousTemplate_OPEN_DELIMITER_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 21 : _type = OPEN_DELIMITER; pushMode(TemplateExpression);  break;
+		switch (actionIndex) {
+		case 21: _type = OPEN_DELIMITER; pushMode(TemplateExpression);  break;
 		}
 	}
 	public void AnonymousTemplate_ANYCHAR_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 23 : _type = ANYCHAR;  break;
+		switch (actionIndex) {
+		case 23: _type = ANYCHAR;  break;
 		}
 	}
 	public void BigStringTemplate_NEWLINE_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 28 : _type = NEWLINE;  break;
+		switch (actionIndex) {
+		case 28: _type = NEWLINE;  break;
 		}
 	}
 	public void DelimitersOpenSpec_NEWLINE_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 67 : _type = NEWLINE;  break;
+		switch (actionIndex) {
+		case 67: _type = NEWLINE;  break;
 		}
 	}
 	public void DELIMITERS_SPEC_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void COMMA_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void TemplateExpression_COMMA_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 46 : _type = COMMA;  break;
+		switch (actionIndex) {
+		case 46: _type = COMMA;  break;
 		}
 	}
 	public void BigStringLineTemplate_COMMENT_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 37 : _type = COMMENT; pushMode(TemplateComment);  break;
+		switch (actionIndex) {
+		case 37: _type = COMMENT; pushMode(TemplateComment);  break;
 		}
 	}
 	public void AnonymousTemplate_NEWLINE_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 19 : _type = NEWLINE;  break;
+		switch (actionIndex) {
+		case 19: _type = NEWLINE;  break;
 		}
 	}
 	public void STRIP_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void CONTINUE_COMMENT_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 8 : _type = COMMENT;  break;
+		switch (actionIndex) {
+		case 8: _type = COMMENT;  break;
 		}
 	}
 	public void PIPE_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 0 : popMode(); break;
+		switch (actionIndex) {
+		case 0: popMode(); break;
 		}
 	}
 	public void TEMPLATE_PARAMETER_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void DOT_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void BigStringTemplate_TEXT_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 31 : _type = TEXT;  break;
+		switch (actionIndex) {
+		case 31: _type = TEXT;  break;
 		}
 	}
 	public void AnonymousTemplate_RBRACE_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 18 : _type = RBRACE; popMode();  break;
+		switch (actionIndex) {
+		case 18: _type = RBRACE; popMode();  break;
 		}
 	}
 	public void AnonymousTemplateParameters_COMMA_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 26 : _type = COMMA;  break;
+		switch (actionIndex) {
+		case 26: _type = COMMA;  break;
 		}
 	}
 	public void TemplateExpression_RBRACK_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 51 : _type = RBRACK;  break;
+		switch (actionIndex) {
+		case 51: _type = RBRACK;  break;
 		}
 	}
 	public void BigStringLineTemplate_TEXT_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 39 : _type = TEXT;  break;
+		switch (actionIndex) {
+		case 39: _type = TEXT;  break;
 		}
 	}
 	public void WS_CHAR_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void BigStringLineTemplate_ESCAPE_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 40 : _type = TEXT;  break;
+		switch (actionIndex) {
+		case 40: _type = TEXT;  break;
 		}
 	}
 	public void DEFAULT_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void TemplateExpression_WS_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 54 : _type = WS;  break;
+		switch (actionIndex) {
+		case 54: _type = WS;  break;
 		}
 	}
 	public void TemplateExpression_DOT_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 45 : _type = DOT;  break;
+		switch (actionIndex) {
+		case 45: _type = DOT;  break;
 		}
 	}
 	public void TEXT_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void TemplateExpression_NEWLINE_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 43 : _type = NEWLINE;  break;
+		switch (actionIndex) {
+		case 43: _type = NEWLINE;  break;
 		}
 	}
 	public void SEMI_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void TRUE_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void StringTemplate_OPEN_DELIMITER_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 61 : _type = OPEN_DELIMITER; pushMode(TemplateExpression);  break;
+		switch (actionIndex) {
+		case 61: _type = OPEN_DELIMITER; pushMode(TemplateExpression);  break;
 		}
 	}
 	public void ELSEIF_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void DelimitersOpenSpec_DELIMITER_STRING_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void TemplateExpression_STRING_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 57 : _type = STRING;  break;
+		switch (actionIndex) {
+		case 57: _type = STRING;  break;
 		}
 	}
 	public void COLON_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void ESCAPE_RBRACE_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 22 : _type = TEXT;  break;
+		switch (actionIndex) {
+		case 22: _type = TEXT;  break;
 		}
 	}
 	public void BlockComment_ANYCHAR_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 11 : _type = ANYCHAR;  break;
+		switch (actionIndex) {
+		case 11: _type = ANYCHAR;  break;
 		}
 	}
 	public void NEWLINE_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void TemplateComment_NEWLINE_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 12 : _type = NEWLINE;  break;
+		switch (actionIndex) {
+		case 12: _type = NEWLINE;  break;
 		}
 	}
 	public void StringTemplate_TEXT_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 62 : _type = TEXT;  break;
+		switch (actionIndex) {
+		case 62: _type = TEXT;  break;
 		}
 	}
 	public void StringTemplate_END_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 64 : _type = TEXT; popMode();  break;
+		switch (actionIndex) {
+		case 64: _type = TEXT; popMode();  break;
 		}
 	}
 	public void REGION_ID_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 	public void DelimitersCloseSpec_DELIMITER_STRING_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 71 : popMode();  break;
+		switch (actionIndex) {
+		case 71: popMode();  break;
 		}
 	}
 	public void BLOCK_COMMENT_STAR_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 10 : _type = COMMENT;  break;
+		switch (actionIndex) {
+		case 10: _type = COMMENT;  break;
 		}
 	}
 	public void DelimitersOpenSpec_COMMA_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 68 : _type = COMMA; _mode = DelimitersCloseSpec;  break;
+		switch (actionIndex) {
+		case 68: _type = COMMA; _mode = DelimitersCloseSpec;  break;
 		}
 	}
 	public void BigStringTemplate_LANGLE_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 34 : _type = TEXT;  break;
+		switch (actionIndex) {
+		case 34: _type = TEXT;  break;
 		}
 	}
 	public void STRING_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
-			case 3 : pushMode(StringTemplate);  break;
+		switch (actionIndex) {
+		case 3: pushMode(StringTemplate);  break;
 		}
 	}
 	public void FIRST_action(RuleContext<Integer> _localctx, int actionIndex) {
-		switch ( actionIndex ) {
+		switch (actionIndex) {
 		}
 	}
 
@@ -1301,8 +1301,5 @@ public abstract class AbstractGroupHighlighterLexer extends Lexer {
 	public static final ATN _ATN =
 		ATNSimulator.deserialize(_serializedATN.toCharArray());
 	static {
-		//org.antlr.v4.tool.DOTGenerator dot = new org.antlr.v4.tool.DOTGenerator(null);
-		//System.out.println(dot.getDOT(_ATN.decisionToState.get(0), ruleNames, false));
-		//System.out.println(dot.getDOT(_ATN.ruleToStartState[2], ruleNames, false));
 	}
 }
