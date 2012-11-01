@@ -32,8 +32,8 @@
                 <package>org.antlr.tool</package>
             </public-packages>
             <class-path-extension>
-                <runtime-relative-path>ext/antlr-3.4.1-SNAPSHOT.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/antlr-3.4.1-SNAPSHOT.jar</binary-origin>
+                <runtime-relative-path>ext/antlr3.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/antlr3.jar</binary-origin>
             </class-path-extension>
         </data>
     </configuration>
