@@ -265,7 +265,7 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
 
                                 for (int i = 0; i < context.size(); i++) {
                                     workList.add(context.getParent(i));
-                                    stateWorkList.add(context.getInvokingState(i));
+                                    stateWorkList.add(context.getReturnState(i));
                                 }
 
                                 int ruleIndex = atn.states.get(state).ruleIndex;

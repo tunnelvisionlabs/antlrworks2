@@ -18,7 +18,6 @@ import javax.swing.text.EditorKit;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.MutableAttributeSet;
 import javax.swing.text.SimpleAttributeSet;
-import org.antlr.v4.runtime.atn.LexerATNSimulator.LexerOpCode;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.netbeans.api.editor.settings.EditorStyleConstants;
 import org.netbeans.spi.editor.highlighting.HighlightsContainer;
@@ -311,5 +310,33 @@ public class LexerDebuggerTokenHighlighterLayerFactory implements HighlightsLaye
         value |= reader.read() << 16;
         value |= reader.read() << 24;
         return value;
+    }
+
+    public enum LexerOpCode {
+        BeginMatch(5),
+        EndMatch(0),
+        MatchATN(0),
+        MatchDFA(0),
+        FailOverToATN(0),
+        AcceptState(4),
+        Predict(4),
+
+        Seek(4),
+        Consume(8),
+        Lookahead1(0),
+
+        PushMode(1),
+        PopMode(0),
+        Emit(16);
+
+        private final int argumentSize;
+
+        private LexerOpCode(int argumentSize) {
+            this.argumentSize = argumentSize;
+        }
+
+        public int getArgumentSize() {
+            return argumentSize;
+        }
     }
 }

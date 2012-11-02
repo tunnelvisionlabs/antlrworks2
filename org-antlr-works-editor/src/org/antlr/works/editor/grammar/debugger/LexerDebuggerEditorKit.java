@@ -25,6 +25,7 @@ import javax.swing.text.EditorKit;
 import javax.swing.text.TextAction;
 import javax.xml.bind.DatatypeConverter;
 import org.antlr.v4.runtime.atn.LexerATNSimulator;
+import org.antlr.works.editor.grammar.debugger.LexerDebuggerTokenHighlighterLayerFactory.LexerOpCode;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.netbeans.editor.BaseDocument;
 import org.netbeans.modules.editor.NbEditorKit;
@@ -211,7 +212,7 @@ public class LexerDebuggerEditorKit extends NbEditorKit {
                     break;
                 }
 
-                LexerATNSimulator.LexerOpCode opcode = LexerATNSimulator.LexerOpCode.values()[opcodeValue];
+                LexerOpCode opcode = LexerOpCode.values()[opcodeValue];
                 switch (opcode) {
                 case BeginMatch:
                 {

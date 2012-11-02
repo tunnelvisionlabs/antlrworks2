@@ -102,7 +102,7 @@ public class CodeCompletionErrorStrategy<Symbol extends Token> extends DefaultEr
             int stateNumber = recognizer.getState();
             ATNState state = interp.atn.states.get(stateNumber);
 
-            PredictionContext context = PredictionContext.fromRuleContext(recognizer.getContext(), false);
+            PredictionContext context = PredictionContext.fromRuleContext(interp.atn, recognizer.getContext(), false);
             ATNConfigSet intermediate = new ATNConfigSet();
             ATNConfigSet closure = new ATNConfigSet();
             for (int i = 0; i < state.getNumberOfTransitions(); i++) {
@@ -120,7 +120,7 @@ public class CodeCompletionErrorStrategy<Symbol extends Token> extends DefaultEr
 
             if (!state.onlyHasEpsilonTransitions()) {
                 for (int i = 0; i < state.getNumberOfTransitions(); i++) {
-                    closure.add(ATNConfig.create(state, i + 1, PredictionContext.fromRuleContext(recognizer.getContext())));
+                    closure.add(ATNConfig.create(state, i + 1, PredictionContext.fromRuleContext(interp.atn, recognizer.getContext())));
                 }
             }
 

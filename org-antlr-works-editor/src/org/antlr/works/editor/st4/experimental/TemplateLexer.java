@@ -265,7 +265,6 @@ public class TemplateLexer extends AbstractTemplateLexer {
         }
 
         protected void resetAcceptPosition(CharStream input, int index, int line, int charPositionInLine) {
-            traceSeek(index);
             input.seek(index);
             this.line = line;
             this.charPositionInLine = charPositionInLine;
