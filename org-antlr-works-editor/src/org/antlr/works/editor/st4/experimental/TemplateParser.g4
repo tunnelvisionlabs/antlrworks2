@@ -70,7 +70,7 @@ formalArgs
 
 formalArg
     :   name=ID
-        (   '=' (string | anonymousTemplate | TRUE | FALSE)
+        (   '=' (string | anonymousTemplate | (TRUE | FALSE))
         )?
     ;
 
@@ -100,9 +100,10 @@ keyValue
     |   bigstringTemplateNoNewline
     |   anonymousTemplate
     |   string
-    |   TRUE
-    |   FALSE
-    |   ID
+    |   (   TRUE
+        |   FALSE
+        |   ID
+        )
     ;
 
 string
@@ -139,13 +140,11 @@ anonymousTemplateParameters
     ;
 
 templateBody
-    :   (   NEWLINE
-        |   COMMENT
+    :   (   (NEWLINE | COMMENT | TEXT)
         |   ifstat
         |   region
         |   exprTag
         |   escape
-        |   TEXT
         )*
     ;
 
@@ -237,14 +236,16 @@ includeExpr
     ;
 
 primary
-    :   ID
-    |   STRING
-    |   TRUE
-    |   FALSE
+@version{1}
+    :   (   ID
+        |   STRING
+        |   TRUE
+        |   FALSE
+        )
     |   subtemplate
     |   list
-    |   LPAREN conditional RPAREN
     |   LPAREN expr RPAREN (LPAREN argExprList? RPAREN)?
+    |   LPAREN conditional RPAREN
     ;
 
 arguments

@@ -1,5 +1,5 @@
 ANTLR 4 (Tool and Runtime):
-    * Referenced revision: 0ad6674e0283233ee6ac71c0ab306a64d4fe39c0
+    * Referenced revision: f2082a66eb481e47253124d6d043ca3ccfd9e9fe
     * Maven build from source
     * Run UpdateExternalBinaries.bat to copy build output to local build folders
 ANTLR 3 (Tool and Runtime):

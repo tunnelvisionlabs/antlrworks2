@@ -280,7 +280,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
         }
 
         @Override
-        @RuleDependency(recognizer=TemplateParser.class, rule=TemplateParser.RULE_primary, version=0)
+        @RuleDependency(recognizer=TemplateParser.class, rule=TemplateParser.RULE_primary, version=1)
         public void enterPrimary(PrimaryContext ctx) {
             TerminalNode<Token> id = ctx.ID();
             if (id != null) {
