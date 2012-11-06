@@ -48,6 +48,7 @@ public abstract class AbstractCompletionParserATNSimulator extends ParserATNSimu
 
     private List<MultipleDecisionData> decisionPoints;
     private IntegerList selections;
+    private int _firstDecisionIndex;
 
     // state variables used for the custom implementation
     private TokenStream<? extends Token> _input;
@@ -81,6 +82,11 @@ public abstract class AbstractCompletionParserATNSimulator extends ParserATNSimu
         this.decisionPoints = decisionPoints;
         this.selections = selections;
         this.caretTransitions = null;
+        if (decisionPoints != null && !decisionPoints.isEmpty()) {
+            _firstDecisionIndex = decisionPoints.get(0).inputIndex;
+        } else {
+            _firstDecisionIndex = Integer.MAX_VALUE;
+        }
     }
 
     @Override
@@ -90,7 +96,7 @@ public abstract class AbstractCompletionParserATNSimulator extends ParserATNSimu
         _outerContext = outerContext;
         caretTransitions = null;
 
-        if (decisionPoints != null) {
+        if (decisionPoints != null && _firstDecisionIndex <= _startIndex) {
             int index = input.index();
             for (int i = 0; i < decisionPoints.size(); i++) {
                 if (decisionPoints.get(i).inputIndex == index && decisionPoints.get(i).decision == decision) {
