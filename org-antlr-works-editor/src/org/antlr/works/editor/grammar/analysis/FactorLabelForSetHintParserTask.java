@@ -72,6 +72,7 @@ import org.openide.util.Exceptions;
  * @author Sam Harwell
  */
 public class FactorLabelForSetHintParserTask implements ParserTask {
+    private static final String HINT_LAYER = "antlr4/factor-label-for-set";
 
     private FactorLabelForSetHintParserTask() {
     }
@@ -86,6 +87,11 @@ public class FactorLabelForSetHintParserTask implements ParserTask {
 
         Document document = context.getDocument().getDocument();
         if (document == null) {
+            return;
+        }
+
+        if (GrammarEditorKit.isLegacyMode(document)) {
+            HintsController.setErrors(document, HINT_LAYER, Collections.<ErrorDescription>emptyList());
             return;
         }
 
@@ -107,7 +113,7 @@ public class FactorLabelForSetHintParserTask implements ParserTask {
             }
         }
 
-        HintsController.setErrors(document, "antlr4/factor-label-for-set", hints);
+        HintsController.setErrors(document, HINT_LAYER, hints);
     }
 
     private static <T> T getCachedData(ParserTaskManager taskManager, ParseContext context, DocumentSnapshot snapshot, ParserDataDefinition<T> definition) throws InterruptedException, ExecutionException {

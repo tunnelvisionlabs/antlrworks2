@@ -64,6 +64,7 @@ import org.openide.util.Exceptions;
  * @author Sam Harwell
  */
 public class ImplicitTokenDefinitionHintParserTask implements ParserTask {
+    private static final String HINT_LAYER = "antlr4/implicit-token-definitions";
 
     private ImplicitTokenDefinitionHintParserTask() {
     }
@@ -78,6 +79,11 @@ public class ImplicitTokenDefinitionHintParserTask implements ParserTask {
 
         Document document = context.getDocument().getDocument();
         if (document == null) {
+            return;
+        }
+
+        if (GrammarEditorKit.isLegacyMode(document)) {
+            HintsController.setErrors(document, HINT_LAYER, Collections.<ErrorDescription>emptyList());
             return;
         }
 
@@ -114,7 +120,7 @@ public class ImplicitTokenDefinitionHintParserTask implements ParserTask {
             }
         }
 
-        HintsController.setErrors(document, "antlr4/implicit-token-definitions", hints);
+        HintsController.setErrors(document, HINT_LAYER, hints);
     }
 
     private static <T> T getCachedData(ParserTaskManager taskManager, ParseContext context, DocumentSnapshot snapshot, ParserDataDefinition<T> definition) throws InterruptedException, ExecutionException {

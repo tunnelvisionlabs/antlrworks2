@@ -58,6 +58,7 @@ import org.openide.util.Exceptions;
  * @author Sam Harwell
  */
 public class GroupSetElementsHintParserTask implements ParserTask {
+    private static final String HINT_LAYER = "antlr4/group-terminals";
 
     private GroupSetElementsHintParserTask() {
     }
@@ -72,6 +73,11 @@ public class GroupSetElementsHintParserTask implements ParserTask {
 
         Document document = context.getDocument().getDocument();
         if (document == null) {
+            return;
+        }
+
+        if (GrammarEditorKit.isLegacyMode(document)) {
+            HintsController.setErrors(document, HINT_LAYER, Collections.<ErrorDescription>emptyList());
             return;
         }
 
@@ -93,7 +99,7 @@ public class GroupSetElementsHintParserTask implements ParserTask {
             }
         }
 
-        HintsController.setErrors(document, "antlr4/group-terminals", hints);
+        HintsController.setErrors(document, HINT_LAYER, hints);
     }
 
     private static <T> T getCachedData(ParserTaskManager taskManager, ParseContext context, DocumentSnapshot snapshot, ParserDataDefinition<T> definition) throws InterruptedException, ExecutionException {
