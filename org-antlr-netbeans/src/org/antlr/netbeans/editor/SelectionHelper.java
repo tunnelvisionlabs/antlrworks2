@@ -18,10 +18,17 @@ import javax.swing.text.Position;
 import javax.swing.text.StyledDocument;
 
 /**
+ * This class provides utility methods for working with rectangular selections.
  *
  * @author Sam Harwell
  */
 public final class SelectionHelper {
+
+    /** Boolean property defining whether selection is being rectangular in a particular text component. */
+    private static final String RECTANGULAR_SELECTION_PROPERTY = "rectangular-selection"; // NOI18N
+
+    /** List of positions (with even size) defining regions of rectangular selection. Maintained by BaseCaret. */
+    private static final String RECTANGULAR_SELECTION_REGIONS_PROPERTY = "rectangular-selection-regions"; // NOI18N
 
     private SelectionHelper() {
         // static class
@@ -73,12 +80,6 @@ public final class SelectionHelper {
             target.select(updatedSelection.get(0).getStart().getOffset(), updatedSelection.get(0).getEnd().getOffset());
         }
     }
-
-    /** Boolean property defining whether selection is being rectangular in a particular text component. */
-    private static final String RECTANGULAR_SELECTION_PROPERTY = "rectangular-selection"; // NOI18N
-
-    /** List of positions (with even size) defining regions of rectangular selection. Maintained by BaseCaret. */
-    private static final String RECTANGULAR_SELECTION_REGIONS_PROPERTY = "rectangular-selection-regions"; // NOI18N
 
     public static boolean isRectangularSelection(JComponent c) {
         return Boolean.TRUE.equals(c.getClientProperty(RECTANGULAR_SELECTION_PROPERTY));

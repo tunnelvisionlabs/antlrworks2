@@ -12,12 +12,15 @@ import javax.swing.JComponent;
 import javax.swing.text.JTextComponent;
 import org.netbeans.editor.CodeFoldingSideBar;
 import org.netbeans.editor.SideBarFactory;
+import org.netbeans.spi.editor.fold.FoldManagerFactory;
 
 /**
- *  Java Code Folding Side Bar Factory, responsible for creating CodeFoldingSideBar
- *  Plugged via layer.xml
+ * Default code folding {@link SideBarFactory}, responsible for creating a
+ * general-purpose {@link CodeFoldingSideBar}. The factory can be registered in
+ * {@code layer.xml} to provide a code folding UI for particular mime types
+ * which provide an specialized implementation of {@link FoldManagerFactory}.
  *
- *  @author  Sam Harwell
+ * @author Sam Harwell
  */
 public class CodeFoldingSideBarFactory implements SideBarFactory {
 
@@ -25,5 +28,4 @@ public class CodeFoldingSideBarFactory implements SideBarFactory {
     public JComponent createSideBar(JTextComponent target) {
         return new CodeFoldingSideBar(target);
     }
-
 }

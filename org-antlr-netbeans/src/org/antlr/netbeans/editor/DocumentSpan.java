@@ -14,6 +14,7 @@ import javax.swing.text.StyledDocument;
 import org.openide.util.Parameters;
 
 /**
+ * Represents a fixed range within a {@link StyledDocument}.
  *
  * @author Sam Harwell
  */

@@ -14,6 +14,7 @@ import org.openide.text.NbDocument;
 import org.openide.util.Parameters;
 
 /**
+ * Represents a line of text in a {@link StyledDocument}.
  *
  * @author Sam Harwell
  */

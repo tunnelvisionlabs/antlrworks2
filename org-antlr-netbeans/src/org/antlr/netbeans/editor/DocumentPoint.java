@@ -15,6 +15,7 @@ import org.openide.text.NbDocument;
 import org.openide.util.Parameters;
 
 /**
+ * Represents a fixed position within a {@link StyledDocument}.
  *
  * @author Sam Harwell
  */

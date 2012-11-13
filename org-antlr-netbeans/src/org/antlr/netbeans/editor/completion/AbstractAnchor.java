@@ -14,13 +14,22 @@ import org.netbeans.api.annotations.common.NonNull;
 import org.openide.util.Parameters;
 
 /**
+ * This class provides a default abstract implementation of the {@link Anchor}
+ * interface. The {@link #getRuleNames} method is added to provide a
+ * human-readable default implementation of {@link #toString}.
  *
  * @author Sam Harwell
  */
 public abstract class AbstractAnchor implements Anchor {
+
     private final TrackingPositionRegion span;
     private final int rule;
 
+    /**
+     *
+     * @param span The span of the anchor in the source file.
+     * @param rule The grammar rule associated with this anchor.
+     */
     protected AbstractAnchor(@NonNull TrackingPositionRegion span, int rule) {
         Parameters.notNull("span", span);
         this.span = span;
@@ -50,5 +59,11 @@ public abstract class AbstractAnchor implements Anchor {
         return ruleName + ": " + span.toString();
     }
 
+    /**
+     * Gets a mapping from index to display name of the rules in a grammar.
+     *
+     * @return A list of names of rules in the grammar.
+     */
+    @NonNull
     protected abstract List<String> getRuleNames();
 }
