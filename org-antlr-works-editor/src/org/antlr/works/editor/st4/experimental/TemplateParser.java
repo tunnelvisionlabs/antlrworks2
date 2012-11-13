@@ -664,7 +664,6 @@ public class TemplateParser extends Parser<Token> {
 				case 3:
 					{
 					setState(170);
-					_input.LT(1);
 					_la = _input.LA(1);
 					if ( !(_la==TRUE || _la==FALSE) ) {
 					_errHandler.recoverInline(this);
@@ -1041,7 +1040,6 @@ public class TemplateParser extends Parser<Token> {
 				enterOuterAlt(_localctx, 5);
 				{
 				setState(210);
-				_input.LT(1);
 				_la = _input.LA(1);
 				if ( !(_la==TRUE || _la==FALSE || _la==ID) ) {
 				_errHandler.recoverInline(this);
@@ -1459,7 +1457,6 @@ public class TemplateParser extends Parser<Token> {
 					case 1:
 						{
 						setState(244);
-						_input.LT(1);
 						_la = _input.LA(1);
 						if ( !(_la==NEWLINE || _la==COMMENT || _la==TEXT) ) {
 						_errHandler.recoverInline(this);
@@ -2742,7 +2739,6 @@ public class TemplateParser extends Parser<Token> {
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(427);
-				_input.LT(1);
 				_la = _input.LA(1);
 				if ( !(_la==STRING || _la==TRUE || _la==FALSE || _la==ID) ) {
 				_errHandler.recoverInline(this);
