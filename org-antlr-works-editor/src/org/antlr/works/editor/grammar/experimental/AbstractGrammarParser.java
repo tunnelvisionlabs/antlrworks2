@@ -234,11 +234,10 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		GrammarTypeContext _localctx = new GrammarTypeContext(_ctx, getState());
 		enterRule(_localctx, 2, RULE_grammarType);
 		try {
-			enterOuterAlt(_localctx, 1);
-			{
 			setState(168);
 			switch ( getInterpreter().adaptivePredict(_input,3,_ctx) ) {
 			case 1:
+				enterOuterAlt(_localctx, 1);
 				{
 				setState(163); match(LEXER);
 				setState(164); match(GRAMMAR);
@@ -246,6 +245,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 				break;
 
 			case 2:
+				enterOuterAlt(_localctx, 2);
 				{
 				setState(165); match(PARSER);
 				setState(166); match(GRAMMAR);
@@ -253,11 +253,11 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 				break;
 
 			case 3:
+				enterOuterAlt(_localctx, 3);
 				{
 				setState(167); match(GRAMMAR);
 				}
 				break;
-			}
 			}
 		}
 		catch (RecognitionException re) {

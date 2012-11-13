@@ -83,13 +83,12 @@ grammarSpec
 	;
 
 grammarType
-	:	(	LEXER GRAMMAR
-		|	// A standalone parser specification
-			PARSER GRAMMAR
+	:	LEXER GRAMMAR
+	|	// A standalone parser specification
+		PARSER GRAMMAR
 
-		// A combined lexer and parser specification
-		|	GRAMMAR
-		)
+	// A combined lexer and parser specification
+	|	GRAMMAR
 	;
 
 // This is the list of all constructs that can be declared before
