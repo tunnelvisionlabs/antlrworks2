@@ -208,11 +208,8 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 
 	public static class GrammarTypeContext extends ParserRuleContext<Token> {
 		public TerminalNode<Token> PARSER() { return getToken(AbstractGrammarParser.PARSER, 0); }
-		public TerminalNode<Token> GRAMMAR(int i) {
-			return getToken(AbstractGrammarParser.GRAMMAR, i);
-		}
 		public TerminalNode<Token> LEXER() { return getToken(AbstractGrammarParser.LEXER, 0); }
-		public List<? extends TerminalNode<Token>> GRAMMAR() { return getTokens(AbstractGrammarParser.GRAMMAR); }
+		public TerminalNode<Token> GRAMMAR() { return getToken(AbstractGrammarParser.GRAMMAR, 0); }
 		public GrammarTypeContext(ParserRuleContext<Token> parent, int invokingState) {
 			super(parent, invokingState);
 		}
