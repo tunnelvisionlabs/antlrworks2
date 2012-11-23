@@ -30,6 +30,7 @@ import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNode;
+import org.antlr.v4.tool.Grammar;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.AltListContext;
@@ -435,7 +436,7 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
             if (wildcard || reference) {
                 String text = ctx.start.getText();
                 boolean nonTerminal = Character.isLowerCase(text.charAt(0));
-                if (!nonTerminal && Character.isUpperCase(text.charAt(0)) && RuleSpec != null && Character.isUpperCase(RuleSpec.getRuleName().charAt(0)))
+                if (!nonTerminal && Grammar.isTokenName(text) && RuleSpec != null && Grammar.isTokenName(RuleSpec.getRuleName()))
                     nonTerminal = true;
 
                 if (nonTerminal) {

@@ -52,6 +52,7 @@ import org.antlr.v4.runtime.atn.WildcardTransition;
 import org.antlr.v4.runtime.misc.IntervalSet;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import org.antlr.v4.tool.Grammar;
 import org.antlr.v4.tool.Rule;
 import org.antlr.works.editor.antlr4.classification.TaggerTokenSource;
 import org.antlr.works.editor.antlr4.completion.AbstractCompletionQuery;
@@ -352,7 +353,7 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
                 }
 
                 for (Description rule : rules) {
-                    if (!tokenReferencesOnly || Character.isUpperCase(rule.getName().charAt(0))) {
+                    if (!tokenReferencesOnly || Grammar.isTokenName(rule.getName())) {
                         results.add(new GrammarRuleCompletionItem(rule));
                     }
                 }
@@ -589,7 +590,7 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
                     if (possibleInAction && !inExpression) {
                         for (Token implicit : labelAnalyzer.getUnlabeledElements()) {
                             // only add implicit tokens here. all implicit rule references will be added separately
-                            if (Character.isUpperCase(implicit.getText().charAt(0))) {
+                            if (Grammar.isTokenName(implicit.getText())) {
                                 CompletionItem item = new ActionReferenceCompletionItem(implicit.getText(), false);
                                 intermediateResults.put(item.getInsertPrefix().toString(), item);
                             }

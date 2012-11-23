@@ -21,6 +21,7 @@ import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.RuleNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.v4.runtime.tree.Tree;
+import org.antlr.v4.tool.Grammar;
 import org.antlr.works.editor.antlr4.parsing.ParseTrees;
 import org.antlr.works.editor.grammar.experimental.GrammarParser;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.ActionBlockContext;
@@ -744,7 +745,7 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
                             unresolvedModeReferences.add(ctx.start);
                             tokenDecorator.putProperty(ctx.start, GrammarTreeProperties.PROP_NODE_TYPE, NodeType.MODE_REF);
                         } else if ("type".equals(lexerCommandNameContext.start.getText())
-                            && Character.isUpperCase(ctx.start.getText().charAt(0))) {
+                            && Grammar.isTokenName(ctx.start.getText())) {
                             unresolvedTokenReferences.add(ctx.start);
                             tokenDecorator.putProperty(ctx.start, GrammarTreeProperties.PROP_NODE_TYPE, NodeType.TOKEN_REF);
                         }

@@ -35,6 +35,7 @@ import org.antlr.netbeans.parsing.spi.ParserDataOptions;
 import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.tool.Grammar;
 import org.antlr.works.editor.grammar.completion.GrammarCompletionProvider;
 import org.antlr.works.editor.grammar.experimental.GrammarLexer;
 import org.antlr.works.editor.grammar.experimental.GrammarParser;
@@ -88,7 +89,7 @@ public class GoToSupport {
 
         if (text.charAt(0) == '$') {
             return "reference";
-        } else if (Character.isUpperCase(text.charAt(0))) {
+        } else if (Grammar.isTokenName(text)) {
             return "lexer rule " + text;
         } else {
             return "parser rule " + text;

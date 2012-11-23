@@ -14,6 +14,7 @@ import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.atn.ATN;
 import org.antlr.v4.runtime.atn.LexerATNSimulator;
 import org.antlr.v4.runtime.misc.Interval;
+import org.antlr.v4.tool.Grammar;
 import org.antlr.works.editor.grammar.experimental.GrammarLexer;
 
 /**
@@ -103,7 +104,7 @@ public class GrammarHighlighterLexer extends AbstractGrammarHighlighterLexer {
         case IDENTIFIER:
             if (_ruleType == Token.INVALID_TYPE) {
                 String firstChar = _input.getText(Interval.of(_tokenStartCharIndex, _tokenStartCharIndex));
-                if (Character.isUpperCase(firstChar.charAt(0))) {
+                if (Grammar.isTokenName(firstChar)) {
                     _ruleType = GrammarLexer.TOKEN_REF;
                 } else {
                     _ruleType = GrammarLexer.RULE_REF;

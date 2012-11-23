@@ -28,6 +28,7 @@ import org.antlr.netbeans.editor.text.SnapshotPosition;
 import org.antlr.netbeans.editor.text.SnapshotPositionRegion;
 import org.antlr.netbeans.editor.text.TrackingPosition;
 import org.antlr.netbeans.editor.text.VersionedDocument;
+import org.antlr.v4.tool.Grammar;
 import org.netbeans.api.editor.settings.FontColorNames;
 import org.netbeans.modules.editor.NbEditorUtilities;
 import org.openide.text.Line;
@@ -96,7 +97,7 @@ public class Node extends JComponent implements Element {
         Parameters.notNull("label", label);
         if (label.startsWith("'")) {
             return "stringliteral";
-        } else if (!label.isEmpty() && Character.isUpperCase(label.charAt(0))) {
+        } else if (!label.isEmpty() && Grammar.isTokenName(label)) {
             return "lexerrule";
         } else {
             return "parserrule";

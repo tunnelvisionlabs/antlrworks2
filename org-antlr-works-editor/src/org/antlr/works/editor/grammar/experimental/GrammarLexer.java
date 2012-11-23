@@ -11,6 +11,7 @@ package org.antlr.works.editor.grammar.experimental;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Interval;
+import org.antlr.v4.tool.Grammar;
 
 /**
  *
@@ -38,7 +39,7 @@ public class GrammarLexer extends AbstractGrammarLexer {
     public Token emit() {
         if (_type == ID) {
             String firstChar = _input.getText(Interval.of(_tokenStartCharIndex, _tokenStartCharIndex));
-            if (Character.isUpperCase(firstChar.charAt(0))) {
+            if (Grammar.isTokenName(firstChar)) {
                 _type = TOKEN_REF;
             } else {
                 _type = RULE_REF;
