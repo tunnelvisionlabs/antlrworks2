@@ -10,23 +10,24 @@ package org.antlr.works.editor.grammar.completion;
 
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenStream;
-import org.antlr.works.editor.antlr4.completion.AbstractParserCache;
+import org.netbeans.api.annotations.common.NonNull;
 
 /**
  *
  * @author Sam Harwell
  */
-public class ParserCache extends AbstractParserCache<Token, CodeCompletionGrammarParser> {
-    public static final ParserCache DEFAULT = new ParserCache();
+public class ParserFactory {
+    public static final ParserFactory DEFAULT = new ParserFactory();
 
-    private ParserCache() {
-    }
-
-    @Override
-    protected CodeCompletionGrammarParser createParser(TokenStream<? extends Token> input) {
+    @NonNull
+    protected CodeCompletionGrammarParser createParser(@NonNull TokenStream<? extends Token> input) {
         CodeCompletionGrammarParser parser = new CodeCompletionGrammarParser(input);
         parser.removeErrorListeners();
         return parser;
     }
 
+    @NonNull
+    public CodeCompletionGrammarParser getParser(@NonNull TokenStream<? extends Token> input) {
+        return createParser(input);
+    }
 }

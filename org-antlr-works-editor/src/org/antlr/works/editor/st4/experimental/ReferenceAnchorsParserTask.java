@@ -82,7 +82,7 @@ public class ReferenceAnchorsParserTask implements ParserTask {
         //        GrammarLexer lexer = new GrammarLexer(input);
                 InterruptableTokenStream tokenStream = new InterruptableTokenStream(tokenSource);
                 TemplateParser.GroupContext parseResult;
-                TemplateParser parser = TemplateParserCache.DEFAULT.getParser(tokenStream);
+                TemplateParser parser = TemplateParserFactory.DEFAULT.getParser(tokenStream);
                 try {
                     parser.getInterpreter().disable_global_context = true;
                     parser.removeErrorListeners();
@@ -101,8 +101,6 @@ public class ReferenceAnchorsParserTask implements ParserTask {
                     } else {
                         throw ex;
                     }
-                } finally {
-                    TemplateParserCache.DEFAULT.putParser(parser);
                 }
 
                 parseTreeResult = new BaseParserData<ParserRuleContext<Token>>(context, TemplateParserDataDefinitions.REFERENCE_PARSE_TREE, snapshot, parseResult);

@@ -99,7 +99,7 @@ public class CurrentRuleContextParserTask implements ParserTask {
                         input.seek(enclosing.getSpan().getStartPosition(snapshot).getOffset());
                         GrammarLexer lexer = new GrammarLexer(input);
                         CommonTokenStream tokens = new TaskTokenStream(lexer);
-                        GrammarParser parser = GrammarParserCache.DEFAULT.getParser(tokens);
+                        GrammarParser parser = GrammarParserFactory.DEFAULT.getParser(tokens);
                         try {
                             parser.getInterpreter().disable_global_context = true;
                             parser.removeErrorListeners();
@@ -117,8 +117,6 @@ public class CurrentRuleContextParserTask implements ParserTask {
                             } else {
                                 throw ex;
                             }
-                        } finally {
-                            GrammarParserCache.DEFAULT.putParser(parser);
                         }
                     }
                 }

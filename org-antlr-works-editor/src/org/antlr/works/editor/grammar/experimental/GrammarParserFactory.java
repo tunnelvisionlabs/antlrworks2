@@ -6,30 +6,30 @@
  *  distribution. For information about licensing, contact Sam Harwell at:
  *      sam@tunnelvisionlabs.com
  */
-package org.antlr.works.editor.st4.experimental;
+package org.antlr.works.editor.grammar.experimental;
 
 import org.antlr.v4.runtime.DefaultErrorStrategy;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenStream;
-import org.antlr.works.editor.antlr4.completion.AbstractParserCache;
 import org.antlr.works.editor.antlr4.parsing.DescriptiveErrorListener;
+import org.netbeans.api.annotations.common.NonNull;
 
 /**
  *
  * @author Sam Harwell
  */
-public class TemplateParserCache extends AbstractParserCache<Token, TemplateParser> {
-    public static final TemplateParserCache DEFAULT = new TemplateParserCache();
+public class GrammarParserFactory {
+    public static final GrammarParserFactory DEFAULT = new GrammarParserFactory();
 
-    @Override
-    protected TemplateParser createParser(TokenStream<? extends Token> input) {
-        TemplateParser parser = new TemplateParser(input);
+    @NonNull
+    protected GrammarParser createParser(@NonNull TokenStream<? extends Token> input) {
+        GrammarParser parser = new GrammarParser(input);
         return parser;
     }
 
-    @Override
-    public TemplateParser getParser(TokenStream<? extends Token> input) {
-        TemplateParser result = super.getParser(input);
+    @NonNull
+    public GrammarParser getParser(@NonNull TokenStream<? extends Token> input) {
+        GrammarParser result = createParser(input);
         result.getInterpreter().disable_global_context = false;
         result.removeErrorListeners();
         result.addErrorListener(DescriptiveErrorListener.INSTANCE);
@@ -37,5 +37,4 @@ public class TemplateParserCache extends AbstractParserCache<Token, TemplatePars
         result.setErrorHandler(new DefaultErrorStrategy<Token>());
         return result;
     }
-
 }

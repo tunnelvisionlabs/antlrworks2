@@ -193,16 +193,11 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
                 TokenSource<Token> tokenSource = new CodeCompletionTokenSource(getCaretOffset(), taggerTokenSource);
                 CommonTokenStream tokens = new CommonTokenStream(tokenSource);
 
-                CodeCompletionGrammarParser parser = ParserCache.DEFAULT.getParser(tokens);
-                ATN atn = null;
-                try {
-                    parser.setBuildParseTree(true);
-                    parser.setErrorHandler(new CodeCompletionErrorStrategy<Token>());
-                    atn = parser.getATN();
-                    parseTrees = forestParser.getParseTrees(parser);
-                } finally {
-                    ParserCache.DEFAULT.putParser(parser);
-                }
+                CodeCompletionGrammarParser parser = ParserFactory.DEFAULT.getParser(tokens);
+                parser.setBuildParseTree(true);
+                parser.setErrorHandler(new CodeCompletionErrorStrategy<Token>());
+                ATN atn = parser.getATN();
+                parseTrees = forestParser.getParseTrees(parser);
 
                 boolean hasActionConfig = false;
                 boolean hasNonActionConfig = false;

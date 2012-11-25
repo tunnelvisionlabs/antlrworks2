@@ -50,7 +50,7 @@ import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
 import org.antlr.works.editor.grammar.completion.CodeCompletionGrammarParser;
 import org.antlr.works.editor.grammar.completion.CompletionParserATNSimulator;
 import org.antlr.works.editor.grammar.completion.GrammarForestParser;
-import org.antlr.works.editor.grammar.completion.ParserCache;
+import org.antlr.works.editor.grammar.completion.ParserFactory;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.ActionBlockContext;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.AltListContext;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.BlockContext;
@@ -88,7 +88,6 @@ import org.openide.util.NotImplementedException;
 public class GrammarIndentTask extends AbstractIndentTask {
 
     private GrammarCodeStyle codeStyle;
-    private CodeCompletionGrammarParser parser;
 
     public GrammarIndentTask(Context context) {
         super(context);
@@ -100,14 +99,7 @@ public class GrammarIndentTask extends AbstractIndentTask {
             return false;
         }
 
-        try {
-            return super.smartReindent();
-        } finally {
-            if (parser != null) {
-                ParserCache.DEFAULT.putParser(parser);
-                parser = null;
-            }
-        }
+        return super.smartReindent();
     }
 
     @Override
@@ -162,7 +154,7 @@ public class GrammarIndentTask extends AbstractIndentTask {
     @Override
     @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleSpec, version=0)
     protected Map<RuleContext<Token>, CaretReachedException> getParseTrees(CommonTokenStream tokens, ReferenceAnchors anchors) {
-        parser = ParserCache.DEFAULT.getParser(tokens);
+        CodeCompletionGrammarParser parser = ParserFactory.DEFAULT.getParser(tokens);
 
         parser.setBuildParseTree(true);
         parser.setErrorHandler(new CodeCompletionErrorStrategy<Token>());
