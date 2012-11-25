@@ -8,10 +8,6 @@
  */
 package org.antlr.works.editor.grammar.experimental;
 
-import java.lang.ref.Reference;
-import java.lang.ref.SoftReference;
-import java.util.Map;
-import java.util.WeakHashMap;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.Token;
@@ -26,7 +22,6 @@ import org.netbeans.api.annotations.common.NonNull;
  * @author Sam Harwell
  */
 class GrammarTokensTaskTaggerSnapshot extends AbstractTokensTaskTaggerSnapshot<SimpleLexerState> {
-    private static final Map<Thread, Reference<GrammarLexerWrapper>> lexerCache = new WeakHashMap<Thread, Reference<GrammarLexerWrapper>>();
 
     public GrammarTokensTaskTaggerSnapshot(@NonNull DocumentSnapshot snapshot) {
         super(snapshot);
@@ -43,19 +38,9 @@ class GrammarTokensTaskTaggerSnapshot extends AbstractTokensTaskTaggerSnapshot<S
 
     @Override
     protected TokenSourceWithStateV4<Token, SimpleLexerState> createLexer(CharStream input, SimpleLexerState startState) {
-        synchronized (lexerCache) {
-            Reference<GrammarLexerWrapper> ref = lexerCache.get(Thread.currentThread());
-            GrammarLexerWrapper lexer = ref != null ? ref.get() : null;
-            if (lexer == null) {
-                lexer = new GrammarLexerWrapper(input);
-                lexerCache.put(Thread.currentThread(), new SoftReference<GrammarLexerWrapper>(lexer));
-            } else {
-                lexer.setInputStream(input);
-            }
-
-            startState.apply(lexer);
-            return lexer;
-        }
+        GrammarLexerWrapper lexer = new GrammarLexerWrapper(input);
+        startState.apply(lexer);
+        return lexer;
     }
 
     @Override
