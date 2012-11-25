@@ -80,7 +80,7 @@ public class CompiledModelParserV4 extends CompiledModelParser {
                     grammar.fileName = snapshot.getVersionedDocument().getFileObject().getNameExt();
                     grammar.loadImportedGrammars();
 
-                    CommonTokenStream tokenStream = (CommonTokenStream)root.tokens;
+                    CommonTokenStream tokenStream = (CommonTokenStream)root.tokenStream;
                     List<? extends Token> tokenList = tokenStream.getTokens();
                     tokens = tokenList.toArray(new CommonToken[0]);
                 }

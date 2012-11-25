@@ -54,7 +54,7 @@ public class CompiledFileModelV4 extends CompiledFileModel {
         this.importedResults = new ArrayList<CompiledFileModelV4>();
         if (grammar != null && grammar.importedGrammars != null) {
             for (Grammar imported : grammar.importedGrammars) {
-                CommonTokenStream importedTokenStream = (CommonTokenStream)imported.ast.tokens;
+                CommonTokenStream importedTokenStream = (CommonTokenStream)imported.ast.tokenStream;
                 String fileName = ((Lexer)importedTokenStream.getTokenSource()).getCharStream().getSourceName();
                 FileObject importedFileObject = FileUtil.toFileObject(new File(fileName));
                 List<? extends Token> importedTokensList = importedTokenStream.getTokens();
