@@ -517,7 +517,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 				{
 				setState(192);
 				_la = _input.LA(1);
-				if ( !(_la==STAR || _la==INT || _la==STRING_LITERAL) ) {
+				if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << STAR) | (1L << INT) | (1L << STRING_LITERAL))) != 0)) ) {
 				_errHandler.recoverInline(this);
 				}
 				consume();
@@ -917,7 +917,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 						{
 						setState(233);
 						_la = _input.LA(1);
-						if ( !(_la==ACTION_DOT || _la==ACTION_LT || _la==ACTION_GT || _la==ACTION_LPAREN || _la==ACTION_RPAREN || _la==ACTION_LBRACK || _la==ACTION_RBRACK || _la==ACTION_EQUALS || _la==ACTION_COMMA || _la==ACTION_COLON2 || _la==ACTION_COLON || _la==ACTION_MINUS || _la==ACTION_ESCAPE || _la==ACTION_WORD || _la==ACTION_REFERENCE || _la==ACTION_COMMENT || _la==ACTION_LITERAL || _la==ACTION_TEXT || _la==ACTION_WS || _la==ACTION_NEWLINE) ) {
+						if ( !(((((_la - 66)) & ~0x3f) == 0 && ((1L << (_la - 66)) & ((1L << (ACTION_DOT - 66)) | (1L << (ACTION_LT - 66)) | (1L << (ACTION_GT - 66)) | (1L << (ACTION_LPAREN - 66)) | (1L << (ACTION_RPAREN - 66)) | (1L << (ACTION_LBRACK - 66)) | (1L << (ACTION_RBRACK - 66)) | (1L << (ACTION_EQUALS - 66)) | (1L << (ACTION_COMMA - 66)) | (1L << (ACTION_COLON2 - 66)) | (1L << (ACTION_COLON - 66)) | (1L << (ACTION_MINUS - 66)) | (1L << (ACTION_ESCAPE - 66)) | (1L << (ACTION_WORD - 66)) | (1L << (ACTION_REFERENCE - 66)) | (1L << (ACTION_COMMENT - 66)) | (1L << (ACTION_LITERAL - 66)) | (1L << (ACTION_TEXT - 66)) | (1L << (ACTION_WS - 66)) | (1L << (ACTION_NEWLINE - 66)))) != 0)) ) {
 						_errHandler.recoverInline(this);
 						}
 						consume();
@@ -1291,7 +1291,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 					{
 					setState(306);
 					_la = _input.LA(1);
-					if ( !(_la==ARG_ACTION_LT || _la==ARG_ACTION_GT || _la==ARG_ACTION_LPAREN || _la==ARG_ACTION_RPAREN || _la==ARG_ACTION_EQUALS || _la==ARG_ACTION_COMMA || _la==ARG_ACTION_ESCAPE || _la==ARG_ACTION_WORD || _la==ARG_ACTION_ELEMENT || _la==ARG_ACTION_TEXT || _la==ARG_ACTION_WS || _la==ARG_ACTION_NEWLINE) ) {
+					if ( !(((((_la - 53)) & ~0x3f) == 0 && ((1L << (_la - 53)) & ((1L << (ARG_ACTION_LT - 53)) | (1L << (ARG_ACTION_GT - 53)) | (1L << (ARG_ACTION_LPAREN - 53)) | (1L << (ARG_ACTION_RPAREN - 53)) | (1L << (ARG_ACTION_EQUALS - 53)) | (1L << (ARG_ACTION_COMMA - 53)) | (1L << (ARG_ACTION_ESCAPE - 53)) | (1L << (ARG_ACTION_WORD - 53)) | (1L << (ARG_ACTION_ELEMENT - 53)) | (1L << (ARG_ACTION_TEXT - 53)) | (1L << (ARG_ACTION_WS - 53)) | (1L << (ARG_ACTION_NEWLINE - 53)))) != 0)) ) {
 					_errHandler.recoverInline(this);
 					}
 					consume();
@@ -1747,7 +1747,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 			{
 			setState(388);
 			_la = _input.LA(1);
-			if ( !(_la==ARG_ACTION_WS || _la==ARG_ACTION_NEWLINE || _la==ACTION_COMMENT || _la==ACTION_WS || _la==ACTION_NEWLINE) ) {
+			if ( !(((((_la - 63)) & ~0x3f) == 0 && ((1L << (_la - 63)) & ((1L << (ARG_ACTION_WS - 63)) | (1L << (ARG_ACTION_NEWLINE - 63)) | (1L << (ACTION_COMMENT - 63)) | (1L << (ACTION_WS - 63)) | (1L << (ACTION_NEWLINE - 63)))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			}
 			consume();
@@ -2811,7 +2811,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 			{
 			setState(496);
 			_la = _input.LA(1);
-			if ( !(_la==FRAGMENT || _la==PROTECTED || _la==PUBLIC || _la==PRIVATE) ) {
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << FRAGMENT) | (1L << PROTECTED) | (1L << PUBLIC) | (1L << PRIVATE))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			}
 			consume();
@@ -4756,7 +4756,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 				{
 				setState(702);
 				_la = _input.LA(1);
-				if ( !(_la==TOKEN_REF || _la==LEXER_CHAR_SET || _la==STRING_LITERAL) ) {
+				if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << TOKEN_REF) | (1L << LEXER_CHAR_SET) | (1L << STRING_LITERAL))) != 0)) ) {
 				_errHandler.recoverInline(this);
 				}
 				consume();
