@@ -8,9 +8,11 @@
  */
 package org.antlr.works.editor.antlr4.completion;
 
+import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonToken;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenSource;
+import org.antlr.v4.runtime.misc.Tuple2;
 
 /**
  *
@@ -20,7 +22,7 @@ public class CaretToken extends CommonToken {
     public static final int CARET_TOKEN_TYPE = -2;
     private final Token originalToken;
 
-    public CaretToken(TokenSource<?> source, int channel, int start, int stop) {
+    public CaretToken(Tuple2<? extends TokenSource<?>, CharStream> source, int channel, int start, int stop) {
         super(source, CARET_TOKEN_TYPE, channel, start, stop);
         this.originalToken = null;
     }

@@ -21,6 +21,8 @@ import org.antlr.v4.runtime.CommonTokenFactory;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenFactory;
 import org.antlr.v4.runtime.TokenSource;
+import org.antlr.v4.runtime.misc.Tuple;
+import org.antlr.v4.runtime.misc.Tuple2;
 import org.netbeans.api.annotations.common.NonNull;
 import org.openide.filesystems.FileObject;
 import org.openide.util.Parameters;
@@ -37,6 +39,7 @@ public class TaggerTokenSource<Symbol extends Token> implements TokenSource<Symb
     private final Iterator<TaggedPositionRegion<TokenTag<Symbol>>> tagIterator;
     private TokenTag<Symbol> previousTag;
     private CharStream input;
+    private Tuple2<? extends TokenSource<Symbol>, CharStream> tokenFactorySourcePair;
     private int line = -1;
     private int charPositionInLine = -1;
     @SuppressWarnings("unchecked")
@@ -70,7 +73,7 @@ public class TaggerTokenSource<Symbol extends Token> implements TokenSource<Symb
             int stop = start - 1;
             int line = snapshot.getLineCount();
             int charPositionInLine = snapshot.findLineFromLineNumber(line - 1).getLength();
-            previousTag = new TokenTag<Symbol>(tokenFactory.create(source, Token.EOF, text, channel, start, stop, line, charPositionInLine));
+            previousTag = new TokenTag<Symbol>(tokenFactory.create(tokenFactorySourcePair, Token.EOF, text, channel, start, stop, line, charPositionInLine));
         }
 
         line = -1;
@@ -117,6 +120,7 @@ public class TaggerTokenSource<Symbol extends Token> implements TokenSource<Symb
     public CharStream getInputStream() {
         if (input == null) {
             input = new DocumentSnapshotCharStream(snapshot);
+            tokenFactorySourcePair = Tuple.create(this, input);
         }
         return input;
     }

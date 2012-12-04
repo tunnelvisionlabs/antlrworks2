@@ -13,6 +13,8 @@ import org.antlr.v4.runtime.CommonTokenFactory;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenFactory;
 import org.antlr.v4.runtime.TokenSource;
+import org.antlr.v4.runtime.misc.Tuple;
+import org.antlr.v4.runtime.misc.Tuple2;
 
 /**
  *
@@ -21,6 +23,7 @@ import org.antlr.v4.runtime.TokenSource;
 public class CodeCompletionTokenSource implements TokenSource<Token> {
     private final int caretOffset;
     private final TokenSource<Token> source;
+    private final Tuple2<? extends TokenSource<Token>, CharStream> tokenFactorySourcePair;
 
     private TokenFactory<? extends Token> tokenFactory = CommonTokenFactory.DEFAULT;
 
@@ -29,6 +32,7 @@ public class CodeCompletionTokenSource implements TokenSource<Token> {
     public CodeCompletionTokenSource(int caretOffset, TokenSource<Token> source) {
         this.caretOffset = caretOffset;
         this.source = source;
+        this.tokenFactorySourcePair = Tuple.create(source, source.getInputStream());
     }
 
     @Override
@@ -39,7 +43,7 @@ public class CodeCompletionTokenSource implements TokenSource<Token> {
                 // the caret is after this token, nothing special to do
             } else if (token.getStartIndex() > caretOffset) {
                 // the token is after the caret, no need to include it
-                token = new CaretToken(source, Token.DEFAULT_CHANNEL, caretOffset, caretOffset);
+                token = new CaretToken(tokenFactorySourcePair, Token.DEFAULT_CHANNEL, caretOffset, caretOffset);
                 caretToken = token;
             } else {
                 if (token.getStopIndex() + 1 == caretOffset
@@ -98,7 +102,7 @@ public class CodeCompletionTokenSource implements TokenSource<Token> {
     }
 
     protected Token emitEOF() {
-        return tokenFactory.create(source,
+        return tokenFactory.create(tokenFactorySourcePair,
                                    Token.EOF,
                                    (String)null,
                                    Token.DEFAULT_CHANNEL,

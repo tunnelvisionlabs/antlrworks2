@@ -11,6 +11,7 @@ package org.antlr.works.editor.grammar.debugger;
 import java.util.List;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
+import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenSource;
 import org.netbeans.api.annotations.common.NonNull;
@@ -93,6 +94,11 @@ public class TraceToken implements Token {
     @Override
     public TokenSource<?> getTokenSource() {
         throw new UnsupportedOperationException("No token source is available.");
+    }
+
+    @Override
+    public CharStream getInputStream() {
+        throw new UnsupportedOperationException("No input stream is available.");
     }
 
     @Override

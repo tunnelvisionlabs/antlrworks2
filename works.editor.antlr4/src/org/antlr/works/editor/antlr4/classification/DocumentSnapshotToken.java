@@ -13,6 +13,7 @@ import org.antlr.netbeans.editor.text.DocumentSnapshotLine;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonToken;
 import org.antlr.v4.runtime.TokenSource;
+import org.antlr.v4.runtime.misc.Tuple2;
 
 /**
  *
@@ -21,9 +22,9 @@ import org.antlr.v4.runtime.TokenSource;
 public class DocumentSnapshotToken extends CommonToken {
     private final DocumentSnapshot snapshot;
 
-    public DocumentSnapshotToken(TokenSource<?> source, int type, int channel, int start, int stop) {
+    public DocumentSnapshotToken(Tuple2<? extends TokenSource<?>, CharStream> source, int type, int channel, int start, int stop) {
         super(source, type, channel, start, stop);
-        CharStream inputStream = source.getInputStream();
+        CharStream inputStream = source.getItem2();
         if (!(inputStream instanceof DocumentSnapshotCharStream)) {
             throw new IllegalArgumentException(String.format("Expected a %s backed by a %s.", TokenSource.class.getSimpleName(), DocumentSnapshotCharStream.class.getSimpleName()));
         }

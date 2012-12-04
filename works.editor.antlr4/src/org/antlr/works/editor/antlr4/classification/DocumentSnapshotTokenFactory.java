@@ -8,8 +8,11 @@
  */
 package org.antlr.works.editor.antlr4.classification;
 
+import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.TokenFactory;
 import org.antlr.v4.runtime.TokenSource;
+import org.antlr.v4.runtime.misc.Tuple;
+import org.antlr.v4.runtime.misc.Tuple2;
 
 /**
  *
@@ -17,14 +20,18 @@ import org.antlr.v4.runtime.TokenSource;
  */
 public class DocumentSnapshotTokenFactory implements TokenFactory<DocumentSnapshotToken> {
 
-    private final TokenSource<? super DocumentSnapshotToken> effectiveSource;
+    private final Tuple2<? extends TokenSource<? super DocumentSnapshotToken>, CharStream> effectiveSource;
 
     public DocumentSnapshotTokenFactory(TokenSource<? super DocumentSnapshotToken> effectiveSource) {
+        this.effectiveSource = Tuple.create(effectiveSource, effectiveSource.getInputStream());
+    }
+
+    public DocumentSnapshotTokenFactory(Tuple2<? extends TokenSource<? super DocumentSnapshotToken>, CharStream> effectiveSource) {
         this.effectiveSource = effectiveSource;
     }
 
     @Override
-    public DocumentSnapshotToken create(TokenSource<? super DocumentSnapshotToken> source, int type, String text, int channel, int start, int stop, int line, int charPositionInLine) {
+    public DocumentSnapshotToken create(Tuple2<? extends TokenSource<? super DocumentSnapshotToken>, CharStream> source, int type, String text, int channel, int start, int stop, int line, int charPositionInLine) {
         if (effectiveSource != null) {
             source = effectiveSource;
         }
