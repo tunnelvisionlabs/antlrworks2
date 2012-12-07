@@ -1,12 +1,12 @@
 ANTLR 4 (Tool and Runtime):
-    * Referenced revision: 4772c3e0807a16f7b0c19754e31faecda92060dd
+    * Referenced revision: 4adef97915ab509204573ad10c5807c6e7b55656
     * Maven build from source
     * Run UpdateExternalBinaries.bat to copy build output to local build folders
-ANTLR 3 (Tool and Runtime):
+ANTLR 3.5 RC 1 (Tool and Runtime):
     * Referenced revision: 7c364b767c587682b15db5b586c7df6957a799a4
     * Maven build from source
     * Run UpdateExternalBinaries.bat to copy build output to local build folders
-StringTemplate 4:
+StringTemplate 4.0.7 RC 1:
     * Referenced revision: abc3d358978dc03beb6f651152c0d3c2470b7874
     * Maven build from source
     * Run UpdateExternalBinaries.bat to copy build output to local build folders
