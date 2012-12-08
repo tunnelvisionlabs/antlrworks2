@@ -13,7 +13,7 @@ import org.openide.util.Parameters;
 
 /**
  *
- * @author sam
+ * @author Sam Harwell
  */
 public abstract class DocumentParserTaskProvider implements ParserTaskProvider {
     private final Object lock = new Object();
