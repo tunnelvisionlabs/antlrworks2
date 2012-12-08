@@ -59,7 +59,7 @@ import org.openide.util.Exceptions;
  *
  * @author Sam Harwell
  */
-public class MissingRuleDefinitionHintParserTask implements ParserTask {
+public final class MissingRuleDefinitionHintParserTask implements ParserTask {
     private static final String HINT_LAYER = "antlr4/missing-rule-definitions";
 
     private MissingRuleDefinitionHintParserTask() {

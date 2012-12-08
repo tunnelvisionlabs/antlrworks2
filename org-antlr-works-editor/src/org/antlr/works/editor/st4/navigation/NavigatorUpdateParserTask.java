@@ -40,7 +40,7 @@ import org.netbeans.api.editor.mimelookup.MimeRegistration;
  *
  * @author Sam Harwell
  */
-public class NavigatorUpdateParserTask implements ParserTask {
+public final class NavigatorUpdateParserTask implements ParserTask {
 
     private final Object lock = new Object();
 

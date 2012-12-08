@@ -30,7 +30,7 @@ import org.netbeans.api.editor.mimelookup.MimeRegistration;
  *
  * @author Sam Harwell
  */
-public class GrammarFoldManagerParserTask extends AbstractFoldManagerParserTask<CompiledModel> {
+public final class GrammarFoldManagerParserTask extends AbstractFoldManagerParserTask<CompiledModel> {
 
     private final AbstractFoldScanner<CompiledModel> v3 = new GrammarFoldScannerV3();
     private final AbstractFoldScanner<CompiledModel> v4 = new GrammarFoldScannerV4();

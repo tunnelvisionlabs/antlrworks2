@@ -57,7 +57,7 @@ import org.openide.util.Exceptions;
  *
  * @author Sam Harwell
  */
-public class GroupSetElementsHintParserTask implements ParserTask {
+public final class GroupSetElementsHintParserTask implements ParserTask {
     private static final String HINT_LAYER = "antlr4/group-terminals";
 
     private GroupSetElementsHintParserTask() {

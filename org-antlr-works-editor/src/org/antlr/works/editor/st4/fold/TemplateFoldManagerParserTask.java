@@ -27,7 +27,7 @@ import org.netbeans.api.editor.mimelookup.MimeRegistration;
  *
  * @author Sam Harwell
  */
-public class TemplateFoldManagerParserTask extends AbstractFoldManagerParserTask<CompiledModel> {
+public final class TemplateFoldManagerParserTask extends AbstractFoldManagerParserTask<CompiledModel> {
 
     private final TemplateFoldScanner templateFoldScanner = new TemplateFoldScanner();
 

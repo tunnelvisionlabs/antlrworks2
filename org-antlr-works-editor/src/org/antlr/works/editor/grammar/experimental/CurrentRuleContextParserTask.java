@@ -46,7 +46,7 @@ import org.netbeans.api.editor.mimelookup.MimeRegistration;
  *
  * @author Sam Harwell
  */
-public class CurrentRuleContextParserTask implements ParserTask {
+public final class CurrentRuleContextParserTask implements ParserTask {
 
     private CurrentRuleContextParserTask() {
     }

@@ -45,7 +45,10 @@ import org.openide.util.Exceptions;
  *
  * @author Sam Harwell
  */
-public class SyntaxErrorsHighlightingParserTask implements ParserTask {
+public final class SyntaxErrorsHighlightingParserTask implements ParserTask {
+
+    private SyntaxErrorsHighlightingParserTask() {
+    }
 
     @Override
     public ParserTaskDefinition getDefinition() {

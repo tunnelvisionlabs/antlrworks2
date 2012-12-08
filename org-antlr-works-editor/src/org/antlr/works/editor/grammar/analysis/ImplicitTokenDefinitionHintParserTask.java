@@ -63,7 +63,7 @@ import org.openide.util.Exceptions;
  *
  * @author Sam Harwell
  */
-public class ImplicitTokenDefinitionHintParserTask implements ParserTask {
+public final class ImplicitTokenDefinitionHintParserTask implements ParserTask {
     private static final String HINT_LAYER = "antlr4/implicit-token-definitions";
 
     private ImplicitTokenDefinitionHintParserTask() {

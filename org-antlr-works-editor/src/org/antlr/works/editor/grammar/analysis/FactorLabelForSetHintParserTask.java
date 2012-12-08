@@ -71,7 +71,7 @@ import org.openide.util.Exceptions;
  *
  * @author Sam Harwell
  */
-public class FactorLabelForSetHintParserTask implements ParserTask {
+public final class FactorLabelForSetHintParserTask implements ParserTask {
     private static final String HINT_LAYER = "antlr4/factor-label-for-set";
 
     private FactorLabelForSetHintParserTask() {

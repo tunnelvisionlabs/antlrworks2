@@ -54,7 +54,7 @@ import org.netbeans.api.editor.mimelookup.MimeRegistration;
  *
  * @author Sam Harwell
  */
-public class ReferenceAnchorsParserTask implements ParserTask {
+public final class ReferenceAnchorsParserTask implements ParserTask {
 
     private final Object lock = new Object();
 

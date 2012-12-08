@@ -37,9 +37,12 @@ import org.netbeans.api.editor.mimelookup.MimeRegistration;
  *
  * @author Sam Harwell
  */
-public class TemplateScanningParserTask implements ParserTask {
+public final class TemplateScanningParserTask implements ParserTask {
     private final TemplateScanner templateScanner = new TemplateScanner();
     private final Object lock = new Object();
+
+    private TemplateScanningParserTask() {
+    }
 
     @Override
     public ParserTaskDefinition getDefinition() {

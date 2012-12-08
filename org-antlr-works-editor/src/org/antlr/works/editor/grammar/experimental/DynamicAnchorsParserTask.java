@@ -36,7 +36,7 @@ import org.netbeans.api.editor.mimelookup.MimeRegistration;
  *
  * @author Sam Harwell
  */
-public class DynamicAnchorsParserTask implements ParserTask {
+public final class DynamicAnchorsParserTask implements ParserTask {
 
     private DynamicAnchorsParserTask() {
     }

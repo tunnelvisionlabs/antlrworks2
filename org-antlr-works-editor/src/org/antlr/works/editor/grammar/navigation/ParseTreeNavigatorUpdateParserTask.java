@@ -35,7 +35,6 @@ import org.antlr.works.editor.antlr4.navigation.ParseTreeNode;
 import org.antlr.works.editor.grammar.GrammarEditorKit;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
 import org.antlr.works.editor.grammar.experimental.CurrentRuleContextData;
-import org.antlr.works.editor.grammar.parser.CompiledModel;
 import org.netbeans.api.editor.EditorRegistry;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 
@@ -43,8 +42,11 @@ import org.netbeans.api.editor.mimelookup.MimeRegistration;
  *
  * @author Sam Harwell
  */
-public class ParseTreeNavigatorUpdateParserTask implements ParserTask {
+public final class ParseTreeNavigatorUpdateParserTask implements ParserTask {
     private final Object lock = new Object();
+
+    private ParseTreeNavigatorUpdateParserTask() {
+    }
 
     @Override
     public ParserTaskDefinition getDefinition() {
