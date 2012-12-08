@@ -38,6 +38,7 @@ public class TemplateParserDataDefinitions {
     public static final ParserDataDefinition<FileModel> FILE_MODEL = new FileModelDataDefinition();
 
     public static final ParserDataDefinition<Description> NAVIGATOR_ROOT = new NavigatorRootDataDefinition();
+    public static final ParserDataDefinition<Boolean> NAVIGATOR_UI_VISIBLE = new NavigatorUIVisibleDataDefinition();
 
     private TemplateParserDataDefinitions() {
     }
@@ -146,6 +147,14 @@ public class TemplateParserDataDefinitions {
 
         public NavigatorRootDataDefinition() {
             super("StringTemplate Navigator Root", Description.class, false, true, ParserTaskScheduler.INPUT_SENSITIVE_TASK_SCHEDULER);
+        }
+
+    }
+
+    private static final class NavigatorUIVisibleDataDefinition extends ParserDataDefinition<Boolean> {
+
+        public NavigatorUIVisibleDataDefinition() {
+            super("StringTemplate Navigator UI Visible", Boolean.class, false, false, ParserTaskScheduler.MANUAL_TASK_SCHEDULER);
         }
 
     }

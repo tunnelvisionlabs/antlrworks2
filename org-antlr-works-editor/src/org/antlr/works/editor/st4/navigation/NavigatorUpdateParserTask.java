@@ -107,7 +107,8 @@ public final class NavigatorUpdateParserTask implements ParserTask {
         private static final Collection<ParserDataDefinition<?>> INPUTS =
             Arrays.<ParserDataDefinition<?>>asList(
                 TemplateParserDataDefinitions.NAVIGATOR_ROOT,
-                TemplateParserDataDefinitions.CURRENT_TEMPLATE_CONTEXT);
+                TemplateParserDataDefinitions.CURRENT_TEMPLATE_CONTEXT,
+                TemplateParserDataDefinitions.NAVIGATOR_UI_VISIBLE);
 
         private static final Collection<ParserDataDefinition<?>> OUTPUTS =
             Collections.<ParserDataDefinition<?>>emptyList();

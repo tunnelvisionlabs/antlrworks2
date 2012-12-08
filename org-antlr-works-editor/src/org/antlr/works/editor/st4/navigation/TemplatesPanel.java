@@ -8,9 +8,22 @@
  */
 package org.antlr.works.editor.st4.navigation;
 
+import java.util.concurrent.TimeUnit;
+import javax.swing.text.Document;
+import javax.swing.text.JTextComponent;
+import org.antlr.netbeans.editor.text.VersionedDocument;
+import org.antlr.netbeans.editor.text.VersionedDocumentUtilities;
+import org.antlr.netbeans.parsing.spi.ParseContext;
+import org.antlr.netbeans.parsing.spi.ParserTaskManager;
+import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
 import org.antlr.works.editor.st4.StringTemplateEditorKit;
+import org.antlr.works.editor.st4.StringTemplateFileTypeDataObject;
+import org.antlr.works.editor.st4.TemplateParserDataDefinitions;
+import org.netbeans.api.editor.EditorRegistry;
+import org.netbeans.modules.editor.NbEditorUtilities;
 import org.netbeans.spi.navigator.NavigatorPanel;
 import org.netbeans.spi.navigator.NavigatorPanel.Registration;
+import org.openide.loaders.DataObject;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
 
@@ -43,17 +56,44 @@ public class TemplatesPanel implements NavigatorPanel {
     @Override
     public void panelActivated(Lookup context) {
         INSTANCE = this;
+        scheduleTaskManagerUpdate(context.lookup(DataObject.class));
     }
 
     @Override
     public void panelDeactivated() {
         INSTANCE = null;
+        scheduleTaskManagerUpdate(null);
         getTemplatesPanelUI().showWaitNode();
     }
 
     @Override
     public Lookup getLookup() {
         return getTemplatesPanelUI().getLookup();
+    }
+
+    private void scheduleTaskManagerUpdate(DataObject dataObject) {
+        if (dataObject != null && !(dataObject instanceof StringTemplateFileTypeDataObject)) {
+            return;
+        }
+
+        JTextComponent currentComponent = EditorRegistry.lastFocusedComponent();
+        if (currentComponent == null) {
+            return;
+        }
+
+        Document document = currentComponent.getDocument();
+        DataObject documentDataObject = document != null ? NbEditorUtilities.getDataObject(document) : null;
+        VersionedDocument versionedDocument;
+        if (dataObject != null && (documentDataObject == null || !dataObject.equals(documentDataObject))) {
+            versionedDocument = VersionedDocumentUtilities.getVersionedDocument(dataObject.getPrimaryFile());
+        } else if (document != null) {
+            versionedDocument = VersionedDocumentUtilities.getVersionedDocument(document);
+        } else {
+            return;
+        }
+
+        ParseContext context = new ParseContext(ParserTaskScheduler.MANUAL_TASK_SCHEDULER, versionedDocument);
+        Lookup.getDefault().lookup(ParserTaskManager.class).scheduleData(context, TemplateParserDataDefinitions.NAVIGATOR_UI_VISIBLE, 0, TimeUnit.MILLISECONDS);
     }
 
     private synchronized TemplatesPanelUI getTemplatesPanelUI() {
