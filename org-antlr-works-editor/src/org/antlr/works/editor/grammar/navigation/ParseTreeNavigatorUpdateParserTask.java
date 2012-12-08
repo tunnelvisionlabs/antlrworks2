@@ -52,7 +52,7 @@ public class ParseTreeNavigatorUpdateParserTask implements ParserTask {
     }
 
     @Override
-    public void parse(ParserTaskManager taskManager, ParseContext parseContext, DocumentSnapshot snapshot, Collection<ParserDataDefinition<?>> requestedData, ParserResultHandler results) throws InterruptedException, ExecutionException {
+    public void parse(ParserTaskManager taskManager, ParseContext parseContext, DocumentSnapshot snapshot, Collection<? extends ParserDataDefinition<?>> requestedData, ParserResultHandler results) throws InterruptedException, ExecutionException {
         synchronized (lock) {
             GrammarParseTreeNavigatorPanel panel = GrammarParseTreeNavigatorPanel.getInstance();
             if (panel == null) {

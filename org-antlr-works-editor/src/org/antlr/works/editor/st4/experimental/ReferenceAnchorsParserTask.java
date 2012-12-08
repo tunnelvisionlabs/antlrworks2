@@ -68,7 +68,7 @@ public class ReferenceAnchorsParserTask implements ParserTask {
 
     @Override
     @RuleDependency(recognizer=TemplateParser.class, rule=TemplateParser.RULE_group, version=0)
-    public void parse(ParserTaskManager taskManager, ParseContext context, DocumentSnapshot snapshot, Collection<ParserDataDefinition<?>> requestedData, ParserResultHandler results) throws InterruptedException, ExecutionException {
+    public void parse(ParserTaskManager taskManager, ParseContext context, DocumentSnapshot snapshot, Collection<? extends ParserDataDefinition<?>> requestedData, ParserResultHandler results) throws InterruptedException, ExecutionException {
         synchronized (lock) {
             ParserData<ParserRuleContext<Token>> parseTreeResult = taskManager.getData(snapshot, TemplateParserDataDefinitions.REFERENCE_PARSE_TREE, EnumSet.of(ParserDataOptions.NO_UPDATE)).get();
             ParserData<List<Anchor>> anchorPointsResult = taskManager.getData(snapshot, TemplateParserDataDefinitions.REFERENCE_ANCHOR_POINTS, EnumSet.of(ParserDataOptions.NO_UPDATE)).get();

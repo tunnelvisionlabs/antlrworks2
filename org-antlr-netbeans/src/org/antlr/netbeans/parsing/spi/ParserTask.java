@@ -21,7 +21,7 @@ public interface ParserTask {
 
     @NonNull ParserTaskDefinition getDefinition();
 
-    void parse(@NonNull ParserTaskManager taskManager, @NonNull ParseContext context, @NonNull DocumentSnapshot snapshot, @NonNull Collection<ParserDataDefinition<?>> requestedData, @NonNull ParserResultHandler results)
+    void parse(@NonNull ParserTaskManager taskManager, @NonNull ParseContext context, @NonNull DocumentSnapshot snapshot, @NonNull Collection<? extends ParserDataDefinition<?>> requestedData, @NonNull ParserResultHandler results)
         throws InterruptedException, ExecutionException;
 
 }

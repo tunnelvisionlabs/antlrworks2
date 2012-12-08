@@ -29,7 +29,7 @@ public abstract class CompiledModelParser {
     // -J-Dorg.antlr.works.editor.grammar.parser.CompiledModelParser.level=FINE
     private static final Logger LOGGER = Logger.getLogger(CompiledModelParser.class.getName());
 
-    public void parse(ParserTaskManager taskManager, ParseContext context, DocumentSnapshot snapshot, Collection<ParserDataDefinition<?>> requestedData, ParserResultHandler results)
+    public void parse(ParserTaskManager taskManager, ParseContext context, DocumentSnapshot snapshot, Collection<? extends ParserDataDefinition<?>> requestedData, ParserResultHandler results)
         throws InterruptedException, ExecutionException {
 
         try {

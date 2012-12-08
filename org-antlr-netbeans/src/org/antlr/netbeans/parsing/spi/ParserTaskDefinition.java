@@ -22,13 +22,13 @@ public class ParserTaskDefinition {
     @NonNull
     private final String name;
     @NonNull
-    private final Collection<ParserDataDefinition<?>> inputs;
+    private final Collection<? extends ParserDataDefinition<?>> inputs;
     @NonNull
-    private final Collection<ParserDataDefinition<?>> outputs;
+    private final Collection<? extends ParserDataDefinition<?>> outputs;
     @NullAllowed
     private final Class<? extends ParserTaskScheduler> scheduler;
 
-    public ParserTaskDefinition(@NonNull String name, @NonNull Collection<ParserDataDefinition<?>> inputs, @NonNull Collection<ParserDataDefinition<?>> outputs, @NullAllowed Class<? extends ParserTaskScheduler> scheduler) {
+    public ParserTaskDefinition(@NonNull String name, @NonNull Collection<? extends ParserDataDefinition<?>> inputs, @NonNull Collection<? extends ParserDataDefinition<?>> outputs, @NullAllowed Class<? extends ParserTaskScheduler> scheduler) {
         Parameters.notNull("name", name);
         Parameters.notNull("inputs", inputs);
         Parameters.notNull("outputs", outputs);
@@ -45,12 +45,12 @@ public class ParserTaskDefinition {
     }
 
     @NonNull
-    public Collection<ParserDataDefinition<?>> getInputs() {
+    public Collection<? extends ParserDataDefinition<?>> getInputs() {
         return inputs;
     }
 
     @NonNull
-    public Collection<ParserDataDefinition<?>> getOutputs() {
+    public Collection<? extends ParserDataDefinition<?>> getOutputs() {
         return outputs;
     }
 
