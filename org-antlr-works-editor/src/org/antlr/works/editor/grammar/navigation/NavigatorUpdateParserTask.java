@@ -14,6 +14,8 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
 import org.antlr.netbeans.editor.navigation.Description;
@@ -41,6 +43,8 @@ import org.netbeans.api.editor.mimelookup.MimeRegistration;
  * @author Sam Harwell
  */
 public final class NavigatorUpdateParserTask implements ParserTask {
+    // -J-Dorg.antlr.works.editor.grammar.navigation.NavigatorUpdateParserTask.level=FINE
+    private static final Logger LOGGER = Logger.getLogger(NavigatorUpdateParserTask.class.getName());
 
     private final Object lock = new Object();
 
@@ -59,6 +63,7 @@ public final class NavigatorUpdateParserTask implements ParserTask {
         synchronized (lock) {
             GrammarRulesPanel panel = GrammarRulesPanel.getInstance();
             if (panel == null) {
+                LOGGER.log(Level.FINE, "Navigator update cancelled: {0} instance not found.", GrammarRulesPanel.class.getName());
                 return;
             }
 
