@@ -16,6 +16,7 @@ import org.antlr.netbeans.editor.text.SnapshotPosition;
 import org.antlr.netbeans.editor.text.VersionedDocument;
 import org.netbeans.api.annotations.common.CheckForNull;
 import org.netbeans.api.annotations.common.NonNull;
+import org.netbeans.api.annotations.common.NullAllowed;
 import org.openide.util.Parameters;
 
 /**
@@ -32,19 +33,19 @@ public class ParseContext {
     private final SnapshotPosition position;
     private final Reference<JTextComponent> component;
 
-    public ParseContext(@NonNull Class<? extends ParserTaskScheduler> scheduler, VersionedDocument document) {
+    public ParseContext(@NonNull Class<? extends ParserTaskScheduler> scheduler, @NonNull VersionedDocument document) {
         this(scheduler, document, null, null, null);
     }
 
-    public ParseContext(@NonNull Class<? extends ParserTaskScheduler> scheduler, VersionedDocument document, JTextComponent component) {
+    public ParseContext(@NonNull Class<? extends ParserTaskScheduler> scheduler, @NonNull VersionedDocument document, @NullAllowed JTextComponent component) {
         this(scheduler, document, null, null, component);
     }
 
-    public ParseContext(@NonNull Class<? extends ParserTaskScheduler> scheduler, DocumentSnapshot snapshot) {
+    public ParseContext(@NonNull Class<? extends ParserTaskScheduler> scheduler, @NonNull DocumentSnapshot snapshot) {
         this(scheduler, snapshot.getVersionedDocument(), snapshot, null, null);
     }
 
-    public ParseContext(@NonNull Class<? extends ParserTaskScheduler> scheduler, DocumentSnapshot snapshot, JTextComponent component) {
+    public ParseContext(@NonNull Class<? extends ParserTaskScheduler> scheduler, @NonNull DocumentSnapshot snapshot, @NullAllowed JTextComponent component) {
         this(scheduler, snapshot.getVersionedDocument(), snapshot, null, component);
     }
 
@@ -52,11 +53,11 @@ public class ParseContext {
         this(scheduler, position.getSnapshot().getVersionedDocument(), position.getSnapshot(), position, null);
     }
 
-    public ParseContext(@NonNull Class<? extends ParserTaskScheduler> scheduler, @NonNull SnapshotPosition position, JTextComponent component) {
+    public ParseContext(@NonNull Class<? extends ParserTaskScheduler> scheduler, @NonNull SnapshotPosition position, @NullAllowed JTextComponent component) {
         this(scheduler, position.getSnapshot().getVersionedDocument(), position.getSnapshot(), position, component);
     }
 
-    public ParseContext(@NonNull Class<? extends ParserTaskScheduler> schedulerClass, VersionedDocument document, DocumentSnapshot snapshot, SnapshotPosition position, JTextComponent component) {
+    public ParseContext(@NonNull Class<? extends ParserTaskScheduler> schedulerClass, @NonNull VersionedDocument document, @NullAllowed DocumentSnapshot snapshot, @NullAllowed SnapshotPosition position, @NullAllowed JTextComponent component) {
         Parameters.notNull("schedulerClass", schedulerClass);
         Parameters.notNull("document", document);
 
