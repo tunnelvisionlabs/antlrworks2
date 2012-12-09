@@ -76,7 +76,7 @@ public final class ReferenceAnchorsParserTask implements ParserTask {
     public void parse(ParserTaskManager taskManager, ParseContext context, DocumentSnapshot snapshot, Collection<? extends ParserDataDefinition<?>> requestedData, ParserResultHandler results)
         throws InterruptedException, ExecutionException {
 
-        boolean legacyMode = GrammarEditorKit.isLegacyMode(document.getDocument());
+        boolean legacyMode = GrammarEditorKit.isLegacyMode(snapshot);
         if (legacyMode) {
             ParserData<List<Anchor>> emptyResult = new BaseParserData<List<Anchor>>(context, GrammarParserDataDefinitions.REFERENCE_ANCHOR_POINTS, snapshot, null);
             results.addResult(emptyResult);

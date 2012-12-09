@@ -36,6 +36,7 @@ import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.netbeans.editor.text.VersionedDocumentUtilities;
 import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
+import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.editor.EditorActionRegistration;
 import org.netbeans.api.editor.mimelookup.MimeLookup;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
@@ -110,7 +111,7 @@ public class GrammarEditorKit extends NbEditorKit {
         return actions;
     }
 
-    public static boolean isLegacyMode(DocumentSnapshot snapshot) {
+    public static boolean isLegacyMode(@NonNull DocumentSnapshot snapshot) {
         Document document = snapshot.getVersionedDocument().getDocument();
         if (document == null) {
             return false;
@@ -119,7 +120,7 @@ public class GrammarEditorKit extends NbEditorKit {
         return isLegacyMode(document);
     }
 
-    public static boolean isLegacyMode(Document document) {
+    public static boolean isLegacyMode(@NonNull Document document) {
         Boolean mode = (Boolean)document.getProperty(PROP_LEGACY_MODE);
         if (mode == null) {
             return false;
