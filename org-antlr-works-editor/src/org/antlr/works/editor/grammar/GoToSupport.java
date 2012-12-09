@@ -125,7 +125,7 @@ public class GoToSupport {
             }
         }
 
-        if (target == null) {
+        if (target == null || target.getFileObject() == null) {
             return;
         }
 

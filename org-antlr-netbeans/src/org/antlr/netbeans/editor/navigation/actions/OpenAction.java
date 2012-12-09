@@ -52,6 +52,9 @@ public final class OpenAction extends AbstractAction {
 
     public OpenAction(@NonNull Description description) {
         Parameters.notNull("description", description);
+        if (description.getFileObject() == null) {
+            throw new IllegalArgumentException("Description does not provide a file.");
+        }
 
         this.description = description;
         this.fileObject = null;
