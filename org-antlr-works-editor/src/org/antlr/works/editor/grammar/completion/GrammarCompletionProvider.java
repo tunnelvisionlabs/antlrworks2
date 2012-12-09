@@ -28,13 +28,15 @@ import org.antlr.works.editor.antlr4.completion.AbstractCompletionQuery;
 import org.antlr.works.editor.grammar.GoToSupport;
 import org.antlr.works.editor.grammar.GrammarEditorKit;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
+import org.antlr.works.editor.grammar.codemodel.CodeElementModel;
+import org.antlr.works.editor.grammar.codemodel.CodeElementPositionRegion;
 import org.antlr.works.editor.grammar.codemodel.FileModel;
 import org.antlr.works.editor.grammar.codemodel.LexerRuleModel;
 import org.antlr.works.editor.grammar.codemodel.ModeModel;
 import org.antlr.works.editor.grammar.codemodel.RuleModel;
 import org.antlr.works.editor.grammar.codemodel.TokenData;
 import org.antlr.works.editor.grammar.experimental.GrammarLexer;
-import org.antlr.works.editor.grammar.navigation.GrammarNode;
+import org.antlr.works.editor.grammar.navigation.GrammarNode.GrammarNodeDescription;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.netbeans.spi.editor.completion.CompletionProvider;
 import org.openide.util.NbBundle;
@@ -159,7 +161,9 @@ public class GrammarCompletionProvider extends AbstractCompletionProvider {
                     continue;
                 }
 
-                rules.put(ruleModel.getName(), new GrammarNode.GrammarNodeDescription(ruleModel.getName()));
+                GrammarNodeDescription description = new GrammarNodeDescription(ruleModel.getName());
+                addSeekPositionToDescription(description, ruleModel);
+                rules.put(ruleModel.getName(), description);
             }
 
             if (!ignoreLexerOnlyRules) {
@@ -169,7 +173,9 @@ public class GrammarCompletionProvider extends AbstractCompletionProvider {
                             continue;
                         }
 
-                        rules.put(ruleModel.getName(), new GrammarNode.GrammarNodeDescription(ruleModel.getName()));
+                        GrammarNodeDescription description = new GrammarNodeDescription(ruleModel.getName());
+                        addSeekPositionToDescription(description, ruleModel);
+                        rules.put(ruleModel.getName(), description);
                     }
                 }
             }
@@ -179,11 +185,28 @@ public class GrammarCompletionProvider extends AbstractCompletionProvider {
                     continue;
                 }
 
-                rules.put(tokenData.getName(), new GrammarNode.GrammarNodeDescription(tokenData.getName()));
+                GrammarNodeDescription description = new GrammarNodeDescription(tokenData.getName());
+                Collection<? extends RuleModel> resolved = tokenData.resolve();
+                for (RuleModel ruleModel : resolved) {
+                    if (addSeekPositionToDescription(description, ruleModel)) {
+                        break;
+                    }
+                }
+
+                rules.put(tokenData.getName(), description);
             }
         }
 
         return rules.values();
     }
 
+    private static boolean addSeekPositionToDescription(GrammarNodeDescription description, CodeElementModel codeElementModel) {
+        CodeElementPositionRegion position = codeElementModel.getSeek();
+        if (position == null) {
+            return false;
+        }
+
+        description.setOffset(null, position.getFileObject(), position.getOffsetRegion().getStart());
+        return true;
+    }
 }
