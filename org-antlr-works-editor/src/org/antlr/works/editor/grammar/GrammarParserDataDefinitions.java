@@ -52,6 +52,7 @@ public class GrammarParserDataDefinitions {
 
     public static final ParserDataDefinition<Description> NAVIGATOR_ROOT = new NavigatorRootDataDefinition();
     public static final ParserDataDefinition<Boolean> NAVIGATOR_UI_VISIBLE = new NavigatorUIVisibleDataDefinition();
+    public static final ParserDataDefinition<Boolean> PARSE_TREE_UI_VISIBLE = new ParseTreeUIVisibleDataDefinition();
 
     private GrammarParserDataDefinitions() {
     }
@@ -208,6 +209,14 @@ public class GrammarParserDataDefinitions {
 
         public NavigatorUIVisibleDataDefinition() {
             super("Grammar Navigator UI Visible", Boolean.class, false, false, ParserTaskScheduler.MANUAL_TASK_SCHEDULER);
+        }
+
+    }
+
+    private static final class ParseTreeUIVisibleDataDefinition extends ParserDataDefinition<Boolean> {
+
+        public ParseTreeUIVisibleDataDefinition() {
+            super("Parse Tree UI Visible", Boolean.class, false, false, ParserTaskScheduler.MANUAL_TASK_SCHEDULER);
         }
 
     }

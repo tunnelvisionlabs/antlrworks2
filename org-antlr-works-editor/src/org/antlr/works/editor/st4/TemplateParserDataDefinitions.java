@@ -39,6 +39,7 @@ public class TemplateParserDataDefinitions {
 
     public static final ParserDataDefinition<Description> NAVIGATOR_ROOT = new NavigatorRootDataDefinition();
     public static final ParserDataDefinition<Boolean> NAVIGATOR_UI_VISIBLE = new NavigatorUIVisibleDataDefinition();
+    public static final ParserDataDefinition<Boolean> PARSE_TREE_UI_VISIBLE = new ParseTreeUIVisibleDataDefinition();
 
     private TemplateParserDataDefinitions() {
     }
@@ -155,6 +156,14 @@ public class TemplateParserDataDefinitions {
 
         public NavigatorUIVisibleDataDefinition() {
             super("StringTemplate Navigator UI Visible", Boolean.class, false, false, ParserTaskScheduler.MANUAL_TASK_SCHEDULER);
+        }
+
+    }
+
+    private static final class ParseTreeUIVisibleDataDefinition extends ParserDataDefinition<Boolean> {
+
+        public ParseTreeUIVisibleDataDefinition() {
+            super("StringTemplate Parse Tree UI Visible", Boolean.class, false, false, ParserTaskScheduler.MANUAL_TASK_SCHEDULER);
         }
 
     }
