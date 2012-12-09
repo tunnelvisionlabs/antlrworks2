@@ -9,6 +9,11 @@
 package org.antlr.works.editor.grammar.codemodel.impl;
 
 import java.util.Collection;
+import org.antlr.netbeans.editor.text.OffsetRegion;
+import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.tree.TerminalNode;
+import org.antlr.works.editor.grammar.codemodel.CodeElementPositionRegion;
 import org.antlr.works.editor.grammar.codemodel.ModeModel;
 import org.antlr.works.editor.grammar.codemodel.RuleModel;
 
@@ -19,8 +24,13 @@ import org.antlr.works.editor.grammar.codemodel.RuleModel;
 public class ModeModelImpl extends AbstractCodeElementModel implements ModeModel {
     private final FreezableArrayList<RuleModelImpl> rules = new FreezableArrayList<RuleModelImpl>();
 
-    public ModeModelImpl(String name, FileModelImpl file) {
+    private final OffsetRegion seek;
+    private final OffsetRegion span;
+
+    public ModeModelImpl(String name, FileModelImpl file, TerminalNode<? extends Token> seek, ParserRuleContext<?> span) {
         super(name, file);
+        this.seek = getOffsetRegion(seek);
+        this.span = getOffsetRegion(span);
     }
 
     @Override
@@ -36,6 +46,24 @@ public class ModeModelImpl extends AbstractCodeElementModel implements ModeModel
     @Override
     public Collection<? extends AbstractCodeElementModel> getMembers() {
         return rules;
+    }
+
+    @Override
+    public CodeElementPositionRegion getSeek() {
+        if (this.seek == null) {
+            return super.getSeek();
+        }
+
+        return new CodeElementPositionRegionImpl(this, seek);
+    }
+
+    @Override
+    public CodeElementPositionRegion getSpan() {
+        if (this.span == null) {
+            return super.getSpan();
+        }
+
+        return new CodeElementPositionRegionImpl(this, span);
     }
 
     @Override

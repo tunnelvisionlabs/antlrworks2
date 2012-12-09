@@ -10,7 +10,12 @@ package org.antlr.works.editor.grammar.codemodel.impl;
 
 import java.util.Collection;
 import java.util.Collections;
+import org.antlr.netbeans.editor.text.OffsetRegion;
+import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.works.editor.grammar.codemodel.AttributeModel;
+import org.antlr.works.editor.grammar.codemodel.CodeElementPositionRegion;
 
 /**
  *
@@ -19,9 +24,28 @@ import org.antlr.works.editor.grammar.codemodel.AttributeModel;
 public abstract class AbstractAttributeModel extends AbstractCodeElementModel implements AttributeModel {
     private final String type;
 
-    public AbstractAttributeModel(String name, String type, FileModelImpl file) {
+    private final OffsetRegion seek;
+    private final OffsetRegion span;
+
+    protected AbstractAttributeModel(String name, String type, FileModelImpl file, Collection<? extends TerminalNode<? extends Token>> definitions, Collection<? extends TerminalNode<? extends Token>> uses) {
         super(name, file);
         this.type = type;
+
+        if (definitions != null && !definitions.isEmpty()) {
+            TerminalNode<? extends Token> firstDefinition = definitions.iterator().next();
+            this.seek = getOffsetRegion(firstDefinition);
+            this.span = this.seek;
+        } else {
+            this.seek = null;
+            this.span = null;
+        }
+    }
+
+    protected AbstractAttributeModel(String name, String type, FileModelImpl file, TerminalNode<? extends Token> seek, ParserRuleContext<? extends Token> span) {
+        super(name, file);
+        this.type = type;
+        this.seek = getOffsetRegion(seek);
+        this.span = getOffsetRegion(span);
     }
 
     @Override
@@ -37,5 +61,23 @@ public abstract class AbstractAttributeModel extends AbstractCodeElementModel im
     @Override
     public Collection<? extends AbstractCodeElementModel> getMembers(String name) {
         return Collections.emptyList();
+    }
+
+    @Override
+    public CodeElementPositionRegion getSeek() {
+        if (this.seek == null) {
+            return super.getSeek();
+        }
+
+        return new CodeElementPositionRegionImpl(this, seek);
+    }
+
+    @Override
+    public CodeElementPositionRegion getSpan() {
+        if (this.span == null) {
+            return super.getSpan();
+        }
+
+        return new CodeElementPositionRegionImpl(this, span);
     }
 }

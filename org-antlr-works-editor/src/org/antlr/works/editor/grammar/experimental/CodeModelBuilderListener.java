@@ -83,7 +83,7 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
     private final Deque<Collection<ParameterModelImpl>> returnValueContainerStack = new ArrayDeque<Collection<ParameterModelImpl>>();
     private final Deque<Collection<ParameterModelImpl>> localContainerStack = new ArrayDeque<Collection<ParameterModelImpl>>();
     private final Deque<Collection<LabelModelImpl>> labelContainerStack = new ArrayDeque<Collection<LabelModelImpl>>();
-    private final Deque<Map<String, Collection<SnapshotPositionRegion>>> labelUses = new ArrayDeque<Map<String, Collection<SnapshotPositionRegion>>>();
+    private final Deque<Map<String, Collection<TerminalNode<Token>>>> labelUses = new ArrayDeque<Map<String, Collection<TerminalNode<Token>>>>();
 
     public CodeModelBuilderListener(DocumentSnapshot snapshot, TokenStream<? extends Token> tokens) {
         FileObject fileObject = snapshot.getVersionedDocument().getFileObject();
@@ -127,11 +127,11 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_parserRuleSpec, version=0),
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerRule, version=0),
     })
-    private void handleEnterRule(ParserRuleContext<Token> ctx, Token name) {
+    private void handleEnterRule(ParserRuleContext<Token> ctx, TerminalNode<Token> name) {
         String ruleName = name != null ? name.getText() : "?";
         RuleModelImpl ruleModel;
         if (ctx instanceof GrammarParser.ParserRuleSpecContext) {
-            ruleModel = new ParserRuleModelImpl(ruleName, fileModel);
+            ruleModel = new ParserRuleModelImpl(ruleName, fileModel, name, ctx);
         } else if (ctx instanceof GrammarParser.LexerRuleContext) {
             boolean generateTokenType = !SuppressTokenTypeVisitor.INSTANCE.visit(ctx);
             String literal = null;
@@ -140,7 +140,7 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
                 literal = terminal != null ? terminal.getSymbol().getText() : null;
             }
 
-            ruleModel = new LexerRuleModelImpl(ruleName, modeModelStack.peek(), generateTokenType, literal, fileModel);
+            ruleModel = new LexerRuleModelImpl(ruleName, modeModelStack.peek(), generateTokenType, literal, fileModel, name, ctx);
         } else {
             throw new UnsupportedOperationException();
         }
@@ -151,14 +151,14 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
         returnValueContainerStack.push(ruleModel.getReturnValues());
         localContainerStack.push(ruleModel.getLocals());
         labelContainerStack.push(ruleModel.getLabels());
-        labelUses.push(new HashMap<String, Collection<SnapshotPositionRegion>>());
+        labelUses.push(new HashMap<String, Collection<TerminalNode<Token>>>());
     }
 
     private void handleExitRule(ParserRuleContext<Token> ctx) {
         Collection<LabelModelImpl> labels = labelContainerStack.peek();
-        for (Map.Entry<String, Collection<SnapshotPositionRegion>> labelUsage : labelUses.peek().entrySet()) {
+        for (Map.Entry<String, Collection<TerminalNode<Token>>> labelUsage : labelUses.peek().entrySet()) {
             //labels.add(new LabelModelImpl(labelUsage.getKey(), labelUsage.getValue()));
-            labels.add(new LabelModelImpl(labelUsage.getKey(), fileModel));
+            labels.add(new LabelModelImpl(labelUsage.getKey(), fileModel, labelUsage.getValue(), null));
         }
 
         ruleModelStack.pop();
@@ -175,7 +175,7 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_argActionParameters, version=0),
     })
     public void enterParserRuleSpec(ParserRuleSpecContext ctx) {
-        handleEnterRule(ctx, ctx.name);
+        handleEnterRule(ctx, ctx.RULE_REF());
 
         ArgActionParametersContext ctxparameters = ctx.argActionParameters();
         if (ctxparameters != null) {
@@ -192,7 +192,7 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
     @Override
     @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerRule, version=0)
     public void enterLexerRule(LexerRuleContext ctx) {
-        handleEnterRule(ctx, ctx.name);
+        handleEnterRule(ctx, ctx.TOKEN_REF());
     }
 
     @Override
@@ -208,13 +208,13 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
     })
     public void enterTokensSpec(TokensSpecContext ctx) {
         for (IdContext id : ctx.id()) {
-            Token token = id.start;
+            TerminalNode<Token> token = ParseTrees.getStartNode(id);
             if (token == null) {
                 continue;
             }
 
             String tokenName = token.getText();
-            RuleModelImpl ruleModel = new TokenRuleModelImpl(tokenName, null, fileModel);
+            RuleModelImpl ruleModel = new TokenRuleModelImpl(tokenName, null, fileModel, token, ctx);
             ruleContainerStack.peek().add(ruleModel);
         }
     }
@@ -232,15 +232,17 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
     public void enterModeSpec(ModeSpecContext ctx) {
         String name = null;
         IdContext nameId = ctx.id();
-        if (nameId != null) {
-            name = nameId.start.getText();
+        TerminalNode<Token> nameToken = ParseTrees.getStartNode(nameId);
+
+        if (nameToken != null) {
+            name = nameToken.getText();
         }
 
         if (name == null || name.isEmpty()) {
             name = "?mode?";
         }
 
-        ModeModelImpl modeModel = new ModeModelImpl(name, fileModel);
+        ModeModelImpl modeModel = new ModeModelImpl(name, fileModel, nameToken, ctx);
         modeContainerStack.peek().add(modeModel);
         modeModelStack.push(modeModel);
         ruleContainerStack.push(modeModel.getRules());
@@ -286,16 +288,17 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=1),
     })
     public void enterLabeledElement(LabeledElementContext ctx) {
-        if (ctx.label != null) {
-            String name = ctx.label.start.getText();
-            Collection<SnapshotPositionRegion> uses = labelUses.peek().get(name);
+        IdContext label = ctx.label;
+        if (label != null) {
+            TerminalNode<Token> nameToken = ParseTrees.getStartNode(label);
+            String name = nameToken.getText();
+            Collection<TerminalNode<Token>> uses = labelUses.peek().get(name);
             if (uses == null) {
-                uses = new ArrayList<SnapshotPositionRegion>();
+                uses = new ArrayList<TerminalNode<Token>>();
                 labelUses.peek().put(name, uses);
             }
 
-            SnapshotPositionRegion use = getSpan(ctx.label);
-            uses.add(use);
+            uses.add(nameToken);
         }
     }
 
@@ -328,7 +331,7 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
         String name = getText(nodes.get(0));
         String target = getText(nodes.get(nodes.size() - 1));
         ImportDeclarationModelImpl importDeclarationModel =
-            new ImportDeclarationModelImpl(name, target, fileModel);
+            new ImportDeclarationModelImpl(name, target, fileModel, ParseTrees.getStartNode(ctx), ctx);
 
         fileModel.getImportDeclarations().add(importDeclarationModel);
     }
@@ -357,8 +360,8 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
 
         for (ArgActionParameterContext context : contexts) {
             String type = getText(context.type);
-            Token name = context.name;
-            ParameterModelImpl parameter = new ParameterModelImpl(name != null ? name.getText() : "?", type, fileModel);
+            TerminalNode<Token> name = ParseTrees.findTerminalNode(context, context.name);
+            ParameterModelImpl parameter = new ParameterModelImpl(name != null ? name.getText() : "?", type, fileModel, name, context);
             models.add(parameter);
         }
     }

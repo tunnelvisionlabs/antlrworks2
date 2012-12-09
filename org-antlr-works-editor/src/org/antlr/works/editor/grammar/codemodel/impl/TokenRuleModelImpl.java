@@ -8,6 +8,9 @@
  */
 package org.antlr.works.editor.grammar.codemodel.impl;
 
+import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.works.editor.grammar.codemodel.RuleKind;
 
 /**
@@ -16,8 +19,8 @@ import org.antlr.works.editor.grammar.codemodel.RuleKind;
  */
 public class TokenRuleModelImpl extends LexerRuleModelImpl {
 
-    public TokenRuleModelImpl(String name, String literal, FileModelImpl file) {
-        super(name, null, true, literal, file);
+    public TokenRuleModelImpl(String name, String literal, FileModelImpl file, TerminalNode<? extends Token> seek, ParserRuleContext<?> span) {
+        super(name, null, true, literal, file, seek, span);
     }
 
     @Override

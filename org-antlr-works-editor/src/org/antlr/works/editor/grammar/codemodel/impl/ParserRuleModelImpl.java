@@ -8,6 +8,9 @@
  */
 package org.antlr.works.editor.grammar.codemodel.impl;
 
+import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.works.editor.grammar.codemodel.ModeModel;
 import org.antlr.works.editor.grammar.codemodel.RuleKind;
 
@@ -17,8 +20,8 @@ import org.antlr.works.editor.grammar.codemodel.RuleKind;
  */
 public class ParserRuleModelImpl extends RuleModelImpl {
 
-    public ParserRuleModelImpl(String name, FileModelImpl file) {
-        super(name, file);
+    public ParserRuleModelImpl(String name, FileModelImpl file, TerminalNode<? extends Token> seek, ParserRuleContext<?> span) {
+        super(name, file, seek, span);
     }
 
     @Override

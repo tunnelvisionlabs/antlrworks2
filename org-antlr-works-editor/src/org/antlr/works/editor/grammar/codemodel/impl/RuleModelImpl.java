@@ -10,6 +10,11 @@ package org.antlr.works.editor.grammar.codemodel.impl;
 
 import java.util.Collection;
 import java.util.List;
+import org.antlr.netbeans.editor.text.OffsetRegion;
+import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.tree.TerminalNode;
+import org.antlr.works.editor.grammar.codemodel.CodeElementPositionRegion;
 import org.antlr.works.editor.grammar.codemodel.LabelModel;
 import org.antlr.works.editor.grammar.codemodel.ParameterModel;
 import org.antlr.works.editor.grammar.codemodel.RuleModel;
@@ -27,8 +32,13 @@ public abstract class RuleModelImpl extends AbstractCodeElementModel implements 
     @SuppressWarnings("unchecked")
     private final ProxyCollection<AbstractCodeElementModel> members = new ProxyCollection<AbstractCodeElementModel>(parameters, returnValues, locals, labels);
 
-    public RuleModelImpl(String name, FileModelImpl file) {
+    private final OffsetRegion seek;
+    private final OffsetRegion span;
+
+    public RuleModelImpl(String name, FileModelImpl file, TerminalNode<? extends Token> seek, ParserRuleContext<?> span) {
         super(name, file);
+        this.seek = getOffsetRegion(seek);
+        this.span = getOffsetRegion(span);
     }
 
     @NonNull
@@ -79,6 +89,24 @@ public abstract class RuleModelImpl extends AbstractCodeElementModel implements 
     @Override
     public Collection<? extends AbstractCodeElementModel> getMembers() {
         return members;
+    }
+
+    @Override
+    public CodeElementPositionRegion getSeek() {
+        if (this.seek == null) {
+            return super.getSeek();
+        }
+
+        return new CodeElementPositionRegionImpl(this, seek);
+    }
+
+    @Override
+    public CodeElementPositionRegion getSpan() {
+        if (this.span == null) {
+            return super.getSpan();
+        }
+
+        return new CodeElementPositionRegionImpl(this, span);
     }
 
     @Override

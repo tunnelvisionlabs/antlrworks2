@@ -10,6 +10,11 @@ package org.antlr.works.editor.grammar.codemodel.impl;
 
 import java.util.Collection;
 import java.util.Collections;
+import org.antlr.netbeans.editor.text.OffsetRegion;
+import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.tree.TerminalNode;
+import org.antlr.works.editor.grammar.codemodel.CodeElementPositionRegion;
 import org.antlr.works.editor.grammar.codemodel.ImportDeclarationModel;
 
 /**
@@ -19,9 +24,14 @@ import org.antlr.works.editor.grammar.codemodel.ImportDeclarationModel;
 public class ImportDeclarationModelImpl extends AbstractCodeElementModel implements ImportDeclarationModel {
     private final String target;
 
-    public ImportDeclarationModelImpl(String name, String target, FileModelImpl file) {
+    private final OffsetRegion seek;
+    private final OffsetRegion span;
+
+    public ImportDeclarationModelImpl(String name, String target, FileModelImpl file, TerminalNode<? extends Token> seek, ParserRuleContext<?> span) {
         super(name, file);
         this.target = target;
+        this.seek = getOffsetRegion(seek);
+        this.span = getOffsetRegion(span);
     }
 
     @Override
@@ -34,4 +44,21 @@ public class ImportDeclarationModelImpl extends AbstractCodeElementModel impleme
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    @Override
+    public CodeElementPositionRegion getSeek() {
+        if (this.seek == null) {
+            return super.getSeek();
+        }
+
+        return new CodeElementPositionRegionImpl(this, seek);
+    }
+
+    @Override
+    public CodeElementPositionRegion getSpan() {
+        if (this.span == null) {
+            return super.getSpan();
+        }
+
+        return new CodeElementPositionRegionImpl(this, span);
+    }
 }
