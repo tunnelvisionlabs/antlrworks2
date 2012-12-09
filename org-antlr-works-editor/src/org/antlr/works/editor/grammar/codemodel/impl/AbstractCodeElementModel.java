@@ -95,7 +95,7 @@ public abstract class AbstractCodeElementModel implements CodeElementModel {
         return packagePath;
     }
 
-    protected CodeModelCacheImpl getCodeModelCache() {
+    protected final CodeModelCacheImpl getCodeModelCache() {
         return CodeModelCacheImpl.getInstance();
     }
 
