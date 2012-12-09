@@ -66,8 +66,8 @@ public final class SemanticAnalyzerParserTask implements ParserTask {
 
                 ParserRuleContext<Token> referenceParseTree = null;
                 try {
-                    Future<ParserData<ParserRuleContext<Token>>> futureRefParseTreeData = getTaskManager().getData(snapshot, GrammarParserDataDefinitions.REFERENCE_PARSE_TREE, EnumSet.of(ParserDataOptions.SYNCHRONOUS));
-                    ParserData<ParserRuleContext<Token>> refParseTreeData = futureRefParseTreeData != null ? futureRefParseTreeData.get() : null;
+                    Future<? extends ParserData<? extends ParserRuleContext<Token>>> futureRefParseTreeData = getTaskManager().getData(snapshot, GrammarParserDataDefinitions.REFERENCE_PARSE_TREE, EnumSet.of(ParserDataOptions.SYNCHRONOUS));
+                    ParserData<? extends ParserRuleContext<Token>> refParseTreeData = futureRefParseTreeData != null ? futureRefParseTreeData.get() : null;
                     referenceParseTree = refParseTreeData != null ? refParseTreeData.getData() : null;
                 } catch (InterruptedException ex) {
                     Exceptions.printStackTrace(ex);

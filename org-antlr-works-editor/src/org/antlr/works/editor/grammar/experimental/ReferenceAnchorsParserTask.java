@@ -36,7 +36,6 @@ import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
 import org.antlr.v4.runtime.BailErrorStrategy;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.DefaultErrorStrategy;
-import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
@@ -50,6 +49,7 @@ import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
 import org.antlr.works.editor.grammar.codemodel.FileModel;
 import org.antlr.works.editor.grammar.codemodel.impl.CodeModelCacheImpl;
 import org.antlr.works.editor.grammar.codemodel.impl.FileModelImpl;
+import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.GrammarSpecContext;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 
 /**
@@ -84,7 +84,7 @@ public final class ReferenceAnchorsParserTask implements ParserTask {
         }
 
         synchronized (lock) {
-            ParserData<ParserRuleContext<Token>> parseTreeResult = taskManager.getData(snapshot, GrammarParserDataDefinitions.REFERENCE_PARSE_TREE, EnumSet.of(ParserDataOptions.NO_UPDATE)).get();
+            ParserData<GrammarSpecContext> parseTreeResult = taskManager.getData(snapshot, GrammarParserDataDefinitions.REFERENCE_PARSE_TREE, EnumSet.of(ParserDataOptions.NO_UPDATE)).get();
             ParserData<List<Anchor>> anchorPointsResult = taskManager.getData(snapshot, GrammarParserDataDefinitions.REFERENCE_ANCHOR_POINTS, EnumSet.of(ParserDataOptions.NO_UPDATE)).get();
             ParserData<FileModel> fileModelResult = taskManager.getData(snapshot, GrammarParserDataDefinitions.FILE_MODEL, EnumSet.of(ParserDataOptions.NO_UPDATE)).get();
             if (parseTreeResult == null || anchorPointsResult == null || fileModelResult == null) {
@@ -95,7 +95,7 @@ public final class ReferenceAnchorsParserTask implements ParserTask {
         //        input.setSourceName((String)document.getDocument().getProperty(Document.TitleProperty));
         //        GrammarLexer lexer = new GrammarLexer(input);
                 InterruptableTokenStream tokenStream = new InterruptableTokenStream(tokenSource);
-                ParserRuleContext<Token> parseResult;
+                GrammarSpecContext parseResult;
                 GrammarParser parser = GrammarParserFactory.DEFAULT.getParser(tokenStream);
                 try {
                     parser.getInterpreter().disable_global_context = true;
@@ -117,7 +117,7 @@ public final class ReferenceAnchorsParserTask implements ParserTask {
                     }
                 }
 
-                parseTreeResult = new BaseParserData<ParserRuleContext<Token>>(context, GrammarParserDataDefinitions.REFERENCE_PARSE_TREE, snapshot, parseResult);
+                parseTreeResult = new BaseParserData<GrammarSpecContext>(context, GrammarParserDataDefinitions.REFERENCE_PARSE_TREE, snapshot, parseResult);
 
                 if (anchorPointsResult == null && snapshot.getVersionedDocument().getDocument() != null) {
                     GrammarParserAnchorListener listener = new GrammarParserAnchorListener(snapshot);

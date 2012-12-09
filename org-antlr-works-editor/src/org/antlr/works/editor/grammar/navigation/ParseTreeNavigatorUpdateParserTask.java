@@ -71,8 +71,8 @@ public final class ParseTreeNavigatorUpdateParserTask implements ParserTask {
                 return;
             }
 
-            Future<ParserData<ParserRuleContext<Token>>> futureData = taskManager.getData(snapshot, GrammarParserDataDefinitions.REFERENCE_PARSE_TREE, EnumSet.of(ParserDataOptions.NO_UPDATE, ParserDataOptions.SYNCHRONOUS));
-            ParserData<ParserRuleContext<Token>> parserData = futureData.get();
+            Future<? extends ParserData<? extends ParserRuleContext<Token>>> futureData = taskManager.getData(snapshot, GrammarParserDataDefinitions.REFERENCE_PARSE_TREE, EnumSet.of(ParserDataOptions.NO_UPDATE, ParserDataOptions.SYNCHRONOUS));
+            ParserData<? extends ParserRuleContext<Token>> parserData = futureData.get();
             if (parserData == null) {
                 return;
             }
