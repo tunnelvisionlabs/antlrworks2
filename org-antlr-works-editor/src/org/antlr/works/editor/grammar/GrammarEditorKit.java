@@ -37,6 +37,7 @@ import org.antlr.netbeans.editor.text.VersionedDocumentUtilities;
 import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
 import org.netbeans.api.annotations.common.NonNull;
+import org.netbeans.api.annotations.common.NullAllowed;
 import org.netbeans.api.editor.EditorActionRegistration;
 import org.netbeans.api.editor.mimelookup.MimeLookup;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
@@ -48,7 +49,9 @@ import org.netbeans.editor.Utilities;
 import org.netbeans.editor.ext.ExtKit;
 import org.netbeans.lib.editor.util.swing.DocumentUtilities;
 import org.netbeans.modules.editor.NbEditorKit;
+import org.netbeans.modules.editor.NbEditorUtilities;
 import org.openide.awt.Mnemonics;
+import org.openide.filesystems.FileObject;
 import org.openide.util.ContextAwareAction;
 import org.openide.util.ImageUtilities;
 import org.openide.util.Lookup;
@@ -114,7 +117,7 @@ public class GrammarEditorKit extends NbEditorKit {
     public static boolean isLegacyMode(@NonNull DocumentSnapshot snapshot) {
         Document document = snapshot.getVersionedDocument().getDocument();
         if (document == null) {
-            return false;
+            return isDefaultLegacyMode(snapshot.getVersionedDocument().getFileObject());
         }
 
         return isLegacyMode(document);
@@ -123,10 +126,26 @@ public class GrammarEditorKit extends NbEditorKit {
     public static boolean isLegacyMode(@NonNull Document document) {
         Boolean mode = (Boolean)document.getProperty(PROP_LEGACY_MODE);
         if (mode == null) {
-            return false;
+            return isDefaultLegacyMode(NbEditorUtilities.getFileObject(document));
         }
 
         return mode;
+    }
+
+    private static boolean isDefaultLegacyMode(@NullAllowed FileObject fileObject) {
+        if (fileObject == null) {
+            return false;
+        }
+
+        String name = fileObject.getName();
+        String nameExt = fileObject.getNameExt();
+        if (name != null && nameExt != null && name.length() < nameExt.length()) {
+            String extension = nameExt.substring(name.length());
+            boolean v4grammar = ".g4".equals(extension);
+            return !v4grammar;
+        }
+
+        return false;
     }
 
     @NbBundle.Messages({
@@ -153,7 +172,6 @@ public class GrammarEditorKit extends NbEditorKit {
             this.document = document;
             if (document != null) {
                 DocumentUtilities.addPropertyChangeListener(document, this);
-                updateState();
             }
         }
 
@@ -180,6 +198,7 @@ public class GrammarEditorKit extends NbEditorKit {
                 button.putClientProperty("hideActionText", true);
                 button.setIcon((Icon)getValue(SMALL_ICON));
                 button.setAction(this);
+                updateState();
             }
 
             return button;
