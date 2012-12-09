@@ -92,6 +92,10 @@ public class GrammarRulesPanel implements NavigatorPanel {
             return;
         }
 
+        if (!GrammarEditorKit.GRAMMAR_MIME_TYPE.equals(versionedDocument.getMimeType())) {
+            return;
+        }
+
         ParseContext context = new ParseContext(ParserTaskScheduler.MANUAL_TASK_SCHEDULER, versionedDocument);
         Lookup.getDefault().lookup(ParserTaskManager.class).scheduleData(context, GrammarParserDataDefinitions.NAVIGATOR_UI_VISIBLE, 0, TimeUnit.MILLISECONDS);
     }
