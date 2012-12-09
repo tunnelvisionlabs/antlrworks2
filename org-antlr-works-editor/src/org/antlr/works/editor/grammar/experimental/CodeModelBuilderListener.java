@@ -310,43 +310,12 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
         if (id != null && id.start != null) {
             String optionName = id.start.getText();
             if ("tokenVocab".equals(optionName)) {
-                String vocabName = getOptionValue(ctx.optionValue());
+                String vocabName = GrammarParser.getOptionValue(ctx.optionValue());
                 if (vocabName != null && !vocabName.isEmpty()) {
                     fileModel.getTokenVocabDeclaration().add(new TokenVocabDeclarationModelImpl(vocabName, fileModel));
                 }
             }
         }
-    }
-
-    @RuleDependencies({
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_qid, version=0),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_optionValue, version=0),
-    })
-    private String getOptionValue(OptionValueContext ctx) {
-        QidContext qid = ctx.qid();
-        if (qid != null) {
-            return getText(qid);
-        }
-
-        TerminalNode<Token> node = ctx.INT();
-        if (node != null) {
-            return node.getSymbol().getText();
-        }
-
-        node = ctx.STAR();
-        if (node != null) {
-            return node.getSymbol().getText();
-        }
-
-        node = ctx.STRING_LITERAL();
-        if (node != null) {
-            String result = node.getSymbol().getText();
-            result = result.substring(0, result.length() - 1);
-            result = result.replace("\\\"", "\"");
-            return result;
-        }
-
-        return null;
     }
 
     @Override
