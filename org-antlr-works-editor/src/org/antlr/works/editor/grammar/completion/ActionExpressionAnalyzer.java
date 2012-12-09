@@ -12,12 +12,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import javax.swing.text.JTextComponent;
 import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.RuleDependencies;
 import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
 import org.antlr.works.editor.grammar.codemodel.AttributeModel;
 import org.antlr.works.editor.grammar.codemodel.CodeElementModel;
+import org.antlr.works.editor.grammar.codemodel.CodeElementPositionRegion;
 import org.antlr.works.editor.grammar.codemodel.FileModel;
 import org.antlr.works.editor.grammar.codemodel.LabelModel;
 import org.antlr.works.editor.grammar.codemodel.PackageModel;
@@ -195,6 +197,21 @@ public class ActionExpressionAnalyzer extends GrammarParserBaseListener {
         public Collection<? extends CodeElementModel> getMembers(String name) {
             return Collections.emptyList();
         }
+
+        @Override
+        public CodeElementPositionRegion getSeek() {
+            return null;
+        }
+
+        @Override
+        public CodeElementPositionRegion getSpan() {
+            return null;
+        }
+
+        @Override
+        public JTextComponent navigateTo() {
+            return null;
+        }
     }
 
     private static class IntrinsicPackage implements PackageModel {
@@ -233,6 +250,21 @@ public class ActionExpressionAnalyzer extends GrammarParserBaseListener {
         @Override
         public Collection<? extends CodeElementModel> getMembers(String name) {
             return Collections.emptyList();
+        }
+
+        @Override
+        public CodeElementPositionRegion getSeek() {
+            return null;
+        }
+
+        @Override
+        public CodeElementPositionRegion getSpan() {
+            return null;
+        }
+
+        @Override
+        public JTextComponent navigateTo() {
+            return null;
         }
     }
 }

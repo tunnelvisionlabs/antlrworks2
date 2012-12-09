@@ -8,12 +8,20 @@
  */
 package org.antlr.works.editor.grammar.codemodel.impl;
 
+import java.awt.event.ActionEvent;
 import java.util.Collection;
+import javax.swing.Action;
+import javax.swing.text.JTextComponent;
+import org.antlr.netbeans.editor.navigation.actions.OpenAction;
+import org.antlr.netbeans.editor.text.OffsetRegion;
+import org.antlr.netbeans.editor.text.SnapshotPositionRegion;
 import org.antlr.works.editor.grammar.codemodel.CodeElementModel;
+import org.antlr.works.editor.grammar.codemodel.CodeElementPositionRegion;
 import org.netbeans.api.annotations.common.CheckForNull;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;
 import org.netbeans.api.project.Project;
+import org.openide.filesystems.FileObject;
 import org.openide.util.Parameters;
 
 /**
@@ -93,6 +101,48 @@ public abstract class AbstractCodeElementModel implements CodeElementModel {
 
     public String getPackagePath() {
         return packagePath;
+    }
+
+    @Override
+    public CodeElementPositionRegion getSeek() {
+        final CodeElementPositionRegion span = getSpan();
+        if (span == null) {
+            return null;
+        }
+
+        return new CodeElementPositionRegion() {
+            @Override
+            public FileObject getFileObject() {
+                return span.getFileObject();
+            }
+
+            @Override
+            public OffsetRegion getOffsetRegion() {
+                return new OffsetRegion(span.getOffsetRegion().getStart(), 0);
+            }
+
+            @Override
+            public SnapshotPositionRegion getSnapshotPositionRegion(boolean translateToOpenDocument) {
+                return new SnapshotPositionRegion(span.getSnapshotPositionRegion(translateToOpenDocument).getStart(), 0);
+            }
+        };
+    }
+
+    @Override
+    public CodeElementPositionRegion getSpan() {
+        return null;
+    }
+
+    @Override
+    public JTextComponent navigateTo() {
+        CodeElementPositionRegion position = getSeek();
+        if (position == null) {
+            return null;
+        }
+
+        OpenAction openAction = new OpenAction(position.getFileObject(), position.getOffsetRegion().getStart());
+        openAction.actionPerformed(new ActionEvent(this, 0, openAction.getValue(Action.NAME).toString()));
+        return null;
     }
 
     protected final CodeModelCacheImpl getCodeModelCache() {

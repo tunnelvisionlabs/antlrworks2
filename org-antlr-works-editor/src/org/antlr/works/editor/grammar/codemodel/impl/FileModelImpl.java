@@ -45,6 +45,10 @@ public class FileModelImpl extends AbstractCodeElementModel implements FileModel
         this.fileObject = null;
     }
 
+    public FileObject getFileObject() {
+        return fileObject;
+    }
+
     @Override
     public Collection<ImportDeclarationModelImpl> getImportDeclarations() {
         return importDeclarations;
