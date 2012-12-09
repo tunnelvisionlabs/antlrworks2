@@ -13,8 +13,11 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.netbeans.editor.text.VersionedDocument;
+import org.antlr.netbeans.editor.text.VersionedDocumentUtilities;
 import org.antlr.netbeans.parsing.spi.BaseParserData;
 import org.antlr.netbeans.parsing.spi.DocumentParserTaskProvider;
 import org.antlr.netbeans.parsing.spi.ParseContext;
@@ -27,12 +30,20 @@ import org.antlr.netbeans.parsing.spi.ParserTaskDefinition;
 import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.netbeans.parsing.spi.ParserTaskProvider;
 import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
-import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.RuleDependencies;
+import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.works.editor.grammar.GrammarEditorKit;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
+import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.DelegateGrammarsContext;
+import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.GrammarSpecContext;
+import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.IdContext;
+import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.OptionContext;
+import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.OptionsSpecContext;
+import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.PrequelConstructContext;
+import org.antlr.works.editor.grammar.experimental.GrammarParser;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
+import org.openide.filesystems.FileObject;
 import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 
@@ -41,6 +52,8 @@ import org.openide.util.Lookup;
  * @author Sam Harwell
  */
 public final class SemanticAnalyzerParserTask implements ParserTask {
+    // -J-Dorg.antlr.works.editor.grammar.semantics.SemanticAnalyzerParserTask.level=FINE
+    private static final Logger LOGGER = Logger.getLogger(SemanticAnalyzerParserTask.class.getName());
 
     private final Object lock = new Object();
 
@@ -53,6 +66,7 @@ public final class SemanticAnalyzerParserTask implements ParserTask {
     }
 
     @Override
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_grammarSpec, version=0)
     public void parse(ParserTaskManager taskManager, ParseContext context, DocumentSnapshot snapshot, Collection<? extends ParserDataDefinition<?>> requestedData, ParserResultHandler results)
         throws InterruptedException, ExecutionException {
 
@@ -64,10 +78,10 @@ public final class SemanticAnalyzerParserTask implements ParserTask {
                     return;
                 }
 
-                ParserRuleContext<Token> referenceParseTree = null;
+                GrammarSpecContext referenceParseTree = null;
                 try {
-                    Future<? extends ParserData<? extends ParserRuleContext<Token>>> futureRefParseTreeData = getTaskManager().getData(snapshot, GrammarParserDataDefinitions.REFERENCE_PARSE_TREE, EnumSet.of(ParserDataOptions.SYNCHRONOUS));
-                    ParserData<? extends ParserRuleContext<Token>> refParseTreeData = futureRefParseTreeData != null ? futureRefParseTreeData.get() : null;
+                    Future<ParserData<GrammarSpecContext>> futureRefParseTreeData = getTaskManager().getData(snapshot, GrammarParserDataDefinitions.REFERENCE_PARSE_TREE, EnumSet.of(ParserDataOptions.SYNCHRONOUS));
+                    ParserData<GrammarSpecContext> refParseTreeData = futureRefParseTreeData != null ? futureRefParseTreeData.get() : null;
                     referenceParseTree = refParseTreeData != null ? refParseTreeData.getData() : null;
                 } catch (InterruptedException ex) {
                     Exceptions.printStackTrace(ex);
@@ -76,6 +90,7 @@ public final class SemanticAnalyzerParserTask implements ParserTask {
                 }
 
                 if (referenceParseTree != null) {
+                    updateImportedFiles(snapshot.getVersionedDocument(), referenceParseTree);
                     GrammarAnnotatedParseTree annotatedParseTree = new GrammarAnnotatedParseTree(referenceParseTree);
                     SemanticAnalyzerListener listener = new SemanticAnalyzerListener(annotatedParseTree.getTreeDecorator(), annotatedParseTree.getTokenDecorator());
                     ParseTreeWalker.DEFAULT.walk(listener, referenceParseTree);
@@ -91,6 +106,98 @@ public final class SemanticAnalyzerParserTask implements ParserTask {
 
     private ParserTaskManager getTaskManager() {
         return Lookup.getDefault().lookup(ParserTaskManager.class);
+    }
+
+    @RuleDependencies({
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_grammarSpec, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_prequelConstruct, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_delegateGrammars, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_optionsSpec, version=1),
+    })
+    private void updateImportedFiles(VersionedDocument document, GrammarSpecContext grammarSpec) {
+        for (PrequelConstructContext prequelConstruct : grammarSpec.prequelConstruct()) {
+            if (prequelConstruct.delegateGrammars() != null) {
+                handleImportedGrammars(prequelConstruct.delegateGrammars());
+            }
+
+            if (prequelConstruct.optionsSpec() != null) {
+                handleImportOptions(document, prequelConstruct.optionsSpec());
+            }
+        }
+    }
+
+    @RuleDependencies({
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_optionsSpec, version=1),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_option, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=1),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_optionValue, version=0),
+    })
+    private void handleImportOptions(VersionedDocument document, OptionsSpecContext optionsSpec) {
+        for (OptionContext option : optionsSpec.option()) {
+            IdContext id = option.id();
+            if (id != null && id.start != null) {
+                String optionName = id.start.getText();
+                if ("tokenVocab".equals(optionName)) {
+                    String vocabName = GrammarParser.getOptionValue(option.optionValue());
+                    if (vocabName != null && !vocabName.isEmpty()) {
+                        FileObject fileObject = document.getFileObject();
+                        if (fileObject == null) {
+                            LOGGER.log(Level.WARNING, "Could not find source for token vocabulary.");
+                            continue;
+                        }
+
+                        // try to find a lexer in the same folder with this name
+                        FileObject containingFolder = fileObject.getParent();
+                        if (containingFolder == null) {
+                            LOGGER.log(Level.WARNING, "Could not find source for token vocabulary.");
+                            continue;
+                        }
+
+                        FileObject sourceFileObject = containingFolder.getFileObject(vocabName, "g4");
+                        if (sourceFileObject == null) {
+                            sourceFileObject = containingFolder.getFileObject(vocabName, "g3");
+                        }
+
+                        if (sourceFileObject == null) {
+                            sourceFileObject = containingFolder.getFileObject(vocabName, "g");
+                        }
+
+                        if (sourceFileObject == null) {
+                            LOGGER.log(Level.WARNING, "Could not find source for token vocabulary.");
+                            continue;
+                        }
+
+                        VersionedDocument sourceDocument = VersionedDocumentUtilities.getVersionedDocument(sourceFileObject);
+                        Future<? extends ParserData<?>> futureData = getTaskManager().getData(sourceDocument.getCurrentSnapshot(), GrammarParserDataDefinitions.FILE_MODEL);
+                        if (futureData == null) {
+                            LOGGER.log(Level.WARNING, "Failed to load source for token vocabulary.");
+                            continue;
+                        }
+
+                        ParserData<?> data;
+                        try {
+                            data = futureData.get();
+                        } catch (InterruptedException ex) {
+                            LOGGER.log(Level.WARNING, "Failed to load source for token vocabulary.");
+                            continue;
+                        } catch (ExecutionException ex) {
+                            LOGGER.log(Level.WARNING, "Failed to load source for token vocabulary.");
+                            continue;
+                        }
+
+                        if (data == null) {
+                            LOGGER.log(Level.WARNING, "Failed to load source for token vocabulary.");
+                            continue;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_delegateGrammars, version=0)
+    private void handleImportedGrammars(DelegateGrammarsContext delegateGrammars) {
+        LOGGER.log(Level.WARNING, "Cannot load delegate grammars on demand (not yet implemented).");
     }
 
     private static final class Definition extends ParserTaskDefinition {
