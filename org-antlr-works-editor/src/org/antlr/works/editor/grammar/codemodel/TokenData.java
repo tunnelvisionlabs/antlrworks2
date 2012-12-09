@@ -9,6 +9,8 @@
 package org.antlr.works.editor.grammar.codemodel;
 
 import java.util.Collection;
+import org.netbeans.api.annotations.common.CheckForNull;
+import org.netbeans.api.annotations.common.NonNull;
 
 /**
  *
@@ -16,10 +18,13 @@ import java.util.Collection;
  */
 public interface TokenData {
 
+    @NonNull
     String getName();
 
+    @CheckForNull
     String getLiteral();
 
+    @NonNull
     Collection<? extends RuleModel> resolve();
 
 }
