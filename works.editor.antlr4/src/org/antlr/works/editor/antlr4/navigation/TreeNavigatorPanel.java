@@ -128,6 +128,10 @@ public abstract class TreeNavigatorPanel implements NavigatorPanel {
         _manager.setRootContext(rootNode);
     }
 
+    protected final ExplorerManager getExplorerManager() {
+        return _manager;
+    }
+
     protected abstract FileObject getCurrentFile();
 
     protected static OffsetsBag getBag(Document doc) {
