@@ -59,8 +59,9 @@ public class TemplateParseTreeNavigatorPanel extends TreeNavigatorPanel {
         this._currentFile = currentFile;
     }
 
-        @Override
+    @Override
     public void panelActivated(Lookup context) {
+        super.panelActivated(context);
         INSTANCE = this;
         _currentFile = null;
         scheduleTaskManagerUpdate(context.lookup(DataObject.class));
@@ -68,6 +69,7 @@ public class TemplateParseTreeNavigatorPanel extends TreeNavigatorPanel {
 
     @Override
     public void panelDeactivated() {
+        super.panelDeactivated();
         INSTANCE = null;
         _currentFile = null;
         scheduleTaskManagerUpdate(null);

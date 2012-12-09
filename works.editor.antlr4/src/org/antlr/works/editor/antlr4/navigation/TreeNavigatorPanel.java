@@ -12,6 +12,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.beans.PropertyVetoException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ActionMap;
@@ -111,6 +112,11 @@ public abstract class TreeNavigatorPanel implements NavigatorPanel {
 
     @Override
     public void panelDeactivated() {
+        try {
+            // clear highlights
+            _manager.setSelectedNodes(new Node[0]);
+        } catch (PropertyVetoException ex) {
+        }
     }
 
     @Override
