@@ -62,7 +62,7 @@ public abstract class AbstractSemanticHighlighter<SemanticData> extends Abstract
     private static final Logger LOGGER = Logger.getLogger(AbstractSemanticHighlighter.class.getName());
 
     private final StyledDocument document;
-    private final ParserDataDefinition<SemanticData> semanticDataDefinition;
+    private final ParserDataDefinition<? extends SemanticData> semanticDataDefinition;
     private final ParserTaskManager taskManager;
     private final VersionedDocument versionedDocument;
     private final DataListener dataListener;
@@ -71,7 +71,7 @@ public abstract class AbstractSemanticHighlighter<SemanticData> extends Abstract
 
     private final Set<JTextComponent> components = new HashSet<JTextComponent>();
 
-    protected AbstractSemanticHighlighter(@NonNull StyledDocument document, @NonNull ParserDataDefinition<SemanticData> semanticDataDefinition) {
+    protected AbstractSemanticHighlighter(@NonNull StyledDocument document, @NonNull ParserDataDefinition<? extends SemanticData> semanticDataDefinition) {
         Parameters.notNull("document", document);
         Parameters.notNull("semanticDataDefinition", semanticDataDefinition);
 

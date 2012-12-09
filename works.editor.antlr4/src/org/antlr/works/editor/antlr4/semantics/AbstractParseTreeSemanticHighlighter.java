@@ -32,7 +32,7 @@ public abstract class AbstractParseTreeSemanticHighlighter<Listener extends Pars
     // -J-Dorg.antlr.works.editor.antlr4.semantics.AbstractParseTreeSemanticHighlighter.level=FINE
     private static final Logger LOGGER = Logger.getLogger(AbstractParseTreeSemanticHighlighter.class.getName());
 
-    protected AbstractParseTreeSemanticHighlighter(@NonNull StyledDocument document, ParserDataDefinition<Data> semanticDataDefinition) {
+    protected AbstractParseTreeSemanticHighlighter(@NonNull StyledDocument document, ParserDataDefinition<? extends Data> semanticDataDefinition) {
         super(document, semanticDataDefinition);
     }
 
