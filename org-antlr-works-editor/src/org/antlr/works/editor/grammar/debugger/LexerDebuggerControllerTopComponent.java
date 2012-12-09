@@ -37,18 +37,18 @@ import org.openide.windows.TopComponent;
 /**
  * Top component which displays something.
  */
-@ConvertAsProperties(dtd = "-//org.antlr.works.editor.grammar.debugger//LexerDebuggerController//EN",
-                     autostore = false)
-@TopComponent.Description(preferredID = "LexerDebuggerControllerTopComponent",
-                          //iconBase="SET/PATH/TO/ICON/HERE",
-                          persistenceType = TopComponent.PERSISTENCE_ALWAYS)
-@TopComponent.Registration(mode = "rightSlidingSide", openAtStartup = true)
-@ActionID(category = "Window", id = "org.antlr.works.editor.grammar.debugger.LexerDebuggerControllerTopComponent")
-@ActionReference(path = "Menu/Window" /*
- * , position = 333
- */)
-@TopComponent.OpenActionRegistration(displayName = "#CTL_LexerDebuggerControllerAction",
-                                     preferredID = "LexerDebuggerControllerTopComponent")
+//@ConvertAsProperties(dtd = "-//org.antlr.works.editor.grammar.debugger//LexerDebuggerController//EN",
+//                     autostore = false)
+//@TopComponent.Description(preferredID = "LexerDebuggerControllerTopComponent",
+//                          //iconBase="SET/PATH/TO/ICON/HERE",
+//                          persistenceType = TopComponent.PERSISTENCE_ALWAYS)
+//@TopComponent.Registration(mode = "rightSlidingSide", openAtStartup = true)
+//@ActionID(category = "Window", id = "org.antlr.works.editor.grammar.debugger.LexerDebuggerControllerTopComponent")
+//@ActionReference(path = "Menu/Window" /*
+// * , position = 333
+// */)
+//@TopComponent.OpenActionRegistration(displayName = "#CTL_LexerDebuggerControllerAction",
+//                                     preferredID = "LexerDebuggerControllerTopComponent")
 @Messages({
     "CTL_LexerDebuggerControllerAction=LexerDebuggerController",
     "CTL_LexerDebuggerControllerTopComponent=LexerDebuggerController Window",
