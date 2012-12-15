@@ -110,6 +110,10 @@ public class BaseCompletionController implements CompletionController {
         return queries;
     }
 
+    protected CompletionMatchEvaluator getCompletionMatchEvaluator(String evaluatedText) {
+        return new CompletionMatchEvaluator(evaluatedText);
+    }
+
     public TrackingPositionRegion getApplicableTo() {
         AbstractCompletionQuery appliedQuery = null;
         for (AsyncCompletionQuery query : queries) {
@@ -139,7 +143,7 @@ public class BaseCompletionController implements CompletionController {
             CompletionItem bestMatch = null;
             int bestMatchValue = 0;
             int prefixMatch = 0;
-            CompletionMatchEvaluator evaluator = new CompletionMatchEvaluator(evaluatedText);
+            CompletionMatchEvaluator evaluator = getCompletionMatchEvaluator(evaluatedText);
             for (CompletionItem item : items) {
                 int matchValue = evaluator.getMatchStrength(item);
                 if (matchValue > 0) {

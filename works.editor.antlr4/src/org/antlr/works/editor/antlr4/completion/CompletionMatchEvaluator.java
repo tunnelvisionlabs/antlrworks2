@@ -49,8 +49,8 @@ public class CompletionMatchEvaluator {
 
     static {
         recentCompletionsCollator = Collator.getInstance(Locale.getDefault());
-        recentCompletionsCollator.setDecomposition(Collator.FULL_DECOMPOSITION);
-        recentCompletionsCollator.setStrength(Collator.SECONDARY);
+        recentCompletionsCollator.setDecomposition(Collator.NO_DECOMPOSITION);
+        recentCompletionsCollator.setStrength(Collator.IDENTICAL);
     }
 
     public CompletionMatchEvaluator(@NonNull String evaluatedText) {
@@ -240,9 +240,13 @@ public class CompletionMatchEvaluator {
         return completionItem.getSortPriority() < 0 ? CompletionMatchResult.Match : CompletionMatchResult.None;
     }
 
+    protected Collator getRecentCompletionsCollator() {
+        return recentCompletionsCollator;
+    }
+
     public int getRecentlyUsed(@NonNull CompletionItem completionItem) {
         Parameters.notNull("completionItem", completionItem);
 
-        return BaseCompletionController.getRecentCompletionWeight(completionItem.getInsertPrefix().toString(), recentCompletionsCollator);
+        return BaseCompletionController.getRecentCompletionWeight(completionItem.getInsertPrefix().toString(), getRecentCompletionsCollator());
     }
 }
