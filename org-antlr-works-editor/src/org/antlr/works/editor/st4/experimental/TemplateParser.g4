@@ -69,8 +69,9 @@ formalArgs
     ;
 
 formalArg
+@version{1}
     :   name=ID
-        (   '=' (string | anonymousTemplate | (TRUE | FALSE))
+        (   '=' (string | anonymousTemplate | (TRUE | FALSE) | '[' ']')
         )?
     ;
 
