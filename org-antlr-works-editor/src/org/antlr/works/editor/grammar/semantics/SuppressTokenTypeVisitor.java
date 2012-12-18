@@ -52,7 +52,7 @@ public class SuppressTokenTypeVisitor extends GrammarParserBaseVisitor<Boolean> 
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommandName, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommandName, version=1),
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=1),
     })
     public Boolean visitLexerCommandName(LexerCommandNameContext ctx) {

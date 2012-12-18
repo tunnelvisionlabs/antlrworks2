@@ -305,7 +305,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
         @Override
         @RuleDependencies({
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommand, version=1),
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommandName, version=0),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommandName, version=1),
         })
         public void enterLexerCommand(LexerCommandContext ctx) {
             LexerCommandNameContext lexerCommandNameContext = ctx.lexerCommandName();
@@ -325,7 +325,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
         @Override
         @RuleDependencies({
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommand, version=1),
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommandName, version=0),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommandName, version=1),
         })
         public void exitLexerCommand(LexerCommandContext ctx) {
             LexerCommandNameContext lexerCommandNameContext = ctx.lexerCommandName();
@@ -374,7 +374,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
 
         @Override
         @RuleDependencies({
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_option, version=0),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_option, version=1),
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=1),
         })
         public void enterOption(OptionContext ctx) {

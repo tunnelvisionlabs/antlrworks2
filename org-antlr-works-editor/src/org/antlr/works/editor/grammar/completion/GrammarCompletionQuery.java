@@ -131,10 +131,10 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerRule, version=0),
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_actionBlock, version=0),
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=1),
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommandName, version=0),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommandName, version=1),
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommandExpr, version=1),
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleref, version=0),
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_terminal, version=0),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_terminal, version=1),
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_actionExpression, version=0),
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_actionScopeExpression, version=0),
         })
@@ -432,7 +432,7 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
         }
 
         @RuleDependencies({
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommandName, version=0),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommandName, version=1),
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=1),
         })
         private void analyzeKeywords(Map<RuleContext<Token>, CaretReachedException> parseTrees, Map<String, CompletionItem> intermediateResults) {

@@ -34,7 +34,7 @@ public class LiteralLexerRuleValueVisitor extends GrammarParserBaseVisitor<Termi
     }
 
     @Override
-    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_terminal, version=0)
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_terminal, version=1)
     public TerminalNode<Token> visitTerminal(TerminalContext ctx) {
         return ctx.STRING_LITERAL();
     }

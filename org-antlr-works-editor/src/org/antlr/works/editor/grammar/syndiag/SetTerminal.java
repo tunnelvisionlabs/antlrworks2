@@ -52,7 +52,7 @@ public class SetTerminal extends Terminal {
     }
 
     @RuleDependencies({
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_range, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_range, version=2),
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_setElement, version=2),
     })
     private static AttributedString getAttributedLabel(List<? extends ParseTree<Token>> elements, boolean inverted) {

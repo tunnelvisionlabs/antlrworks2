@@ -318,7 +318,7 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
         }
 
         @Override
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerAltList, version=0)
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerAltList, version=1)
         public void enterLexerAltList(LexerAltListContext ctx) {
             enterBlock();
         }
@@ -342,7 +342,7 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
         }
 
         @Override
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerAltList, version=0)
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerAltList, version=1)
         public void exitLexerAltList(LexerAltListContext ctx) {
             exitBlock();
         }
@@ -358,7 +358,7 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
          */
 
         @Override
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_alternative, version=0)
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_alternative, version=1)
         public void enterAlternative(AlternativeContext ctx) {
             enterAlternative();
         }
@@ -370,7 +370,7 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
         }
 
         @Override
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_alternative, version=0)
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_alternative, version=1)
         public void exitAlternative(AlternativeContext ctx) {
             exitAlternative();
         }
@@ -402,10 +402,10 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
         }
 
         @RuleDependencies({
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_terminal, version=0),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_terminal, version=1),
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleref, version=0),
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_range, version=0),
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_notSet, version=0),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_range, version=2),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_notSet, version=1),
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_blockSet, version=0),
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_setElement, version=2),
         })

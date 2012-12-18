@@ -128,7 +128,7 @@ public final class SemanticAnalyzerParserTask implements ParserTask {
 
     @RuleDependencies({
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_optionsSpec, version=1),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_option, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_option, version=1),
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=1),
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_optionValue, version=0),
     })
