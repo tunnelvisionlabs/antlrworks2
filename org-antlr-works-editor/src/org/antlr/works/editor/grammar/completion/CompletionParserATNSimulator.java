@@ -11,6 +11,7 @@ package org.antlr.works.editor.grammar.completion;
 import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.atn.ATN;
+import org.antlr.v4.runtime.atn.PredictionMode;
 import org.antlr.v4.runtime.misc.IntervalSet;
 import org.antlr.works.editor.antlr4.completion.AbstractCompletionParserATNSimulator;
 import org.antlr.works.editor.grammar.experimental.GrammarLexer;
@@ -24,7 +25,7 @@ public class CompletionParserATNSimulator extends AbstractCompletionParserATNSim
 
     public CompletionParserATNSimulator(@NonNull Parser<Token> parser, ATN atn) {
         super(parser, atn);
-        disable_global_context = true;
+        setPredictionMode(PredictionMode.SLL);
     }
 
     private static final IntervalSet WORDLIKE_TOKEN_TYPES =

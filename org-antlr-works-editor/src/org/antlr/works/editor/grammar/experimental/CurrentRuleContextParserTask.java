@@ -36,6 +36,7 @@ import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenSource;
+import org.antlr.v4.runtime.atn.PredictionMode;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.antlr.works.editor.antlr4.classification.DocumentSnapshotCharStream;
 import org.antlr.works.editor.grammar.GrammarEditorKit;
@@ -101,7 +102,7 @@ public final class CurrentRuleContextParserTask implements ParserTask {
                         CommonTokenStream tokens = new TaskTokenStream(lexer);
                         GrammarParser parser = GrammarParserFactory.DEFAULT.getParser(tokens);
                         try {
-                            parser.getInterpreter().disable_global_context = true;
+                            parser.getInterpreter().setPredictionMode(PredictionMode.SLL);
                             parser.removeErrorListeners();
                             parser.setBuildParseTree(true);
                             parser.setErrorHandler(new BailErrorStrategy<Token>());
@@ -110,7 +111,7 @@ public final class CurrentRuleContextParserTask implements ParserTask {
                             if (ex.getCause() instanceof RecognitionException) {
                                 // retry with default error handler
                                 tokens.reset();
-                                parser.getInterpreter().disable_global_context = false;
+                                parser.getInterpreter().setPredictionMode(PredictionMode.LL);
                                 parser.setInputStream(tokens);
                                 parser.setErrorHandler(new DefaultErrorStrategy<Token>());
                                 ruleContext = parser.ruleSpec();

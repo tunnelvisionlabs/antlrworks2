@@ -25,6 +25,7 @@ import org.antlr.v4.runtime.atn.AtomTransition;
 import org.antlr.v4.runtime.atn.NotSetTransition;
 import org.antlr.v4.runtime.atn.ParserATNSimulator;
 import org.antlr.v4.runtime.atn.PredictionContextCache;
+import org.antlr.v4.runtime.atn.PredictionMode;
 import org.antlr.v4.runtime.atn.RangeTransition;
 import org.antlr.v4.runtime.atn.SetTransition;
 import org.antlr.v4.runtime.atn.SimulatorState;
@@ -61,7 +62,7 @@ public abstract class AbstractCompletionParserATNSimulator extends ParserATNSimu
     public AbstractCompletionParserATNSimulator(@NonNull Parser<Token> parser, ATN atn) {
         super(parser, atn);
         Parameters.notNull("parser", parser);
-        disable_global_context = true;
+        setPredictionMode(PredictionMode.SLL);
     }
 
     public Map<ATNConfig, List<Transition>> getCaretTransitions() {

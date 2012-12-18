@@ -41,6 +41,7 @@ import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenSource;
+import org.antlr.v4.runtime.atn.PredictionMode;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.works.editor.antlr4.classification.TaggerTokenSource;
@@ -84,7 +85,7 @@ public final class ReferenceAnchorsParserTask implements ParserTask {
                 TemplateParser.GroupContext parseResult;
                 TemplateParser parser = TemplateParserFactory.DEFAULT.getParser(tokenStream);
                 try {
-                    parser.getInterpreter().disable_global_context = true;
+                    parser.getInterpreter().setPredictionMode(PredictionMode.SLL);
                     parser.removeErrorListeners();
                     parser.setBuildParseTree(true);
                     parser.setErrorHandler(new BailErrorStrategy<Token>());
@@ -93,7 +94,7 @@ public final class ReferenceAnchorsParserTask implements ParserTask {
                     if (ex.getCause() instanceof RecognitionException) {
                         // retry with default error handler
                         tokenStream.reset();
-                        parser.getInterpreter().disable_global_context = false;
+                        parser.getInterpreter().setPredictionMode(PredictionMode.LL);
                         parser.addErrorListener(DescriptiveErrorListener.INSTANCE);
                         parser.setInputStream(tokenStream);
                         parser.setErrorHandler(new DefaultErrorStrategy<Token>());

@@ -11,6 +11,7 @@ package org.antlr.works.editor.st4.experimental;
 import org.antlr.v4.runtime.DefaultErrorStrategy;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenStream;
+import org.antlr.v4.runtime.atn.PredictionMode;
 import org.antlr.works.editor.antlr4.parsing.DescriptiveErrorListener;
 import org.netbeans.api.annotations.common.NonNull;
 
@@ -30,7 +31,7 @@ public class TemplateParserFactory {
     @NonNull
     public TemplateParser getParser(@NonNull TokenStream<? extends Token> input) {
         TemplateParser result = createParser(input);
-        result.getInterpreter().disable_global_context = false;
+        result.getInterpreter().setPredictionMode(PredictionMode.LL);
         result.removeErrorListeners();
         result.addErrorListener(DescriptiveErrorListener.INSTANCE);
         result.setBuildParseTree(false);
