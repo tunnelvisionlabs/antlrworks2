@@ -11,8 +11,8 @@ package org.antlr.works.editor.antlr4.completion;
 import java.util.List;
 import javax.swing.text.JTextComponent;
 import org.antlr.netbeans.editor.text.TrackingPositionRegion;
-import org.netbeans.spi.editor.completion.CompletionDocumentation;
-import org.netbeans.spi.editor.completion.CompletionItem;
+import com.tvl.spi.editor.completion.CompletionDocumentation;
+import com.tvl.spi.editor.completion.CompletionItem;
 import org.openide.util.Parameters;
 
 /**

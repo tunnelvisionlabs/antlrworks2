@@ -31,12 +31,12 @@ import org.netbeans.api.annotations.common.CheckForNull;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.editor.BaseDocument;
 import org.netbeans.editor.Utilities;
-import org.netbeans.spi.editor.completion.CompletionController;
-import org.netbeans.spi.editor.completion.CompletionItem;
-import org.netbeans.spi.editor.completion.CompletionResultSet;
-import org.netbeans.spi.editor.completion.CompletionTask;
-import org.netbeans.spi.editor.completion.support.AsyncCompletionQuery;
-import org.netbeans.spi.editor.completion.support.AsyncCompletionTask;
+import com.tvl.spi.editor.completion.CompletionController;
+import com.tvl.spi.editor.completion.CompletionItem;
+import com.tvl.spi.editor.completion.CompletionResultSet;
+import com.tvl.spi.editor.completion.CompletionTask;
+import com.tvl.spi.editor.completion.support.AsyncCompletionQuery;
+import com.tvl.spi.editor.completion.support.AsyncCompletionTask;
 import org.openide.util.Parameters;
 
 /**

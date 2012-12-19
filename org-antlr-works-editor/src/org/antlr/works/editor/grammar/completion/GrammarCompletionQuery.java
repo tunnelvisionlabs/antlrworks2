@@ -70,7 +70,7 @@ import org.antlr.works.editor.grammar.experimental.GrammarParser;
 import org.antlr.works.editor.grammar.experimental.GrammarParserAnchorListener;
 import org.antlr.works.editor.grammar.experimental.GrammarReferenceAnchors;
 import org.netbeans.editor.BaseDocument;
-import org.netbeans.spi.editor.completion.CompletionItem;
+import com.tvl.spi.editor.completion.CompletionItem;
 import org.openide.util.Exceptions;
 
 /**

@@ -26,13 +26,13 @@ import org.antlr.netbeans.editor.text.TrackingPositionRegion;
 import org.antlr.netbeans.editor.text.VersionedDocument;
 import org.antlr.netbeans.editor.text.VersionedDocumentUtilities;
 import org.netbeans.api.annotations.common.NonNull;
-import org.netbeans.api.editor.completion.Completion;
+import com.tvl.api.editor.completion.Completion;
 import org.netbeans.editor.BaseDocument;
 import org.netbeans.editor.GuardedDocument;
-import org.netbeans.spi.editor.completion.CompletionController;
-import org.netbeans.spi.editor.completion.CompletionItem;
-import org.netbeans.spi.editor.completion.CompletionTask;
-import org.netbeans.spi.editor.completion.support.CompletionUtilities;
+import com.tvl.spi.editor.completion.CompletionController;
+import com.tvl.spi.editor.completion.CompletionItem;
+import com.tvl.spi.editor.completion.CompletionTask;
+import com.tvl.spi.editor.completion.support.CompletionUtilities;
 
 /**
  *

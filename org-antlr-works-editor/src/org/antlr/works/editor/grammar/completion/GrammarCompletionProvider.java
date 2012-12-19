@@ -38,7 +38,7 @@ import org.antlr.works.editor.grammar.codemodel.TokenData;
 import org.antlr.works.editor.grammar.experimental.GrammarLexer;
 import org.antlr.works.editor.grammar.navigation.GrammarNode.GrammarNodeDescription;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
-import org.netbeans.spi.editor.completion.CompletionProvider;
+import com.tvl.spi.editor.completion.CompletionProvider;
 import org.openide.util.NbBundle;
 
 /**

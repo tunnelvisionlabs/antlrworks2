@@ -19,9 +19,9 @@ import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
 import org.antlr.v4.runtime.Token;
 import org.netbeans.editor.Utilities;
-import org.netbeans.spi.editor.completion.CompletionProvider;
-import org.netbeans.spi.editor.completion.CompletionTask;
-import org.netbeans.spi.editor.completion.support.AsyncCompletionTask;
+import com.tvl.spi.editor.completion.CompletionProvider;
+import com.tvl.spi.editor.completion.CompletionTask;
+import com.tvl.spi.editor.completion.support.AsyncCompletionTask;
 import org.openide.util.NbBundle;
 
 /**

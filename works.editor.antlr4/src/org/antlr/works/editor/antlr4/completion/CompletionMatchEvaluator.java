@@ -13,7 +13,7 @@ import java.util.Locale;
 import java.util.regex.Pattern;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;
-import org.netbeans.spi.editor.completion.CompletionItem;
+import com.tvl.spi.editor.completion.CompletionItem;
 import org.openide.util.Parameters;
 
 /**
