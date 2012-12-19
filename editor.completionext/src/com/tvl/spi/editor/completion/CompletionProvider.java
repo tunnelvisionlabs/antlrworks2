@@ -67,22 +67,37 @@ public interface CompletionProvider {
     /**
      * The <code>int</code> value representing the query for a code completion.
      */
-    public static final int COMPLETION_QUERY_TYPE = 1;
+    public static final int COMPLETION_QUERY_TYPE = 0x01;
 
     /**
      * The <code>int</code> value representing the query for a documentation.
      */    
-    public static final int DOCUMENTATION_QUERY_TYPE = 2;
+    public static final int DOCUMENTATION_QUERY_TYPE = 0x02;
     
     /**
      * The <code>int</code> value representing the query for a tooltip hint.
      */    
-    public static final int TOOLTIP_QUERY_TYPE = 4;
+    public static final int TOOLTIP_QUERY_TYPE = 0x04;
 
     /**
      * The <code>int</code> value representing the query for an all code completion.
      */
-    public static final int COMPLETION_ALL_QUERY_TYPE = 9;
+    public static final int COMPLETION_ALL_QUERY_TYPE = 0x11;
+
+    /**
+     * The <code>int</code> mask representing the bits used for a completion query type.
+     */
+    public static final int COMPLETION_QUERY_MASK = COMPLETION_QUERY_TYPE | COMPLETION_ALL_QUERY_TYPE;
+
+    /**
+     * The <code>int</code> mask of bits a user can specify to customize the query type.
+     */
+    public static final int USER_QUERY_MASK = 0xFFFF0000;
+
+    /**
+     * The <code>int</code> mask of bits used by the API to specify the query type.
+     */
+    public static final int RESERVED_QUERY_MASK = ~USER_QUERY_MASK;
 
     /**
      * Creates a task that performs a query of the given type on the given component.

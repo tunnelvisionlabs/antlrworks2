@@ -49,6 +49,8 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import javax.swing.ImageIcon;
+import org.netbeans.api.annotations.common.NonNull;
+import org.netbeans.api.annotations.common.NullAllowed;
 import com.tvl.modules.editor.completion.PatchedHtmlRenderer;
 
 /**
@@ -119,7 +121,7 @@ public final class CompletionUtilities {
         }
         return width;
     }
-    
+
     /**
      * Render a completion item using the provided icon and left and right
      * html texts.
@@ -160,30 +162,98 @@ public final class CompletionUtilities {
     public static void renderHtml(ImageIcon icon, String leftHtmlText, String rightHtmlText,
     Graphics g, Font defaultFont, Color defaultColor,
     int width, int height, boolean selected) {
+        renderHtml(icon, leftHtmlText, rightHtmlText, g, defaultFont, defaultColor, defaultColor, width, height, selected, true);
+    }
+
+    /**
+     * Render a completion item using the provided icon and left and right
+     * html texts.
+     *
+     * @param icon icon 16x16 that will be displayed on the left. It may be null
+     *  which means that no icon will be displayed but the space for the icon
+     *  will still be reserved (to properly align with other items
+     *  that will provide an icon).
+     * 
+     * @param leftHtmlText html text that will be displayed on the left side
+     *  of the item's rendering area next to the icon.
+     *  <br/>
+     *  It may be null which indicates that no left text will be displayed.
+     *  <br/>
+     *  If there's not enough horizontal space in the rendering area
+     *  the text will be shrinked and "..." will be displayed at the end.
+     *
+     * @param rightHtmlText html text that will be aligned to the right edge
+     *  of the item's rendering area.
+     *  <br/>
+     *  It may be null which means that no right text will be displayed.
+     *  <br/>
+     *  The right text is always attempted to be fully displayed unlike
+     *  the left text that may be shrinked if there's not enough rendering space
+     *  in the horizontal direction.
+     *  <br/>
+     *  If there's not enough space even for the right text it will be shrinked
+     *  and "..." will be displayed at the end of the rendered string.
+     * @param g non-null graphics through which the rendering happens.
+     * @param defaultFont non-null default font to be used for rendering.
+     * @param foregroundColor non-null default color to be used for rendering.
+     * @param selectedBackgroundColor non-null color to be used a the background
+     *  for rendering selected items.
+     * @param width &gt;=0 available width for rendering.
+     * @param height &gt;=0 available height for rendering.
+     * @param isBestMatch whether the item being rendered is currently the best
+     *  match in the completion's JList. If selected the foreground color is forced
+     *  to be black for all parts of the rendered strings.
+     * @param isSelected whether the item being rendered is currently selected in
+     *  the completion's JList. If <code>true</code>, the foreground color is
+     *  forced to the value of the foregroundColor argument for all parts of the
+     *  rendered strings.
+     */
+    public static void renderHtml(@NullAllowed ImageIcon icon,
+                                  @NullAllowed String leftHtmlText,
+                                  @NullAllowed String rightHtmlText,
+                                  @NonNull Graphics g,
+                                  @NonNull Font defaultFont,
+                                  @NonNull Color foregroundColor,
+                                  @NonNull Color selectedBackgroundColor,
+                                  int width,
+                                  int height,
+                                  boolean isBestMatch,
+                                  boolean isSelected) {
         if (icon != null) {
             // The image of the ImageIcon should already be loaded
             // so no ImageObserver should be necessary
             boolean done = g.drawImage(icon.getImage(), BEFORE_ICON_GAP, (height - icon.getIconHeight()) /2, null);
             assert (done);
         }
+        
+        if (isBestMatch && isSelected) {
+            g.setColor(foregroundColor);
+        }
+
         int iconWidth = BEFORE_ICON_GAP + ICON_WIDTH + AFTER_ICON_GAP;
         int rightTextX = width - AFTER_RIGHT_TEXT_GAP;
         FontMetrics fm = g.getFontMetrics(defaultFont);
         int textY = (height - fm.getHeight())/2 + fm.getHeight() - fm.getDescent();
         if (rightHtmlText != null && rightHtmlText.length() > 0) {
             int rightTextWidth = (int)PatchedHtmlRenderer.renderHTML(rightHtmlText, g, 0, 0, Integer.MAX_VALUE, 0,
-                    defaultFont, defaultColor, PatchedHtmlRenderer.STYLE_CLIP, false, true);
+                    defaultFont, foregroundColor, PatchedHtmlRenderer.STYLE_CLIP, false, true);
             rightTextX = Math.max(iconWidth, rightTextX - rightTextWidth);
             // Render right text
             PatchedHtmlRenderer.renderHTML(rightHtmlText, g, rightTextX, textY, rightTextWidth, textY,
-                defaultFont, defaultColor, PatchedHtmlRenderer.STYLE_CLIP, true, selected);
+                defaultFont, foregroundColor, PatchedHtmlRenderer.STYLE_CLIP, true, isBestMatch && isSelected);
             rightTextX = Math.max(iconWidth, rightTextX - BEFORE_RIGHT_TEXT_GAP);
         }
 
         // Render left text
         if (leftHtmlText != null && leftHtmlText.length() > 0 && rightTextX > iconWidth) { // any space for left text?
             PatchedHtmlRenderer.renderHTML(leftHtmlText, g, iconWidth, textY, rightTextX - iconWidth, textY,
-                defaultFont, defaultColor, PatchedHtmlRenderer.STYLE_TRUNCATE, true, selected);
+                defaultFont, foregroundColor, PatchedHtmlRenderer.STYLE_TRUNCATE, true, isBestMatch && isSelected);
+        }
+
+        // Render border for best match items that are not selected
+        if (isBestMatch && !isSelected) {
+            g.setColor(selectedBackgroundColor);
+            g.drawRect(0, 0, width - 1, height - 1);
         }
     }
     

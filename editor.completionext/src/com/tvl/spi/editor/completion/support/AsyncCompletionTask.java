@@ -47,6 +47,9 @@ package com.tvl.spi.editor.completion.support;
 import javax.swing.SwingUtilities;
 import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
+import org.netbeans.api.annotations.common.CheckForNull;
+import org.netbeans.api.annotations.common.NonNull;
+import org.netbeans.api.annotations.common.NullAllowed;
 import com.tvl.spi.editor.completion.CompletionResultSet;
 import com.tvl.spi.editor.completion.CompletionTask;
 import org.openide.util.RequestProcessor;
@@ -97,7 +100,7 @@ public final class AsyncCompletionTask implements CompletionTask, Runnable {
      *  <br>
      *  It may be null to indicate that no component was provided.
      */
-    public AsyncCompletionTask(AsyncCompletionQuery query, JTextComponent component) {
+    public AsyncCompletionTask(@NonNull AsyncCompletionQuery query, @NullAllowed JTextComponent component) {
         assert (query != null) : "Query must be non-null";
         this.query = query;
         this.component = component;
@@ -110,8 +113,26 @@ public final class AsyncCompletionTask implements CompletionTask, Runnable {
      *
      * @param query non-null query implementation.
      */
-    public AsyncCompletionTask(AsyncCompletionQuery query) {
+    public AsyncCompletionTask(@NonNull AsyncCompletionQuery query) {
         this(query, null);
+    }
+
+    /**
+     * Gets the {@link AsyncCompletionQuery} wrapped by this task.
+     *
+     * @return The {@link AsyncCompletionQuery}.
+     */
+    public @NonNull AsyncCompletionQuery getQuery() {
+        return query;
+    }
+
+    /**
+     * Gets the active component used by this task.
+     *
+     * @return The component.
+     */
+    public @CheckForNull JTextComponent getComponent() {
+        return component;
     }
 
     /**

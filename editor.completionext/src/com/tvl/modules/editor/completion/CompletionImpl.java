@@ -49,6 +49,7 @@ import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.ref.WeakReference;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -129,6 +130,64 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
     
     private static final int PLEASE_WAIT_TIMEOUT = 750;
     private static final int PRESCAN = 25;
+
+    /**
+     * A default {@link CompletionController} which is used for the "Please wait..."
+     * and "No suggestions" completion results.
+     */
+    private final CompletionController FALLBACK_COMPLETION_CONTROLLER =
+        new CompletionController() {
+            @Override
+            public void sortItems(List<? extends CompletionItem> items, int sortType) {
+                assert items.size() == 1;
+            }
+
+            @Override
+            public Selection getSelection(List<? extends CompletionItem> items, List<? extends CompletionItem> declarationItems) {
+                assert items.size() == 1;
+                return Selection.DEFAULT;
+            }
+
+            @Override
+            public void defaultAction(CompletionItem bestMatch, boolean isSelected) {
+                if (isSelected) {
+                    bestMatch.defaultAction(getActiveComponent());
+                }
+            }
+
+            @Override
+            public void processKeyEvent(KeyEvent evt, CompletionItem bestMatch,
+            boolean isSelected) {
+                bestMatch.processKeyEvent(evt);
+            }
+
+            @Override
+            public void render(Graphics g, Font defaultFont, Color foregroundColor,
+            Color backgroundColor, Color selectedForegroundColor,
+            Color selectedBackgroundColor, int width, int height, CompletionItem item,
+            boolean isBestMatch, boolean isSelected) {
+                if (isBestMatch) {
+                    // Clear the background
+                    g.setColor(selectedBackgroundColor);
+                    g.fillRect(0, 0, width, height);
+                    g.setColor(selectedForegroundColor);
+                    item.render(g, defaultFont, selectedForegroundColor,
+                            selectedBackgroundColor, width, height, isBestMatch);
+                } else {
+                    // Clear the background
+                    g.setColor(backgroundColor);
+                    g.fillRect(0, 0, width, height);
+                    g.setColor(foregroundColor);
+                    item.render(g, defaultFont, foregroundColor, backgroundColor,
+                            width, height, isBestMatch);
+                }
+            }
+
+            @Override
+            public boolean instantSubstitution(CompletionItem uniqueMatch) {
+                return uniqueMatch.instantSubstitution(getActiveComponent());
+            }
+        };
     
     public static CompletionImpl get() {
         if (singleton == null)
@@ -165,8 +224,12 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
     /* Completion providers registered for the active component (its mime-type). Changed in AWT only. */
     private CompletionProvider[] activeProviders = null;
     
-    /** Mapping of mime-type to array of providers. Changed in AWT only. */
-    private HashMap<String, CompletionProvider[]> providersCache = new HashMap<String, CompletionProvider[]>();
+    /** Completion providers registered for the active component (its mime-type). Changed in AWT only. */
+    private CompletionControllerProvider[] activeControllerProviders = null;
+    
+    /** Mapping of mime-type to service provider type to array of providers. Changed in AWT only. */
+    private HashMap<String, HashMap<Class<?>, Object[]>> providersCache =
+        new HashMap<String, HashMap<Class<?>, Object[]>>();
 
     /**
      * Result of the completion query.
@@ -252,7 +315,9 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
         
         docAutoPopupTimer = new Timer(0, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                if (lastSelectedItem == null || lastSelectedItem.get() != layout.getSelectedCompletionItem())
+                SelectedCompletionItem selectedItem = layout.getSelectedCompletionItem();
+                CompletionItem currentSelectedItem = selectedItem != null ? selectedItem.getItem() : null;
+                if (lastSelectedItem == null || lastSelectedItem.get() != currentSelectedItem)
                     showDocumentation();
             }
         });
@@ -277,7 +342,10 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
                     }
                 }
                 layout.showCompletion(Collections.singletonList(waitText),
-                        null, -1, CompletionImpl.this, null, null, 0);
+                        Collections.emptyList(),
+                        null, -1, CompletionImpl.this, null, null,
+                        FALLBACK_COMPLETION_CONTROLLER,
+                        CompletionController.Selection.DEFAULT);
                 pleaseWaitDisplayed = true;
                 if (!politeWaitText) {
                     long when = System.currentTimeMillis() - PLEASE_WAIT_TIMEOUT;
@@ -327,7 +395,7 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
                             CompletionSettings.getInstance(getActiveComponent()).completionAutoPopup()) {
                         autoModEndOffset = modEndOffset;
                         if (completionResultNull)
-                            showCompletion(false, false, true, CompletionProvider.COMPLETION_QUERY_TYPE);
+                            showCompletion(false, false, true, type & (CompletionProvider.COMPLETION_QUERY_MASK | CompletionProvider.USER_QUERY_MASK));
                     }
 
                     boolean tooltipResultNull;
@@ -367,7 +435,8 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
             }
             if (autoModEndOffset >= 0 && e.getDot() != autoModEndOffset
                     && (completionAutoPopupTimer.isRunning() || localCompletionResult != null)
-                    && (!layout.isCompletionVisible() || pleaseWaitDisplayed)) {
+                    && (!layout.isCompletionVisible() || pleaseWaitDisplayed)
+                    && CompletionSettings.getInstance(getActiveComponent()).completionAutoPopupDelay() > 0) {
                 hideCompletion(false);
             }
 
@@ -496,45 +565,62 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
     }
     
     private void initActiveProviders(JTextComponent component) {
-        activeProviders = (component != null)
-                ? getCompletionProvidersForComponent(component, true)
+        activeProviders = initActiveProviders(CompletionProvider.class, component);
+        // currently only one async warm up task is allowed at once
+        activeControllerProviders = null;
+    }
+    
+    private <T> T[] initActiveProviders(Class<T> clazz, JTextComponent component) {
+        T[] providers = (component != null)
+                ? getProvidersForComponent(clazz, component, true)
                 : null;
+
         if (LOG.isLoggable(Level.FINE)) {
-            StringBuffer sb = new StringBuffer("Completion PROVIDERS:\n"); // NOI18N
-            if (activeProviders != null) {
-                for (int i = 0; i < activeProviders.length; i++) {
+            StringBuilder sb = new StringBuilder(clazz.getName() + " PROVIDERS:\n"); // NOI18N
+            if (providers != null) {
+                for (int i = 0; i < providers.length; i++) {
                     sb.append("providers["); // NOI18N
                     sb.append(i);
                     sb.append("]: "); // NOI18N
-                    sb.append(activeProviders[i].getClass());
+                    sb.append(providers[i].getClass());
                     sb.append('\n');
                 }
             }
             LOG.fine(sb.toString());
         }
+        
+        return providers;
     }
     
     private boolean ensureActiveProviders() {
-        if (activeProviders != null)
-            return true;
+        activeProviders = ensureActiveProviders(CompletionProvider.class, activeProviders);
+        activeControllerProviders = ensureActiveProviders(CompletionControllerProvider.class, activeControllerProviders);
+        // allow activeControllerProviders to be null since we have a
+        // DefaultCompletionControllerProvider to fall back on.
+        return activeProviders != null;
+    }
+    
+    private <T> T[] ensureActiveProviders(Class<T> clazz, T[] providers) {
+        if (providers != null)
+            return providers;
         JTextComponent component = getActiveComponent();
-        activeProviders = (component != null)
-                ? getCompletionProvidersForComponent(component, false)
+        providers = (component != null)
+                ? getProvidersForComponent(clazz, component, false)
                 : null;
         if (LOG.isLoggable(Level.FINE)) {
-            StringBuffer sb = new StringBuffer("Completion PROVIDERS:\n"); // NOI18N
-            if (activeProviders != null) {
-                for (int i = 0; i < activeProviders.length; i++) {
+            StringBuilder sb = new StringBuilder(clazz.getName() + " PROVIDERS:\n"); // NOI18N
+            if (providers != null) {
+                for (int i = 0; i < providers.length; i++) {
                     sb.append("providers["); // NOI18N
                     sb.append(i);
                     sb.append("]: "); // NOI18N
-                    sb.append(activeProviders[i].getClass());
+                    sb.append(providers[i].getClass());
                     sb.append('\n');
                 }
             }
             LOG.fine(sb.toString());
         }
-        return activeProviders != null;
+        return providers;
     }
     
     private void restartCompletionAutoPopupTimer() {
@@ -552,8 +638,8 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
         docAutoPopupTimer.setInitialDelay(docDelay);
         docAutoPopupTimer.restart();
     }
-    
-    private CompletionProvider[] getCompletionProvidersForComponent(JTextComponent component, boolean asyncWarmUp) {
+
+    private <T> T[] getProvidersForComponent(final Class<T> clazz, JTextComponent component, boolean asyncWarmUp) {
         assert (SwingUtilities.isEventDispatchThread());
 
         if (component == null)
@@ -568,15 +654,26 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
             BaseKit kit = Utilities.getKit(component);
             
             if (kit == null) {
-                return new CompletionProvider[0];
+                @SuppressWarnings("unchecked")
+                T[] result = (T[])Array.newInstance(clazz, 0);
+                return result;
             }
             
             mimeType = kit.getContentType();
         }
         
-        if (providersCache.containsKey(mimeType))
-            return providersCache.get(mimeType);
+        HashMap<Class<?>, Object[]> providers = providersCache.get(mimeType);
+        if (providers == null) {
+            providers = new HashMap<Class<?>, Object[]>();
+            providersCache.put(mimeType, providers);
+        }
 
+        if (providers.containsKey(clazz)) {
+            @SuppressWarnings("unchecked")
+            T[] result = (T[])providers.get(clazz);
+            return result;
+        }
+        
         if (asyncWarmUpTask != null) {
             if (asyncWarmUp && mimeType != null && mimeType.equals(asyncWarmUpMimeType))
                 return null;
@@ -586,24 +683,27 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
             asyncWarmUpTask = null;
             asyncWarmUpMimeType = null;
         }
+
         final Lookup lookup = MimeLookup.getLookup(MimePath.get(mimeType));
         if (asyncWarmUp) {
             asyncWarmUpMimeType = mimeType;
             asyncWarmUpTask = RequestProcessor.getDefault().post(new Runnable() {
                 @Override
                 public void run() {
-                    lookup.lookupAll(CompletionProvider.class);
+                    lookup.lookupAll(clazz);
                 }
             });
             return null;
         }
-        Collection<? extends CompletionProvider> col = lookup.lookupAll(CompletionProvider.class);
+
+        Collection<? extends T> col = lookup.lookupAll(clazz);
         int size = col.size();
-        CompletionProvider[] ret = size == 0 ? null : col.toArray(new CompletionProvider[size]);
-        providersCache.put(mimeType, ret);
+        @SuppressWarnings("unchecked")
+        T[] ret = size == 0 ? null : col.toArray((T[])Array.newInstance(clazz, size));
+        providers.put(clazz, ret);
         return ret;
     }
-    
+
     private void dispatchKeyEvent(KeyEvent e) {
         if (e == null)
             return;
@@ -623,21 +723,23 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
             }
         }
         if (layout.isCompletionVisible()) {
-            CompletionItem item = layout.getSelectedCompletionItem();
-            if (item != null) {
+            SelectedCompletionItem item = layout.getSelectedCompletionItem();
+            Result result = completionResult;
+            if (item != null && result != null) {
                 sendUndoableEdit(doc, CloneableEditorSupport.BEGIN_COMMIT_GROUP);
                 try {
                     if (compEditable && !guardedPos) {
                         LogRecord r = new LogRecord(Level.FINE, "COMPL_KEY_SELECT"); // NOI18N
-                        r.setParameters(new Object[] {e.getKeyChar(), layout.getSelectedIndex(), item.getClass().getSimpleName()});
-                        item.processKeyEvent(e);
+                        r.setParameters(new Object[] {e.getKeyChar(), layout.getSelectedIndex(), item.getItem().getClass().getSimpleName()});
+                        result.getController().processKeyEvent(e, item.getItem(), item.isSelected());
                         if (e.isConsumed()) {
                             uilog(r);
                             return;
                         }
                     }
-                    // Call default action if ENTER was pressed
-                    if (e.getKeyCode() == KeyEvent.VK_ENTER && e.getID() == KeyEvent.KEY_PRESSED) {
+                    // Call default action if ENTER was pressed and the item is selected
+                    // TODO: move this functionality to the CompletionController
+                    if (item.isSelected() && e.getKeyCode() == KeyEvent.VK_ENTER && e.getID() == KeyEvent.KEY_PRESSED) {
                         e.consume();
                         if (guardedPos) {
                             Toolkit.getDefaultToolkit().beep();
@@ -647,8 +749,8 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
                                 consumeIdentifier();
                             }
                             LogRecord r = new LogRecord(Level.FINE, "COMPL_KEY_SELECT_DEFAULT"); // NOI18N
-                            r.setParameters(new Object[]{'\n', layout.getSelectedIndex(), item.getClass().getSimpleName()});
-                            item.defaultAction(getActiveComponent());
+                            r.setParameters(new Object[]{'\n', layout.getSelectedIndex(), item.getItem().getClass().getSimpleName()});
+                            result.getController().defaultAction(item.getItem(), item.isSelected());
                             uilog(r);
                         }
                         return;
@@ -661,6 +763,7 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
                     || e.getKeyCode() == KeyEvent.VK_HOME || e.getKeyCode() == KeyEvent.VK_END) {
                 hideCompletion(false);                
             }
+            // TODO: move this functionality to the CompletionController
             if (e.getKeyCode() == KeyEvent.VK_TAB && doc.getProperty(CT_HANDLER_DOC_PROPERTY) == null) {
                 e.consume();
                 if (guardedPos) {
@@ -704,7 +807,7 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
         
         if (completionResultSets.size() > 0) {
             // Query the tasks
-            if (delayQuery) {
+            if (delayQuery && CompletionSettings.getInstance(getActiveComponent()).completionAutoPopupDelay() > 0) {
                 restartCompletionAutoPopupTimer();
             } else {
                 pleaseWaitTimer.restart();
@@ -715,8 +818,13 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
             }
         } else {
             completionCancel();
-            if (explicitQuery)
-                layout.showCompletion(Collections.singletonList(NO_SUGGESTIONS), null, -1, CompletionImpl.this, null, null, 0);
+            if (explicitQuery) {
+                layout.showCompletion(Collections.singletonList(NO_SUGGESTIONS),
+                      Collections.emptyList(),
+                      null, -1, CompletionImpl.this, null, null,
+                      FALLBACK_COMPLETION_CONTROLLER,
+                      CompletionController.Selection.DEFAULT);
+            }
             pleaseWaitDisplayed = false;
             stopProfiling();
         }
@@ -857,9 +965,9 @@ outer:      for (Iterator it = localCompletionResult.getResultSets().iterator();
                     return;
                 }
             }
-            CompletionItem item = layout.getSelectedCompletionItem();
+            SelectedCompletionItem item = layout.getSelectedCompletionItem();
             if (item != null)
-                item.defaultAction(c);
+                localCompletionResult.getController().defaultAction(item.getItem(), item.isSelected());
         }
     }
     
@@ -911,6 +1019,7 @@ outer:      for (Iterator it = localCompletionResult.getResultSets().iterator();
         stopProfiling();
         
         // Compute total count of the result sets
+        int declarationItemsSize = 0;
         int size = 0;
         int qType = 0;
         boolean hasAdditionalItems = false;
@@ -918,6 +1027,7 @@ outer:      for (Iterator it = localCompletionResult.getResultSets().iterator();
         List<CompletionResultSetImpl> completionResultSets = result.getResultSets();
         for (int i = completionResultSets.size() - 1; i >= 0; i--) {
             CompletionResultSetImpl resultSet = completionResultSets.get(i);
+            declarationItemsSize += resultSet.getDeclarationItems().size();
             size += resultSet.getItems().size();
             qType = resultSet.getQueryType();
             if (resultSet.hasAdditionalItems()) {
@@ -948,7 +1058,7 @@ outer:      for (Iterator it = localCompletionResult.getResultSets().iterator();
         
         final ArrayList<CompletionItem> sortedResultItems = new ArrayList<CompletionItem>(size = resultItems.size());
         if (size > 0) {
-            Collections.sort(resultItems, CompletionItemComparator.get(getSortType()));
+            result.getController().sortItems(resultItems, getSortType());
             int cnt = 0;
             for(int i = 0; i < size; i++) {
                 CompletionItem item = resultItems.get(i);                
@@ -965,13 +1075,30 @@ outer:      for (Iterator it = localCompletionResult.getResultSets().iterator();
             }
         }
 
-        final boolean noSuggestions = sortedResultItems.size() == 0;
+        List<CompletionItem> declarationItems = new ArrayList<CompletionItem>(declarationItemsSize);
+        if (declarationItemsSize > 0) {
+            for (int i = 0; i < completionResultSets.size(); i++) {
+                CompletionResultSetImpl resultSet = completionResultSets.get(i);
+                List<? extends CompletionItem> items = resultSet.getDeclarationItems();
+                if (!items.isEmpty()) {
+                    declarationItems.addAll(items);
+                }
+            }
+        }
+
+        final ArrayList<CompletionItem> sortedDeclarationItems = new ArrayList<CompletionItem>(declarationItemsSize = declarationItems.size());
+        if (declarationItemsSize > 0) {
+            result.getController().sortItems(resultItems, getSortType());
+            sortedDeclarationItems.addAll(declarationItems);
+        }
+
+        final boolean noSuggestions = sortedResultItems.isEmpty() && declarationItems.isEmpty();
         if (noSuggestions) {
-            if (hasAdditionalItems && qType == CompletionProvider.COMPLETION_QUERY_TYPE && !this.refreshedQuery) {
+            if (hasAdditionalItems && (qType & CompletionProvider.COMPLETION_ALL_QUERY_TYPE) != CompletionProvider.COMPLETION_ALL_QUERY_TYPE && !this.refreshedQuery) {
                 showCompletion(this.explicitQuery, this.refreshedQuery, false, CompletionProvider.COMPLETION_ALL_QUERY_TYPE);
                 return;
             }
-            if (!explicitQuery) {                
+            if (!explicitQuery) {
                 hideCompletion(false);
                 return;
             }
@@ -991,29 +1118,38 @@ outer:      for (Iterator it = localCompletionResult.getResultSets().iterator();
                 Document doc = c.getDocument();
                 CompletionSettings cs = CompletionSettings.getInstance(c);
                 int caretOffset = c.getSelectionStart();
-                // completionResults = null;
-                if (sortedResultItems.size() == 1 && !refreshedQuery && explicitQuery
+
+                CompletionController.Selection selection = result.getController().getSelection(sortedResultItems, sortedDeclarationItems);
+                // the CompletionController should be returning a valid selection
+                assert selection != null
+                    && (sortedResultItems.isEmpty()
+                        || selection.getIndex() >= 0 && selection.getIndex() < sortedResultItems.size());
+                if (selection == null || selection.getIndex() < 0 || selection.getIndex() > sortedResultItems.size()) {
+                    selection = CompletionController.Selection.DEFAULT;
+                }
+
+                if (selection.isUnique() && !refreshedQuery && explicitQuery
                         && cs.completionInstantSubstitution()
                         && c.isEditable() && !(doc instanceof GuardedDocument && ((GuardedDocument)doc).isPosGuarded(caretOffset))) {
+
+                    sendUndoableEdit(doc, CloneableEditorSupport.BEGIN_COMMIT_GROUP);
                     try {
-                        int[] block = Utilities.getIdentifierBlock(c, caretOffset);
-                        if (block == null || block[1] == caretOffset) { // NOI18N
-                            CompletionItem item = sortedResultItems.get(0);
-                            sendUndoableEdit(doc, CloneableEditorSupport.BEGIN_COMMIT_GROUP);
-                            try {
-                                if (item.instantSubstitution(c))
-                                    return;
-                            } finally {
-                                sendUndoableEdit(doc, CloneableEditorSupport.END_COMMIT_GROUP);
-                            }
-                        }
-                    } catch (BadLocationException ex) {
+                        if (result.getController().instantSubstitution(sortedResultItems.get(selection.getIndex())))
+                            return;
+                    } finally {
+                        sendUndoableEdit(doc, CloneableEditorSupport.END_COMMIT_GROUP);
                     }
                 }
                 
-                int selectedIndex = getCompletionPreSelectionIndex(sortedResultItems);
                 c.putClientProperty("completion-visible", Boolean.TRUE);
-                layout.showCompletion(noSuggestions ? Collections.singletonList(NO_SUGGESTIONS) : sortedResultItems, displayTitle, displayAnchorOffset, CompletionImpl.this, displayAdditionalItems ? hasAdditionalItemsText.toString() : null, displayAdditionalItems ? completionShortcut : null, selectedIndex);
+                layout.showCompletion(
+                        noSuggestions ? Collections.singletonList(NO_SUGGESTIONS) : sortedResultItems,
+                        sortedDeclarationItems,
+                        displayTitle, displayAnchorOffset, CompletionImpl.this,
+                        displayAdditionalItems ? hasAdditionalItemsText.toString() : null,
+                        displayAdditionalItems ? completionShortcut : null,
+                        result.getController(),
+                        selection);
                 pleaseWaitDisplayed = false;
                 stopProfiling();
 
@@ -1030,32 +1166,6 @@ outer:      for (Iterator it = localCompletionResult.getResultSets().iterator();
             }
         };
         runInAWT(requestShowRunnable);
-    }
-    
-    private int getCompletionPreSelectionIndex(List<CompletionItem> items) {
-        String prefix = null;
-        if(getActiveDocument() instanceof BaseDocument) {
-            BaseDocument doc = (BaseDocument)getActiveDocument();
-            int caretOffset = getActiveComponent().getSelectionStart();
-            try {
-                int[] block = Utilities.getIdentifierBlock(doc, caretOffset);
-                if (block != null) {
-                    block[1] = caretOffset;
-                    prefix = doc.getText(block);
-                }
-            } catch (BadLocationException ble) {
-            }
-        }
-        if (prefix != null && prefix.length() > 0) {
-            int idx = 0;
-            for (CompletionItem item : items) {
-                CharSequence text = item.getInsertPrefix();
-                if (text != null && text.toString().startsWith(prefix))
-                    return idx;
-                idx++;
-            }
-        }
-        return 0;
     }
 
     /**
@@ -1147,10 +1257,10 @@ outer:      for (Iterator it = localCompletionResult.getResultSets().iterator();
         List<CompletionResultSetImpl> documentationResultSets = docResult.getResultSets();
 
         CompletionTask docTask;
-        CompletionItem selectedItem = layout.getSelectedCompletionItem();
+        SelectedCompletionItem selectedItem = layout.getSelectedCompletionItem();
         if (selectedItem != null) {
-            lastSelectedItem = new WeakReference<CompletionItem>(selectedItem);
-            docTask = selectedItem.createDocumentationTask();
+            lastSelectedItem = new WeakReference<CompletionItem>(selectedItem.getItem());
+            docTask = selectedItem.getItem().createDocumentationTask();
             if (docTask != null) { // attempt the documentation for selected item
                 CompletionResultSetImpl resultSet = new CompletionResultSetImpl(
                         this, newDocumentationResult, docTask, CompletionProvider.DOCUMENTATION_QUERY_TYPE);
@@ -1269,8 +1379,8 @@ outer:      for (Iterator it = localCompletionResult.getResultSets().iterator();
         List<CompletionResultSetImpl> toolTipResultSets = newToolTipResult.getResultSets();
 
         CompletionTask toolTipTask;
-        CompletionItem selectedItem = layout.getSelectedCompletionItem();
-        if (selectedItem != null && (toolTipTask = selectedItem.createToolTipTask()) != null) {
+        SelectedCompletionItem selectedItem = layout.getSelectedCompletionItem();
+        if (selectedItem != null && (toolTipTask = selectedItem.getItem().createToolTipTask()) != null) {
             CompletionResultSetImpl resultSet = new CompletionResultSetImpl(
                     this, newToolTipResult, toolTipTask, CompletionProvider.TOOLTIP_QUERY_TYPE);
             toolTipResultSets.add(resultSet);
@@ -1440,7 +1550,7 @@ outer:      for (Iterator it = localCompletionResult.getResultSets().iterator();
     void finishNotify(CompletionResultSetImpl finishedResult) {
         Result localResult;
         boolean finished = false;
-        switch (finishedResult.getQueryType()) {
+        switch (finishedResult.getQueryType() & CompletionProvider.RESERVED_QUERY_MASK) {
             case CompletionProvider.COMPLETION_QUERY_TYPE:
             case CompletionProvider.COMPLETION_ALL_QUERY_TYPE:
                 synchronized (this) {
@@ -1506,7 +1616,7 @@ outer:      for (Iterator it = localCompletionResult.getResultSets().iterator();
     private static CompletionResultSetImpl findFirstValidResult(List<CompletionResultSetImpl> resultSets) {
         for (int i = 0; i < resultSets.size(); i++) {
             CompletionResultSetImpl result = resultSets.get(i);
-            switch (result.getQueryType()) {
+            switch (result.getQueryType() & CompletionProvider.RESERVED_QUERY_MASK) {
                 case CompletionProvider.DOCUMENTATION_QUERY_TYPE:
                     if (result.getDocumentation() != null) {
                         return result;
@@ -1701,6 +1811,8 @@ outer:      for (Iterator it = localCompletionResult.getResultSets().iterator();
         private boolean invoked;                
         private boolean cancelled;
         private boolean beforeQuery = true;
+
+        private CompletionController controller;
         
         Result(int resultSetsSize) {
             resultSets = new ArrayList<CompletionResultSetImpl>(resultSetsSize);
@@ -1713,6 +1825,42 @@ outer:      for (Iterator it = localCompletionResult.getResultSets().iterator();
          */
         List<CompletionResultSetImpl> getResultSets() {
             return resultSets;
+        }
+
+        CompletionController getController() {
+            synchronized (resultSets) {
+                if (controller == null) {
+                    if (resultSets.isEmpty()) {
+                        return FALLBACK_COMPLETION_CONTROLLER;
+                    }
+
+                    JTextComponent component = getActiveComponent();
+                    List<CompletionTask> tasks = new ArrayList<CompletionTask>();
+                    List<Integer> queryTypes = new ArrayList<Integer>();
+                    for (CompletionResultSetImpl resultSet : resultSets) {
+                        tasks.add(resultSet.getTask());
+                        queryTypes.add(resultSet.getQueryType());
+                    }
+
+                    CompletionControllerProvider[] providers = activeControllerProviders;
+                    if (providers != null) {
+                        for (CompletionControllerProvider provider : providers) {
+                            controller = provider.createController(component, tasks, queryTypes);
+                            if (controller != null) {
+                                break;
+                            }
+                        }
+                    }
+
+                    if (controller == null) {
+                        CompletionControllerProvider provider =
+                            DefaultCompletionControllerProvider.INSTANCE;
+                        controller = provider.createController(component, tasks, queryTypes);
+                    }
+                }
+
+                return controller;
+            }
         }
 
         /**

@@ -44,6 +44,9 @@
 
 package com.tvl.modules.editor.completion;
 
+import com.tvl.spi.editor.completion.CompletionController;
+import com.tvl.spi.editor.completion.CompletionItem;
+import com.tvl.spi.editor.completion.LazyCompletionItem;
 import java.awt.*;
 import java.awt.event.MouseListener;
 import java.util.Collections;
@@ -53,10 +56,8 @@ import javax.accessibility.Accessible;
 import javax.accessibility.AccessibleContext;
 import javax.swing.*;
 import javax.swing.text.JTextComponent;
-
+import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.editor.LocaleSupport;
-import com.tvl.spi.editor.completion.CompletionItem;
-import com.tvl.spi.editor.completion.LazyCompletionItem;
 import org.openide.util.Utilities;
 
 /**
@@ -76,6 +77,11 @@ public class CompletionJList extends JList {
     private int maxVisibleRowCount;
     private JTextComponent editorComponent;
     private int smartIndex;
+    /** The current completion controller. */
+    private CompletionController controller;
+    /** <code>true</code> if the best match is selected, otherwise <code>false</code>. */
+    private boolean isSelected;
+    private boolean preventSelection;
     
     public CompletionJList(int maxVisibleRowCount, MouseListener mouseListener, JTextComponent editorComponent) {
         this.maxVisibleRowCount = maxVisibleRowCount;
@@ -92,28 +98,26 @@ public class CompletionJList extends JList {
         setCellRenderer(new ListCellRenderer() {
             private ListCellRenderer defaultRenderer = new DefaultListCellRenderer();
 
-            public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+            @Override
+            public Component getListCellRendererComponent(JList list, Object value, int index, boolean isBestMatch, boolean cellHasFocus) {
                 if( value instanceof CompletionItem ) {
                     CompletionItem item = (CompletionItem)value;
                     renderComponent.setItem(item);
-                    renderComponent.setSelected(isSelected);
+                    renderComponent.setSelected(isBestMatch, isBestMatch && CompletionJList.this.isSelected);
                     renderComponent.setSeparator(smartIndex > 0 && smartIndex == index);
-                    Color bgColor;
-                    Color fgColor;
-                    if (isSelected) {
-                        bgColor = list.getSelectionBackground();
-                        fgColor = list.getSelectionForeground();
-                    } else { // not selected
-                        bgColor = list.getBackground();
-                        if ((index % 2) == 0) { // every second item slightly different
-                            bgColor = new Color(
-                                    Math.abs(bgColor.getRed() - DARKER_COLOR_COMPONENT),
-                                    Math.abs(bgColor.getGreen() - DARKER_COLOR_COMPONENT),
-                                    Math.abs(bgColor.getBlue() - DARKER_COLOR_COMPONENT)
-                            );
-                        }
-                        fgColor = list.getForeground();
+                    Color bgColor = list.getBackground();
+                    Color bgSelectedColor = list.getSelectionBackground();
+                    Color fgColor = list.getForeground();
+                    Color fgSelectedColor = list.getSelectionForeground();
+                    if ((index % 2) == 0) { // every second item slightly different
+                        bgColor = new Color(
+                                Math.abs(bgColor.getRed() - DARKER_COLOR_COMPONENT),
+                                Math.abs(bgColor.getGreen() - DARKER_COLOR_COMPONENT),
+                                Math.abs(bgColor.getBlue() - DARKER_COLOR_COMPONENT)
+                        );
                     }
+
+                    renderComponent.setColors(fgColor, bgColor, fgSelectedColor, bgSelectedColor);
                     // quick check Component.setBackground() always fires change
                     if (renderComponent.getBackground() != bgColor) {
                         renderComponent.setBackground(bgColor);
@@ -124,12 +128,20 @@ public class CompletionJList extends JList {
                     return renderComponent;
 
                 } else {
-                    return defaultRenderer.getListCellRendererComponent( list, value, index, isSelected, cellHasFocus);
+                    return defaultRenderer.getListCellRendererComponent( list, value, index, isBestMatch, cellHasFocus);
                 }
             }
         });
         getAccessibleContext().setAccessibleName(LocaleSupport.getString("ACSN_CompletionView"));
         getAccessibleContext().setAccessibleDescription(LocaleSupport.getString("ACSD_CompletionView"));
+    }
+
+    public boolean isPreventSelection() {
+        return preventSelection;
+    }
+
+    public void setPreventSelection(boolean preventSelection) {
+        this.preventSelection = preventSelection;
     }
 
     public @Override void paint(Graphics g) {
@@ -149,8 +161,9 @@ public class CompletionJList extends JList {
         }
     }
     
-    void setData(List data) {
+    void setData(List data, @NonNull CompletionController controller) {
         smartIndex = -1;
+        this.controller = controller;
         if (data != null) {
             int itemCount = data.size();
             ListCellRenderer renderer = getCellRenderer();
@@ -181,7 +194,7 @@ public class CompletionJList extends JList {
             setModel(lm);
             
             if (itemCount > 0) {
-                setSelectedIndex(0);
+                setSelection(0, false);
             }
             int visibleRowCount = Math.min(itemCount, maxVisibleRowCount);
             setVisibleRowCount(visibleRowCount);
@@ -216,6 +229,33 @@ public class CompletionJList extends JList {
             updateAccessible();
         }
     }
+
+    @Override
+    public void addSelectionInterval(int anchor, int lead) {
+        // make sure Ctrl+Click sets isSelected to true
+        this.isSelected = true;
+        super.addSelectionInterval(anchor, lead);
+    }
+
+    @Override
+    public void setSelectionInterval(int anchor, int lead) {
+        // make sure Click and Shift+Click sets isSelected to true
+        this.isSelected = true;
+        super.setSelectionInterval(anchor, lead);
+    }
+
+    public @NonNull CompletionController.Selection getSelection() {
+        return new CompletionController.Selection(getSelectedIndex(), isSelected);
+    }
+
+    public void setSelection(@NonNull CompletionController.Selection selection) {
+        setSelection(selection.getIndex(), selection.isSelected());
+    }
+
+    public void setSelection(int index, boolean isSelected) {
+        this.isSelected = isSelected;
+        setSelectedIndex(index);
+    }
     
     private JLabel accessibleLabel;
     private JLabel accessibleFakeLabel;
@@ -228,6 +268,9 @@ public class CompletionJList extends JList {
         JLabel orig = accessibleLabel;
         editorAC.firePropertyChange(AccessibleContext.ACCESSIBLE_ACTIVE_DESCENDANT_PROPERTY, accessibleLabel, accessibleFakeLabel);
         Object selectedValue = getSelectedValue();
+        if (selectedValue == null) {
+            selectedValue = LocaleSupport.getString("ACSN_CompletionView_NoSelectedItem"); //NOI18N
+        }
         String accName = selectedValue instanceof Accessible ? ((Accessible) selectedValue).getAccessibleContext().getAccessibleName() : selectedValue.toString();
         accessibleLabel = new JLabel(LocaleSupport.getString("ACSN_CompletionView_SelectedItem") + accName); //NOI18N
         editorAC.firePropertyChange(AccessibleContext.ACCESSIBLE_CHILD_PROPERTY, null, accessibleLabel);
@@ -243,7 +286,7 @@ public class CompletionJList extends JList {
             int idx = (getSelectedIndex() - 1 + size) % size;
             while(idx > 0 && getModel().getElementAt(idx) == null)
                 idx--;
-            setSelectedIndex(idx);
+            setSelection(idx, true);
             ensureIndexIsVisible(idx);
         }
     }
@@ -256,7 +299,7 @@ public class CompletionJList extends JList {
                 idx++;
             if (idx == size)
                 idx = 0;
-            setSelectedIndex(idx);
+            setSelection(idx, true);
             ensureIndexIsVisible(idx);
         }
     }
@@ -267,7 +310,7 @@ public class CompletionJList extends JList {
             int idx = Math.max(getSelectedIndex() - pageSize, 0);
             while(idx > 0 && getModel().getElementAt(idx) == null)
                 idx--;
-            setSelectedIndex(idx);
+            setSelection(idx, true);
             ensureIndexIsVisible(idx);
         }
     }
@@ -284,14 +327,14 @@ public class CompletionJList extends JList {
                 while(idx > 0 && getModel().getElementAt(idx) == null)
                     idx--;
             }
-            setSelectedIndex(idx);
+            setSelection(idx, true);
             ensureIndexIsVisible(idx);
         }
     }
 
     public void begin() {
         if (getModel().getSize() > 0) {
-            setSelectedIndex(0);
+            setSelection(0, true);
             ensureIndexIsVisible(0);
         }
     }
@@ -302,7 +345,7 @@ public class CompletionJList extends JList {
             int idx = size - 1;
             while(idx > 0 && getModel().getElementAt(idx) == null)
                 idx--;
-            setSelectedIndex(idx);
+            setSelection(idx, true);
             ensureIndexIsVisible(idx);
         }
     }
@@ -325,18 +368,25 @@ public class CompletionJList extends JList {
     }
     
     private final class RenderComponent extends JComponent {
-        
+
         private CompletionItem item;
         
-        private boolean selected;
+        private boolean isBestMatch;
+        private boolean isSelected;
         private boolean separator;
+
+        private Color fgColor;
+        private Color bgColor;
+        private Color fgSelectedColor;
+        private Color bgSelectedColor;
         
         void setItem(CompletionItem item) {
             this.item = item;
         }
         
-        void setSelected(boolean selected) {
-            this.selected = selected;
+        void setSelected(boolean isBestMatch, boolean isSelected) {
+            this.isBestMatch = isBestMatch;
+            this.isSelected = isSelected;
         }
         
         void setSeparator(boolean separator) {
@@ -350,19 +400,13 @@ public class CompletionJList extends JList {
             // they can render (and still leaves them with the preferred width
             // of the widest item).
             // Therefore the item's render width is taken from the viewport's width.
-            int itemRenderWidth = ((JViewport)CompletionJList.this.getParent()).getWidth();
-            Color bgColor = getBackground();
-            Color fgColor = getForeground();
+            int itemRenderWidth = CompletionJList.this.getParent().getWidth();
             int height = getHeight();
 
-            // Clear the background
-            g.setColor(bgColor);
-            g.fillRect(0, 0, itemRenderWidth, height);
-            g.setColor(fgColor);
-
             // Render the item
-            item.render(g, CompletionJList.this.getFont(), getForeground(), bgColor,
-                    itemRenderWidth, getHeight(), selected);
+            controller.render(g, CompletionJList.this.getFont(), fgColor, bgColor,
+                    fgSelectedColor, bgSelectedColor, itemRenderWidth, getHeight(),
+                    item, isBestMatch && !preventSelection, isSelected && !preventSelection);
             
             if (separator) {
                 g.setColor(Color.gray);
@@ -370,7 +414,7 @@ public class CompletionJList extends JList {
                 g.setColor(fgColor);
             }
         }
-        
+
         public @Override Dimension getPreferredSize() {
             if (cellPreferredSizeGraphics == null) {
                 // CompletionJList.this.getGraphics() is null
@@ -381,6 +425,13 @@ public class CompletionJList extends JList {
             }
             return new Dimension(item.getPreferredWidth(cellPreferredSizeGraphics, CompletionJList.this.getFont()),
                     fixedItemHeight);
+        }
+
+        private void setColors(Color fgColor, Color bgColor, Color fgSelectedColor, Color bgSelectedColor) {
+            this.fgColor = fgColor;
+            this.bgColor = bgColor;
+            this.fgSelectedColor = fgSelectedColor;
+            this.bgSelectedColor = bgSelectedColor;
         }
 
     }

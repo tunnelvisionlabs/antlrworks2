@@ -45,6 +45,8 @@
 package com.tvl.spi.editor.completion;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import javax.swing.JToolTip;
 import com.tvl.modules.editor.completion.CompletionResultSetImpl;
 import com.tvl.modules.editor.completion.CompletionSpiPackageAccessor;
@@ -103,11 +105,8 @@ public final class CompletionResultSet {
     /**
      * Set the document offset to which the returned completion items
      * or documentation or tooltip should be anchored.
-     * <br>
-     * If there will be multiple completion providers setting this property
-     * for the given mime-type then only the first one
-     * (according to the xml-layer registration order)
-     * will be taken into account.
+     *
+     * @see #getAnchorOffset()
      */
     public void setAnchorOffset(int anchorOffset) {
         impl.setAnchorOffset(anchorOffset);
@@ -149,6 +148,15 @@ public final class CompletionResultSet {
      */
     public boolean addAllItems(Collection<? extends CompletionItem> items) {
         return impl.addAllItems(items);
+    }
+
+    /**
+     * Add the completion item to this result set as a declaration item.
+     *
+     * @param item non-null completion item.
+     */
+    public void addDeclarationItem(CompletionItem item) {
+        impl.addDeclarationItem(item);
     }
     
     /**

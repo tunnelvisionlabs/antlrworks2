@@ -93,6 +93,8 @@ public final class CompletionResultSetImpl {
     private int anchorOffset;
     
     private List<CompletionItem> items;
+
+    private List<CompletionItem> declarationItems;
     
     private boolean hasAdditionalItems;
     
@@ -201,6 +203,22 @@ public final class CompletionResultSetImpl {
         }
         return cont;
     }
+
+    public synchronized void addDeclarationItem(CompletionItem item) {
+        assert (item != null) : "Added item cannot be null";
+        checkNotFinished();
+
+        if (declarationItems == null) {
+            declarationItems = new ArrayList<CompletionItem>(1);
+        }
+
+        declarationItems.add(item);
+    }
+
+    public synchronized List<? extends CompletionItem> getDeclarationItems() {
+        assert isFinished() : "Adding not finished";
+        return (declarationItems != null) ? declarationItems : Collections.<CompletionItem>emptyList();
+    }
     
     /**
      * @return non-null list of items.
@@ -213,7 +231,7 @@ public final class CompletionResultSetImpl {
     
     public synchronized void setHasAdditionalItems(boolean value) {
         checkNotFinished();
-        if (queryType != CompletionProvider.COMPLETION_QUERY_TYPE) {
+        if ((queryType & CompletionProvider.COMPLETION_ALL_QUERY_TYPE) == CompletionProvider.COMPLETION_ALL_QUERY_TYPE) {
             return;
         }
         this.hasAdditionalItems = value;
@@ -225,7 +243,7 @@ public final class CompletionResultSetImpl {
     
     public synchronized void setHasAdditionalItemsText(String text) {
         checkNotFinished();
-        if (queryType != CompletionProvider.COMPLETION_QUERY_TYPE) {
+        if ((queryType & CompletionProvider.COMPLETION_ALL_QUERY_TYPE) == CompletionProvider.COMPLETION_ALL_QUERY_TYPE) {
             return;
         }
         this.hasAdditionalItemsText = text;
@@ -237,7 +255,7 @@ public final class CompletionResultSetImpl {
 
     public synchronized void setDocumentation(CompletionDocumentation documentation) {
         checkNotFinished();
-        if (!active || queryType != CompletionProvider.DOCUMENTATION_QUERY_TYPE) {
+        if (!active || (queryType & CompletionProvider.DOCUMENTATION_QUERY_TYPE) != CompletionProvider.DOCUMENTATION_QUERY_TYPE) {
             return;
         }
         this.documentation = documentation;
@@ -253,7 +271,7 @@ public final class CompletionResultSetImpl {
     
     public synchronized void setToolTip(JToolTip toolTip) {
         checkNotFinished();
-        if (!active || queryType != CompletionProvider.TOOLTIP_QUERY_TYPE) {
+        if (!active || (queryType & CompletionProvider.TOOLTIP_QUERY_TYPE) != CompletionProvider.TOOLTIP_QUERY_TYPE) {
             return;
         }
         this.toolTip = toolTip;

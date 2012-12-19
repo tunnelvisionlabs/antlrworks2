@@ -45,6 +45,7 @@
 
 package com.tvl.modules.editor.completion;
 
+import com.tvl.spi.editor.completion.CompletionDocumentation;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
@@ -67,7 +68,6 @@ import javax.swing.text.html.HTMLDocument;
 
 import org.netbeans.editor.*;
 import org.netbeans.editor.ext.ExtKit;
-import com.tvl.spi.editor.completion.CompletionDocumentation;
 import org.netbeans.api.annotations.common.StaticResource;
 
 import org.openide.awt.HtmlBrowser;

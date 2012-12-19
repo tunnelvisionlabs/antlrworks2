@@ -45,6 +45,8 @@
 package com.tvl.modules.editor.completion;
 
 
+import com.tvl.spi.editor.completion.CompletionController;
+import com.tvl.spi.editor.completion.CompletionItem;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Rectangle;
@@ -61,13 +63,11 @@ import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.plaf.TextUI;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.Keymap;
-import javax.swing.text.EditorKit;
+import org.netbeans.api.annotations.common.CheckForNull;
 import org.netbeans.editor.BaseKit;
 import org.netbeans.editor.ext.ExtKit;
-import com.tvl.spi.editor.completion.CompletionItem;
 
 /**
 * Pane displaying the completion view and accompanying components
@@ -122,11 +122,14 @@ public class CompletionScrollPane extends JScrollPane {
         installKeybindings(editorComponent);
     }
     
-    public void setData(List data, String title, int selectedIndex) {
+    public void setData(List data,
+                        String title,
+                        CompletionController controller,
+                        CompletionController.Selection selection) {
         dataObj = data;
-        view.setData(data);
-        view.setSelectedIndex(selectedIndex);
-        Rectangle r = view.getCellBounds(selectedIndex, selectedIndex);
+        view.setData(data, controller);
+        view.setSelection(selection);
+        Rectangle r = view.getCellBounds(selection.getIndex(), selection.getIndex());
         if (r != null)
             view.scrollRectToVisible(r);
         setTitle(title);
@@ -139,9 +142,14 @@ public class CompletionScrollPane extends JScrollPane {
         setViewportView(getViewport().getView());
     }
     
-    public CompletionItem getSelectedCompletionItem() {
+    public @CheckForNull SelectedCompletionItem getSelectedCompletionItem() {
         Object ret = view.getSelectedValue();
-        return ret instanceof CompletionItem ? (CompletionItem) ret : null;
+        if (ret instanceof CompletionItem) {
+            boolean isSelected = view.getSelection().isSelected();
+            return new SelectedCompletionItem((CompletionItem)ret, isSelected);
+        }
+
+        return null;
     }
     
     public int getSelectedIndex() {

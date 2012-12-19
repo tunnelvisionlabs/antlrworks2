@@ -44,6 +44,8 @@
 
 package com.tvl.modules.editor.completion;
 
+import com.tvl.spi.editor.completion.CompletionController;
+import com.tvl.spi.editor.completion.CompletionDocumentation;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -69,12 +71,12 @@ import javax.swing.JToolTip;
 import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.border.LineBorder;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
+import org.netbeans.api.annotations.common.CheckForNull;
 import org.netbeans.editor.GuardedDocument;
-import com.tvl.spi.editor.completion.CompletionDocumentation;
-import com.tvl.spi.editor.completion.CompletionItem;
 import org.openide.text.CloneableEditorSupport;
 import org.openide.util.NbBundle;
 
@@ -138,9 +140,11 @@ public final class CompletionLayout {
         visiblePopups.clear();
     }
 
-    public void showCompletion(List data, String title, int anchorOffset,
-    ListSelectionListener listSelectionListener, String additionalItemsText, String shortcutHint, int selectedIndex) {
-        completionPopup.show(data, title, anchorOffset, listSelectionListener, additionalItemsText, shortcutHint, selectedIndex);
+    public void showCompletion(List data, List declarationData, String title, int anchorOffset,
+    ListSelectionListener listSelectionListener, String additionalItemsText,
+    String shortcutHint, CompletionController controller,
+    CompletionController.Selection selection) {
+        completionPopup.show(data, declarationData, title, anchorOffset, listSelectionListener, additionalItemsText, shortcutHint, controller, selection);
         if (!visiblePopups.contains(completionPopup))
             visiblePopups.push(completionPopup);
     }
@@ -160,7 +164,7 @@ public final class CompletionLayout {
         return completionPopup.isVisible();
     }
     
-    public CompletionItem getSelectedCompletionItem() {
+    public @CheckForNull SelectedCompletionItem getSelectedCompletionItem() {
         return completionPopup.getSelectedCompletionItem();
     }
     
@@ -310,11 +314,16 @@ public final class CompletionLayout {
     }
     
     private static final class CompletionPopup extends CompletionLayoutPopup {
-        
+
+        private JPanel stickyItemsPanel;
+        private CompletionJList stickyItemsList;
+
         private CompletionScrollPane completionScrollPane;
         
-        public void show(List data, String title, int anchorOffset,
-        ListSelectionListener listSelectionListener, String additionalItemsText, String shortcutHint, int selectedIndex) {
+        public void show(List data, List declarationData, String title, int anchorOffset,
+        ListSelectionListener listSelectionListener, String additionalItemsText,
+        String shortcutHint, final CompletionController controller,
+        CompletionController.Selection selection) {
             
 	    JTextComponent editorComponent = getEditorComponent();
 	    if (editorComponent == null) {
@@ -331,6 +340,13 @@ public final class CompletionLayout {
             } else { // not yet visible => create completion scrollpane
                 lastSize = new Dimension(0, 0); // no last size => use (0,0)
 
+                stickyItemsPanel = new JPanel();
+                stickyItemsPanel.setLayout(new BorderLayout(0, 0));
+                stickyItemsPanel.setBorder(new LineBorder(Color.black, 1));
+                stickyItemsList = new CompletionJList(1, new MouseAdapter() {}, editorComponent);
+                stickyItemsList.setPreventSelection(true);
+                stickyItemsPanel.add(stickyItemsList, BorderLayout.CENTER);
+
                 completionScrollPane = new CompletionScrollPane(
                     editorComponent, listSelectionListener,
                     new MouseAdapter() {
@@ -339,7 +355,7 @@ public final class CompletionLayout {
 			    JTextComponent c = getEditorComponent();
                             if (SwingUtilities.isLeftMouseButton(evt)) {
                                 if (c != null && evt.getClickCount() == 2 ) {
-                                    CompletionItem selectedItem
+                                    SelectedCompletionItem selectedItem
                                             = completionScrollPane.getSelectedCompletionItem();
                                     if (selectedItem != null) {
                                         Document doc = c.getDocument();
@@ -351,7 +367,7 @@ public final class CompletionLayout {
                                             CompletionImpl.uilog(r);
                                             CompletionImpl.sendUndoableEdit(doc, CloneableEditorSupport.BEGIN_COMMIT_GROUP);
                                             try {
-                                                selectedItem.defaultAction(c);
+                                                controller.defaultAction(selectedItem.getItem(), selectedItem.isSelected());
                                             } finally {
                                                 CompletionImpl.sendUndoableEdit(doc, CloneableEditorSupport.END_COMMIT_GROUP);
                                             }
@@ -362,11 +378,12 @@ public final class CompletionLayout {
                         }
                     }
                 );
-                
+
+                JPanel panel = new JPanel();
+                panel.setLayout(new BorderLayout());
+                panel.add(stickyItemsPanel, BorderLayout.NORTH);
+                panel.add(completionScrollPane, BorderLayout.CENTER);
                 if (shortcutHint != null) {
-                    JPanel panel = new JPanel();
-                    panel.setLayout(new BorderLayout());
-                    panel.add(completionScrollPane, BorderLayout.CENTER);
                     JLabel label = new JLabel();
                     label.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, Color.white),
                             BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(0, 1, 1, 1, Color.gray), BorderFactory.createEmptyBorder(2, 2, 2, 2))));
@@ -374,14 +391,14 @@ public final class CompletionLayout {
                     label.setHorizontalAlignment(SwingConstants.RIGHT);
                     label.setText(NbBundle.getMessage(CompletionLayout.class, "TXT_completion_shortcut_tips", additionalItemsText, shortcutHint)); //NOI18N
                     panel.add(label, BorderLayout.SOUTH);
-                    setContentComponent(panel);
-                } else {
-                    setContentComponent(completionScrollPane);
                 }
+                setContentComponent(panel);
             }
             // Set the new data
             getPreferredSize();
-            completionScrollPane.setData(data, title, selectedIndex);
+            stickyItemsList.setData(declarationData, controller);
+            stickyItemsPanel.setVisible(!declarationData.isEmpty());
+            completionScrollPane.setData(data, title, controller, selection);
             setAnchorOffset(anchorOffset);
 
             Dimension prefSize = getPreferredSize();
@@ -404,7 +421,7 @@ public final class CompletionLayout {
             } // otherwise present popup size will be retained
         }
         
-        public CompletionItem getSelectedCompletionItem() {
+        public @CheckForNull SelectedCompletionItem getSelectedCompletionItem() {
             return isVisible() ? completionScrollPane.getSelectedCompletionItem() : null;
         }
 
