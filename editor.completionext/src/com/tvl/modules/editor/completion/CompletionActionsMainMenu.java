@@ -49,6 +49,11 @@ import org.openide.util.NbBundle;
  *
  * @author phrebejk
  */
+@NbBundle.Messages({
+    "completion-show-main_menu_item=Complete &Code...",
+    "documentation-show-main_menu_item=Show &Documentation",
+    "tooltip-show-main_menu_item=&Show Method Parameters",
+})
 public abstract class CompletionActionsMainMenu extends MainMenuAction implements Action {
 
     private AbstractAction delegate;
@@ -132,7 +137,7 @@ public abstract class CompletionActionsMainMenu extends MainMenuAction implement
 
 
         protected String getMenuItemText() {
-            return NbBundle.getBundle(CompletionActionsMainMenu.class).getString(ExtKit.completionShowAction + "-main_menu_item"); //NOI18N
+            return Bundle.completion_show_main_menu_item();
         }
 
         
@@ -152,7 +157,7 @@ public abstract class CompletionActionsMainMenu extends MainMenuAction implement
     public static final class DocumentationShow extends CompletionActionsMainMenu {
 
         protected String getMenuItemText() {
-            return NbBundle.getBundle(CompletionActionsMainMenu.class).getString(ExtKit.documentationShowAction + "-main_menu_item"); //NOI18N
+            return Bundle.documentation_show_main_menu_item();
         }
         
         protected String getActionName() {
@@ -168,7 +173,7 @@ public abstract class CompletionActionsMainMenu extends MainMenuAction implement
     public static final class ToolTipShow extends CompletionActionsMainMenu {
 
         protected String getMenuItemText() {
-            return NbBundle.getBundle(CompletionActionsMainMenu.class).getString(ExtKit.completionTooltipShowAction + "-main_menu_item"); //NOI18N
+            return Bundle.tooltip_show_main_menu_item();
         }
         
         protected String getActionName() {

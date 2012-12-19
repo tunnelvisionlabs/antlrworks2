@@ -57,7 +57,7 @@ import javax.accessibility.AccessibleContext;
 import javax.swing.*;
 import javax.swing.text.JTextComponent;
 import org.netbeans.api.annotations.common.NonNull;
-import org.netbeans.editor.LocaleSupport;
+import org.openide.util.NbBundle;
 import org.openide.util.Utilities;
 
 /**
@@ -65,6 +65,14 @@ import org.openide.util.Utilities;
 * @version 1.00
 */
 
+@NbBundle.Messages({
+    "completion-please-wait=Please wait...",
+    "ACSN_CompletionView=Code Completion",
+    "ACSD_CompletionView=Code Completion Window",
+    "# {0} - selected completion item",
+    "ACSN_CompletionView_SelectedItem=Selected code completion item {0}",
+    "ACSN_CompletionView_NoSelectedItem=No selection",
+})
 public class CompletionJList extends JList {
 
     private static final int DARKER_COLOR_COMPONENT = 5;
@@ -132,8 +140,8 @@ public class CompletionJList extends JList {
                 }
             }
         });
-        getAccessibleContext().setAccessibleName(LocaleSupport.getString("ACSN_CompletionView"));
-        getAccessibleContext().setAccessibleDescription(LocaleSupport.getString("ACSD_CompletionView"));
+        getAccessibleContext().setAccessibleName(Bundle.ACSN_CompletionView());
+        getAccessibleContext().setAccessibleDescription(Bundle.ACSD_CompletionView());
     }
 
     public boolean isPreventSelection() {
@@ -190,7 +198,7 @@ public class CompletionJList extends JList {
                     break;
             }
             setFixedCellWidth(width);
-            ListModel lm = LazyListModel.create( new Model(data), CompletionImpl.filter, 1.0d, LocaleSupport.getString("completion-please-wait") ); //NOI18N
+            ListModel lm = LazyListModel.create( new Model(data), CompletionImpl.filter, 1.0d, Bundle.completion_please_wait() ); //NOI18N
             setModel(lm);
             
             if (itemCount > 0) {
@@ -269,10 +277,10 @@ public class CompletionJList extends JList {
         editorAC.firePropertyChange(AccessibleContext.ACCESSIBLE_ACTIVE_DESCENDANT_PROPERTY, accessibleLabel, accessibleFakeLabel);
         Object selectedValue = getSelectedValue();
         if (selectedValue == null) {
-            selectedValue = LocaleSupport.getString("ACSN_CompletionView_NoSelectedItem"); //NOI18N
+            selectedValue = Bundle.ACSN_CompletionView_NoSelectedItem(); //NOI18N
         }
         String accName = selectedValue instanceof Accessible ? ((Accessible) selectedValue).getAccessibleContext().getAccessibleName() : selectedValue.toString();
-        accessibleLabel = new JLabel(LocaleSupport.getString("ACSN_CompletionView_SelectedItem") + accName); //NOI18N
+        accessibleLabel = new JLabel(Bundle.ACSN_CompletionView_SelectedItem(accName)); //NOI18N
         editorAC.firePropertyChange(AccessibleContext.ACCESSIBLE_CHILD_PROPERTY, null, accessibleLabel);
         editorAC.firePropertyChange(AccessibleContext.ACCESSIBLE_ACTIVE_DESCENDANT_PROPERTY, accessibleFakeLabel, accessibleLabel);
         if (orig != null) {

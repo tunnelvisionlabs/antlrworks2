@@ -80,6 +80,12 @@ import org.openide.util.RequestProcessor;
  *
  *  @author  Martin Roskanin, Dusan Balek
  */
+@NbBundle.Messages({
+    "HINT_doc_browser_back_button=Go to previous page",
+    "HINT_doc_browser_forward_button=Go to next page",
+    "HINT_doc_browser_show_web_button=Show documentation in external web browser",
+    "HINT_doc_browser_goto_source_button=Open source in editor",
+})
 public class DocumentationScrollPane extends JScrollPane {
 
     @StaticResource
@@ -178,7 +184,7 @@ public class DocumentationScrollPane extends JScrollPane {
             bBack.setFocusable(false);
             bBack.setContentAreaFilled(false);
             bBack.setMargin(new Insets(0, 0, 0, 0));
-            bBack.setToolTipText(NbBundle.getMessage(DocumentationScrollPane.class, "HINT_doc_browser_back_button")); //NOI18N
+            bBack.setToolTipText(Bundle.HINT_doc_browser_back_button()); //NOI18N
             toolbar.add(bBack, gdc);
         }
         
@@ -192,7 +198,7 @@ public class DocumentationScrollPane extends JScrollPane {
             bForward.setEnabled(false);
             bForward.setFocusable(false);
             bForward.setContentAreaFilled(false);
-            bForward.setToolTipText(NbBundle.getMessage(DocumentationScrollPane.class, "HINT_doc_browser_forward_button")); //NOI18N
+            bForward.setToolTipText(Bundle.HINT_doc_browser_forward_button()); //NOI18N
             bForward.setMargin(new Insets(0, 0, 0, 0));
             toolbar.add(bForward, gdc);
         }
@@ -208,7 +214,7 @@ public class DocumentationScrollPane extends JScrollPane {
             bShowWeb.setFocusable(false);
             bShowWeb.setContentAreaFilled(false);
             bShowWeb.setMargin(new Insets(0, 0, 0, 0));
-            bShowWeb.setToolTipText(NbBundle.getMessage(DocumentationScrollPane.class, "HINT_doc_browser_show_web_button")); //NOI18N
+            bShowWeb.setToolTipText(Bundle.HINT_doc_browser_show_web_button()); //NOI18N
             toolbar.add(bShowWeb, gdc);
         }
         
@@ -224,7 +230,7 @@ public class DocumentationScrollPane extends JScrollPane {
             bGoToSource.setFocusable(false);
             bGoToSource.setContentAreaFilled(false);
             bGoToSource.setMargin(new Insets(0, 0, 0, 0));
-            bGoToSource.setToolTipText(NbBundle.getMessage(DocumentationScrollPane.class, "HINT_doc_browser_goto_source_button")); //NOI18N
+            bGoToSource.setToolTipText(Bundle.HINT_doc_browser_goto_source_button()); //NOI18N
             toolbar.add(bGoToSource, gdc);
         }
         setColumnHeaderView(toolbar);

@@ -108,6 +108,9 @@ import org.openide.util.WeakListeners;
  * @author Dusan Balek, Miloslav Metelka
  */
 
+@NbBundle.Messages({
+    "completion-no-suggestions=No suggestions"
+})
 public class CompletionImpl extends MouseAdapter implements DocumentListener,
 CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChangeListener, ChangeListener {
     
@@ -120,8 +123,8 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
 
     private static CompletionImpl singleton = null;
 
-    private static final String NO_SUGGESTIONS = NbBundle.getMessage(CompletionImpl.class, "completion-no-suggestions");
-    private static final String PLEASE_WAIT = NbBundle.getMessage(CompletionImpl.class, "completion-please-wait");
+    private static final String NO_SUGGESTIONS = Bundle.completion_no_suggestions();
+    private static final String PLEASE_WAIT = Bundle.completion_please_wait();
 
     private static final String COMPLETION_SHOW = "completion-show"; //NOI18N
     private static final String COMPLETION_ALL_SHOW = "completion-all-show"; //NOI18N

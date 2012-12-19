@@ -85,6 +85,11 @@ import org.openide.util.NbBundle;
  *
  * @author Dusan Balek, Miloslav Metelka
  */
+@NbBundle.Messages({
+    "# {0} - Additional items text",
+    "# {1} - Shortcut hint",
+    "TXT_completion_shortcut_tips={0}Press {1} Again for All Items"
+})
 public final class CompletionLayout {
     
     public static final int COMPLETION_ITEM_HEIGHT = 16;
@@ -389,7 +394,7 @@ public final class CompletionLayout {
                             BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(0, 1, 1, 1, Color.gray), BorderFactory.createEmptyBorder(2, 2, 2, 2))));
                     label.setFont(label.getFont().deriveFont((float)label.getFont().getSize() - 2));
                     label.setHorizontalAlignment(SwingConstants.RIGHT);
-                    label.setText(NbBundle.getMessage(CompletionLayout.class, "TXT_completion_shortcut_tips", additionalItemsText, shortcutHint)); //NOI18N
+                    label.setText(Bundle.TXT_completion_shortcut_tips(additionalItemsText, shortcutHint)); //NOI18N
                     panel.add(label, BorderLayout.SOUTH);
                 }
                 setContentComponent(panel);
