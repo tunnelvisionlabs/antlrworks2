@@ -118,7 +118,11 @@
                     </run-dependency>
                 </dependency>
             </module-dependencies>
-            <public-packages/>
+            <public-packages>
+                <package>com.tvl.api.editor.completion</package>
+                <package>com.tvl.spi.editor.completion</package>
+                <package>com.tvl.spi.editor.completion.support</package>
+            </public-packages>
         </data>
     </configuration>
 </project>
