@@ -18,6 +18,7 @@
 /tvl-editor-actions/build/
 /editor.containingfolder/build/
 /tvl.editor.whitespace/build/
+/editor.completionext/build/
 /org-antlr-v4/release/modules/ext/*.jar
 /org-antlr-v4-runtime/release/modules/ext/*.jar
 /org-antlr/release/modules/ext/*.jar
