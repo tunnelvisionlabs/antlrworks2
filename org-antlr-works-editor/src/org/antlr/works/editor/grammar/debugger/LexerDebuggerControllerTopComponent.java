@@ -25,6 +25,7 @@ import javax.swing.plaf.TextUI;
 import javax.swing.text.Document;
 import javax.swing.text.EditorKit;
 import javax.swing.text.JTextComponent;
+import org.antlr.v4.runtime.Lexer;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.editor.EditorRegistry;
 import org.netbeans.api.settings.ConvertAsProperties;
@@ -59,6 +60,9 @@ public final class LexerDebuggerControllerTopComponent extends TopComponent {
 
     private final PropertyChangeListener editorRegistryListener = new EditorRegistryListener();
 
+    private static final String defaultChannelText = String.format("DEFAULT (%d)", Lexer.DEFAULT_TOKEN_CHANNEL);
+    private static final String hiddenChannelText = String.format("HIDDEN (%d)", Lexer.HIDDEN);
+
     public LexerDebuggerControllerTopComponent() {
         initComponents();
         setName(Bundle.CTL_LexerDebuggerControllerTopComponent());
@@ -73,17 +77,17 @@ public final class LexerDebuggerControllerTopComponent extends TopComponent {
                 List<Integer> selectedChannels = new ArrayList<Integer>();
                 for (Object item : list.getSelectedValues()) {
                     if (item instanceof String) {
-                        if ("DEFAULT (0)".equals(item)) {
-                            selectedChannels.add(0);
-                        } else if ("HIDDEN (99)".equals(item)) {
-                            selectedChannels.add(99);
+                        if (defaultChannelText.equals(item)) {
+                            selectedChannels.add(Lexer.DEFAULT_TOKEN_CHANNEL);
+                        } else if (hiddenChannelText.equals(item)) {
+                            selectedChannels.add(Lexer.HIDDEN);
                         } else {
-                            assert false : "Unrecognized channel name.";
+                            throw new UnsupportedOperationException("unrecognized channel");
                         }
                     } else if (item instanceof Integer) {
                         selectedChannels.add((Integer)item);
                     } else {
-                        assert false : "Unrecognized channel value.";
+                        throw new UnsupportedOperationException("unrecognized channel");
                     }
                 }
 
@@ -486,7 +490,7 @@ public final class LexerDebuggerControllerTopComponent extends TopComponent {
                 lstTokens.setCellRenderer(new TraceTokenListCellRenderer(tokenNames));
 
                 lstChannels.setModel(new AbstractListModel() {
-                    private final Object[] elements = { "DEFAULT (0)", "HIDDEN (99)" };
+                    private final Object[] elements = { defaultChannelText, hiddenChannelText };
 
                     @Override
                     public int getSize() {
