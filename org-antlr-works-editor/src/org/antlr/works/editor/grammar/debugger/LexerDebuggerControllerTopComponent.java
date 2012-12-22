@@ -55,7 +55,6 @@ import org.openide.windows.TopComponent;
     "CTL_LexerDebuggerControllerTopComponent=LexerDebuggerController Window",
     "HINT_LexerDebuggerControllerTopComponent=This is a LexerDebuggerController window"
 })
-@SuppressWarnings({"deprecation", "unchecked", "rawtypes"})
 public final class LexerDebuggerControllerTopComponent extends TopComponent {
 
     private final PropertyChangeListener editorRegistryListener = new EditorRegistryListener();
