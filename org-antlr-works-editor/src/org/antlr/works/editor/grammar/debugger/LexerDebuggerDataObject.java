@@ -27,7 +27,7 @@ import org.openide.windows.TopComponent;
 @MIMEResolver.ExtensionRegistration(
     position=100,
     displayName="#LexerDebuggerResolver",
-    extension="ldbg",
+    extension={"ldbg", "linterp"},
     mimeType=LexerDebuggerEditorKit.LEXER_DEBUGGER_MIME_TYPE)
 public class LexerDebuggerDataObject extends MultiDataObject {
 

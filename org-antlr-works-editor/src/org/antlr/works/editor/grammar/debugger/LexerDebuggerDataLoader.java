@@ -40,6 +40,7 @@ public class LexerDebuggerDataLoader extends UniFileLoader {
         super.initialize();
         ExtensionList extensions = new ExtensionList();
         extensions.addExtension(".ldbg");
+        extensions.addExtension(".linterp");
         extensions.addMimeType(LexerDebuggerEditorKit.LEXER_DEBUGGER_MIME_TYPE);
         setExtensions(extensions);
     }

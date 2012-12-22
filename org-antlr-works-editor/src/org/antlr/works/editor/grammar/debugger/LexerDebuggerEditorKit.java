@@ -23,11 +23,16 @@ import javax.swing.text.Document;
 import javax.swing.text.EditorKit;
 import javax.swing.text.TextAction;
 import javax.xml.bind.DatatypeConverter;
-import org.antlr.v4.runtime.atn.LexerATNSimulator;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.atn.ATN;
+import org.antlr.v4.runtime.atn.ATNSimulator;
 import org.antlr.works.editor.grammar.debugger.LexerDebuggerTokenHighlighterLayerFactory.LexerOpCode;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.netbeans.editor.BaseDocument;
 import org.netbeans.modules.editor.NbEditorKit;
+import org.netbeans.modules.editor.NbEditorUtilities;
+import org.openide.filesystems.FileObject;
+import org.openide.util.Exceptions;
 import org.openide.util.Parameters;
 
 /**
@@ -40,6 +45,7 @@ public class LexerDebuggerEditorKit extends NbEditorKit {
     private static final String UTF_8 = "UTF-8"; // NOI18N
 
     public static final String PROP_TRACE = "Lexer Trace";
+    public static final String PROP_INTERP_DATA = "Lexer Interpreter Data";
     public static final String PROP_TOKENS = "Trace Tokens";
     public static final String PROP_SELECTED_TOKENS = "Selected Trace Tokens";
     public static final String PROP_CHANNELS = "Channels";
@@ -72,6 +78,12 @@ public class LexerDebuggerEditorKit extends NbEditorKit {
 
     @Override
     public void read(Reader in, Document doc, int pos) throws IOException, BadLocationException {
+        FileObject fileObject = NbEditorUtilities.getFileObject(doc);
+        if (fileObject.hasExt("linterp")) {
+            super.read(in, doc, pos);
+            return;
+        }
+
         String data = readAllText(in, 0);
         byte[] binary = DatatypeConverter.parseBase64Binary(data);
         int inputSize = readInteger(binary, 0);
@@ -147,11 +159,52 @@ public class LexerDebuggerEditorKit extends NbEditorKit {
         TraceToken[] tokens = (TraceToken[])document.getProperty(PROP_TOKENS);
         if (tokens == null) {
             byte[] traceData = (byte[])document.getProperty(PROP_TRACE);
-            tokens = loadTokens(document, new ByteArrayInputStream(traceData));
+            if (traceData != null) {
+                tokens = loadTokens(document, new ByteArrayInputStream(traceData));
+            }
+            else {
+                LexerInterpreterData interpreterData = (LexerInterpreterData)document.getProperty(PROP_INTERP_DATA);
+                if (interpreterData != null) {
+                    tokens = loadTokens(document, interpreterData);
+                }
+            }
+
             document.putProperty(PROP_TOKENS, tokens);
         }
 
         return tokens;
+    }
+
+    private TraceToken[] loadTokens(final Document document, LexerInterpreterData interpreterData) {
+        final List<TraceToken> tokens = new ArrayList<TraceToken>();
+
+        LexerTraceListener listener = new AbstractLexerTraceListener() {
+            int mode;
+
+            @Override
+            public void beginMatch(int mode, int index) {
+                this.mode = mode;
+            }
+
+            @Override
+            public void emit(int startIndex, int stopIndex, int type, int channel) {
+                tokens.add(new TraceToken(document, startIndex, stopIndex, tokens.size(), type, channel, mode));
+            }
+
+        };
+        try {
+            TracingCharStream charStream = new TracingCharStream(listener, document.getText(0, document.getLength()));
+            TracingLexer lexer = new TracingLexer(interpreterData, listener, charStream);
+            ATN atn = ATNSimulator.deserialize(interpreterData.serializedAtn.toCharArray());
+            TracingLexerATNSimulator atnSimulator = new TracingLexerATNSimulator(listener, lexer, atn);
+            lexer.setInterpreter(atnSimulator);
+            CommonTokenStream commonTokenStream = new CommonTokenStream(lexer);
+            commonTokenStream.fill();
+            return tokens.toArray(new TraceToken[0]);
+        } catch (BadLocationException ex) {
+            Exceptions.printStackTrace(ex);
+            return new TraceToken[0];
+        }
     }
 
     private TraceToken[] loadTokens(final Document document, InputStream reader) {

@@ -452,13 +452,23 @@ public final class LexerDebuggerControllerTopComponent extends TopComponent {
                 Document document = component.getDocument();
                 String[] tokenNamesArray = (String[])document.getProperty(LexerDebuggerEditorKit.PROP_TOKEN_NAMES);
                 String[] modeNamesArray = (String[])document.getProperty(LexerDebuggerEditorKit.PROP_MODE_NAMES);
-                final List<String> tokenNames = tokenNamesArray != null ? Arrays.asList(tokenNamesArray) : Collections.<String>emptyList();
-                final List<String> modeNames = modeNamesArray != null ? Arrays.asList(modeNamesArray) : Collections.<String>emptyList();
+                List<String> tokenNames = tokenNamesArray != null ? Arrays.asList(tokenNamesArray) : Collections.<String>emptyList();
+                List<String> modeNames = modeNamesArray != null ? Arrays.asList(modeNamesArray) : Collections.<String>emptyList();
+                if (tokenNames.isEmpty()) {
+                    LexerInterpreterData lexerInterpreterData = (LexerInterpreterData)document.getProperty(LexerDebuggerEditorKit.PROP_INTERP_DATA);
+                    if (lexerInterpreterData != null) {
+                        tokenNames = lexerInterpreterData.tokenNames;
+                        modeNames = lexerInterpreterData.modeNames;
+                    }
+                }
+
+                final List<String> finalTokenNames = tokenNames;
+                final List<String> finalModeNames = modeNames;
 
                 currentComponent = component;
 
                 lstTokenTypes.setModel(new AbstractListModel() {
-                    private final List<String> elements = tokenNames;
+                    private final List<String> elements = finalTokenNames;
 
                     @Override
                     public int getSize() {
@@ -503,7 +513,7 @@ public final class LexerDebuggerControllerTopComponent extends TopComponent {
                 });
 
                 lstModes.setModel(new AbstractListModel() {
-                    private final List<String> elements = modeNames;
+                    private final List<String> elements = finalModeNames;
 
                     @Override
                     public int getSize() {
