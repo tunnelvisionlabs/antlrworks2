@@ -13,6 +13,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.BitSet;
 import java.util.Collections;
 import java.util.List;
 import javax.swing.AbstractListModel;
@@ -22,6 +23,7 @@ import javax.swing.JList;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.plaf.TextUI;
+import javax.swing.table.AbstractTableModel;
 import javax.swing.text.Document;
 import javax.swing.text.EditorKit;
 import javax.swing.text.JTextComponent;
@@ -105,17 +107,24 @@ public final class LexerDebuggerControllerTopComponent extends TopComponent {
             }
         });
 
-        lstTokenTypes.addListSelectionListener(new ListSelectionListener() {
+        tblTokenTypes.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                JList list = (JList)e.getSource();
-                int[] selectedTypes = list.getSelectedIndices();
+                int[] selectedRows = tblTokenTypes.getSelectedRows();
+                BitSet selectedTypes = new BitSet();
+                for (int i : selectedRows) {
+                    selectedTypes.set((Integer)tblTokenTypes.getValueAt(i, 2));
+                }
 
                 JTextComponent editor = EditorRegistry.lastFocusedComponent();
                 TraceToken[] tokens = getEditorTokens(editor);
                 List<TraceToken> selectedTokens = new ArrayList<TraceToken>();
                 for (TraceToken token : tokens) {
-                    if (Arrays.binarySearch(selectedTypes, token.getType()) >= 0) {
+                    if (token.getType() < 0) {
+                        continue;
+                    }
+
+                    if (selectedTypes.get(token.getType())) {
                         selectedTokens.add(token);
                     }
                 }
@@ -236,7 +245,7 @@ public final class LexerDebuggerControllerTopComponent extends TopComponent {
         javax.swing.JTabbedPane jTabbedPane1 = new javax.swing.JTabbedPane();
         javax.swing.JPanel jPanel3 = new javax.swing.JPanel();
         javax.swing.JScrollPane jScrollPane1 = new javax.swing.JScrollPane();
-        lstTokenTypes = new javax.swing.JList();
+        tblTokenTypes = new javax.swing.JTable();
         javax.swing.JPanel jPanel2 = new javax.swing.JPanel();
         javax.swing.JScrollPane jScrollPane3 = new javax.swing.JScrollPane();
         lstTokens = new javax.swing.JList();
@@ -259,27 +268,45 @@ public final class LexerDebuggerControllerTopComponent extends TopComponent {
         jSplitPane1.setResizeWeight(1.0);
         jSplitPane1.setContinuousLayout(true);
 
-        jScrollPane1.setViewportView(lstTokenTypes);
+        tblTokenTypes.setAutoCreateRowSorter(true);
+        tblTokenTypes.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "Name", "Literal", "Value"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(tblTokenTypes);
+        tblTokenTypes.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(LexerDebuggerControllerTopComponent.class, "LexerDebuggerControllerTopComponent.tblTokenTypes.columnModel.title0")); // NOI18N
+        tblTokenTypes.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(LexerDebuggerControllerTopComponent.class, "LexerDebuggerControllerTopComponent.tblTokenTypes.columnModel.title1")); // NOI18N
+        tblTokenTypes.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(LexerDebuggerControllerTopComponent.class, "LexerDebuggerControllerTopComponent.tblTokenTypes.columnModel.title2")); // NOI18N
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 310, Short.MAX_VALUE)
-            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel3Layout.createSequentialGroup()
-                    .addGap(0, 0, 0)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 310, Short.MAX_VALUE)
-                    .addGap(0, 0, 0)))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 310, Short.MAX_VALUE)
+                .addGap(0, 0, 0))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 194, Short.MAX_VALUE)
-            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel3Layout.createSequentialGroup()
-                    .addGap(0, 0, 0)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
-                    .addGap(0, 0, 0)))
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 505, Short.MAX_VALUE)
+                .addGap(0, 0, 0))
         );
 
         jTabbedPane1.addTab(org.openide.util.NbBundle.getMessage(LexerDebuggerControllerTopComponent.class, "LexerDebuggerControllerTopComponent.jPanel3.TabConstraints.tabTitle"), jPanel3); // NOI18N
@@ -299,11 +326,11 @@ public final class LexerDebuggerControllerTopComponent extends TopComponent {
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 194, Short.MAX_VALUE)
+            .addGap(0, 505, Short.MAX_VALUE)
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel2Layout.createSequentialGroup()
                     .addGap(0, 0, 0)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 505, Short.MAX_VALUE)
                     .addGap(0, 0, 0)))
         );
 
@@ -324,11 +351,11 @@ public final class LexerDebuggerControllerTopComponent extends TopComponent {
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 194, Short.MAX_VALUE)
+            .addGap(0, 505, Short.MAX_VALUE)
             .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel4Layout.createSequentialGroup()
                     .addGap(0, 0, 0)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 505, Short.MAX_VALUE)
                     .addGap(0, 0, 0)))
         );
 
@@ -354,11 +381,11 @@ public final class LexerDebuggerControllerTopComponent extends TopComponent {
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 194, Short.MAX_VALUE)
+            .addGap(0, 505, Short.MAX_VALUE)
             .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel6Layout.createSequentialGroup()
                     .addGap(0, 0, 0)
-                    .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 505, Short.MAX_VALUE)
                     .addGap(0, 0, 0)))
         );
 
@@ -379,11 +406,11 @@ public final class LexerDebuggerControllerTopComponent extends TopComponent {
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 194, Short.MAX_VALUE)
+            .addGap(0, 505, Short.MAX_VALUE)
             .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel5Layout.createSequentialGroup()
                     .addGap(0, 0, 0)
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 505, Short.MAX_VALUE)
                     .addGap(0, 0, 0)))
         );
 
@@ -412,8 +439,8 @@ public final class LexerDebuggerControllerTopComponent extends TopComponent {
     private javax.swing.JList lstChannels;
     private javax.swing.JList lstLookahead;
     private javax.swing.JList lstModes;
-    private javax.swing.JList lstTokenTypes;
     private javax.swing.JList lstTokens;
+    private javax.swing.JTable tblTokenTypes;
     // End of variables declaration//GEN-END:variables
 
     @Override
@@ -450,34 +477,77 @@ public final class LexerDebuggerControllerTopComponent extends TopComponent {
                 }
 
                 Document document = component.getDocument();
-                String[] tokenNamesArray = (String[])document.getProperty(LexerDebuggerEditorKit.PROP_TOKEN_NAMES);
+                TokenDescriptor[] tokenDescriptorArray = (TokenDescriptor[])document.getProperty(LexerDebuggerEditorKit.PROP_TOKEN_NAMES);
                 String[] modeNamesArray = (String[])document.getProperty(LexerDebuggerEditorKit.PROP_MODE_NAMES);
-                List<String> tokenNames = tokenNamesArray != null ? Arrays.asList(tokenNamesArray) : Collections.<String>emptyList();
+                List<TokenDescriptor> tokenDescriptors = tokenDescriptorArray != null ? Arrays.asList(tokenDescriptorArray) : Collections.<TokenDescriptor>emptyList();
                 List<String> modeNames = modeNamesArray != null ? Arrays.asList(modeNamesArray) : Collections.<String>emptyList();
-                if (tokenNames.isEmpty()) {
+                if (tokenDescriptors.isEmpty()) {
                     LexerInterpreterData lexerInterpreterData = (LexerInterpreterData)document.getProperty(LexerDebuggerEditorKit.PROP_INTERP_DATA);
                     if (lexerInterpreterData != null) {
-                        tokenNames = lexerInterpreterData.tokenNames;
+                        tokenDescriptors = lexerInterpreterData.tokenNames;
                         modeNames = lexerInterpreterData.modeNames;
                     }
                 }
 
-                final List<String> finalTokenNames = tokenNames;
+                final List<TokenDescriptor> finalTokenDescriptors = tokenDescriptors;
                 final List<String> finalModeNames = modeNames;
 
                 currentComponent = component;
 
-                lstTokenTypes.setModel(new AbstractListModel() {
-                    private final List<String> elements = finalTokenNames;
+                tblTokenTypes.setModel(new AbstractTableModel() {
+                    private final List<TokenDescriptor> elements = finalTokenDescriptors;
 
                     @Override
-                    public int getSize() {
+                    public int getRowCount() {
                         return elements.size();
                     }
 
                     @Override
-                    public Object getElementAt(int index) {
-                        return elements.get(index);
+                    public int getColumnCount() {
+                        return 3;
+                    }
+
+                    @Override
+                    public String getColumnName(int column) {
+                        switch (column) {
+                        case 0:
+                            return "Name";
+                        case 1:
+                            return "Literal";
+                        case 2:
+                            return "Value";
+                        default:
+                            throw new IllegalArgumentException();
+                        }
+                    }
+
+                    @Override
+                    public Class<?> getColumnClass(int columnIndex) {
+                        switch (columnIndex) {
+                        case 0:
+                        case 1:
+                            return String.class;
+
+                        case 2:
+                            return Integer.class;
+
+                        default:
+                            throw new IllegalArgumentException();
+                        }
+                    }
+
+                    @Override
+                    public Object getValueAt(int rowIndex, int columnIndex) {
+                        switch (columnIndex) {
+                        case 0:
+                            return elements.get(rowIndex).name;
+                        case 1:
+                            return elements.get(rowIndex).literal;
+                        case 2:
+                            return elements.get(rowIndex).value;
+                        default:
+                            throw new IllegalArgumentException();
+                        }
                     }
                 });
 
@@ -496,7 +566,15 @@ public final class LexerDebuggerControllerTopComponent extends TopComponent {
 
                 });
 
-                lstTokens.setCellRenderer(new TraceTokenListCellRenderer(tokenNames));
+                String[] tokenNamesArray = new String[tokenDescriptors.size()];
+                for (int i = 0; i < tokenDescriptors.size(); i++) {
+                    tokenNamesArray[i] = tokenDescriptors.get(i).literal;
+                    if (tokenNamesArray[i] == null || tokenNamesArray[i].isEmpty()) {
+                        tokenNamesArray[i] = tokenDescriptors.get(i).name;
+                    }
+                }
+
+                lstTokens.setCellRenderer(new TraceTokenListCellRenderer(Arrays.asList(tokenNamesArray)));
 
                 lstChannels.setModel(new AbstractListModel() {
                     private final Object[] elements = { defaultChannelText, hiddenChannelText };
@@ -590,5 +668,11 @@ public final class LexerDebuggerControllerTopComponent extends TopComponent {
             return component;
         }
 
+    }
+
+    public static class TokenDescriptor {
+        public String name = "";
+        public String literal = "";
+        public int value;
     }
 }
