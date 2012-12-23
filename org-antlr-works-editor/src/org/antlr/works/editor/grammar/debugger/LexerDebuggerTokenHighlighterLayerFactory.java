@@ -41,6 +41,7 @@ public class LexerDebuggerTokenHighlighterLayerFactory implements HighlightsLaye
 
     private static final Color[] ModeColors =
     {
+        Color.black,
         Color.red,
         Color.blue,
         Color.orange,
@@ -49,7 +50,6 @@ public class LexerDebuggerTokenHighlighterLayerFactory implements HighlightsLaye
         Color.cyan,
         Color.yellow,
         Color.pink,
-        Color.black,
     };
 
     private static final AttributeSet[] TokenFullOutlineAttributes =
