@@ -46,6 +46,7 @@ public class TracingTool extends Tool {
 				g.implicitLexer = lexerg;
 				lexerg.implicitLexerOwner = g;
 				processNonCombinedGrammar(lexerg, gencode);
+                return;
 //				System.out.println("lexer tokens="+lexerg.tokenNameToTypeMap);
 //				System.out.println("lexer strings="+lexerg.stringLiteralToTypeMap);
 			}
