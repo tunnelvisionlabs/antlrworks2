@@ -141,8 +141,6 @@ public class LexerDebuggerTokenHighlighterLayerFactory implements HighlightsLaye
             attributes.addAttribute(EditorStyleConstants.RightBorderLineColor, color);
         }
 
-        attributes.addAttribute(EditorStyleConstants.BottomBorderLineColor, color);
-        attributes.addAttribute(EditorStyleConstants.TopBorderLineColor, color);
         return attributes;
     }
 
