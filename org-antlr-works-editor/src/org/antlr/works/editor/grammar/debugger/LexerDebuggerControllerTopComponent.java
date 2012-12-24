@@ -9,6 +9,8 @@
 package org.antlr.works.editor.grammar.debugger;
 
 import java.awt.Component;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
@@ -27,12 +29,16 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.text.Document;
 import javax.swing.text.EditorKit;
 import javax.swing.text.JTextComponent;
+import javax.swing.text.StyledDocument;
 import org.antlr.v4.runtime.Lexer;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.editor.EditorRegistry;
 import org.netbeans.api.settings.ConvertAsProperties;
+import org.netbeans.modules.editor.NbEditorUtilities;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
+import org.openide.text.Line;
+import org.openide.text.NbDocument;
 import org.openide.util.NbBundle.Messages;
 import org.openide.util.WeakListeners;
 import org.openide.windows.TopComponent;
@@ -71,6 +77,51 @@ public final class LexerDebuggerControllerTopComponent extends TopComponent {
         jSplitPane1.setDividerLocation(0.8);
 
         EditorRegistry.addPropertyChangeListener(WeakListeners.propertyChange(editorRegistryListener, EditorRegistry.class));
+
+        lstChannels.addMouseListener(new MouseAdapter() {
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2) {
+                    JList list = (JList)e.getSource();
+                    List<Integer> selectedChannels = new ArrayList<Integer>();
+                    for (Object item : list.getSelectedValues()) {
+                        if (item instanceof String) {
+                            if (defaultChannelText.equals(item)) {
+                                selectedChannels.add(Lexer.DEFAULT_TOKEN_CHANNEL);
+                            } else if (hiddenChannelText.equals(item)) {
+                                selectedChannels.add(Lexer.HIDDEN);
+                            } else {
+                                throw new UnsupportedOperationException("unrecognized channel");
+                            }
+                        } else if (item instanceof Integer) {
+                            selectedChannels.add((Integer)item);
+                        } else {
+                            throw new UnsupportedOperationException("unrecognized channel");
+                        }
+                    }
+
+                    JTextComponent editor = EditorRegistry.lastFocusedComponent();
+                    TraceToken[] tokens = getEditorTokens(editor);
+                    if (editor == null || !(editor.getDocument() instanceof StyledDocument)) {
+                        return;
+                    }
+
+                    StyledDocument document = (StyledDocument)editor.getDocument();
+                    for (TraceToken token : tokens) {
+                        if (selectedChannels.contains(token.getChannel())) {
+                            int index = token.getStartIndex();
+                            if (index >= 0 && index <= document.getLength()) {
+                                int column = NbDocument.findLineColumn(document, index);
+                                NbEditorUtilities.getLine(document, index, true).show(Line.ShowOpenType.OPEN, Line.ShowVisibilityType.FOCUS, column);
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
         lstChannels.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
@@ -107,6 +158,42 @@ public final class LexerDebuggerControllerTopComponent extends TopComponent {
             }
         });
 
+        tblTokenTypes.addMouseListener(new MouseAdapter() {
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2) {
+                    int[] selectedRows = tblTokenTypes.getSelectedRows();
+                    BitSet selectedTypes = new BitSet();
+                    for (int i : selectedRows) {
+                        selectedTypes.set((Integer)tblTokenTypes.getValueAt(i, 2));
+                    }
+
+                    JTextComponent editor = EditorRegistry.lastFocusedComponent();
+                    if (editor == null || !(editor.getDocument() instanceof StyledDocument)) {
+                        return;
+                    }
+
+                    StyledDocument document = (StyledDocument)editor.getDocument();
+                    TraceToken[] tokens = getEditorTokens(editor);
+                    for (TraceToken token : tokens) {
+                        if (token.getType() < 0) {
+                            continue;
+                        }
+
+                        if (selectedTypes.get(token.getType())) {
+                            int index = token.getStartIndex();
+                            if (index >= 0 && index <= document.getLength()) {
+                                int column = NbDocument.findLineColumn(document, index);
+                                NbEditorUtilities.getLine(document, index, true).show(Line.ShowOpenType.OPEN, Line.ShowVisibilityType.FOCUS, column);
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
         tblTokenTypes.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
@@ -135,6 +222,33 @@ public final class LexerDebuggerControllerTopComponent extends TopComponent {
             }
         });
 
+        lstTokens.addMouseListener(new MouseAdapter() {
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2) {
+                    JList list = (JList)e.getSource();
+                    JTextComponent editor = EditorRegistry.lastFocusedComponent();
+                    if (editor == null || !(editor.getDocument() instanceof StyledDocument)) {
+                        return;
+                    }
+
+                    StyledDocument document = (StyledDocument)editor.getDocument();
+                    for (Object value : list.getSelectedValues()) {
+                        if (value instanceof TraceToken) {
+                            TraceToken token = (TraceToken)value;
+                            int index = token.getStartIndex();
+                            if (index >= 0 && index <= document.getLength()) {
+                                int column = NbDocument.findLineColumn(document, index);
+                                NbEditorUtilities.getLine(document, index, true).show(Line.ShowOpenType.OPEN, Line.ShowVisibilityType.FOCUS, column);
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
         lstTokens.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
@@ -150,6 +264,35 @@ public final class LexerDebuggerControllerTopComponent extends TopComponent {
                 TraceToken[] tokens = getEditorTokens(editor);
                 if (tokens.length > 0) {
                     editor.getDocument().putProperty(LexerDebuggerEditorKit.PROP_SELECTED_TOKENS, selectedTokens);
+                }
+            }
+        });
+
+        lstModes.addMouseListener(new MouseAdapter() {
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2) {
+                    JList list = (JList)e.getSource();
+                    int[] selectedModes = list.getSelectedIndices();
+
+                    JTextComponent editor = EditorRegistry.lastFocusedComponent();
+                    TraceToken[] tokens = getEditorTokens(editor);
+                    if (editor == null || !(editor.getDocument() instanceof StyledDocument)) {
+                        return;
+                    }
+
+                    StyledDocument document = (StyledDocument)editor.getDocument();
+                    for (TraceToken token : tokens) {
+                        if (Arrays.binarySearch(selectedModes, token.getMode()) >= 0) {
+                            int index = token.getStartIndex();
+                            if (index >= 0 && index <= document.getLength()) {
+                                int column = NbDocument.findLineColumn(document, index);
+                                NbEditorUtilities.getLine(document, index, true).show(Line.ShowOpenType.OPEN, Line.ShowVisibilityType.FOCUS, column);
+                                return;
+                            }
+                        }
+                    }
                 }
             }
         });
