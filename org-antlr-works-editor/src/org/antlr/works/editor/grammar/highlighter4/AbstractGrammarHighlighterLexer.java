@@ -1,4 +1,4 @@
-// $ANTLR ANTLRVersion> AbstractGrammarHighlighterLexer.java generatedTimestamp>
+// Generated from GrammarHighlighterLexer.g4 by ANTLR 4.0-SNAPSHOT
 package org.antlr.works.editor.grammar.highlighter4;
 /*
  *  Copyright (c) 2012 Sam Harwell, Tunnel Vision Laboratories LLC

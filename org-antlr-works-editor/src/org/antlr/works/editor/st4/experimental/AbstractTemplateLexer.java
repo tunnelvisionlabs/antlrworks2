@@ -1,4 +1,4 @@
-// $ANTLR ANTLRVersion> AbstractTemplateLexer.java generatedTimestamp>
+// Generated from TemplateLexer.g4 by ANTLR 4.0-SNAPSHOT
 package org.antlr.works.editor.st4.experimental;
 /*
  *  Copyright (c) 2012 Sam Harwell, Tunnel Vision Laboratories LLC

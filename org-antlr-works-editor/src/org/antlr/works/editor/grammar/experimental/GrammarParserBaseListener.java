@@ -1,3 +1,4 @@
+// Generated from GrammarParser.g4 by ANTLR 4.0-SNAPSHOT
 package org.antlr.works.editor.grammar.experimental;
 
 import org.antlr.v4.runtime.ParserRuleContext;

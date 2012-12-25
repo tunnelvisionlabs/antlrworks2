@@ -1,4 +1,4 @@
-// $ANTLR ANTLRVersion> TemplateParser.java generatedTimestamp>
+// Generated from TemplateParser.g4 by ANTLR 4.0-SNAPSHOT
 package org.antlr.works.editor.st4.experimental;
 /*
  *  Copyright (c) 2012 Sam Harwell, Tunnel Vision Laboratories LLC
@@ -111,7 +111,7 @@ public class TemplateParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitGroup(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -207,7 +207,7 @@ public class TemplateParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitOldStyleHeader(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -263,7 +263,7 @@ public class TemplateParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitGroupName(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -324,7 +324,7 @@ public class TemplateParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitDelimiters(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -374,7 +374,7 @@ public class TemplateParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitDef(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -447,7 +447,7 @@ public class TemplateParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitTemplateDef(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -550,7 +550,7 @@ public class TemplateParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitFormalArgs(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -629,7 +629,7 @@ public class TemplateParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitFormalArg(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -716,7 +716,7 @@ public class TemplateParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitDictDef(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -762,7 +762,7 @@ public class TemplateParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitDict(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -814,7 +814,7 @@ public class TemplateParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitDictPairs(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -896,7 +896,7 @@ public class TemplateParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitDefaultValuePair(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -945,7 +945,7 @@ public class TemplateParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitKeyValuePair(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1003,7 +1003,7 @@ public class TemplateParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitKeyValue(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1086,7 +1086,7 @@ public class TemplateParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitString(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1134,7 +1134,7 @@ public class TemplateParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitStringTemplate(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1182,7 +1182,7 @@ public class TemplateParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitBigstringTemplate(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1230,7 +1230,7 @@ public class TemplateParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitBigstringTemplateNoNewline(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1281,7 +1281,7 @@ public class TemplateParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitAnonymousTemplate(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1343,7 +1343,7 @@ public class TemplateParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitAnonymousTemplateParameters(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1440,7 +1440,7 @@ public class TemplateParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitTemplateBody(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1534,7 +1534,7 @@ public class TemplateParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitEscape(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1586,7 +1586,7 @@ public class TemplateParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitExprTag(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1651,7 +1651,7 @@ public class TemplateParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitRegion(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1701,7 +1701,7 @@ public class TemplateParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitSubtemplate(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1777,7 +1777,7 @@ public class TemplateParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitIfstat(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1870,7 +1870,7 @@ public class TemplateParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitConditional(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1938,7 +1938,7 @@ public class TemplateParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitAndConditional(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -2003,7 +2003,7 @@ public class TemplateParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitNotConditional(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -2067,7 +2067,7 @@ public class TemplateParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitExprOptions(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -2132,7 +2132,7 @@ public class TemplateParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitOption(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -2189,7 +2189,7 @@ public class TemplateParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitExprNoComma(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -2242,7 +2242,7 @@ public class TemplateParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitExpr(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -2303,7 +2303,7 @@ public class TemplateParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitMapExpr(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -2427,7 +2427,7 @@ public class TemplateParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitMapTemplateRef(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -2527,7 +2527,7 @@ public class TemplateParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitMemberExpr(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -2614,7 +2614,7 @@ public class TemplateParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitIncludeExpr(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -2730,7 +2730,7 @@ public class TemplateParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitPrimary(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -2845,7 +2845,7 @@ public class TemplateParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitArguments(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -2947,7 +2947,7 @@ public class TemplateParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitArgExprList(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -3008,7 +3008,7 @@ public class TemplateParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitArg(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -3056,7 +3056,7 @@ public class TemplateParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitNamedArg(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -3111,7 +3111,7 @@ public class TemplateParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitList(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -3187,7 +3187,7 @@ public class TemplateParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof TemplateParserVisitor<?, ?> ) return ((TemplateParserVisitor<? super Token, ? extends Result>)visitor).visitListElement(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 

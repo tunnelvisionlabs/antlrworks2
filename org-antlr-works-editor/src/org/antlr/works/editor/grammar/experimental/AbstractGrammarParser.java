@@ -1,4 +1,4 @@
-// $ANTLR ANTLRVersion> AbstractGrammarParser.java generatedTimestamp>
+// Generated from GrammarParser.g4 by ANTLR 4.0-SNAPSHOT
 package org.antlr.works.editor.grammar.experimental;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
@@ -138,7 +138,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitGrammarSpec(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -225,7 +225,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitGrammarType(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -299,7 +299,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitPrequelConstruct(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -378,7 +378,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitOptionsSpec(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -444,7 +444,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitOption(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -493,7 +493,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitOptionValue(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -564,7 +564,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitDelegateGrammars(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -631,7 +631,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitDelegateGrammar(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -698,7 +698,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitTokensSpec(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -873,7 +873,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitActionBlock(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -972,7 +972,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitActionExpression(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1066,7 +1066,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitActionScopeExpression(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1268,7 +1268,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitArgActionBlock(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1352,7 +1352,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitArgActionParameters(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1493,7 +1493,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitArgActionParameter(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1570,7 +1570,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitArgActionParameterType(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1650,7 +1650,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitArgActionParameterTypePart(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1733,7 +1733,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitIgnored(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1791,7 +1791,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitAction(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1848,7 +1848,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitActionScopeName(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1918,7 +1918,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitModeSpec(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -1987,7 +1987,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitRules(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -2049,7 +2049,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitRuleSpec(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -2131,7 +2131,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitParserRuleSpec(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -2234,7 +2234,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitExceptionGroup(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -2305,7 +2305,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitExceptionHandler(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -2352,7 +2352,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitFinallyClause(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -2400,7 +2400,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitRulePrequels(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -2462,7 +2462,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitRulePrequel(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -2519,7 +2519,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitRuleReturns(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -2572,7 +2572,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitThrowsSpec(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -2635,7 +2635,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitLocalsSpec(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -2684,7 +2684,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitRuleAction(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -2733,7 +2733,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitRuleModifiers(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -2797,7 +2797,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitRuleModifier(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -2847,7 +2847,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitRuleBlock(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -2898,7 +2898,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitRuleAltList(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -2963,7 +2963,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitLabeledAlt(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -3022,7 +3022,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitLexerRule(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -3085,7 +3085,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitLexerRuleBlock(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -3136,7 +3136,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitLexerAltList(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -3200,7 +3200,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitLexerAlt(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -3262,7 +3262,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitLexerElements(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -3338,7 +3338,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitLexerElement(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -3449,7 +3449,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitLabeledLexerElement(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -3521,7 +3521,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitLexerBlock(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -3584,7 +3584,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitLexerCommands(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -3651,7 +3651,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitLexerCommand(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -3711,7 +3711,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitLexerCommandName(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -3768,7 +3768,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitLexerCommandExpr(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -3831,7 +3831,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitAltList(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -3892,7 +3892,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitAlternative(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -3950,7 +3950,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitElements(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -4026,7 +4026,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitElement(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -4140,7 +4140,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitLabeledElement(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -4209,7 +4209,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitEbnf(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -4266,7 +4266,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitBlockSuffix(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -4313,7 +4313,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitEbnfSuffix(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -4412,7 +4412,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitLexerAtom(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -4517,7 +4517,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitAtom(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -4606,7 +4606,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitNotSet(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -4673,7 +4673,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitBlockSet(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -4739,7 +4739,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitSetElement(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -4813,7 +4813,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitBlock(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -4892,7 +4892,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitRuleref(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -4946,7 +4946,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitRange(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -4994,7 +4994,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitTerminal(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -5075,7 +5075,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitElementOptions(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -5143,7 +5143,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitElementOption(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -5213,7 +5213,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitId(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -5270,7 +5270,7 @@ public abstract class AbstractGrammarParser extends Parser<Token> {
 		@Override
 		public <Result> Result accept(ParseTreeVisitor<? super Token, ? extends Result> visitor) {
 			if ( visitor instanceof GrammarParserVisitor<?, ?> ) return ((GrammarParserVisitor<? super Token, ? extends Result>)visitor).visitQid(this);
-			else return null;
+			else return visitor.visitChildren(this);
 		}
 	}
 

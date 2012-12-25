@@ -1,4 +1,4 @@
-// $ANTLR ANTLRVersion> AbstractGroupHighlighterLexer.java generatedTimestamp>
+// Generated from GroupHighlighterLexer.g4 by ANTLR 4.0-SNAPSHOT
 package org.antlr.works.editor.st4.highlighter4;
 /*
  *  Copyright (c) 2012 Sam Harwell, Tunnel Vision Laboratories LLC

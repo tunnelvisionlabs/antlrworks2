@@ -1,4 +1,4 @@
-// $ANTLR ANTLRVersion> AbstractGrammarLexer.java generatedTimestamp>
+// Generated from GrammarLexer.g4 by ANTLR 4.0-SNAPSHOT
 package org.antlr.works.editor.grammar.experimental;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
