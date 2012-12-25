@@ -49,8 +49,10 @@ public final class GenerateRecognizerAction implements ActionListener {
         WizardDescriptor wizard = new WizardDescriptor(new CodeGeneratorWizardIterator());
         wizard.setTitle("{0} ({1})");
         wizard.setTitle("Generate Recognizer");
+
+        FileObject fileObject = context.getPrimaryFile();
+        CodeGeneratorWizardOptions.setProperty(wizard, CodeGeneratorWizardPanel1.OUTPUT_DIRECTORY, fileObject.getParent().getPath().replace('/', File.separatorChar));
         if (DialogDisplayer.getDefault().notify(wizard) == WizardDescriptor.FINISH_OPTION) {
-            FileObject fileObject = context.getPrimaryFile();
             CodeGenerator generator = new CodeGenerator(fileObject);
             generator.outputDirectory = FileUtil.toFileObject(new File(CodeGeneratorWizardOptions.Location.getOutputDirectory(wizard)));
 
