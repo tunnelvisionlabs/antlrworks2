@@ -10,9 +10,9 @@ package org.antlr.works.editor.grammar.codegen;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import org.antlr.works.editor.grammar.GrammarDataObject;
 import org.netbeans.api.queries.FileEncodingQuery;
 import org.openide.DialogDisplayer;
@@ -22,6 +22,7 @@ import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.awt.ActionRegistration;
 import org.openide.filesystems.FileObject;
+import org.openide.filesystems.FileUtil;
 import org.openide.util.NbBundle.Messages;
 
 @ActionID(
@@ -51,7 +52,13 @@ public final class GenerateRecognizerAction implements ActionListener {
         if (DialogDisplayer.getDefault().notify(wizard) == WizardDescriptor.FINISH_OPTION) {
             FileObject fileObject = context.getPrimaryFile();
             CodeGenerator generator = new CodeGenerator(fileObject);
-            generator.outputDirectory = fileObject.getParent();
+            generator.outputDirectory = FileUtil.toFileObject(new File(CodeGeneratorWizardOptions.Location.getOutputDirectory(wizard)));
+
+            String libraryDirectory = CodeGeneratorWizardOptions.Location.getLibraryDirectory(wizard);
+            if (libraryDirectory != null && !libraryDirectory.isEmpty()) {
+                generator.libDirectory = FileUtil.toFileObject(new File(libraryDirectory));
+            }
+
             generator.listener = CodeGeneratorWizardOptions.Features.isGenerateListener(wizard);
             generator.visitor = CodeGeneratorWizardOptions.Features.isGenerateVisitor(wizard);
             generator.encoding = FileEncodingQuery.getEncoding(fileObject).name();

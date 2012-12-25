@@ -17,6 +17,8 @@ public class CodeGeneratorWizardPanel1 implements WizardDescriptor.Panel<WizardD
     public static final String LIBRARY_DIRECTORY = "libraryDirectory";
     public static final String SELECTED_TARGET = "selectedTarget";
 
+    private String outputDirectory;
+    private String libraryDirectory;
     private String targetName;
 
     /**
@@ -24,6 +26,38 @@ public class CodeGeneratorWizardPanel1 implements WizardDescriptor.Panel<WizardD
      * component from this class, use {@link #getComponent}.
      */
     private CodeGeneratorVisualPanel1 component;
+
+    public String getOutputDirectory() {
+        if (component != null) {
+            return component.getOutputDirectory();
+        }
+
+        return outputDirectory;
+    }
+
+    public void setOutputDirectory(String value) {
+        if (component != null) {
+            component.setOutputDirectory(value);
+        }
+
+        outputDirectory = value;
+    }
+
+    public String getLibraryDirectory() {
+        if (component != null) {
+            return component.getLibraryDirectory();
+        }
+
+        return libraryDirectory;
+    }
+
+    public void setLibraryDirectory(String value) {
+        if (component != null) {
+            component.setLibraryDirectory(value);
+        }
+
+        libraryDirectory = value;
+    }
 
     public String getTargetName() {
         if (component != null) {
@@ -50,6 +84,8 @@ public class CodeGeneratorWizardPanel1 implements WizardDescriptor.Panel<WizardD
         if (component == null) {
             component = new CodeGeneratorVisualPanel1();
             if (targetName != null) {
+                component.setOutputDirectory(outputDirectory);
+                component.setLibraryDirectory(libraryDirectory);
                 component.setTargetName(targetName);
             }
         }
@@ -79,11 +115,15 @@ public class CodeGeneratorWizardPanel1 implements WizardDescriptor.Panel<WizardD
 
     @Override
     public void readSettings(WizardDescriptor wiz) {
+        setOutputDirectory(CodeGeneratorWizardOptions.Location.getOutputDirectory(wiz));
+        setLibraryDirectory(CodeGeneratorWizardOptions.Location.getLibraryDirectory(wiz));
         setTargetName(CodeGeneratorWizardOptions.Location.getSelectedTarget(wiz));
     }
 
     @Override
     public void storeSettings(WizardDescriptor wiz) {
+        CodeGeneratorWizardOptions.setProperty(wiz, OUTPUT_DIRECTORY, getOutputDirectory());
+        CodeGeneratorWizardOptions.setProperty(wiz, LIBRARY_DIRECTORY, getLibraryDirectory());
         CodeGeneratorWizardOptions.setProperty(wiz, SELECTED_TARGET, getTargetName());
     }
 }

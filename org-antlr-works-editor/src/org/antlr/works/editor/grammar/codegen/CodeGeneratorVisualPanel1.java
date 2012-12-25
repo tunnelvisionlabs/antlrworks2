@@ -22,6 +22,30 @@ public final class CodeGeneratorVisualPanel1 extends JPanel {
         initComponents();
     }
 
+    public String getOutputDirectory() {
+        return txtOutputDirectory.getText();
+    }
+
+    public void setOutputDirectory(String value) {
+        if (value == null) {
+            value = "";
+        }
+
+        txtOutputDirectory.setText(value);
+    }
+
+    public String getLibraryDirectory() {
+        return txtLibDirectory.getText();
+    }
+
+    public void setLibraryDirectory(String value) {
+        if (value == null) {
+            value = "";
+        }
+
+        txtLibDirectory.setText(value);
+    }
+
     public String getTargetName() {
         return (String)cmbTargetLanguage.getSelectedItem();
     }
