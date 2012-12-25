@@ -36,7 +36,9 @@ public class CodeGenerator {
     @StaticResource
     private static final String ANTLR4_COMPLETE_JAR = "org/antlr/works/editor/grammar/resources/antlr4-complete.jar";
 
-    public FileObject[] grammarFiles;
+    public final String target;
+    public final FileObject[] grammarFiles;
+
     public FileObject outputDirectory;
     public FileObject libDirectory;
     public boolean listener;
@@ -48,14 +50,25 @@ public class CodeGenerator {
     public Map<String, String> options;
     public List<String> arguments;
 
-    public CodeGenerator(FileObject... grammarFiles) {
+    public CodeGenerator(String target, FileObject... grammarFiles) {
+        if (!target.contains("Java")) {
+            throw new UnsupportedOperationException();
+        }
+
+        this.target = target;
         this.grammarFiles = grammarFiles;
     }
 
     public void run() {
         try {
-            File completeJar = copyCompleteJarToTempDir();
-            ClassLoader loader = new URLClassLoader(new URL[] { Utilities.toURI(completeJar).toURL() }, ClassLoader.getSystemClassLoader());
+            ClassLoader loader;
+            if (target.contains("sharwell/optimized")) {
+                loader = Thread.currentThread().getContextClassLoader();
+            } else {
+                File completeJar = copyCompleteJarToTempDir();
+                loader = new URLClassLoader(new URL[] { Utilities.toURI(completeJar).toURL() }, ClassLoader.getSystemClassLoader());
+            }
+
             Class<?> toolClass = loader.loadClass(Tool.class.getName());
             Constructor<?> ctor = toolClass.getConstructor(String[].class);
             Method processGrammarsOnCommandLine = toolClass.getMethod("processGrammarsOnCommandLine");
