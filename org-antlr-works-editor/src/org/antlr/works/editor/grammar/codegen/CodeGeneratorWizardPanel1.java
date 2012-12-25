@@ -8,6 +8,7 @@
  */
 package org.antlr.works.editor.grammar.codegen;
 
+import java.io.File;
 import javax.swing.event.ChangeListener;
 import org.openide.WizardDescriptor;
 import org.openide.util.ChangeSupport;
@@ -104,7 +105,22 @@ public class CodeGeneratorWizardPanel1 implements WizardDescriptor.Panel<WizardD
 
     @Override
     public boolean isValid() {
-        // it is always OK to press Next or Finish
+        String outputDirectory = getOutputDirectory();
+        if (outputDirectory == null || outputDirectory.isEmpty()) {
+            return false;
+        }
+
+        if (!new File(outputDirectory).isDirectory()) {
+            return false;
+        }
+
+        String libraryDirectory = getLibraryDirectory();
+        if (libraryDirectory != null && !libraryDirectory.isEmpty()) {
+            if (!new File(libraryDirectory).isDirectory()) {
+                return false;
+            }
+        }
+
         return true;
     }
 
