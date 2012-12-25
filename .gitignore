@@ -24,3 +24,4 @@
 /org-antlr/release/modules/ext/*.jar
 /org-antlr-runtime/release/modules/ext/*.jar
 /org-stringtemplate-v4/release/modules/ext/*.jar
+/org-antlr-works-editor/src/org/antlr/works/editor/grammar/resources/antlr4-complete.jar
