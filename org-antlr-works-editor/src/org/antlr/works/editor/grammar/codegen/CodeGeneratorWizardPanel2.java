@@ -32,7 +32,7 @@ public class CodeGeneratorWizardPanel2 implements WizardDescriptor.Panel<WizardD
 
     /**
      * The visual component that displays this panel. If you need to access the
-     * component from this class, just use getComponent().
+     * component from this class, just use {@link #getComponent}.
      */
     private CodeGeneratorVisualPanel2 component;
 
