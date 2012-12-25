@@ -20,9 +20,9 @@ public class CodeGeneratorWizardPanel1 implements WizardDescriptor.Panel<WizardD
 
     private final ChangeSupport _changeSupport = new ChangeSupport(this);
 
-    private String outputDirectory;
-    private String libraryDirectory;
-    private String targetName;
+    private String _outputDirectory;
+    private String _libraryDirectory;
+    private String _targetName;
 
     /**
      * The visual component that displays this panel. If you need to access the
@@ -39,7 +39,7 @@ public class CodeGeneratorWizardPanel1 implements WizardDescriptor.Panel<WizardD
             return component.getOutputDirectory();
         }
 
-        return outputDirectory;
+        return _outputDirectory;
     }
 
     public void setOutputDirectory(String value) {
@@ -47,7 +47,7 @@ public class CodeGeneratorWizardPanel1 implements WizardDescriptor.Panel<WizardD
             component.setOutputDirectory(value);
         }
 
-        outputDirectory = value;
+        _outputDirectory = value;
     }
 
     public String getLibraryDirectory() {
@@ -55,7 +55,7 @@ public class CodeGeneratorWizardPanel1 implements WizardDescriptor.Panel<WizardD
             return component.getLibraryDirectory();
         }
 
-        return libraryDirectory;
+        return _libraryDirectory;
     }
 
     public void setLibraryDirectory(String value) {
@@ -63,7 +63,7 @@ public class CodeGeneratorWizardPanel1 implements WizardDescriptor.Panel<WizardD
             component.setLibraryDirectory(value);
         }
 
-        libraryDirectory = value;
+        _libraryDirectory = value;
     }
 
     public String getTargetName() {
@@ -71,7 +71,7 @@ public class CodeGeneratorWizardPanel1 implements WizardDescriptor.Panel<WizardD
             return component.getTargetName();
         }
 
-        return targetName;
+        return _targetName;
     }
 
     public void setTargetName(String targetName) {
@@ -79,7 +79,7 @@ public class CodeGeneratorWizardPanel1 implements WizardDescriptor.Panel<WizardD
             component.setTargetName(targetName);
         }
 
-        this.targetName = targetName;
+        this._targetName = targetName;
     }
 
     // Get the visual component for the panel. In this template, the component
