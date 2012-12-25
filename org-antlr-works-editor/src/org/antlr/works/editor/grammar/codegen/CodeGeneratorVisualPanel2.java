@@ -9,6 +9,8 @@
 package org.antlr.works.editor.grammar.codegen;
 
 import javax.swing.JPanel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -45,6 +47,15 @@ public final class CodeGeneratorVisualPanel2 extends JPanel {
             setGenerateVisitor(wizardPanel.isGenerateVisitor());
             setPackageName(wizardPanel.isUsePackageName(), wizardPanel.getPackageName());
             setAbstractClasses(wizardPanel.isAbstractClasses());
+
+            chkAbstractClasses.setEnabled(wizardPanel.isAbstractClassesAvailable());
+            wizardPanel.getLocationPanel().addChangeListener(new ChangeListener() {
+
+                @Override
+                public void stateChanged(ChangeEvent e) {
+                    chkAbstractClasses.setEnabled(_wizardPanel.isAbstractClassesAvailable());
+                }
+            });
         }
 
         txtPackageName.getDocument().addDocumentListener(_documentListener);

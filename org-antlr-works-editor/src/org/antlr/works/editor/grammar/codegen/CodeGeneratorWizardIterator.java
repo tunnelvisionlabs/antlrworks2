@@ -24,8 +24,9 @@ public final class CodeGeneratorWizardIterator implements WizardDescriptor.Itera
     private List<WizardDescriptor.Panel<WizardDescriptor>> getPanels() {
         if (panels == null) {
             panels = new ArrayList<WizardDescriptor.Panel<WizardDescriptor>>();
-            panels.add(new CodeGeneratorWizardPanel1());
-            panels.add(new CodeGeneratorWizardPanel2());
+            CodeGeneratorWizardPanel1 locationPanel = new CodeGeneratorWizardPanel1();
+            panels.add(locationPanel);
+            panels.add(new CodeGeneratorWizardPanel2(locationPanel));
             panels.add(new CodeGeneratorWizardPanel3());
             String[] steps = new String[panels.size()];
             for (int i = 0; i < panels.size(); i++) {

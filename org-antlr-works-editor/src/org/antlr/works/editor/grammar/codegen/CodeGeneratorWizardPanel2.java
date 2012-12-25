@@ -9,6 +9,7 @@
 package org.antlr.works.editor.grammar.codegen;
 
 import javax.swing.event.ChangeListener;
+import org.netbeans.api.annotations.common.NonNull;
 import org.openide.WizardDescriptor;
 import org.openide.util.ChangeSupport;
 import org.openide.util.HelpCtx;
@@ -20,6 +21,7 @@ public class CodeGeneratorWizardPanel2 implements WizardDescriptor.Panel<WizardD
     public static final String PACKAGE_NAME = "packageName";
     public static final String ABSTRACT_CLASSES = "abstractClasses";
 
+    private final CodeGeneratorWizardPanel1 _locationPanel;
     private final ChangeSupport _changeSupport = new ChangeSupport(this);
 
     private boolean generateListener;
@@ -33,6 +35,14 @@ public class CodeGeneratorWizardPanel2 implements WizardDescriptor.Panel<WizardD
      * component from this class, just use getComponent().
      */
     private CodeGeneratorVisualPanel2 component;
+
+    public CodeGeneratorWizardPanel2(@NonNull CodeGeneratorWizardPanel1 locationPanel) {
+        this._locationPanel = locationPanel;
+    }
+
+    public CodeGeneratorWizardPanel1 getLocationPanel() {
+        return _locationPanel;
+    }
 
     /*package*/ ChangeSupport getChangeSupport() {
         return _changeSupport;
@@ -109,6 +119,14 @@ public class CodeGeneratorWizardPanel2 implements WizardDescriptor.Panel<WizardD
         }
 
         this.abstractClasses = abstractClasses;
+    }
+
+    public boolean isAbstractClassesAvailable() {
+        if (_locationPanel.getTargetName() == null) {
+            return false;
+        }
+
+        return _locationPanel.getTargetName().contains("sharwell/optimized");
     }
 
     // Get the visual component for the panel. In this template, the component
