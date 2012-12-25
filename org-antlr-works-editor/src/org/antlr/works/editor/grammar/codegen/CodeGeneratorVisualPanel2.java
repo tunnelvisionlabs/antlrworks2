@@ -8,17 +8,46 @@
  */
 package org.antlr.works.editor.grammar.codegen;
 
-import javax.swing.JCheckBox;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 public final class CodeGeneratorVisualPanel2 extends JPanel {
+    private final CodeGeneratorWizardPanel2 _wizardPanel;
+    private final DocumentListener _documentListener = new DocumentListener() {
 
-    /**
-     * Creates new form CodeGeneratorVisualPanel2
-     */
+        @Override
+        public void insertUpdate(DocumentEvent e) {
+            fireChange();
+        }
+
+        @Override
+        public void removeUpdate(DocumentEvent e) {
+            fireChange();
+        }
+
+        @Override
+        public void changedUpdate(DocumentEvent e) {
+            fireChange();
+        }
+
+    };
+
     public CodeGeneratorVisualPanel2() {
+        this(null);
+    }
+
+    public CodeGeneratorVisualPanel2(CodeGeneratorWizardPanel2 wizardPanel) {
         initComponents();
+        _wizardPanel = wizardPanel;
+        if (wizardPanel != null) {
+            setGenerateListener(wizardPanel.isGenerateListener());
+            setGenerateVisitor(wizardPanel.isGenerateVisitor());
+            setPackageName(wizardPanel.isUsePackageName(), wizardPanel.getPackageName());
+            setAbstractClasses(wizardPanel.isAbstractClasses());
+        }
+
+        txtPackageName.getDocument().addDocumentListener(_documentListener);
     }
 
     public boolean isGenerateListener() {
@@ -65,6 +94,12 @@ public final class CodeGeneratorVisualPanel2 extends JPanel {
         return "Features";
     }
 
+    private void fireChange() {
+        if (_wizardPanel != null) {
+            _wizardPanel.getChangeSupport().fireChange();
+        }
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -85,8 +120,18 @@ public final class CodeGeneratorVisualPanel2 extends JPanel {
 
         chkGenerateListener.setSelected(true);
         org.openide.awt.Mnemonics.setLocalizedText(chkGenerateListener, org.openide.util.NbBundle.getMessage(CodeGeneratorVisualPanel2.class, "CodeGeneratorVisualPanel2.chkGenerateListener.text")); // NOI18N
+        chkGenerateListener.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkGenerateListenerActionPerformed(evt);
+            }
+        });
 
         org.openide.awt.Mnemonics.setLocalizedText(chkGenerateVisitor, org.openide.util.NbBundle.getMessage(CodeGeneratorVisualPanel2.class, "CodeGeneratorVisualPanel2.chkGenerateVisitor.text")); // NOI18N
+        chkGenerateVisitor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkGenerateVisitorActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -111,8 +156,18 @@ public final class CodeGeneratorVisualPanel2 extends JPanel {
 
         org.openide.awt.Mnemonics.setLocalizedText(chkAbstractClasses, org.openide.util.NbBundle.getMessage(CodeGeneratorVisualPanel2.class, "CodeGeneratorVisualPanel2.chkAbstractClasses.text")); // NOI18N
         chkAbstractClasses.setToolTipText(org.openide.util.NbBundle.getMessage(CodeGeneratorVisualPanel2.class, "CodeGeneratorVisualPanel2.chkAbstractClasses.toolTipText")); // NOI18N
+        chkAbstractClasses.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkAbstractClassesActionPerformed(evt);
+            }
+        });
 
         org.openide.awt.Mnemonics.setLocalizedText(chkSetPackageName, org.openide.util.NbBundle.getMessage(CodeGeneratorVisualPanel2.class, "CodeGeneratorVisualPanel2.chkSetPackageName.text")); // NOI18N
+        chkSetPackageName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkSetPackageNameActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -158,6 +213,23 @@ public final class CodeGeneratorVisualPanel2 extends JPanel {
                 .addContainerGap(80, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void chkGenerateListenerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkGenerateListenerActionPerformed
+        fireChange();
+    }//GEN-LAST:event_chkGenerateListenerActionPerformed
+
+    private void chkGenerateVisitorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkGenerateVisitorActionPerformed
+        fireChange();
+    }//GEN-LAST:event_chkGenerateVisitorActionPerformed
+
+    private void chkSetPackageNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkSetPackageNameActionPerformed
+        fireChange();
+    }//GEN-LAST:event_chkSetPackageNameActionPerformed
+
+    private void chkAbstractClassesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkAbstractClassesActionPerformed
+        fireChange();
+    }//GEN-LAST:event_chkAbstractClassesActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox chkAbstractClasses;
     private javax.swing.JCheckBox chkGenerateListener;

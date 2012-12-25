@@ -10,6 +10,7 @@ package org.antlr.works.editor.grammar.codegen;
 
 import javax.swing.event.ChangeListener;
 import org.openide.WizardDescriptor;
+import org.openide.util.ChangeSupport;
 import org.openide.util.HelpCtx;
 
 public class CodeGeneratorWizardPanel2 implements WizardDescriptor.Panel<WizardDescriptor> {
@@ -18,6 +19,8 @@ public class CodeGeneratorWizardPanel2 implements WizardDescriptor.Panel<WizardD
     public static final String USE_PACKAGE_NAME = "usePackageName";
     public static final String PACKAGE_NAME = "packageName";
     public static final String ABSTRACT_CLASSES = "abstractClasses";
+
+    private final ChangeSupport _changeSupport = new ChangeSupport(this);
 
     private boolean generateListener;
     private boolean generateVisitor;
@@ -30,6 +33,10 @@ public class CodeGeneratorWizardPanel2 implements WizardDescriptor.Panel<WizardD
      * component from this class, just use getComponent().
      */
     private CodeGeneratorVisualPanel2 component;
+
+    /*package*/ ChangeSupport getChangeSupport() {
+        return _changeSupport;
+    }
 
     public boolean isGenerateListener() {
         if (component != null) {
@@ -111,12 +118,10 @@ public class CodeGeneratorWizardPanel2 implements WizardDescriptor.Panel<WizardD
     @Override
     public CodeGeneratorVisualPanel2 getComponent() {
         if (component == null) {
-            component = new CodeGeneratorVisualPanel2();
-            component.setGenerateListener(generateListener);
-            component.setGenerateVisitor(generateVisitor);
-            component.setPackageName(usePackageName, packageName);
-            component.setAbstractClasses(abstractClasses);
+            component = new CodeGeneratorVisualPanel2(this);
+            _changeSupport.fireChange();
         }
+
         return component;
     }
 
@@ -140,10 +145,12 @@ public class CodeGeneratorWizardPanel2 implements WizardDescriptor.Panel<WizardD
 
     @Override
     public void addChangeListener(ChangeListener l) {
+        _changeSupport.addChangeListener(l);
     }
 
     @Override
     public void removeChangeListener(ChangeListener l) {
+        _changeSupport.removeChangeListener(l);
     }
 
     @Override

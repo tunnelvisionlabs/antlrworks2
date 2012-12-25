@@ -10,6 +10,7 @@ package org.antlr.works.editor.grammar.codegen;
 
 import javax.swing.event.ChangeListener;
 import org.openide.WizardDescriptor;
+import org.openide.util.ChangeSupport;
 import org.openide.util.HelpCtx;
 
 public class CodeGeneratorWizardPanel3 implements WizardDescriptor.Panel<WizardDescriptor> {
@@ -17,6 +18,8 @@ public class CodeGeneratorWizardPanel3 implements WizardDescriptor.Panel<WizardD
     public static final String DEBUG_ST = "debugST";
     public static final String FORCE_ATN = "forceATN";
     public static final String TREAT_WARNINGS_AS_ERRORS = "treatWarningsAsErrors";
+
+    private final ChangeSupport _changeSupport = new ChangeSupport(this);
 
     private boolean generateATNDiagrams;
     private boolean debugST;
@@ -28,6 +31,10 @@ public class CodeGeneratorWizardPanel3 implements WizardDescriptor.Panel<WizardD
      * component from this class, just use getComponent().
      */
     private CodeGeneratorVisualPanel3 component;
+
+    /*package*/ ChangeSupport getChangeSupport() {
+        return _changeSupport;
+    }
 
     public boolean isGenerateATNDiagrams() {
         if (component != null) {
@@ -100,8 +107,10 @@ public class CodeGeneratorWizardPanel3 implements WizardDescriptor.Panel<WizardD
     @Override
     public CodeGeneratorVisualPanel3 getComponent() {
         if (component == null) {
-            component = new CodeGeneratorVisualPanel3();
+            component = new CodeGeneratorVisualPanel3(this);
+            _changeSupport.fireChange();
         }
+
         return component;
     }
 
@@ -125,10 +134,12 @@ public class CodeGeneratorWizardPanel3 implements WizardDescriptor.Panel<WizardD
 
     @Override
     public void addChangeListener(ChangeListener l) {
+        _changeSupport.addChangeListener(l);
     }
 
     @Override
     public void removeChangeListener(ChangeListener l) {
+        _changeSupport.removeChangeListener(l);
     }
 
     @Override

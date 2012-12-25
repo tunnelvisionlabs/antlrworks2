@@ -77,6 +77,9 @@
               <ResourceString bundle="org/antlr/works/editor/grammar/codegen/Bundle.properties" key="CodeGeneratorVisualPanel3.chkForceATN.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="chkForceATNActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JCheckBox" name="chkTreatWarningsAsErrors">
           <Properties>
@@ -84,6 +87,9 @@
               <ResourceString bundle="org/antlr/works/editor/grammar/codegen/Bundle.properties" key="CodeGeneratorVisualPanel3.chkTreatWarningsAsErrors.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="chkTreatWarningsAsErrorsActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
@@ -132,6 +138,9 @@
               <ResourceString bundle="org/antlr/works/editor/grammar/codegen/Bundle.properties" key="CodeGeneratorVisualPanel3.chkATNDiagrams.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="chkATNDiagramsActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JCheckBox" name="chkDebugST">
           <Properties>
@@ -139,6 +148,9 @@
               <ResourceString bundle="org/antlr/works/editor/grammar/codegen/Bundle.properties" key="CodeGeneratorVisualPanel3.chkDebugST.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="chkDebugSTActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

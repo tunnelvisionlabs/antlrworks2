@@ -11,15 +11,47 @@ package org.antlr.works.editor.grammar.codegen;
 import java.io.File;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import org.netbeans.api.annotations.common.NullAllowed;
 import org.openide.filesystems.FileChooserBuilder;
 
 public final class CodeGeneratorVisualPanel1 extends JPanel {
+    private final CodeGeneratorWizardPanel1 _wizardPanel;
+    private final DocumentListener _documentListener = new DocumentListener() {
 
-    /**
-     * Creates new form CodeGeneratorVisualPanel1
-     */
+        @Override
+        public void insertUpdate(DocumentEvent e) {
+            fireChange();
+        }
+
+        @Override
+        public void removeUpdate(DocumentEvent e) {
+            fireChange();
+        }
+
+        @Override
+        public void changedUpdate(DocumentEvent e) {
+            fireChange();
+        }
+
+    };
+
     public CodeGeneratorVisualPanel1() {
+        this(null);
+    }
+
+    public CodeGeneratorVisualPanel1(@NullAllowed CodeGeneratorWizardPanel1 wizardPanel) {
         initComponents();
+        _wizardPanel = wizardPanel;
+        if (wizardPanel != null) {
+            setOutputDirectory(wizardPanel.getOutputDirectory());
+            setLibraryDirectory(wizardPanel.getLibraryDirectory());
+            setTargetName(wizardPanel.getTargetName());
+        }
+
+        txtOutputDirectory.getDocument().addDocumentListener(_documentListener);
+        txtLibDirectory.getDocument().addDocumentListener(_documentListener);
     }
 
     public String getOutputDirectory() {
@@ -59,6 +91,12 @@ public final class CodeGeneratorVisualPanel1 extends JPanel {
         return "Location";
     }
 
+    private void fireChange() {
+        if (_wizardPanel != null) {
+            _wizardPanel.getChangeSupport().fireChange();
+        }
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -85,6 +123,11 @@ public final class CodeGeneratorVisualPanel1 extends JPanel {
         txtOutputDirectory.setMinimumSize(new java.awt.Dimension(80, 20));
 
         cmbTargetLanguage.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Java", "Java (sharwell/optimized)" }));
+        cmbTargetLanguage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbTargetLanguageActionPerformed(evt);
+            }
+        });
 
         org.openide.awt.Mnemonics.setLocalizedText(btnBrowseOutputDirectory, org.openide.util.NbBundle.getMessage(CodeGeneratorVisualPanel1.class, "CodeGeneratorVisualPanel1.btnBrowseOutputDirectory.text")); // NOI18N
         btnBrowseOutputDirectory.addActionListener(new java.awt.event.ActionListener() {
@@ -146,6 +189,10 @@ public final class CodeGeneratorVisualPanel1 extends JPanel {
     private void btnBrowseLibDirectoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrowseLibDirectoryActionPerformed
         browseForDirectory(txtLibDirectory);
     }//GEN-LAST:event_btnBrowseLibDirectoryActionPerformed
+
+    private void cmbTargetLanguageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTargetLanguageActionPerformed
+        fireChange();
+    }//GEN-LAST:event_cmbTargetLanguageActionPerformed
 
     private void browseForDirectory(JTextField field) {
         FileChooserBuilder builder = new FileChooserBuilder(CodeGenerator.class)

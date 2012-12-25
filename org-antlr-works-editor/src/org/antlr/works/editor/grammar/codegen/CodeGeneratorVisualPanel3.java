@@ -11,12 +11,25 @@ package org.antlr.works.editor.grammar.codegen;
 import javax.swing.JPanel;
 
 public final class CodeGeneratorVisualPanel3 extends JPanel {
+    private final CodeGeneratorWizardPanel3 _wizardPanel;
 
     /**
      * Creates new form CodeGeneratorVisualPanel3
      */
+
     public CodeGeneratorVisualPanel3() {
+        this(null);
+    }
+
+    public CodeGeneratorVisualPanel3(CodeGeneratorWizardPanel3 wizardPanel) {
         initComponents();
+        _wizardPanel = wizardPanel;
+        if (wizardPanel != null) {
+            setGenerateATNDiagrams(wizardPanel.isGenerateATNDiagrams());
+            setDebugST(wizardPanel.isDebugST());
+            setForceATN(wizardPanel.isForceATN());
+            setTreatWarningsAsErrors(wizardPanel.isTreatWarningsAsErrors());
+        }
     }
 
     public boolean isGenerateATNDiagrams() {
@@ -56,6 +69,12 @@ public final class CodeGeneratorVisualPanel3 extends JPanel {
         return "Advanced";
     }
 
+    private void fireChange() {
+        if (_wizardPanel != null) {
+            _wizardPanel.getChangeSupport().fireChange();
+        }
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -74,8 +93,18 @@ public final class CodeGeneratorVisualPanel3 extends JPanel {
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(CodeGeneratorVisualPanel3.class, "CodeGeneratorVisualPanel3.jPanel1.border.title"))); // NOI18N
 
         org.openide.awt.Mnemonics.setLocalizedText(chkForceATN, org.openide.util.NbBundle.getMessage(CodeGeneratorVisualPanel3.class, "CodeGeneratorVisualPanel3.chkForceATN.text")); // NOI18N
+        chkForceATN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkForceATNActionPerformed(evt);
+            }
+        });
 
         org.openide.awt.Mnemonics.setLocalizedText(chkTreatWarningsAsErrors, org.openide.util.NbBundle.getMessage(CodeGeneratorVisualPanel3.class, "CodeGeneratorVisualPanel3.chkTreatWarningsAsErrors.text")); // NOI18N
+        chkTreatWarningsAsErrors.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkTreatWarningsAsErrorsActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -99,8 +128,18 @@ public final class CodeGeneratorVisualPanel3 extends JPanel {
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(CodeGeneratorVisualPanel3.class, "CodeGeneratorVisualPanel3.jPanel2.border.title"))); // NOI18N
 
         org.openide.awt.Mnemonics.setLocalizedText(chkATNDiagrams, org.openide.util.NbBundle.getMessage(CodeGeneratorVisualPanel3.class, "CodeGeneratorVisualPanel3.chkATNDiagrams.text")); // NOI18N
+        chkATNDiagrams.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkATNDiagramsActionPerformed(evt);
+            }
+        });
 
         org.openide.awt.Mnemonics.setLocalizedText(chkDebugST, org.openide.util.NbBundle.getMessage(CodeGeneratorVisualPanel3.class, "CodeGeneratorVisualPanel3.chkDebugST.text")); // NOI18N
+        chkDebugST.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkDebugSTActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -137,6 +176,23 @@ public final class CodeGeneratorVisualPanel3 extends JPanel {
                 .addContainerGap(48, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void chkForceATNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkForceATNActionPerformed
+        fireChange();
+    }//GEN-LAST:event_chkForceATNActionPerformed
+
+    private void chkTreatWarningsAsErrorsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkTreatWarningsAsErrorsActionPerformed
+        fireChange();
+    }//GEN-LAST:event_chkTreatWarningsAsErrorsActionPerformed
+
+    private void chkATNDiagramsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkATNDiagramsActionPerformed
+        fireChange();
+    }//GEN-LAST:event_chkATNDiagramsActionPerformed
+
+    private void chkDebugSTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkDebugSTActionPerformed
+        fireChange();
+    }//GEN-LAST:event_chkDebugSTActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox chkATNDiagrams;
     private javax.swing.JCheckBox chkDebugST;

@@ -10,12 +10,15 @@ package org.antlr.works.editor.grammar.codegen;
 
 import javax.swing.event.ChangeListener;
 import org.openide.WizardDescriptor;
+import org.openide.util.ChangeSupport;
 import org.openide.util.HelpCtx;
 
 public class CodeGeneratorWizardPanel1 implements WizardDescriptor.Panel<WizardDescriptor> {
     public static final String OUTPUT_DIRECTORY = "outputDirectory";
     public static final String LIBRARY_DIRECTORY = "libraryDirectory";
     public static final String SELECTED_TARGET = "selectedTarget";
+
+    private final ChangeSupport _changeSupport = new ChangeSupport(this);
 
     private String outputDirectory;
     private String libraryDirectory;
@@ -26,6 +29,10 @@ public class CodeGeneratorWizardPanel1 implements WizardDescriptor.Panel<WizardD
      * component from this class, use {@link #getComponent}.
      */
     private CodeGeneratorVisualPanel1 component;
+
+    /*package*/ ChangeSupport getChangeSupport() {
+        return _changeSupport;
+    }
 
     public String getOutputDirectory() {
         if (component != null) {
@@ -82,12 +89,8 @@ public class CodeGeneratorWizardPanel1 implements WizardDescriptor.Panel<WizardD
     @Override
     public CodeGeneratorVisualPanel1 getComponent() {
         if (component == null) {
-            component = new CodeGeneratorVisualPanel1();
-            if (targetName != null) {
-                component.setOutputDirectory(outputDirectory);
-                component.setLibraryDirectory(libraryDirectory);
-                component.setTargetName(targetName);
-            }
+            component = new CodeGeneratorVisualPanel1(this);
+            _changeSupport.fireChange();
         }
 
         return component;
@@ -107,10 +110,12 @@ public class CodeGeneratorWizardPanel1 implements WizardDescriptor.Panel<WizardD
 
     @Override
     public void addChangeListener(ChangeListener l) {
+        _changeSupport.addChangeListener(l);
     }
 
     @Override
     public void removeChangeListener(ChangeListener l) {
+        _changeSupport.removeChangeListener(l);
     }
 
     @Override
