@@ -32,6 +32,7 @@ import org.antlr.v4.runtime.BailErrorStrategy;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.DefaultErrorStrategy;
+import org.antlr.v4.runtime.Dependents;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
@@ -58,7 +59,7 @@ public final class CurrentTemplateContextParserTask implements ParserTask {
     }
 
     @Override
-    @RuleDependency(recognizer=TemplateParser.class, rule=TemplateParser.RULE_group, version=0)
+    @RuleDependency(recognizer=TemplateParser.class, rule=TemplateParser.RULE_group, version=0, dependents=Dependents.SELF)
     public void parse(ParserTaskManager taskManager, ParseContext context, DocumentSnapshot snapshot, Collection<? extends ParserDataDefinition<?>> requestedData, ParserResultHandler results)
         throws InterruptedException, ExecutionException {
 

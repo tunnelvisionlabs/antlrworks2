@@ -30,6 +30,7 @@ import org.antlr.netbeans.parsing.spi.ParserTaskDefinition;
 import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.netbeans.parsing.spi.ParserTaskProvider;
 import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
+import org.antlr.v4.runtime.Dependents;
 import org.antlr.v4.runtime.RuleDependencies;
 import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
@@ -66,7 +67,7 @@ public final class SemanticAnalyzerParserTask implements ParserTask {
     }
 
     @Override
-    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_grammarSpec, version=0)
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_grammarSpec, version=0, dependents=Dependents.SELF)
     public void parse(ParserTaskManager taskManager, ParseContext context, DocumentSnapshot snapshot, Collection<? extends ParserDataDefinition<?>> requestedData, ParserResultHandler results)
         throws InterruptedException, ExecutionException {
 
@@ -109,10 +110,10 @@ public final class SemanticAnalyzerParserTask implements ParserTask {
     }
 
     @RuleDependencies({
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_grammarSpec, version=0),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_prequelConstruct, version=0),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_delegateGrammars, version=0),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_optionsSpec, version=1),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_grammarSpec, version=0, dependents=Dependents.SELF),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_prequelConstruct, version=0, dependents=Dependents.SELF),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_delegateGrammars, version=0, dependents=Dependents.SELF),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_optionsSpec, version=1, dependents=Dependents.SELF),
     })
     private void updateImportedFiles(VersionedDocument document, GrammarSpecContext grammarSpec) {
         for (PrequelConstructContext prequelConstruct : grammarSpec.prequelConstruct()) {
@@ -127,10 +128,10 @@ public final class SemanticAnalyzerParserTask implements ParserTask {
     }
 
     @RuleDependencies({
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_optionsSpec, version=1),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_option, version=1),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=1),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_optionValue, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_optionsSpec, version=1, dependents=Dependents.SELF),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_option, version=0, dependents=Dependents.SELF),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=1, dependents=Dependents.DESCENDANTS),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_optionValue, version=0, dependents=Dependents.SELF),
     })
     private void handleImportOptions(VersionedDocument document, OptionsSpecContext optionsSpec) {
         for (OptionContext option : optionsSpec.option()) {
@@ -195,7 +196,7 @@ public final class SemanticAnalyzerParserTask implements ParserTask {
         }
     }
 
-    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_delegateGrammars, version=0)
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_delegateGrammars, version=0, dependents=Dependents.SELF)
     private void handleImportedGrammars(DelegateGrammarsContext delegateGrammars) {
         LOGGER.log(Level.WARNING, "Cannot load delegate grammars on demand (not yet implemented).");
     }

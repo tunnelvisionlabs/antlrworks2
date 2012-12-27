@@ -24,6 +24,7 @@ import org.antlr.netbeans.parsing.spi.ParserData;
 import org.antlr.netbeans.parsing.spi.ParserDataEvent;
 import org.antlr.netbeans.parsing.spi.ParserDataListener;
 import org.antlr.netbeans.parsing.spi.ParserTaskManager;
+import org.antlr.v4.runtime.Dependents;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleDependencies;
 import org.antlr.v4.runtime.RuleDependency;
@@ -98,7 +99,7 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
         return (SyntaxDiagramTopComponent)WindowManager.getDefault().findTopComponent("SyntaxDiagramTopComponent");
     }
 
-    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleSpec, version=0)
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleSpec, version=0, dependents=Dependents.SELF)
     public void setRuleContext(@NullAllowed CurrentRuleContextData context) {
         if (!SwingUtilities.isEventDispatchThread()) {
             throw new UnsupportedOperationException();
@@ -157,7 +158,7 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
         return a.equals(b);
     }
 
-    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleSpec, version=0)
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleSpec, version=0, dependents=Dependents.SELF)
     private static boolean isSameContext(GrammarParser.RuleSpecContext a, GrammarParser.RuleSpecContext b) {
         if (a == b) {
             return true;
@@ -268,7 +269,7 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
          */
 
         @Override
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_parserRuleSpec, version=0)
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_parserRuleSpec, version=0, dependents=Dependents.PARENTS)
         public void enterParserRuleSpec(ParserRuleSpecContext ctx) {
             @SuppressWarnings("LocalVariableHidesMemberVariable")
             Rule RuleSpec = new Rule(ctx.name.getText());
@@ -277,7 +278,7 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
         }
 
         @Override
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_parserRuleSpec, version=0)
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_parserRuleSpec, version=0, dependents=Dependents.PARENTS)
         public void exitParserRuleSpec(ParserRuleSpecContext ctx) {
             assert nodes.size() == 1;
             this.RuleSpec = (Rule)nodes.pop();
@@ -285,7 +286,7 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
         }
 
         @Override
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerRule, version=0)
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerRule, version=0, dependents=Dependents.PARENTS)
         public void enterLexerRule(LexerRuleContext ctx) {
             @SuppressWarnings("LocalVariableHidesMemberVariable")
             Rule RuleSpec = new Rule(ctx.name.getText());
@@ -294,7 +295,7 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
         }
 
         @Override
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerRule, version=0)
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerRule, version=0, dependents=Dependents.PARENTS)
         public void exitLexerRule(LexerRuleContext ctx) {
             assert nodes.size() == 1;
             this.RuleSpec = (Rule)nodes.pop();
@@ -306,49 +307,49 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
          */
 
         @Override
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleAltList, version=0)
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleAltList, version=0, dependents=Dependents.PARENTS)
         public void enterRuleAltList(RuleAltListContext ctx) {
             enterBlock();
         }
 
         @Override
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_altList, version=0)
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_altList, version=0, dependents=Dependents.PARENTS)
         public void enterAltList(AltListContext ctx) {
             enterBlock();
         }
 
         @Override
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerAltList, version=1)
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerAltList, version=1, dependents=Dependents.PARENTS)
         public void enterLexerAltList(LexerAltListContext ctx) {
             enterBlock();
         }
 
         @Override
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerBlock, version=1)
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerBlock, version=1, dependents=Dependents.PARENTS)
         public void enterLexerBlock(LexerBlockContext ctx) {
             enterBlock();
         }
 
         @Override
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleAltList, version=0)
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleAltList, version=0, dependents=Dependents.PARENTS)
         public void exitRuleAltList(RuleAltListContext ctx) {
             exitBlock();
         }
 
         @Override
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_altList, version=0)
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_altList, version=0, dependents=Dependents.PARENTS)
         public void exitAltList(AltListContext ctx) {
             exitBlock();
         }
 
         @Override
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerAltList, version=1)
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerAltList, version=1, dependents=Dependents.PARENTS)
         public void exitLexerAltList(LexerAltListContext ctx) {
             exitBlock();
         }
 
         @Override
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerBlock, version=1)
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerBlock, version=1, dependents=Dependents.PARENTS)
         public void exitLexerBlock(LexerBlockContext ctx) {
             exitBlock();
         }
@@ -358,25 +359,25 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
          */
 
         @Override
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_alternative, version=1)
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_alternative, version=1, dependents=Dependents.PARENTS)
         public void enterAlternative(AlternativeContext ctx) {
             enterAlternative();
         }
 
         @Override
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerAlt, version=1)
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerAlt, version=1, dependents=Dependents.PARENTS)
         public void enterLexerAlt(LexerAltContext ctx) {
             enterAlternative();
         }
 
         @Override
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_alternative, version=1)
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_alternative, version=1, dependents=Dependents.PARENTS)
         public void exitAlternative(AlternativeContext ctx) {
             exitAlternative();
         }
 
         @Override
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerAlt, version=1)
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerAlt, version=1, dependents=Dependents.PARENTS)
         public void exitLexerAlt(LexerAltContext ctx) {
             exitAlternative();
         }
@@ -390,24 +391,24 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
          */
 
         @Override
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerAtom, version=1)
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerAtom, version=1, dependents=Dependents.PARENTS)
         public void enterLexerAtom(LexerAtomContext ctx) {
             enterEveryAtom(ctx);
         }
 
         @Override
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_atom, version=0)
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_atom, version=0, dependents=Dependents.PARENTS)
         public void enterAtom(AtomContext ctx) {
             enterEveryAtom(ctx);
         }
 
         @RuleDependencies({
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_terminal, version=1),
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleref, version=0),
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_range, version=2),
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_notSet, version=1),
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_blockSet, version=0),
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_setElement, version=2),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_terminal, version=1, dependents=Dependents.PARENTS),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleref, version=0, dependents=Dependents.PARENTS),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_range, version=2, dependents=Dependents.PARENTS),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_notSet, version=1, dependents=Dependents.PARENTS),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_blockSet, version=0, dependents=Dependents.PARENTS),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_setElement, version=2, dependents=Dependents.PARENTS),
         })
         public void enterEveryAtom(ParserRuleContext<Token> ctx) {
             if (outermostAtom != null) {
@@ -480,7 +481,7 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
         }
 
         @Override
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerAtom, version=1)
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerAtom, version=1, dependents=Dependents.PARENTS)
         public void exitLexerAtom(LexerAtomContext ctx) {
             if (outermostAtom == ctx) {
                 outermostAtom = null;
@@ -488,7 +489,7 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
         }
 
         @Override
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_atom, version=0)
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_atom, version=0, dependents=Dependents.PARENTS)
         public void exitAtom(AtomContext ctx) {
             if (outermostAtom == ctx) {
                 outermostAtom = null;
@@ -500,7 +501,7 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
          */
 
         @Override
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ebnfSuffix, version=1)
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ebnfSuffix, version=1, dependents=Dependents.ANCESTORS)
         public void enterEbnfSuffix(EbnfSuffixContext ctx) {
             Block block;
 

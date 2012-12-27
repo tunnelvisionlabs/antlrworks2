@@ -8,6 +8,7 @@
  */
 package org.antlr.works.editor.grammar.completion;
 
+import org.antlr.v4.runtime.Dependents;
 import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.RuleDependencies;
 import org.antlr.v4.runtime.RuleDependency;
@@ -20,8 +21,8 @@ import org.antlr.works.editor.grammar.experimental.GrammarParser;
  * @author Sam Harwell
  */
 @RuleDependencies({
-    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_rules, version=0),
-    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_grammarSpec, version=0),
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_rules, version=0, dependents=Dependents.SELF),
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_grammarSpec, version=0, dependents=Dependents.SELF),
 })
 public class GrammarForestParser extends AbstractForestParser<CodeCompletionGrammarParser> {
     public static final GrammarForestParser RULES = new GrammarForestParser(GrammarParser.RULE_rules);

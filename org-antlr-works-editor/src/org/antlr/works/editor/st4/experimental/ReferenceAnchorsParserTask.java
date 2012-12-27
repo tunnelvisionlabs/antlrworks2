@@ -36,6 +36,7 @@ import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
 import org.antlr.v4.runtime.BailErrorStrategy;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.DefaultErrorStrategy;
+import org.antlr.v4.runtime.Dependents;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.RuleDependency;
@@ -68,7 +69,7 @@ public final class ReferenceAnchorsParserTask implements ParserTask {
     }
 
     @Override
-    @RuleDependency(recognizer=TemplateParser.class, rule=TemplateParser.RULE_group, version=0)
+    @RuleDependency(recognizer=TemplateParser.class, rule=TemplateParser.RULE_group, version=0, dependents=Dependents.SELF)
     public void parse(ParserTaskManager taskManager, ParseContext context, DocumentSnapshot snapshot, Collection<? extends ParserDataDefinition<?>> requestedData, ParserResultHandler results) throws InterruptedException, ExecutionException {
         synchronized (lock) {
             ParserData<ParserRuleContext<Token>> parseTreeResult = taskManager.getData(snapshot, TemplateParserDataDefinitions.REFERENCE_PARSE_TREE, EnumSet.of(ParserDataOptions.NO_UPDATE)).get();

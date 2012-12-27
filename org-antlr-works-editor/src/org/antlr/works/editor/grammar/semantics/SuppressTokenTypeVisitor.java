@@ -8,6 +8,7 @@
  */
 package org.antlr.works.editor.grammar.semantics;
 
+import org.antlr.v4.runtime.Dependents;
 import org.antlr.v4.runtime.RuleDependencies;
 import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
@@ -42,7 +43,7 @@ public class SuppressTokenTypeVisitor extends GrammarParserBaseVisitor<Boolean> 
     }
 
     @Override
-    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerRule, version=0)
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerRule, version=0, dependents=Dependents.PARENTS)
     public Boolean visitLexerRule(LexerRuleContext ctx) {
         if (ctx.FRAGMENT() != null) {
             return true;
@@ -52,8 +53,8 @@ public class SuppressTokenTypeVisitor extends GrammarParserBaseVisitor<Boolean> 
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommandName, version=1),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=1),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommandName, version=1, dependents=Dependents.PARENTS),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=1, dependents=Dependents.SELF),
     })
     public Boolean visitLexerCommandName(LexerCommandNameContext ctx) {
         IdContext id = ctx.id();

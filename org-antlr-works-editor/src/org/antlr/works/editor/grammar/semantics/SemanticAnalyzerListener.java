@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.antlr.netbeans.semantics.ObjectDecorator;
+import org.antlr.v4.runtime.Dependents;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleDependencies;
 import org.antlr.v4.runtime.RuleDependency;
@@ -125,10 +126,14 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_parserRuleSpec, version=0),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleref, version=0),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerRule, version=0),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_terminal, version=1),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_parserRuleSpec, version=0, dependents=Dependents.SELF),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleref, version=0, dependents=Dependents.SELF),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerRule, version=0, dependents=Dependents.ANCESTORS),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_terminal, version=1, dependents=Dependents.ANCESTORS),
+        // ensure lexerRule is an ancestor of lexerRule and terminal
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerRule, version=2, dependents=Dependents.DESCENDANTS),
+        // ensure parserRuleSpec is an ancestor of terminal
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_parserRuleSpec, version=2, dependents=Dependents.DESCENDANTS),
     })
     public void visitTerminal(TerminalNode<? extends Token> node) {
         NodeType nodeType = treeDecorator.getProperty(node.getParent(), GrammarTreeProperties.PROP_NODE_TYPE);
@@ -470,8 +475,8 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_labeledAlt, version=1),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=1),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_labeledAlt, version=1, dependents=Dependents.PARENTS),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=1, dependents=Dependents.SELF),
     })
     public void enterLabeledAlt(LabeledAltContext ctx) {
         if (ctx.getChildCount() == 3 && ctx.getChild(2) instanceof IdContext) {
@@ -536,7 +541,7 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
     }
 
     @Override
-    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_grammarSpec, version=0)
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_grammarSpec, version=0, dependents=Dependents.PARENTS)
     public void exitGrammarSpec(GrammarSpecContext ctx) {
         for (Token token : unresolvedRuleReferences) {
             String text = token.getText();
@@ -664,8 +669,8 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_labeledLexerElement, version=0),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=1),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_labeledLexerElement, version=0, dependents=Dependents.PARENTS),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=1, dependents=Dependents.SELF),
     })
     public void enterLabeledLexerElement(LabeledLexerElementContext ctx) {
         if (ctx.getChildCount() == 0 || !(ctx.getChild(0) instanceof IdContext)) {
@@ -713,13 +718,13 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=1),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_grammarSpec, version=0),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_tokensSpec, version=1),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_modeSpec, version=0),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommand, version=1),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommandName, version=1),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommandExpr, version=1),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=1, dependents={Dependents.PARENTS, Dependents.DESCENDANTS}),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_grammarSpec, version=0, dependents=Dependents.SELF),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_tokensSpec, version=1, dependents=Dependents.SELF),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_modeSpec, version=0, dependents=Dependents.SELF),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommand, version=1, dependents=Dependents.SELF),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommandName, version=1, dependents=Dependents.DESCENDANTS),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommandExpr, version=1, dependents=Dependents.ANCESTORS),
     })
     public void enterId(IdContext ctx) {
         if (ctx.start != null && ctx.parent != null) {
@@ -888,8 +893,8 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommand, version=1),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommandName, version=1),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommand, version=1, dependents=Dependents.PARENTS),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommandName, version=0, dependents=Dependents.SELF),
     })
     public void enterLexerCommand(LexerCommandContext ctx) {
         if (ctx.getChildCount() == 0 || !(ctx.getChild(0) instanceof LexerCommandNameContext)) {

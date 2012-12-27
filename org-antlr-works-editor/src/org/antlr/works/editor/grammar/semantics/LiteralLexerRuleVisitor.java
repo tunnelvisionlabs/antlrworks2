@@ -8,6 +8,7 @@
  */
 package org.antlr.works.editor.grammar.semantics;
 
+import org.antlr.v4.runtime.Dependents;
 import org.antlr.v4.runtime.RuleDependencies;
 import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
@@ -30,6 +31,7 @@ import org.antlr.works.editor.grammar.experimental.GrammarParserBaseVisitor;
  * literal, and optionally lexer action(s) which do not include {@code more},
  * {@code skip}, or {@code type}.
  */
+@RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerRule, version=2, dependents=Dependents.DESCENDANTS)
 public class LiteralLexerRuleVisitor extends GrammarParserBaseVisitor<Boolean> {
     public static final LiteralLexerRuleVisitor INSTANCE = new LiteralLexerRuleVisitor();
 
@@ -50,7 +52,7 @@ public class LiteralLexerRuleVisitor extends GrammarParserBaseVisitor<Boolean> {
     }
 
     @Override
-    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerRule, version=0)
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerRule, version=0, dependents=Dependents.PARENTS)
     public Boolean visitLexerRule(LexerRuleContext ctx) {
         if (ctx.FRAGMENT() != null) {
             return false;
@@ -60,8 +62,8 @@ public class LiteralLexerRuleVisitor extends GrammarParserBaseVisitor<Boolean> {
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerAltList, version=1),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerAlt, version=1),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerAltList, version=1, dependents=Dependents.PARENTS),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerAlt, version=1, dependents=Dependents.SELF),
     })
     public Boolean visitLexerAltList(LexerAltListContext ctx) {
         if (ctx.lexerAlt().size() != 1) {
@@ -72,8 +74,8 @@ public class LiteralLexerRuleVisitor extends GrammarParserBaseVisitor<Boolean> {
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerAlt, version=1),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerElements, version=1),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerAlt, version=1, dependents=Dependents.PARENTS),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerElements, version=0, dependents=Dependents.SELF),
     })
     public Boolean visitLexerAlt(LexerAltContext ctx) {
         if (ctx.lexerElements() == null) {
@@ -84,8 +86,8 @@ public class LiteralLexerRuleVisitor extends GrammarParserBaseVisitor<Boolean> {
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerElements, version=1),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerElement, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerElements, version=1, dependents=Dependents.PARENTS),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerElement, version=0, dependents=Dependents.SELF),
     })
     public Boolean visitLexerElements(LexerElementsContext ctx) {
         if (ctx.lexerElement().size() != 1) {
@@ -96,9 +98,9 @@ public class LiteralLexerRuleVisitor extends GrammarParserBaseVisitor<Boolean> {
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerElement, version=0),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerAtom, version=1),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_labeledLexerElement, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerElement, version=0, dependents=Dependents.PARENTS),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerAtom, version=1, dependents=Dependents.SELF),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_labeledLexerElement, version=0, dependents=Dependents.SELF),
     })
     public Boolean visitLexerElement(LexerElementContext ctx) {
         if (ctx.lexerAtom() == null && ctx.labeledLexerElement() == null) {
@@ -109,8 +111,8 @@ public class LiteralLexerRuleVisitor extends GrammarParserBaseVisitor<Boolean> {
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_labeledLexerElement, version=0),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerAtom, version=1),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_labeledLexerElement, version=0, dependents=Dependents.PARENTS),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerAtom, version=1, dependents=Dependents.SELF),
     })
     public Boolean visitLabeledLexerElement(LabeledLexerElementContext ctx) {
         // if the element is labeled, it must be a lexerAtom
@@ -122,8 +124,8 @@ public class LiteralLexerRuleVisitor extends GrammarParserBaseVisitor<Boolean> {
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerAtom, version=1),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_terminal, version=1),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerAtom, version=1, dependents=Dependents.PARENTS),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_terminal, version=0, dependents=Dependents.SELF),
     })
     public Boolean visitLexerAtom(LexerAtomContext ctx) {
         if (ctx.terminal() == null) {
@@ -133,7 +135,7 @@ public class LiteralLexerRuleVisitor extends GrammarParserBaseVisitor<Boolean> {
     }
 
     @Override
-    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_terminal, version=1)
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_terminal, version=1, dependents=Dependents.PARENTS)
     public Boolean visitTerminal(TerminalContext ctx) {
         if (ctx.STRING_LITERAL() == null) {
             return false;
@@ -143,8 +145,8 @@ public class LiteralLexerRuleVisitor extends GrammarParserBaseVisitor<Boolean> {
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommandName, version=1),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=1),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommandName, version=1, dependents=Dependents.PARENTS),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=1, dependents=Dependents.DESCENDANTS),
     })
     public Boolean visitLexerCommandName(LexerCommandNameContext ctx) {
         IdContext id = ctx.id();

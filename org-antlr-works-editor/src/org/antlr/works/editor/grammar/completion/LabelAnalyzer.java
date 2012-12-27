@@ -11,6 +11,7 @@ package org.antlr.works.editor.grammar.completion;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import org.antlr.v4.runtime.Dependents;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.RuleDependencies;
@@ -75,7 +76,7 @@ public class LabelAnalyzer extends GrammarParserBaseListener {
     }
 
     @Override
-    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_actionExpression, version=0)
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_actionExpression, version=0, dependents=Dependents.PARENTS)
     public void enterParserRuleSpec(ParserRuleSpecContext ctx) {
         if (ctx.name != null) {
             enclosingRuleName = ctx.name;
@@ -83,7 +84,7 @@ public class LabelAnalyzer extends GrammarParserBaseListener {
     }
 
     @Override
-    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerRule, version=0)
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerRule, version=0, dependents=Dependents.PARENTS)
     public void enterLexerRule(LexerRuleContext ctx) {
         if (ctx.name != null) {
             enclosingRuleName = ctx.name;
@@ -91,7 +92,7 @@ public class LabelAnalyzer extends GrammarParserBaseListener {
     }
 
     @Override
-    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_labeledAlt, version=1)
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_labeledAlt, version=1, dependents=Dependents.PARENTS)
     public void enterLabeledAlt(LabeledAltContext ctx) {
         if (isCaretReached()) {
             return;
@@ -102,7 +103,7 @@ public class LabelAnalyzer extends GrammarParserBaseListener {
     }
 
     @Override
-    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_labeledElement, version=0)
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_labeledElement, version=2, dependents={Dependents.PARENTS, Dependents.DESCENDANTS})
     public void enterLabeledElement(LabeledElementContext ctx) {
         if (isCaretReached()) {
             return;
@@ -114,7 +115,7 @@ public class LabelAnalyzer extends GrammarParserBaseListener {
     }
 
     @Override
-    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_terminal, version=1)
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_terminal, version=1, dependents={Dependents.PARENTS, Dependents.DESCENDANTS})
     public void enterTerminal(TerminalContext ctx) {
         if (isCaretReached()) {
             return;
@@ -132,7 +133,7 @@ public class LabelAnalyzer extends GrammarParserBaseListener {
     }
 
     @Override
-    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleref, version=0)
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleref, version=1, dependents={Dependents.PARENTS, Dependents.DESCENDANTS})
     public void enterRuleref(RulerefContext ctx) {
         if (isCaretReached()) {
             return;
@@ -150,7 +151,7 @@ public class LabelAnalyzer extends GrammarParserBaseListener {
     }
 
     @Override
-    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_actionBlock, version=0)
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_actionBlock, version=0, dependents=Dependents.PARENTS)
     public void enterActionBlock(ActionBlockContext ctx) {
         if (isCaretReached()) {
             return;
@@ -160,7 +161,7 @@ public class LabelAnalyzer extends GrammarParserBaseListener {
     }
 
     @Override
-    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_actionBlock, version=0)
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_actionBlock, version=0, dependents=Dependents.PARENTS)
     public void exitActionBlock(ActionBlockContext ctx) {
         checkCaretReached(ctx);
 
@@ -172,7 +173,7 @@ public class LabelAnalyzer extends GrammarParserBaseListener {
     }
 
     @Override
-    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_argActionBlock, version=1)
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_argActionBlock, version=1, dependents=Dependents.PARENTS)
     public void enterArgActionBlock(ArgActionBlockContext ctx) {
         if (isCaretReached()) {
             return;
@@ -182,7 +183,7 @@ public class LabelAnalyzer extends GrammarParserBaseListener {
     }
 
     @Override
-    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_argActionBlock, version=1)
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_argActionBlock, version=1, dependents=Dependents.PARENTS)
     public void exitArgActionBlock(ArgActionBlockContext ctx) {
         checkCaretReached(ctx);
 
@@ -200,8 +201,8 @@ public class LabelAnalyzer extends GrammarParserBaseListener {
     }
 
     @RuleDependencies({
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_labeledElement, version=0),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_notSet, version=1),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_labeledElement, version=2, dependents=Dependents.DESCENDANTS),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_notSet, version=2, dependents=Dependents.DESCENDANTS),
     })
     private static boolean isLabeledContext(ParserRuleContext<Token> ctx) {
         for (RuleContext<?> current = ctx; current != null; current = current.parent) {

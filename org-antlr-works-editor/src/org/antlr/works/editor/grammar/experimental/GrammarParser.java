@@ -8,6 +8,7 @@
  */
 package org.antlr.works.editor.grammar.experimental;
 
+import org.antlr.v4.runtime.Dependents;
 import org.antlr.v4.runtime.RuleDependencies;
 import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
@@ -26,8 +27,8 @@ public class GrammarParser extends AbstractGrammarParser {
     }
 
     @RuleDependencies({
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_qid, version=0),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_optionValue, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_optionValue, version=0, dependents=Dependents.PARENTS),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_qid, version=1, dependents=Dependents.DESCENDANTS),
     })
     public static String getOptionValue(@NonNull OptionValueContext ctx) {
         QidContext qid = ctx.qid();

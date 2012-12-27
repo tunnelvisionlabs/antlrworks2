@@ -18,6 +18,7 @@ import java.util.List;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.StyleConstants;
 import org.antlr.netbeans.editor.text.SnapshotPositionRegion;
+import org.antlr.v4.runtime.Dependents;
 import org.antlr.v4.runtime.RuleDependencies;
 import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
@@ -35,7 +36,7 @@ public class SetTerminal extends Terminal {
     private final AttributedString attributedLabel;
     private final boolean inverted;
 
-    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_setElement, version=2)
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_setElement, version=2, dependents=Dependents.SELF)
     public SetTerminal(List<GrammarParser.SetElementContext> elements, SnapshotPositionRegion sourceSpan, boolean inverted) {
         this(getAttributedLabel(elements, inverted), sourceSpan, inverted);
     }
@@ -52,8 +53,8 @@ public class SetTerminal extends Terminal {
     }
 
     @RuleDependencies({
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_range, version=2),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_setElement, version=2),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_range, version=0, dependents=Dependents.SELF),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_setElement, version=2, dependents=Dependents.SELF),
     })
     private static AttributedString getAttributedLabel(List<? extends ParseTree<Token>> elements, boolean inverted) {
         IntervalSet foregroundSpans = new IntervalSet();

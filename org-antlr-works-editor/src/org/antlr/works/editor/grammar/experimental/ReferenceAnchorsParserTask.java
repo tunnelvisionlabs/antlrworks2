@@ -36,6 +36,7 @@ import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
 import org.antlr.v4.runtime.BailErrorStrategy;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.DefaultErrorStrategy;
+import org.antlr.v4.runtime.Dependents;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
@@ -73,7 +74,7 @@ public final class ReferenceAnchorsParserTask implements ParserTask {
     }
 
     @Override
-    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_grammarSpec, version=0)
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_grammarSpec, version=0, dependents=Dependents.SELF)
     public void parse(ParserTaskManager taskManager, ParseContext context, DocumentSnapshot snapshot, Collection<? extends ParserDataDefinition<?>> requestedData, ParserResultHandler results)
         throws InterruptedException, ExecutionException {
 

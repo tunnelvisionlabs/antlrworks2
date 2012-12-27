@@ -18,13 +18,13 @@ import java.util.Map;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.netbeans.editor.text.OffsetRegion;
 import org.antlr.netbeans.editor.text.SnapshotPositionRegion;
+import org.antlr.v4.runtime.Dependents;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleDependencies;
 import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.misc.Interval;
-import org.antlr.v4.runtime.misc.Utils;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.works.editor.antlr4.parsing.ParseTrees;
 import org.antlr.works.editor.grammar.codemodel.impl.FileModelImpl;
@@ -47,14 +47,11 @@ import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.LexerRu
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.LocalsSpecContext;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.ModeSpecContext;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.OptionContext;
-import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.OptionValueContext;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.ParserRuleSpecContext;
-import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.QidContext;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.RuleReturnsContext;
 import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.TokensSpecContext;
 import org.antlr.works.editor.grammar.semantics.LiteralLexerRuleValueVisitor;
 import org.antlr.works.editor.grammar.semantics.LiteralLexerRuleVisitor;
-import org.antlr.works.editor.grammar.semantics.SemanticAnalyzerListener;
 import org.antlr.works.editor.grammar.semantics.SuppressTokenTypeVisitor;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;
@@ -97,7 +94,7 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
     }
 
     @Override
-    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_grammarSpec, version=0)
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_grammarSpec, version=0, dependents=Dependents.PARENTS)
     public void enterGrammarSpec(GrammarSpecContext ctx) {
         FileObject packageFolder = snapshot.getVersionedDocument().getFileObject().getParent();
         FileObject projectFolder = project != null ? project.getProjectDirectory() : null;
@@ -116,7 +113,7 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
     }
 
     @Override
-    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_grammarSpec, version=0)
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_grammarSpec, version=0, dependents=Dependents.PARENTS)
     public void exitGrammarSpec(GrammarSpecContext ctx) {
         this.fileModel.freeze();
         this.modeContainerStack.pop();
@@ -124,8 +121,8 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
     }
 
     @RuleDependencies({
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_parserRuleSpec, version=0),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerRule, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_parserRuleSpec, version=0, dependents=Dependents.PARENTS),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerRule, version=0, dependents=Dependents.PARENTS),
     })
     private void handleEnterRule(ParserRuleContext<Token> ctx, TerminalNode<Token> name) {
         String ruleName = name != null ? name.getText() : "?";
@@ -171,8 +168,8 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_parserRuleSpec, version=0),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_argActionParameters, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_parserRuleSpec, version=0, dependents=Dependents.PARENTS),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_argActionParameters, version=0, dependents=Dependents.SELF),
     })
     public void enterParserRuleSpec(ParserRuleSpecContext ctx) {
         handleEnterRule(ctx, ctx.RULE_REF());
@@ -184,27 +181,27 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
     }
 
     @Override
-    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_parserRuleSpec, version=0)
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_parserRuleSpec, version=0, dependents=Dependents.PARENTS)
     public void exitParserRuleSpec(ParserRuleSpecContext ctx) {
         handleExitRule(ctx);
     }
 
     @Override
-    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerRule, version=0)
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerRule, version=0, dependents=Dependents.PARENTS)
     public void enterLexerRule(LexerRuleContext ctx) {
         handleEnterRule(ctx, ctx.TOKEN_REF());
     }
 
     @Override
-    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerRule, version=0)
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerRule, version=0, dependents=Dependents.PARENTS)
     public void exitLexerRule(LexerRuleContext ctx) {
         handleExitRule(ctx);
     }
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_tokensSpec, version=1),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=1),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_tokensSpec, version=1, dependents=Dependents.PARENTS),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=1, dependents=Dependents.DESCENDANTS),
     })
     public void enterTokensSpec(TokensSpecContext ctx) {
         for (IdContext id : ctx.id()) {
@@ -226,8 +223,8 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_modeSpec, version=0),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=1),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_modeSpec, version=0, dependents=Dependents.PARENTS),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=1, dependents=Dependents.DESCENDANTS),
     })
     public void enterModeSpec(ModeSpecContext ctx) {
         String name = null;
@@ -250,8 +247,8 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_modeSpec, version=0),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=1),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_modeSpec, version=0, dependents=Dependents.PARENTS),
+        //@RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=1),
     })
     public void exitModeSpec(ModeSpecContext ctx) {
         modeModelStack.pop();
@@ -260,8 +257,8 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleReturns, version=0),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_argActionParameters, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleReturns, version=0, dependents=Dependents.PARENTS),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_argActionParameters, version=0, dependents=Dependents.SELF),
     })
     public void enterRuleReturns(RuleReturnsContext ctx) {
         ArgActionParametersContext values = ctx.argActionParameters();
@@ -272,8 +269,8 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_localsSpec, version=0),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_argActionParameters, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_localsSpec, version=0, dependents=Dependents.PARENTS),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_argActionParameters, version=0, dependents=Dependents.SELF),
     })
     public void enterLocalsSpec(LocalsSpecContext ctx) {
         ArgActionParametersContext values = ctx.argActionParameters();
@@ -284,8 +281,8 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_labeledElement, version=0),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=1),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_labeledElement, version=0, dependents=Dependents.PARENTS),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=1, dependents=Dependents.DESCENDANTS),
     })
     public void enterLabeledElement(LabeledElementContext ctx) {
         IdContext label = ctx.label;
@@ -304,9 +301,9 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_option, version=1),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=1),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_optionValue, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_option, version=1, dependents=Dependents.PARENTS),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=1, dependents=Dependents.DESCENDANTS),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_optionValue, version=0, dependents=Dependents.SELF),
     })
     public void enterOption(OptionContext ctx) {
         IdContext id = ctx.id();
@@ -322,6 +319,10 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
     }
 
     @Override
+    @RuleDependencies({
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_delegateGrammar, version=0, dependents=Dependents.PARENTS),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=1, dependents=Dependents.DESCENDANTS),
+    })
     public void enterDelegateGrammar(DelegateGrammarContext ctx) {
         List<? extends IdContext> nodes = ctx.id();
         if (nodes.isEmpty()) {
@@ -350,8 +351,8 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
     }
 
     @RuleDependencies({
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_argActionParameter, version=0),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_argActionParameterType, version=0),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_argActionParameter, version=0, dependents=Dependents.PARENTS),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_argActionParameterType, version=0, dependents=Dependents.SELF),
     })
     private void handleParameters(@NullAllowed Collection<ArgActionParameterContext> contexts, @NonNull Collection<ParameterModelImpl> models) {
         if (contexts == null) {

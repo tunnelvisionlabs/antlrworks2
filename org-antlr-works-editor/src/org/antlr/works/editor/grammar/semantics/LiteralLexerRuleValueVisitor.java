@@ -8,6 +8,7 @@
  */
 package org.antlr.works.editor.grammar.semantics;
 
+import org.antlr.v4.runtime.Dependents;
 import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.RuleNode;
@@ -34,7 +35,7 @@ public class LiteralLexerRuleValueVisitor extends GrammarParserBaseVisitor<Termi
     }
 
     @Override
-    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_terminal, version=1)
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_terminal, version=1, dependents=Dependents.PARENTS)
     public TerminalNode<Token> visitTerminal(TerminalContext ctx) {
         return ctx.STRING_LITERAL();
     }

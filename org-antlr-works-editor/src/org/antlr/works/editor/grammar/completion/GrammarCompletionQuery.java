@@ -71,6 +71,7 @@ import org.antlr.works.editor.grammar.experimental.GrammarParserAnchorListener;
 import org.antlr.works.editor.grammar.experimental.GrammarReferenceAnchors;
 import org.netbeans.editor.BaseDocument;
 import com.tvl.spi.editor.completion.CompletionItem;
+import org.antlr.v4.runtime.Dependents;
 import org.openide.util.Exceptions;
 
 /**
@@ -126,17 +127,17 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
 
         @Override
         @RuleDependencies({
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleSpec, version=0),
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_parserRuleSpec, version=0),
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerRule, version=0),
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_actionBlock, version=0),
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=1),
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommandName, version=1),
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommandExpr, version=1),
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleref, version=0),
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_terminal, version=1),
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_actionExpression, version=0),
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_actionScopeExpression, version=0),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleSpec, version=0, dependents=Dependents.PARENTS),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_parserRuleSpec, version=0, dependents=Dependents.PARENTS),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerRule, version=0, dependents=Dependents.PARENTS),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_actionBlock, version=0, dependents=Dependents.PARENTS),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=1, dependents=Dependents.PARENTS),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommandName, version=1, dependents=Dependents.PARENTS),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommandExpr, version=1, dependents=Dependents.PARENTS),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleref, version=0, dependents=Dependents.PARENTS),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_terminal, version=1, dependents=Dependents.PARENTS),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_actionExpression, version=0, dependents=Dependents.PARENTS),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_actionScopeExpression, version=0, dependents=Dependents.PARENTS),
         })
         protected void runImpl(BaseDocument document) {
             results = new ArrayList<CompletionItem>();
@@ -432,8 +433,8 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
         }
 
         @RuleDependencies({
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommandName, version=1),
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=1),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommandName, version=0, dependents=Dependents.SELF),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=1, dependents=Dependents.PARENTS),
         })
         private void analyzeKeywords(Map<RuleContext<Token>, CaretReachedException> parseTrees, Map<String, CompletionItem> intermediateResults) {
             boolean maybeLexerCommand = false;
@@ -484,8 +485,8 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
         }
 
         @RuleDependencies({
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_actionExpression, version=0),
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_actionScopeExpression, version=0),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_actionExpression, version=0, dependents=Dependents.PARENTS),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_actionScopeExpression, version=0, dependents=Dependents.PARENTS),
         })
         private int analyzeExpressions(ParserTaskManager taskManager,
                                        DocumentSnapshot snapshot,
