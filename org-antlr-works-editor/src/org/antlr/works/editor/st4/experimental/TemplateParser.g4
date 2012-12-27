@@ -97,10 +97,12 @@ keyValuePair
     ;
 
 keyValue
+@version{2}
     :   bigstringTemplate
     |   bigstringTemplateNoNewline
     |   anonymousTemplate
     |   string
+	|	'[' ']'
     |   (   TRUE
         |   FALSE
         |   ID

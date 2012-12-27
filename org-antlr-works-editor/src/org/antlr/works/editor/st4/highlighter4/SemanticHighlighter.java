@@ -232,13 +232,13 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
         }
 
         @Override
-        @RuleDependency(recognizer=TemplateParser.class, rule=TemplateParser.RULE_anonymousTemplate, version=1, dependents=Dependents.PARENTS)
+        @RuleDependency(recognizer=TemplateParser.class, rule=TemplateParser.RULE_anonymousTemplate, version=2, dependents=Dependents.PARENTS)
         public void enterAnonymousTemplate(AnonymousTemplateContext ctx) {
             parameters.push(new HashSet<String>());
         }
 
         @Override
-        @RuleDependency(recognizer=TemplateParser.class, rule=TemplateParser.RULE_anonymousTemplate, version=1, dependents=Dependents.PARENTS)
+        @RuleDependency(recognizer=TemplateParser.class, rule=TemplateParser.RULE_anonymousTemplate, version=2, dependents=Dependents.PARENTS)
         public void exitAnonymousTemplate(AnonymousTemplateContext ctx) {
             parameters.pop();
         }
