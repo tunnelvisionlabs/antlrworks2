@@ -220,7 +220,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
         }
 
         @Override
-        @RuleDependency(recognizer=TemplateParser.class, rule=TemplateParser.RULE_formalArg, version=0)
+        @RuleDependency(recognizer=TemplateParser.class, rule=TemplateParser.RULE_formalArg, version=1)
         public void enterFormalArg(FormalArgContext ctx) {
             if (ctx.name != null) {
                 parameterDeclarations.add(ctx.name);
