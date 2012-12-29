@@ -37,7 +37,7 @@ import org.openide.util.NbBundle.Messages;
     id = "org.antlr.works.editor.grammar.debugger.InterpretCurrentLexerAction")
 @ActionRegistration(
     displayName = "#CTL_InterpretCurrentLexerAction")
-@ActionReference(path = "Menu/RunProject", position = 2700, separatorBefore = 2650)
+@ActionReference(path = "Menu/BuildProject", position = 248, separatorBefore = 223)
 @Messages("CTL_InterpretCurrentLexerAction=Interpret Lexer...")
 public final class InterpretCurrentLexerAction implements ActionListener {
 
