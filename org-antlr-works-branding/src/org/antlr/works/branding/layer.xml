@@ -8,4 +8,26 @@
             </folder>
         </folder>
     </folder>
+    <folder name="Menu">
+        <folder name="File">
+            <file name="Export_hidden"/>
+            <file name="Import_hidden"/>
+            <file name="org-netbeans-modules-project-ui-CloseProject.shadow_hidden"/>
+            <file name="org-netbeans-modules-project-ui-CustomizeProject.shadow_hidden"/>
+            <file name="org-netbeans-modules-project-ui-NewProject.shadow_hidden"/>
+            <file name="org-netbeans-modules-project-ui-OpenProject.shadow_hidden"/>
+            <file name="org-netbeans-modules-project-ui-RecentProjects.shadow_hidden"/>
+            <file name="org-netbeans-modules-project-ui-groups-GroupsMenu.shadow_hidden"/>
+        </folder>
+        <folder name="Source">
+            <file name="org-netbeans-modules-editor-MainMenuAction$ToggleCommentAction.instance_hidden"/>
+        </folder>
+    </folder>
+    <folder name="Toolbars">
+        <folder name="File">
+            <file name="org-netbeans-modules-project-ui-NewProject.shadow_hidden"/>
+            <file name="org-netbeans-modules-project-ui-OpenProject.shadow_hidden"/>
+        </folder>
+        <file name="Standard.xml" url="Standard.xml"/>
+    </folder>
 </filesystem>
