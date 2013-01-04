@@ -29,7 +29,7 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service=ParserTaskScheduler.class)
 public class DataInputParserTaskScheduler extends ParserTaskScheduler {
-    private ParserDataListener<Object> listener = new Listener();
+    private final ParserDataListener<Object> listener = new Listener();
     private final Map<ParserDataDefinition<?>, List<ParserTaskProvider>> dependentTasks =
         new HashMap<ParserDataDefinition<?>, List<ParserTaskProvider>>();
 
