@@ -669,10 +669,12 @@ public final class PatchedHtmlRenderer {
 
                     case 'H':
                     case 'h': //Just an opening HTML tag
-
                         if (pos == 1) {
                             break;
                         }
+
+                        throwBadHTML("Malformed or unsupported HTML", pos, chars); //NOI18N
+                        throw new IllegalStateException("not reachable...");
 
                     default:
                         throwBadHTML("Malformed or unsupported HTML", pos, chars); //NOI18N
