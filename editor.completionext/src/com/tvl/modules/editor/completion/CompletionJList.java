@@ -49,6 +49,7 @@ import com.tvl.spi.editor.completion.CompletionItem;
 import com.tvl.spi.editor.completion.LazyCompletionItem;
 import java.awt.*;
 import java.awt.event.MouseListener;
+import java.lang.ref.WeakReference;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -74,6 +75,8 @@ import org.openide.util.Utilities;
     "ACSN_CompletionView_NoSelectedItem=No selection",
 })
 public class CompletionJList extends JList {
+    private static final Object COMPLETION_CONTROLLER_PROPERTY = CompletionJList.class.getName() + ".controller";
+    private static final Object COMPLETION_DATA_PROPERTY = CompletionJList.class.getName() + ".data";
 
     private static final int DARKER_COLOR_COMPONENT = 5;
 
@@ -83,17 +86,17 @@ public class CompletionJList extends JList {
 
     private int fixedItemHeight;
     private int maxVisibleRowCount;
-    private JTextComponent editorComponent;
+    private WeakReference<JTextComponent> editorComponent;
     private int smartIndex;
     /** The current completion controller. */
-    private CompletionController controller;
+    private WeakReference<CompletionController> controller;
     /** <code>true</code> if the best match is selected, otherwise <code>false</code>. */
     private boolean isSelected;
     private boolean preventSelection;
     
     public CompletionJList(int maxVisibleRowCount, MouseListener mouseListener, JTextComponent editorComponent) {
         this.maxVisibleRowCount = maxVisibleRowCount;
-        this.editorComponent = editorComponent;
+        this.editorComponent = new WeakReference<JTextComponent>(editorComponent);
         addMouseListener(mouseListener);
         setFont(editorComponent.getFont());
         setLayoutOrientation(JList.VERTICAL);
@@ -171,7 +174,11 @@ public class CompletionJList extends JList {
     
     void setData(List<?> data, @NonNull CompletionController controller) {
         smartIndex = -1;
-        this.controller = controller;
+        this.controller = new WeakReference<CompletionController>(controller);
+        // since this.controller is a weak reference, add a strong reference to
+        // the editor component
+        editorComponent.get().putClientProperty(COMPLETION_CONTROLLER_PROPERTY, controller);
+        editorComponent.get().putClientProperty(COMPLETION_DATA_PROPERTY, data);
         if (data != null) {
             int itemCount = data.size();
             ListCellRenderer renderer = getCellRenderer();
@@ -219,7 +226,7 @@ public class CompletionJList extends JList {
                 }
             });
         } else {
-            AccessibleContext editorAC = editorComponent.getAccessibleContext();
+            AccessibleContext editorAC = editorComponent.get().getAccessibleContext();
             if (accessibleLabel != null) {
                 editorAC.firePropertyChange(AccessibleContext.ACCESSIBLE_ACTIVE_DESCENDANT_PROPERTY, accessibleLabel, null);
                 editorAC.firePropertyChange(AccessibleContext.ACCESSIBLE_CHILD_PROPERTY, accessibleLabel, null);
@@ -268,7 +275,7 @@ public class CompletionJList extends JList {
     private JLabel accessibleLabel;
     private JLabel accessibleFakeLabel;
     private void updateAccessible() {
-        AccessibleContext editorAC = editorComponent.getAccessibleContext();
+        AccessibleContext editorAC = editorComponent.get().getAccessibleContext();
         if (accessibleFakeLabel == null) {
             accessibleFakeLabel = new JLabel(""); //NOI18N
             editorAC.firePropertyChange(AccessibleContext.ACCESSIBLE_CHILD_PROPERTY, null, accessibleFakeLabel);
@@ -358,26 +365,34 @@ public class CompletionJList extends JList {
         }
     }
 
-    private final class Model extends AbstractListModel {
+    private static final class Model extends AbstractListModel {
 
-        List<?> data;
+        WeakReference<List<?>> _data;
 
         public Model(List<?> data) {
-            this.data = data;
+            this._data = new WeakReference<List<?>>(data);
         }
         
+        @Override
         public int getSize() {
-            return data.size();
+            List<?> data = this._data.get();
+            return data != null ? data.size() : 0;
         }
 
+        @Override
         public Object getElementAt(int index) {
+            List<?> data = this._data.get();
+            if (data == null) {
+                return null;
+            }
+
             return (index >= 0 && index < data.size()) ? data.get(index) : null;
         }
     }
     
     private final class RenderComponent extends JComponent {
 
-        private CompletionItem item;
+        private WeakReference<CompletionItem> item;
         
         private boolean isBestMatch;
         private boolean isSelected;
@@ -389,7 +404,7 @@ public class CompletionJList extends JList {
         private Color bgSelectedColor;
         
         void setItem(CompletionItem item) {
-            this.item = item;
+            this.item = new WeakReference<CompletionItem>(item);
         }
         
         void setSelected(boolean isBestMatch, boolean isSelected) {
@@ -412,9 +427,9 @@ public class CompletionJList extends JList {
             int height = getHeight();
 
             // Render the item
-            controller.render(g, CompletionJList.this.getFont(), fgColor, bgColor,
+            controller.get().render(g, CompletionJList.this.getFont(), fgColor, bgColor,
                     fgSelectedColor, bgSelectedColor, itemRenderWidth, getHeight(),
-                    item, isBestMatch && !preventSelection, isSelected && !preventSelection);
+                    item.get(), isBestMatch && !preventSelection, isSelected && !preventSelection);
             
             if (separator) {
                 g.setColor(Color.gray);
@@ -431,7 +446,7 @@ public class CompletionJList extends JList {
                         getDefaultConfiguration().createCompatibleImage(1, 1).getGraphics();
                 assert (cellPreferredSizeGraphics != null);
             }
-            return new Dimension(item.getPreferredWidth(cellPreferredSizeGraphics, CompletionJList.this.getFont()),
+            return new Dimension(item.get().getPreferredWidth(cellPreferredSizeGraphics, CompletionJList.this.getFont()),
                     fixedItemHeight);
         }
 
