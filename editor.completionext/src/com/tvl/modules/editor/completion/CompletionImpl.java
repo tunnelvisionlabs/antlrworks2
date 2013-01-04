@@ -380,7 +380,7 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
             return;
         }
         // Check whether the insertion came from typing
-        if (!DocumentUtilities.isTypingModification(e)) {
+        if (!DocumentUtilities.isTypingModification(e.getDocument())) {
             return;
         }
 

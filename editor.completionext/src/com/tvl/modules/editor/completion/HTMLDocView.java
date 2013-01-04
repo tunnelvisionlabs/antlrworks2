@@ -63,7 +63,11 @@ import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Document;
 import javax.swing.text.EditorKit;
 import javax.swing.text.html.HTMLEditorKit;
-import org.netbeans.editor.EditorUI;
+import org.netbeans.api.editor.mimelookup.MimeLookup;
+import org.netbeans.api.editor.mimelookup.MimePath;
+import org.netbeans.api.editor.settings.FontColorNames;
+import org.netbeans.api.editor.settings.FontColorSettings;
+import org.netbeans.editor.Coloring;
 import org.openide.util.Exceptions;
 
 /**
@@ -193,7 +197,9 @@ public class HTMLDocView extends JEditorPane {
     private void setBodyFontInCSS() {
         javax.swing.text.html.StyleSheet css =
                 new javax.swing.text.html.StyleSheet();
-        java.awt.Font f = new EditorUI().getDefaultColoring().getFont();
+        FontColorSettings fcs = MimeLookup.getLookup(MimePath.EMPTY).lookup(FontColorSettings.class);
+        Coloring c = Coloring.fromAttributeSet(fcs.getFontColors(FontColorNames.DEFAULT_COLORING));
+        java.awt.Font f = c.getFont();
         css.addRule(new StringBuilder("body { font-size: ").append(f.getSize()) // NOI18N
                 .append("; font-family: ").append(getFont().getFamily()).append("; color: " + getForegroundColor() + ";}").toString()); // NOI18N
                 // do not use monospaced font, just adjust fontsize
