@@ -10,6 +10,7 @@ package org.antlr.netbeans.parsing.spi.impl;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.lang.ref.WeakReference;
 import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
 import org.antlr.netbeans.editor.text.VersionedDocument;
@@ -25,7 +26,7 @@ import org.openide.filesystems.FileObject;
  */
 public abstract class CurrentEditorParserTaskScheduler extends ParserTaskScheduler {
 
-    private JTextComponent currentEditor;
+    private WeakReference<JTextComponent> currentEditor;
 
     @Override
     protected void initializeImpl() {
@@ -34,7 +35,12 @@ public abstract class CurrentEditorParserTaskScheduler extends ParserTaskSchedul
     }
 
     protected JTextComponent getCurrentEditor() {
-        return currentEditor;
+        WeakReference<JTextComponent> ref = currentEditor;
+        if (ref == null) {
+            return null;
+        }
+
+        return ref.get();
     }
 
     protected abstract void setEditor(JTextComponent editor);
@@ -48,14 +54,14 @@ public abstract class CurrentEditorParserTaskScheduler extends ParserTaskSchedul
                 || evt.getPropertyName().equals(EditorRegistry.FOCUS_GAINED_PROPERTY)) {
 
                 JTextComponent editor = EditorRegistry.focusedComponent();
-                if (editor == currentEditor) {
+                if (editor == getCurrentEditor()) {
                     return;
                 }
 
-                currentEditor = editor;
+                currentEditor = new WeakReference<JTextComponent>(editor);
                 try {
-                    if (currentEditor != null) {
-                        Document document = currentEditor.getDocument();
+                    if (editor != null) {
+                        Document document = editor.getDocument();
                         VersionedDocument versionedDocument = VersionedDocumentUtilities.getVersionedDocument(document);
                             FileObject fileObject = versionedDocument.getFileObject();
                             if (fileObject == null) {
@@ -63,7 +69,7 @@ public abstract class CurrentEditorParserTaskScheduler extends ParserTaskSchedul
                             }
                     }
 
-                    setEditor(currentEditor);
+                    setEditor(editor);
                 } catch (UnsupportedOperationException ex) {
                 }
             } else if (evt.getPropertyName().equals(EditorRegistry.LAST_FOCUSED_REMOVED_PROPERTY)) {

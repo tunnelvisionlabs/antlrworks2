@@ -8,6 +8,7 @@
  */
 package org.antlr.netbeans.parsing.spi.impl;
 
+import java.lang.ref.WeakReference;
 import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
 import org.antlr.netbeans.editor.text.VersionedDocument;
@@ -25,15 +26,24 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service=ParserTaskScheduler.class)
 public class CurrentDocumentParserTaskScheduler extends CurrentEditorParserTaskScheduler {
 
-    private Document currentDocument;
-    private VersionedDocument versionedDocument;
+    private WeakReference<Document> currentDocument;
 
     protected Document getCurrentDocument() {
-        return currentDocument;
+        WeakReference<Document> ref = currentDocument;
+        if (ref == null) {
+            return null;
+        }
+
+        return ref.get();
     }
 
     protected VersionedDocument getVersionedDocument() {
-        return versionedDocument;
+        Document document = getCurrentDocument();
+        if (document == null) {
+            return null;
+        }
+
+        return VersionedDocumentUtilities.getVersionedDocument(document);
     }
 
     @Override
@@ -45,16 +55,14 @@ public class CurrentDocumentParserTaskScheduler extends CurrentEditorParserTaskS
     protected void setEditor(JTextComponent editor) {
         if (editor != null) {
             Document document = editor.getDocument();
-            if (currentDocument == document) {
+            if (getCurrentDocument() == document) {
                 return;
             }
 
-            currentDocument = document;
-            versionedDocument = VersionedDocumentUtilities.getVersionedDocument(document);
-            schedule(createParseContext(versionedDocument, editor));
+            currentDocument = new WeakReference<Document>(document);
+            schedule(createParseContext(getVersionedDocument(), editor));
         } else {
             currentDocument = null;
-            versionedDocument = null;
         }
     }
 

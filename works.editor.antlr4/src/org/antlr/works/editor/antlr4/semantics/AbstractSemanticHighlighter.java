@@ -10,10 +10,10 @@ package org.antlr.works.editor.antlr4.semantics;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.lang.ref.WeakReference;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Callable;
@@ -52,6 +52,8 @@ import org.netbeans.spi.editor.highlighting.support.AbstractHighlightsContainer;
 import org.netbeans.spi.editor.highlighting.support.OffsetsBag;
 import org.openide.util.Lookup;
 import org.openide.util.Parameters;
+import org.openide.util.WeakListeners;
+import org.openide.util.WeakSet;
 
 /**
  *
@@ -66,10 +68,9 @@ public abstract class AbstractSemanticHighlighter<SemanticData> extends Abstract
     private final ParserTaskManager taskManager;
     private final VersionedDocument versionedDocument;
     private final DataListener dataListener;
-    private final EditorRegistryListener editorRegistryListener;
     private final OffsetsBag container;
 
-    private final Set<JTextComponent> components = new HashSet<JTextComponent>();
+    private final Set<JTextComponent> components = new WeakSet<JTextComponent>();
 
     protected AbstractSemanticHighlighter(@NonNull StyledDocument document, @NonNull ParserDataDefinition<? extends SemanticData> semanticDataDefinition) {
         Parameters.notNull("document", document);
@@ -80,7 +81,6 @@ public abstract class AbstractSemanticHighlighter<SemanticData> extends Abstract
         this.taskManager = Lookup.getDefault().lookup(ParserTaskManager.class);
         this.versionedDocument = VersionedDocumentUtilities.getVersionedDocument(document);
         this.dataListener = new DataListener();
-        this.editorRegistryListener = new EditorRegistryListener();
         this.container = new OffsetsBag(document, true);
         this.container.addHighlightsChangeListener(new HighlightsChangeListener() {
             @Override
@@ -127,15 +127,7 @@ public abstract class AbstractSemanticHighlighter<SemanticData> extends Abstract
     protected void addComponent(JTextComponent component) {
         components.add(component);
         if (components.size() == 1) {
-            taskManager.addDataListener(semanticDataDefinition, dataListener);
-            EditorRegistry.addPropertyChangeListener(editorRegistryListener);
-        }
-    }
-
-    protected void removeComponent(JTextComponent component) {
-        if (components.remove(component) && components.isEmpty()) {
-            taskManager.removeDataListener(semanticDataDefinition, dataListener);
-            EditorRegistry.removePropertyChangeListener(editorRegistryListener);
+            taskManager.addDataListener(semanticDataDefinition, new WeakDataListener<SemanticData>(semanticDataDefinition, dataListener));
         }
     }
 
@@ -231,17 +223,31 @@ public abstract class AbstractSemanticHighlighter<SemanticData> extends Abstract
 
     }
 
-    protected class EditorRegistryListener implements PropertyChangeListener {
+    protected static class WeakDataListener<T> implements ParserDataListener<T> {
+        @NonNull
+        private final WeakReference<ParserDataListener<T>> _listener;
+        @NonNull
+        private final ParserDataDefinition<? extends T> dataDefinition;
 
-        @Override
-        public void propertyChange(PropertyChangeEvent evt) {
-            if (evt.getPropertyName().equals(EditorRegistry.COMPONENT_REMOVED_PROPERTY)) {
-                Object component = evt.getOldValue();
-                if (component instanceof JTextComponent) {
-                    removeComponent((JTextComponent)component);
-                }
-            }
+        public WeakDataListener(@NonNull ParserDataDefinition<? extends T> dataDefinition, @NonNull ParserDataListener<T> listener) {
+            this._listener = new WeakReference<ParserDataListener<T>>(listener);
+            this.dataDefinition = dataDefinition;
         }
 
+        @Override
+        public void dataChanged(ParserDataEvent<? extends T> event) {
+            ParserDataListener<T> listener = getListener();
+            if (listener == null) {
+                ParserTaskManager taskManager = Lookup.getDefault().lookup(ParserTaskManager.class);
+                taskManager.removeDataListener(dataDefinition, this);
+                return;
+            }
+
+            listener.dataChanged(event);
+        }
+
+        protected ParserDataListener<T> getListener() {
+            return _listener.get();
+        }
     }
 }

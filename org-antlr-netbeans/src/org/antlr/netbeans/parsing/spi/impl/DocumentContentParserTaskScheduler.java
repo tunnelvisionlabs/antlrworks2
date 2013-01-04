@@ -10,10 +10,9 @@ package org.antlr.netbeans.parsing.spi.impl;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.WeakHashMap;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.Document;
@@ -23,6 +22,7 @@ import org.antlr.netbeans.editor.text.VersionedDocumentUtilities;
 import org.antlr.netbeans.parsing.spi.ParseContext;
 import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
 import org.netbeans.api.editor.EditorRegistry;
+import org.openide.util.WeakSet;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
@@ -32,7 +32,7 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service=ParserTaskScheduler.class)
 public class DocumentContentParserTaskScheduler extends ParserTaskScheduler {
-    private final Map<Document, Set<JTextComponent>> documents = new HashMap<Document, Set<JTextComponent>>();
+    private final Map<Document, Set<JTextComponent>> documents = new WeakHashMap<Document, Set<JTextComponent>>();
     private final EditorRegistryListener editorRegistryListener = new EditorRegistryListener();
     private final DocumentListener documentListener = new DocumentListenerImpl();
 
@@ -60,7 +60,7 @@ public class DocumentContentParserTaskScheduler extends ParserTaskScheduler {
                 synchronized (documents) {
                     components = documents.get(document);
                     if (components == null) {
-                        components = new HashSet<JTextComponent>();
+                        components = new WeakSet<JTextComponent>();
                         documents.put(document, components);
                         document.addDocumentListener(documentListener);
                         VersionedDocument versionedDocument = VersionedDocumentUtilities.getVersionedDocument(document);
