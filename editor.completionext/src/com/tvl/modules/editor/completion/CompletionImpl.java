@@ -949,22 +949,29 @@ outer:      for (Iterator it = localCompletionResult.getResultSets().iterator();
                 int caretOffset = c.getSelectionStart();
                 if (caretOffset - anchorOffset < commonText.length()) {
 
-                    Document doc = getActiveDocument();
-                    BaseDocument baseDoc = null;
-                    if(doc instanceof BaseDocument)
-                        baseDoc = (BaseDocument)doc;
-                        
+                    final int finalAnchorOffset = anchorOffset;
+                    final int finalCaretOffset = caretOffset;
+                    final CharSequence finalCommonText = commonText;
+                    final Document doc = getActiveDocument();
+
+                    Runnable operation = new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                doc.remove(finalAnchorOffset, finalCaretOffset - finalAnchorOffset);
+                                doc.insertString(finalAnchorOffset, finalCommonText.toString(), null);
+                            } catch (BadLocationException e) {
+                            }
+                        }
+                    };
+
                     // Insert the missing end part of the prefix
-                    if(baseDoc != null)
-                        baseDoc.atomicLock();
-                    try {
-                        doc.remove(anchorOffset, caretOffset - anchorOffset);
-                        doc.insertString(anchorOffset, commonText.toString(), null);
-                    } catch (BadLocationException e) {
-                    } finally {
-                        if(baseDoc != null)
-                            baseDoc.atomicUnlock();
+                    if (doc instanceof BaseDocument) {
+                        ((BaseDocument)doc).runAtomic(operation);
+                    } else {
+                        operation.run();
                     }
+
                     return;
                 }
             }
