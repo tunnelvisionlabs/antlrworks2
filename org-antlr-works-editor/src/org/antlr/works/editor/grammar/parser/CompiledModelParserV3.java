@@ -78,6 +78,8 @@ public class CompiledModelParserV3 extends CompiledModelParser {
                 lastResult = null;
                 lastException = ex;
                 throw new ExecutionException("An unexpected error occurred.", ex);
+            } finally {
+                ErrorManager.setErrorListener(null);
             }
         }
 
