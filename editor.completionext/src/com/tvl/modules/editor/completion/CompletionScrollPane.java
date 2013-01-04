@@ -252,10 +252,6 @@ public class CompletionScrollPane extends JScrollPane {
         BaseKit.endLineAction, component);
     }
 
-    List testGetData() {
-        return dataObj;
-    }
-    
     private class CompletionPaneAction extends AbstractAction {
         private int action;
 
