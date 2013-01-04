@@ -46,6 +46,7 @@ package com.tvl.modules.editor.completion;
 
 import com.tvl.spi.editor.completion.CompletionController;
 import com.tvl.spi.editor.completion.CompletionDocumentation;
+import com.tvl.spi.editor.completion.CompletionItem;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -145,7 +146,7 @@ public final class CompletionLayout {
         visiblePopups.clear();
     }
 
-    public void showCompletion(List data, List declarationData, String title, int anchorOffset,
+    public void showCompletion(List<?> data, List<? extends CompletionItem> declarationData, String title, int anchorOffset,
     ListSelectionListener listSelectionListener, String additionalItemsText,
     String shortcutHint, CompletionController controller,
     CompletionController.Selection selection) {
@@ -325,7 +326,7 @@ public final class CompletionLayout {
 
         private CompletionScrollPane completionScrollPane;
         
-        public void show(List data, List declarationData, String title, int anchorOffset,
+        public void show(List<?> data, List<? extends CompletionItem> declarationData, String title, int anchorOffset,
         ListSelectionListener listSelectionListener, String additionalItemsText,
         String shortcutHint, final CompletionController controller,
         CompletionController.Selection selection) {

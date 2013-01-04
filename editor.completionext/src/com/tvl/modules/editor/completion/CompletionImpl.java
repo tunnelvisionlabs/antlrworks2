@@ -345,7 +345,7 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
                     }
                 }
                 layout.showCompletion(Collections.singletonList(waitText),
-                        Collections.emptyList(),
+                        Collections.<CompletionItem>emptyList(),
                         null, -1, CompletionImpl.this, null, null,
                         FALLBACK_COMPLETION_CONTROLLER,
                         CompletionController.Selection.DEFAULT);
@@ -823,7 +823,7 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
             completionCancel();
             if (explicitQuery) {
                 layout.showCompletion(Collections.singletonList(NO_SUGGESTIONS),
-                      Collections.emptyList(),
+                      Collections.<CompletionItem>emptyList(),
                       null, -1, CompletionImpl.this, null, null,
                       FALLBACK_COMPLETION_CONTROLLER,
                       CompletionController.Selection.DEFAULT);
@@ -909,8 +909,7 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
         if (localCompletionResult != null) {
             CharSequence commonText = null;
             int anchorOffset = -1;
-outer:      for (Iterator it = localCompletionResult.getResultSets().iterator(); it.hasNext();) {
-                CompletionResultSetImpl resultSet = (CompletionResultSetImpl)it.next();
+outer:      for (CompletionResultSetImpl resultSet : localCompletionResult.getResultSets()) {
                 List<? extends CompletionItem> resultItems = resultSet.getItems();
                 if (resultItems.size() > 0) {
                     if (anchorOffset >= -1) {
@@ -919,8 +918,8 @@ outer:      for (Iterator it = localCompletionResult.getResultSets().iterator();
                         else
                             anchorOffset = resultSet.getAnchorOffset();
                     }
-                    for (Iterator itt = resultItems.iterator(); itt.hasNext();) {
-                        CharSequence text = ((CompletionItem)itt.next()).getInsertPrefix();
+                    for (CompletionItem item : resultItems) {
+                        CharSequence text = item.getInsertPrefix();
                         if (text == null) {
                             commonText = null;
                             break outer;

@@ -97,7 +97,7 @@ public class CompletionScrollPane extends JScrollPane {
 
     private CompletionJList view;
     
-    private List dataObj;
+    private List<?> dataObj;
     
     private JLabel topLabel;
     
@@ -122,7 +122,7 @@ public class CompletionScrollPane extends JScrollPane {
         installKeybindings(editorComponent);
     }
     
-    public void setData(List data,
+    public void setData(List<?> data,
                         String title,
                         CompletionController controller,
                         CompletionController.Selection selection) {

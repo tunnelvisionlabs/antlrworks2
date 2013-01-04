@@ -154,7 +154,7 @@ public class CompletionJList extends JList {
 
     public @Override void paint(Graphics g) {
         Object value = (Map)(Toolkit.getDefaultToolkit().getDesktopProperty("awt.font.desktophints")); //NOI18N
-        Map renderingHints = (value instanceof Map) ? (java.util.Map)value : null;
+        Map<?, ?> renderingHints = (value instanceof Map) ? (Map<?, ?>)value : null;
         if (renderingHints != null && g instanceof Graphics2D) {
             Graphics2D g2d = (Graphics2D) g;
             RenderingHints oldHints = g2d.getRenderingHints();
@@ -169,7 +169,7 @@ public class CompletionJList extends JList {
         }
     }
     
-    void setData(List data, @NonNull CompletionController controller) {
+    void setData(List<?> data, @NonNull CompletionController controller) {
         smartIndex = -1;
         this.controller = controller;
         if (data != null) {
@@ -360,9 +360,9 @@ public class CompletionJList extends JList {
 
     private final class Model extends AbstractListModel {
 
-        List data;
+        List<?> data;
 
-        public Model(List data) {
+        public Model(List<?> data) {
             this.data = data;
         }
         
