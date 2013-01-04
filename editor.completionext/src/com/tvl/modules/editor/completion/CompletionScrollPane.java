@@ -214,6 +214,7 @@ public class CompletionScrollPane extends JScrollPane {
         getActionMap().put(actionName, new CompletionPaneAction(action));
     }
 
+    @SuppressWarnings("deprecation")
     private void installKeybindings(JTextComponent component) {
 	// Register Escape key
         registerKeybinding(ACTION_ESCAPE, ESCAPE,

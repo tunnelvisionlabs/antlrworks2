@@ -358,6 +358,7 @@ public class DocumentationScrollPane extends JScrollPane {
         getActionMap().put(actionName, new DocPaneAction(action));
     }
     
+    @SuppressWarnings("deprecation")
     private void installKeybindings(JTextComponent component) {
 	// Register Escape key
         registerKeybinding(ACTION_JAVADOC_ESCAPE, JAVADOC_ESCAPE,
