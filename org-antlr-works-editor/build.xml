@@ -5,4 +5,133 @@
 <project name="org.antlr.works.editor" default="netbeans" basedir=".">
     <description>Builds, tests, and runs the project org.antlr.works.editor.</description>
     <import file="nbproject/build-impl.xml"/>
+
+    <target name="clean" depends="projectized-common.clean">
+        <delete failonerror="true" includeemptydirs="true">
+            <fileset dir="${basedir}" includes="${src.dir}/**/generated/**"/>
+        </delete>
+    </target>
+
+    <target name="antlr-init">
+        <property name="antlr4.jar" value="${basedir}/../org-antlr-v4/release/modules/ext/antlr4.jar"/>
+        <property name="antlr4_runtime.jar" value="${basedir}/../org-antlr-v4-runtime/release/modules/ext/antlr4_runtime.jar"/>
+        <property name="st4.jar" value="${basedir}/../org-stringtemplate-v4/release/modules/ext/st4.jar"/>
+        <property name="antlr3_runtime.jar" value="${basedir}/../org-antlr-runtime/release/modules/ext/antlr3_runtime.jar"/>
+
+        <property name="antlr4.touch" value="${build.dir}/antlr4.touch" />
+    </target>
+
+    <target name="build-init" depends="antlr-init,harness.build-init"/>
+
+    <target name="antlr4-up-to-date" depends="antlr-init">
+        <uptodate targetfile="${antlr4.touch}" property="is.antlr4.uptodate">
+            <!-- TODO: rebuild grammars if we switch to a new build of the tool -->
+            <srcfiles dir="${src.dir}">
+                <include name="**/*.g4"/>
+                <include name="**/*.tokens"/>
+                <exclude name="**/generated/**"/>
+            </srcfiles>
+        </uptodate>
+    </target>
+
+    <target name="all-up-to-date" depends="antlr4-up-to-date,up-to-date">
+        <condition property="is.all.uptodate">
+            <and>
+                <istrue value="${is.jar.uptodate}"/>
+                <istrue value="${is.antlr4.uptodate}"/>
+            </and>
+        </condition>
+
+        <scriptdef name="propertyreset" language="javascript"
+                   description="Allows to assign @{property} new value">
+            <attribute name="name"/>
+            <attribute name="value"/>
+            project.setProperty(attributes.get("name"), attributes.get("value"));
+        </scriptdef>
+
+        <propertyreset name="${is.jar.uptodate}" value="${is.all.uptodate}" />
+    </target>
+
+    <target name="compile" depends="antlr4,init,all-up-to-date,projectized-common.compile" />
+
+    <target name="antlr4" depends="antlr-init,antlr4-up-to-date" unless="is.antlr4.uptodate">
+        <mkdir dir="${build.antlr4.dir}" />
+
+        <path id="sources.antlr4">
+            <fileset dir="${src.dir}" includes="**/*.g4"/>
+        </path>
+        <pathconvert pathsep="${line.separator}  " property="echo.sources.antlr4" refid="sources.antlr4">
+            <map from="${src.dir}" to="src"/>
+        </pathconvert>
+        <echo message="Generating ANTLR 4 grammars:${line.separator}  ${echo.sources.antlr4}"/>
+
+        <parallel threadsperprocessor="1" failonany="true">
+            <java classname="org.antlr.v4.Tool" fork="true" failonerror="true" dir="${src.dir}/org/antlr/works/editor/grammar/experimental">
+                <arg value="-o"/>
+                <arg value="generated"/>
+                <arg value="-package"/>
+                <arg value="org.antlr.works.editor.grammar.experimental"/>
+                <arg value="-visitor"/>
+                <arg value="-Xforce-atn"/>
+                <arg value="*.g4"/>
+                <classpath>
+                    <pathelement location="${antlr4.jar}"/>
+                    <pathelement location="${antlr4_runtime.jar}"/>
+                    <pathelement location="${st4.jar}"/>
+                    <pathelement location="${antlr3_runtime.jar}"/>
+                    <pathelement location="${java.class.path}"/>
+                </classpath>
+            </java>
+
+            <java classname="org.antlr.v4.Tool" fork="true" failonerror="true" dir="${src.dir}/org/antlr/works/editor/grammar/highlighter4">
+                <arg value="-o"/>
+                <arg value="generated"/>
+                <arg value="-package"/>
+                <arg value="org.antlr.works.editor.grammar.highlighter4"/>
+                <arg value="*.g4"/>
+                <classpath>
+                    <pathelement location="${antlr4.jar}"/>
+                    <pathelement location="${antlr4_runtime.jar}"/>
+                    <pathelement location="${st4.jar}"/>
+                    <pathelement location="${antlr3_runtime.jar}"/>
+                    <pathelement location="${java.class.path}"/>
+                </classpath>
+            </java>
+
+            <java classname="org.antlr.v4.Tool" fork="true" failonerror="true" dir="${src.dir}/org/antlr/works/editor/st4/experimental">
+                <arg value="-o"/>
+                <arg value="generated"/>
+                <arg value="-package"/>
+                <arg value="org.antlr.works.editor.st4.experimental"/>
+                <arg value="-visitor"/>
+                <arg value="-Xforce-atn"/>
+                <arg value="*.g4"/>
+                <classpath>
+                    <pathelement location="${antlr4.jar}"/>
+                    <pathelement location="${antlr4_runtime.jar}"/>
+                    <pathelement location="${st4.jar}"/>
+                    <pathelement location="${antlr3_runtime.jar}"/>
+                    <pathelement location="${java.class.path}"/>
+                </classpath>
+            </java>
+
+            <java classname="org.antlr.v4.Tool" fork="true" failonerror="true" dir="${src.dir}/org/antlr/works/editor/st4/highlighter4">
+                <arg value="-o"/>
+                <arg value="generated"/>
+                <arg value="-package"/>
+                <arg value="org.antlr.works.editor.st4.highlighter4"/>
+                <arg value="*.g4"/>
+                <classpath>
+                    <pathelement location="${antlr4.jar}"/>
+                    <pathelement location="${antlr4_runtime.jar}"/>
+                    <pathelement location="${st4.jar}"/>
+                    <pathelement location="${antlr3_runtime.jar}"/>
+                    <pathelement location="${java.class.path}"/>
+                </classpath>
+            </java>
+        </parallel>
+
+        <touch file="${antlr4.touch}" mkdirs="true"/>
+    </target>
+
 </project>
