@@ -6,11 +6,13 @@
     <description>Builds, tests, and runs the project org.antlr.works.editor.</description>
     <import file="nbproject/build-impl.xml"/>
 
-    <target name="clean" depends="projectized-common.clean">
+    <target name="clean-generated-sources">
         <delete failonerror="true" includeemptydirs="true">
             <fileset dir="${basedir}" includes="src/**/generated/**"/>
         </delete>
     </target>
+
+    <target name="clean" depends="projectized-common.clean,clean-generated-sources"/>
 
     <target name="antlr-init">
         <property name="antlr4.jar" value="${basedir}/../org-antlr-v4/release/modules/ext/antlr4.jar"/>
