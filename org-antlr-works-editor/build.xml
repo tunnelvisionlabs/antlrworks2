@@ -94,7 +94,7 @@
             <fileset dir="${src.dir}" includes="**/*.g4"/>
         </path>
         <pathconvert pathsep="${line.separator}  " property="echo.sources.antlr4" refid="sources.antlr4">
-            <map from="${src.dir}" to="src"/>
+            <map from="${src.dir}/" to=""/>
         </pathconvert>
         <echo message="Generating ANTLR 4 grammars:${line.separator}  ${echo.sources.antlr4}"/>
 
