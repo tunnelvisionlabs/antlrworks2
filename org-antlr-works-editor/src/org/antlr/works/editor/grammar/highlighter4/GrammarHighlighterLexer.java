@@ -16,6 +16,7 @@ import org.antlr.v4.runtime.atn.LexerATNSimulator;
 import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.tool.Grammar;
 import org.antlr.works.editor.grammar.experimental.GrammarLexer;
+import org.antlr.works.editor.grammar.highlighter4.generated.AbstractGrammarHighlighterLexer;
 
 /**
  *

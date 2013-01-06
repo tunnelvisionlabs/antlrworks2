@@ -13,9 +13,9 @@ import org.antlr.v4.runtime.Dependents;
 import org.antlr.v4.runtime.RuleDependencies;
 import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
-import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.LexerRuleContext;
-import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.ParserRuleSpecContext;
-import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.RuleSpecContext;
+import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.LexerRuleContext;
+import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.ParserRuleSpecContext;
+import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.RuleSpecContext;
 
 /**
  *

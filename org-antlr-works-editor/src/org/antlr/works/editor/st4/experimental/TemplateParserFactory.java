@@ -13,6 +13,7 @@ import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.atn.PredictionMode;
 import org.antlr.works.editor.antlr4.parsing.DescriptiveErrorListener;
+import org.antlr.works.editor.st4.experimental.generated.TemplateParser;
 import org.netbeans.api.annotations.common.NonNull;
 
 /**

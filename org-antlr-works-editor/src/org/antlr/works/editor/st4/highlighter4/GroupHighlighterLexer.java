@@ -26,6 +26,7 @@ import org.antlr.v4.runtime.atn.SetTransition;
 import org.antlr.v4.runtime.atn.Transition;
 import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.misc.IntervalSet;
+import org.antlr.works.editor.st4.highlighter4.generated.AbstractGroupHighlighterLexer;
 
 /**
  *

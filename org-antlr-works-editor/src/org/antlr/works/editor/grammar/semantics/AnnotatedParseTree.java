@@ -17,7 +17,7 @@ import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.v4.runtime.tree.Tree;
-import org.antlr.works.editor.grammar.experimental.GrammarParserBaseListener;
+import org.antlr.works.editor.grammar.experimental.generated.GrammarParserBaseListener;
 import org.netbeans.api.annotations.common.NonNull;
 import org.openide.util.Parameters;
 

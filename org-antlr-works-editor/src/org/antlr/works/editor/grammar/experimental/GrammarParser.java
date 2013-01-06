@@ -14,6 +14,9 @@ import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.tree.TerminalNode;
+import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser;
+import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.OptionValueContext;
+import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.QidContext;
 import org.netbeans.api.annotations.common.NonNull;
 
 /**

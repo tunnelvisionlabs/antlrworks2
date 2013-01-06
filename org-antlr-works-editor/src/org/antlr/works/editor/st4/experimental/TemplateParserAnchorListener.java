@@ -20,6 +20,8 @@ import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.netbeans.editor.text.TrackingPositionRegion;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
+import org.antlr.works.editor.st4.experimental.generated.TemplateParser;
+import org.antlr.works.editor.st4.experimental.generated.TemplateParserBaseListener;
 import org.netbeans.api.annotations.common.NonNull;
 import org.openide.util.Parameters;
 

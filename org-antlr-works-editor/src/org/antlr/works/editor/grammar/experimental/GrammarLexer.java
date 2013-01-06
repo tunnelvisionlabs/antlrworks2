@@ -12,6 +12,7 @@ import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.tool.Grammar;
+import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarLexer;
 
 /**
  *

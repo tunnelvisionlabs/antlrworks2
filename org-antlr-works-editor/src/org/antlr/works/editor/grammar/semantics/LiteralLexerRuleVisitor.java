@@ -13,18 +13,18 @@ import org.antlr.v4.runtime.RuleDependencies;
 import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.RuleNode;
-import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.IdContext;
-import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.LabeledLexerElementContext;
-import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.LexerAltContext;
-import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.LexerAltListContext;
-import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.LexerAtomContext;
-import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.LexerCommandNameContext;
-import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.LexerElementContext;
-import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.LexerElementsContext;
-import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.LexerRuleContext;
-import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.TerminalContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser;
-import org.antlr.works.editor.grammar.experimental.GrammarParserBaseVisitor;
+import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.IdContext;
+import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.LabeledLexerElementContext;
+import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.LexerAltContext;
+import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.LexerAltListContext;
+import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.LexerAtomContext;
+import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.LexerCommandNameContext;
+import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.LexerElementContext;
+import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.LexerElementsContext;
+import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.LexerRuleContext;
+import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.TerminalContext;
+import org.antlr.works.editor.grammar.experimental.generated.GrammarParserBaseVisitor;
 
 /**
  * Literal lexer rules are non-fragment rules that contain a single string

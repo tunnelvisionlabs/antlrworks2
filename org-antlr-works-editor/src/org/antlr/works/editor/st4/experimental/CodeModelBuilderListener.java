@@ -12,6 +12,7 @@ import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenStream;
 import org.antlr.works.editor.st4.codemodel.FileModel;
+import org.antlr.works.editor.st4.experimental.generated.TemplateParserBaseListener;
 
 /**
  *

@@ -26,7 +26,7 @@ import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
 import org.antlr.v4.runtime.Token;
 import org.antlr.works.editor.grammar.codemodel.FileModel;
-import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.GrammarSpecContext;
+import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.GrammarSpecContext;
 import org.antlr.works.editor.grammar.experimental.CurrentRuleContextData;
 import org.antlr.works.editor.grammar.parser.CompiledModel;
 import org.antlr.works.editor.grammar.semantics.GrammarAnnotatedParseTree;

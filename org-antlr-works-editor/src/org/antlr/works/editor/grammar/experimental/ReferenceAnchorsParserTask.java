@@ -51,7 +51,7 @@ import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
 import org.antlr.works.editor.grammar.codemodel.FileModel;
 import org.antlr.works.editor.grammar.codemodel.impl.CodeModelCacheImpl;
 import org.antlr.works.editor.grammar.codemodel.impl.FileModelImpl;
-import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.GrammarSpecContext;
+import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.GrammarSpecContext;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 
 /**

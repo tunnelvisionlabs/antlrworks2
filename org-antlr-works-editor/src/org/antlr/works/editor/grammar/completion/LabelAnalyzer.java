@@ -18,15 +18,15 @@ import org.antlr.v4.runtime.RuleDependencies;
 import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
 import org.antlr.works.editor.grammar.experimental.GrammarParser;
-import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.ActionBlockContext;
-import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.ArgActionBlockContext;
-import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.LabeledAltContext;
-import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.LabeledElementContext;
-import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.LexerRuleContext;
-import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.ParserRuleSpecContext;
-import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.RulerefContext;
-import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.TerminalContext;
-import org.antlr.works.editor.grammar.experimental.GrammarParserBaseListener;
+import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.ActionBlockContext;
+import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.ArgActionBlockContext;
+import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.LabeledAltContext;
+import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.LabeledElementContext;
+import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.LexerRuleContext;
+import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.ParserRuleSpecContext;
+import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.RulerefContext;
+import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.TerminalContext;
+import org.antlr.works.editor.grammar.experimental.generated.GrammarParserBaseListener;
 
 /**
  *

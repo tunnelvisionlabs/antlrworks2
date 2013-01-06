@@ -46,7 +46,7 @@ import org.antlr.works.editor.grammar.GrammarEditorKit;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
 import org.antlr.works.editor.grammar.codemodel.FileModel;
 import org.antlr.works.editor.grammar.experimental.CurrentRuleContextData;
-import org.antlr.works.editor.grammar.experimental.GrammarParserBaseListener;
+import org.antlr.works.editor.grammar.experimental.generated.GrammarParserBaseListener;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.editor.mimelookup.MimeLookup;
 import org.netbeans.api.editor.mimelookup.MimePath;

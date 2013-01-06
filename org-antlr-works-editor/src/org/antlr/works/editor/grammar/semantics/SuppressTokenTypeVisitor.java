@@ -13,11 +13,11 @@ import org.antlr.v4.runtime.RuleDependencies;
 import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.RuleNode;
-import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.IdContext;
-import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.LexerCommandNameContext;
-import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.LexerRuleContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser;
-import org.antlr.works.editor.grammar.experimental.GrammarParserBaseVisitor;
+import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.IdContext;
+import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.LexerCommandNameContext;
+import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.LexerRuleContext;
+import org.antlr.works.editor.grammar.experimental.generated.GrammarParserBaseVisitor;
 
 /**
  * Token types are suppressed for fragment rules and for rules containing

@@ -50,6 +50,7 @@ import org.antlr.works.editor.antlr4.parsing.DescriptiveErrorListener;
 import org.antlr.works.editor.st4.StringTemplateEditorKit;
 import org.antlr.works.editor.st4.TemplateParserDataDefinitions;
 import org.antlr.works.editor.st4.codemodel.FileModel;
+import org.antlr.works.editor.st4.experimental.generated.TemplateParser;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 
 /**

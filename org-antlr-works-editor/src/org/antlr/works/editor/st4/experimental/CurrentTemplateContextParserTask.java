@@ -42,6 +42,7 @@ import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.antlr.works.editor.antlr4.classification.DocumentSnapshotCharStream;
 import org.antlr.works.editor.st4.StringTemplateEditorKit;
 import org.antlr.works.editor.st4.TemplateParserDataDefinitions;
+import org.antlr.works.editor.st4.experimental.generated.TemplateParser;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 
 /**

@@ -69,7 +69,7 @@
                 <arg value="-o"/>
                 <arg value="generated"/>
                 <arg value="-package"/>
-                <arg value="${package}"/>
+                <arg value="${package}.generated"/>
                 <args/>
                 <arg value="*.g4"/>
                 <classpath>

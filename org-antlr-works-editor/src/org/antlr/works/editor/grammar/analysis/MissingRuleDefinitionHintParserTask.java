@@ -37,7 +37,7 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.works.editor.grammar.GrammarEditorKit;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
-import org.antlr.works.editor.grammar.experimental.GrammarParserBaseListener;
+import org.antlr.works.editor.grammar.experimental.generated.GrammarParserBaseListener;
 import org.antlr.works.editor.grammar.parser.CompiledModel;
 import org.antlr.works.editor.grammar.semantics.GrammarAnnotatedParseTree;
 import org.antlr.works.editor.grammar.semantics.GrammarTreeProperties;

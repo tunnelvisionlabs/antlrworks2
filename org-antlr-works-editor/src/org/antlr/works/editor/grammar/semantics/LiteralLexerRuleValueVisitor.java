@@ -13,9 +13,9 @@ import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.RuleNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
-import org.antlr.works.editor.grammar.experimental.AbstractGrammarParser.TerminalContext;
 import org.antlr.works.editor.grammar.experimental.GrammarParser;
-import org.antlr.works.editor.grammar.experimental.GrammarParserBaseVisitor;
+import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.TerminalContext;
+import org.antlr.works.editor.grammar.experimental.generated.GrammarParserBaseVisitor;
 
 /**
  *
