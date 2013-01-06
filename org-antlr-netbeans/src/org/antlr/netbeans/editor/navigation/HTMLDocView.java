@@ -16,7 +16,6 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import javax.swing.JEditorPane;
 import javax.swing.SwingUtilities;
 import javax.swing.text.BadLocationException;

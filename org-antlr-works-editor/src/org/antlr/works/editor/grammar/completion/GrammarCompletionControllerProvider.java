@@ -8,13 +8,13 @@
  */
 package org.antlr.works.editor.grammar.completion;
 
+import com.tvl.spi.editor.completion.CompletionController;
+import com.tvl.spi.editor.completion.CompletionControllerProvider;
+import com.tvl.spi.editor.completion.CompletionTask;
 import java.util.List;
 import javax.swing.text.JTextComponent;
 import org.antlr.works.editor.grammar.GrammarEditorKit;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
-import com.tvl.spi.editor.completion.CompletionController;
-import com.tvl.spi.editor.completion.CompletionControllerProvider;
-import com.tvl.spi.editor.completion.CompletionTask;
 
 /**
  *

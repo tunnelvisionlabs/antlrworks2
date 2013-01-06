@@ -8,6 +8,7 @@
  */
 package org.antlr.works.editor.grammar.completion;
 
+import com.tvl.spi.editor.completion.CompletionProvider;
 import java.util.ArrayDeque;
 import java.util.Collection;
 import java.util.EnumSet;
@@ -38,7 +39,6 @@ import org.antlr.works.editor.grammar.codemodel.TokenData;
 import org.antlr.works.editor.grammar.experimental.GrammarLexer;
 import org.antlr.works.editor.grammar.navigation.GrammarNode.GrammarNodeDescription;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
-import com.tvl.spi.editor.completion.CompletionProvider;
 import org.openide.util.NbBundle;
 
 /**

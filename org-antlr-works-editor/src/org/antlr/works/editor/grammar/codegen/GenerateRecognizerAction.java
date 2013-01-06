@@ -17,12 +17,12 @@ import org.antlr.works.editor.grammar.GrammarDataObject;
 import org.netbeans.api.queries.FileEncodingQuery;
 import org.openide.DialogDisplayer;
 import org.openide.WizardDescriptor;
-import org.openide.loaders.DataObject;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.awt.ActionRegistration;
 import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileUtil;
+import org.openide.loaders.DataObject;
 import org.openide.util.NbBundle.Messages;
 
 @ActionID(

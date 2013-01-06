@@ -8,6 +8,9 @@
  */
 package org.antlr.works.editor.antlr4.completion;
 
+import com.tvl.spi.editor.completion.CompletionProvider;
+import com.tvl.spi.editor.completion.CompletionTask;
+import com.tvl.spi.editor.completion.support.AsyncCompletionTask;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -19,9 +22,6 @@ import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
 import org.antlr.v4.runtime.Token;
 import org.netbeans.editor.Utilities;
-import com.tvl.spi.editor.completion.CompletionProvider;
-import com.tvl.spi.editor.completion.CompletionTask;
-import com.tvl.spi.editor.completion.support.AsyncCompletionTask;
 import org.openide.util.NbBundle;
 
 /**

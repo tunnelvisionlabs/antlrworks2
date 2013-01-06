@@ -8,12 +8,12 @@
  */
 package org.antlr.works.editor.antlr4.completion;
 
+import com.tvl.spi.editor.completion.CompletionItem;
 import java.text.Collator;
 import java.util.Locale;
 import java.util.regex.Pattern;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;
-import com.tvl.spi.editor.completion.CompletionItem;
 import org.openide.util.Parameters;
 
 /**

@@ -8,6 +8,12 @@
  */
 package org.antlr.works.editor.antlr4.completion;
 
+import com.tvl.spi.editor.completion.CompletionController;
+import com.tvl.spi.editor.completion.CompletionItem;
+import com.tvl.spi.editor.completion.CompletionResultSet;
+import com.tvl.spi.editor.completion.CompletionTask;
+import com.tvl.spi.editor.completion.support.AsyncCompletionQuery;
+import com.tvl.spi.editor.completion.support.AsyncCompletionTask;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -31,12 +37,6 @@ import org.netbeans.api.annotations.common.CheckForNull;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.editor.BaseDocument;
 import org.netbeans.editor.Utilities;
-import com.tvl.spi.editor.completion.CompletionController;
-import com.tvl.spi.editor.completion.CompletionItem;
-import com.tvl.spi.editor.completion.CompletionResultSet;
-import com.tvl.spi.editor.completion.CompletionTask;
-import com.tvl.spi.editor.completion.support.AsyncCompletionQuery;
-import com.tvl.spi.editor.completion.support.AsyncCompletionTask;
 import org.openide.util.Parameters;
 
 /**

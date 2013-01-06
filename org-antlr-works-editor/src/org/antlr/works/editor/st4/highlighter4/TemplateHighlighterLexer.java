@@ -8,7 +8,6 @@
  */
 package org.antlr.works.editor.st4.highlighter4;
 
-import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.Map;
 import org.antlr.v4.runtime.CharStream;

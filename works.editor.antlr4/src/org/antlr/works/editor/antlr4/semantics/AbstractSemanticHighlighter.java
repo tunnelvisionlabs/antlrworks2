@@ -8,8 +8,6 @@
  */
 package org.antlr.works.editor.antlr4.semantics;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.lang.ref.WeakReference;
 import java.util.Collection;
 import java.util.Collections;
@@ -40,7 +38,6 @@ import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Tuple;
 import org.antlr.v4.runtime.misc.Tuple2;
 import org.netbeans.api.annotations.common.NonNull;
-import org.netbeans.api.editor.EditorRegistry;
 import org.netbeans.api.editor.settings.FontColorSettings;
 import org.netbeans.spi.editor.highlighting.HighlightsChangeEvent;
 import org.netbeans.spi.editor.highlighting.HighlightsChangeListener;
@@ -52,7 +49,6 @@ import org.netbeans.spi.editor.highlighting.support.AbstractHighlightsContainer;
 import org.netbeans.spi.editor.highlighting.support.OffsetsBag;
 import org.openide.util.Lookup;
 import org.openide.util.Parameters;
-import org.openide.util.WeakListeners;
 import org.openide.util.WeakSet;
 
 /**

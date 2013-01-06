@@ -8,12 +8,12 @@
  */
 package org.antlr.works.editor.antlr4.completion;
 
+import com.tvl.spi.editor.completion.CompletionItem;
+import com.tvl.spi.editor.completion.CompletionItemComparator;
 import java.text.Collator;
 import java.util.Comparator;
 import java.util.Locale;
 import org.netbeans.api.annotations.common.NonNull;
-import com.tvl.spi.editor.completion.CompletionItem;
-import com.tvl.spi.editor.completion.CompletionItemComparator;
 
 /**
  *

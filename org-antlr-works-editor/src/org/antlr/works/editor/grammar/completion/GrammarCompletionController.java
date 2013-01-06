@@ -8,6 +8,9 @@
  */
 package org.antlr.works.editor.grammar.completion;
 
+import com.tvl.spi.editor.completion.CompletionItem;
+import com.tvl.spi.editor.completion.CompletionProvider;
+import com.tvl.spi.editor.completion.CompletionTask;
 import java.awt.event.KeyEvent;
 import java.util.Collection;
 import java.util.List;
@@ -15,9 +18,6 @@ import javax.swing.text.JTextComponent;
 import org.antlr.works.editor.antlr4.completion.BaseCompletionController;
 import org.netbeans.api.editor.mimelookup.MimeLookup;
 import org.netbeans.lib.editor.util.swing.DocumentUtilities;
-import com.tvl.spi.editor.completion.CompletionItem;
-import com.tvl.spi.editor.completion.CompletionProvider;
-import com.tvl.spi.editor.completion.CompletionTask;
 import org.openide.util.Lookup;
 
 /**

@@ -10,7 +10,6 @@ package org.antlr.works.editor.antlr4.classification;
 
 import org.antlr.netbeans.editor.highlighting.LineStateInfo;
 import org.antlr.v4.runtime.Lexer;
-import org.antlr.v4.runtime.misc.IntegerList;
 import org.antlr.v4.runtime.misc.IntegerStack;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;

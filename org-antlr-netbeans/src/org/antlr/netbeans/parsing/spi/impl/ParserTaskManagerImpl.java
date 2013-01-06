@@ -49,7 +49,6 @@ import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.editor.mimelookup.MimeLookup;
 import org.netbeans.lib.editor.util.ListenerList;
 import org.openide.filesystems.FileObject;
-import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
 import org.openide.util.Parameters;
 import org.openide.util.lookup.ServiceProvider;
