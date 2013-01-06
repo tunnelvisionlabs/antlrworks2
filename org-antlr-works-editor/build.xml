@@ -8,7 +8,7 @@
 
     <target name="clean" depends="projectized-common.clean">
         <delete failonerror="true" includeemptydirs="true">
-            <fileset dir="${basedir}" includes="${src.dir}/**/generated/**"/>
+            <fileset dir="${basedir}" includes="src/**/generated/**"/>
         </delete>
     </target>
 
