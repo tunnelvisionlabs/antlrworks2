@@ -20,6 +20,13 @@
         <property name="st4.jar" value="${basedir}/../org-stringtemplate-v4/release/modules/ext/st4.jar"/>
         <property name="antlr3_runtime.jar" value="${basedir}/../org-antlr-runtime/release/modules/ext/antlr3_runtime.jar"/>
 
+        <path id="cp.antlr4">
+            <pathelement location="${antlr4.jar}"/>
+            <pathelement location="${antlr4_runtime.jar}"/>
+            <pathelement location="${st4.jar}"/>
+            <pathelement location="${antlr3_runtime.jar}"/>
+        </path>
+
         <property name="antlr4.touch" value="${build.dir}/antlr4.touch" />
     </target>
 
@@ -73,10 +80,7 @@
                 <args/>
                 <arg value="*.g4"/>
                 <classpath>
-                    <pathelement location="${antlr4.jar}"/>
-                    <pathelement location="${antlr4_runtime.jar}"/>
-                    <pathelement location="${st4.jar}"/>
-                    <pathelement location="${antlr3_runtime.jar}"/>
+                    <path refid="cp.antlr4"/>
                     <pathelement location="${java.class.path}"/>
                 </classpath>
             </java>
