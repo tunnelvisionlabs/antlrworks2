@@ -56,6 +56,33 @@
 
     <target name="compile" depends="init,up-to-date,antlr4,projectized-common.compile" unless="is.jar.uptodate" />
 
+    <macrodef name="antlr4">
+        <attribute name="srcpath"/>
+        <element name="args" optional="true"/>
+        <sequential>
+            <local name="package"/>
+            <pathconvert property="package" dirsep=".">
+                <path location="${src.dir}/@{srcpath}"/>
+                <map from="${src.dir}/" to=""/>
+            </pathconvert>
+            <java classname="org.antlr.v4.Tool" fork="true" failonerror="true" dir="${src.dir}/@{srcpath}">
+                <arg value="-o"/>
+                <arg value="generated"/>
+                <arg value="-package"/>
+                <arg value="${package}"/>
+                <args/>
+                <arg value="*.g4"/>
+                <classpath>
+                    <pathelement location="${antlr4.jar}"/>
+                    <pathelement location="${antlr4_runtime.jar}"/>
+                    <pathelement location="${st4.jar}"/>
+                    <pathelement location="${antlr3_runtime.jar}"/>
+                    <pathelement location="${java.class.path}"/>
+                </classpath>
+            </java>
+        </sequential>
+    </macrodef>
+
     <target name="antlr4" depends="antlr-init,antlr4-up-to-date" unless="is.antlr4.uptodate">
         <mkdir dir="${build.antlr4.dir}" />
 
@@ -68,69 +95,23 @@
         <echo message="Generating ANTLR 4 grammars:${line.separator}  ${echo.sources.antlr4}"/>
 
         <parallel threadsperprocessor="1" failonany="true">
-            <java classname="org.antlr.v4.Tool" fork="true" failonerror="true" dir="${src.dir}/org/antlr/works/editor/grammar/experimental">
-                <arg value="-o"/>
-                <arg value="generated"/>
-                <arg value="-package"/>
-                <arg value="org.antlr.works.editor.grammar.experimental"/>
-                <arg value="-visitor"/>
-                <arg value="-Xforce-atn"/>
-                <arg value="*.g4"/>
-                <classpath>
-                    <pathelement location="${antlr4.jar}"/>
-                    <pathelement location="${antlr4_runtime.jar}"/>
-                    <pathelement location="${st4.jar}"/>
-                    <pathelement location="${antlr3_runtime.jar}"/>
-                    <pathelement location="${java.class.path}"/>
-                </classpath>
-            </java>
+            <antlr4 srcpath="org/antlr/works/editor/grammar/experimental">
+                <args>
+                    <arg value="-visitor"/>
+                    <arg value="-Xforce-atn"/>
+                </args>
+            </antlr4>
 
-            <java classname="org.antlr.v4.Tool" fork="true" failonerror="true" dir="${src.dir}/org/antlr/works/editor/grammar/highlighter4">
-                <arg value="-o"/>
-                <arg value="generated"/>
-                <arg value="-package"/>
-                <arg value="org.antlr.works.editor.grammar.highlighter4"/>
-                <arg value="*.g4"/>
-                <classpath>
-                    <pathelement location="${antlr4.jar}"/>
-                    <pathelement location="${antlr4_runtime.jar}"/>
-                    <pathelement location="${st4.jar}"/>
-                    <pathelement location="${antlr3_runtime.jar}"/>
-                    <pathelement location="${java.class.path}"/>
-                </classpath>
-            </java>
+            <antlr4 srcpath="org/antlr/works/editor/grammar/highlighter4"/>
 
-            <java classname="org.antlr.v4.Tool" fork="true" failonerror="true" dir="${src.dir}/org/antlr/works/editor/st4/experimental">
-                <arg value="-o"/>
-                <arg value="generated"/>
-                <arg value="-package"/>
-                <arg value="org.antlr.works.editor.st4.experimental"/>
-                <arg value="-visitor"/>
-                <arg value="-Xforce-atn"/>
-                <arg value="*.g4"/>
-                <classpath>
-                    <pathelement location="${antlr4.jar}"/>
-                    <pathelement location="${antlr4_runtime.jar}"/>
-                    <pathelement location="${st4.jar}"/>
-                    <pathelement location="${antlr3_runtime.jar}"/>
-                    <pathelement location="${java.class.path}"/>
-                </classpath>
-            </java>
+            <antlr4 srcpath="org/antlr/works/editor/st4/experimental">
+                <args>
+                    <arg value="-visitor"/>
+                    <arg value="-Xforce-atn"/>
+                </args>
+            </antlr4>
 
-            <java classname="org.antlr.v4.Tool" fork="true" failonerror="true" dir="${src.dir}/org/antlr/works/editor/st4/highlighter4">
-                <arg value="-o"/>
-                <arg value="generated"/>
-                <arg value="-package"/>
-                <arg value="org.antlr.works.editor.st4.highlighter4"/>
-                <arg value="*.g4"/>
-                <classpath>
-                    <pathelement location="${antlr4.jar}"/>
-                    <pathelement location="${antlr4_runtime.jar}"/>
-                    <pathelement location="${st4.jar}"/>
-                    <pathelement location="${antlr3_runtime.jar}"/>
-                    <pathelement location="${java.class.path}"/>
-                </classpath>
-            </java>
+            <antlr4 srcpath="org/antlr/works/editor/st4/highlighter4"/>
         </parallel>
 
         <touch file="${antlr4.touch}" mkdirs="true"/>
