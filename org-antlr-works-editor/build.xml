@@ -36,7 +36,7 @@
         </uptodate>
     </target>
 
-    <target name="all-up-to-date" depends="antlr4-up-to-date,up-to-date">
+    <target name="up-to-date" depends="antlr4-up-to-date,projectized-common.up-to-date">
         <condition property="is.all.uptodate">
             <and>
                 <istrue value="${is.jar.uptodate}"/>
@@ -54,7 +54,7 @@
         <propertyreset name="${is.jar.uptodate}" value="${is.all.uptodate}" />
     </target>
 
-    <target name="compile" depends="antlr4,init,all-up-to-date,projectized-common.compile" />
+    <target name="compile" depends="init,up-to-date,antlr4,projectized-common.compile" unless="is.jar.uptodate" />
 
     <target name="antlr4" depends="antlr-init,antlr4-up-to-date" unless="is.antlr4.uptodate">
         <mkdir dir="${build.antlr4.dir}" />
