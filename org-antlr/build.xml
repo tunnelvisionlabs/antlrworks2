@@ -5,4 +5,26 @@
 <project name="org.antlr" default="netbeans" basedir=".">
     <description>Builds, tests, and runs the project org.antlr.</description>
     <import file="nbproject/build-impl.xml"/>
+
+    <target name="init-artifact">
+        <property name="artifact.name" value="antlr3"/>
+        <property name="artifact.commit" value="3.5"/>
+    </target>
+
+    <target name="download-artifact" depends="init-artifact,harness.build-init">
+        <property name="modules.ext.dir" value="release/modules/ext"/>
+        <property name="modules.cache.dir" value="lib/cache"/>
+        <property name="artifact.intermediatefile" value="${modules.cache.dir}/${artifact.name}-${artifact.commit}.jar"/>
+        <property name="artifact.file" value="${modules.ext.dir}/${artifact.name}.jar"/>
+
+        <mkdir dir="${modules.ext.dir}"/>
+        <mkdir dir="${modules.cache.dir}"/>
+        <get src="http://tunnelvisionlabs.com/downloads/antlr/build/${artifact.name}-${artifact.commit}.jar"
+             dest="${artifact.intermediatefile}"
+             skipexisting="true"/>
+        <copy file="${artifact.intermediatefile}" tofile="${artifact.file}"/>
+    </target>
+
+    <target name="build-init" depends="harness.build-init,download-artifact"/>
+
 </project>

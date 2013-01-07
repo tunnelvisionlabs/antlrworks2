@@ -6,13 +6,33 @@
     <description>Builds, tests, and runs the project org.antlr.works.editor.</description>
     <import file="nbproject/build-impl.xml"/>
 
+    <target name="init-complete-artifact">
+        <property name="artifact.name" value="antlr4-complete"/>
+        <property name="artifact.commit" value="8d13e3c47ea4d90ba3c541b14ce9b51ee420f544"/>
+        <property name="grammar.resources.dir" value="src/org/antlr/works/editor/grammar/resources"/>
+        <property name="modules.cache.dir" value="lib/cache"/>
+        <property name="artifact.intermediatefile" value="${modules.cache.dir}/${artifact.name}-${artifact.commit}.jar"/>
+        <property name="complete-artifact.file" value="${grammar.resources.dir}/${artifact.name}.jar"/>
+    </target>
+
+    <target name="download-complete-artifact" depends="init-complete-artifact,harness.build-init">
+        <mkdir dir="${grammar.resources.dir}"/>
+        <mkdir dir="${modules.cache.dir}"/>
+        <get src="http://tunnelvisionlabs.com/downloads/antlr/build/${artifact.name}-${artifact.commit}.jar"
+             dest="${artifact.intermediatefile}"
+             skipexisting="true"/>
+        <copy file="${artifact.intermediatefile}" tofile="${complete-artifact.file}"/>
+    </target>
+
     <target name="clean-generated-sources">
         <delete failonerror="true" includeemptydirs="true">
             <fileset dir="${basedir}" includes="src/**/generated/**"/>
         </delete>
     </target>
 
-    <target name="clean" depends="projectized-common.clean,clean-generated-sources"/>
+    <target name="clean" depends="init-complete-artifact,projectized-common.clean,clean-generated-sources">
+        <delete file="${complete-artifact.file}"/>
+    </target>
 
     <target name="antlr-init">
         <property name="antlr4.jar" value="${basedir}/../org-antlr-v4/release/modules/ext/antlr4.jar"/>
@@ -30,7 +50,7 @@
         <property name="antlr4.touch" value="${build.dir}/antlr4.touch" />
     </target>
 
-    <target name="build-init" depends="antlr-init,harness.build-init"/>
+    <target name="build-init" depends="antlr-init,harness.build-init,download-complete-artifact"/>
 
     <target name="antlr4-up-to-date" depends="antlr-init">
         <uptodate targetfile="${antlr4.touch}" property="is.antlr4.uptodate">
