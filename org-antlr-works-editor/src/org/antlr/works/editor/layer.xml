@@ -384,18 +384,6 @@
             </folder>
         </folder>
     </folder>
-    <folder name="Templates">
-        <folder name="Other">
-            <file name="GrammarTemplate.g" url="grammar/GrammarTemplate.g">
-                <attr name="displayName" bundlevalue="org.antlr.works.editor.Bundle#Templates/Other/GrammarTemplate.g"/>
-                <attr name="template" boolvalue="true"/>
-            </file>
-            <file name="StringTemplateFileTypeTemplate.stg" url="st4/StringTemplateFileTypeTemplate.stg">
-                <attr name="displayName" bundlevalue="org.antlr.works.editor.Bundle#Templates/Other/StringTemplateFileTypeTemplate.stg"/>
-                <attr name="template" boolvalue="true"/>
-            </file>
-        </folder>
-    </folder>
     <folder name="Windows2">
         <folder name="Modes">
             <folder name="navigator">
