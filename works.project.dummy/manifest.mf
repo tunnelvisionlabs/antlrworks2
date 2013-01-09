@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+AutoUpdate-Show-In-Client: false
+OpenIDE-Module: com.tvl.antlrworks.project
+OpenIDE-Module-Localizing-Bundle: com/tvl/antlrworks/project/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0
+OpenIDE-Module-Needs: javax.script.ScriptEngine.freemarker
