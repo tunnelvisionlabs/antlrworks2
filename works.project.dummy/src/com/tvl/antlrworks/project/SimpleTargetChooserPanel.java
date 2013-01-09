@@ -45,8 +45,7 @@
 package com.tvl.antlrworks.project;
 
 import java.awt.Component;
-import java.io.IOException;
-import javax.swing.JPanel;
+import java.io.File;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import org.netbeans.spi.project.ui.templates.support.Templates;
@@ -56,9 +55,6 @@ import org.openide.filesystems.FileUtil;
 import org.openide.util.ChangeSupport;
 import org.openide.util.HelpCtx;
 import org.openide.util.NbBundle.Messages;
-
-import static com.tvl.antlrworks.project.Bundle.*;
-import java.io.File;
 import org.openide.util.NbPreferences;
 
 /**
@@ -70,17 +66,12 @@ final class SimpleTargetChooserPanel implements WizardDescriptor.Panel<WizardDes
     private final ChangeSupport changeSupport = new ChangeSupport(this);
     private SimpleTargetChooserPanelGUI gui;
 
-    private WizardDescriptor.Panel<WizardDescriptor> bottomPanel;
     private WizardDescriptor wizard;
     private boolean isFolder;
     private boolean freeFileExtension;
     
     @SuppressWarnings("LeakingThisInConstructor")
-    SimpleTargetChooserPanel(WizardDescriptor.Panel<WizardDescriptor> bottomPanel, boolean isFolder, boolean freeFileExtension) {
-        this.bottomPanel = bottomPanel;
-        if ( bottomPanel != null ) {
-            bottomPanel.addChangeListener( this );
-        }
+    SimpleTargetChooserPanel(boolean isFolder, boolean freeFileExtension) {
         this.isFolder = isFolder;
         this.freeFileExtension = freeFileExtension;
         this.gui = null;
@@ -88,28 +79,19 @@ final class SimpleTargetChooserPanel implements WizardDescriptor.Panel<WizardDes
 
     public @Override Component getComponent() {
         if (gui == null) {
-            gui = new SimpleTargetChooserPanelGUI(bottomPanel == null ? null : bottomPanel.getComponent(), isFolder, freeFileExtension);
+            gui = new SimpleTargetChooserPanelGUI(isFolder, freeFileExtension);
             gui.addChangeListener(this);
         }
         return gui;
     }
 
     public @Override HelpCtx getHelp() {
-        if ( bottomPanel != null ) {
-            HelpCtx bottomHelp = bottomPanel.getHelp();
-            if ( bottomHelp != null ) {
-                return bottomHelp;
-            }
-        }
-        
         //XXX
         return null;
-        
     }
 
     public @Override boolean isValid() {
-        boolean ok = ( gui != null && gui.getTargetName() != null && gui.getTargetFolder() != null &&
-               ( bottomPanel == null || bottomPanel.isValid() ) );
+        boolean ok = ( gui != null && gui.getTargetName() != null && gui.getTargetFolder() != null );
         
         if (!ok) {
             return false;
@@ -156,11 +138,7 @@ final class SimpleTargetChooserPanel implements WizardDescriptor.Panel<WizardDes
             wizard.putProperty ("NewFileWizard_Title", substitute); // NOI18N
         }
         
-        wizard.putProperty(WizardDescriptor.PROP_CONTENT_DATA, new String[] {LBL_TemplatesPanel_Name(), LBL_SimpleTargetChooserPanel_Name()});
-            
-        if ( bottomPanel != null ) {
-            bottomPanel.readSettings( settings );
-        }
+        wizard.putProperty(WizardDescriptor.PROP_CONTENT_DATA, new String[] {Bundle.LBL_TemplatesPanel_Name(), Bundle.LBL_SimpleTargetChooserPanel_Name()});
     }
     
     public @Override void storeSettings(WizardDescriptor settings) {
@@ -168,9 +146,6 @@ final class SimpleTargetChooserPanel implements WizardDescriptor.Panel<WizardDes
             return;
         }
         if(!WizardDescriptor.CANCEL_OPTION.equals(settings.getValue()) && isValid()) {
-            if ( bottomPanel != null ) {
-                bottomPanel.storeSettings( settings );
-            }
             if ( gui == null ) {
                 getComponent();
             }

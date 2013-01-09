@@ -91,7 +91,7 @@ public final class NewFileWizard extends TemplateWizard {
 
     @Override
     protected WizardDescriptor.Panel<WizardDescriptor> createTargetChooser() {
-        return Templates.buildSimpleTargetChooser().create();
+        return new SimpleTargetChooserPanel(false, false);
     }
 }
  

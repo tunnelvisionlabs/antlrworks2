@@ -82,14 +82,11 @@ public class SimpleTargetChooserPanelGUI extends javax.swing.JPanel implements A
 
     @SuppressWarnings("LeakingThisInConstructor")
     @Messages("LBL_SimpleTargetChooserPanel_Name=Name and Location")
-    public SimpleTargetChooserPanelGUI( Component bottomPanel, boolean isFolder, boolean freeFileExtension) {
+    public SimpleTargetChooserPanelGUI( boolean isFolder, boolean freeFileExtension) {
         this.isFolder = isFolder;
         this.freeFileExtension = freeFileExtension;
         initComponents();
 
-        if ( bottomPanel != null ) {
-            bottomPanelContainer.add( bottomPanel, java.awt.BorderLayout.CENTER );
-        }
         initValues( null, null, null );
 
         setPreferredSize(PREF_DIM);
@@ -221,7 +218,7 @@ public class SimpleTargetChooserPanelGUI extends javax.swing.JPanel implements A
         jLabel4 = new javax.swing.JLabel();
         fileTextField = new javax.swing.JTextField();
         targetSeparator = new javax.swing.JSeparator();
-        bottomPanelContainer = new javax.swing.JPanel();
+        javax.swing.JPanel bottomPanelContainer = new javax.swing.JPanel();
 
         setLayout(new java.awt.GridBagLayout());
 
@@ -306,7 +303,6 @@ public class SimpleTargetChooserPanelGUI extends javax.swing.JPanel implements A
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel bottomPanelContainer;
     private javax.swing.JButton browseButton;
     private javax.swing.JTextField documentNameTextField;
     private javax.swing.JTextField fileTextField;
