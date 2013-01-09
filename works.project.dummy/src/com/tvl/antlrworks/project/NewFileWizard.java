@@ -43,22 +43,11 @@
  */
 package com.tvl.antlrworks.project;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import javax.swing.JComponent;
-import org.netbeans.api.project.Project;
-import org.netbeans.api.project.ProjectUtils;
-import org.netbeans.api.project.Sources;
-import org.netbeans.modules.project.uiapi.ProjectChooserFactory;
-import org.netbeans.spi.project.ui.templates.support.Templates;
 import org.openide.WizardDescriptor;
-import org.openide.loaders.DataObject;
-import org.openide.loaders.DataObjectNotFoundException;
 
 import org.openide.loaders.TemplateWizard;
-import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
-import org.openide.util.Utilities;
 
 @NbBundle.Messages({
     "# {0} - Title",
@@ -71,59 +60,7 @@ import org.openide.util.Utilities;
 })
 public final class NewFileWizard extends TemplateWizard {
 
-    private Project currP;
-    // private String[] recommendedTypes;
-    private Project getCurrentProject() {
-        return currP;
-    }
-
-    private void setCurrentProject(Project p) {
-        this.currP = p;
-    }
-
-    public NewFileWizard(Project project /*, String recommendedTypes[] */) {
-        setCurrentProject(project);
-        putProperty(ProjectChooserFactory.WIZARD_KEY_PROJECT, getCurrentProject());
-        // this.recommendedTypes = recommendedTypes;        
-        //setTitleFormat( new MessageFormat( "{0}") );
-        addPropertyChangeListener(new PropertyChangeListener() {
-
-            @Override
-            public void propertyChange(PropertyChangeEvent evt) {
-                // check ProjectChooserFactory.WIZARD_KEY_PROJECT property
-                if (ProjectChooserFactory.WIZARD_KEY_PROJECT.equals(evt.getPropertyName())) {
-                    Project newProject = (Project) evt.getNewValue();
-                    if (!Utilities.compareObjects(getCurrentProject(), newProject)) {
-                        // set the new project and force reload panels in wizard
-                        setCurrentProject(newProject);
-                        try {
-                            //reload (DataObject.find (Templates.getTemplate (NewFileWizard.this)));
-                            // bugfix #44481, check if the template is null
-                            if (Templates.getTemplate(NewFileWizard.this) != null) {
-                                DataObject obj = DataObject.find(Templates.getTemplate(NewFileWizard.this));
-
-                                // read the attributes declared in module's layer
-                                Object unknownIterator = obj.getPrimaryFile().getAttribute("instantiatingIterator"); //NOI18N
-                                if (unknownIterator == null) {
-                                    unknownIterator = obj.getPrimaryFile().getAttribute("templateWizardIterator"); //NOI18N
-                                }
-                                // set default NewFileIterator if no attribute is set
-                                if (unknownIterator == null) {
-                                    try {
-                                        obj.getPrimaryFile().setAttribute("instantiatingIterator", NewFileIterator.genericFileIterator()); //NOI18N
-                                    } catch (java.io.IOException e) {
-                                        // can ignore it because a iterator will created though
-                                    }
-                                }
-                                Hacks.reloadPanelsInWizard(NewFileWizard.this, obj);
-                            }
-                        } catch (DataObjectNotFoundException ex) {
-                            Exceptions.printStackTrace(ex);
-                        }
-                    }
-                }
-            }
-        });
+    public NewFileWizard() {
     }
 
     @Override
@@ -145,7 +82,7 @@ public final class NewFileWizard extends TemplateWizard {
 
     @Override
     protected WizardDescriptor.Panel<WizardDescriptor> createTemplateChooser() {
-        WizardDescriptor.Panel<WizardDescriptor> panel = new TemplateChooserPanel(getCurrentProject() /*, recommendedTypes */);
+        WizardDescriptor.Panel<WizardDescriptor> panel = new TemplateChooserPanel();
         JComponent jc = (JComponent) panel.getComponent();
         jc.getAccessibleContext().setAccessibleName(Bundle.ACSN_NewFileWizard()); // NOI18N
         jc.getAccessibleContext().setAccessibleDescription(Bundle.ACSD_NewFileWizard()); // NOI18N
@@ -154,8 +91,7 @@ public final class NewFileWizard extends TemplateWizard {
 
     @Override
     protected WizardDescriptor.Panel<WizardDescriptor> createTargetChooser() {
-        Sources c = ProjectUtils.getSources(getCurrentProject());
-        return Templates.buildSimpleTargetChooser(getCurrentProject(), c.getSourceGroups(Sources.TYPE_GENERIC)).create();
+        return Templates.buildSimpleTargetChooser().create();
     }
 }
  

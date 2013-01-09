@@ -358,7 +358,16 @@ public class ProjectUtilities {
         
         // test whether the selected folder on selected filesystem already exists
         if (targetFolder == null) {
-            return MSG_fs_or_folder_does_not_exist();
+            if (folderName == null || folderName.isEmpty()) {
+                return MSG_fs_or_folder_does_not_exist();
+            }
+
+            targetFolder = FileUtil.toFileObject(new File(folderName));
+            if (targetFolder == null) {
+                return MSG_fs_or_folder_does_not_exist();
+            }
+
+            folderName = "";
         }
         
         // target directory should be writable

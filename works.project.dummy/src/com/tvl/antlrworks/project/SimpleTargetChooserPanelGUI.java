@@ -49,17 +49,9 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.ListCellRenderer;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import org.netbeans.api.project.Project;
-import org.netbeans.api.project.ProjectUtils;
-import org.netbeans.api.project.SourceGroup;
-import org.netbeans.api.project.Sources;
 import org.openide.awt.Mnemonics;
 import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileUtil;
@@ -69,36 +61,32 @@ import org.openide.util.ChangeSupport;
 import org.openide.util.NbBundle.Messages;
 
 import static com.tvl.antlrworks.project.Bundle.*;
+import java.util.prefs.Preferences;
+import javax.swing.JFileChooser;
+import org.openide.filesystems.FileChooserBuilder;
+import org.openide.util.NbPreferences;
 
 /**
  *
  * @author  phrebejk
  */
 public class SimpleTargetChooserPanelGUI extends javax.swing.JPanel implements ActionListener, DocumentListener {
-  
+
     /** preferred dimension of the panels */
     private static final Dimension PREF_DIM = new Dimension(500, 340);
-    
-    private final ListCellRenderer CELL_RENDERER = new GroupCellRenderer();
-        
-    private Project project;
+
     private String expectedExtension;
     private final ChangeSupport changeSupport = new ChangeSupport(this);
-    private SourceGroup[] folders;
     private boolean isFolder;
     private boolean freeFileExtension;
-    
+
     @SuppressWarnings("LeakingThisInConstructor")
     @Messages("LBL_SimpleTargetChooserPanel_Name=Name and Location")
-    public SimpleTargetChooserPanelGUI( Project project, SourceGroup[] folders, Component bottomPanel, boolean isFolder, boolean freeFileExtension) {
-        this.project = project;
-        this.folders = folders.clone();
+    public SimpleTargetChooserPanelGUI( Component bottomPanel, boolean isFolder, boolean freeFileExtension) {
         this.isFolder = isFolder;
         this.freeFileExtension = freeFileExtension;
         initComponents();
-        
-        locationComboBox.setRenderer( CELL_RENDERER );
-        
+
         if ( bottomPanel != null ) {
             bottomPanelContainer.add( bottomPanel, java.awt.BorderLayout.CENTER );
         }
@@ -107,13 +95,12 @@ public class SimpleTargetChooserPanelGUI extends javax.swing.JPanel implements A
         setPreferredSize(PREF_DIM);
 
         browseButton.addActionListener( this );
-        locationComboBox.addActionListener( this );
         documentNameTextField.getDocument().addDocumentListener( this );
         folderTextField.getDocument().addDocumentListener( this );
-        
+
         setName(LBL_SimpleTargetChooserPanel_Name());
     }
-    
+
     @Messages({
         "LBL_SimpleTargetChooserPanelGUI_NewFilePrefix=new",
         "LBL_TargetChooser_FolderName_Label=Folder &Name:",
@@ -125,44 +112,24 @@ public class SimpleTargetChooserPanelGUI extends javax.swing.JPanel implements A
         "# sample folder name", "LBL_folder_name=folder"
     })
     final void initValues(FileObject template, FileObject preselectedFolder, String documentName) {
-        assert project != null;
-        
-        projectTextField.setText(ProjectUtils.getInformation(project).getDisplayName());
-        
-        Sources sources = ProjectUtils.getSources( project );
-
-        if (folders == null) {
-            folders = sources.getSourceGroups( Sources.TYPE_GENERIC );
-        }
-
-        if ( folders.length < 2 ) {
-            // one source group i.e. hide Location
-            locationLabel.setVisible( false );
-            locationComboBox.setVisible( false );
-        }
-        else {
-            // more source groups user needs to select location
-            locationLabel.setVisible( true );
-            locationComboBox.setVisible( true );
-            
-        }
-        
-        locationComboBox.setModel( new DefaultComboBoxModel( folders ) );
-        // Guess the group we want to create the file in
-        SourceGroup preselectedGroup = getPreselectedGroup( folders, preselectedFolder );
-        // Create OS dependent relative name
-        if (preselectedGroup != null) {
-            locationComboBox.setSelectedItem( preselectedGroup );
-            FileObject rootFolder = preselectedGroup.getRootFolder();
-            if (rootFolder == null) {
-                throw new NullPointerException("#173645: null returned illegally from " + preselectedGroup.getClass().getName() + ".getRootFolder()");
+        if (preselectedFolder == null) {
+            Preferences preferences = NbPreferences.forModule(SimpleTargetChooserPanelGUI.class);
+            JFileChooser chooser = new FileChooserBuilder(SimpleTargetChooserPanelGUI.class).setDirectoriesOnly(true).createFileChooser();
+            File rootFolder = chooser.getSelectedFile();
+            if (rootFolder == null || !rootFolder.isDirectory()) {
+                rootFolder = chooser.getCurrentDirectory();
             }
-            folderTextField.setText(getRelativeNativeName(rootFolder, preselectedFolder));
+
+            File lastFolder = new File(preferences.get("directories.newfilenoproject", rootFolder.getPath()));
+            rootFolder = lastFolder.isDirectory() ? lastFolder : rootFolder;
+            preselectedFolder = FileUtil.toFileObject(rootFolder);
         }
+
+        folderTextField.setText(FileUtil.toFile(preselectedFolder).getAbsolutePath());
 
         String ext = template == null ? "" : template.getExt(); // NOI18N
         expectedExtension = ext.length() == 0 ? "" : "." + ext; // NOI18N
-        
+
         String displayName = null;
         try {
             if (template != null) {
@@ -172,7 +139,7 @@ public class SimpleTargetChooserPanelGUI extends javax.swing.JPanel implements A
         } catch (DataObjectNotFoundException ex) {
             displayName = template.getName ();
         }
-        putClientProperty ("NewFileWizard_Title", displayName);// NOI18N        
+        putClientProperty ("NewFileWizard_Title", displayName);// NOI18N
         if (template != null) {
             final String baseName = isFolder ? LBL_folder_name() : LBL_SimpleTargetChooserPanelGUI_NewFilePrefix() + template.getName ();
             if (documentName == null) {
@@ -188,11 +155,11 @@ public class SimpleTargetChooserPanelGUI extends javax.swing.JPanel implements A
                     documentName = baseName + ++index;
                 }
             }
-                
+
             documentNameTextField.setText (documentName);
             documentNameTextField.selectAll ();
         }
-        
+
         if (isFolder) {
             Mnemonics.setLocalizedText(jLabel3, LBL_TargetChooser_FolderName_Label());
             Mnemonics.setLocalizedText(jLabel2, LBL_TargetChooser_ParentFolder_Label());
@@ -203,27 +170,23 @@ public class SimpleTargetChooserPanelGUI extends javax.swing.JPanel implements A
             Mnemonics.setLocalizedText(jLabel4, LBL_TargetChooser_CreatedFile_Label());
         }
     }
-    
-    public SourceGroup getTargetGroup() {
-        return (SourceGroup)locationComboBox.getSelectedItem();
-    }
-        
+
     public String getTargetFolder() {
-        
+
         String folderName = folderTextField.getText().trim();
-        
+
         if ( folderName.length() == 0 ) {
             return null;
         }
-        else {           
+        else {
             return folderName.replace( File.separatorChar, '/' ); // NOI18N
         }
     }
-    
+
     public String getTargetName() {
-        
+
         String text = documentNameTextField.getText().trim();
-        
+
         if ( text.length() == 0 ) {
             return null;
         }
@@ -231,15 +194,15 @@ public class SimpleTargetChooserPanelGUI extends javax.swing.JPanel implements A
             return text;
         }
     }
-    
+
     public void addChangeListener(ChangeListener l) {
         changeSupport.addChangeListener(l);
     }
-    
+
     public void removeChangeListener(ChangeListener l) {
         changeSupport.removeChangeListener(l);
     }
-    
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -252,10 +215,6 @@ public class SimpleTargetChooserPanelGUI extends javax.swing.JPanel implements A
         jPanel1 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         documentNameTextField = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
-        projectTextField = new javax.swing.JTextField();
-        locationLabel = new javax.swing.JLabel();
-        locationComboBox = new javax.swing.JComboBox();
         jLabel2 = new javax.swing.JLabel();
         folderTextField = new javax.swing.JTextField();
         browseButton = new javax.swing.JButton();
@@ -286,36 +245,6 @@ public class SimpleTargetChooserPanelGUI extends javax.swing.JPanel implements A
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 24, 0);
         add(jPanel1, gridBagConstraints);
-
-        jLabel1.setLabelFor(projectTextField);
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(SimpleTargetChooserPanelGUI.class, "LBL_TargetChooser_Project_Label")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 6, 0);
-        add(jLabel1, gridBagConstraints);
-
-        projectTextField.setEditable(false);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 6, 6, 0);
-        add(projectTextField, gridBagConstraints);
-        projectTextField.getAccessibleContext().setAccessibleDescription(org.openide.util.NbBundle.getBundle(SimpleTargetChooserPanelGUI.class).getString("AD_projectTextField")); // NOI18N
-
-        locationLabel.setLabelFor(locationComboBox);
-        org.openide.awt.Mnemonics.setLocalizedText(locationLabel, org.openide.util.NbBundle.getMessage(SimpleTargetChooserPanelGUI.class, "LBL_TargetChooser_Location_Label")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
-        add(locationLabel, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 6, 5, 0);
-        add(locationComboBox, gridBagConstraints);
-        locationComboBox.getAccessibleContext().setAccessibleDescription(org.openide.util.NbBundle.getBundle(SimpleTargetChooserPanelGUI.class).getString("AD_locationComboBox")); // NOI18N
 
         jLabel2.setLabelFor(folderTextField);
         org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(SimpleTargetChooserPanelGUI.class, "LBL_TargetChooser_Folder_Label")); // NOI18N
@@ -374,157 +303,80 @@ public class SimpleTargetChooserPanelGUI extends javax.swing.JPanel implements A
         getAccessibleContext().setAccessibleDescription(org.openide.util.NbBundle.getBundle(SimpleTargetChooserPanelGUI.class).getString("AD_SimpleTargetChooserPanelGUI")); // NOI18N
     }// </editor-fold>//GEN-END:initComponents
 
-    
-    
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel bottomPanelContainer;
     private javax.swing.JButton browseButton;
     private javax.swing.JTextField documentNameTextField;
     private javax.swing.JTextField fileTextField;
     private javax.swing.JTextField folderTextField;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JComboBox locationComboBox;
-    private javax.swing.JLabel locationLabel;
-    private javax.swing.JTextField projectTextField;
     private javax.swing.JSeparator targetSeparator;
     // End of variables declaration//GEN-END:variables
 
-    private SourceGroup getPreselectedGroup( SourceGroup[] groups, FileObject folder ) {        
-        for( int i = 0; folder != null && i < groups.length; i++ ) {
-            if( FileUtil.isParentOf( groups[i].getRootFolder(), folder )
-                || groups[i].getRootFolder().equals(folder)) {
-                return groups[i];
-            }
-        }
-        if (groups.length > 0) {
-            return groups[0];
-        }
-        return null;
-    }
-    
     private String getRelativeNativeName( FileObject root, FileObject folder ) {
         assert root != null;
         String path;
-        
+
         if (folder == null) {
             path = ""; // NOI18N
         }
         else {
-            path = FileUtil.getRelativePath( root, folder );            
+            path = FileUtil.getRelativePath( root, folder );
         }
-        
+
         return path == null ? "" : path.replace( '/', File.separatorChar ); // NOI18N
     }
-    
+
     private void updateCreatedFolder() {
-        
-        SourceGroup sg = (SourceGroup)locationComboBox.getSelectedItem();
-        if (sg == null) {
-            return;
-        }
-        FileObject root = sg.getRootFolder();
-        if (root == null) {
-            return;
-        }
-            
         String folderName = folderTextField.getText().trim();
         String documentName = documentNameTextField.getText().trim();
-        
-        String createdFileName = FileUtil.getFileDisplayName( root ) + 
-            ( folderName.startsWith("/") || folderName.startsWith( File.separator ) ? "" : "/" ) + // NOI18N
-            folderName + 
+
+        String createdFileName = folderName +
             ( folderName.endsWith("/") || folderName.endsWith( File.separator ) || folderName.length() == 0 ? "" : "/" ) + // NOI18N
             documentName + (!freeFileExtension || documentName.indexOf('.') == -1 ? expectedExtension : "");
-            
-        fileTextField.setText( createdFileName.replace( '/', File.separatorChar ) ); // NOI18N    
-            
+
+        fileTextField.setText( createdFileName.replace( '/', File.separatorChar ) ); // NOI18N
         changeSupport.fireChange();
     }
-    
-   
+
+
     // ActionListener implementation -------------------------------------------
-    
+
     public @Override void actionPerformed(ActionEvent e) {
         if ( browseButton == e.getSource() ) {
-            FileObject fo=null;
-            // Show the browse dialog             
-            
-            SourceGroup group = (SourceGroup)locationComboBox.getSelectedItem();
-            if (group == null) { // #161478
-                return;
+            FileChooserBuilder builder = new FileChooserBuilder(SimpleTargetChooserPanelGUI.class)
+                .setDirectoriesOnly(true);
+
+            String targetFolder = getTargetFolder();
+            File existing = targetFolder != null ? new File(targetFolder) : null;
+            if (existing != null && existing.isDirectory()) {
+                builder.setDefaultWorkingDirectory(existing);
+                builder.forceUseOfDefaultWorkingDirectory(true);
             }
-            
-            fo = BrowseFolders.showDialog( new SourceGroup[] { group }, 
-                                           project, 
-                                           folderTextField.getText().replace( File.separatorChar, '/' ) ); // NOI18N
-                        
-            if ( fo != null && fo.isFolder() ) {
-                String relPath = FileUtil.getRelativePath( group.getRootFolder(), fo );
-                folderTextField.setText( relPath.replace( '/', File.separatorChar ) ); // NOI18N
-            }                        
+
+            File targetDirectory = builder.showOpenDialog();
+            if (targetDirectory != null && targetDirectory.isDirectory()) {
+                folderTextField.setText(targetDirectory.getAbsolutePath());
+            }
         }
-        else if ( locationComboBox == e.getSource() )  {
-            updateCreatedFolder();
-        }
-    }    
-    
+    }
+
     // DocumentListener implementation -----------------------------------------
-    
+
     public @Override void changedUpdate(DocumentEvent e) {
         updateCreatedFolder();
-    }    
-    
+    }
+
     public @Override void insertUpdate(DocumentEvent e) {
         updateCreatedFolder();
     }
-    
+
     public @Override void removeUpdate(DocumentEvent e) {
         updateCreatedFolder();
-    }
-    
-    
-    // Rendering of the location combo box -------------------------------------
-    
-    private class GroupCellRenderer extends JLabel implements ListCellRenderer {
-    
-        public GroupCellRenderer() {
-            setOpaque( true );
-        }
-        
-        public @Override Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-            if (value instanceof SourceGroup) {
-                SourceGroup group = (SourceGroup)value;
-                String projectDisplayName = ProjectUtils.getInformation( project ).getDisplayName();
-                String groupDisplayName = group.getDisplayName();
-                if ( projectDisplayName.equals( groupDisplayName ) ) {
-                    setText( groupDisplayName );
-                }
-                else {
-                    setText(FMT_PhysicalView_GroupName(
-                            groupDisplayName, projectDisplayName, group.getRootFolder().getName()));
-                }
-                
-                setIcon( group.getIcon( false ) );
-            } 
-            else {
-                setText( value.toString () );
-                setIcon( null );
-            }
-            if ( isSelected ) {
-                setBackground(list.getSelectionBackground());
-                setForeground(list.getSelectionForeground());             
-            }
-            else {
-                setBackground(list.getBackground());
-                setForeground(list.getForeground());
-             
-            }
-            return this;        
-        }
-                
     }
 }

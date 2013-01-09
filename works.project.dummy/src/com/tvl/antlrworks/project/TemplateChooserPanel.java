@@ -73,13 +73,9 @@ final class TemplateChooserPanel implements WizardDescriptor.Panel<WizardDescrip
     private final ChangeSupport changeSupport = new ChangeSupport(this);
     private TemplateChooserPanelGUI gui;
 
-    private Project project;
-    // private String[] recommendedTypes;
     private WizardDescriptor wizard;
 
-    TemplateChooserPanel( Project p /*, String recommendedTypes[] */ ) {
-        this.project = p;
-        /* this.recommendedTypes = recommendedTypes; */
+    TemplateChooserPanel() {
     }
 
     @Override
@@ -158,8 +154,6 @@ final class TemplateChooserPanel implements WizardDescriptor.Panel<WizardDescrip
         if ( NotifyDescriptor.CANCEL_OPTION != value &&
              NotifyDescriptor.CLOSED_OPTION != value ) {        
             try { 
-
-                project = null;
                 wd.putProperty(ProjectChooserFactory.WIZARD_KEY_PROJECT, null);
                 
                 if (gui.getTemplate () == null) {

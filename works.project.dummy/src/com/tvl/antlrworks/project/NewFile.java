@@ -37,7 +37,7 @@ public final class NewFile implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        final NewFileWizard newFileWizard = new NewFileWizard(null);
+        final NewFileWizard newFileWizard = new NewFileWizard();
         RP.post(new Runnable() {
 
             @Override
@@ -59,6 +59,5 @@ public final class NewFile implements ActionListener {
             }
 
         });
-        // TODO implement action body
     }
 }

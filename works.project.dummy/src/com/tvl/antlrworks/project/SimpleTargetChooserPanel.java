@@ -49,8 +49,6 @@ import java.io.IOException;
 import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import org.netbeans.api.project.Project;
-import org.netbeans.api.project.SourceGroup;
 import org.netbeans.spi.project.ui.templates.support.Templates;
 import org.openide.WizardDescriptor;
 import org.openide.filesystems.FileObject;
@@ -60,6 +58,8 @@ import org.openide.util.HelpCtx;
 import org.openide.util.NbBundle.Messages;
 
 import static com.tvl.antlrworks.project.Bundle.*;
+import java.io.File;
+import org.openide.util.NbPreferences;
 
 /**
  *
@@ -70,18 +70,13 @@ final class SimpleTargetChooserPanel implements WizardDescriptor.Panel<WizardDes
     private final ChangeSupport changeSupport = new ChangeSupport(this);
     private SimpleTargetChooserPanelGUI gui;
 
-    private Project project;
-    private SourceGroup[] folders;
     private WizardDescriptor.Panel<WizardDescriptor> bottomPanel;
     private WizardDescriptor wizard;
     private boolean isFolder;
     private boolean freeFileExtension;
     
     @SuppressWarnings("LeakingThisInConstructor")
-    SimpleTargetChooserPanel(Project project, SourceGroup[] folders,
-            WizardDescriptor.Panel<WizardDescriptor> bottomPanel, boolean isFolder, boolean freeFileExtension) {
-        this.folders = folders;
-        this.project = project;
+    SimpleTargetChooserPanel(WizardDescriptor.Panel<WizardDescriptor> bottomPanel, boolean isFolder, boolean freeFileExtension) {
         this.bottomPanel = bottomPanel;
         if ( bottomPanel != null ) {
             bottomPanel.addChangeListener( this );
@@ -92,18 +87,11 @@ final class SimpleTargetChooserPanel implements WizardDescriptor.Panel<WizardDes
     }
 
     public @Override Component getComponent() {
-        if (noFolders()) {
-            return new JPanel();
-        }
         if (gui == null) {
-            gui = new SimpleTargetChooserPanelGUI(project, folders, bottomPanel == null ? null : bottomPanel.getComponent(), isFolder, freeFileExtension);
+            gui = new SimpleTargetChooserPanelGUI(bottomPanel == null ? null : bottomPanel.getComponent(), isFolder, freeFileExtension);
             gui.addChangeListener(this);
         }
         return gui;
-    }
-
-    private boolean noFolders() { // #202410
-        return folders != null && folders.length == 0;
     }
 
     public @Override HelpCtx getHelp() {
@@ -120,11 +108,7 @@ final class SimpleTargetChooserPanel implements WizardDescriptor.Panel<WizardDes
     }
 
     public @Override boolean isValid() {
-        if (noFolders()) {
-            return false;
-        }
-
-        boolean ok = ( gui != null && gui.getTargetName() != null && gui.getTargetGroup() != null &&
+        boolean ok = ( gui != null && gui.getTargetName() != null && gui.getTargetFolder() != null &&
                ( bottomPanel == null || bottomPanel.isValid() ) );
         
         if (!ok) {
@@ -134,7 +118,7 @@ final class SimpleTargetChooserPanel implements WizardDescriptor.Panel<WizardDes
         // check if the file name can be created
         FileObject template = Templates.getTemplate( wizard );
 
-        String errorMessage = ProjectUtilities.canUseFileName(gui.getTargetGroup().getRootFolder(),
+        String errorMessage = ProjectUtilities.canUseFileName(null,
                 gui.getTargetFolder(), gui.getTargetName(), template.getExt(), isFolder, freeFileExtension);
         wizard.putProperty(WizardDescriptor.PROP_ERROR_MESSAGE, errorMessage);
 
@@ -150,26 +134,16 @@ final class SimpleTargetChooserPanel implements WizardDescriptor.Panel<WizardDes
     }
 
     @Messages({
-        "SimpleTargetChooserPanelGUI_no_source_folders=No source folders in project; perhaps it has been deleted?",
         "LBL_TemplatesPanel_Name=Choose File Type"
     })
     @Override public void readSettings(WizardDescriptor settings) {
         wizard = settings;
-                
-        if (noFolders()) {
-            wizard.putProperty(WizardDescriptor.PROP_ERROR_MESSAGE, SimpleTargetChooserPanelGUI_no_source_folders());
-            return;
-        }
-
         if ( gui == null ) {
             getComponent();
         }
         
         // Try to preselect a folder            
         FileObject preselectedTarget = Templates.getTargetFolder( wizard );
-        if (preselectedTarget == null) {
-            preselectedTarget = project.getProjectDirectory();
-        }
         // Try to preserve the already entered target name
         String targetName = isFolder ? null : Templates.getTargetName( wizard );
         // Init values
@@ -190,10 +164,6 @@ final class SimpleTargetChooserPanel implements WizardDescriptor.Panel<WizardDes
     }
     
     public @Override void storeSettings(WizardDescriptor settings) {
-        if (noFolders()) {
-            return;
-        }
-
         if (WizardDescriptor.PREVIOUS_OPTION.equals(settings.getValue())) {
             return;
         }
@@ -211,6 +181,7 @@ final class SimpleTargetChooserPanel implements WizardDescriptor.Panel<WizardDes
             
             Templates.setTargetFolder(settings, getTargetFolderFromGUI());
             Templates.setTargetName(settings, name);
+            NbPreferences.forModule(SimpleTargetChooserPanelGUI.class).put("directories.newfilenoproject", getTargetFolderFromGUI().getPath());
         }
         settings.putProperty("NewFileWizard_Title", null); // NOI18N
     }
@@ -220,7 +191,6 @@ final class SimpleTargetChooserPanel implements WizardDescriptor.Panel<WizardDes
     }
     
     private FileObject getTargetFolderFromGUI () {
-        FileObject rootFolder = gui.getTargetGroup().getRootFolder();
         String folderName = gui.getTargetFolder();
         String newObject = gui.getTargetName ();
         
@@ -231,21 +201,21 @@ final class SimpleTargetChooserPanel implements WizardDescriptor.Panel<WizardDes
 
         FileObject targetFolder;
         if ( folderName == null ) {
-            targetFolder = rootFolder;
+            throw new IllegalArgumentException();
         }
         else {            
-            targetFolder = rootFolder.getFileObject( folderName );
+            targetFolder = FileUtil.toFileObject( new File(folderName) );
         }
 
-        if ( targetFolder == null ) {
-            // XXX add deletion of the file in uninitalize ow the wizard
-            try {
-                targetFolder = FileUtil.createFolder( rootFolder, folderName );
-            } catch (IOException ioe) {
-                // Can't create the folder
-                throw new IllegalArgumentException(ioe); // ioe already annotated
-            }
-        }
+//        if ( targetFolder == null ) {
+//            // XXX add deletion of the file in uninitalize ow the wizard
+//            try {
+//                targetFolder = FileUtil.createFolder( rootFolder, folderName );
+//            } catch (IOException ioe) {
+//                // Can't create the folder
+//                throw new IllegalArgumentException(ioe); // ioe already annotated
+//            }
+//        }
         
         return targetFolder;
     }

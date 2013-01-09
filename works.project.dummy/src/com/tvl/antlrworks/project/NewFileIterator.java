@@ -53,7 +53,6 @@ import javax.swing.event.ChangeListener;
 import org.netbeans.api.project.Project;
 import org.netbeans.api.project.ProjectUtils;
 import org.netbeans.api.project.Sources;
-import org.netbeans.api.templates.TemplateRegistration;
 import org.netbeans.spi.project.ui.templates.support.Templates;
 import org.openide.WizardDescriptor;
 import org.openide.filesystems.FileObject;
@@ -76,7 +75,6 @@ public class NewFileIterator implements WizardDescriptor.InstantiatingIterator<W
     private transient WizardDescriptor.Iterator<WizardDescriptor> simpleIterator;
     private transient WizardDescriptor.Panel<WizardDescriptor> panel;
     private transient WizardDescriptor wiz;
-    private transient Project currentProject;
     
     private transient boolean isFolder;
     
@@ -113,15 +111,11 @@ public class NewFileIterator implements WizardDescriptor.InstantiatingIterator<W
     }
             
     private WizardDescriptor.Panel<WizardDescriptor> getPanel (WizardDescriptor wizardDescriptor) {
-        Project project = Templates.getProject( wizardDescriptor );
-        assert project != null : wizardDescriptor;
-        if (!project.equals (currentProject) || panel == null) {
-            currentProject = project;
-            Sources sources = ProjectUtils.getSources(project);
+        if (panel == null) {
             if (isFolder) {
-                panel = new SimpleTargetChooserPanel(project, sources.getSourceGroups(Sources.TYPE_GENERIC), null, true, false);
+                panel = new SimpleTargetChooserPanel(null, true, false);
             } else {
-                panel = Templates.buildSimpleTargetChooser(project, sources.getSourceGroups(Sources.TYPE_GENERIC)).create();
+                panel = new SimpleTargetChooserPanel(null, false, false);
             }
         }
         return panel;
