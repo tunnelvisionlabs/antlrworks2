@@ -52,9 +52,9 @@ import javax.swing.event.ChangeListener;
 import org.netbeans.api.project.Project;
 import org.netbeans.modules.project.uiapi.ProjectChooserFactory;
 import org.netbeans.spi.project.ui.templates.support.Templates;
+import org.openide.ErrorManager;
 import org.openide.NotifyDescriptor;
 import org.openide.WizardDescriptor;
-import org.openide.ErrorManager;
 import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileUtil;
 import org.openide.loaders.DataObject;
@@ -142,7 +142,7 @@ final class TemplateChooserPanel implements WizardDescriptor.Panel<WizardDescrip
                 //Ignore and use default
             }
         }
-        panel.readValues( project, currentCategoryName, currentTemplateName );
+        panel.readValues( currentCategoryName, currentTemplateName );
         settings.putProperty(WizardDescriptor.PROP_CONTENT_SELECTED_INDEX, 0);
         settings.putProperty(WizardDescriptor.PROP_CONTENT_DATA, new String[] {
                 Bundle.LBL_TemplatesPanel_Name(), // NOI18N
@@ -159,9 +159,8 @@ final class TemplateChooserPanel implements WizardDescriptor.Panel<WizardDescrip
              NotifyDescriptor.CLOSED_OPTION != value ) {        
             try { 
 
-                Project newProject = gui.getProject ();
-                project = newProject;
-                wd.putProperty(ProjectChooserFactory.WIZARD_KEY_PROJECT, newProject);
+                project = null;
+                wd.putProperty(ProjectChooserFactory.WIZARD_KEY_PROJECT, null);
                 
                 if (gui.getTemplate () == null) {
                     return ;

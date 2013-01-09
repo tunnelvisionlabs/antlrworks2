@@ -44,22 +44,17 @@
 
 package com.tvl.antlrworks.project;
 
+import static com.tvl.antlrworks.project.Bundle.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.ListCellRenderer;
 import javax.swing.event.ChangeListener;
 import org.netbeans.api.annotations.common.NonNull;
-import org.netbeans.api.project.Project;
-import static com.tvl.antlrworks.project.Bundle.*;
-import org.netbeans.api.project.ui.OpenProjects;
 import org.netbeans.modules.project.ui.spi.TemplateCategorySorter;
 import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileUtil;
@@ -72,6 +67,7 @@ import org.openide.nodes.FilterNode;
 import org.openide.nodes.Node;
 import org.openide.util.AsyncGUIJob;
 import org.openide.util.ChangeSupport;
+import org.openide.util.Lookup;
 import org.openide.util.NbBundle.Messages;
 import org.openide.util.Utilities;
 
@@ -92,12 +88,10 @@ final class TemplateChooserPanelGUI extends javax.swing.JPanel implements Proper
 
     //GUI Builder
     private TemplatesPanelGUI.Builder builder;
-    private Project project;
     private @NonNull String[] projectRecommendedTypes;
     private String category;
     private String template;
     private boolean isWarmUp = true;
-    private ListCellRenderer projectCellRenderer;
     private boolean firstTime = true;
     private ActionListener defaultActionListener;
 
@@ -107,54 +101,21 @@ final class TemplateChooserPanelGUI extends javax.swing.JPanel implements Proper
         initComponents();
         setPreferredSize( PREF_DIM );
         setName(LBL_TemplateChooserPanelGUI_Name());
-        projectCellRenderer = new ProjectCellRenderer ();
-        projectsComboBox.setRenderer (projectCellRenderer);
      }
     
-    public void readValues (Project p, String category, String template) {
-        assert p != null : "Project can not be null";   //NOI18N
+    public void readValues (String category, String template) {
         boolean wf;
         synchronized (this) {
-            this.project = p;
-            this.projectRecommendedTypes = OpenProjectList.getRecommendedTypes(p);
+            this.projectRecommendedTypes = OpenProjectList.getRecommendedTypes(null);
             this.category = category;
             this.template = template;
             wf = this.isWarmUp;
         }
         if (!wf) {
-            this.selectProject ( project );
             ((TemplatesPanelGUI)this.templatesPanel).setSelectedCategoryByName (this.category);
             ((TemplatesPanelGUI)this.templatesPanel).setSelectedTemplateByName (this.template);
         }
     }
-
-    @Override
-    public void removeNotify() {
-        super.removeNotify();
-        project = null;
-    }
-
-    /** Called from readSettings, to initialize the GUI with proper components
-     */
-    private void initValues( Project p ) {
-        // Populate the combo box with list of projects
-        Project openProjects[] = OpenProjects.getDefault().getOpenProjects();
-        Arrays.sort(openProjects, OpenProjectList.projectByDisplayName());
-        DefaultComboBoxModel projectsModel = new DefaultComboBoxModel( openProjects );
-        projectsComboBox.setModel( projectsModel );
-        this.selectProject (p);
-    }
-
-    private void selectProject (Project p) {
-        if (p != null) {
-            DefaultComboBoxModel projectsModel = (DefaultComboBoxModel) projectsComboBox.getModel ();
-            if ( projectsModel.getIndexOf( p ) == -1 ) {
-                projectsModel.insertElementAt( p, 0 );
-            }
-            projectsComboBox.setSelectedItem( p );
-        }
-    }
-
 
     public void addChangeListener(ChangeListener l) {
         changeSupport.addChangeListener(l);
@@ -172,19 +133,6 @@ final class TemplateChooserPanelGUI extends javax.swing.JPanel implements Proper
         this.defaultActionListener = al;
     }
 
-    public Project getProject() {
-        boolean wf;
-        synchronized (this) {
-            wf = isWarmUp;
-        }
-        if (wf) {
-            return this.project;
-        }
-        else {
-            return (Project)projectsComboBox.getSelectedItem();
-        }
-    }
-    
     public FileObject getTemplate() {
         return ((TemplatesPanelGUI)this.templatesPanel).getSelectedTemplate ();
     }
@@ -228,26 +176,9 @@ final class TemplateChooserPanelGUI extends javax.swing.JPanel implements Proper
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        jLabel1 = new javax.swing.JLabel();
-        projectsComboBox = new javax.swing.JComboBox();
         templatesPanel = new TemplatesPanelGUI (this.builder);
 
         setLayout(new java.awt.GridBagLayout());
-
-        jLabel1.setLabelFor(projectsComboBox);
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(TemplateChooserPanelGUI.class, "LBL_TemplateChooserPanelGUI_jLabel1")); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 13, 0);
-        add(jLabel1, gridBagConstraints);
-        jLabel1.getAccessibleContext().setAccessibleName(org.openide.util.NbBundle.getMessage(TemplateChooserPanelGUI.class, "ACSN_jLabel1")); // NOI18N
-        jLabel1.getAccessibleContext().setAccessibleDescription(org.openide.util.NbBundle.getMessage(TemplateChooserPanelGUI.class, "ACSD_jLabel1")); // NOI18N
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridwidth = java.awt.GridBagConstraints.REMAINDER;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 6, 12, 0);
-        add(projectsComboBox, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridwidth = java.awt.GridBagConstraints.REMAINDER;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -258,8 +189,6 @@ final class TemplateChooserPanelGUI extends javax.swing.JPanel implements Proper
 
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JComboBox projectsComboBox;
     private javax.swing.JPanel templatesPanel;
     // End of variables declaration//GEN-END:variables
 
@@ -293,29 +222,24 @@ final class TemplateChooserPanelGUI extends javax.swing.JPanel implements Proper
         }
         
         @Override protected void addNotify() {
-            projectsComboBox.addActionListener( this );
         }
         
         @Override protected void removeNotify() {
-            projectsComboBox.removeActionListener( this );
         }
 
         @Override protected boolean createKeys(List<TemplateKey> keys) {
             DataObject[] children = folder.getChildren();
             if (isRoot) {
-                Project p = getProject();
-                TemplateCategorySorter tcs = p != null ? p.getLookup().lookup(TemplateCategorySorter.class) : null;
-                if (tcs != null) {
-                    List<DataObject> dobjs = new ArrayList<DataObject>();                    
-                    for (DataObject d : children) {
-                        if (isFolderOfTemplates(d)) {
-                            dobjs.add(d);
-                        }
+                TemplateCategorySorter tcs = Lookup.getDefault().lookup(TemplateCategorySorter.class);
+                List<DataObject> dobjs = new ArrayList<DataObject>();                    
+                for (DataObject d : children) {
+                    if (isFolderOfTemplates(d)) {
+                        dobjs.add(d);
                     }
-                    List<DataObject> sorted = tcs.sort(dobjs);
-                    assert sorted.size() == dobjs.size() && new HashSet<DataObject>(dobjs).equals(new HashSet<DataObject>(sorted));
-                    children = sorted.toArray(new DataObject[children.length]);
                 }
+                List<DataObject> sorted = tcs != null ? tcs.sort(dobjs) : dobjs;
+                assert sorted.size() == dobjs.size() && new HashSet<DataObject>(dobjs).equals(new HashSet<DataObject>(sorted));
+                children = sorted.toArray(new DataObject[children.length]);
             }
             
             for (DataObject d : children) {
@@ -338,7 +262,7 @@ final class TemplateChooserPanelGUI extends javax.swing.JPanel implements Proper
         }
         
         @Override public void actionPerformed (ActionEvent event) {
-            projectRecommendedTypes = OpenProjectList.getRecommendedTypes(getProject());
+            projectRecommendedTypes = OpenProjectList.getRecommendedTypes(null);
             final String cat = getCategoryName ();
             String template =  ((TemplatesPanelGUI)TemplateChooserPanelGUI.this.templatesPanel).getSelectedTemplateName();
             refresh(false);
@@ -353,7 +277,7 @@ final class TemplateChooserPanelGUI extends javax.swing.JPanel implements Proper
             if (d instanceof DataFolder && !isTemplate((DataFolder)d))  {
                 Object o = d.getPrimaryFile().getAttribute("simple"); // NOI18N
                 if (o == null || Boolean.TRUE.equals(o)) {
-                    return hasChildren((Project) projectsComboBox.getSelectedItem(), d);
+                    return hasChildren(d);
                 }
             }
             return false;
@@ -431,7 +355,7 @@ final class TemplateChooserPanelGUI extends javax.swing.JPanel implements Proper
         return false;
     }
     
-    private boolean hasChildren (Project p, DataObject folder) { 
+    private boolean hasChildren (DataObject folder) { 
         if (!(folder instanceof DataFolder)) {
             return false;
         }
@@ -449,7 +373,7 @@ final class TemplateChooserPanelGUI extends javax.swing.JPanel implements Proper
                 if (!(ch[i] instanceof DataShadow)) {
                     return true;
                 }
-            } else if (ch[i] instanceof DataFolder && hasChildren (p, ch[i])) {
+            } else if (ch[i] instanceof DataFolder && hasChildren (ch[i])) {
                 return true;
             }
         }
@@ -469,16 +393,13 @@ final class TemplateChooserPanelGUI extends javax.swing.JPanel implements Proper
         //In the awt
         Cursor cursor = null;
         try {
-            Project p;
             String c,t;
             synchronized (this) {
-                p = this.project;
                 c = this.category;
                 t = this.template;
             }
             cursor = TemplateChooserPanelGUI.this.getCursor();
             TemplateChooserPanelGUI.this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-            initValues( p );
             ((TemplatesPanelGUI)this.templatesPanel).doFinished (this.templatesFolder, c, t);
         } finally {
             synchronized (this) {
