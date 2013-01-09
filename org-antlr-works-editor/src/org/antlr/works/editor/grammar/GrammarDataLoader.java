@@ -9,6 +9,9 @@
 package org.antlr.works.editor.grammar;
 
 import java.io.IOException;
+import org.openide.awt.ActionID;
+import org.openide.awt.ActionReference;
+import org.openide.awt.ActionReferences;
 import org.openide.filesystems.FileObject;
 import org.openide.loaders.DataObject;
 import org.openide.loaders.DataObjectExistsException;
@@ -29,6 +32,25 @@ import org.openide.util.NbBundle;
     displayName="#GrammarLoader_Name",
     mimeType=GrammarEditorKit.GRAMMAR_MIME_TYPE,
     position=99999)
+@ActionReferences(value = {
+    @ActionReference(id =
+        @ActionID(category = "System", id = "org.openide.actions.OpenAction"), path = "Loaders/text/x-antlr3/Actions", position = 100, separatorAfter = 200),
+    @ActionReference(id =
+        @ActionID(category = "Edit", id = "org.openide.actions.CutAction"), path = "Loaders/text/x-antlr3/Actions", position = 300),
+    @ActionReference(id =
+        @ActionID(category = "Edit", id = "org.openide.actions.CopyAction"), path = "Loaders/text/x-antlr3/Actions", position = 400, separatorAfter = 500),
+    @ActionReference(id =
+        @ActionID(category = "Edit", id = "org.openide.actions.DeleteAction"), path = "Loaders/text/x-antlr3/Actions", position = 600),
+    @ActionReference(id =
+        @ActionID(category = "System", id = "org.openide.actions.RenameAction"), path = "Loaders/text/x-antlr3/Actions", position = 700, separatorAfter = 800),
+    @ActionReference(id =
+        @ActionID(category = "System", id = "org.openide.actions.SaveAsTemplateAction"), path = "Loaders/text/x-antlr3/Actions", position = 900, separatorAfter = 1000),
+    @ActionReference(id =
+        @ActionID(category = "System", id = "org.openide.actions.FileSystemAction"), path = "Loaders/text/x-antlr3/Actions", position = 1100, separatorAfter = 1200),
+    @ActionReference(id =
+        @ActionID(category = "System", id = "org.openide.actions.ToolsAction"), path = "Loaders/text/x-antlr3/Actions", position = 1300),
+    @ActionReference(id =
+        @ActionID(category = "System", id = "org.openide.actions.PropertiesAction"), path = "Loaders/text/x-antlr3/Actions", position = 1400)})
 public class GrammarDataLoader extends UniFileLoader {
 
     public GrammarDataLoader() {
