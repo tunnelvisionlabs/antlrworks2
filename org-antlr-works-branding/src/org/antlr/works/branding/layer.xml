@@ -9,6 +9,21 @@
         </folder>
     </folder>
     <folder name="Menu">
+        <folder name="BuildProject">
+            <file name="org-netbeans-modules-project-ui-BuildMainProject.shadow_hidden"/>
+            <file name="org-netbeans-modules-project-ui-CompileSingle.shadow_hidden"/>
+            <file name="org-netbeans-modules-project-ui-RebuildMainProject.shadow_hidden"/>
+            <file name="org-netbeans-modules-project-ui-Rerun.shadow_hidden"/>
+            <file name="org-netbeans-modules-project-ui-RunMainProject.shadow_hidden"/>
+            <file name="org-netbeans-modules-project-ui-RunSingle.shadow_hidden"/>
+            <file name="org-netbeans-modules-project-ui-SetMainProject.shadow_hidden"/>
+            <file name="org-netbeans-modules-project-ui-TestProject.shadow_hidden"/>
+            <file name="org-netbeans-modules-project-ui-TestSingle.shadow_hidden"/>
+            <file name="org-netbeans-modules-project-ui-actions-ActiveConfigAction.shadow_hidden"/>
+            <file name="org-netbeans-modules-project-ui-actions-StopBuildingAction.shadow_hidden"/>
+            <file name="org-netbeans-modules-xml-tools-actions-CheckAction.shadow_hidden"/>
+            <file name="org-netbeans-modules-xml-tools-actions-ValidateAction.shadow_hidden"/>
+        </folder>
         <folder name="File">
             <file name="Export_hidden"/>
             <file name="Import_hidden"/>
@@ -20,8 +35,17 @@
             <file name="org-netbeans-modules-project-ui-RecentProjects.shadow_hidden"/>
             <file name="org-netbeans-modules-project-ui-groups-GroupsMenu.shadow_hidden"/>
         </folder>
+        <folder name="GoTo">
+            <file name="org-netbeans-modules-project-ui-SelectInProjects.shadow_hidden"/>
+        </folder>
+        <file name="Refactoring_hidden"/>
+        <file name="RunProject_hidden"/>
         <folder name="Source">
             <file name="org-netbeans-modules-editor-MainMenuAction$ToggleCommentAction.instance_hidden"/>
+        </folder>
+        <file name="Versioning_hidden"/>
+        <folder name="Window">
+            <file name="org-netbeans-modules-project-ui-logical-tab-action.shadow_hidden"/>
         </folder>
     </folder>
     <folder name="Toolbars">
@@ -31,5 +55,11 @@
             <file name="org-netbeans-modules-project-ui-OpenProject.shadow_hidden"/>
         </folder>
         <file name="Standard.xml" url="Standard.xml"/>
+    </folder>
+    <folder name="Windows2">
+        <folder name="Components">
+            <file name="projectTabLogical_tc.settings_hidden"/>
+            <file name="projectTab_tc.settings_hidden"/>
+        </folder>
     </folder>
 </filesystem>
