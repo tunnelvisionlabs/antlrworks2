@@ -8,20 +8,11 @@
  */
 package org.antlr.works.editor.st4.navigation;
 
-import java.util.concurrent.TimeUnit;
-import javax.swing.text.Document;
-import javax.swing.text.JTextComponent;
-import org.antlr.netbeans.editor.text.VersionedDocument;
-import org.antlr.netbeans.editor.text.VersionedDocumentUtilities;
-import org.antlr.netbeans.parsing.spi.ParseContext;
-import org.antlr.netbeans.parsing.spi.ParserTaskManager;
-import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
+import org.antlr.netbeans.editor.navigation.AbstractNavigatorPanel;
 import org.antlr.works.editor.st4.StringTemplateEditorKit;
 import org.antlr.works.editor.st4.StringTemplateFileTypeDataObject;
 import org.antlr.works.editor.st4.TemplateParserDataDefinitions;
-import org.netbeans.api.editor.EditorRegistry;
-import org.netbeans.modules.editor.NbEditorUtilities;
-import org.netbeans.spi.navigator.NavigatorPanel;
+import org.netbeans.api.annotations.common.CheckForNull;
 import org.netbeans.spi.navigator.NavigatorPanel.Registration;
 import org.openide.loaders.DataObject;
 import org.openide.util.Lookup;
@@ -32,11 +23,13 @@ import org.openide.util.NbBundle;
     "HINT_templates=Templates"
 })
 @Registration(mimeType = StringTemplateEditorKit.TEMPLATE_MIME_TYPE, position = 100, displayName = "#LBL_templates")
-public class TemplatesPanel implements NavigatorPanel {
+public class TemplatesPanel extends AbstractNavigatorPanel<TemplatesPanelUI> {
 
     private static volatile TemplatesPanel INSTANCE;
 
-    private TemplatesPanelUI component;
+    public TemplatesPanel() {
+        super(StringTemplateEditorKit.TEMPLATE_MIME_TYPE, TemplateParserDataDefinitions.NAVIGATOR_UI_VISIBLE);
+    }
 
     @Override
     public String getDisplayName() {
@@ -49,11 +42,6 @@ public class TemplatesPanel implements NavigatorPanel {
     }
 
     @Override
-    public TemplatesPanelUI getComponent() {
-        return getTemplatesPanelUI();
-    }
-
-    @Override
     public void panelActivated(Lookup context) {
         INSTANCE = this;
         scheduleTaskManagerUpdate(context.lookup(DataObject.class));
@@ -63,53 +51,31 @@ public class TemplatesPanel implements NavigatorPanel {
     public void panelDeactivated() {
         INSTANCE = null;
         scheduleTaskManagerUpdate(null);
-        getTemplatesPanelUI().showWaitNode();
+        getComponent().showWaitNode();
     }
 
     @Override
     public Lookup getLookup() {
-        return getTemplatesPanelUI().getLookup();
+        return getComponent().getLookup();
     }
 
-    private void scheduleTaskManagerUpdate(DataObject dataObject) {
+    @Override
+    protected void scheduleTaskManagerUpdate(DataObject dataObject) {
         if (dataObject != null && !(dataObject instanceof StringTemplateFileTypeDataObject)) {
             return;
         }
 
-        JTextComponent currentComponent = EditorRegistry.lastFocusedComponent();
-        if (currentComponent == null) {
-            return;
-        }
-
-        Document document = currentComponent.getDocument();
-        DataObject documentDataObject = document != null ? NbEditorUtilities.getDataObject(document) : null;
-        VersionedDocument versionedDocument;
-        if (dataObject != null && (documentDataObject == null || !dataObject.equals(documentDataObject))) {
-            versionedDocument = VersionedDocumentUtilities.getVersionedDocument(dataObject.getPrimaryFile());
-        } else if (document != null) {
-            versionedDocument = VersionedDocumentUtilities.getVersionedDocument(document);
-        } else {
-            return;
-        }
-
-        if (!StringTemplateEditorKit.TEMPLATE_MIME_TYPE.equals(versionedDocument.getMimeType())) {
-            return;
-        }
-
-        ParseContext context = new ParseContext(ParserTaskScheduler.MANUAL_TASK_SCHEDULER, versionedDocument);
-        Lookup.getDefault().lookup(ParserTaskManager.class).scheduleData(context, TemplateParserDataDefinitions.NAVIGATOR_UI_VISIBLE, 0, TimeUnit.MILLISECONDS);
+        super.scheduleTaskManagerUpdate(dataObject);
     }
 
-    private synchronized TemplatesPanelUI getTemplatesPanelUI() {
-        if (this.component == null) {
-            this.component = new TemplatesPanelUI();
-        }
-
-        return this.component;
-    }
-
+    @CheckForNull
     public static TemplatesPanel getInstance() {
         return INSTANCE;
+    }
+
+    @Override
+    protected TemplatesPanelUI createPanelUI() {
+        return new TemplatesPanelUI();
     }
 
 }
