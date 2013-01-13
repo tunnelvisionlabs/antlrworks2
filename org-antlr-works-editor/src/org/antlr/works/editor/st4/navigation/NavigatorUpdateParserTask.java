@@ -78,12 +78,11 @@ public final class NavigatorUpdateParserTask implements ParserTask {
             }
 
             Future<ParserData<Description>> futureData = taskManager.getData(snapshot, TemplateParserDataDefinitions.NAVIGATOR_ROOT, EnumSet.of(ParserDataOptions.NO_UPDATE, ParserDataOptions.SYNCHRONOUS));
-            ParserData<Description> parserData = futureData.get();
-            if (parserData == null) {
+            ParserData<Description> parserData = futureData != null ? futureData.get() : null;
+            Description root = parserData != null ? parserData.getData() : null;
+            if (root == null) {
                 return;
             }
-
-            Description root = parserData.getData();
 
             Future<ParserData<CurrentTemplateContextData>> futureContextData = taskManager.getData(snapshot, TemplateParserDataDefinitions.CURRENT_TEMPLATE_CONTEXT, EnumSet.of(ParserDataOptions.NO_UPDATE, ParserDataOptions.SYNCHRONOUS));
             ParserData<CurrentTemplateContextData> parserContextData = futureContextData.get();
