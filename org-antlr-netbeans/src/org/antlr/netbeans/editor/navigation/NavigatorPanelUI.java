@@ -30,6 +30,7 @@ import javax.swing.tree.TreePath;
 import org.antlr.netbeans.editor.navigation.actions.FilterSubmenuAction;
 import org.antlr.netbeans.editor.navigation.actions.SortByNameAction;
 import org.antlr.netbeans.editor.navigation.actions.SortBySourceAction;
+import org.netbeans.api.annotations.common.NonNull;
 import org.openide.explorer.ExplorerManager;
 import org.openide.explorer.view.BeanTreeView;
 import org.openide.filesystems.FileObject;
@@ -37,6 +38,7 @@ import org.openide.nodes.Node;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
 import org.openide.util.NbPreferences;
+import org.openide.util.Parameters;
 import org.openide.util.RequestProcessor;
 import org.openide.util.Utilities;
 import org.openide.util.lookup.AbstractLookup;
@@ -226,7 +228,9 @@ public abstract class NavigatorPanelUI extends javax.swing.JPanel implements Exp
         }
     }
 
-    public void refresh(final Description description) {
+    public void refresh(@NonNull final Description description) {
+        Parameters.notNull("description", description);
+
         final NavigatorNode rootNode = getRootNode();
         FileObject rootFileObject = rootNode != null ? rootNode.getDescription().getFileObject() : null;
         if (rootFileObject != null && rootFileObject.equals(description.getFileObject())) {
