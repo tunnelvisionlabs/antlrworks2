@@ -74,6 +74,10 @@ public final class RuleScanningParserTask implements ParserTask {
 
                 Future<ParserData<CompiledModel>> futureData = taskManager.getData(snapshot, context.getComponent(), GrammarParserDataDefinitions.COMPILED_MODEL, options);
                 ParserData<CompiledModel> parserData = futureData != null ? futureData.get() : null;
+                if (parserData == null && !explicitRequest) {
+                    return;
+                }
+
                 CompiledModel model = parserData != null ? parserData.getData() : null;
                 if (model != null) {
                     RuleScanner scanner = getScanner(model);

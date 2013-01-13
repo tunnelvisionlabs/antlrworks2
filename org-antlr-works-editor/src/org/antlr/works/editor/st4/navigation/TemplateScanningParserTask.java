@@ -71,6 +71,10 @@ public final class TemplateScanningParserTask implements ParserTask {
 
                 Future<ParserData<CompiledModel>> futureData = taskManager.getData(snapshot, context.getComponent(), TemplateParserDataDefinitions.COMPILED_MODEL, options);
                 ParserData<CompiledModel> parserData = futureData != null ? futureData.get() : null;
+                if (parserData == null && !explicitRequest) {
+                    return;
+                }
+
                 CompiledModel model = parserData != null ? parserData.getData() : null;
                 if (model != null) {
                     TemplateScanner scanner = getScanner(model);
