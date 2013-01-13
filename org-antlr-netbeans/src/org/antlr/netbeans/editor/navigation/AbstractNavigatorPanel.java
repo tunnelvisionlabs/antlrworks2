@@ -52,12 +52,14 @@ public abstract class AbstractNavigatorPanel<PanelUI extends JComponent> impleme
 
     @NonNull
     @Override
-    public final synchronized PanelUI getComponent() {
+    public final PanelUI getComponent() {
         if (this.component == null) {
             Runnable panelFactory = new Runnable() {
                 @Override
                 public void run() {
-                    component = createPanelUI();
+                    if (component == null) {
+                        component = createPanelUI();
+                    }
                 }
             };
 
