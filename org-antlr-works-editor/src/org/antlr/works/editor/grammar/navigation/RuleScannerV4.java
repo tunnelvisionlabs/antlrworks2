@@ -10,8 +10,6 @@ package org.antlr.works.editor.grammar.navigation;
 
 import java.util.List;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
-import org.antlr.netbeans.editor.text.OffsetRegion;
-import org.antlr.netbeans.editor.text.SnapshotPositionRegion;
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.v4.parse.ANTLRParser;
@@ -98,7 +96,7 @@ public class RuleScannerV4 extends RuleScanner {
                 }
 
                 GrammarNode.GrammarNodeDescription ruleDescription = new GrammarNode.GrammarNodeDescription(ruleName);
-                ruleDescription.setOffset(snapshot, fileObject, ((CommonToken)((CommonTree)child.getChild(0)).getToken()).getStartIndex());
+                ruleDescription.setOffset(snapshot, fileObject, getElementOffset(child));
                 ruleDescription.setSpan(getSpan(snapshot, result, child));
                 ruleDescription.setInherited(snapshot == null); // for now, go on the fact that snapshots aren't available for imported files
 
@@ -125,7 +123,7 @@ public class RuleScannerV4 extends RuleScanner {
                     }
 
                     GrammarNode.GrammarNodeDescription ruleDescription = new GrammarNode.GrammarNodeDescription(ruleName);
-                    ruleDescription.setOffset(snapshot, fileObject, ((CommonToken)((CommonTree)child.getChild(0)).getToken()).getStartIndex());
+                    ruleDescription.setOffset(snapshot, fileObject, getElementOffset(child));
                     ruleDescription.setSpan(getSpan(snapshot, result, child));
                     ruleDescription.setInherited(snapshot == null); // for now, go on the fact that snapshots aren't available for imported files
 
@@ -141,7 +139,7 @@ public class RuleScannerV4 extends RuleScanner {
                     }
 
                     GrammarNode.GrammarNodeDescription ruleDescription = new GrammarNode.GrammarNodeDescription(ruleName);
-                    ruleDescription.setOffset(snapshot, fileObject, ((CommonToken)child.getToken()).getStartIndex());
+                    ruleDescription.setOffset(snapshot, fileObject, getElementOffset(child));
                     ruleDescription.setSpan(getSpan(snapshot, result, child));
                     ruleDescription.setInherited(snapshot == null); // for now, go on the fact that snapshots aren't available for imported files
 
@@ -153,6 +151,34 @@ public class RuleScannerV4 extends RuleScanner {
                 }
             }
         }
+    }
+
+    private int getElementOffset(CommonTree tree) {
+        switch (tree.getType()) {
+        case ANTLRParser.ASSIGN:
+        case ANTLRParser.RULE:
+            if (tree.getChildCount() > 0 && tree.getChild(0) instanceof CommonTree) {
+                CommonTree child = (CommonTree)tree.getChild(0);
+                if (child.getToken() instanceof CommonToken) {
+                    CommonToken token = (CommonToken)child.getToken();
+                    return token.getStartIndex();
+                }
+            }
+
+            break;
+
+        case ANTLRParser.ID:
+            break;
+
+        default:
+            throw new UnsupportedOperationException();
+        }
+
+        if (tree.getToken() instanceof CommonToken) {
+            return ((CommonToken)tree.getToken()).getStartIndex();
+        }
+
+        return 0;
     }
 
 }

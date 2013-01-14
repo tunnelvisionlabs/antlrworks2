@@ -95,7 +95,7 @@ public class RuleScannerV3 extends RuleScanner {
                 }
 
                 GrammarNode.GrammarNodeDescription ruleDescription = new GrammarNode.GrammarNodeDescription(ruleName);
-                ruleDescription.setOffset(snapshot, fileObject, ((CommonToken)((CommonTree)child.getChild(0)).getToken()).getStartIndex());
+                ruleDescription.setOffset(snapshot, fileObject, getElementOffset(child));
                 ruleDescription.setSpan(getSpan(snapshot, result, child));
                 ruleDescription.setInherited(snapshot == null); // for now, go on the fact that snapshots aren't available for imported files
 
@@ -106,7 +106,7 @@ public class RuleScannerV3 extends RuleScanner {
                 }
             } else if (child.getText() != null && child.getText().startsWith("tokens")) {
                 for (int j = 0; j < child.getChildCount(); j++) {
-                    Tree tokenChild = child.getChild(j);
+                    CommonTree tokenChild = (CommonTree)child.getChild(j);
                     if ("=".equals(tokenChild.getText()) && tokenChild.getChildCount() == 2) {
                         String ruleName = tokenChild.getChild(0).getText();
                         if (ruleName == null || ruleName.length() == 0) {
@@ -114,7 +114,7 @@ public class RuleScannerV3 extends RuleScanner {
                         }
 
                         GrammarNode.GrammarNodeDescription ruleDescription = new GrammarNode.GrammarNodeDescription(ruleName);
-                        ruleDescription.setOffset(snapshot, fileObject, ((CommonToken)((CommonTree)tokenChild.getChild(0)).getToken()).getStartIndex());
+                        ruleDescription.setOffset(snapshot, fileObject, getElementOffset(tokenChild));
                         ruleDescription.setSpan(getSpan(snapshot, result, child));
                         ruleDescription.setInherited(snapshot == null); // for now, go on the fact that snapshots aren't available for imported files
 
@@ -130,7 +130,7 @@ public class RuleScannerV3 extends RuleScanner {
                         }
 
                         GrammarNode.GrammarNodeDescription ruleDescription = new GrammarNode.GrammarNodeDescription(ruleName);
-                        ruleDescription.setOffset(snapshot, fileObject, ((CommonToken)((CommonTree)tokenChild).getToken()).getStartIndex());
+                        ruleDescription.setOffset(snapshot, fileObject, getElementOffset(tokenChild));
                         ruleDescription.setSpan(getSpan(snapshot, result, child));
                         ruleDescription.setInherited(snapshot == null); // for now, go on the fact that snapshots aren't available for imported files
 
@@ -143,6 +143,34 @@ public class RuleScannerV3 extends RuleScanner {
                 }
             }
         }
+    }
+
+    private int getElementOffset(CommonTree tree) {
+        switch (tree.getType()) {
+        case ANTLRParser.ASSIGN:
+        case ANTLRParser.RULE:
+            if (tree.getChildCount() > 0 && tree.getChild(0) instanceof CommonTree) {
+                CommonTree child = (CommonTree)tree.getChild(0);
+                if (child.getToken() instanceof CommonToken) {
+                    CommonToken token = (CommonToken)child.getToken();
+                    return token.getStartIndex();
+                }
+            }
+
+            break;
+
+        case ANTLRParser.TOKEN_REF:
+            break;
+
+        default:
+            throw new UnsupportedOperationException();
+        }
+
+        if (tree.getToken() instanceof CommonToken) {
+            return ((CommonToken)tree.getToken()).getStartIndex();
+        }
+
+        return 0;
     }
 
 }
