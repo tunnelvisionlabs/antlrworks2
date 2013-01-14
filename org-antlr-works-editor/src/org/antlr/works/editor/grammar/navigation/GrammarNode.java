@@ -46,7 +46,7 @@ public class GrammarNode extends NavigatorNode {
     @Override
     public Image getIcon(int type) {
         String name = getDescription().getName();
-        if (getDescription().getChildren() != null && !getDescription().getChildren().isEmpty()) {
+        if (!getDescription().getChildren().isEmpty()) {
             name = getDescription().getChildren().iterator().next().getName();
         }
 

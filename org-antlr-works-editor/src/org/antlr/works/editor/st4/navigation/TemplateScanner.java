@@ -8,7 +8,6 @@
  */
 package org.antlr.works.editor.st4.navigation;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import org.antlr.netbeans.editor.navigation.Description;
 import org.antlr.netbeans.editor.navigation.NavigatorPanelUI;
@@ -47,7 +46,6 @@ public class TemplateScanner {
             }*/
 
             TemplateNode.TemplateDescription rootDescription = new TemplateNode.TemplateDescription();
-            rootDescription.setChildren(new ArrayList<Description>());
             rootDescription.setFileObject(model.getSnapshot().getVersionedDocument().getFileObject());
 
             for (CompiledFileModel importedParseResult : model.getImportedGroupResults()) {

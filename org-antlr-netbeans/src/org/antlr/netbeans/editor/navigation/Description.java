@@ -8,11 +8,13 @@
  */
 package org.antlr.netbeans.editor.navigation;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.netbeans.editor.text.SnapshotPosition;
 import org.antlr.netbeans.editor.text.SnapshotPositionRegion;
+import org.netbeans.api.annotations.common.NonNull;
 import org.openide.filesystems.FileObject;
 
 /**
@@ -28,11 +30,12 @@ public class Description {
 
     public static final String INHERITED_COLOR = "#7D694A";
 
+    private final Collection<Description> children = new ArrayList<Description>(0);
+
     private FileObject fileObject;
     private boolean inherited;
     private String name;
     private String htmlHeader;
-    private Collection<Description> children;
     private int offset;
     private SnapshotPosition position;
     private SnapshotPositionRegion span;
@@ -52,12 +55,9 @@ public class Description {
         return text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
     }
 
+    @NonNull
     public Collection<Description> getChildren() {
         return children;
-    }
-
-    public void setChildren(Collection<Description> children) {
-        this.children = children;
     }
 
     public int getOffset() {

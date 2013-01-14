@@ -143,9 +143,7 @@ public class GrammarCompletionProvider extends AbstractCompletionProvider {
                     rules.put(description.getName(), description);
                 }
 
-                if (description.getChildren() != null) {
-                    workList.addAll(description.getChildren());
-                }
+                workList.addAll(description.getChildren());
             }
         }
 

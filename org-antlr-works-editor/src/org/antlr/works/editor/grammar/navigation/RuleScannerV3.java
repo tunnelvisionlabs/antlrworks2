@@ -8,10 +8,7 @@
  */
 package org.antlr.works.editor.grammar.navigation;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import org.antlr.grammar.v3.ANTLRParser;
-import org.antlr.netbeans.editor.navigation.Description;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.netbeans.editor.text.OffsetRegion;
 import org.antlr.netbeans.editor.text.SnapshotPositionRegion;
@@ -47,16 +44,13 @@ public class RuleScannerV3 extends RuleScanner {
             }*/
 
             GrammarNode.GrammarNodeDescription rootDescription = new GrammarNode.GrammarNodeDescription();
-            rootDescription.setChildren(new ArrayList<Description>());
             rootDescription.setFileObject(model.getSnapshot().getVersionedDocument().getFileObject());
 
             GrammarNode.GrammarNodeDescription parserRulesRootDescription = new GrammarNode.GrammarNodeDescription("1" + Bundle.LBL_ParserRules());
             parserRulesRootDescription.setHtmlHeader(Bundle.LBL_ParserRules());
-            parserRulesRootDescription.setChildren(new HashSet<Description>());
 
             GrammarNode.GrammarNodeDescription lexerRulesRootDescription = new GrammarNode.GrammarNodeDescription("2" + Bundle.LBL_LexerRules());
             lexerRulesRootDescription.setHtmlHeader(Bundle.LBL_LexerRules());
-            lexerRulesRootDescription.setChildren(new HashSet<Description>());
 
             for (CompiledFileModelV3 importedParseResult : model.getImportedGrammarResults()) {
                 processParseResult(null, importedParseResult, parserRulesRootDescription, lexerRulesRootDescription);
