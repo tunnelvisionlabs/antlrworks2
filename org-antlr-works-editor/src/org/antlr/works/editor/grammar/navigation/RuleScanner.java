@@ -9,7 +9,9 @@
 package org.antlr.works.editor.grammar.navigation;
 
 import org.antlr.netbeans.editor.navigation.Description;
+import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.netbeans.editor.text.OffsetRegion;
+import org.antlr.netbeans.editor.text.SnapshotPositionRegion;
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.works.editor.grammar.parser.CompiledFileModel;
@@ -47,7 +49,11 @@ public abstract class RuleScanner {
     }
 
     @CheckForNull
-    protected OffsetRegion getSpan(@NullAllowed CommonToken startToken, @NullAllowed CommonToken stopToken) {
+    protected SnapshotPositionRegion getSpan(@NullAllowed DocumentSnapshot snapshot, @NullAllowed CommonToken startToken, @NullAllowed CommonToken stopToken) {
+        if (snapshot == null) {
+            return null;
+        }
+
         if (startToken == null || stopToken == null) {
             return null;
         }
@@ -56,18 +62,18 @@ public abstract class RuleScanner {
             return null;
         }
 
-        return OffsetRegion.fromBounds(startToken.getStartIndex(), stopToken.getStopIndex() + 1);
+        return new SnapshotPositionRegion(snapshot, OffsetRegion.fromBounds(startToken.getStartIndex(), stopToken.getStopIndex() + 1));
     }
 
     @CheckForNull
-    protected OffsetRegion getSpan(@NonNull CompiledFileModel result, @NullAllowed CommonTree tree) {
-        if (tree == null) {
+    protected SnapshotPositionRegion getSpan(@NullAllowed DocumentSnapshot snapshot, @NonNull CompiledFileModel result, @NullAllowed CommonTree tree) {
+        if (snapshot == null || tree == null) {
             return null;
         }
 
         CommonToken startToken = getToken(result, tree.getTokenStartIndex());
         CommonToken stopToken = getToken(result, tree.getTokenStopIndex());
-        return getSpan(startToken, stopToken);
+        return getSpan(snapshot, startToken, stopToken);
     }
 
 }

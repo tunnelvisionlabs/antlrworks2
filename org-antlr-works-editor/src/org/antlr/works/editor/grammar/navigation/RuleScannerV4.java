@@ -99,12 +99,7 @@ public class RuleScannerV4 extends RuleScanner {
 
                 GrammarNode.GrammarNodeDescription ruleDescription = new GrammarNode.GrammarNodeDescription(ruleName);
                 ruleDescription.setOffset(snapshot, fileObject, ((CommonToken)((CommonTree)child.getChild(0)).getToken()).getStartIndex());
-
-                OffsetRegion span = getSpan(result, child);
-                if (span != null) {
-                    ruleDescription.setSpan(new SnapshotPositionRegion(snapshot, span));
-                }
-
+                ruleDescription.setSpan(getSpan(snapshot, result, child));
                 ruleDescription.setInherited(snapshot == null); // for now, go on the fact that snapshots aren't available for imported files
 
                 if (Character.isLowerCase(ruleName.charAt(0))) {
@@ -131,12 +126,7 @@ public class RuleScannerV4 extends RuleScanner {
 
                     GrammarNode.GrammarNodeDescription ruleDescription = new GrammarNode.GrammarNodeDescription(ruleName);
                     ruleDescription.setOffset(snapshot, fileObject, ((CommonToken)((CommonTree)child.getChild(0)).getToken()).getStartIndex());
-
-                    OffsetRegion span = getSpan(result, child);
-                    if (span != null) {
-                        ruleDescription.setSpan(new SnapshotPositionRegion(snapshot, span));
-                    }
-
+                    ruleDescription.setSpan(getSpan(snapshot, result, child));
                     ruleDescription.setInherited(snapshot == null); // for now, go on the fact that snapshots aren't available for imported files
 
                     if (Character.isLowerCase(ruleName.charAt(0))) {
@@ -152,12 +142,7 @@ public class RuleScannerV4 extends RuleScanner {
 
                     GrammarNode.GrammarNodeDescription ruleDescription = new GrammarNode.GrammarNodeDescription(ruleName);
                     ruleDescription.setOffset(snapshot, fileObject, ((CommonToken)child.getToken()).getStartIndex());
-
-                    OffsetRegion span = getSpan(result, child);
-                    if (span != null) {
-                        ruleDescription.setSpan(new SnapshotPositionRegion(snapshot, span));
-                    }
-
+                    ruleDescription.setSpan(getSpan(snapshot, result, child));
                     ruleDescription.setInherited(snapshot == null); // for now, go on the fact that snapshots aren't available for imported files
 
                     if (Character.isLowerCase(ruleName.charAt(0))) {

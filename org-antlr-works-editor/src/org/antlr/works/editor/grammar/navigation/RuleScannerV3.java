@@ -10,8 +10,6 @@ package org.antlr.works.editor.grammar.navigation;
 
 import org.antlr.grammar.v3.ANTLRParser;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
-import org.antlr.netbeans.editor.text.OffsetRegion;
-import org.antlr.netbeans.editor.text.SnapshotPositionRegion;
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
@@ -98,12 +96,7 @@ public class RuleScannerV3 extends RuleScanner {
 
                 GrammarNode.GrammarNodeDescription ruleDescription = new GrammarNode.GrammarNodeDescription(ruleName);
                 ruleDescription.setOffset(snapshot, fileObject, ((CommonToken)((CommonTree)child.getChild(0)).getToken()).getStartIndex());
-
-                OffsetRegion span = getSpan(result, child);
-                if (span != null) {
-                    ruleDescription.setSpan(new SnapshotPositionRegion(snapshot, span));
-                }
-
+                ruleDescription.setSpan(getSpan(snapshot, result, child));
                 ruleDescription.setInherited(snapshot == null); // for now, go on the fact that snapshots aren't available for imported files
 
                 if (Character.isLowerCase(ruleName.charAt(0))) {
@@ -122,12 +115,7 @@ public class RuleScannerV3 extends RuleScanner {
 
                         GrammarNode.GrammarNodeDescription ruleDescription = new GrammarNode.GrammarNodeDescription(ruleName);
                         ruleDescription.setOffset(snapshot, fileObject, ((CommonToken)((CommonTree)tokenChild.getChild(0)).getToken()).getStartIndex());
-
-                        OffsetRegion span = getSpan(result, child);
-                        if (span != null) {
-                            ruleDescription.setSpan(new SnapshotPositionRegion(snapshot, span));
-                        }
-
+                        ruleDescription.setSpan(getSpan(snapshot, result, child));
                         ruleDescription.setInherited(snapshot == null); // for now, go on the fact that snapshots aren't available for imported files
 
                         if (Character.isLowerCase(ruleName.charAt(0))) {
@@ -143,12 +131,7 @@ public class RuleScannerV3 extends RuleScanner {
 
                         GrammarNode.GrammarNodeDescription ruleDescription = new GrammarNode.GrammarNodeDescription(ruleName);
                         ruleDescription.setOffset(snapshot, fileObject, ((CommonToken)((CommonTree)tokenChild).getToken()).getStartIndex());
-
-                        OffsetRegion span = getSpan(result, child);
-                        if (span != null) {
-                            ruleDescription.setSpan(new SnapshotPositionRegion(snapshot, span));
-                        }
-
+                        ruleDescription.setSpan(getSpan(snapshot, result, child));
                         ruleDescription.setInherited(snapshot == null); // for now, go on the fact that snapshots aren't available for imported files
 
                         if (Character.isLowerCase(ruleName.charAt(0))) {
