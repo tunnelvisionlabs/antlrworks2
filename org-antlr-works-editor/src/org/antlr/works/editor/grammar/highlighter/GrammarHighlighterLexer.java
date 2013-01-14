@@ -6,7 +6,7 @@
  *  distribution. For information about licensing, contact Sam Harwell at:
  *      sam@tunnelvisionlabs.com
  */
-package org.antlr.works.editor.grammar.highlighter4;
+package org.antlr.works.editor.grammar.highlighter;
 
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.Lexer;
@@ -16,7 +16,7 @@ import org.antlr.v4.runtime.atn.LexerATNSimulator;
 import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.tool.Grammar;
 import org.antlr.works.editor.grammar.experimental.GrammarLexer;
-import org.antlr.works.editor.grammar.highlighter4.generated.AbstractGrammarHighlighterLexer;
+import org.antlr.works.editor.grammar.highlighter.generated.AbstractGrammarHighlighterLexer;
 
 /**
  *

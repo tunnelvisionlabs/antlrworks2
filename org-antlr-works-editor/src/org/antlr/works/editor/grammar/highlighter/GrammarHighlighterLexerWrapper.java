@@ -6,7 +6,7 @@
  *  distribution. For information about licensing, contact Sam Harwell at:
  *      sam@tunnelvisionlabs.com
  */
-package org.antlr.works.editor.grammar.highlighter4;
+package org.antlr.works.editor.grammar.highlighter;
 
 import java.util.HashMap;
 import java.util.Map;

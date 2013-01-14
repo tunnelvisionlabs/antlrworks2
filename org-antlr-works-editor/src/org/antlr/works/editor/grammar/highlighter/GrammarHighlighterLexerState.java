@@ -6,51 +6,62 @@
  *  distribution. For information about licensing, contact Sam Harwell at:
  *      sam@tunnelvisionlabs.com
  */
-package org.antlr.works.editor.st4.highlighter4;
+package org.antlr.works.editor.grammar.highlighter;
 
 import java.util.Arrays;
 import org.antlr.netbeans.editor.highlighting.LineStateInfo;
 import org.antlr.v4.runtime.Lexer;
+import org.antlr.v4.runtime.Token;
 
 /**
  *
  * @author Sam Harwell
  */
-public class TemplateHighlighterLexerState implements LineStateInfo<TemplateHighlighterLexerState> {
-    public static final TemplateHighlighterLexerState INITIAL = new TemplateHighlighterLexerState();
-    public static final TemplateHighlighterLexerState DIRTY = new TemplateHighlighterLexerState();
-    public static final TemplateHighlighterLexerState MULTILINE = new TemplateHighlighterLexerState();
+public class GrammarHighlighterLexerState implements LineStateInfo<GrammarHighlighterLexerState> {
+    public static final GrammarHighlighterLexerState INITIAL = new GrammarHighlighterLexerState();
+    public static final GrammarHighlighterLexerState DIRTY = new GrammarHighlighterLexerState();
+    public static final GrammarHighlighterLexerState MULTILINE = new GrammarHighlighterLexerState();
 
-    private final char openDelimiter;
-    private final char closeDelimiter;
+    private final boolean inOptions;
+    private final boolean inTokens;
+    private final int ruleType;
     private final int mode;
     private final int[] modeStack;
 
-    private TemplateHighlighterLexerState() {
-        this(GroupHighlighterLexer.DEFAULT_OPEN_DELIMITER, GroupHighlighterLexer.DEFAULT_CLOSE_DELIMITER, Lexer.DEFAULT_MODE, null);
+    private GrammarHighlighterLexerState() {
+        this(false, false, Token.INVALID_TYPE, Lexer.DEFAULT_MODE, null);
     }
 
-    public TemplateHighlighterLexerState(char openDelimiter, char closeDelimiter, int mode, int[] modeStack) {
-        this.openDelimiter = openDelimiter;
-        this.closeDelimiter = closeDelimiter;
+    public GrammarHighlighterLexerState(boolean inOptions, boolean inTokens, int ruleType, int mode, int[] modeStack) {
+        this.inOptions = inOptions;
+        this.inTokens = inTokens;
+        this.ruleType = ruleType;
         this.mode = mode;
         this.modeStack = modeStack;
     }
 
-    public char getOpenDelimiter() {
+    public boolean isInOptions() {
         if (getIsDirty() || getIsMultiLineToken()) {
             throw new UnsupportedOperationException();
         }
 
-        return openDelimiter;
+        return inOptions;
     }
 
-    public char getCloseDelimiter() {
+    public boolean isInTokens() {
         if (getIsDirty() || getIsMultiLineToken()) {
             throw new UnsupportedOperationException();
         }
 
-        return closeDelimiter;
+        return inTokens;
+    }
+
+    public int getRuleType() {
+        if (getIsDirty() || getIsMultiLineToken()) {
+            throw new UnsupportedOperationException();
+        }
+
+        return ruleType;
     }
 
     public int getMode() {
@@ -81,14 +92,14 @@ public class TemplateHighlighterLexerState implements LineStateInfo<TemplateHigh
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof TemplateHighlighterLexerState)) {
+        if (!(obj instanceof GrammarHighlighterLexerState)) {
             return false;
         }
 
-        return this.equals((TemplateHighlighterLexerState)obj);
+        return this.equals((GrammarHighlighterLexerState)obj);
     }
 
-    public boolean equals(TemplateHighlighterLexerState other) {
+    public boolean equals(GrammarHighlighterLexerState other) {
         if (this == other) {
             return true;
         }
@@ -98,8 +109,9 @@ public class TemplateHighlighterLexerState implements LineStateInfo<TemplateHigh
 
         return this.getIsDirty() == other.getIsDirty()
             && this.getIsMultiLineToken() == other.getIsMultiLineToken()
-            && this.getOpenDelimiter() == other.getOpenDelimiter()
-            && this.getCloseDelimiter() == other.getCloseDelimiter()
+            && this.isInOptions() == other.isInOptions()
+            && this.isInTokens() == other.isInTokens()
+            && this.getRuleType() == other.getRuleType()
             && this.getMode() == other.getMode()
             && Arrays.equals(this.getModeStack(), other.getModeStack());
     }
@@ -107,20 +119,21 @@ public class TemplateHighlighterLexerState implements LineStateInfo<TemplateHigh
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 31 * hash + this.openDelimiter;
-        hash = 31 * hash + this.closeDelimiter;
+        hash = 31 * hash + (this.inOptions ? 1 : 0);
+        hash = 31 * hash + (this.inTokens ? 1 : 0);
+        hash = 31 * hash + this.ruleType;
         hash = 31 * hash + this.mode;
         hash = 31 * hash + Arrays.hashCode(this.modeStack);
         return hash;
     }
 
     @Override
-    public TemplateHighlighterLexerState createDirtyState() {
+    public GrammarHighlighterLexerState createDirtyState() {
         return DIRTY;
     }
 
     @Override
-    public TemplateHighlighterLexerState createMultiLineState() {
+    public GrammarHighlighterLexerState createMultiLineState() {
         return MULTILINE;
     }
 }

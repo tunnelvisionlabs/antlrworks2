@@ -126,7 +126,7 @@
                 </args>
             </antlr4>
 
-            <antlr4 srcpath="org/antlr/works/editor/grammar/highlighter4"/>
+            <antlr4 srcpath="org/antlr/works/editor/grammar/highlighter"/>
 
             <antlr4 srcpath="org/antlr/works/editor/st4/experimental">
                 <args>
@@ -135,7 +135,7 @@
                 </args>
             </antlr4>
 
-            <antlr4 srcpath="org/antlr/works/editor/st4/highlighter4"/>
+            <antlr4 srcpath="org/antlr/works/editor/st4/highlighter"/>
         </parallel>
 
         <touch file="${antlr4.touch}" mkdirs="true"/>

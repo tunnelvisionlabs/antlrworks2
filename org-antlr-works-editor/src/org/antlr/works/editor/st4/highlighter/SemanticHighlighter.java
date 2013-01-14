@@ -6,7 +6,7 @@
  *  distribution. For information about licensing, contact Sam Harwell at:
  *      sam@tunnelvisionlabs.com
  */
-package org.antlr.works.editor.st4.highlighter4;
+package org.antlr.works.editor.st4.highlighter;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;

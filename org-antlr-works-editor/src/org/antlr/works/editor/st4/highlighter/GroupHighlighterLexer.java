@@ -6,7 +6,7 @@
  *  distribution. For information about licensing, contact Sam Harwell at:
  *      sam@tunnelvisionlabs.com
  */
-package org.antlr.works.editor.st4.highlighter4;
+package org.antlr.works.editor.st4.highlighter;
 
 import java.util.HashMap;
 import java.util.IdentityHashMap;
@@ -26,7 +26,7 @@ import org.antlr.v4.runtime.atn.SetTransition;
 import org.antlr.v4.runtime.atn.Transition;
 import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.misc.IntervalSet;
-import org.antlr.works.editor.st4.highlighter4.generated.AbstractGroupHighlighterLexer;
+import org.antlr.works.editor.st4.highlighter.generated.AbstractGroupHighlighterLexer;
 
 /**
  *
