@@ -10,11 +10,9 @@ package org.antlr.works.editor.st4.navigation;
 
 import org.antlr.netbeans.editor.navigation.AbstractNavigatorPanel;
 import org.antlr.works.editor.st4.StringTemplateEditorKit;
-import org.antlr.works.editor.st4.StringTemplateFileTypeDataObject;
 import org.antlr.works.editor.st4.TemplateParserDataDefinitions;
 import org.netbeans.api.annotations.common.CheckForNull;
 import org.netbeans.spi.navigator.NavigatorPanel.Registration;
-import org.openide.loaders.DataObject;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
 
@@ -28,7 +26,7 @@ public class TemplatesPanel extends AbstractNavigatorPanel<TemplatesPanelUI> {
     private static volatile TemplatesPanel INSTANCE;
 
     public TemplatesPanel() {
-        super(StringTemplateEditorKit.TEMPLATE_MIME_TYPE, TemplateParserDataDefinitions.NAVIGATOR_UI_VISIBLE);
+        super(StringTemplateEditorKit.TEMPLATE_MIME_TYPE, TemplateParserDataDefinitions.NAVIGATOR_ROOT, TemplateParserDataDefinitions.NAVIGATOR_UI_VISIBLE);
     }
 
     @Override
@@ -44,28 +42,19 @@ public class TemplatesPanel extends AbstractNavigatorPanel<TemplatesPanelUI> {
     @Override
     public void panelActivated(Lookup context) {
         INSTANCE = this;
-        scheduleTaskManagerUpdate(context.lookup(DataObject.class));
+        super.panelActivated(context);
     }
 
     @Override
     public void panelDeactivated() {
         INSTANCE = null;
-        scheduleTaskManagerUpdate(null);
+        super.panelDeactivated();
         getComponent().showWaitNode();
     }
 
     @Override
     public Lookup getLookup() {
         return getComponent().getLookup();
-    }
-
-    @Override
-    protected void scheduleTaskManagerUpdate(DataObject dataObject) {
-        if (dataObject != null && !(dataObject instanceof StringTemplateFileTypeDataObject)) {
-            return;
-        }
-
-        super.scheduleTaskManagerUpdate(dataObject);
     }
 
     @CheckForNull

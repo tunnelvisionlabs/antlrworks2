@@ -9,11 +9,9 @@
 package org.antlr.works.editor.grammar.navigation;
 
 import org.antlr.netbeans.editor.navigation.AbstractNavigatorPanel;
-import org.antlr.works.editor.grammar.GrammarDataObject;
 import org.antlr.works.editor.grammar.GrammarEditorKit;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
 import org.netbeans.spi.navigator.NavigatorPanel.Registration;
-import org.openide.loaders.DataObject;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
 
@@ -27,7 +25,7 @@ public class GrammarRulesPanel extends AbstractNavigatorPanel<GrammarRulesPanelU
     private static volatile GrammarRulesPanel INSTANCE;
 
     public GrammarRulesPanel() {
-        super(GrammarEditorKit.GRAMMAR_MIME_TYPE, GrammarParserDataDefinitions.NAVIGATOR_UI_VISIBLE);
+        super(GrammarEditorKit.GRAMMAR_MIME_TYPE, GrammarParserDataDefinitions.NAVIGATOR_ROOT, GrammarParserDataDefinitions.NAVIGATOR_UI_VISIBLE);
     }
 
     @Override
@@ -43,28 +41,19 @@ public class GrammarRulesPanel extends AbstractNavigatorPanel<GrammarRulesPanelU
     @Override
     public void panelActivated(Lookup context) {
         INSTANCE = this;
-        scheduleTaskManagerUpdate(context.lookup(DataObject.class));
+        super.panelActivated(context);
     }
 
     @Override
     public void panelDeactivated() {
         INSTANCE = null;
-        scheduleTaskManagerUpdate(null);
+        super.panelDeactivated();
         getComponent().showWaitNode();
     }
 
     @Override
     public Lookup getLookup() {
         return getComponent().getLookup();
-    }
-
-    @Override
-    protected void scheduleTaskManagerUpdate(DataObject dataObject) {
-        if (dataObject != null && !(dataObject instanceof GrammarDataObject)) {
-            return;
-        }
-
-        super.scheduleTaskManagerUpdate(dataObject);
     }
 
     public static GrammarRulesPanel getInstance() {

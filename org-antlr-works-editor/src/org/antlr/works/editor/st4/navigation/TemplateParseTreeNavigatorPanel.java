@@ -37,7 +37,7 @@ public class TemplateParseTreeNavigatorPanel extends TreeNavigatorPanel {
     private FileObject _currentFile;
 
     public TemplateParseTreeNavigatorPanel() {
-        super(StringTemplateEditorKit.TEMPLATE_MIME_TYPE, TemplateParserDataDefinitions.PARSE_TREE_UI_VISIBLE);
+        super(StringTemplateEditorKit.TEMPLATE_MIME_TYPE, TemplateParserDataDefinitions.REFERENCE_PARSE_TREE, TemplateParserDataDefinitions.PARSE_TREE_UI_VISIBLE);
     }
 
     public static TemplateParseTreeNavigatorPanel getInstance() {
@@ -58,7 +58,6 @@ public class TemplateParseTreeNavigatorPanel extends TreeNavigatorPanel {
         super.panelActivated(context);
         INSTANCE = this;
         _currentFile = null;
-        scheduleTaskManagerUpdate(context.lookup(DataObject.class));
     }
 
     @Override
@@ -66,7 +65,6 @@ public class TemplateParseTreeNavigatorPanel extends TreeNavigatorPanel {
         super.panelDeactivated();
         INSTANCE = null;
         _currentFile = null;
-        scheduleTaskManagerUpdate(null);
     }
 
     @Override

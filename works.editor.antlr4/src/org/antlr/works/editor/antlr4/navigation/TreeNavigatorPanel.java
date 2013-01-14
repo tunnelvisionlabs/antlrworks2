@@ -56,8 +56,8 @@ public abstract class TreeNavigatorPanel extends AbstractNavigatorPanel<JCompone
 
     private final ExplorerManager _manager = new ExplorerManager();
 
-    protected TreeNavigatorPanel(@NonNull String mimeType, @NonNull ParserDataDefinition<?> dataDefinition) {
-        super(mimeType, dataDefinition);
+    protected TreeNavigatorPanel(@NonNull String mimeType, @NonNull ParserDataDefinition<?>... dataDefinitions) {
+        super(mimeType, dataDefinitions);
 
         _manager.addPropertyChangeListener(new PropertyChangeListener() {
             @Override
@@ -81,6 +81,7 @@ public abstract class TreeNavigatorPanel extends AbstractNavigatorPanel<JCompone
 
     @Override
     public void panelActivated(Lookup context) {
+        super.panelActivated(context);
     }
 
     @Override
@@ -90,6 +91,8 @@ public abstract class TreeNavigatorPanel extends AbstractNavigatorPanel<JCompone
             _manager.setSelectedNodes(new Node[0]);
         } catch (PropertyVetoException ex) {
         }
+
+        super.panelDeactivated();
     }
 
     @Override

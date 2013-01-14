@@ -15,10 +15,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.text.Document;
-import javax.swing.text.JTextComponent;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
-import org.antlr.netbeans.editor.text.VersionedDocumentUtilities;
 import org.antlr.netbeans.parsing.spi.ParseContext;
 import org.antlr.netbeans.parsing.spi.ParserData;
 import org.antlr.netbeans.parsing.spi.ParserDataDefinition;
@@ -31,7 +28,8 @@ import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
 import org.netbeans.api.annotations.common.CheckForNull;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;
-import org.netbeans.api.editor.EditorRegistry;
+import org.openide.loaders.DataObject;
+import org.openide.loaders.DataObjectNotFoundException;
 
 /**
  *
@@ -60,13 +58,11 @@ public abstract class AbstractNavigatorUpdateParserTask<TPanel extends AbstractN
                 return;
             }
 
-            JTextComponent currentComponent = EditorRegistry.lastFocusedComponent();
-            if (currentComponent == null) {
-                return;
-            }
-
-            Document document = currentComponent.getDocument();
-            if (document == null || !VersionedDocumentUtilities.getVersionedDocument(document).equals(snapshot.getVersionedDocument())) {
+            try {
+                if (!panel.isExpectedContext(DataObject.find(snapshot.getVersionedDocument().getFileObject()))) {
+                    return;
+                }
+            } catch (DataObjectNotFoundException ex) {
                 return;
             }
 

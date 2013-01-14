@@ -9,7 +9,6 @@
 package org.antlr.works.editor.grammar.navigation;
 
 import org.antlr.works.editor.antlr4.navigation.TreeNavigatorPanel;
-import org.antlr.works.editor.grammar.GrammarDataObject;
 import org.antlr.works.editor.grammar.GrammarEditorKit;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
@@ -18,7 +17,6 @@ import org.netbeans.spi.editor.highlighting.HighlightsLayerFactory;
 import org.netbeans.spi.editor.highlighting.ZOrder;
 import org.netbeans.spi.navigator.NavigatorPanel;
 import org.openide.filesystems.FileObject;
-import org.openide.loaders.DataObject;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
 
@@ -37,7 +35,7 @@ public class GrammarParseTreeNavigatorPanel extends TreeNavigatorPanel {
     private FileObject _currentFile;
 
     public GrammarParseTreeNavigatorPanel() {
-        super(GrammarEditorKit.GRAMMAR_MIME_TYPE, GrammarParserDataDefinitions.PARSE_TREE_UI_VISIBLE);
+        super(GrammarEditorKit.GRAMMAR_MIME_TYPE, GrammarParserDataDefinitions.REFERENCE_PARSE_TREE, GrammarParserDataDefinitions.PARSE_TREE_UI_VISIBLE);
     }
 
     public static GrammarParseTreeNavigatorPanel getInstance() {
@@ -58,7 +56,6 @@ public class GrammarParseTreeNavigatorPanel extends TreeNavigatorPanel {
         super.panelActivated(context);
         INSTANCE = this;
         _currentFile = null;
-        scheduleTaskManagerUpdate(context.lookup(DataObject.class));
     }
 
     @Override
@@ -66,16 +63,6 @@ public class GrammarParseTreeNavigatorPanel extends TreeNavigatorPanel {
         super.panelDeactivated();
         INSTANCE = null;
         _currentFile = null;
-        scheduleTaskManagerUpdate(null);
-    }
-
-    @Override
-    protected void scheduleTaskManagerUpdate(DataObject dataObject) {
-        if (dataObject != null && !(dataObject instanceof GrammarDataObject)) {
-            return;
-        }
-
-        super.scheduleTaskManagerUpdate(dataObject);
     }
 
     @MimeRegistration(mimeType=GrammarEditorKit.GRAMMAR_MIME_TYPE, service=HighlightsLayerFactory.class)
