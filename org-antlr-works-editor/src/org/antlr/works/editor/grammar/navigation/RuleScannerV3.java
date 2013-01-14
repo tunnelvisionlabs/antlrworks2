@@ -78,8 +78,12 @@ public class RuleScannerV3 extends RuleScanner {
                                     GrammarNode.GrammarNodeDescription lexerRulesRootDescription) {
 
         ANTLRParser.grammar__return parseResult = result.getResult();
+        if (parseResult == null) {
+            return;
+        }
+
         FileObject fileObject = result.getFileObject();
-        Tree tree = (Tree)parseResult.getTree();
+        Tree tree = parseResult.getTree();
         int childCount = tree.getChildCount();
         for (int i = 0; i < childCount; i++) {
             Object childObject = tree.getChild(i);
