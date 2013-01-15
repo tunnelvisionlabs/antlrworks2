@@ -43,6 +43,7 @@ public abstract class NavigatorNode extends AbstractNode {
 
     private static Node WAIT_NODE;
     private final NavigatorPanelUI ui;
+    private final Factory factory;
     private Description description;
     private OpenAction openAction;
 
@@ -50,6 +51,7 @@ public abstract class NavigatorNode extends AbstractNode {
         super(description.getChildren().isEmpty() ? Children.LEAF : new ElementChildren(ui, description.getChildren(), nodeFactory), prepareLookup(description));
         this.ui = ui;
         this.description = description;
+        this.factory = nodeFactory;
         setDisplayName(description.getName());
     }
 
@@ -143,6 +145,11 @@ public abstract class NavigatorNode extends AbstractNode {
 
     public void refreshRecursively() {
         Children ch = getChildren();
+        if (!description.getChildren().isEmpty() && !(ch instanceof ElementChildren)) {
+            ch = new ElementChildren(ui, description.getChildren(), factory);
+            setChildren(ch);
+        }
+
         if (ch instanceof ElementChildren) {
             boolean scrollOnExpand = getUI().getScrollOnExpand();
             getUI().setScrollOnExpand(false);
@@ -158,6 +165,11 @@ public abstract class NavigatorNode extends AbstractNode {
 
     public void updateRecursively(Description newDescription) {
         Children children = getChildren();
+        if (!newDescription.getChildren().isEmpty() && !(children instanceof ElementChildren)) {
+            children = new ElementChildren(ui, newDescription.getChildren(), factory);
+            setChildren(children);
+        }
+
         if (children instanceof ElementChildren) {
             Set<Description> oldChildren = new HashSet<Description>(description.getChildren());
 
