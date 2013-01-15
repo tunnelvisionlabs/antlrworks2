@@ -34,7 +34,7 @@
         <delete file="${complete-artifact.file}"/>
     </target>
 
-    <target name="antlr-init">
+    <target name="antlr-init" depends="harness.build-init">
         <property name="antlr4.jar" value="${basedir}/../org-antlr-v4/release/modules/ext/antlr4.jar"/>
         <property name="antlr4_runtime.jar" value="${basedir}/../org-antlr-v4-runtime/release/modules/ext/antlr4_runtime.jar"/>
         <property name="st4.jar" value="${basedir}/../org-stringtemplate-v4/release/modules/ext/st4.jar"/>
@@ -107,9 +107,7 @@
         </sequential>
     </macrodef>
 
-    <target name="antlr4" depends="antlr-init,antlr4-up-to-date" unless="is.antlr4.uptodate">
-        <mkdir dir="${build.antlr4.dir}" />
-
+    <target name="antlr4" depends="antlr-init,harness.build-init,antlr4-up-to-date" unless="is.antlr4.uptodate">
         <path id="sources.antlr4">
             <fileset dir="${src.dir}" includes="**/*.g4"/>
         </path>
