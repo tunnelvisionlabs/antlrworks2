@@ -18,6 +18,7 @@ import org.antlr.netbeans.editor.parsing.SyntaxError;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.netbeans.parsing.spi.ParseContext;
 import org.antlr.netbeans.parsing.spi.ParserTaskManager;
+import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
@@ -73,12 +74,16 @@ public class CompiledModelParserV4 extends CompiledModelParser {
                 tool.addListener(new ErrorListener(snapshot, tool, syntaxErrors));
                 tool.libDirectory = new File(snapshot.getVersionedDocument().getFileObject().getPath()).getParent();
                 GrammarRootAST root = tool.loadFromString(snapshot.getText().toString());
+
                 Grammar grammar = null;
                 CommonToken[] tokens = null;
                 if (root != null) {
+                    ANTLRStringStream inputStream = (ANTLRStringStream)root.token.getInputStream();
+                    inputStream.name = snapshot.getVersionedDocument().getFileObject().getPath();
+
                     grammar = tool.createGrammar(root);
                     grammar.fileName = snapshot.getVersionedDocument().getFileObject().getNameExt();
-                    grammar.loadImportedGrammars();
+                    tool.process(grammar, false);
 
                     CommonTokenStream tokenStream = (CommonTokenStream)root.tokenStream;
                     List<? extends Token> tokenList = tokenStream.getTokens();
