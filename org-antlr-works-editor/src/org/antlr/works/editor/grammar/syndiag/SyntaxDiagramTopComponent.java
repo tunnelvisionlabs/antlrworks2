@@ -390,7 +390,7 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
         }
 
         @Override
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerAlt, version=1, dependents=Dependents.PARENTS)
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerAlt, version=3, dependents=Dependents.PARENTS)
         public void enterLexerAlt(LexerAltContext ctx) {
             enterAlternative();
         }
@@ -402,7 +402,7 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
         }
 
         @Override
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerAlt, version=1, dependents=Dependents.PARENTS)
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerAlt, version=3, dependents=Dependents.PARENTS)
         public void exitLexerAlt(LexerAltContext ctx) {
             exitAlternative();
         }
@@ -526,7 +526,7 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
          */
 
         @Override
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ebnfSuffix, version=1, dependents=Dependents.ANCESTORS)
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ebnfSuffix, version=3, dependents=Dependents.ANCESTORS)
         public void enterEbnfSuffix(EbnfSuffixContext ctx) {
             Block block;
 

@@ -215,8 +215,8 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
 
         @Override
         @RuleDependencies({
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_argActionParameter, version=0, dependents={Dependents.PARENTS, Dependents.ANCESTORS}),
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleSpec, version=2, dependents=Dependents.DESCENDANTS),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_argActionParameter, version=3, dependents={Dependents.PARENTS, Dependents.ANCESTORS}),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleSpec, version=3, dependents=Dependents.DESCENDANTS),
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleReturns, version=0, dependents=Dependents.DESCENDANTS),
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_localsSpec, version=0, dependents=Dependents.DESCENDANTS),
         })
@@ -241,14 +241,14 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
         }
 
         @Override
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleSpec, version=0, dependents=Dependents.PARENTS)
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleSpec, version=3, dependents=Dependents.PARENTS)
         public void enterRuleSpec(RuleSpecContext ctx) {
             memberContext.push(GrammarParser.RULE_ruleSpec);
             ruleLevel++;
         }
 
         @Override
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleSpec, version=0, dependents=Dependents.PARENTS)
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleSpec, version=3, dependents=Dependents.PARENTS)
         public void exitRuleSpec(RuleSpecContext ctx) {
             int context = memberContext.pop();
             assert context == GrammarParser.RULE_ruleSpec;
@@ -283,7 +283,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
 
         @Override
         @RuleDependencies({
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_modeSpec, version=0, dependents=Dependents.PARENTS),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_modeSpec, version=3, dependents=Dependents.PARENTS),
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=1, dependents=Dependents.DESCENDANTS),
         })
         public void enterModeSpec(ModeSpecContext ctx) {
@@ -375,7 +375,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
 
         @Override
         @RuleDependencies({
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_option, version=1, dependents=Dependents.ANCESTORS),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_option, version=3, dependents=Dependents.ANCESTORS),
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=1, dependents=Dependents.DESCENDANTS),
         })
         public void enterOption(OptionContext ctx) {
@@ -410,7 +410,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
 
         @Override
         @RuleDependencies({
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_elementOption, version=0, dependents=Dependents.PARENTS),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_elementOption, version=3, dependents=Dependents.PARENTS),
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=1, dependents=Dependents.DESCENDANTS),
         })
         public void enterElementOption(ElementOptionContext ctx) {

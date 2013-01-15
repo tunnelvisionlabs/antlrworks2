@@ -118,8 +118,9 @@ prequelConstruct
 
 // A list of options that affect analysis and/or code generation
 optionsSpec
-@version{1}
+@version{3}
 	:	OPTIONS (option SEMI)* RBRACE
+	|	OPTIONS RBRACE
 	;
 
 option
@@ -167,7 +168,7 @@ delegateGrammar
  */
 tokensSpec
 @version{1}
-	:	TOKENS (id (COMMA id)*)? COMMA? RBRACE
+	:	TOKENS (id (COMMA id)* COMMA?)? RBRACE
 	;
 
 actionBlock
@@ -274,7 +275,8 @@ actionScopeName
 	;
 
 modeSpec
-	:	MODE id SEMI ruleSpec+
+@version{3}
+	:	MODE id SEMI ruleSpec*
 	;
 
 rules
@@ -481,8 +483,9 @@ lexerAltList
 	;
 
 lexerAlt
-@version{1}
+@version{3}
 	:	lexerElements? lexerCommands?
+	|	// empty alt
 	;
 
 lexerElements
@@ -690,7 +693,8 @@ terminal
 // Terminals may be adorned with certain options when
 // reference in the grammar: TOK<,,,>
 elementOptions
-	:	LT elementOption (COMMA elementOption)* GT
+@version{3}
+	:	LT (elementOption (COMMA elementOption)*) GT
 	;
 
 // WHen used with elements we can specify what the tree node type can

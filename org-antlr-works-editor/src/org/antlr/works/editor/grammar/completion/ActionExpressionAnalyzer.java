@@ -60,7 +60,7 @@ public class ActionExpressionAnalyzer extends GrammarParserBaseListener {
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_actionExpression, version=1, dependents=Dependents.ANCESTORS),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_actionExpression, version=3, dependents=Dependents.ANCESTORS),
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleSpec, version=0, dependents=Dependents.SELF),
     })
     public void enterActionScopeExpression(ActionScopeExpressionContext ctx) {
@@ -83,7 +83,7 @@ public class ActionExpressionAnalyzer extends GrammarParserBaseListener {
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_actionExpression, version=1, dependents=Dependents.ANCESTORS),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_actionExpression, version=3, dependents=Dependents.ANCESTORS),
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleSpec, version=0, dependents=Dependents.SELF),
     })
     public void enterActionExpression(ActionExpressionContext ctx) {
@@ -154,7 +154,7 @@ public class ActionExpressionAnalyzer extends GrammarParserBaseListener {
         return null;
     }
 
-    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleSpec, version=2, dependents=Dependents.DESCENDANTS)
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleSpec, version=3, dependents=Dependents.DESCENDANTS)
     private static RuleSpecContext getEnclosingRuleContext(RuleContext<?> context) {
         while (context != null) {
             if (context instanceof RuleSpecContext) {

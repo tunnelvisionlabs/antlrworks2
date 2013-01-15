@@ -224,7 +224,7 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_modeSpec, version=0, dependents=Dependents.PARENTS),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_modeSpec, version=3, dependents=Dependents.PARENTS),
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=1, dependents=Dependents.DESCENDANTS),
     })
     public void enterModeSpec(ModeSpecContext ctx) {
@@ -248,7 +248,7 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_modeSpec, version=0, dependents=Dependents.PARENTS),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_modeSpec, version=3, dependents=Dependents.PARENTS),
         //@RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=1),
     })
     public void exitModeSpec(ModeSpecContext ctx) {
@@ -302,7 +302,7 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_option, version=1, dependents=Dependents.PARENTS),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_option, version=3, dependents=Dependents.PARENTS),
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=1, dependents=Dependents.DESCENDANTS),
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_optionValue, version=0, dependents=Dependents.SELF),
     })

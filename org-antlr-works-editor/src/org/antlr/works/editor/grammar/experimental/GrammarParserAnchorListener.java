@@ -95,13 +95,13 @@ public class GrammarParserAnchorListener extends GrammarParserBaseListener {
     }
 
     @Override
-    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleSpec, version=0, dependents=Dependents.PARENTS)
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleSpec, version=3, dependents=Dependents.PARENTS)
     public void enterRuleSpec(RuleSpecContext ctx) {
         enterAnchor(ctx);
     }
 
     @Override
-    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleSpec, version=0, dependents=Dependents.PARENTS)
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleSpec, version=3, dependents=Dependents.PARENTS)
     public void exitRuleSpec(RuleSpecContext ctx) {
         exitAnchor(ctx, GrammarParser.RULE_ruleSpec);
     }
