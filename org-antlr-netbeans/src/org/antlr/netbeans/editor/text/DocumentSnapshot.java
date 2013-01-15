@@ -44,6 +44,12 @@ public interface DocumentSnapshot {
 
     public @NonNull TrackingPositionRegion createTrackingRegion(int start, int length, @NonNull TrackingPositionRegion.Bias bias, @NonNull TrackingFidelity fidelity);
 
+    /**
+     * @throws IndexOutOfBoundsException
+     *      if {@code lineNumber < 0}
+     *      or
+     *      {@code lineNumber >= }{@link #getLineCount getLineCount()}
+     */
     public @NonNull DocumentSnapshotLine findLineFromLineNumber(int lineNumber);
 
     public @NonNull DocumentSnapshotLine findLineFromOffset(int offset);
