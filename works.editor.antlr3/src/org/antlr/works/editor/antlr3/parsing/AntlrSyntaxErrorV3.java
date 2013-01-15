@@ -12,6 +12,7 @@ import org.antlr.netbeans.editor.parsing.SyntaxError;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.netbeans.editor.text.DocumentSnapshotLine;
 import org.antlr.netbeans.editor.text.OffsetRegion;
+import org.antlr.netbeans.editor.text.SnapshotPosition;
 import org.antlr.netbeans.editor.text.SnapshotPositionRegion;
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.RecognitionException;
@@ -37,19 +38,36 @@ public class AntlrSyntaxErrorV3 extends SyntaxError {
     private static SnapshotPositionRegion getLocationFromToken(@NonNull DocumentSnapshot snapshot, Token offendingToken, RecognitionException exception) {
         Parameters.notNull("snapshot", snapshot);
 
-        CommonToken token = offendingToken instanceof CommonToken ? (CommonToken)offendingToken : null;
-
         if (offendingToken != null) {
-            int startOffset = token.getStartIndex();
-            int endOffset = token.getStopIndex() + 1;
-            if (startOffset < 0 || endOffset < startOffset) {
-                return new SnapshotPositionRegion(snapshot, 0, 0);
+            int line = offendingToken.getLine();
+            DocumentSnapshotLine snapshotLine = line > 0 && line <= snapshot.getLineCount() ? snapshot.findLineFromLineNumber(line - 1) : null;
+            int charPositionInLine = offendingToken.getCharPositionInLine();
+            SnapshotPosition startPosition = null;
+            if (snapshotLine != null && charPositionInLine >= 0 && charPositionInLine <= snapshotLine.getLength()) {
+                startPosition = snapshotLine.getStart().add(charPositionInLine);
             }
 
-            startOffset = Math.min(startOffset, snapshot.length());
-            endOffset = Math.min(endOffset, snapshot.length());
-            OffsetRegion offsetRegion = OffsetRegion.fromBounds(startOffset, endOffset);
-            return new SnapshotPositionRegion(snapshot, offsetRegion);
+            CommonToken token = offendingToken instanceof CommonToken ? (CommonToken)offendingToken : null;
+            if (token != null) {
+                int startOffset = token.getStartIndex();
+                int endOffset = token.getStopIndex() + 1;
+                if (startOffset >= 0 && endOffset >= startOffset) {
+                    startOffset = Math.min(startOffset, snapshot.length());
+                    endOffset = Math.min(endOffset, snapshot.length());
+                    if (startPosition != null) {
+                        return new SnapshotPositionRegion(startPosition, endOffset - startOffset);
+                    } else {
+                        OffsetRegion offsetRegion = OffsetRegion.fromBounds(startOffset, endOffset);
+                        return new SnapshotPositionRegion(snapshot, offsetRegion);
+                    }
+                }
+            }
+
+            if (startPosition != null) {
+                return new SnapshotPositionRegion(startPosition, 0);
+            } else {
+                return new SnapshotPositionRegion(snapshot, 0, 0);
+            }
         }
 
         int line = exception != null ? exception.line : -1;
