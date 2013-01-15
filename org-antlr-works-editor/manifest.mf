@@ -1,6 +1,5 @@
 Manifest-Version: 1.0
 OpenIDE-Module: org.antlr.works.editor
-OpenIDE-Module-Install: org/antlr/works/editor/Installer.class
 OpenIDE-Module-Layer: org/antlr/works/editor/layer.xml
 OpenIDE-Module-Localizing-Bundle: org/antlr/works/editor/Bundle.properties
 OpenIDE-Module-Requires: org.openide.windows.WindowManager
