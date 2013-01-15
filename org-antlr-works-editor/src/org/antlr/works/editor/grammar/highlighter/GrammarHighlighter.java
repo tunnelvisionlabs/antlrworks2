@@ -25,6 +25,7 @@ import org.antlr.netbeans.editor.text.VersionedDocumentUtilities;
 import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.tool.Grammar;
 import org.antlr.works.editor.antlr4.highlighting.ANTLRHighlighterBaseV4;
 import org.antlr.works.editor.antlr4.highlighting.TokenSourceWithStateV4;
 import org.antlr.works.editor.grammar.GoToSupport;
@@ -255,10 +256,10 @@ public class GrammarHighlighter extends ANTLRHighlighterBaseV4<GrammarHighlighte
             return identifierAttributes;
         }
 
-        if (Character.isLowerCase(text.charAt(0))) {
-            return parserRuleAttributes;
-        } else {
+        if (Grammar.isTokenName(text)) {
             return lexerRuleAttributes;
+        } else {
+            return parserRuleAttributes;
         }
     }
 

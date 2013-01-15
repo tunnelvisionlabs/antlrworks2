@@ -599,7 +599,7 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
                             }
 
                             for (Description rule : rules) {
-                                if (Character.isLowerCase(rule.getName().charAt(0))) {
+                                if (!Grammar.isTokenName(rule.getName())) {
                                     CompletionItem item = new ActionReferenceCompletionItem(rule.getName(), false);
                                     intermediateResults.put(item.getInsertPrefix().toString(), item);
                                 }

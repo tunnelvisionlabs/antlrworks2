@@ -127,10 +127,10 @@ public class RuleScannerV4 extends RuleScanner {
                     ruleDescription.setSpan(getSpan(snapshot, result, child));
                     ruleDescription.setInherited(snapshot == null); // for now, go on the fact that snapshots aren't available for imported files
 
-                    if (Character.isLowerCase(ruleName.charAt(0))) {
-                        parserRulesRootDescription.getChildren().add(ruleDescription);
-                    } else {
+                    if (Grammar.isTokenName(ruleName)) {
                         lexerRulesRootDescription.getChildren().add(ruleDescription);
+                    } else {
+                        parserRulesRootDescription.getChildren().add(ruleDescription);
                     }
                 } else if (child.getChildCount() == 0 && child.getToken() != null) {
                     String ruleName = child.getText();
@@ -143,10 +143,10 @@ public class RuleScannerV4 extends RuleScanner {
                     ruleDescription.setSpan(getSpan(snapshot, result, child));
                     ruleDescription.setInherited(snapshot == null); // for now, go on the fact that snapshots aren't available for imported files
 
-                    if (Character.isLowerCase(ruleName.charAt(0))) {
-                        parserRulesRootDescription.getChildren().add(ruleDescription);
-                    } else {
+                    if (Grammar.isTokenName(ruleName)) {
                         lexerRulesRootDescription.getChildren().add(ruleDescription);
+                    } else {
+                        parserRulesRootDescription.getChildren().add(ruleDescription);
                     }
                 }
             }

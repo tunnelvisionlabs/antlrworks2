@@ -10,6 +10,7 @@ package org.antlr.works.editor.grammar.completion;
 
 import javax.swing.ImageIcon;
 import org.antlr.netbeans.editor.navigation.Description;
+import org.antlr.v4.tool.Grammar;
 import org.antlr.works.editor.grammar.navigation.GrammarNode;
 
 /**
@@ -51,10 +52,10 @@ public class GrammarRuleCompletionItem extends GrammarCompletionItem {
     @Override
     protected ImageIcon getIcon() {
         String name = rule.getName();
-        if (Character.isLowerCase(name.charAt(0))) {
-            return PARSER_ICON;
-        } else {
+        if (Grammar.isTokenName(name)) {
             return LEXER_ICON;
+        } else {
+            return PARSER_ICON;
         }
     }
 

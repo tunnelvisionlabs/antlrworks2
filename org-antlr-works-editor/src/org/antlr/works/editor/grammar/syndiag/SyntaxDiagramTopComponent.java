@@ -461,7 +461,7 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
 
             if (wildcard || reference) {
                 String text = ctx.start.getText();
-                boolean nonTerminal = Character.isLowerCase(text.charAt(0));
+                boolean nonTerminal = !Grammar.isTokenName(text);
                 if (!nonTerminal && Grammar.isTokenName(text) && RuleSpec != null && Grammar.isTokenName(RuleSpec.getRuleName()))
                     nonTerminal = true;
 

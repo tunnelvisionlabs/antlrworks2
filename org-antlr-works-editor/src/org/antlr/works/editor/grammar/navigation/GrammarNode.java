@@ -12,6 +12,7 @@ import java.awt.Image;
 import org.antlr.netbeans.editor.navigation.Description;
 import org.antlr.netbeans.editor.navigation.NavigatorNode;
 import org.antlr.netbeans.editor.navigation.NavigatorPanelUI;
+import org.antlr.v4.tool.Grammar;
 import org.openide.util.ImageUtilities;
 
 public class GrammarNode extends NavigatorNode {
@@ -52,10 +53,10 @@ public class GrammarNode extends NavigatorNode {
 
         if (name == null) {
             return super.getIcon(type);
-        } else if (Character.isLowerCase(name.charAt(0))) {
-            return PARSER_IMAGE;
-        } else {
+        } else if (Grammar.isTokenName(name)) {
             return LEXER_IMAGE;
+        } else {
+            return PARSER_IMAGE;
         }
     }
 
