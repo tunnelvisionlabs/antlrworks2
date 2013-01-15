@@ -26,6 +26,8 @@ import org.antlr.runtime.Token;
 import org.antlr.v4.Tool;
 import org.antlr.v4.tool.ANTLRMessage;
 import org.antlr.v4.tool.ANTLRToolListener;
+import org.antlr.v4.tool.ErrorManager;
+import org.antlr.v4.tool.ErrorSeverity;
 import org.antlr.v4.tool.Grammar;
 import org.antlr.v4.tool.GrammarSemanticsMessage;
 import org.antlr.v4.tool.GrammarSyntaxMessage;
@@ -71,6 +73,7 @@ public class CompiledModelParserV4 extends CompiledModelParser {
             try {
                 final List<SyntaxError> syntaxErrors = new ArrayList<SyntaxError>();
                 final Tool tool = new Tool();
+                tool.errMgr = new CustomErrorManager(tool);
                 tool.addListener(new ErrorListener(snapshot, tool, syntaxErrors));
                 tool.libDirectory = new File(snapshot.getVersionedDocument().getFileObject().getPath()).getParent();
                 GrammarRootAST root = tool.loadFromString(snapshot.getText().toString());
@@ -101,6 +104,35 @@ public class CompiledModelParserV4 extends CompiledModelParser {
                 lastException = ex;
                 throw new ExecutionException("An unexpected error occurred.", ex);
             }
+        }
+    }
+
+    private static class CustomErrorManager extends ErrorManager {
+
+        public CustomErrorManager(Tool tool) {
+            super(tool);
+        }
+
+        @Override
+        public ST getLocationFormat() {
+            return new ST("");
+        }
+
+        @Override
+        public ST getMessageFormat() {
+            return new ST("(<id>) <text>");
+        }
+
+        @Override
+        public ST getReportFormat(ErrorSeverity severity) {
+            ST st = new ST("<type>(<message.id>): <message.text>");
+            st.add("type", severity.getText());
+            return st;
+        }
+
+        @Override
+        public boolean formatWantsSingleLineMessage() {
+            return false;
         }
     }
 
