@@ -8,7 +8,7 @@
 
     <target name="init-artifact">
         <property name="artifact.name" value="antlr4_runtime"/>
-        <property name="artifact.commit" value="8240b3c5cb7d0d741ef284cc9cad73bed3eb48ba"/>
+        <property name="artifact.commit" value="e0ce76a98f79b908ac270effe3a2cd4400ebf204"/>
     </target>
 
     <target name="download-artifact" depends="init-artifact,harness.build-init">
