@@ -15,6 +15,7 @@ import org.antlr.netbeans.editor.text.VersionedDocument;
 import org.antlr.netbeans.editor.text.VersionedDocumentUtilities;
 import org.antlr.netbeans.parsing.spi.ParseContext;
 import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
+import org.netbeans.modules.editor.NbEditorUtilities;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
@@ -60,6 +61,11 @@ public class CurrentDocumentParserTaskScheduler extends CurrentEditorParserTaskS
             }
 
             currentDocument = new WeakReference<Document>(document);
+
+            if (!hasAssociatedDataDefinitions(getClass(), NbEditorUtilities.getMimeType(getCurrentDocument()))) {
+                return;
+            }
+
             schedule(createParseContext(getVersionedDocument(), editor));
         } else {
             currentDocument = null;

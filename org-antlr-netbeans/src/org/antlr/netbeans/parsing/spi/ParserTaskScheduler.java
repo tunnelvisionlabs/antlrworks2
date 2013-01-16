@@ -29,6 +29,7 @@ import org.antlr.netbeans.parsing.spi.impl.DocumentContentParserTaskScheduler;
 import org.antlr.netbeans.parsing.spi.impl.ManualParserTaskScheduler;
 import org.antlr.netbeans.parsing.spi.impl.SelectedNodesParserTaskScheduler;
 import org.netbeans.api.annotations.common.NonNull;
+import org.netbeans.api.annotations.common.NullAllowed;
 import org.netbeans.api.editor.mimelookup.MimeLookup;
 import org.openide.filesystems.FileObject;
 import org.openide.util.Lookup;
@@ -152,10 +153,8 @@ public abstract class ParserTaskScheduler {
 
         // Schedule data updates
         String mimeType = context.getDocument().getMimeType();
-        @SuppressWarnings("unchecked")
-        Collection<? extends ParserDataDefinition<?>> mimeData = (Collection<? extends ParserDataDefinition<?>>)MimeLookup.getLookup(mimeType).lookupAll(ParserDataDefinition.class);
         Set<ParserDataDefinition<?>> currentScheduledData = new HashSet<ParserDataDefinition<?>>();
-        for (ParserDataDefinition<?> data : mimeData) {
+        for (ParserDataDefinition<?> data : MimeLookup.getLookup(mimeType).lookupAll(ParserDataDefinition.class)) {
             if (getClass().equals(data.getScheduler())) {
                 currentScheduledData.add(data);
             }
@@ -251,6 +250,20 @@ public abstract class ParserTaskScheduler {
                 }
             }
         }
+    }
+
+    protected static boolean hasAssociatedDataDefinitions(@NonNull Class<? extends ParserTaskScheduler> schedulerClass, @NullAllowed String mimeType) {
+        if (mimeType == null) {
+            return false;
+        }
+
+        for (ParserDataDefinition<?> data : MimeLookup.getLookup(mimeType).lookupAll(ParserDataDefinition.class)) {
+            if (schedulerClass.equals(data.getScheduler())) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     protected int getParseDelayMilliseconds() {

@@ -17,12 +17,13 @@ import org.antlr.netbeans.editor.text.SnapshotPosition;
 import org.antlr.netbeans.editor.text.VersionedDocument;
 import org.antlr.netbeans.parsing.spi.ParseContext;
 import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
+import org.netbeans.modules.editor.NbEditorUtilities;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- * A task scheduler which schedules tasks when the active editor window changes, the
- * content of the active document changes, and/or the caret position changes within
- * the active document.
+ * A task scheduler which schedules tasks when the active editor window changes,
+ * the content of the active document changes, and/or the caret position changes
+ * within the active document.
  *
  * @author Sam Harwell
  */
@@ -57,6 +58,10 @@ public class CursorSensitiveParserTaskScheduler extends CurrentDocumentParserTas
 
         @Override
         public void caretUpdate(CaretEvent e) {
+            if (!hasAssociatedDataDefinitions(CursorSensitiveParserTaskScheduler.this.getClass(), NbEditorUtilities.getMimeType(getCurrentDocument()))) {
+                return;
+            }
+
             VersionedDocument document = getVersionedDocument();
             if (document == null) {
                 return;
