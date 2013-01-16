@@ -35,6 +35,11 @@
                         </file>
                     </folder>
 
+                    <folder name="refactor">
+                        <attr name="position" intvalue="600"/>
+                        <attr name="SystemFileSystem.localizingBundle" stringvalue="org.antlr.works.editor.Bundle"/>
+                    </folder>
+
                     <file name="SeparatorBeforeCut.instance">
                         <attr name="instanceClass" stringvalue="javax.swing.JSeparator"/>
                         <attr name="position" intvalue="1960"/>
