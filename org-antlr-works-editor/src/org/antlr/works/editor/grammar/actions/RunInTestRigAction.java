@@ -44,14 +44,20 @@ import org.antlr.works.editor.grammar.codegen.CodeGenerator.OutputWriterStream;
 import org.antlr.works.editor.grammar.codemodel.FileModel;
 import org.antlr.works.editor.grammar.codemodel.RuleKind;
 import org.antlr.works.editor.grammar.codemodel.RuleModel;
+import org.antlr.works.editor.grammar.codemodel.TokenVocabDeclarationModel;
+import org.antlr.works.editor.grammar.codemodel.TokenVocabModel;
+import org.antlr.works.editor.grammar.codemodel.impl.FileVocabModelImpl;
+import org.netbeans.api.annotations.common.CheckForNull;
+import org.netbeans.api.annotations.common.NonNull;
+import org.netbeans.api.annotations.common.NullAllowed;
 import org.openide.DialogDisplayer;
 import org.openide.WizardDescriptor;
-import org.openide.loaders.DataObject;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.awt.ActionRegistration;
 import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileUtil;
+import org.openide.loaders.DataObject;
 import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle.Messages;
@@ -92,7 +98,8 @@ public final class RunInTestRigAction implements ActionListener {
         wizard.setTitle("{0} ({1})");
         wizard.setTitle("Run in TestRig");
 
-        List<String> availableRules = getAvailableRules(fileObject);
+        FileModel fileModel = getFileModel(fileObject);
+        List<String> availableRules = getAvailableRules(fileModel);
         wizard.putProperty(RunInTestRigWizardPanel.AVAILABLE_RULES, availableRules.toArray(new String[availableRules.size()]));
         if (DialogDisplayer.getDefault().notify(wizard) == WizardDescriptor.FINISH_OPTION) {
             File inputFile = new File(RunInTestRigWizardOptions.getInputFile(wizard));
@@ -100,7 +107,37 @@ public final class RunInTestRigAction implements ActionListener {
                 return;
             }
 
-            TestRigTask task = new TestRigTask(fileObject, inputFile);
+            String baseGrammarName = fileObject.getName();
+            if (fileModel != null) {
+                if (baseGrammarName.endsWith("Parser")) {
+                    boolean containsLexerRule = false;
+                    for (RuleModel rule : fileModel.getRules()) {
+                        if (rule.getRuleKind() == RuleKind.LEXER) {
+                            containsLexerRule = true;
+                            break;
+                        }
+                    }
+
+                    if (!containsLexerRule) {
+                        baseGrammarName = baseGrammarName.substring(0, baseGrammarName.length() - "Parser".length());
+                    }
+                } else if (baseGrammarName.endsWith("Lexer")) {
+                    boolean containsParserRule = false;
+                    for (RuleModel rule : fileModel.getRules()) {
+                        if (rule.getRuleKind() == RuleKind.PARSER) {
+                            containsParserRule = true;
+                            break;
+                        }
+                    }
+
+                    if (!containsParserRule) {
+                        baseGrammarName = baseGrammarName.substring(0, baseGrammarName.length() - "Lexer".length());
+                    }
+                }
+            }
+
+            List<FileObject> dependencies = getDependencies(fileModel);
+            TestRigTask task = new TestRigTask(baseGrammarName, fileObject, dependencies, inputFile);
             task.startRule = RunInTestRigWizardOptions.getStartRule(wizard);
             task.showTokens = RunInTestRigWizardOptions.isShowTokens(wizard);
             task.showTree = RunInTestRigWizardOptions.isShowTree(wizard);
@@ -109,29 +146,34 @@ public final class RunInTestRigAction implements ActionListener {
         }
     }
 
-    public static List<String> getAvailableRules(FileObject fileObject) {
+    @CheckForNull
+    private static FileModel getFileModel(FileObject fileObject) {
         ParserTaskManager parserTaskManager = Lookup.getDefault().lookup(ParserTaskManager.class);
         VersionedDocument versionedDocument = VersionedDocumentUtilities.getVersionedDocument(fileObject);
         DocumentSnapshot snapshot = versionedDocument.getCurrentSnapshot();
         Future<ParserData<FileModel>> futureData = parserTaskManager.getData(snapshot, GrammarParserDataDefinitions.FILE_MODEL);
         if (futureData == null) {
-            return Collections.emptyList();
+            return null;
         }
 
         ParserData<FileModel> data;
         try {
             data = futureData.get();
         } catch (InterruptedException ex) {
-            return Collections.emptyList();
+            return null;
         } catch (ExecutionException ex) {
-            return Collections.emptyList();
+            return null;
         }
 
         if (data == null) {
-            return Collections.emptyList();
+            return null;
         }
 
-        FileModel fileModel = data.getData();
+        return data.getData();
+    }
+
+    @NonNull
+    private static List<String> getAvailableRules(@NullAllowed FileModel fileModel) {
         if (fileModel == null) {
             return Collections.emptyList();
         }
@@ -150,6 +192,27 @@ public final class RunInTestRigAction implements ActionListener {
         return result;
     }
 
+    @NonNull
+    private static List<FileObject> getDependencies(@NullAllowed FileModel fileModel) {
+        if (fileModel == null) {
+            return Collections.emptyList();
+        }
+
+        List<FileObject> result = new ArrayList<FileObject>();
+        for (TokenVocabDeclarationModel tokenVocabDeclarationModel : fileModel.getTokenVocabDeclaration()) {
+            for (TokenVocabModel tokenVocabModel : tokenVocabDeclarationModel.resolve()) {
+                if (!(tokenVocabModel instanceof FileVocabModelImpl)) {
+                    continue;
+                }
+
+                FileVocabModelImpl fileVocabModelImpl = (FileVocabModelImpl)tokenVocabModel;
+                result.add(fileVocabModelImpl.getFile().getFileObject());
+            }
+        }
+
+        return result;
+    }
+
     private static class TestRigTask implements Runnable {
 
         public String startRule;
@@ -157,11 +220,15 @@ public final class RunInTestRigAction implements ActionListener {
         public boolean showTree;
         public boolean showTreeInGUI;
 
+        private final String baseGrammarName;
         private final FileObject grammarFile;
+        private final List<FileObject> dependencies;
         private final File inputFile;
 
-        public TestRigTask(FileObject grammarFile, File inputFile) {
+        public TestRigTask(String baseGrammarName, FileObject grammarFile, List<FileObject> dependencies, File inputFile) {
+            this.baseGrammarName = baseGrammarName;
             this.grammarFile = grammarFile;
+            this.dependencies = dependencies;
             this.inputFile = inputFile;
         }
 
@@ -171,7 +238,11 @@ public final class RunInTestRigAction implements ActionListener {
                 File tmpdir = new File(System.getProperty("java.io.tmpdir"),
                     getClass().getSimpleName() + "-" + System.currentTimeMillis());
                 tmpdir.mkdir();
-                CodeGenerator codeGenerator = new CodeGenerator("Java", grammarFile);
+
+                List<FileObject> compiled = new ArrayList<FileObject>();
+                compiled.add(grammarFile);
+                compiled.addAll(dependencies);
+                CodeGenerator codeGenerator = new CodeGenerator("Java", compiled.toArray(new FileObject[compiled.size()]));
                 codeGenerator.outputDirectory = FileUtil.toFileObject(tmpdir);
                 codeGenerator.libDirectory = grammarFile.getParent();
                 Task codeGenerationTask = codeGenerator.run();
@@ -225,7 +296,7 @@ public final class RunInTestRigAction implements ActionListener {
                         Method mainMethod = testRig.getMethod("main", String[].class);
 
                         List<String> testRigArguments = new ArrayList<String>();
-                        testRigArguments.add(grammarFile.getName());
+                        testRigArguments.add(baseGrammarName);
                         testRigArguments.add(startRule);
                         if (showTokens) {
                             testRigArguments.add("-tokens");
@@ -240,6 +311,7 @@ public final class RunInTestRigAction implements ActionListener {
                         }
 
                         testRigArguments.add(inputFile.getAbsolutePath());
+                        outputWriter.println("Arguments: " + testRigArguments);
 
                         ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
                         Thread.currentThread().setContextClassLoader(loader);
