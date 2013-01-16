@@ -210,7 +210,7 @@ public class NbVersionedDocument implements VersionedDocument {
                 return;
             }
 
-            //throw new UnsupportedOperationException("Not implemented yet.");
+            LOGGER.log(Level.WARNING, "Change events are not yet supported.");
         }
     }
 }
