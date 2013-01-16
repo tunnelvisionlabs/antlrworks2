@@ -62,7 +62,6 @@ public class TracingTool extends Tool {
 		final Grammar g;
 		if ( ast.grammarType==ANTLRParser.LEXER ) g = new TracingLexerGrammar(this, ast);
 		else g = new Grammar(this, ast);
-		g.tokenStream = ast.tokenStream;
 
 		// ensure each node has pointer to surrounding grammar
 		GrammarTransformPipeline.setGrammarPtr(g, ast);
