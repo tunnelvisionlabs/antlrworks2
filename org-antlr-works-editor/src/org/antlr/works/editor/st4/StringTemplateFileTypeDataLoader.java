@@ -32,25 +32,26 @@ import org.openide.util.NbBundle;
     displayName="#StringTemplateLoader_Name",
     mimeType=StringTemplateEditorKit.TEMPLATE_MIME_TYPE,
     position=99999)
-@ActionReferences(value = {
+@ActionReferences({
     @ActionReference(id =
-        @ActionID(category = "System", id = "org.openide.actions.OpenAction"), path = "Loaders/text/x-stringtemplate4/Actions", position = 100, separatorAfter = 200),
+        @ActionID(category = "System", id = "org.openide.actions.OpenAction"), path = "Loaders/" + StringTemplateEditorKit.TEMPLATE_MIME_TYPE + "/Actions", position = 100, separatorAfter = 200),
     @ActionReference(id =
-        @ActionID(category = "Edit", id = "org.openide.actions.CutAction"), path = "Loaders/text/x-stringtemplate4/Actions", position = 300),
+        @ActionID(category = "Edit", id = "org.openide.actions.CutAction"), path = "Loaders/" + StringTemplateEditorKit.TEMPLATE_MIME_TYPE + "/Actions", position = 300),
     @ActionReference(id =
-        @ActionID(category = "Edit", id = "org.openide.actions.CopyAction"), path = "Loaders/text/x-stringtemplate4/Actions", position = 400, separatorAfter = 500),
+        @ActionID(category = "Edit", id = "org.openide.actions.CopyAction"), path = "Loaders/" + StringTemplateEditorKit.TEMPLATE_MIME_TYPE + "/Actions", position = 400, separatorAfter = 500),
     @ActionReference(id =
-        @ActionID(category = "Edit", id = "org.openide.actions.DeleteAction"), path = "Loaders/text/x-stringtemplate4/Actions", position = 600),
+        @ActionID(category = "Edit", id = "org.openide.actions.DeleteAction"), path = "Loaders/" + StringTemplateEditorKit.TEMPLATE_MIME_TYPE + "/Actions", position = 600),
     @ActionReference(id =
-        @ActionID(category = "System", id = "org.openide.actions.RenameAction"), path = "Loaders/text/x-stringtemplate4/Actions", position = 700, separatorAfter = 800),
+        @ActionID(category = "System", id = "org.openide.actions.RenameAction"), path = "Loaders/" + StringTemplateEditorKit.TEMPLATE_MIME_TYPE + "/Actions", position = 700, separatorAfter = 800),
     @ActionReference(id =
-        @ActionID(category = "System", id = "org.openide.actions.SaveAsTemplateAction"), path = "Loaders/text/x-stringtemplate4/Actions", position = 900, separatorAfter = 1000),
+        @ActionID(category = "System", id = "org.openide.actions.SaveAsTemplateAction"), path = "Loaders/" + StringTemplateEditorKit.TEMPLATE_MIME_TYPE + "/Actions", position = 900, separatorAfter = 1000),
     @ActionReference(id =
-        @ActionID(category = "System", id = "org.openide.actions.FileSystemAction"), path = "Loaders/text/x-stringtemplate4/Actions", position = 1100, separatorAfter = 1200),
+        @ActionID(category = "System", id = "org.openide.actions.FileSystemAction"), path = "Loaders/" + StringTemplateEditorKit.TEMPLATE_MIME_TYPE + "/Actions", position = 1100, separatorAfter = 1200),
     @ActionReference(id =
-        @ActionID(category = "System", id = "org.openide.actions.ToolsAction"), path = "Loaders/text/x-stringtemplate4/Actions", position = 1300),
+        @ActionID(category = "System", id = "org.openide.actions.ToolsAction"), path = "Loaders/" + StringTemplateEditorKit.TEMPLATE_MIME_TYPE + "/Actions", position = 1300),
     @ActionReference(id =
-        @ActionID(category = "System", id = "org.openide.actions.PropertiesAction"), path = "Loaders/text/x-stringtemplate4/Actions", position = 1400)})
+        @ActionID(category = "System", id = "org.openide.actions.PropertiesAction"), path = "Loaders/" + StringTemplateEditorKit.TEMPLATE_MIME_TYPE + "/Actions", position = 1400)
+})
 public class StringTemplateFileTypeDataLoader extends UniFileLoader {
 
     public StringTemplateFileTypeDataLoader() {
