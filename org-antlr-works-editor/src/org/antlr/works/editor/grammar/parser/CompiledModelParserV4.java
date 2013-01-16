@@ -37,6 +37,7 @@ import org.antlr.v4.tool.ANTLRMessage;
 import org.antlr.v4.tool.ANTLRToolListener;
 import org.antlr.v4.tool.ErrorManager;
 import org.antlr.v4.tool.ErrorSeverity;
+import org.antlr.v4.tool.ErrorType;
 import org.antlr.v4.tool.Grammar;
 import org.antlr.v4.tool.GrammarSemanticsMessage;
 import org.antlr.v4.tool.GrammarSyntaxMessage;
@@ -156,6 +157,16 @@ public class CompiledModelParserV4 extends CompiledModelParser {
 
         public CustomErrorManager(Tool tool) {
             super(tool);
+        }
+
+        @Override
+        public void grammarError(ErrorType etype, String fileName, Token token, Object... args) {
+            if (etype == ErrorType.IMPLICIT_STRING_DEFINITION) {
+                // ignore this until CustomTokenVocabParser can extract string literals
+                return;
+            }
+
+            super.grammarError(etype, fileName, token, args);
         }
 
         @Override
