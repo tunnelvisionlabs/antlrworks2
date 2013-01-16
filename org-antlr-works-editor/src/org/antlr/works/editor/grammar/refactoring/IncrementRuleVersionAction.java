@@ -11,7 +11,6 @@ package org.antlr.works.editor.grammar.refactoring;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -26,11 +25,16 @@ import java.util.logging.Logger;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.Icon;
+import javax.swing.text.BadLocationException;
 import javax.swing.text.JTextComponent;
 import org.antlr.netbeans.editor.navigation.Description;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
+import org.antlr.netbeans.editor.text.DocumentSnapshotLine;
+import org.antlr.netbeans.editor.text.OffsetRegion;
 import org.antlr.netbeans.editor.text.SnapshotPosition;
 import org.antlr.netbeans.editor.text.SnapshotPositionRegion;
+import org.antlr.netbeans.editor.text.TrackingPosition;
+import org.antlr.netbeans.editor.text.TrackingPositionRegion;
 import org.antlr.netbeans.editor.text.VersionedDocument;
 import org.antlr.netbeans.editor.text.VersionedDocumentUtilities;
 import org.antlr.netbeans.parsing.spi.ParserData;
@@ -63,12 +67,14 @@ import org.netbeans.api.annotations.common.CheckForNull;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;
 import org.netbeans.api.editor.EditorRegistry;
+import org.netbeans.editor.BaseDocument;
+import org.netbeans.editor.GuardedDocument;
+import org.netbeans.modules.editor.indent.api.Indent;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.awt.ActionRegistration;
-import org.openide.awt.NotificationDisplayer;
-import org.openide.awt.NotificationDisplayer.Priority;
 import org.openide.cookies.EditorCookie;
+import org.openide.text.NbDocument;
 import org.openide.util.ContextAwareAction;
 import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
@@ -183,9 +189,9 @@ public final class IncrementRuleVersionAction extends AbstractAction implements 
 
             ParserRuleSpecContext currentRule = findRuleForDescription(rules, _description);
             if (currentRule == null) {
-                String message = "Could not locate the current rule in the parse tree.";
-                NotificationDisplayer.getDefault().notify("Could Not Apply 'Increment Rule Version'", EmptyIcon.INSTANCE, message, (ActionListener)null, Priority.NORMAL);
-                return;
+                throw new UnsupportedOperationException("Could not locate the current rule in the parse tree.");
+//                NotificationDisplayer.getDefault().notify("Could Not Apply 'Increment Rule Version'", EmptyIcon.INSTANCE, message, (ActionListener)null, Priority.NORMAL);
+//                return;
             }
 
             Tuple3<RuleActionContext, TerminalNode<Token>, Integer> currentVersion = versionedRules.get(currentRule);
@@ -203,19 +209,105 @@ public final class IncrementRuleVersionAction extends AbstractAction implements 
         }
     }
 
-    private void updateVersionNumber(TerminalNode<Token> currentVersionToken, int newVersion) {
-        String message = String.format("Need to update the existing @version{} action for rule '%s' from version %s to %d...", _description.getName(), currentVersionToken.getText(), newVersion);
-        NotificationDisplayer.getDefault().notify("Could Not Apply 'Increment Rule Version'", EmptyIcon.INSTANCE, message, (ActionListener)null, Priority.NORMAL);
+    private void updateVersionNumber(TerminalNode<Token> currentVersionToken, final int newVersion) {
+        Interval sourceInterval = ParseTrees.getSourceInterval(currentVersionToken);
+        OffsetRegion region = OffsetRegion.fromBounds(sourceInterval.a, sourceInterval.b + 1);
+        TrackingPositionRegion trackingRegion = _snapshot.createTrackingRegion(region, TrackingPositionRegion.Bias.Forward);
+        final SnapshotPositionRegion currentRegion = trackingRegion.getRegion(_snapshot.getVersionedDocument().getCurrentSnapshot());
+        final BaseDocument baseDocument = (BaseDocument)_snapshot.getVersionedDocument().getDocument();
+        if (baseDocument == null) {
+            throw new UnsupportedOperationException("No document available");
+        }
+
+        baseDocument.runAtomicAsUser(new Runnable() {
+
+            @Override
+            public void run() {
+                try {
+                    baseDocument.remove(currentRegion.getStart().getOffset(), currentRegion.getLength());
+                    baseDocument.insertString(currentRegion.getStart().getOffset(), Integer.toString(newVersion), null);
+                } catch (BadLocationException ex) {
+                    Exceptions.printStackTrace(ex);
+                }
+            }
+        });
     }
 
     private void addVersionNumberToAction(RuleActionContext versionAction, int version) {
-        String message = String.format("Need to update rule '%s' by adding a '%d' to the existing (empty) @version{} action...", _description.getName(), version);
-        NotificationDisplayer.getDefault().notify("Could Not Apply 'Increment Rule Version'", EmptyIcon.INSTANCE, message, (ActionListener)null, Priority.NORMAL);
+        ActionBlockContext actionBlockContext = versionAction.actionBlock();
+        if (actionBlockContext == null || actionBlockContext.BEGIN_ACTION() == null || actionBlockContext.END_ACTION() == null) {
+            throw new UnsupportedOperationException("Incomplete or invalid action block");
+        }
+
+        final String text = Integer.toString(version) + (actionBlockContext.getChildCount() == 2 ? "" : " ");
+
+        int offset = ParseTrees.getSourceInterval(actionBlockContext.BEGIN_ACTION()).b + 1;
+        TrackingPosition trackingPosition = _snapshot.createTrackingPosition(offset, TrackingPosition.Bias.Forward);
+        final SnapshotPosition currentPosition = trackingPosition.getPosition(_snapshot.getVersionedDocument().getCurrentSnapshot());
+        final BaseDocument baseDocument = (BaseDocument)_snapshot.getVersionedDocument().getDocument();
+        if (baseDocument == null) {
+            throw new UnsupportedOperationException("No document available");
+        }
+
+        baseDocument.runAtomicAsUser(new Runnable() {
+
+            @Override
+            public void run() {
+                try {
+                    baseDocument.insertString(currentPosition.getOffset(), text, null);
+                } catch (BadLocationException ex) {
+                    Exceptions.printStackTrace(ex);
+                }
+            }
+        });
     }
 
-    private void addVersionNumber(ParserRuleSpecContext ruleContext, int version) {
-        String message = String.format("Need to update rule '%s' by adding a new @version{%d} action...", _description.getName(), version);
-        NotificationDisplayer.getDefault().notify("Could Not Apply 'Increment Rule Version'", EmptyIcon.INSTANCE, message, (ActionListener)null, Priority.NORMAL);
+    private void addVersionNumber(@NonNull ParserRuleSpecContext ruleContext, int version) {
+        TerminalNode<Token> colon = ruleContext.COLON();
+        if (colon == null) {
+            throw new UnsupportedOperationException("Incomplete rule");
+        }
+
+        DocumentSnapshotLine line = _snapshot.findLineFromLineNumber(colon.getSymbol().getLine() - 1);
+        final boolean hasLeadingNewline = line.getText().substring(0, colon.getSymbol().getCharPositionInLine()).trim().isEmpty();
+
+        final String text = String.format("%s@version{%d}\n", hasLeadingNewline ? "" : "\n", version);
+
+        int offset = ParseTrees.getSourceInterval(colon).a;
+        TrackingPosition trackingPosition = _snapshot.createTrackingPosition(offset, TrackingPosition.Bias.Forward);
+        final SnapshotPosition currentPosition = trackingPosition.getPosition(_snapshot.getVersionedDocument().getCurrentSnapshot());
+        final GuardedDocument document = (GuardedDocument)_snapshot.getVersionedDocument().getDocument();
+        if (document == null) {
+            throw new UnsupportedOperationException("No " + GuardedDocument.class.getName() + " available");
+        }
+
+        Indent indent = Indent.get(document);
+        indent.lock();
+        try {
+            document.runAtomicAsUser(new Runnable() {
+
+                @Override
+                public void run() {
+                    try {
+                        document.insertString(currentPosition.getOffset(), text, null);
+
+                        // reindent the line containing the @version{} action and the (following) line containing the ':'
+                        int startLine = currentPosition.getContainingLine().getLineNumber() + (hasLeadingNewline ? 0 : 1);
+                        int endLine = startLine + 1;
+
+                        // currently the reindent algorithm only supports operating on one line at a time
+                        for (int i = startLine; i <= endLine; i++) {
+                            int lineOffset = NbDocument.findLineOffset(document, i);
+                            Indent.get(document).reindent(lineOffset);
+                        }
+                    } catch (BadLocationException ex) {
+                        Exceptions.printStackTrace(ex);
+                    }
+                }
+            });
+        } finally {
+            indent.unlock();
+        }
     }
 
     @RuleDependencies({
