@@ -137,6 +137,28 @@ public final class IncrementRuleVersionAction extends AbstractAction implements 
     }
 
     @Override
+    public boolean isEnabled() {
+        return _description != null;
+    }
+
+    @Override
+    public Action createContextAwareInstance(Lookup actionContext) {
+        if (actionContext == null) {
+            return null;
+        }
+
+        if (actionContext.lookup(GrammarDataObject.class) == null) {
+            return null;
+        }
+
+        if (actionContext.lookup(EditorCookie.class) == null) {
+            return null;
+        }
+
+        return new IncrementRuleVersionAction(actionContext);
+    }
+
+    @Override
     @RuleDependencies({
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_grammarSpec, version=0, dependents=Dependents.SELF),
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_parserRuleSpec, version=0, dependents=Dependents.SELF),
@@ -168,17 +190,11 @@ public final class IncrementRuleVersionAction extends AbstractAction implements 
 
             Tuple3<RuleActionContext, TerminalNode<Token>, Integer> currentVersion = versionedRules.get(currentRule);
             if (currentVersion == null) {
-                String message = String.format("Need to update rule '%s' by adding a new @version{%d} action...", _description.getName(), maximumVersion + 1);
-                NotificationDisplayer.getDefault().notify("Could Not Apply 'Increment Rule Version'", EmptyIcon.INSTANCE, message, (ActionListener)null, Priority.NORMAL);
-                return;
-            }
-
-            if (currentVersion.getItem2() == null) {
-                String message = String.format("Need to update rule '%s' by adding a '%d' to the existing empty @version{} action...", _description.getName(), maximumVersion + 1);
-                NotificationDisplayer.getDefault().notify("Could Not Apply 'Increment Rule Version'", EmptyIcon.INSTANCE, message, (ActionListener)null, Priority.NORMAL);
+                addVersionNumber(currentRule, maximumVersion + 1);
+            } else if (currentVersion.getItem2() == null) {
+                addVersionNumberToAction(currentVersion.getItem1(), maximumVersion + 1);
             } else {
-                String message = String.format("Need to update the existing @version{} action for rule '%s' from version %d to %d...", _description.getName(), currentVersion.getItem3(), maximumVersion + 1);
-                NotificationDisplayer.getDefault().notify("Could Not Apply 'Increment Rule Version'", EmptyIcon.INSTANCE, message, (ActionListener)null, Priority.NORMAL);
+                updateVersionNumber(currentVersion.getItem2(), maximumVersion + 1);
             }
         } catch (InterruptedException ex) {
             Exceptions.printStackTrace(ex);
@@ -187,26 +203,19 @@ public final class IncrementRuleVersionAction extends AbstractAction implements 
         }
     }
 
-    @Override
-    public boolean isEnabled() {
-        return _description != null;
+    private void updateVersionNumber(TerminalNode<Token> currentVersionToken, int newVersion) {
+        String message = String.format("Need to update the existing @version{} action for rule '%s' from version %s to %d...", _description.getName(), currentVersionToken.getText(), newVersion);
+        NotificationDisplayer.getDefault().notify("Could Not Apply 'Increment Rule Version'", EmptyIcon.INSTANCE, message, (ActionListener)null, Priority.NORMAL);
     }
 
-    @Override
-    public Action createContextAwareInstance(Lookup actionContext) {
-        if (actionContext == null) {
-            return null;
-        }
+    private void addVersionNumberToAction(RuleActionContext versionAction, int version) {
+        String message = String.format("Need to update rule '%s' by adding a '%d' to the existing (empty) @version{} action...", _description.getName(), version);
+        NotificationDisplayer.getDefault().notify("Could Not Apply 'Increment Rule Version'", EmptyIcon.INSTANCE, message, (ActionListener)null, Priority.NORMAL);
+    }
 
-        if (actionContext.lookup(GrammarDataObject.class) == null) {
-            return null;
-        }
-
-        if (actionContext.lookup(EditorCookie.class) == null) {
-            return null;
-        }
-
-        return new IncrementRuleVersionAction(actionContext);
+    private void addVersionNumber(ParserRuleSpecContext ruleContext, int version) {
+        String message = String.format("Need to update rule '%s' by adding a new @version{%d} action...", _description.getName(), version);
+        NotificationDisplayer.getDefault().notify("Could Not Apply 'Increment Rule Version'", EmptyIcon.INSTANCE, message, (ActionListener)null, Priority.NORMAL);
     }
 
     @RuleDependencies({
