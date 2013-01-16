@@ -45,7 +45,7 @@ public class DocumentSnapshotToken extends CommonToken {
     @Override
     public int getLine() {
         if (snapshot != null) {
-            return snapshot.findLineNumber(getStartIndex());
+            return snapshot.findLineNumber(getStartIndex()) + 1;
         }
 
         return super.getLine();
