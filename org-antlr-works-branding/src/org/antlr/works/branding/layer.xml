@@ -29,7 +29,6 @@
             <file name="Import_hidden"/>
             <file name="org-netbeans-modules-project-ui-CloseProject.shadow_hidden"/>
             <file name="org-netbeans-modules-project-ui-CustomizeProject.shadow_hidden"/>
-            <file name="org-netbeans-modules-project-ui-NewFile.shadow_hidden"/>
             <file name="org-netbeans-modules-project-ui-NewProject.shadow_hidden"/>
             <file name="org-netbeans-modules-project-ui-OpenProject.shadow_hidden"/>
             <file name="org-netbeans-modules-project-ui-RecentProjects.shadow_hidden"/>
@@ -50,7 +49,6 @@
     </folder>
     <folder name="Toolbars">
         <folder name="File">
-            <file name="org-netbeans-modules-project-ui-NewFile.shadow_hidden"/>
             <file name="org-netbeans-modules-project-ui-NewProject.shadow_hidden"/>
             <file name="org-netbeans-modules-project-ui-OpenProject.shadow_hidden"/>
         </folder>
