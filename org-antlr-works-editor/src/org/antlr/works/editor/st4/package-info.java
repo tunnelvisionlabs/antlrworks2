@@ -11,8 +11,8 @@
     "LBL_TemplateFile=StringTemplate Template File",
 })
 @TemplateRegistrations({
-    @TemplateRegistration(content = "resources/templates/Group.stg.template", description = "resources/templates/group.html", folder = "StringTemplate", displayName = "#LBL_GroupFile", scriptEngine = "freemarker"),
-    @TemplateRegistration(content = "resources/templates/Template.st.template", description = "resources/templates/template.html", folder = "StringTemplate", displayName = "#LBL_TemplateFile", scriptEngine = "freemarker"),
+    @TemplateRegistration(content = "resources/templates/Group.stg.template", description = "resources/templates/group.html", folder = "StringTemplate", displayName = "#LBL_GroupFile", scriptEngine = "freemarker", requireProject = false),
+    @TemplateRegistration(content = "resources/templates/Template.st.template", description = "resources/templates/template.html", folder = "StringTemplate", displayName = "#LBL_TemplateFile", scriptEngine = "freemarker", requireProject = false),
 })
 package org.antlr.works.editor.st4;
 
