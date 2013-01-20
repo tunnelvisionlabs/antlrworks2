@@ -12,4 +12,7 @@
     <entry javaType="java.lang.Integer" name="completion-auto-popup-delay">
         <value><![CDATA[0]]></value>
     </entry>
+    <entry javaType="methodvalue" name="identifier-acceptor">
+        <value><![CDATA[org.antlr.works.editor.grammar.NbGrammarSettingsInitializer.getIdentifierAcceptor]]></value>
+    </entry>
 </editor-preferences>
