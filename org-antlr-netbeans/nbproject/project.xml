@@ -244,6 +244,7 @@
                 <package>org.antlr.netbeans.editor.text</package>
                 <package>org.antlr.netbeans.parsing.spi</package>
                 <package>org.antlr.netbeans.semantics</package>
+                <package>org.antlr.netbeans.util</package>
             </public-packages>
         </data>
     </configuration>
