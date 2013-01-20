@@ -13,7 +13,6 @@ import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.concurrent.TimeUnit;
-import java.util.prefs.Preferences;
 import javax.swing.Action;
 import javax.swing.Icon;
 import javax.swing.JEditorPane;
@@ -39,11 +38,8 @@ import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;
 import org.netbeans.api.editor.EditorActionRegistration;
-import org.netbeans.api.editor.mimelookup.MimeLookup;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
-import org.netbeans.api.editor.settings.SimpleValueNames;
 import org.netbeans.editor.BaseAction;
-import org.netbeans.editor.BaseDocument;
 import org.netbeans.editor.BaseKit;
 import org.netbeans.editor.Utilities;
 import org.netbeans.editor.ext.ExtKit;
@@ -71,16 +67,6 @@ public class GrammarEditorKit extends NbEditorKit {
 
     private static final LineCommentFormat LINE_COMMENT_FORMAT = new LineCommentFormat("//");
     private static final BlockCommentFormat BLOCK_COMMENT_FORMAT = new BlockCommentFormat("/*", "*/");
-
-    @Override
-    protected void initDocument(BaseDocument doc) {
-        super.initDocument(doc);
-
-        Preferences preferences = MimeLookup.getLookup(GRAMMAR_MIME_TYPE).lookup(Preferences.class);
-        if (preferences != null) {
-            preferences.putInt(SimpleValueNames.COMPLETION_AUTO_POPUP_DELAY, 0);
-        }
-    }
 
     @Override
     public String getContentType() {

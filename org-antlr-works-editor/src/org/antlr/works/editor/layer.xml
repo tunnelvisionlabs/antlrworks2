@@ -6,6 +6,12 @@
             <folder name="x-antlr3">
                 <attr name="SystemFileSystem.localizingBundle" stringvalue="org.antlr.works.editor.Bundle"/>
 
+                <folder name="Preferences">
+                    <folder name="Defaults">
+                        <file name="org-antlr-works-editor-grammar-preferences.xml" url="grammar/resources/DefaultPreferences.xml" />
+                    </folder>
+                </folder>
+
                 <folder name="FontsColors">
                     <folder name="NetBeans">
                         <folder name="Defaults">
@@ -139,6 +145,12 @@
             </folder>
             <folder name="x-stringtemplate4">
                 <attr name="SystemFileSystem.localizingBundle" stringvalue="org.antlr.works.editor.Bundle"/>
+
+                <folder name="Preferences">
+                    <folder name="Defaults">
+                        <file name="org-antlr-works-editor-st4-preferences.xml" url="st4/resources/DefaultPreferences.xml" />
+                    </folder>
+                </folder>
 
                 <folder name="FontsColors">
                     <folder name="NetBeans">
