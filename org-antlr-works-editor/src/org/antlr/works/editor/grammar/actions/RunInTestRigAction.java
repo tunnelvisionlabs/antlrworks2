@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+import javax.swing.text.StyledDocument;
 import javax.tools.JavaCompiler;
 import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
@@ -36,7 +37,9 @@ import org.antlr.netbeans.editor.text.VersionedDocument;
 import org.antlr.netbeans.editor.text.VersionedDocumentUtilities;
 import org.antlr.netbeans.parsing.spi.ParserData;
 import org.antlr.netbeans.parsing.spi.ParserTaskManager;
+import org.antlr.netbeans.util.NotificationIcons;
 import org.antlr.v4.runtime.misc.TestRig;
+import org.antlr.works.editor.grammar.GrammarDataObject;
 import org.antlr.works.editor.grammar.GrammarEditorKit;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
 import org.antlr.works.editor.grammar.codegen.CodeGenerator;
@@ -55,6 +58,8 @@ import org.openide.WizardDescriptor;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.awt.ActionRegistration;
+import org.openide.awt.NotificationDisplayer;
+import org.openide.cookies.EditorCookie;
 import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileUtil;
 import org.openide.loaders.DataObject;
@@ -84,13 +89,33 @@ public final class RunInTestRigAction implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent ev) {
-        final FileObject fileObject = context.getPrimaryFile();
-        if (fileObject == null) {
+        if (context == null) {
+            displayError("This command is only valid in the context of a file.");
             return;
         }
 
-        String mimeType = fileObject.getMIMEType();
-        if (!GrammarEditorKit.GRAMMAR_MIME_TYPE.equals(mimeType)) {
+        if (!(context instanceof GrammarDataObject)) {
+            displayError("This command is only valid for ANTLR grammar files.");
+            return;
+        }
+
+        EditorCookie editorCookie = context.getLookup().lookup(EditorCookie.class);
+        if (editorCookie != null) {
+            StyledDocument document = editorCookie.getDocument();
+            if (document != null && GrammarEditorKit.isLegacyMode(document)) {
+                displayError("This command is not valid in legacy (ANTLR 3) mode.");
+                return;
+            }
+        }
+
+        FileObject fileObject = context.getPrimaryFile();
+        if (fileObject == null) {
+            displayError("No FileObject is available for the DataObject");
+            return;
+        }
+
+        if (fileObject.hasExt("g") || fileObject.hasExt("g3")) {
+            displayError("ANTLR grammar files ending in *.g and *.g3 default to legacy (ANTLR 3) mode. If this is an ANTLR 4 grammar, open the file and uncheck the Legacy Mode button on the toolbar before running TestRig.");
             return;
         }
 
@@ -144,6 +169,10 @@ public final class RunInTestRigAction implements ActionListener {
             task.showTreeInGUI = RunInTestRigWizardOptions.isShowTreeInGUI(wizard);
             CodeGenerator.REFERENCE_RP.post(task);
         }
+    }
+
+    private void displayError(String message) {
+        NotificationDisplayer.getDefault().notify("Run in TestRig", NotificationIcons.ERROR, message, null);
     }
 
     @CheckForNull

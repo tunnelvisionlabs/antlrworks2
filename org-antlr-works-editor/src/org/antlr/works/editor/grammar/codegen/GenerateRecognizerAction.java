@@ -13,13 +13,18 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import javax.swing.text.StyledDocument;
+import org.antlr.netbeans.util.NotificationIcons;
 import org.antlr.works.editor.grammar.GrammarDataObject;
+import org.antlr.works.editor.grammar.GrammarEditorKit;
 import org.netbeans.api.queries.FileEncodingQuery;
 import org.openide.DialogDisplayer;
 import org.openide.WizardDescriptor;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.awt.ActionRegistration;
+import org.openide.awt.NotificationDisplayer;
+import org.openide.cookies.EditorCookie;
 import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileUtil;
 import org.openide.loaders.DataObject;
@@ -42,8 +47,34 @@ public final class GenerateRecognizerAction implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent ev) {
-        if (!(context instanceof GrammarDataObject)) {
+        if (context == null) {
+            displayError("This command is only valid in the context of a file.");
             return;
+        }
+
+        if (!(context instanceof GrammarDataObject)) {
+            displayError("This command is only valid for ANTLR grammar files.");
+            return;
+        }
+
+        EditorCookie editorCookie = context.getLookup().lookup(EditorCookie.class);
+        if (editorCookie != null) {
+            StyledDocument document = editorCookie.getDocument();
+            if (document != null && GrammarEditorKit.isLegacyMode(document)) {
+                displayError("This command is not valid in legacy (ANTLR 3) mode.");
+                return;
+            }
+        } else {
+            FileObject primaryFile = context.getPrimaryFile();
+            if (primaryFile == null) {
+                displayError("No FileObject is available for the DataObject");
+                return;
+            }
+
+            if (primaryFile.hasExt("g") || primaryFile.hasExt("g3")) {
+                displayError("ANTLR grammar files ending in *.g and *.g3 default to legacy (ANTLR 3) mode. If this is an ANTLR 4 grammar, open the file and uncheck the Legacy Mode button on the toolbar before generating code.");
+                return;
+            }
         }
 
         WizardDescriptor wizard = new WizardDescriptor(new CodeGeneratorWizardIterator());
@@ -88,5 +119,9 @@ public final class GenerateRecognizerAction implements ActionListener {
             generator.run();
         }
 
+    }
+
+    private void displayError(String message) {
+        NotificationDisplayer.getDefault().notify("Generate Recognizer", NotificationIcons.ERROR, message, null);
     }
 }

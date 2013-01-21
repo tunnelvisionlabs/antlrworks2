@@ -16,11 +16,13 @@ import javax.swing.SwingUtilities;
 import javax.swing.text.Document;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.netbeans.editor.text.VersionedDocumentUtilities;
+import org.antlr.netbeans.util.NotificationIcons;
 import org.antlr.works.editor.grammar.GrammarEditorKit;
 import org.netbeans.modules.editor.NbEditorUtilities;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.awt.ActionRegistration;
+import org.openide.awt.NotificationDisplayer;
 import org.openide.cookies.EditorCookie;
 import org.openide.cookies.OpenCookie;
 import org.openide.filesystems.FileChooserBuilder;
@@ -49,21 +51,27 @@ public final class InterpretCurrentLexerAction implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent ev) {
-
-        // TODO use context
         Document document = context.getDocument();
         if (document == null) {
+            displayError("This command is only valid in the context of a document.");
             return;
         }
 
         String mimeType = NbEditorUtilities.getMimeType(document);
         if (!GrammarEditorKit.GRAMMAR_MIME_TYPE.equals(mimeType)) {
+            displayError("This command is only valid for ANTLR grammar files.");
+            return;
+        }
+
+        if (GrammarEditorKit.isLegacyMode(document)) {
+            displayError("This command is not valid in legacy (ANTLR 3) mode.");
             return;
         }
 
         DocumentSnapshot snapshot = VersionedDocumentUtilities.getVersionedDocument(document).getCurrentSnapshot();
         LexerInterpreterData lexerInterpreterData = LexerInterpreterData.buildFromSnapshot(snapshot);
         if (lexerInterpreterData == null) {
+            displayError("An error occurred while constructing a lexer ATN from the grammar.");
             return;
         }
 
@@ -75,8 +83,9 @@ public final class InterpretCurrentLexerAction implements ActionListener {
             return;
         }
 
-        if (inputFile.length() > 1000000) {
-            throw new UnsupportedOperationException("File too large");
+        if (inputFile.length() > 1024 * 1024) {
+            displayError("This specified input file is too large. Please choose a file smaller than 1MB.");
+            return;
         }
 
         try {
@@ -95,9 +104,15 @@ public final class InterpretCurrentLexerAction implements ActionListener {
             }
         } catch (DataObjectNotFoundException ex) {
             Exceptions.printStackTrace(ex);
+            displayError("An error occurred. See the IDE Log output window for details.");
         } catch (IOException ex) {
             Exceptions.printStackTrace(ex);
+            displayError("An error occurred. See the IDE Log output window for details.");
         }
+    }
+
+    private void displayError(String message) {
+        NotificationDisplayer.getDefault().notify("Interpret Current Lexer", NotificationIcons.ERROR, message, null);
     }
 
     private void doOpen(final OpenCookie oc) {
