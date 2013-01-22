@@ -52,15 +52,16 @@ def
     ;
 
 templateDef
-    :   (   '@' enclosing=ID '.' name=ID '(' ')'
-        |   name=ID '(' formalArgs ')'
+@version{3}
+    :   (   '@' enclosing=(ID|TRUE|FALSE) '.' name=(ID|TRUE|FALSE) '(' ')'
+        |   name=(ID|TRUE|FALSE) '(' formalArgs ')'
         )
         '::='
         (   stringTemplate
         |   bigstringTemplate
         |   bigstringTemplateNoNewline
         )
-    |   alias=ID '::=' target=ID
+    |   alias=(ID|TRUE|FALSE) '::=' target=(ID|TRUE|FALSE)
     ;
 
 formalArgs

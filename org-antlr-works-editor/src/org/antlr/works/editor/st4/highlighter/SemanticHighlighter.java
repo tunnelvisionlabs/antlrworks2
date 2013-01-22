@@ -192,7 +192,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
         }
 
         @Override
-        @RuleDependency(recognizer=TemplateParser.class, rule=TemplateParser.RULE_templateDef, version=0, dependents=Dependents.PARENTS)
+        @RuleDependency(recognizer=TemplateParser.class, rule=TemplateParser.RULE_templateDef, version=3, dependents=Dependents.PARENTS)
         public void enterTemplateDef(TemplateDefContext ctx) {
             parameters.push(new HashSet<String>());
 
@@ -215,7 +215,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
         }
 
         @Override
-        @RuleDependency(recognizer=TemplateParser.class, rule=TemplateParser.RULE_templateDef, version=0, dependents=Dependents.PARENTS)
+        @RuleDependency(recognizer=TemplateParser.class, rule=TemplateParser.RULE_templateDef, version=3, dependents=Dependents.PARENTS)
         public void exitTemplateDef(TemplateDefContext ctx) {
             parameters.pop();
         }
