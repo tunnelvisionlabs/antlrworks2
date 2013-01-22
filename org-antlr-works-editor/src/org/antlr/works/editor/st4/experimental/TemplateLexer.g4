@@ -24,6 +24,10 @@ options {
  */
 }
 
+@members {
+protected abstract boolean inStringTemplateMode();
+}
+
 tokens {
     OPEN_DELIMITER,
     CLOSE_DELIMITER,
@@ -232,7 +236,7 @@ mode TemplateExpression;
     OR : '||';
     AND : '&&';
     SEMI : ';';
-    ESCAPE : '\\' (~'\uFFF1')*;
+    ESCAPE : '\\' (~('"' | '\uFFF1'))*;
 
     REGION_END : '@end';
     REGION_ID : '@' ID;
@@ -241,6 +245,10 @@ mode TemplateExpression;
     TemplateExpression_CLOSE_DELIMITER : CLOSE_DELIMITER -> type(CLOSE_DELIMITER), popMode;
     TemplateExpression_STRING
         :   '"' (~('"' | '\\') | '\\' (. | EOF))* '"' -> type(STRING)
+        ;
+
+    TemplateExpression_ESCAPED_STRING
+        :   '\\"' (~('"' | '\\') | ('\\' {_input.LA(1) != '"'}?))* '\\"' {inStringTemplateMode()}? -> type(STRING)
         ;
 
     TemplateExpression_ANYCHAR : . -> type(ANYCHAR);
@@ -261,7 +269,6 @@ mode StringTemplate;
     StringTemplate_ESCAPE : '\\' (. | EOF) -> type(TEXT);
 
     StringTemplate_END : '"' -> type(QUOTE), popMode;
-    //StringTemplate_CLOSE_DELIMITER : '>' -> type(TEXT);
 
     StringTemplate_ANYCHAR : . -> type(ANYCHAR);
 

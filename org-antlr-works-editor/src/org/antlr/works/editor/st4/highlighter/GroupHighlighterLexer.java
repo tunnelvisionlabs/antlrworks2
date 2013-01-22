@@ -155,6 +155,16 @@ public class GroupHighlighterLexer extends AbstractGroupHighlighterLexer {
         getInterpreter().copyState(interpreter);
     }
 
+    @Override
+    protected boolean inStringTemplateMode() {
+        if (_modeStack.size() < 2) {
+            return false;
+        }
+
+        // index 0 is DEFAULT_MODE, StringTemplate is always 1 inside that
+        return _modeStack.get(1) == StringTemplate;
+    }
+
     private GroupHighlighterATNSimulator getSimulatorForDelimiters(char openDelimiter, char closeDelimiter) {
         ATN atn = getATNForDelimiters(openDelimiter, closeDelimiter);
         synchronized (atnToSimulator) {
