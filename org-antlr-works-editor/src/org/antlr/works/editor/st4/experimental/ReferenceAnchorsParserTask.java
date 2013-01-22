@@ -51,6 +51,7 @@ import org.antlr.works.editor.st4.StringTemplateEditorKit;
 import org.antlr.works.editor.st4.TemplateParserDataDefinitions;
 import org.antlr.works.editor.st4.codemodel.FileModel;
 import org.antlr.works.editor.st4.experimental.generated.TemplateParser;
+import org.antlr.works.editor.st4.experimental.generated.TemplateParser.GroupFileContext;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 
 /**
@@ -70,10 +71,10 @@ public final class ReferenceAnchorsParserTask implements ParserTask {
     }
 
     @Override
-    @RuleDependency(recognizer=TemplateParser.class, rule=TemplateParser.RULE_group, version=0, dependents=Dependents.SELF)
+    @RuleDependency(recognizer=TemplateParser.class, rule=TemplateParser.RULE_groupFile, version=4, dependents=Dependents.SELF)
     public void parse(ParserTaskManager taskManager, ParseContext context, DocumentSnapshot snapshot, Collection<? extends ParserDataDefinition<?>> requestedData, ParserResultHandler results) throws InterruptedException, ExecutionException {
         synchronized (lock) {
-            ParserData<ParserRuleContext<Token>> parseTreeResult = taskManager.getData(snapshot, TemplateParserDataDefinitions.REFERENCE_PARSE_TREE, EnumSet.of(ParserDataOptions.NO_UPDATE)).get();
+            ParserData<GroupFileContext> parseTreeResult = taskManager.getData(snapshot, TemplateParserDataDefinitions.REFERENCE_PARSE_TREE, EnumSet.of(ParserDataOptions.NO_UPDATE)).get();
             ParserData<List<Anchor>> anchorPointsResult = taskManager.getData(snapshot, TemplateParserDataDefinitions.REFERENCE_ANCHOR_POINTS, EnumSet.of(ParserDataOptions.NO_UPDATE)).get();
             ParserData<FileModel> fileModelResult = taskManager.getData(snapshot, TemplateParserDataDefinitions.FILE_MODEL, EnumSet.of(ParserDataOptions.NO_UPDATE)).get();
             if (parseTreeResult == null || anchorPointsResult == null || fileModelResult == null) {
@@ -84,14 +85,14 @@ public final class ReferenceAnchorsParserTask implements ParserTask {
         //        input.setSourceName((String)document.getDocument().getProperty(Document.TitleProperty));
         //        GrammarLexer lexer = new GrammarLexer(input);
                 InterruptableTokenStream tokenStream = new InterruptableTokenStream(tokenSource);
-                TemplateParser.GroupContext parseResult;
+                TemplateParser.GroupFileContext parseResult;
                 TemplateParser parser = TemplateParserFactory.DEFAULT.getParser(tokenStream);
                 try {
                     parser.getInterpreter().setPredictionMode(PredictionMode.SLL);
                     parser.removeErrorListeners();
                     parser.setBuildParseTree(true);
                     parser.setErrorHandler(new BailErrorStrategy<Token>());
-                    parseResult = parser.group();
+                    parseResult = parser.groupFile();
                 } catch (ParseCancellationException ex) {
                     if (ex.getCause() instanceof RecognitionException) {
                         // retry with default error handler
@@ -100,13 +101,13 @@ public final class ReferenceAnchorsParserTask implements ParserTask {
                         parser.addErrorListener(DescriptiveErrorListener.INSTANCE);
                         parser.setInputStream(tokenStream);
                         parser.setErrorHandler(new DefaultErrorStrategy<Token>());
-                        parseResult = parser.group();
+                        parseResult = parser.groupFile();
                     } else {
                         throw ex;
                     }
                 }
 
-                parseTreeResult = new BaseParserData<ParserRuleContext<Token>>(context, TemplateParserDataDefinitions.REFERENCE_PARSE_TREE, snapshot, parseResult);
+                parseTreeResult = new BaseParserData<GroupFileContext>(context, TemplateParserDataDefinitions.REFERENCE_PARSE_TREE, snapshot, parseResult);
 
                 if (anchorPointsResult == null && snapshot.getVersionedDocument().getDocument() != null) {
                     TemplateParserAnchorListener listener = new TemplateParserAnchorListener(snapshot);

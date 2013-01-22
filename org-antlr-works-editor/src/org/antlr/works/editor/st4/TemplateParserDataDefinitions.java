@@ -15,10 +15,14 @@ import org.antlr.netbeans.editor.navigation.Description;
 import org.antlr.netbeans.editor.tagging.Tagger;
 import org.antlr.netbeans.parsing.spi.ParserDataDefinition;
 import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
+import org.antlr.v4.runtime.Dependents;
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
 import org.antlr.works.editor.st4.codemodel.FileModel;
 import org.antlr.works.editor.st4.experimental.CurrentTemplateContextData;
+import org.antlr.works.editor.st4.experimental.generated.TemplateParser;
+import org.antlr.works.editor.st4.experimental.generated.TemplateParser.GroupFileContext;
 import org.antlr.works.editor.st4.parser.CompiledModel;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 
@@ -30,7 +34,8 @@ public class TemplateParserDataDefinitions {
     public static final ParserDataDefinition<CompiledModel> COMPILED_MODEL = new CompiledModelDataDefinition();
 
     public static final ParserDataDefinition<List<Anchor>> REFERENCE_ANCHOR_POINTS = new ReferenceAnchorPointsDataDefinition();
-    public static final ParserDataDefinition<ParserRuleContext<Token>> REFERENCE_PARSE_TREE = new ReferenceParseTreeDataDefinition();
+    @RuleDependency(recognizer=TemplateParser.class, rule=TemplateParser.RULE_groupFile, version=4, dependents=Dependents.SELF)
+    public static final ParserDataDefinition<GroupFileContext> REFERENCE_PARSE_TREE = new ReferenceParseTreeDataDefinition();
 
     public static final ParserDataDefinition<List<Anchor>> DYNAMIC_ANCHOR_POINTS = new DynamicAnchorPointsDataDefinition();
     public static final ParserDataDefinition<Tagger<TokenTag<Token>>> LEXER_TOKENS = new LexerTokensDataDefinition();
@@ -55,7 +60,8 @@ public class TemplateParserDataDefinitions {
     }
 
     @MimeRegistration(mimeType=StringTemplateEditorKit.TEMPLATE_MIME_TYPE, service=ParserDataDefinition.class)
-    public static ParserDataDefinition<ParserRuleContext<Token>> getReferenceParseTreeDataDefinition() {
+    @RuleDependency(recognizer=TemplateParser.class, rule=TemplateParser.RULE_groupFile, version=4, dependents=Dependents.SELF)
+    public static ParserDataDefinition<GroupFileContext> getReferenceParseTreeDataDefinition() {
         return REFERENCE_PARSE_TREE;
     }
 
@@ -101,11 +107,12 @@ public class TemplateParserDataDefinitions {
 
     }
 
-    private static final class ReferenceParseTreeDataDefinition extends ParserDataDefinition<ParserRuleContext<Token>> {
+    @RuleDependency(recognizer=TemplateParser.class, rule=TemplateParser.RULE_groupFile, version=4, dependents=Dependents.SELF)
+    private static final class ReferenceParseTreeDataDefinition extends ParserDataDefinition<GroupFileContext> {
 
-        @SuppressWarnings("unchecked")
+        @RuleDependency(recognizer=TemplateParser.class, rule=TemplateParser.RULE_groupFile, version=4, dependents=Dependents.SELF)
         public ReferenceParseTreeDataDefinition() {
-            super("StringTemplate Reference Parse Tree", (Class<ParserRuleContext<Token>>)(Object)ParserRuleContext.class, false, true, ParserTaskScheduler.CONTENT_SENSITIVE_TASK_SCHEDULER);
+            super("StringTemplate Reference Parse Tree", GroupFileContext.class, false, true, ParserTaskScheduler.CONTENT_SENSITIVE_TASK_SCHEDULER);
         }
 
     }

@@ -24,6 +24,11 @@ options {
  */
 }
 
+groupFile
+@version{4}
+	:	group EOF
+	;
+
 group
     :   oldStyleHeader?
         delimiters?
