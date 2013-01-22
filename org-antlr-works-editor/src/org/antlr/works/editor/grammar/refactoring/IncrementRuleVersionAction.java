@@ -49,6 +49,7 @@ import org.antlr.v4.runtime.misc.Tuple;
 import org.antlr.v4.runtime.misc.Tuple3;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
+import org.antlr.v4.tool.Grammar;
 import org.antlr.works.editor.antlr4.parsing.ParseTrees;
 import org.antlr.works.editor.grammar.GoToSupport;
 import org.antlr.works.editor.grammar.GrammarDataObject;
@@ -124,6 +125,14 @@ public final class IncrementRuleVersionAction extends AbstractAction implements 
                 SnapshotPosition caretPosition = new SnapshotPosition(_snapshot, focused.getCaretPosition());
                 Description currentDescription = null;
                 for (Description description : rules) {
+                    if (Grammar.isTokenName(description.getName())) {
+                        continue;
+                    }
+
+                    if (!_dataObject.getPrimaryFile().equals(description.getFileObject())) {
+                        continue;
+                    }
+
                     SnapshotPositionRegion namePosition = new SnapshotPositionRegion(_snapshot, description.getOffset(), description.getName().length());
                     if (caretPosition.compareTo(namePosition.getStart()) >= 0 && caretPosition.compareTo(namePosition.getEnd()) <= 0) {
                         currentDescription = description;
