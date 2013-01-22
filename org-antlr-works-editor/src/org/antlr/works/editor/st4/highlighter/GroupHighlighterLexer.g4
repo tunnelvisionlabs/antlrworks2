@@ -252,6 +252,8 @@ mode TemplateExpression;
     ESCAPE : '\\' (~('"' | '\uFFF1'))*;
 
     REGION_ID : '@' ID;
+    TemplateExpression_TRUE : TRUE -> type(TRUE);
+    TemplateExpression_FALSE : FALSE -> type(FALSE);
     TemplateExpression_ID : ID -> type(ID);
 
     TemplateExpression_CLOSE_DELIMITER : CLOSE_DELIMITER -> type(CLOSE_DELIMITER), popMode;
