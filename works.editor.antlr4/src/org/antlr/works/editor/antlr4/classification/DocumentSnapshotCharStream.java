@@ -149,25 +149,29 @@ public class DocumentSnapshotCharStream implements CharStream {
             return 0;
         }
 
+        int currentIndex = index();
+        int size = size();
         if (i < 0) {
             // e.g., translate LA(-1) to use offset i=0; then data[p+0-1]
             i++;
-            if ((index() + i - 1) < 0) {
+            if ((currentIndex + i - 1) < 0) {
                 // invalid; no char before first char
                 return CharStream.EOF;
             }
         }
 
-        if ((index() + i - 1) >= size()) {
+        if ((currentIndex + i - 1) >= size) {
             return CharStream.EOF;
         }
 
-        int actualIndex = index() + i - 1;
+        int actualIndex = currentIndex + i - 1;
 
-        if (currentSnapshotLine != null
-            && actualIndex >= currentSnapshotLineStartIndex
-            && actualIndex < currentSnapshotLineStartIndex + currentSnapshotLine.length()) {
-            return currentSnapshotLine.charAt(actualIndex - currentSnapshotLineStartIndex);
+        String currentLine = currentSnapshotLine;
+        int currentLineStartIndex = currentSnapshotLineStartIndex;
+        if (currentLine != null
+            && actualIndex >= currentLineStartIndex
+            && actualIndex < currentLineStartIndex + currentLine.length()) {
+            return currentLine.charAt(actualIndex - currentLineStartIndex);
         }
 
         return getSnapshot().charAt(actualIndex);
