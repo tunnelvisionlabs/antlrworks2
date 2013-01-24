@@ -1,7 +1,6 @@
 Manifest-Version: 1.0
 OpenIDE-Module: com.tvl.modules.editor.completion/1
 OpenIDE-Module-Install: com/tvl/modules/editor/completion/CompletionModule.class
-OpenIDE-Module-Layer: com/tvl/modules/editor/completion/resources/layer.xml
 OpenIDE-Module-Localizing-Bundle: com/tvl/modules/editor/completion/Bundle.properties
 OpenIDE-Module-Specification-Version: 1.0
 
