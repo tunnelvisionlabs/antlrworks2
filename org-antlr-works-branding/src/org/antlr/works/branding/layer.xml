@@ -41,6 +41,9 @@
         <file name="RunProject_hidden"/>
         <folder name="Source">
             <file name="org-netbeans-modules-editor-MainMenuAction$ToggleCommentAction.instance_hidden"/>
+            <file name="org-netbeans-modules-editor-completion-CompletionActionsMainMenu$CompletionShow.instance_hidden"/>
+            <file name="org-netbeans-modules-editor-completion-CompletionActionsMainMenu$DocumentationShow.instance_hidden"/>
+            <file name="org-netbeans-modules-editor-completion-CompletionActionsMainMenu$ToolTipShow.instance_hidden"/>
         </folder>
         <file name="Versioning_hidden"/>
         <folder name="Window">
