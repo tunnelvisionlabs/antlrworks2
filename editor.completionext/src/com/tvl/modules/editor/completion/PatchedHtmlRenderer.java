@@ -53,10 +53,11 @@ import java.awt.Shape;
 import java.awt.font.LineMetrics;
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayDeque;
 import java.util.Arrays;
+import java.util.Deque;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.Stack;
 import java.util.StringTokenizer;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -71,7 +72,7 @@ public final class PatchedHtmlRenderer {
 
     /** Stack object used during HTML rendering to hold previous colors in
      * the case of nested color entries. */
-    private static final Stack<Color> colorStack = new Stack<>();
+    private static final Deque<Color> colorStack = new ArrayDeque<>();
 
     /**
      * Constant used by {@link #renderString renderString}, {@link #renderPlainString renderPlainString},
@@ -347,7 +348,7 @@ public final class PatchedHtmlRenderer {
         }
 
         //Thread safety - avoid allocating memory for the common case
-        Stack<Color> colorStack = SwingUtilities.isEventDispatchThread() ? PatchedHtmlRenderer.colorStack : new Stack<Color>();
+        Deque<Color> colorStack = SwingUtilities.isEventDispatchThread() ? PatchedHtmlRenderer.colorStack : new ArrayDeque<Color>();
 
         g.setColor(defaultColor);
         g.setFont(f);
