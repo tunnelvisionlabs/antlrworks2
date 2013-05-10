@@ -113,7 +113,7 @@ public final class CompletionLayout {
     private final DocPopup docPopup;
     private final TipPopup tipPopup;
     
-    private Stack<CompletionLayoutPopup> visiblePopups;
+    private final Stack<CompletionLayoutPopup> visiblePopups;
     
     CompletionLayout() {
         completionPopup = new CompletionPopup();

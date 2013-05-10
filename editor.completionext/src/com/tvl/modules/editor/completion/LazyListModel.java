@@ -57,19 +57,19 @@ import javax.swing.event.*;
 public final class LazyListModel<T> extends Object
 implements ListModel<T>, Runnable, javax.swing.event.ListDataListener {
     /** means that the value has not yet been assigned */
-    private static int NOT_TESTED = Short.MIN_VALUE - 1;
-    private static int EMPTY_VALUE = Short.MIN_VALUE - 2;
+    private static final int NOT_TESTED = Short.MIN_VALUE - 1;
+    private static final int EMPTY_VALUE = Short.MIN_VALUE - 2;
     /** skips extensive asserts - needed for performance tests */
     private static final boolean skipExpensiveAsserts = Boolean.getBoolean ("org.openide.explorer.view.LazyListModel.skipExpensiveAsserts"); // NOI18N
     
     
     private boolean log;
-    private ListModel<T> listModel;
-    private Filter<? super T> filter;
+    private final ListModel<T> listModel;
+    private final Filter<? super T> filter;
     /** the value to return when nothing else can be returned */
-    private T defaultValue;
+    private final T defaultValue;
     /** simple event listener list */
-    private javax.swing.event.EventListenerList list = new javax.swing.event.EventListenerList ();
+    private final javax.swing.event.EventListenerList list = new javax.swing.event.EventListenerList ();
 
     /** the size of the original list we now know it has */
     private int originalSize;

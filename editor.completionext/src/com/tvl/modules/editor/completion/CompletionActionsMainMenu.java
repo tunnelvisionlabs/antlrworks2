@@ -56,7 +56,7 @@ import org.openide.util.NbBundle;
 })
 public abstract class CompletionActionsMainMenu extends MainMenuAction implements Action {
 
-    private AbstractAction delegate;
+    private final AbstractAction delegate;
         
     public CompletionActionsMainMenu() {
         super();

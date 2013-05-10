@@ -272,7 +272,7 @@ public class MarkOccurrencesHighlighter extends AbstractSemanticHighlighter<Curr
 
         private final List<Token> markedOccurrences = new ArrayList<>();
 
-        private Token referencedToken;
+        private final Token referencedToken;
 
         public MarkOccurrencesListener(FileModel fileModel, GrammarAnnotatedParseTree annotatedParseTree, SnapshotPosition position) {
             this.fileModel = fileModel;

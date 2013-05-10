@@ -64,8 +64,8 @@ public final class ToolTipManagerEx extends MouseAdapter implements MouseMotionL
     private static final Logger LOG = Logger.getLogger(ToolTipManagerEx.class.getName());
     private static final RequestProcessor RP = new RequestProcessor(ToolTipManagerEx.class.getName(), 1, false, false);
     
-    private Timer enterTimer;
-    private Timer  exitTimer;
+    private final Timer enterTimer;
+    private final Timer exitTimer;
     private String toolTipText;
     private JComponent insideComponent;
     private MouseEvent mouseEvent;
@@ -84,7 +84,7 @@ public final class ToolTipManagerEx extends MouseAdapter implements MouseMotionL
    
     private MouseMotionListener moveBeforeEnterListener = null;
 
-    private ToolTipProvider provider;
+    private final ToolTipProvider provider;
     
     private static final String WAITING_TEXT = Bundle.LBL_PleaseWait();
     
@@ -668,8 +668,8 @@ public final class ToolTipManagerEx extends MouseAdapter implements MouseMotionL
     /** calculates tooltip and invokes tooltip refresh */
     private class TooltipCalculator implements Runnable {
         
-        private Point location;
-        private Rectangle tooltipForRect;
+        private final Point location;
+        private final Rectangle tooltipForRect;
         
         TooltipCalculator( Rectangle tooltipForRect, Point loc ) {
             this.tooltipForRect = tooltipForRect;
@@ -743,8 +743,8 @@ public final class ToolTipManagerEx extends MouseAdapter implements MouseMotionL
         "HINT_EnlargeJavaDocToolip=Press {0} to enlarge"
     })
     private class ToolTipEx extends JPanel {
-        private HTMLDocView content;
-        private JLabel shortcut;
+        private final HTMLDocView content;
+        private final JLabel shortcut;
         public ToolTipEx() {
             super( new GridBagLayout() );
             setPreferredSize( getDefaultToolTipSize() );

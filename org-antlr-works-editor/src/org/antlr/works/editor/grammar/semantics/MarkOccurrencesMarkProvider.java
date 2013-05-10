@@ -94,10 +94,10 @@ public class MarkOccurrencesMarkProvider extends MarkProvider {
 
     private static class MarkImpl implements Mark {
 
-        private Document doc;
-        private Position startOffset;
-        private Color color;
-        private String tooltip;
+        private final Document doc;
+        private final Position startOffset;
+        private final Color color;
+        private final String tooltip;
 
         public MarkImpl(Document doc, Position startOffset, Color color, String tooltip) {
             this.doc = doc;

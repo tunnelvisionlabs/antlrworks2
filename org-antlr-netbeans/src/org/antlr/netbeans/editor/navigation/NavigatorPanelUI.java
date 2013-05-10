@@ -66,7 +66,7 @@ public abstract class NavigatorPanelUI extends javax.swing.JPanel implements Exp
     private final Lookup lookup = new AbstractLookup(selectedNodes);
     private final Filters filters;
 
-    private Action[] actions;
+    private final Action[] actions;
 
     private long lastShowWaitNodeTime = -1;
 

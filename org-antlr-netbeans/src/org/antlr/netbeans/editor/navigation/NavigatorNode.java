@@ -295,7 +295,7 @@ public abstract class NavigatorNode extends AbstractNode {
 
     private static class WaitNode extends AbstractNode {
 
-        private Image waitIcon = ImageUtilities.loadImage("org/antlr/netbeans/editor/navigation/resources/wait.gif");
+        private final Image waitIcon = ImageUtilities.loadImage("org/antlr/netbeans/editor/navigation/resources/wait.gif");
 
         public WaitNode() {
             super(Children.LEAF);

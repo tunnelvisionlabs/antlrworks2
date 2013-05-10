@@ -434,7 +434,7 @@ public class DocumentationScrollPane extends JScrollPane {
     }
 
     private class MouseEventListener extends MouseAdapter {        
-        private JButton button;
+        private final JButton button;
         
         MouseEventListener(JButton button) {
             this.button = button;
@@ -491,7 +491,7 @@ public class DocumentationScrollPane extends JScrollPane {
     }
     
     private class DocPaneAction extends AbstractAction {
-        private int action;
+        private final int action;
         
         private DocPaneAction(int action) {
             this.action = action;

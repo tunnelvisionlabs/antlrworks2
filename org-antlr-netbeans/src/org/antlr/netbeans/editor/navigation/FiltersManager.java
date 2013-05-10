@@ -35,7 +35,7 @@ import org.openide.util.NbPreferences;
  */
 public final class FiltersManager {
 
-    private FiltersComponent comp;
+    private final FiltersComponent comp;
 
     static FiltersManager create(FiltersDescription descr) {
         return new FiltersManager(descr);

@@ -95,7 +95,7 @@ public class CompletionScrollPane extends JScrollPane {
     private static final int ACTION_COMPLETION_BEGIN = 5;
     private static final int ACTION_COMPLETION_END = 6;
 
-    private CompletionJList view;
+    private final CompletionJList view;
     
     private List<?> dataObj;
     
@@ -253,7 +253,7 @@ public class CompletionScrollPane extends JScrollPane {
     }
 
     private class CompletionPaneAction extends AbstractAction {
-        private int action;
+        private final int action;
 
         private CompletionPaneAction(int action) {
             this.action = action;

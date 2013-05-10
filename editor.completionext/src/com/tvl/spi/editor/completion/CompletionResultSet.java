@@ -79,7 +79,7 @@ public final class CompletionResultSet {
      */
     public static final int TEXT_SORT_TYPE = 1;
 
-    private CompletionResultSetImpl impl;
+    private final CompletionResultSetImpl impl;
 
     CompletionResultSet(CompletionResultSetImpl impl) {
         this.impl = impl;

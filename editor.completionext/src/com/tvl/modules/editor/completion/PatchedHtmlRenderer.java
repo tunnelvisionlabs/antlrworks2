@@ -71,7 +71,7 @@ public final class PatchedHtmlRenderer {
 
     /** Stack object used during HTML rendering to hold previous colors in
      * the case of nested color entries. */
-    private static Stack<Color> colorStack = new Stack<>();
+    private static final Stack<Color> colorStack = new Stack<>();
 
     /**
      * Constant used by {@link #renderString renderString}, {@link #renderPlainString renderPlainString},
