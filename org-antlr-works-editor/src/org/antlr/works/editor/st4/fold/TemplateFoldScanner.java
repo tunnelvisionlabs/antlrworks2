@@ -33,7 +33,7 @@ public class TemplateFoldScanner extends AbstractFoldScanner<CompiledModel> {
     protected List<FoldInfo> calculateFolds(ParserData<CompiledModel> result) {
         DocumentSnapshot snapshot = result.getSnapshot();
 
-        final List<FoldInfo> folds = new ArrayList<FoldInfo>();
+        final List<FoldInfo> folds = new ArrayList<>();
         CompiledFileModel fileModel = result.getData().getResult();
         TemplateGroupRuleReturnScope parseResult = fileModel.getResult();
         if (parseResult == null) {

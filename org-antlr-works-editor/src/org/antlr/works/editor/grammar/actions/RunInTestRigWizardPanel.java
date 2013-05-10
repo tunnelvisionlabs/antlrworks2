@@ -31,7 +31,7 @@ public class RunInTestRigWizardPanel implements WizardDescriptor.Panel<WizardDes
 
     private final ChangeSupport _changeSupport = new ChangeSupport(this);
 
-    private final List<String> _availableRules = new ArrayList<String>();
+    private final List<String> _availableRules = new ArrayList<>();
 
     private String _inputFile;
     private String _startRule;

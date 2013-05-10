@@ -24,7 +24,7 @@ import org.stringtemplate.v4.compiler.GroupParser;
  */
 public class GroupParserWrapper extends GroupParser {
 
-    private final List<SyntaxError> syntaxErrors = new ArrayList<SyntaxError>();
+    private final List<SyntaxError> syntaxErrors = new ArrayList<>();
     private final DocumentSnapshot snapshot;
 
     public GroupParserWrapper(TokenStream input, DocumentSnapshot snapshot) {

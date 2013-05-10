@@ -38,8 +38,7 @@ import org.openide.util.Parameters;
  * @author Sam Harwell
  */
 public abstract class AbstractNavigatorPanel<PanelUI extends JComponent> implements NavigatorPanel {
-    private final Lookup.Template<DataObject> TEMPLATE =
-        new Lookup.Template<DataObject>(DataObject.class);
+    private final Lookup.Template<DataObject> TEMPLATE = new Lookup.Template<>(DataObject.class);
 
     @NonNull
     private final String _mimeType;
@@ -72,7 +71,7 @@ public abstract class AbstractNavigatorPanel<PanelUI extends JComponent> impleme
         Parameters.notNull("mimeType", mimeType);
         Parameters.notNull("dataDefinitions", dataDefinitions);
         this._mimeType = mimeType;
-        this._dataDefinitions = new ArrayList<ParserDataDefinition<?>>(Arrays.asList(dataDefinitions));
+        this._dataDefinitions = new ArrayList<>(Arrays.asList(dataDefinitions));
     }
 
     @Override
@@ -113,9 +112,7 @@ public abstract class AbstractNavigatorPanel<PanelUI extends JComponent> impleme
             } else {
                 try {
                     SwingUtilities.invokeAndWait(panelFactory);
-                } catch (InterruptedException ex) {
-                    Exceptions.printStackTrace(ex);
-                } catch (InvocationTargetException ex) {
+                } catch (InterruptedException | InvocationTargetException ex) {
                     Exceptions.printStackTrace(ex);
                 }
             }

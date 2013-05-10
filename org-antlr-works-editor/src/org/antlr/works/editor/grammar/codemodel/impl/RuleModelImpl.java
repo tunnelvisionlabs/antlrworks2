@@ -25,10 +25,10 @@ import org.netbeans.api.annotations.common.NonNull;
  * @author Sam Harwell
  */
 public abstract class RuleModelImpl extends AbstractCodeElementModel implements RuleModel {
-    private final FreezableArrayList<ParameterModelImpl> parameters = new FreezableArrayList<ParameterModelImpl>();
-    private final FreezableArrayList<ParameterModelImpl> returnValues = new FreezableArrayList<ParameterModelImpl>();
-    private final FreezableArrayList<ParameterModelImpl> locals = new FreezableArrayList<ParameterModelImpl>();
-    private final FreezableArrayList<LabelModelImpl> labels = new FreezableArrayList<LabelModelImpl>();
+    private final FreezableArrayList<ParameterModelImpl> parameters = new FreezableArrayList<>();
+    private final FreezableArrayList<ParameterModelImpl> returnValues = new FreezableArrayList<>();
+    private final FreezableArrayList<ParameterModelImpl> locals = new FreezableArrayList<>();
+    private final FreezableArrayList<LabelModelImpl> labels = new FreezableArrayList<>();
     @SuppressWarnings("unchecked")
     private final ProxyCollection<AbstractCodeElementModel> members = new ProxyCollection<AbstractCodeElementModel>(parameters, returnValues, locals, labels);
 

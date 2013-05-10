@@ -38,8 +38,7 @@ public class TracingLexerATNFactory extends LexerATNFactory {
     // -J-Dorg.antlr.works.editor.grammar.debugger.TracingLexerATNFactory.level=FINE
     private static final Logger LOGGER = Logger.getLogger(TracingLexerATNFactory.class.getName());
 
-    private static final Map<String, Integer> COMMON_CONSTANTS =
-        new HashMap<String, Integer>();
+    private static final Map<String, Integer> COMMON_CONSTANTS = new HashMap<>();
     static {
         COMMON_CONSTANTS.put("HIDDEN", Lexer.HIDDEN);
         COMMON_CONSTANTS.put("DEFAULT_TOKEN_CHANNEL", Lexer.DEFAULT_TOKEN_CHANNEL);
@@ -52,8 +51,7 @@ public class TracingLexerATNFactory extends LexerATNFactory {
     }
 
     private List<LexerAction> _lexerActions;
-    public Map<Integer, Collection<LexerAction>> _actionsMap =
-        new HashMap<Integer, Collection<LexerAction>>();
+    public Map<Integer, Collection<LexerAction>> _actionsMap = new HashMap<>();
 
     public TracingLexerATNFactory(LexerGrammar g) {
         super(g);
@@ -88,34 +86,54 @@ public class TracingLexerATNFactory extends LexerATNFactory {
 
     protected void createLexerAction(GrammarAST ID, GrammarAST arg) {
         if (_lexerActions == null) {
-            _lexerActions = new ArrayList<LexerAction>();
+            _lexerActions = new ArrayList<>();
         }
 
         String command = ID.getText();
-        if ("skip".equals(command)) {
+        switch (command) {
+        case "skip":
             _lexerActions.add(SkipAction.INSTANCE);
-        } else if ("more".equals(command)) {
+            break;
+
+        case "more":
             _lexerActions.add(MoreAction.INSTANCE);
-        } else if ("popMode".equals(command)) {
+            break;
+
+        case "popMode":
             _lexerActions.add(PopModeAction.INSTANCE);
-        } else if ("mode".equals(command)) {
-            String modeName = arg != null ? arg.getText() : null;
-            int mode = getConstantValue(modeName);
-            _lexerActions.add(new ModeAction(mode));
-        } else if ("pushMode".equals(command)) {
-            String modeName =arg != null ? arg.getText() : null;
-            int mode = getConstantValue(modeName);
-            _lexerActions.add(new PushModeAction(mode));
-        } else if ("type".equals(command)) {
+            break;
+
+        case "mode":
+            {
+                String modeName = arg != null ? arg.getText() : null;
+                int mode = getConstantValue(modeName);
+                _lexerActions.add(new ModeAction(mode));
+                break;
+            }
+
+        case "pushMode":
+            {
+                String modeName =arg != null ? arg.getText() : null;
+                int mode = getConstantValue(modeName);
+                _lexerActions.add(new PushModeAction(mode));
+                break;
+            }
+
+        case "type":
             String typeName = arg != null ? arg.getText() : null;
             int type = getConstantValue(typeName);
             _lexerActions.add(new TypeAction(type));
-        } else if ("channel".equals(command)) {
+            break;
+
+        case "channel":
             String channelName = arg != null ? arg.getText() : null;
             int channel = getConstantValue(channelName);
             _lexerActions.add(new ChannelAction(channel));
-        } else {
+            break;
+
+        default:
             LOGGER.log(Level.WARNING, "The lexer command ''{0}'' is not yet supported by the interpreter.", command);
+            break;
         }
     }
 
@@ -135,7 +153,7 @@ public class TracingLexerATNFactory extends LexerATNFactory {
             return tokenType;
         }
 
-        List<String> modeNames = new ArrayList<String>(((LexerGrammar)g).modes.keySet());
+        List<String> modeNames = new ArrayList<>(((LexerGrammar)g).modes.keySet());
         int mode = modeNames.indexOf(name);
         if (mode >= 0) {
             return mode;

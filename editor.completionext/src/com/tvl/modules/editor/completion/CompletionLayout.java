@@ -125,7 +125,7 @@ public final class CompletionLayout {
         tipPopup = new TipPopup();
         tipPopup.setLayout(this);
         tipPopup.setPreferDisplayAboveCaret(true);
-        visiblePopups = new Stack<CompletionLayoutPopup>();
+        visiblePopups = new Stack<>();
     }
     
     public JTextComponent getEditorComponent() {
@@ -136,7 +136,7 @@ public final class CompletionLayout {
 
     public void setEditorComponent(JTextComponent editorComponent) {
         hideAll();
-        this.editorComponentRef = new WeakReference<JTextComponent>(editorComponent);
+        this.editorComponentRef = new WeakReference<>(editorComponent);
     }
 
     private void hideAll() {

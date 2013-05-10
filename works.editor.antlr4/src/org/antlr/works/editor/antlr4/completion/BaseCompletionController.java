@@ -55,7 +55,7 @@ public class BaseCompletionController implements CompletionController {
     private static final Pattern WORD_PATTERN =
         Pattern.compile("[A-Z][a-z]*");
 
-    private static final List<String> recentCompletions = new ArrayList<String>();
+    private static final List<String> recentCompletions = new ArrayList<>();
 
     private final JTextComponent component;
     private final List<? extends CompletionTask> tasks;
@@ -64,7 +64,7 @@ public class BaseCompletionController implements CompletionController {
     public BaseCompletionController(@NonNull JTextComponent component, @NonNull List<? extends CompletionTask> tasks, @NonNull List<Integer> queryTypes) {
         this.component = component;
         this.tasks = tasks;
-        this.queries = new ArrayList<AsyncCompletionQuery>();
+        this.queries = new ArrayList<>();
         for (CompletionTask task : tasks) {
             if (!(task instanceof AsyncCompletionTask)) {
                 continue;

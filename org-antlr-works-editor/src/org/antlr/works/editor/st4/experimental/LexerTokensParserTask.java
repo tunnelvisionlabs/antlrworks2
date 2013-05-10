@@ -78,7 +78,7 @@ public final class LexerTokensParserTask implements ParserTask {
                     int previousVersion = -1;
                     List<ParserData<Tagger<TokenTag<Token>>>> values;
                     synchronized (documentCache) {
-                        values = new ArrayList<ParserData<Tagger<TokenTag<Token>>>>(documentCache.values());
+                        values = new ArrayList<>(documentCache.values());
                     }
 
                     for (ParserData<Tagger<TokenTag<Token>>> data : values) {
@@ -91,11 +91,11 @@ public final class LexerTokensParserTask implements ParserTask {
 
                     if (previousResult != null) {
                         TemplateTokensTaskTaggerSnapshot previousTagger = (TemplateTokensTaskTaggerSnapshot)previousResult.getData();
-                        result = new BaseParserData<Tagger<TokenTag<Token>>>(context, TemplateParserDataDefinitions.LEXER_TOKENS, snapshot, previousTagger.translateTo(snapshot));
+                        result = new BaseParserData<>(context, TemplateParserDataDefinitions.LEXER_TOKENS, snapshot, previousTagger.translateTo(snapshot));
                     } else {
                         TemplateTokensTaskTaggerSnapshot tagger = new TemplateTokensTaskTaggerSnapshot(snapshot);
                         tagger.initialize();
-                        result = new BaseParserData<Tagger<TokenTag<Token>>>(context, TemplateParserDataDefinitions.LEXER_TOKENS, snapshot, tagger);
+                        result = new BaseParserData<>(context, TemplateParserDataDefinitions.LEXER_TOKENS, snapshot, tagger);
                     }
 
                     synchronized (documentCache) {

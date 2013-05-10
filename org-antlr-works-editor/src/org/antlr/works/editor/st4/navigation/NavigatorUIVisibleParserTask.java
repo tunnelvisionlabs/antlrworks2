@@ -45,7 +45,7 @@ public final class NavigatorUIVisibleParserTask implements ParserTask {
         throws InterruptedException, ExecutionException {
 
         if (requestedData.contains(TemplateParserDataDefinitions.NAVIGATOR_UI_VISIBLE)) {
-            BaseParserData<Boolean> data = new BaseParserData<Boolean>(context, TemplateParserDataDefinitions.NAVIGATOR_UI_VISIBLE, snapshot, TemplatesPanel.getInstance() != null);
+            BaseParserData<Boolean> data = new BaseParserData<>(context, TemplateParserDataDefinitions.NAVIGATOR_UI_VISIBLE, snapshot, TemplatesPanel.getInstance() != null);
             results.addResult(data);
         }
     }

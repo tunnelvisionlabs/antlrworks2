@@ -139,7 +139,7 @@ public abstract class AbstractIndentTask implements IndentTask {
 
         LOGGER.log(Level.FINE, "Reindent from anchor region: {0}.", region);
 
-        TaggerTokenSource<Token> taggerTokenSource = new TaggerTokenSource<Token>(tagger, new SnapshotPositionRegion(getSnapshot(), region));
+        TaggerTokenSource<Token> taggerTokenSource = new TaggerTokenSource<>(tagger, new SnapshotPositionRegion(getSnapshot(), region));
         TokenSource<Token> tokenSource = new CodeCompletionTokenSource(endPosition.getOffset(), taggerTokenSource);
         CommonTokenStream tokens = new CommonTokenStream(tokenSource);
 
@@ -148,8 +148,7 @@ public abstract class AbstractIndentTask implements IndentTask {
             return false;
         }
 
-        NavigableMap<Integer, List<Map.Entry<RuleContext<Token>, CaretReachedException>>> indentLevels =
-            new TreeMap<Integer, List<Map.Entry<RuleContext<Token>, CaretReachedException>>>();
+        NavigableMap<Integer, List<Map.Entry<RuleContext<Token>, CaretReachedException>>> indentLevels = new TreeMap<>();
         for (Map.Entry<RuleContext<Token>, CaretReachedException> parseTree : parseTrees.entrySet()) {
             if (parseTree.getValue() == null) {
                 continue;
@@ -172,7 +171,7 @@ public abstract class AbstractIndentTask implements IndentTask {
             List<Map.Entry<RuleContext<Token>, CaretReachedException>> indentList =
                 indentLevels.get(indentationLevel);
             if (indentList == null) {
-                indentList = new ArrayList<Map.Entry<RuleContext<Token>, CaretReachedException>>();
+                indentList = new ArrayList<>();
                 indentLevels.put(indentationLevel, indentList);
             }
 
@@ -335,7 +334,7 @@ public abstract class AbstractIndentTask implements IndentTask {
             List<ParseTree<? extends Token>> siblings = null;
             if (requirements.contains(AlignmentRequirement.PRIOR_SIBLING)) {
                 int childCount = ancestor.getChildCount();
-                siblings = new ArrayList<ParseTree<? extends Token>>(childCount);
+                siblings = new ArrayList<>(childCount);
                 for (int i = 0; i < childCount; i++) {
                     ParseTree<? extends Token> child = ancestor.getChild(i);
                     siblings.add(child);

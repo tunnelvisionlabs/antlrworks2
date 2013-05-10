@@ -79,7 +79,7 @@ public abstract class Filters {
     }
 
     public Collection<Description> filter(Collection<Description> original) {
-        ArrayList<Description> result = new ArrayList<Description>(original.size());
+        ArrayList<Description> result = new ArrayList<>(original.size());
         for (Description description : original) {
             if (!filterImpl(description)) {
                 continue;

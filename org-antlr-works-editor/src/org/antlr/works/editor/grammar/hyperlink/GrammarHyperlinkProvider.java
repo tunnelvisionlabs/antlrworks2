@@ -57,7 +57,7 @@ public class GrammarHyperlinkProvider implements HyperlinkProviderExt {
                 }
             }
         } else {
-            _lastDocument = new WeakReference<Document>(doc);
+            _lastDocument = new WeakReference<>(doc);
         }
 
         _lastOffset = offset;

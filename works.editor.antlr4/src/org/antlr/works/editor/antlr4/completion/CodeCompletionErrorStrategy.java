@@ -137,11 +137,11 @@ public class CodeCompletionErrorStrategy<Symbol extends Token> extends DefaultEr
                     ATNState target = interp.getReachableTarget(c, trans, CaretToken.CARET_TOKEN_TYPE);
                     if (target != null) {
                         if (transitions == null) {
-                            transitions = new LinkedHashMap<ATNConfig, List<Transition>>();
+                            transitions = new LinkedHashMap<>();
                         }
 
                         if (configTransitions == null) {
-                            configTransitions = new ArrayList<Transition>();
+                            configTransitions = new ArrayList<>();
                             transitions.put(c, configTransitions);
                         }
 

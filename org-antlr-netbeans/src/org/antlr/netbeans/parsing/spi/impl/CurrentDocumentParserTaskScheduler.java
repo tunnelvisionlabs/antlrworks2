@@ -60,7 +60,7 @@ public class CurrentDocumentParserTaskScheduler extends CurrentEditorParserTaskS
                 return;
             }
 
-            currentDocument = new WeakReference<Document>(document);
+            currentDocument = new WeakReference<>(document);
 
             if (!hasAssociatedDataDefinitions(getClass(), NbEditorUtilities.getMimeType(getCurrentDocument()))) {
                 return;

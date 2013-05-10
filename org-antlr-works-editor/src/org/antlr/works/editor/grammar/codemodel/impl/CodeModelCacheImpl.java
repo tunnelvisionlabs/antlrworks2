@@ -35,8 +35,7 @@ public class CodeModelCacheImpl implements CodeModelCache {
     private static CodeModelCacheImpl instance;
 
     private CodeModelProjectCache defaultProjectCache;
-    private final Map<Project, CodeModelProjectCache> projectCaches =
-        new WeakHashMap<Project, CodeModelProjectCache>();
+    private final Map<Project, CodeModelProjectCache> projectCaches = new WeakHashMap<>();
 
     @Override
     @NonNull
@@ -118,7 +117,7 @@ public class CodeModelCacheImpl implements CodeModelCache {
     public static <T extends CodeElementModel> Collection<T> findElementsByName(Collection<? extends T> elements, @NonNull String name) {
         Parameters.notNull("name", name);
 
-        List<T> result = new ArrayList<T>();
+        List<T> result = new ArrayList<>();
         for (T element : elements) {
             if (name.equals(element.getName())) {
                 result.add(element);

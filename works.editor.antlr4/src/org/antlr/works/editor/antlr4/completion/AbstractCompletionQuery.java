@@ -323,7 +323,7 @@ public abstract class AbstractCompletionQuery extends AsyncCompletionQuery {
         Pattern prefixBoundaryPattern = BaseCompletionController.getPrefixBoundaryPattern(prefix, false);
         Pattern letterOrderPattern = BaseCompletionController.getLetterOrderPattern(prefix, false);
         String lowercasePrefix = prefix.toLowerCase(Locale.getDefault());
-        List<CompletionItem> result = new ArrayList<CompletionItem>();
+        List<CompletionItem> result = new ArrayList<>();
         for (CompletionItem item : data) {
             String insertPrefix = item.getInsertPrefix().toString();
             if (insertPrefix.toLowerCase(Locale.getDefault()).contains(lowercasePrefix)) {

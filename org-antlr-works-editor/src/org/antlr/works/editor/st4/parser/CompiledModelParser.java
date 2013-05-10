@@ -54,7 +54,7 @@ public class CompiledModelParser {
         try {
             if (requestedData.contains(TemplateParserDataDefinitions.COMPILED_MODEL)) {
                 CompiledModel result = parseImpl(taskManager, context, snapshot);
-                BaseParserData<CompiledModel> data = new BaseParserData<CompiledModel>(context, TemplateParserDataDefinitions.COMPILED_MODEL, snapshot, result);
+                BaseParserData<CompiledModel> data = new BaseParserData<>(context, TemplateParserDataDefinitions.COMPILED_MODEL, snapshot, result);
                 results.addResult(data);
             }
         } catch (ExecutionException ex) {
@@ -83,7 +83,7 @@ public class CompiledModelParser {
             }
 
             try {
-                final List<SyntaxError> syntaxErrors = new ArrayList<SyntaxError>();
+                final List<SyntaxError> syntaxErrors = new ArrayList<>();
                 ANTLRStringStream input = new ANTLRStringStream(snapshot.getText().toString());
                 input.name = snapshot.getVersionedDocument().getFileObject().getNameExt();
 

@@ -145,8 +145,8 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
             diagram = null;
         }
 
-        this.snapshot = new WeakReference<DocumentSnapshot>(context.getSnapshot());
-        this.context = new WeakReference<GrammarParser.RuleSpecContext>(ruleSpecContext);
+        this.snapshot = new WeakReference<>(context.getSnapshot());
+        this.context = new WeakReference<>(ruleSpecContext);
         if (ruleSpecContext != null) {
             try {
                 SyntaxBuilderListener listener = new SyntaxBuilderListener(context.getGrammarType(), context.getSnapshot());
@@ -155,9 +155,7 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
                 this.jScrollPane1.setViewportView(diagram);
                 this.jScrollPane1.validate();
                 this.diagram.getRule().updatePositions();
-            } catch (NullPointerException ex) {
-                clearDiagram();
-            } catch (IllegalArgumentException ex) {
+            } catch (NullPointerException | IllegalArgumentException ex) {
                 clearDiagram();
             }
         }
@@ -274,7 +272,7 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
 
         private final int grammarType;
         private final DocumentSnapshot snapshot;
-        private final Deque<JComponent> nodes = new ArrayDeque<JComponent>();
+        private final Deque<JComponent> nodes = new ArrayDeque<>();
 
         private Rule RuleSpec;
         private ParserRuleContext<Token> outermostAtom;
@@ -494,7 +492,7 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
                 if (notSetContext.setElement() != null) {
                     elementContexts = Collections.singletonList(notSetContext.setElement());
                 } else {
-                    elementContexts = new ArrayList<AbstractGrammarParser.SetElementContext>(notSetContext.blockSet().setElement());
+                    elementContexts = new ArrayList<>(notSetContext.blockSet().setElement());
                 }
 
                 nodes.peek().add(new SetTerminal(elementContexts, sourceSpan, true));

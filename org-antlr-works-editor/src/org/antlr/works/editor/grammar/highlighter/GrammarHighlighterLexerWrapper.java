@@ -21,7 +21,7 @@ import org.antlr.works.editor.antlr4.highlighting.TokenSourceWithStateV4;
  */
 public class GrammarHighlighterLexerWrapper implements TokenSourceWithStateV4<Token, GrammarHighlighterLexerState> {
     private static final Map<GrammarHighlighterLexerState, GrammarHighlighterLexerState> sharedStates =
-        new HashMap<GrammarHighlighterLexerState, GrammarHighlighterLexerState>();
+        new HashMap<>();
 
     private final GrammarHighlighterLexer grammarLexer;
 

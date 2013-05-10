@@ -28,7 +28,7 @@ import org.openide.util.Lookup;
  */
 public abstract class AbstractNavigatorUpdateWithContextParserTask<TPanel extends AbstractNavigatorPanel, TData, TContext> extends AbstractNavigatorUpdateParserTask<TPanel, TData> {
     private static WeakReference<ParserTaskManager> parserTaskManager =
-        new WeakReference<ParserTaskManager>(null);
+        new WeakReference<>(null);
 
     private final ParserDataDefinition<? extends TContext> contextDataDefinition;
 
@@ -41,7 +41,7 @@ public abstract class AbstractNavigatorUpdateWithContextParserTask<TPanel extend
         ParserTaskManager result = parserTaskManager.get();
         if (result == null) {
             result = Lookup.getDefault().lookup(ParserTaskManager.class);
-            parserTaskManager = new WeakReference<ParserTaskManager>(result);
+            parserTaskManager = new WeakReference<>(result);
         }
 
         return result;
@@ -59,9 +59,7 @@ public abstract class AbstractNavigatorUpdateWithContextParserTask<TPanel extend
             ParserData<? extends TContext> parserContextData;
             try {
                 parserContextData = futureContextData != null ? futureContextData.get() : null;
-            } catch (InterruptedException ex) {
-                parserContextData = null;
-            } catch (ExecutionException ex) {
+            } catch (InterruptedException | ExecutionException ex) {
                 parserContextData = null;
             }
 

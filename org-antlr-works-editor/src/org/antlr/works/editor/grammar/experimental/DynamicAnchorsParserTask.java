@@ -50,7 +50,7 @@ public final class DynamicAnchorsParserTask implements ParserTask {
     public void parse(ParserTaskManager taskManager, ParseContext context, DocumentSnapshot snapshot, Collection<? extends ParserDataDefinition<?>> requestedData, ParserResultHandler results)
         throws InterruptedException, ExecutionException {
         Future<ParserData<List<Anchor>>> futureReferenceData = taskManager.getData(snapshot, context.getComponent(), GrammarParserDataDefinitions.REFERENCE_ANCHOR_POINTS, EnumSet.of(ParserDataOptions.ALLOW_STALE, ParserDataOptions.SYNCHRONOUS));
-        BaseParserData<List<Anchor>> result = new BaseParserData<List<Anchor>>(context, GrammarParserDataDefinitions.DYNAMIC_ANCHOR_POINTS, snapshot, futureReferenceData.get().getData());
+        BaseParserData<List<Anchor>> result = new BaseParserData<>(context, GrammarParserDataDefinitions.DYNAMIC_ANCHOR_POINTS, snapshot, futureReferenceData.get().getData());
         results.addResult(result);
     }
 

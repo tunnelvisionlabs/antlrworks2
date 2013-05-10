@@ -26,7 +26,7 @@ public final class FiltersDescription {
 
     /** Creates a new instance of FiltersDescription */
     public FiltersDescription() {
-        filters = new ArrayList<FilterItem>();
+        filters = new ArrayList<>();
     }
 
     public void addFilter (String name, String displayName, String tooltip,

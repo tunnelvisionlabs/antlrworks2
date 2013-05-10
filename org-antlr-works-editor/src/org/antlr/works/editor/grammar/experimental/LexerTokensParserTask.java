@@ -71,7 +71,7 @@ public final class LexerTokensParserTask implements ParserTask {
             ParserData<Tagger<TokenTag<Token>>> result;
             synchronized (documentCache) {
                 if (GrammarEditorKit.isLegacyMode(snapshot)) {
-                    result = new BaseParserData<Tagger<TokenTag<Token>>>(context, GrammarParserDataDefinitions.LEXER_TOKENS, snapshot, null);
+                    result = new BaseParserData<>(context, GrammarParserDataDefinitions.LEXER_TOKENS, snapshot, null);
                     documentCache.clear();
                     results.addResult(result);
                     return;
@@ -85,7 +85,7 @@ public final class LexerTokensParserTask implements ParserTask {
                     int previousVersion = -1;
                     List<ParserData<Tagger<TokenTag<Token>>>> values;
                     synchronized (documentCache) {
-                        values = new ArrayList<ParserData<Tagger<TokenTag<Token>>>>(documentCache.values());
+                        values = new ArrayList<>(documentCache.values());
                     }
 
                     for (ParserData<Tagger<TokenTag<Token>>> data : values) {
@@ -98,11 +98,11 @@ public final class LexerTokensParserTask implements ParserTask {
 
                     if (previousResult != null) {
                         GrammarTokensTaskTaggerSnapshot previousTagger = (GrammarTokensTaskTaggerSnapshot)previousResult.getData();
-                        result = new BaseParserData<Tagger<TokenTag<Token>>>(context, GrammarParserDataDefinitions.LEXER_TOKENS, snapshot, previousTagger.translateTo(snapshot));
+                        result = new BaseParserData<>(context, GrammarParserDataDefinitions.LEXER_TOKENS, snapshot, previousTagger.translateTo(snapshot));
                     } else {
                         GrammarTokensTaskTaggerSnapshot tagger = new GrammarTokensTaskTaggerSnapshot(snapshot);
                         tagger.initialize();
-                        result = new BaseParserData<Tagger<TokenTag<Token>>>(context, GrammarParserDataDefinitions.LEXER_TOKENS, snapshot, tagger);
+                        result = new BaseParserData<>(context, GrammarParserDataDefinitions.LEXER_TOKENS, snapshot, tagger);
                     }
 
                     synchronized (documentCache) {

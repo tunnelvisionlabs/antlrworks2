@@ -60,16 +60,16 @@ public class LexerInterpreterData {
         LexerInterpreterData data = new LexerInterpreterData();
         data.grammarFileName = lexerGrammar.fileName;
         data.serializedAtn = ATNSerializer.getSerializedAsString(lexerGrammar, lexerGrammar.atn);
-        data.tokenNames = new ArrayList<TokenDescriptor>(Arrays.asList(getTokenNames(lexerGrammar)));
-        data.ruleNames = new ArrayList<String>(lexerGrammar.rules.keySet());
-        data.modeNames = new ArrayList<String>(lexerGrammar.modes.keySet());
+        data.tokenNames = new ArrayList<>(Arrays.asList(getTokenNames(lexerGrammar)));
+        data.ruleNames = new ArrayList<>(lexerGrammar.rules.keySet());
+        data.modeNames = new ArrayList<>(lexerGrammar.modes.keySet());
         data.actionsMap = lexerGrammar._actionsMap;
         return data;
     }
 
     public static TokenDescriptor[] getTokenNames(LexerGrammar grammar) {
         int numTokens = grammar.getMaxTokenType();
-        List<String> typeToStringLiteralList = new ArrayList<String>(grammar.typeToStringLiteralList);
+        List<String> typeToStringLiteralList = new ArrayList<>(grammar.typeToStringLiteralList);
         Utils.setSize(typeToStringLiteralList, numTokens + 1);
         for (Map.Entry<String, Integer> entry : grammar.stringLiteralToTypeMap.entrySet()) {
             if (entry.getValue() < 0 || entry.getValue() >= typeToStringLiteralList.size()) {

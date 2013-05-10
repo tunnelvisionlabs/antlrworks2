@@ -30,7 +30,7 @@ class TextEditImpl implements TextEdit {
     private static final Logger LOGGER = Logger.getLogger(TextEditImpl.class.getName());
 
     final BaseDocument document;
-    private final List<Change> changes = new ArrayList<Change>();
+    private final List<Change> changes = new ArrayList<>();
 
     public TextEditImpl(BaseDocument document) {
         Parameters.notNull("document", document);

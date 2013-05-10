@@ -34,8 +34,8 @@ import org.antlr.works.editor.grammar.experimental.generated.GrammarParserBaseLi
  */
 public class LabelAnalyzer extends GrammarParserBaseListener {
 
-    private final Map<String, Token> labels = new HashMap<String, Token>();
-    private final Map<String, Token> unlabeledElements = new HashMap<String, Token>();
+    private final Map<String, Token> labels = new HashMap<>();
+    private final Map<String, Token> unlabeledElements = new HashMap<>();
     private final RuleContext<?> finalContext;
 
     private Token enclosingRuleName;

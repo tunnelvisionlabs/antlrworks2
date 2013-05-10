@@ -54,8 +54,8 @@ import javax.swing.event.*;
  * Made public just to test an impl of Children.EntrySource based on this
  * filtering list.
 */
-public final class LazyListModel extends Object 
-implements ListModel, Runnable, javax.swing.event.ListDataListener {
+public final class LazyListModel<T> extends Object
+implements ListModel<T>, Runnable, javax.swing.event.ListDataListener {
     /** means that the value has not yet been assigned */
     private static int NOT_TESTED = Short.MIN_VALUE - 1;
     private static int EMPTY_VALUE = Short.MIN_VALUE - 2;
@@ -64,10 +64,10 @@ implements ListModel, Runnable, javax.swing.event.ListDataListener {
     
     
     private boolean log;
-    private ListModel listModel;
-    private Filter filter;
+    private ListModel<T> listModel;
+    private Filter<? super T> filter;
     /** the value to return when nothing else can be returned */
-    private Object defaultValue;
+    private T defaultValue;
     /** simple event listener list */
     private javax.swing.event.EventListenerList list = new javax.swing.event.EventListenerList ();
 
@@ -89,7 +89,7 @@ implements ListModel, Runnable, javax.swing.event.ListDataListener {
     /** dirty means that we should really update assumptions */
     private boolean markDirty;
     
-    private LazyListModel (ListModel m, Filter f, double expectedRadio, Object defaultValue) {
+    private LazyListModel (ListModel<T> m, Filter<? super T> f, double expectedRadio, T defaultValue) {
         this.listModel = m;
         this.filter = f;
         this.defaultValue = defaultValue;
@@ -98,7 +98,7 @@ implements ListModel, Runnable, javax.swing.event.ListDataListener {
         m.addListDataListener (this);
     }
     
-    final Filter getFilter () {
+    final Filter<? super T> getFilter () {
         return filter;
     }
     
@@ -240,14 +240,14 @@ implements ListModel, Runnable, javax.swing.event.ListDataListener {
     
     /** Factory method to create new filtering lazy model.
      */
-    public static LazyListModel create (ListModel listModel, Filter f, double expectedRadio, Object defValue) {
+    public static <T> LazyListModel<T> create (ListModel<T> listModel, Filter<? super T> f, double expectedRadio, T defValue) {
         return create (listModel, f, expectedRadio, defValue, false);
     }
     
     /** Model with enabled logging.
      */
-    static LazyListModel create (ListModel listModel, Filter f, double expectedRadio, Object defValue, boolean log) {
-        LazyListModel lazy = new LazyListModel (listModel, f, expectedRadio, defValue);
+    static <T> LazyListModel<T> create (ListModel<T> listModel, Filter<? super T> f, double expectedRadio, T defValue, boolean log) {
+        LazyListModel<T> lazy = new LazyListModel<> (listModel, f, expectedRadio, defValue);
         lazy.log = log;
         return lazy;
     }
@@ -282,8 +282,8 @@ implements ListModel, Runnable, javax.swing.event.ListDataListener {
     
     /** Is this index accepted.
      */
-    private boolean accepted (int indx, Object[] result) {
-        Object v = listModel.getElementAt (indx);
+    private boolean accepted (int indx, T[] result) {
+        T v = listModel.getElementAt (indx);
         tested.set (indx);
         if (filter.accept (v)) {
             result[0] = v;
@@ -317,7 +317,7 @@ implements ListModel, Runnable, javax.swing.event.ListDataListener {
     static Boolean CREATE;
     /** If value is not know for given index and CREATE.get() is Boolean.FALSE it returns defaultValue.
      */
-    public Object getElementAt(int index) {
+    public T getElementAt(int index) {
         initialize ();
         
         if (log) {
@@ -365,7 +365,8 @@ implements ListModel, Runnable, javax.swing.event.ListDataListener {
                 myIndex = myMaxIndex - 1;
             }
 
-            Object[] result = new Object[1];
+            @SuppressWarnings("unchecked")
+            T[] result = (T[])new Object[1];
             if (accepted (myIndex, result)) {
                 assert external[index] == NOT_TESTED : "External index " + index + " still needs to be unset: " + external[index];
                 external[index] = myIndex;
@@ -547,8 +548,8 @@ implements ListModel, Runnable, javax.swing.event.ListDataListener {
      * This filter is expected to always return the same result for
      * the same object - e.g. either always exclude or include it.
      */
-    public interface Filter {
-        public boolean accept (Object obj);
+    public interface Filter<T> {
+        public boolean accept (T obj);
         /** This method is called when the list needs update. It's goal is
          * usually to do SwingUtilities.invokeLater, even more rafined 
          * methods are allowed.

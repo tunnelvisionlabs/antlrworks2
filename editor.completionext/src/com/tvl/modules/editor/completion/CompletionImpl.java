@@ -198,7 +198,7 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
         return singleton;
     }
 
-    static LazyListModel.Filter filter = new LazyListModel.Filter() {
+    static LazyListModel.Filter<Object> filter = new LazyListModel.Filter<Object>() {
         public boolean accept(Object obj) {
             if (obj instanceof LazyCompletionItem)
                 return ((LazyCompletionItem)obj).accept();
@@ -232,7 +232,7 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
     
     /** Mapping of mime-type to service provider type to array of providers. Changed in AWT only. */
     private HashMap<String, HashMap<Class<?>, Object[]>> providersCache =
-        new HashMap<String, HashMap<Class<?>, Object[]>>();
+        new HashMap<>();
 
     /**
      * Result of the completion query.
@@ -542,7 +542,7 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
                 }
             }
             activeComponent = (component != null)
-                    ? new WeakReference<JTextComponent>(component)
+                    ? new WeakReference<>(component)
                     : null;
             layout.setEditorComponent(getActiveComponent());
             stopProfiling();
@@ -560,7 +560,7 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
             if (document != null)
                 DocumentUtilities.addDocumentListener(document, this,
                         DocumentListenerPriority.AFTER_CARET_UPDATE);
-            activeDocument = (document != null) ? new WeakReference<Document>(document) : null;
+            activeDocument = (document != null) ? new WeakReference<>(document) : null;
             cancel = true;
         }
         if (cancel)
@@ -667,7 +667,7 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
         
         HashMap<Class<?>, Object[]> providers = providersCache.get(mimeType);
         if (providers == null) {
-            providers = new HashMap<Class<?>, Object[]>();
+            providers = new HashMap<>();
             providersCache.put(mimeType, providers);
         }
 
@@ -1048,7 +1048,7 @@ outer:      for (CompletionResultSetImpl resultSet : localCompletionResult.getRe
         }
         
         // Collect and sort the gathered completion items
-        List<CompletionItem> resultItems = new ArrayList<CompletionItem>(size);
+        List<CompletionItem> resultItems = new ArrayList<>(size);
         String title = null;
         int anchorOffset = -1;
         if (size > 0) {
@@ -1065,7 +1065,7 @@ outer:      for (CompletionResultSetImpl resultSet : localCompletionResult.getRe
             }
         }
         
-        final ArrayList<CompletionItem> sortedResultItems = new ArrayList<CompletionItem>(size = resultItems.size());
+        final ArrayList<CompletionItem> sortedResultItems = new ArrayList<>(size = resultItems.size());
         if (size > 0) {
             result.getController().sortItems(resultItems, getSortType());
             int cnt = 0;
@@ -1084,7 +1084,7 @@ outer:      for (CompletionResultSetImpl resultSet : localCompletionResult.getRe
             }
         }
 
-        List<CompletionItem> declarationItems = new ArrayList<CompletionItem>(declarationItemsSize);
+        List<CompletionItem> declarationItems = new ArrayList<>(declarationItemsSize);
         if (declarationItemsSize > 0) {
             for (int i = 0; i < completionResultSets.size(); i++) {
                 CompletionResultSetImpl resultSet = completionResultSets.get(i);
@@ -1095,7 +1095,7 @@ outer:      for (CompletionResultSetImpl resultSet : localCompletionResult.getRe
             }
         }
 
-        final ArrayList<CompletionItem> sortedDeclarationItems = new ArrayList<CompletionItem>(declarationItemsSize = declarationItems.size());
+        final ArrayList<CompletionItem> sortedDeclarationItems = new ArrayList<>(declarationItemsSize = declarationItems.size());
         if (declarationItemsSize > 0) {
             result.getController().sortItems(resultItems, getSortType());
             sortedDeclarationItems.addAll(declarationItems);
@@ -1268,7 +1268,7 @@ outer:      for (CompletionResultSetImpl resultSet : localCompletionResult.getRe
         CompletionTask docTask;
         SelectedCompletionItem selectedItem = layout.getSelectedCompletionItem();
         if (selectedItem != null) {
-            lastSelectedItem = new WeakReference<CompletionItem>(selectedItem.getItem());
+            lastSelectedItem = new WeakReference<>(selectedItem.getItem());
             docTask = selectedItem.getItem().createDocumentationTask();
             if (docTask != null) { // attempt the documentation for selected item
                 CompletionResultSetImpl resultSet = new CompletionResultSetImpl(
@@ -1660,7 +1660,7 @@ outer:      for (CompletionResultSetImpl resultSet : localCompletionResult.getRe
     }
     
     void testSetActiveComponent(JTextComponent component) {
-        activeComponent = new WeakReference<JTextComponent>(component);
+        activeComponent = new WeakReference<>(component);
     }
 
     // ..........................................................................
@@ -1824,7 +1824,7 @@ outer:      for (CompletionResultSetImpl resultSet : localCompletionResult.getRe
         private CompletionController controller;
         
         Result(int resultSetsSize) {
-            resultSets = new ArrayList<CompletionResultSetImpl>(resultSetsSize);
+            resultSets = new ArrayList<>(resultSetsSize);
         }
 
         /**
@@ -1844,8 +1844,8 @@ outer:      for (CompletionResultSetImpl resultSet : localCompletionResult.getRe
                     }
 
                     JTextComponent component = getActiveComponent();
-                    List<CompletionTask> tasks = new ArrayList<CompletionTask>();
-                    List<Integer> queryTypes = new ArrayList<Integer>();
+                    List<CompletionTask> tasks = new ArrayList<>();
+                    List<Integer> queryTypes = new ArrayList<>();
                     for (CompletionResultSetImpl resultSet : resultSets) {
                         tasks.add(resultSet.getTask());
                         queryTypes.add(resultSet.getQueryType());

@@ -84,9 +84,7 @@ public final class SemanticAnalyzerParserTask implements ParserTask {
                     Future<ParserData<GrammarSpecContext>> futureRefParseTreeData = getTaskManager().getData(snapshot, GrammarParserDataDefinitions.REFERENCE_PARSE_TREE, EnumSet.of(ParserDataOptions.SYNCHRONOUS));
                     ParserData<GrammarSpecContext> refParseTreeData = futureRefParseTreeData != null ? futureRefParseTreeData.get() : null;
                     referenceParseTree = refParseTreeData != null ? refParseTreeData.getData() : null;
-                } catch (InterruptedException ex) {
-                    Exceptions.printStackTrace(ex);
-                } catch (ExecutionException ex) {
+                } catch (InterruptedException | ExecutionException ex) {
                     Exceptions.printStackTrace(ex);
                 }
 
@@ -95,9 +93,9 @@ public final class SemanticAnalyzerParserTask implements ParserTask {
                     GrammarAnnotatedParseTree annotatedParseTree = new GrammarAnnotatedParseTree(referenceParseTree);
                     SemanticAnalyzerListener listener = new SemanticAnalyzerListener(annotatedParseTree.getTreeDecorator(), annotatedParseTree.getTokenDecorator());
                     ParseTreeWalker.DEFAULT.walk(listener, referenceParseTree);
-                    parseTreeResult = new BaseParserData<GrammarAnnotatedParseTree>(context, GrammarParserDataDefinitions.ANNOTATED_PARSE_TREE, snapshot, annotatedParseTree);
+                    parseTreeResult = new BaseParserData<>(context, GrammarParserDataDefinitions.ANNOTATED_PARSE_TREE, snapshot, annotatedParseTree);
                 } else {
-                    parseTreeResult = new BaseParserData<GrammarAnnotatedParseTree>(context, GrammarParserDataDefinitions.ANNOTATED_PARSE_TREE, snapshot, null);
+                    parseTreeResult = new BaseParserData<>(context, GrammarParserDataDefinitions.ANNOTATED_PARSE_TREE, snapshot, null);
                 }
 
                 results.addResult(parseTreeResult);
@@ -178,10 +176,7 @@ public final class SemanticAnalyzerParserTask implements ParserTask {
                         ParserData<?> data;
                         try {
                             data = futureData.get();
-                        } catch (InterruptedException ex) {
-                            LOGGER.log(Level.WARNING, "Failed to load source for token vocabulary.");
-                            continue;
-                        } catch (ExecutionException ex) {
+                        } catch (InterruptedException | ExecutionException ex) {
                             LOGGER.log(Level.WARNING, "Failed to load source for token vocabulary.");
                             continue;
                         }

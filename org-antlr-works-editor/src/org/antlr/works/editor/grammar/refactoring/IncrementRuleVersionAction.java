@@ -211,9 +211,7 @@ public final class IncrementRuleVersionAction extends AbstractAction implements 
             } else {
                 updateVersionNumber(currentVersion.getItem2(), maximumVersion + 1);
             }
-        } catch (InterruptedException ex) {
-            Exceptions.printStackTrace(ex);
-        } catch (ExecutionException ex) {
+        } catch (InterruptedException | ExecutionException ex) {
             Exceptions.printStackTrace(ex);
         }
     }
@@ -333,7 +331,7 @@ public final class IncrementRuleVersionAction extends AbstractAction implements 
     })
     private Map<ParserRuleSpecContext, Tuple3<RuleActionContext, TerminalNode<Token>, Integer>> getVersionedRules(Map<ParserRuleSpecContext, String> rules) {
         Map<ParserRuleSpecContext, Tuple3<RuleActionContext, TerminalNode<Token>, Integer>> result =
-            new HashMap<ParserRuleSpecContext, Tuple3<RuleActionContext, TerminalNode<Token>, Integer>>();
+            new HashMap<>();
         for (Map.Entry<ParserRuleSpecContext, String> entry : rules.entrySet()) {
             RuleActionContext versionAction = VersionActionVisitor.INSTANCE.visit(entry.getKey());
             if (versionAction == null) {
@@ -379,7 +377,7 @@ public final class IncrementRuleVersionAction extends AbstractAction implements 
         }
 
         boolean reportedProblem = false;
-        List<TerminalNode<Token>> result = new ArrayList<TerminalNode<Token>>();
+        List<TerminalNode<Token>> result = new ArrayList<>();
         for (int i = 0; i < ctx.getChildCount(); i++) {
             String problem = null;
             ParseTree<Token> child = ctx.getChild(i);
@@ -545,7 +543,7 @@ public final class IncrementRuleVersionAction extends AbstractAction implements 
                 return aggregate;
             }
 
-            Map<ParserRuleSpecContext, String> result = new HashMap<ParserRuleSpecContext, String>(aggregate);
+            Map<ParserRuleSpecContext, String> result = new HashMap<>(aggregate);
             result.putAll(nextResult);
             return result;
         }

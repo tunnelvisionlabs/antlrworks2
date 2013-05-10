@@ -35,7 +35,7 @@ public final class SelectionHelper {
     }
 
     public static List<DocumentSpan> getSelection(JTextComponent target) {
-        List<DocumentSpan> spans = new ArrayList<DocumentSpan>();
+        List<DocumentSpan> spans = new ArrayList<>();
         Document document = target.getDocument();
         if (!(document instanceof StyledDocument)) {
             return null;
@@ -69,7 +69,7 @@ public final class SelectionHelper {
         }
 
         if (updatedSelection.size() > 1) {
-            List<Position> positions = new ArrayList<Position>();
+            List<Position> positions = new ArrayList<>();
             for (int i = 0; i < updatedSelection.size(); i++) {
                 positions.add(document.createPosition(updatedSelection.get(i).getStart().getOffset()));
                 positions.add(document.createPosition(updatedSelection.get(i).getEnd().getOffset()));
@@ -99,7 +99,7 @@ public final class SelectionHelper {
         List<Position> lRegions;
         if (regions != null) {
             synchronized (regions) {
-                lRegions = new ArrayList<Position>(regions);
+                lRegions = new ArrayList<>(regions);
             }
         } else {
             lRegions = null;

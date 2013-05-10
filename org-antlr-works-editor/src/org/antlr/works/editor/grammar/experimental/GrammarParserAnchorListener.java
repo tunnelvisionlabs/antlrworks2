@@ -36,8 +36,8 @@ import org.openide.util.Parameters;
  */
 public class GrammarParserAnchorListener extends GrammarParserBaseListener {
 
-    private final Stack<Integer> anchorPositions = new Stack<Integer>();
-    private final List<Anchor> anchors = new ArrayList<Anchor>();
+    private final Stack<Integer> anchorPositions = new Stack<>();
+    private final List<Anchor> anchors = new ArrayList<>();
     private final DocumentSnapshot snapshot;
     private final AtomicBoolean cancel;
 

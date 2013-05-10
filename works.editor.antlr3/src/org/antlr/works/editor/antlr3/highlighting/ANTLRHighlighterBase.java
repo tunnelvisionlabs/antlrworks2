@@ -48,7 +48,7 @@ public abstract class ANTLRHighlighterBase<TState extends LineStateInfo<TState>>
     private final Object lock = new Object();
     private final StyledDocument document;
     private final DocumentListenerImpl documentListener;
-    private final ArrayList<TState> lineStates = new ArrayList<TState>();
+    private final ArrayList<TState> lineStates = new ArrayList<>();
     private final boolean propagateChangedImmediately;
 
     private Integer firstDirtyLine;
@@ -90,7 +90,7 @@ public abstract class ANTLRHighlighterBase<TState extends LineStateInfo<TState>>
 
     @Override
     public HighlightsSequence getHighlights(int startOffset, int endOffset) {
-        List<Highlight> highlights = new ArrayList<Highlight>();
+        List<Highlight> highlights = new ArrayList<>();
         getHighlights(startOffset, endOffset, highlights, null, true, false);
         return new HighlightsList(highlights);
     }
@@ -383,7 +383,7 @@ public abstract class ANTLRHighlighterBase<TState extends LineStateInfo<TState>>
 
         start = NbDocument.findLineOffset(document, startLine);
         int length = end - start;
-        ParseRequest<TState> request = new ParseRequest<TState>(new OffsetRegion(start, length), state);
+        ParseRequest<TState> request = new ParseRequest<>(new OffsetRegion(start, length), state);
         return request;
     }
 
@@ -542,7 +542,7 @@ public abstract class ANTLRHighlighterBase<TState extends LineStateInfo<TState>>
                     lineStates.subList(lineNumberFromPosition, lineNumberFromPosition + Math.abs(lineCountDelta)).clear();
                 } else if (lineCountDelta > 0) {
                     TState endLineState = lineStates.get(lineNumberFromPosition);
-                    List<TState> insertedElements = new ArrayList<TState>();
+                    List<TState> insertedElements = new ArrayList<>();
                     for (int i = 0; i < lineCountDelta; i++) {
                         insertedElements.add(endLineState);
                     }

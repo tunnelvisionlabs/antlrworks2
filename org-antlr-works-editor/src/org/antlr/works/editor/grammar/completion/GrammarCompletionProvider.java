@@ -130,11 +130,11 @@ public class GrammarCompletionProvider extends AbstractCompletionProvider {
     }
 
     public static Collection<Description> getRulesFromGrammar(ParserTaskManager taskManager, DocumentSnapshot snapshot, boolean ignoreLexerOnlyRules) {
-        Map<String, Description> rules = new HashMap<String, Description>();
+        Map<String, Description> rules = new HashMap<>();
 
         Description rootDescription = GrammarParserDataDefinitions.tryGetData(taskManager, snapshot, GrammarParserDataDefinitions.NAVIGATOR_ROOT, EnumSet.of(ParserDataOptions.SYNCHRONOUS));
         if (rootDescription != null) {
-            Queue<Description> workList = new ArrayDeque<Description>();
+            Queue<Description> workList = new ArrayDeque<>();
             workList.add(rootDescription);
 
             while (!workList.isEmpty()) {

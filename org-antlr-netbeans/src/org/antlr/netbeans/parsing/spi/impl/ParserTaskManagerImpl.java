@@ -72,13 +72,13 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
     private static final int HIGH_THREAD_PRIORITY_VALUE = Thread.NORM_PRIORITY;
     private static final int LOW_THREAD_PRIORITY_VALUE = Thread.NORM_PRIORITY - 2;
 
-    private final ListenerList<ParserDataListener<Object>> globalListeners = new ListenerList<ParserDataListener<Object>>();
+    private final ListenerList<ParserDataListener<Object>> globalListeners = new ListenerList<>();
 
     private final Map<ParserDataDefinition<?>, ListenerList<ParserDataListener<?>>> dataListeners =
-        new HashMap<ParserDataDefinition<?>, ListenerList<ParserDataListener<?>>>();
+        new HashMap<>();
 
     private final Map<String, Collection<? extends ParserTaskProvider>> taskProviders =
-        new HashMap<String, Collection<? extends ParserTaskProvider>>();
+        new HashMap<>();
 
     private static final String COMPONENT_PROPERTIES_KEY = ParserTaskManagerImpl.class.getName() + "-comp-properties";
     private static final String DOCUMENT_PROPERTIES_KEY = ParserTaskManagerImpl.class.getName() + "-properties";
@@ -150,17 +150,17 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
                 cachedData = null;
             }
 
-            return new CompletedFuture<ParserData<T>>(cachedData, null);
+            return new CompletedFuture<>(cachedData, null);
         }
 
         ParseContext context = new ParseContext(ParserTaskScheduler.MANUAL_TASK_SCHEDULER, snapshot, component);
         Callable<ParserData<T>> callable = createCallable(context, definition);
         if (options.contains(ParserDataOptions.SYNCHRONOUS) || isParserThread()) {
             try {
-                return new CompletedFuture<ParserData<T>>(callable.call(), null);
+                return new CompletedFuture<>(callable.call(), null);
             } catch (Exception ex) {
                 LOGGER.log(Level.WARNING, "An exception occurred while handling a parse request.", ex);
-                return new CompletedFuture<ParserData<T>>(null, ex);
+                return new CompletedFuture<>(null, ex);
             }
         }
 
@@ -246,7 +246,7 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
             return Collections.emptyMap();
         }
 
-        Map<ParserDataDefinition<?>, ScheduledFuture<ParserData<?>>> futures = new HashMap<ParserDataDefinition<?>, ScheduledFuture<ParserData<?>>>();
+        Map<ParserDataDefinition<?>, ScheduledFuture<ParserData<?>>> futures = new HashMap<>();
         for (ParserDataDefinition dataDefinition : data) {
             futures.put(dataDefinition, (ScheduledFuture<ParserData<?>>)scheduleData(context, dataDefinition, delay, timeUnit));
         }
@@ -277,7 +277,7 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
             return Collections.emptyMap();
         }
 
-        Map<ParserTaskProvider, ScheduledFuture<Collection<? extends ParserData<?>>>> result = new HashMap<ParserTaskProvider, ScheduledFuture<Collection<? extends ParserData<?>>>>();
+        Map<ParserTaskProvider, ScheduledFuture<Collection<? extends ParserData<?>>>> result = new HashMap<>();
         for (ParserTaskProvider provider : providers) {
             result.put(provider, scheduleTask(context, provider, delay, timeUnit));
         }
@@ -312,10 +312,7 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
             public T call() throws Exception {
                 try {
                     return callable.call();
-                } catch (Exception ex) {
-                    LOGGER.log(Level.WARNING, Bundle.taskFailedException(), ex);
-                    throw ex;
-                } catch (Error ex) {
+                } catch (Exception | Error ex) {
                     LOGGER.log(Level.WARNING, Bundle.taskFailedException(), ex);
                     throw ex;
                 }
@@ -349,7 +346,7 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
         synchronized (dataListeners) {
             ListenerList<ParserDataListener<?>> listeners = dataListeners.get(definition);
             if (listeners == null) {
-                listeners = new ListenerList<ParserDataListener<?>>();
+                listeners = new ListenerList<>();
                 dataListeners.put(definition, listeners);
             }
 
@@ -380,7 +377,7 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
     }
 
     private <T> Callable<ParserData<T>> createCallable(ParseContext context, ParserDataDefinition<T> data) {
-        Callable<ParserData<T>> callable = new UpdateDataCallable<T>(this, context, data);
+        Callable<ParserData<T>> callable = new UpdateDataCallable<>(this, context, data);
         return callable;
     }
 
@@ -399,7 +396,7 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
             return;
         }
 
-        ParserDataEvent<T> event = new ParserDataEvent<T>(this, definition, data);
+        ParserDataEvent<T> event = new ParserDataEvent<>(this, definition, data);
 
         if (listeners != null) {
             for (ParserDataListener<?> listener : listeners.getListeners()) {
@@ -608,10 +605,7 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
         public final Result call() throws Exception {
             try {
                 return callImpl();
-            } catch (Exception ex) {
-                LOGGER.log(Level.WARNING, Bundle.taskFailedException(), ex);
-                throw ex;
-            } catch (Error ex) {
+            } catch (Exception | Error ex) {
                 LOGGER.log(Level.WARNING, Bundle.taskFailedException(), ex);
                 throw ex;
             }
@@ -725,8 +719,8 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
     }
 
     private static class ResultAggregator implements ParserResultHandler {
-        private final List<ParserData<?>> results = new ArrayList<ParserData<?>>();
-        private final List<ParserData<?>> updatedResults = new ArrayList<ParserData<?>>();
+        private final List<ParserData<?>> results = new ArrayList<>();
+        private final List<ParserData<?>> updatedResults = new ArrayList<>();
         private final ParserTaskManagerImpl outer;
         private final ParseContext context;
 
@@ -781,7 +775,7 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
                 }
             }
 
-            return new PriorityInsertionRunnableScheduledFuture<V>(task, priority);
+            return new PriorityInsertionRunnableScheduledFuture<>(task, priority);
         }
 
         @Override
@@ -798,7 +792,7 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
                 }
             }
 
-            return new PriorityInsertionRunnableScheduledFuture<V>(task, priority);
+            return new PriorityInsertionRunnableScheduledFuture<>(task, priority);
         }
 
     }

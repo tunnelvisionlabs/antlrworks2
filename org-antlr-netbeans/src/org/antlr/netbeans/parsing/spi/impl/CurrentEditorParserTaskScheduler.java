@@ -58,7 +58,7 @@ public abstract class CurrentEditorParserTaskScheduler extends ParserTaskSchedul
                     return;
                 }
 
-                currentEditor = new WeakReference<JTextComponent>(editor);
+                currentEditor = new WeakReference<>(editor);
                 try {
                     if (editor != null) {
                         Document document = editor.getDocument();

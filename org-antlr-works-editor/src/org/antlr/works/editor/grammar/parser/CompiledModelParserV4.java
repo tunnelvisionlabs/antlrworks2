@@ -89,7 +89,7 @@ public class CompiledModelParserV4 extends CompiledModelParser {
             }
 
             try {
-                final List<SyntaxError> syntaxErrors = new ArrayList<SyntaxError>();
+                final List<SyntaxError> syntaxErrors = new ArrayList<>();
                 final Tool tool = new CustomTool(context, snapshot);
                 tool.errMgr = new CustomErrorManager(tool);
                 tool.addListener(new ErrorListener(snapshot, tool, syntaxErrors));
@@ -286,10 +286,7 @@ public class CompiledModelParserV4 extends CompiledModelParser {
                 ParserData<FileModel> data;
                 try {
                     data = futureData.get();
-                } catch (InterruptedException ex) {
-                    LOGGER.log(Level.WARNING, "Failed to load source for token vocabulary.");
-                    return Collections.emptyMap();
-                } catch (ExecutionException ex) {
+                } catch (InterruptedException | ExecutionException ex) {
                     LOGGER.log(Level.WARNING, "Failed to load source for token vocabulary.");
                     return Collections.emptyMap();
                 }
@@ -301,7 +298,7 @@ public class CompiledModelParserV4 extends CompiledModelParser {
                 }
 
                 TokenVocabModel vocabulary = fileModel.getVocabulary();
-                Map<String, Integer> result = new HashMap<String, Integer>();
+                Map<String, Integer> result = new HashMap<>();
                 for (TokenData tokenData : vocabulary.getTokens()) {
                     result.put(tokenData.getName(), result.size());
                 }

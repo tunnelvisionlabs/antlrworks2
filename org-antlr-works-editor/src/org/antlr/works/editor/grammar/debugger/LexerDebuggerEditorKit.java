@@ -176,7 +176,7 @@ public class LexerDebuggerEditorKit extends NbEditorKit {
     }
 
     private TraceToken[] loadTokens(final Document document, LexerInterpreterData interpreterData) {
-        final List<TraceToken> tokens = new ArrayList<TraceToken>();
+        final List<TraceToken> tokens = new ArrayList<>();
 
         LexerTraceListener listener = new AbstractLexerTraceListener() {
             int mode;
@@ -208,7 +208,7 @@ public class LexerDebuggerEditorKit extends NbEditorKit {
     }
 
     private TraceToken[] loadTokens(final Document document, InputStream reader) {
-        final List<TraceToken> tokens = new ArrayList<TraceToken>();
+        final List<TraceToken> tokens = new ArrayList<>();
 
         loadTrace(document, reader, new AbstractLexerTraceListener() {
             int mode;

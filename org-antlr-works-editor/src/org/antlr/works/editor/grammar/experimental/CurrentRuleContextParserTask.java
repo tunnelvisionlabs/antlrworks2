@@ -106,7 +106,7 @@ public final class CurrentRuleContextParserTask implements ParserTask {
                             parser.getInterpreter().setPredictionMode(PredictionMode.SLL);
                             parser.removeErrorListeners();
                             parser.setBuildParseTree(true);
-                            parser.setErrorHandler(new BailErrorStrategy<Token>());
+                            parser.setErrorHandler(new BailErrorStrategy<>());
                             ruleContext = parser.ruleSpec();
                         } catch (ParseCancellationException ex) {
                             if (ex.getCause() instanceof RecognitionException) {
@@ -114,7 +114,7 @@ public final class CurrentRuleContextParserTask implements ParserTask {
                                 tokens.reset();
                                 parser.getInterpreter().setPredictionMode(PredictionMode.LL);
                                 parser.setInputStream(tokens);
-                                parser.setErrorHandler(new DefaultErrorStrategy<Token>());
+                                parser.setErrorHandler(new DefaultErrorStrategy<>());
                                 ruleContext = parser.ruleSpec();
                             } else {
                                 throw ex;
@@ -126,7 +126,7 @@ public final class CurrentRuleContextParserTask implements ParserTask {
                 data = new CurrentRuleContextData(snapshot, grammarType, ruleContext);
             }
 
-            results.addResult(new BaseParserData<CurrentRuleContextData>(context, GrammarParserDataDefinitions.CURRENT_RULE_CONTEXT, snapshot, data));
+            results.addResult(new BaseParserData<>(context, GrammarParserDataDefinitions.CURRENT_RULE_CONTEXT, snapshot, data));
         }
     }
 

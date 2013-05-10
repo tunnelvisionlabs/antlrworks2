@@ -23,10 +23,10 @@ import org.stringtemplate.v4.misc.Interval;
 
 public class TemplateGroupWrapper extends STGroup {
 
-    private final List<TemplateInformation> templateInformation = new ArrayList<TemplateInformation>();
+    private final List<TemplateInformation> templateInformation = new ArrayList<>();
 
     private final Map<CompiledST, TemplateInformation> compiledTemplateInformation =
-        new HashMap<CompiledST, TemplateInformation>();
+        new HashMap<>();
 
     public TemplateGroupWrapper(char delimiterStartChar, char delimiterStopChar) {
         super(delimiterStartChar, delimiterStopChar);

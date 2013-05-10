@@ -108,7 +108,7 @@ public final class CurrentTemplateContextParserTask implements ParserTask {
                     parser.getInterpreter().setPredictionMode(PredictionMode.SLL);
                     parser.removeErrorListeners();
                     parser.setBuildParseTree(true);
-                    parser.setErrorHandler(new BailErrorStrategy<Token>());
+                    parser.setErrorHandler(new BailErrorStrategy<>());
                     ruleContext = parser.group();
                 } catch (ParseCancellationException ex) {
                     if (ex.getCause() instanceof RecognitionException) {
@@ -116,7 +116,7 @@ public final class CurrentTemplateContextParserTask implements ParserTask {
                         tokens.reset();
                         parser.getInterpreter().setPredictionMode(PredictionMode.LL);
                         parser.setInputStream(tokens);
-                        parser.setErrorHandler(new DefaultErrorStrategy<Token>());
+                        parser.setErrorHandler(new DefaultErrorStrategy<>());
                         ruleContext = parser.group();
                     } else {
                         throw ex;
@@ -126,7 +126,7 @@ public final class CurrentTemplateContextParserTask implements ParserTask {
         }
 
         CurrentTemplateContextData data = new CurrentTemplateContextData(snapshot, ruleContext);
-        results.addResult(new BaseParserData<CurrentTemplateContextData>(context, TemplateParserDataDefinitions.CURRENT_TEMPLATE_CONTEXT, snapshot, data));
+        results.addResult(new BaseParserData<>(context, TemplateParserDataDefinitions.CURRENT_TEMPLATE_CONTEXT, snapshot, data));
     }
 
     private static class TaskTokenStream extends CommonTokenStream {

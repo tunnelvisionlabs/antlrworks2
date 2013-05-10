@@ -90,7 +90,7 @@ public final class GroupSetElementsHintParserTask implements ParserTask {
         Listener listener = new Listener();
         ParseTreeWalker.DEFAULT.walk(listener, grammarAnnotatedParseTree.getParseTree());
 
-        List<ErrorDescription> hints = new ArrayList<ErrorDescription>();
+        List<ErrorDescription> hints = new ArrayList<>();
         for (Interval interval : listener.getRewriteRanges()) {
             try {
                 hints.add(ErrorDescriptionFactory.createErrorDescription(Severity.HINT, "Group terminals into set", document, document.createPosition(interval.a), document.createPosition(interval.b + 1)));
@@ -172,7 +172,7 @@ public final class GroupSetElementsHintParserTask implements ParserTask {
                 return;
             }
 
-            List<AbstractGrammarParser.AlternativeContext> alternatives = new ArrayList<AbstractGrammarParser.AlternativeContext>(labeledAlts.size());
+            List<AbstractGrammarParser.AlternativeContext> alternatives = new ArrayList<>(labeledAlts.size());
             for (AbstractGrammarParser.LabeledAltContext labeledAltContext : labeledAlts) {
                 AbstractGrammarParser.AlternativeContext alternative = labeledAltContext.alternative();
                 if (alternative == null) {

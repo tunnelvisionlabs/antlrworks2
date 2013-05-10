@@ -35,7 +35,7 @@ public abstract class CompiledModelParser {
         try {
             if (requestedData.contains(GrammarParserDataDefinitions.COMPILED_MODEL)) {
                 CompiledModel result = parseImpl(taskManager, context, snapshot);
-                BaseParserData<CompiledModel> data = new BaseParserData<CompiledModel>(context, GrammarParserDataDefinitions.COMPILED_MODEL, snapshot, result);
+                BaseParserData<CompiledModel> data = new BaseParserData<>(context, GrammarParserDataDefinitions.COMPILED_MODEL, snapshot, result);
                 results.addResult(data);
             }
         } catch (ExecutionException ex) {

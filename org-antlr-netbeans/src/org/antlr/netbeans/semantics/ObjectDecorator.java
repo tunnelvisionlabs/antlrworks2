@@ -24,7 +24,7 @@ public class ObjectDecorator<T> {
     private final Map<T, Map<ObjectProperty<?>, Object>> properties;
 
     public ObjectDecorator() {
-        properties = new HashMap<T, Map<ObjectProperty<?>, Object>>();
+        properties = new HashMap<>();
     }
 
     public ObjectDecorator(@NonNull Map<T, Map<ObjectProperty<?>, Object>> properties) {
@@ -66,7 +66,7 @@ public class ObjectDecorator<T> {
 
         Map<ObjectProperty<?>, Object> nodeProperties = properties.get(tree);
         if (nodeProperties == null) {
-            nodeProperties = new HashMap<ObjectProperty<?>, Object>();
+            nodeProperties = new HashMap<>();
             properties.put(tree, nodeProperties);
         }
 
@@ -97,7 +97,7 @@ public class ObjectDecorator<T> {
 
         Map<ObjectProperty<?>, Object> nodeProperties = this.properties.get(tree);
         if (nodeProperties == null) {
-            nodeProperties = new HashMap<ObjectProperty<?>, Object>(properties);
+            nodeProperties = new HashMap<>(properties);
             this.properties.put(tree, nodeProperties);
         } else {
             nodeProperties.putAll(properties);

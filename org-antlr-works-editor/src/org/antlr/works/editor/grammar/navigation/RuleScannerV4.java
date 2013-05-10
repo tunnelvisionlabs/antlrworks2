@@ -86,11 +86,11 @@ public class RuleScannerV4 extends RuleScanner {
 
         FileObject fileObject = result.getFileObject();
 
-        Set<GrammarAST> topLevelRules = new HashSet<GrammarAST>(parseResult.getNodesWithType(ANTLRParser.RULE));
-        Set<GrammarAST> modes = new HashSet<GrammarAST>(parseResult.getNodesWithType(ANTLRParser.MODE));
-        Map<GrammarAST, Set<GrammarAST>> modeRules = new HashMap<GrammarAST, Set<GrammarAST>>();
+        Set<GrammarAST> topLevelRules = new HashSet<>(parseResult.getNodesWithType(ANTLRParser.RULE));
+        Set<GrammarAST> modes = new HashSet<>(parseResult.getNodesWithType(ANTLRParser.MODE));
+        Map<GrammarAST, Set<GrammarAST>> modeRules = new HashMap<>();
         for (GrammarAST mode : modes) {
-            Set<GrammarAST> rules = new HashSet<GrammarAST>(mode.getNodesWithType(ANTLRParser.RULE));
+            Set<GrammarAST> rules = new HashSet<>(mode.getNodesWithType(ANTLRParser.RULE));
             modeRules.put(mode, rules);
             topLevelRules.removeAll(rules);
         }

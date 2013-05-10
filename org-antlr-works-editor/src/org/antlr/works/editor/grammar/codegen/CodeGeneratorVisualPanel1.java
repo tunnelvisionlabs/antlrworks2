@@ -110,7 +110,7 @@ public final class CodeGeneratorVisualPanel1 extends JPanel {
         javax.swing.JLabel jLabel3 = new javax.swing.JLabel();
         txtOutputDirectory = new javax.swing.JTextField();
         txtLibDirectory = new javax.swing.JTextField();
-        cmbTargetLanguage = new javax.swing.JComboBox();
+        cmbTargetLanguage = new javax.swing.JComboBox<String>();
         btnBrowseOutputDirectory = new javax.swing.JButton();
         btnBrowseLibDirectory = new javax.swing.JButton();
 
@@ -213,7 +213,7 @@ public final class CodeGeneratorVisualPanel1 extends JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBrowseLibDirectory;
     private javax.swing.JButton btnBrowseOutputDirectory;
-    private javax.swing.JComboBox cmbTargetLanguage;
+    private javax.swing.JComboBox<String> cmbTargetLanguage;
     private javax.swing.JTextField txtLibDirectory;
     private javax.swing.JTextField txtOutputDirectory;
     // End of variables declaration//GEN-END:variables

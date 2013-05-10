@@ -52,7 +52,7 @@ public final class CollapsiblePanel extends JPanel {
 
         if (result == null) {
             result = new MouseAdapterImpl();
-            mouseAdapter = new WeakReference<MouseAdapterImpl>(result);
+            mouseAdapter = new WeakReference<>(result);
         }
 
         return result;

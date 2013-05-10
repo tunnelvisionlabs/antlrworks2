@@ -32,7 +32,7 @@ import org.openide.util.Exceptions;
  */
 public class GrammarWrapper extends Grammar {
     
-    private final List<CompiledFileModelV3> imported = new ArrayList<CompiledFileModelV3>();
+    private final List<CompiledFileModelV3> imported = new ArrayList<>();
     private final DocumentSnapshot snapshot;
 
     public GrammarWrapper(DocumentSnapshot snapshot) {

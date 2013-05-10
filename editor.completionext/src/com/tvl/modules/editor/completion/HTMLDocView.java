@@ -161,10 +161,8 @@ public class HTMLDocView extends JEditorPane {
                     } else {
                         scrollRectToVisible(new Rectangle(0,0,0,0));
                     }
-                }catch(IOException ioe){
-                    ioe.printStackTrace();
-                }catch(BadLocationException ble){
-                    ble.printStackTrace();
+                } catch (IOException | BadLocationException ioe) {
+                    Exceptions.printStackTrace(ioe);
                 }
             }
         });

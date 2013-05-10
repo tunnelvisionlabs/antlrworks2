@@ -52,7 +52,7 @@ public class CompiledFileModel {
         this.parser = parser;
         this.result = result;
         this.syntaxErrors = syntaxErrors;
-        this.importedResults = new ArrayList<CompiledFileModel>();
+        this.importedResults = new ArrayList<>();
 //        if (grammar.importedGrammars != null) {
 //            for (Grammar imported : grammar.importedGrammars) {
 //                CommonTokenStream importedTokenStream = (CommonTokenStream)imported.ast.tokens;

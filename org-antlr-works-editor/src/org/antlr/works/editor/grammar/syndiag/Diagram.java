@@ -30,7 +30,7 @@ import org.openide.util.Parameters;
  */
 public class Diagram extends JPanel {
     private final Rule rule;
-    private static Reference<FontColorSettings> weakSettings = new WeakReference<FontColorSettings>(null);
+    private static Reference<FontColorSettings> weakSettings = new WeakReference<>(null);
 
     public Diagram(Rule rule) {
         Parameters.notNull("rule", rule);
@@ -69,7 +69,7 @@ public class Diagram extends JPanel {
         if (settings == null) {
             Lookup lookup = MimeLookup.getLookup(MimePath.parse(GrammarEditorKit.GRAMMAR_MIME_TYPE));
             settings = lookup.lookup(FontColorSettings.class);
-            weakSettings = new WeakReference<FontColorSettings>(settings);
+            weakSettings = new WeakReference<>(settings);
         }
 
         return settings.getTokenFontColors(category);

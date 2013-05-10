@@ -71,7 +71,7 @@ public final class PatchedHtmlRenderer {
 
     /** Stack object used during HTML rendering to hold previous colors in
      * the case of nested color entries. */
-    private static Stack<Color> colorStack = new Stack<Color>();
+    private static Stack<Color> colorStack = new Stack<>();
 
     /**
      * Constant used by {@link #renderString renderString}, {@link #renderPlainString renderPlainString},
@@ -1104,7 +1104,7 @@ public final class PatchedHtmlRenderer {
         if (!STRICT_HTML) {
             if (ErrorManager.getDefault().isLoggable(ErrorManager.WARNING)) {
                 if (badStrings == null) {
-                    badStrings = new HashSet<String>();
+                    badStrings = new HashSet<>();
                 }
 
                 if (!badStrings.contains(msg)) {

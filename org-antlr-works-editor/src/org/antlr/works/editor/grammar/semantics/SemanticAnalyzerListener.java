@@ -109,13 +109,13 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
     private final ObjectDecorator<Tree> treeDecorator;
     private final ObjectDecorator<Token> tokenDecorator;
 
-    private final Map<String, Token> declaredRules = new HashMap<String, Token>();
-    private final Map<String, Token> declaredTokens = new HashMap<String, Token>();
-    private final Map<String, Token> declaredModes = new HashMap<String, Token>();
+    private final Map<String, Token> declaredRules = new HashMap<>();
+    private final Map<String, Token> declaredTokens = new HashMap<>();
+    private final Map<String, Token> declaredModes = new HashMap<>();
 
-    private final List<Token> unresolvedRuleReferences = new ArrayList<Token>();
-    private final List<Token> unresolvedTokenReferences = new ArrayList<Token>();
-    private final List<Token> unresolvedModeReferences = new ArrayList<Token>();
+    private final List<Token> unresolvedRuleReferences = new ArrayList<>();
+    private final List<Token> unresolvedTokenReferences = new ArrayList<>();
+    private final List<Token> unresolvedModeReferences = new ArrayList<>();
 
     public SemanticAnalyzerListener(@NonNull ObjectDecorator<Tree> treeDecorator, @NonNull ObjectDecorator<Token> tokenDecorator) {
         Parameters.notNull("treeDecorator", treeDecorator);

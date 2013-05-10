@@ -29,7 +29,7 @@ public class SyntaxErrorListener implements ANTLRErrorListener<Token> {
     private final DocumentSnapshot snapshot;
 
     @NonNull
-    private final List<SyntaxError> syntaxErrors = new ArrayList<SyntaxError>();
+    private final List<SyntaxError> syntaxErrors = new ArrayList<>();
 
     public SyntaxErrorListener(@NonNull DocumentSnapshot snapshot) {
         Parameters.notNull("snapshot", snapshot);
@@ -43,7 +43,7 @@ public class SyntaxErrorListener implements ANTLRErrorListener<Token> {
 
     @NonNull
     public List<SyntaxError> getSyntaxErrors() {
-        return new ArrayList<SyntaxError>(syntaxErrors);
+        return new ArrayList<>(syntaxErrors);
     }
 
     @Override

@@ -51,7 +51,7 @@ public class CompiledFileModelV4 extends CompiledFileModel {
         this.grammar = grammar;
         this.result = result;
         this.syntaxErrors = syntaxErrors;
-        this.importedResults = new ArrayList<CompiledFileModelV4>();
+        this.importedResults = new ArrayList<>();
         if (grammar != null && grammar.importedGrammars != null) {
             for (Grammar imported : grammar.importedGrammars) {
                 CommonTokenStream importedTokenStream = (CommonTokenStream)imported.ast.tokenStream;
