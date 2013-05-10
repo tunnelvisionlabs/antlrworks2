@@ -73,15 +73,15 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
     // final result
     private FileModelImpl fileModel;
 
-    private final Deque<ModeModelImpl> modeModelStack = new ArrayDeque<ModeModelImpl>();
-    private final Deque<RuleModelImpl> ruleModelStack = new ArrayDeque<RuleModelImpl>();
-    private final Deque<Collection<ModeModelImpl>> modeContainerStack = new ArrayDeque<Collection<ModeModelImpl>>();
-    private final Deque<Collection<RuleModelImpl>> ruleContainerStack = new ArrayDeque<Collection<RuleModelImpl>>();
-    private final Deque<Collection<ParameterModelImpl>> parameterContainerStack = new ArrayDeque<Collection<ParameterModelImpl>>();
-    private final Deque<Collection<ParameterModelImpl>> returnValueContainerStack = new ArrayDeque<Collection<ParameterModelImpl>>();
-    private final Deque<Collection<ParameterModelImpl>> localContainerStack = new ArrayDeque<Collection<ParameterModelImpl>>();
-    private final Deque<Collection<LabelModelImpl>> labelContainerStack = new ArrayDeque<Collection<LabelModelImpl>>();
-    private final Deque<Map<String, Collection<TerminalNode<Token>>>> labelUses = new ArrayDeque<Map<String, Collection<TerminalNode<Token>>>>();
+    private final Deque<ModeModelImpl> modeModelStack = new ArrayDeque<>();
+    private final Deque<RuleModelImpl> ruleModelStack = new ArrayDeque<>();
+    private final Deque<Collection<ModeModelImpl>> modeContainerStack = new ArrayDeque<>();
+    private final Deque<Collection<RuleModelImpl>> ruleContainerStack = new ArrayDeque<>();
+    private final Deque<Collection<ParameterModelImpl>> parameterContainerStack = new ArrayDeque<>();
+    private final Deque<Collection<ParameterModelImpl>> returnValueContainerStack = new ArrayDeque<>();
+    private final Deque<Collection<ParameterModelImpl>> localContainerStack = new ArrayDeque<>();
+    private final Deque<Collection<LabelModelImpl>> labelContainerStack = new ArrayDeque<>();
+    private final Deque<Map<String, Collection<TerminalNode<Token>>>> labelUses = new ArrayDeque<>();
 
     public CodeModelBuilderListener(DocumentSnapshot snapshot, TokenStream<? extends Token> tokens) {
         FileObject fileObject = snapshot.getVersionedDocument().getFileObject();

@@ -56,7 +56,7 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
     private final Object lock = new Object();
     private final StyledDocument document;
     private final DocumentListenerImpl documentListener;
-    private final ArrayList<TState> lineStates = new ArrayList<TState>();
+    private final ArrayList<TState> lineStates = new ArrayList<>();
     private final boolean propagateChangedImmediately;
 
     private Integer firstDirtyLine;
@@ -115,7 +115,7 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
             public Iterator<Highlight> iterator() {
                 return new Iterator<Highlight>() {
 
-                    private final Deque<Highlight> buffer = new ArrayDeque<Highlight>();
+                    private final Deque<Highlight> buffer = new ArrayDeque<>();
 
                     private Highlight _current;
                     private boolean _complete;
@@ -650,7 +650,7 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
 
         start = NbDocument.findLineOffset(document, startLine);
         int length = end - start;
-        ParseRequest<TState> request = new ParseRequest<TState>(new OffsetRegion(start, length), state);
+        ParseRequest<TState> request = new ParseRequest<>(new OffsetRegion(start, length), state);
         return request;
     }
 
@@ -827,7 +827,7 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
                     lineStates.subList(lineNumberFromPosition, lineNumberFromPosition + Math.abs(lineCountDelta)).clear();
                 } else if (lineCountDelta > 0) {
                     TState endLineState = lineStates.get(lineNumberFromPosition);
-                    List<TState> insertedElements = new ArrayList<TState>();
+                    List<TState> insertedElements = new ArrayList<>();
                     for (int i = 0; i < lineCountDelta; i++) {
                         insertedElements.add(endLineState);
                     }

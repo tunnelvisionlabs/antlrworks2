@@ -80,7 +80,7 @@ public final class TemplateScanningParserTask implements ParserTask {
                     TemplateScanner scanner = getScanner(model);
                     Description description = scanner.scan(model);
                     if (description != null) {
-                        data = new BaseParserData<Description>(context, TemplateParserDataDefinitions.NAVIGATOR_ROOT, snapshot, description);
+                        data = new BaseParserData<>(context, TemplateParserDataDefinitions.NAVIGATOR_ROOT, snapshot, description);
                         results.addResult(data);
                     }
                 }

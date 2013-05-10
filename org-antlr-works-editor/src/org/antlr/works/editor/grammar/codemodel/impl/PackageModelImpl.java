@@ -22,7 +22,7 @@ import org.netbeans.api.project.Project;
  * @author Sam Harwell
  */
 public class PackageModelImpl extends AbstractCodeElementModel implements PackageModel {
-    private final Map<String, FileModelImpl> files = new HashMap<String, FileModelImpl>();
+    private final Map<String, FileModelImpl> files = new HashMap<>();
 
     public PackageModelImpl(String name, Project project, String path) {
         super(name, project, path);
@@ -44,7 +44,7 @@ public class PackageModelImpl extends AbstractCodeElementModel implements Packag
 
     @Override
     public Collection<? extends AbstractCodeElementModel> getMembers() {
-        List<AbstractCodeElementModel> members = new ArrayList<AbstractCodeElementModel>();
+        List<AbstractCodeElementModel> members = new ArrayList<>();
         for (FileModelImpl file : getFiles()) {
             members.addAll(file.getMembers());
         }

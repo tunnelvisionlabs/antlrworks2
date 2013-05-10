@@ -78,9 +78,9 @@ public abstract class AbstractFoldScanner<SemanticData> {
                         Collections.sort(foldManager.currentFolds, FoldComparator.DEFAULT);
                         Collections.sort(folds, FoldInfoComparator.DEFAULT);
 
-                        List<Fold> foldsToKeep = new ArrayList<Fold>();
-                        List<Fold> foldsToRemove = new ArrayList<Fold>();
-                        List<FoldInfo> foldsToAdd = new ArrayList<FoldInfo>();
+                        List<Fold> foldsToKeep = new ArrayList<>();
+                        List<Fold> foldsToRemove = new ArrayList<>();
+                        List<FoldInfo> foldsToAdd = new ArrayList<>();
 
                         int i = 0;
                         int j = 0;

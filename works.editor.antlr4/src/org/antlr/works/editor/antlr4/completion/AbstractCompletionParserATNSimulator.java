@@ -170,12 +170,12 @@ public abstract class AbstractCompletionParserATNSimulator extends ParserATNSimu
             }
 
             if (caretTransitions == null) {
-                caretTransitions = new LinkedHashMap<ATNConfig, List<Transition>>();
+                caretTransitions = new LinkedHashMap<>();
             }
 
             List<Transition> configTransitions = caretTransitions.get(source);
             if (configTransitions == null) {
-                configTransitions = new ArrayList<Transition>();
+                configTransitions = new ArrayList<>();
                 caretTransitions.put(source, configTransitions);
             }
 

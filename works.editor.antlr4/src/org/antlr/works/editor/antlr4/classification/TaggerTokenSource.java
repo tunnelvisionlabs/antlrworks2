@@ -73,7 +73,7 @@ public class TaggerTokenSource<Symbol extends Token> implements TokenSource<Symb
             int stop = start - 1;
             int line = snapshot.getLineCount();
             int charPositionInLine = snapshot.findLineFromLineNumber(line - 1).getLength();
-            previousTag = new TokenTag<Symbol>(tokenFactory.create(getTokenFactorySourcePair(), Token.EOF, text, channel, start, stop, line, charPositionInLine));
+            previousTag = new TokenTag<>(tokenFactory.create(getTokenFactorySourcePair(), Token.EOF, text, channel, start, stop, line, charPositionInLine));
         }
 
         line = -1;

@@ -27,8 +27,8 @@ import org.openide.util.Parameters;
  */
 public class AnnotatedParseTree {
 
-    private final ObjectDecorator<Tree> treeDecorator = new ObjectDecorator<Tree>();
-    private final ObjectDecorator<Token> tokenDecorator = new ObjectDecorator<Token>();
+    private final ObjectDecorator<Tree> treeDecorator = new ObjectDecorator<>();
+    private final ObjectDecorator<Token> tokenDecorator = new ObjectDecorator<>();
 
     private ParserRuleContext<Token> parseTree;
 
@@ -71,8 +71,8 @@ public class AnnotatedParseTree {
     }
 
     public void compactAnnotations() {
-        final Set<Tree> trees = new HashSet<Tree>();
-        final Set<Token> tokens = new HashSet<Token>();
+        final Set<Tree> trees = new HashSet<>();
+        final Set<Token> tokens = new HashSet<>();
 
         GrammarParserBaseListener listener = new GrammarParserBaseListener() {
 
@@ -88,7 +88,7 @@ public class AnnotatedParseTree {
 
         };
 
-        final Set<Tree> extraTrees = new HashSet<Tree>();
+        final Set<Tree> extraTrees = new HashSet<>();
         ParseTreeWalker.DEFAULT.walk(listener, parseTree);
         for (Map.Entry<? extends Tree, ?> entry : treeDecorator.getProperties().entrySet()) {
             if (!trees.contains(entry.getKey())) {
@@ -100,7 +100,7 @@ public class AnnotatedParseTree {
             treeDecorator.removeProperties(tree);
         }
 
-        final Set<Token> extraTokens = new HashSet<Token>();
+        final Set<Token> extraTokens = new HashSet<>();
         ParseTreeWalker.DEFAULT.walk(listener, parseTree);
         for (Map.Entry<? extends Token, ?> entry : tokenDecorator.getProperties().entrySet()) {
             if (!tokens.contains(entry.getKey())) {

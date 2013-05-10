@@ -22,7 +22,7 @@ import org.antlr.v4.runtime.TokenStream;
  */
 public abstract class AbstractParserCache<Symbol extends Token, T extends Parser<Symbol>> {
 
-    private final Deque<Reference<T>> parsers = new ArrayDeque<Reference<T>>();
+    private final Deque<Reference<T>> parsers = new ArrayDeque<>();
 
     public T getParser(TokenStream<? extends Symbol> input) {
         T parser = null;
@@ -43,7 +43,7 @@ public abstract class AbstractParserCache<Symbol extends Token, T extends Parser
 
     public void putParser(T parser) {
         synchronized (parsers) {
-            parsers.add(new SoftReference<T>(parser));
+            parsers.add(new SoftReference<>(parser));
         }
     }
 

@@ -32,7 +32,7 @@ public class TokenVocabDeclarationModelImpl extends AbstractCodeElementModel imp
 
     @Override
     public Collection<TokenVocabModel> resolve() {
-        List<TokenVocabModel> result = new ArrayList<TokenVocabModel>();
+        List<TokenVocabModel> result = new ArrayList<>();
         // first try to find a grammar with this name
         PackageModelImpl packageModel = getFile().getPackage();
         for (FileModelImpl fileModel : packageModel.getFiles()) {

@@ -84,7 +84,7 @@ public final class LexerDebuggerControllerTopComponent extends TopComponent {
             public void mouseClicked(MouseEvent e) {
                 if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2) {
                     JList list = (JList)e.getSource();
-                    List<Integer> selectedChannels = new ArrayList<Integer>();
+                    List<Integer> selectedChannels = new ArrayList<>();
                     for (Object item : list.getSelectedValues()) {
                         if (item instanceof String) {
                             if (defaultChannelText.equals(item)) {
@@ -126,7 +126,7 @@ public final class LexerDebuggerControllerTopComponent extends TopComponent {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 JList list = (JList)e.getSource();
-                List<Integer> selectedChannels = new ArrayList<Integer>();
+                List<Integer> selectedChannels = new ArrayList<>();
                 for (Object item : list.getSelectedValues()) {
                     if (item instanceof String) {
                         if (defaultChannelText.equals(item)) {
@@ -145,7 +145,7 @@ public final class LexerDebuggerControllerTopComponent extends TopComponent {
 
                 JTextComponent editor = EditorRegistry.lastFocusedComponent();
                 TraceToken[] tokens = getEditorTokens(editor);
-                List<TraceToken> selectedTokens = new ArrayList<TraceToken>();
+                List<TraceToken> selectedTokens = new ArrayList<>();
                 for (TraceToken token : tokens) {
                     if (selectedChannels.contains(token.getChannel())) {
                         selectedTokens.add(token);
@@ -205,7 +205,7 @@ public final class LexerDebuggerControllerTopComponent extends TopComponent {
 
                 JTextComponent editor = EditorRegistry.lastFocusedComponent();
                 TraceToken[] tokens = getEditorTokens(editor);
-                List<TraceToken> selectedTokens = new ArrayList<TraceToken>();
+                List<TraceToken> selectedTokens = new ArrayList<>();
                 for (TraceToken token : tokens) {
                     if (token.getType() < 0) {
                         continue;
@@ -253,7 +253,7 @@ public final class LexerDebuggerControllerTopComponent extends TopComponent {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 JList list = (JList)e.getSource();
-                List<TraceToken> selectedTokens = new ArrayList<TraceToken>();
+                List<TraceToken> selectedTokens = new ArrayList<>();
                 for (Object value : list.getSelectedValues()) {
                     if (value instanceof TraceToken) {
                         selectedTokens.add((TraceToken)value);
@@ -305,7 +305,7 @@ public final class LexerDebuggerControllerTopComponent extends TopComponent {
 
                 JTextComponent editor = EditorRegistry.lastFocusedComponent();
                 TraceToken[] tokens = getEditorTokens(editor);
-                List<TraceToken> selectedTokens = new ArrayList<TraceToken>();
+                List<TraceToken> selectedTokens = new ArrayList<>();
                 for (TraceToken token : tokens) {
                     if (Arrays.binarySearch(selectedModes, token.getMode()) >= 0) {
                         selectedTokens.add(token);
@@ -341,7 +341,7 @@ public final class LexerDebuggerControllerTopComponent extends TopComponent {
                 final boolean showAtn = showAtnTmp;
                 final boolean showDfa = showDfaTmp;
 
-                final List<TraceToken> selectedTokens = new ArrayList<TraceToken>();
+                final List<TraceToken> selectedTokens = new ArrayList<>();
                 if (showAtn || showDfa) {
                     LexerDebuggerEditorKit kit = (LexerDebuggerEditorKit)editor.getUI().getEditorKit(editor);
                     kit.processTrace(editor.getDocument(), new AbstractLexerTraceListener() {

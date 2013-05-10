@@ -207,7 +207,7 @@ public class CodeGenerator {
     }
 
     private List<String> getCommandArguments() {
-        List<String> args = new ArrayList<String>();
+        List<String> args = new ArrayList<>();
 
         if (outputDirectory != null) {
             args.add("-o");

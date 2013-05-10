@@ -62,10 +62,10 @@ public abstract class ParserTaskScheduler {
         ManualParserTaskScheduler.class;
 
     private final Map<VersionedDocument, Map<ParserDataDefinition<?>, Reference<ScheduledFuture<ParserData<?>>>>> scheduledDocumentDataTasks =
-        new WeakHashMap<VersionedDocument, Map<ParserDataDefinition<?>, Reference<ScheduledFuture<ParserData<?>>>>>();
+        new WeakHashMap<>();
 
     private final Map<VersionedDocument, Map<ParserTaskProvider, Reference<ScheduledFuture<Collection<? extends ParserData<?>>>>>> scheduledDocumentTasks =
-        new WeakHashMap<VersionedDocument, Map<ParserTaskProvider, Reference<ScheduledFuture<Collection<? extends ParserData<?>>>>>>();
+        new WeakHashMap<>();
 
     private boolean initialized;
 
@@ -82,11 +82,11 @@ public abstract class ParserTaskScheduler {
         Collection<VersionedDocument> taskDocuments;
 
         synchronized (scheduledDocumentDataTasks) {
-            dataDocuments = new ArrayList<VersionedDocument>(scheduledDocumentDataTasks.keySet());
+            dataDocuments = new ArrayList<>(scheduledDocumentDataTasks.keySet());
         }
 
         synchronized (scheduledDocumentTasks) {
-            taskDocuments = new ArrayList<VersionedDocument>(scheduledDocumentTasks.keySet());
+            taskDocuments = new ArrayList<>(scheduledDocumentTasks.keySet());
         }
 
         for (VersionedDocument document : dataDocuments) {
@@ -153,7 +153,7 @@ public abstract class ParserTaskScheduler {
 
         // Schedule data updates
         String mimeType = context.getDocument().getMimeType();
-        Set<ParserDataDefinition<?>> currentScheduledData = new HashSet<ParserDataDefinition<?>>();
+        Set<ParserDataDefinition<?>> currentScheduledData = new HashSet<>();
         for (ParserDataDefinition<?> data : MimeLookup.getLookup(mimeType).lookupAll(ParserDataDefinition.class)) {
             if (getClass().equals(data.getScheduler())) {
                 currentScheduledData.add(data);
@@ -166,7 +166,7 @@ public abstract class ParserTaskScheduler {
             synchronized (scheduledDocumentDataTasks) {
                 existing = scheduledDocumentDataTasks.get(document);
                 if (existing == null) {
-                    existing = new HashMap<ParserDataDefinition<?>, Reference<ScheduledFuture<ParserData<?>>>>();
+                    existing = new HashMap<>();
                     scheduledDocumentDataTasks.put(document, existing);
                 }
             }
@@ -190,7 +190,7 @@ public abstract class ParserTaskScheduler {
             Map<ParserDataDefinition<?>, ScheduledFuture<ParserData<?>>> futures = getTaskManager().scheduleData(context, currentScheduledData, delay, timeUnit);
             synchronized (existing) {
                 for (Map.Entry<ParserDataDefinition<?>, ScheduledFuture<ParserData<?>>> entry : futures.entrySet()) {
-                    existing.put(entry.getKey(), new WeakReference<ScheduledFuture<ParserData<?>>>(entry.getValue()));
+                    existing.put(entry.getKey(), new WeakReference<>(entry.getValue()));
                 }
             }
         }
@@ -208,7 +208,7 @@ public abstract class ParserTaskScheduler {
         assert context.getSchedulerClass() == getClass();
 
         // Schedule task updates
-        Set<ParserTaskProvider> currentScheduledProviders = new HashSet<ParserTaskProvider>();
+        Set<ParserTaskProvider> currentScheduledProviders = new HashSet<>();
         providerLoop:
         for (ParserTaskProvider provider : taskProviders) {
             if (getClass().equals(provider.getDefinition().getScheduler())) {
@@ -222,7 +222,7 @@ public abstract class ParserTaskScheduler {
             synchronized(scheduledDocumentTasks) {
                 existing = scheduledDocumentTasks.get(document);
                 if (existing == null) {
-                    existing = new HashMap<ParserTaskProvider, Reference<ScheduledFuture<Collection<? extends ParserData<?>>>>>();
+                    existing = new HashMap<>();
                     scheduledDocumentTasks.put(document, existing);
                 }
             }
@@ -246,7 +246,7 @@ public abstract class ParserTaskScheduler {
             Map<ParserTaskProvider, ScheduledFuture<Collection<? extends ParserData<?>>>> futures = getTaskManager().scheduleTask(context, currentScheduledProviders, delay, timeUnit);
             synchronized (existing) {
                 for (Map.Entry<ParserTaskProvider, ScheduledFuture<Collection<? extends ParserData<?>>>> entry : futures.entrySet()) {
-                    existing.put(entry.getKey(), new WeakReference<ScheduledFuture<Collection<? extends ParserData<?>>>>(entry.getValue()));
+                    existing.put(entry.getKey(), new WeakReference<>(entry.getValue()));
                 }
             }
         }

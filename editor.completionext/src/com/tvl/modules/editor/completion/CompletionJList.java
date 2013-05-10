@@ -96,7 +96,7 @@ public class CompletionJList extends JList {
     
     public CompletionJList(int maxVisibleRowCount, MouseListener mouseListener, JTextComponent editorComponent) {
         this.maxVisibleRowCount = maxVisibleRowCount;
-        this.editorComponent = new WeakReference<JTextComponent>(editorComponent);
+        this.editorComponent = new WeakReference<>(editorComponent);
         addMouseListener(mouseListener);
         setFont(editorComponent.getFont());
         setLayoutOrientation(JList.VERTICAL);
@@ -174,7 +174,7 @@ public class CompletionJList extends JList {
     
     void setData(List<?> data, @NonNull CompletionController controller) {
         smartIndex = -1;
-        this.controller = new WeakReference<CompletionController>(controller);
+        this.controller = new WeakReference<>(controller);
         // since this.controller is a weak reference, add a strong reference to
         // the editor component
         editorComponent.get().putClientProperty(COMPLETION_CONTROLLER_PROPERTY, controller);
@@ -404,7 +404,7 @@ public class CompletionJList extends JList {
         private Color bgSelectedColor;
         
         void setItem(CompletionItem item) {
-            this.item = new WeakReference<CompletionItem>(item);
+            this.item = new WeakReference<>(item);
         }
         
         void setSelected(boolean isBestMatch, boolean isSelected) {

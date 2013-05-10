@@ -40,7 +40,7 @@ public class GrammarFoldScannerV4 extends AbstractAntlrFoldScanner<CompiledModel
         }
 
         DocumentSnapshot snapshot = result4.getSnapshot();
-        final List<FoldInfo> folds = new ArrayList<FoldInfo>();
+        final List<FoldInfo> folds = new ArrayList<>();
 
         GrammarRootAST parseResult = result4.getResult().getResult();
         if (parseResult != null) {

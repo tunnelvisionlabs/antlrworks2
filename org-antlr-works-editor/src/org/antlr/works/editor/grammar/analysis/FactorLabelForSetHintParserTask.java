@@ -104,7 +104,7 @@ public final class FactorLabelForSetHintParserTask implements ParserTask {
         Listener listener = new Listener();
         ParseTreeWalker.DEFAULT.walk(listener, grammarAnnotatedParseTree.getParseTree());
 
-        List<ErrorDescription> hints = new ArrayList<ErrorDescription>();
+        List<ErrorDescription> hints = new ArrayList<>();
         for (Interval interval : listener.getRewriteRanges()) {
             try {
                 hints.add(ErrorDescriptionFactory.createErrorDescription(Severity.WARNING, "Factor label out of set", document, document.createPosition(interval.a), document.createPosition(interval.b + 1)));
@@ -125,7 +125,7 @@ public final class FactorLabelForSetHintParserTask implements ParserTask {
 
     private static final class Listener extends GrammarParserBaseListener {
         private final IntervalSet _ignoreRanges = new IntervalSet();
-        private final Map<ParserRuleContext<?>, Set<String>> _labels = new HashMap<ParserRuleContext<?>, Set<String>>();
+        private final Map<ParserRuleContext<?>, Set<String>> _labels = new HashMap<>();
         private final IntervalSet _rewriteRanges = new IntervalSet();
 
         public List<Interval> getRewriteRanges() {
@@ -192,7 +192,7 @@ public final class FactorLabelForSetHintParserTask implements ParserTask {
                 return;
             }
 
-            List<AlternativeContext> alternatives = new ArrayList<AlternativeContext>(labeledAlts.size());
+            List<AlternativeContext> alternatives = new ArrayList<>(labeledAlts.size());
             for (LabeledAltContext labeledAltContext : labeledAlts) {
                 AlternativeContext alternative = labeledAltContext.alternative();
                 if (alternative == null) {
@@ -208,7 +208,7 @@ public final class FactorLabelForSetHintParserTask implements ParserTask {
         private void addLabel(ParserRuleContext<?> tree, String label) {
             Set<String> labels = _labels.get(tree);
             if (labels == null) {
-                labels = new HashSet<String>();
+                labels = new HashSet<>();
                 _labels.put(tree, labels);
             }
 

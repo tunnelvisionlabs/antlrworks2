@@ -47,7 +47,7 @@ public abstract class AbstractTokensTaskTaggerSnapshot<TState extends LineStateI
     private final DocumentSnapshot snapshot;
 
     private final Object lock = new Object();
-    private final ArrayList<TState> lineStates = new ArrayList<TState>();
+    private final ArrayList<TState> lineStates = new ArrayList<>();
 
     private Integer firstDirtyLine;
     private Integer lastDirtyLine;
@@ -97,7 +97,7 @@ public abstract class AbstractTokensTaskTaggerSnapshot<TState extends LineStateI
                     lineStates.subList(oldStartLine, oldStartLine + Math.abs(lineCountDelta)).clear();
                 } else if (lineCountDelta > 0) {
                     TState endLineState = lineStates.get(oldStartLine);
-                    ArrayList<TState> insertedElements = new ArrayList<TState>();
+                    ArrayList<TState> insertedElements = new ArrayList<>();
                     for (int j = 0; j < lineCountDelta; j++) {
                         insertedElements.add(endLineState);
                     }
@@ -179,7 +179,7 @@ public abstract class AbstractTokensTaskTaggerSnapshot<TState extends LineStateI
     }
 
     public List<TaggedPositionRegion<TokenTag<Token>>> getHighlights(int startOffset, int endOffset) {
-        List<TaggedPositionRegion<TokenTag<Token>>> tags = new ArrayList<TaggedPositionRegion<TokenTag<Token>>>();
+        List<TaggedPositionRegion<TokenTag<Token>>> tags = new ArrayList<>();
         boolean updateOffsets = true;
 
         if (endOffset == Integer.MAX_VALUE) {
@@ -405,7 +405,7 @@ public abstract class AbstractTokensTaskTaggerSnapshot<TState extends LineStateI
 
         start = snapshot.findLineFromLineNumber(startLine).getStart().getOffset();
         int length = end - start;
-        ParseRequest<TState> request = new ParseRequest<TState>(new OffsetRegion(start, length), state);
+        ParseRequest<TState> request = new ParseRequest<>(new OffsetRegion(start, length), state);
         return request;
     }
 
@@ -474,14 +474,14 @@ public abstract class AbstractTokensTaskTaggerSnapshot<TState extends LineStateI
     protected Collection<TaggedPositionRegion<TokenTag<Token>>> getTagsForToken(Token token) {
         TokenTag<Token> tag = highlightToken(token);
         if (tag != null) {
-            return Collections.<TaggedPositionRegion<TokenTag<Token>>>singleton(new BaseTaggedPositionRegion<TokenTag<Token>>(new SnapshotPositionRegion(snapshot, OffsetRegion.fromBounds(token.getStartIndex(), token.getStopIndex() + 1)), tag));
+            return Collections.<TaggedPositionRegion<TokenTag<Token>>>singleton(new BaseTaggedPositionRegion<>(new SnapshotPositionRegion(snapshot, OffsetRegion.fromBounds(token.getStartIndex(), token.getStopIndex() + 1)), tag));
         }
 
         return Collections.emptyList();
     }
 
     protected TokenTag<Token> highlightToken(Token token) {
-        return new TokenTag<Token>(token);
+        return new TokenTag<>(token);
     }
 
     public void forceRehighlightLines(int startLine, int endLineInclusive) {

@@ -94,7 +94,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
 
     @Override
     protected void updateHighlights(OffsetsBag targetContainer, DocumentSnapshot sourceSnapshot, DocumentSnapshot currentSnapshot, SemanticAnalyzerListener listener) {
-        List<Tuple2<OffsetRegion, AttributeSet>> intermediateContainer = new ArrayList<Tuple2<OffsetRegion, AttributeSet>>();
+        List<Tuple2<OffsetRegion, AttributeSet>> intermediateContainer = new ArrayList<>();
         addHighlights(intermediateContainer, sourceSnapshot, currentSnapshot, listener.getParameterDeclarations(), parameterDeclarationAttributes);
         addHighlights(intermediateContainer, sourceSnapshot, currentSnapshot, listener.getReturnValueDeclarations(), returnValueDeclarationAttributes);
         addHighlights(intermediateContainer, sourceSnapshot, currentSnapshot, listener.getLocalsDeclarations(), localDeclarationAttributes);
@@ -159,17 +159,17 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
             add("fail");
         }};
 
-        private final Deque<Integer> memberContext = new ArrayDeque<Integer>();
+        private final Deque<Integer> memberContext = new ArrayDeque<>();
 
-        private final List<Token> parameterDeclarations = new ArrayList<Token>();
-        private final List<Token> returnValueDeclarations = new ArrayList<Token>();
-        private final List<Token> localsDeclarations = new ArrayList<Token>();
-        private final List<Token> invalidOptions = new ArrayList<Token>();
-        private final List<Token> lexerCommands = new ArrayList<Token>();
-        private final List<Token> lexerModes = new ArrayList<Token>();
+        private final List<Token> parameterDeclarations = new ArrayList<>();
+        private final List<Token> returnValueDeclarations = new ArrayList<>();
+        private final List<Token> localsDeclarations = new ArrayList<>();
+        private final List<Token> invalidOptions = new ArrayList<>();
+        private final List<Token> lexerCommands = new ArrayList<>();
+        private final List<Token> lexerModes = new ArrayList<>();
 
-        private final Map<String, List<Token>> possibleLexerModes = new HashMap<String, List<Token>>();
-        private final HashSet<String> lexerModeNames = new HashSet<String>();
+        private final Map<String, List<Token>> possibleLexerModes = new HashMap<>();
+        private final HashSet<String> lexerModeNames = new HashSet<>();
 
         private int grammarType;
         private int ruleLevel;
@@ -351,7 +351,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
                     } else {
                         List<Token> list = possibleLexerModes.get(idContext.start.getText());
                         if (list == null) {
-                            list = new ArrayList<Token>(1);
+                            list = new ArrayList<>(1);
                             possibleLexerModes.put(idContext.start.getText(), list);
                         }
 

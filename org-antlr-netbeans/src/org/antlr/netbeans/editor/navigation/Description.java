@@ -30,7 +30,7 @@ public class Description {
 
     public static final String INHERITED_COLOR = "#7D694A";
 
-    private final Collection<Description> children = new ArrayList<Description>(0);
+    private final Collection<Description> children = new ArrayList<>(0);
 
     private FileObject fileObject;
     private boolean inherited;

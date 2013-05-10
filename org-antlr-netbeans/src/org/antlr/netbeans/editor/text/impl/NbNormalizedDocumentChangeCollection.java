@@ -22,7 +22,7 @@ import org.openide.util.Parameters;
  */
 final class NbNormalizedDocumentChangeCollection extends AbstractList<DocumentChange> implements NormalizedDocumentChangeCollection {
 
-    private final List<NbDocumentChange> internal = new ArrayList<NbDocumentChange>();
+    private final List<NbDocumentChange> internal = new ArrayList<>();
     private boolean includesLineChanges;
     private boolean readOnly;
 

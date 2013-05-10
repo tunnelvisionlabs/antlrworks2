@@ -25,7 +25,7 @@ import org.netbeans.spi.editor.fold.FoldOperation;
 public class AbstractFoldManager implements FoldManager {
 
     private FoldOperation operation;
-    final ArrayList<Fold> currentFolds = new ArrayList<Fold>();
+    final ArrayList<Fold> currentFolds = new ArrayList<>();
 
     public static AbstractFoldManager getFoldManager(VersionedDocument document) {
         return (AbstractFoldManager)document.getProperty(AbstractFoldManager.class);

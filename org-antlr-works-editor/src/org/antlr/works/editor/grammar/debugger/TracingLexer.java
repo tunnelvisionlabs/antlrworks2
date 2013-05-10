@@ -38,7 +38,7 @@ public class TracingLexer extends Lexer {
         if (data.actionsMap != null) {
             _actions = data.actionsMap;
         } else {
-            _actions = new HashMap<Integer, Collection<LexerAction>>();
+            _actions = new HashMap<>();
         }
     }
 

@@ -35,8 +35,8 @@ public class StandardCommenter implements Commenter {
 
     public StandardCommenter(CommentFormat... commentFormats) {
         this.commentFormats = Arrays.asList(Arrays.copyOf(commentFormats, commentFormats.length));
-        this.blockFormats = new ArrayList<BlockCommentFormat>();
-        this.lineFormats = new ArrayList<LineCommentFormat>();
+        this.blockFormats = new ArrayList<>();
+        this.lineFormats = new ArrayList<>();
         for (CommentFormat format : commentFormats) {
             if (format instanceof BlockCommentFormat) {
                 blockFormats.add((BlockCommentFormat)format);
@@ -86,12 +86,12 @@ public class StandardCommenter implements Commenter {
     public List<DocumentSpan> commentSpans(List<DocumentSpan> spans) throws BadLocationException {
         Parameters.notNull("spans", spans);
 
-        List<DocumentSpan> result = new ArrayList<DocumentSpan>();
+        List<DocumentSpan> result = new ArrayList<>();
         if (spans.isEmpty())
             return result;
 
-        List<Position> startPositions = new ArrayList<Position>();
-        List<Position> endPositions = new ArrayList<Position>();
+        List<Position> startPositions = new ArrayList<>();
+        List<Position> endPositions = new ArrayList<>();
         StyledDocument document = spans.get(0).getDocument();
 
         if (!(document instanceof BaseDocument)) {
@@ -135,12 +135,12 @@ public class StandardCommenter implements Commenter {
     public List<DocumentSpan> uncommentSpans(List<DocumentSpan> spans) throws BadLocationException {
         Parameters.notNull("spans", spans);
 
-        List<DocumentSpan> result = new ArrayList<DocumentSpan>();
+        List<DocumentSpan> result = new ArrayList<>();
         if (spans.isEmpty())
             return result;
 
-        List<Position> startPositions = new ArrayList<Position>();
-        List<Position> endPositions = new ArrayList<Position>();
+        List<Position> startPositions = new ArrayList<>();
+        List<Position> endPositions = new ArrayList<>();
         StyledDocument document = spans.get(0).getDocument();
 
         if (!(document instanceof BaseDocument)) {

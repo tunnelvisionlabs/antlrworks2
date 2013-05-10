@@ -39,7 +39,7 @@ public class NbVersionedDocument implements VersionedDocument {
     // -J-Dorg.antlr.netbeans.editor.text.impl.NbVersionedDocument.level=FINE
     private static final Logger LOGGER = Logger.getLogger(NbVersionedDocument.class.getName());
 
-    private static final WeakReference<NbDocumentVersion> NullVersion = new WeakReference<NbDocumentVersion>(null);
+    private static final WeakReference<NbDocumentVersion> NullVersion = new WeakReference<>(null);
 
     @NullAllowed
     private final BaseDocument document;
@@ -47,7 +47,7 @@ public class NbVersionedDocument implements VersionedDocument {
     private final FileObject fileObject;
 
     @NonNull
-    private final Map<Object, Object> properties = new HashMap<Object, Object>();
+    private final Map<Object, Object> properties = new HashMap<>();
 
     @NonNull
     private NbNormalizedDocumentChangeCollection pendingChanges = new NbNormalizedDocumentChangeCollection();
@@ -133,7 +133,7 @@ public class NbVersionedDocument implements VersionedDocument {
                 }
 
                 version = new NbDocumentVersion(this, latestVersionNumber + 1, new LineTextCache(text));
-                latestVersion = new SoftReference<NbDocumentVersion>(version);
+                latestVersion = new SoftReference<>(version);
                 latestVersionNumber = version.getVersionNumber();
                 pendingChanges = new NbNormalizedDocumentChangeCollection();
                 return version;
@@ -163,7 +163,7 @@ public class NbVersionedDocument implements VersionedDocument {
                     version = version.translate(pendingChanges);
                 }
 
-                latestVersion = new WeakReference<NbDocumentVersion>(version);
+                latestVersion = new WeakReference<>(version);
                 latestVersionNumber = version.getVersionNumber();
                 pendingChanges = new NbNormalizedDocumentChangeCollection();
                 return version;

@@ -21,7 +21,7 @@ import org.antlr.works.editor.antlr4.highlighting.TokenSourceWithStateV4;
  */
 public class TemplateHighlighterLexer implements TokenSourceWithStateV4<Token, TemplateHighlighterLexerState> {
     private static final Map<TemplateHighlighterLexerState, TemplateHighlighterLexerState> sharedStates =
-        new HashMap<TemplateHighlighterLexerState, TemplateHighlighterLexerState>();
+        new HashMap<>();
 
     private final GroupHighlighterLexer groupLexer;
 

@@ -45,7 +45,7 @@ public final class NavigatorUIVisibleParserTask implements ParserTask {
         throws InterruptedException, ExecutionException {
 
         if (requestedData.contains(GrammarParserDataDefinitions.NAVIGATOR_UI_VISIBLE)) {
-            BaseParserData<Boolean> data = new BaseParserData<Boolean>(context, GrammarParserDataDefinitions.NAVIGATOR_UI_VISIBLE, snapshot, GrammarRulesPanel.getInstance() != null);
+            BaseParserData<Boolean> data = new BaseParserData<>(context, GrammarParserDataDefinitions.NAVIGATOR_UI_VISIBLE, snapshot, GrammarRulesPanel.getInstance() != null);
             results.addResult(data);
         }
     }

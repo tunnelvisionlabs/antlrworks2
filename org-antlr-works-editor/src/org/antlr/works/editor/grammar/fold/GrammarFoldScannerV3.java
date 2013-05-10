@@ -33,7 +33,7 @@ public class GrammarFoldScannerV3 extends AbstractAntlrFoldScanner<CompiledModel
         CompiledModelV3 result3 = (CompiledModelV3)baseResult.getData();
         DocumentSnapshot snapshot = result3.getSnapshot();
 
-        final List<FoldInfo> folds = new ArrayList<FoldInfo>();
+        final List<FoldInfo> folds = new ArrayList<>();
 
         /*if (!result.getParser().getSyntaxErrors().isEmpty() && !foldManager.currentFolds.isEmpty()) {
             return;

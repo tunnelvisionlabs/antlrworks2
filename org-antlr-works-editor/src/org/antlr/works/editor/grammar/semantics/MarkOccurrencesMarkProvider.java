@@ -57,7 +57,7 @@ public class MarkOccurrencesMarkProvider extends MarkProvider {
 
         synchronized (lock) {
             old = occurrences;
-            occurrences = new ArrayList<Mark>(marks);
+            occurrences = new ArrayList<>(marks);
             nue = occurrences;
         }
 
@@ -66,7 +66,7 @@ public class MarkOccurrencesMarkProvider extends MarkProvider {
     }
 
     public static Collection<Mark> createMarks(final VersionedDocument document, final Collection<SnapshotPosition> bag, final Color color, final String tooltip) {
-        final List<Mark> result = new LinkedList<Mark>();
+        final List<Mark> result = new LinkedList<>();
 
         final Document doc = document.getDocument();
         doc.render(new Runnable() {

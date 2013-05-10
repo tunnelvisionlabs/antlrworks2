@@ -190,7 +190,7 @@ public final class CompletionResultSetImpl {
 
         if (items == null) {
             int estSize = (estimatedItemCount == -1) ? 10 : estimatedItemCount;
-            items = new ArrayList<CompletionItem>(estSize);
+            items = new ArrayList<>(estSize);
         }
         items.add(item);
         return items.size() < 1000;
@@ -209,7 +209,7 @@ public final class CompletionResultSetImpl {
         checkNotFinished();
 
         if (declarationItems == null) {
-            declarationItems = new ArrayList<CompletionItem>(1);
+            declarationItems = new ArrayList<>(1);
         }
 
         declarationItems.add(item);

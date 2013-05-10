@@ -44,7 +44,7 @@ import org.openide.util.Parameters;
 public class ActionExpressionAnalyzer extends GrammarParserBaseListener {
     private final FileModel fileModel;
     private final RuleContext<?> finalContext;
-    private final List<AttributeModel> members = new ArrayList<AttributeModel>();
+    private final List<AttributeModel> members = new ArrayList<>();
 
     public ActionExpressionAnalyzer(@NonNull FileModel fileModel, @NonNull RuleContext<?> finalContext) {
         Parameters.notNull("fileModel", fileModel);

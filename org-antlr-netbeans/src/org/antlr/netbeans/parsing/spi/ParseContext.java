@@ -65,7 +65,7 @@ public class ParseContext {
         this.document = document;
         this.snapshot = snapshot;
         this.position = position;
-        this.component = new WeakReference<JTextComponent>(component);
+        this.component = new WeakReference<>(component);
     }
 
     @NonNull

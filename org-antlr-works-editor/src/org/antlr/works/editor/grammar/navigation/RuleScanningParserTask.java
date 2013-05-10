@@ -83,7 +83,7 @@ public final class RuleScanningParserTask implements ParserTask {
                     RuleScanner scanner = getScanner(model);
                     Description description = scanner.scan(model);
                     if (description != null) {
-                        data = new BaseParserData<Description>(context, GrammarParserDataDefinitions.NAVIGATOR_ROOT, snapshot, description);
+                        data = new BaseParserData<>(context, GrammarParserDataDefinitions.NAVIGATOR_ROOT, snapshot, description);
                         results.addResult(data);
                     }
                 }

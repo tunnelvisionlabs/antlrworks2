@@ -36,7 +36,7 @@ public class TemplateParserFactory {
         result.removeErrorListeners();
         result.addErrorListener(DescriptiveErrorListener.INSTANCE);
         result.setBuildParseTree(false);
-        result.setErrorHandler(new DefaultErrorStrategy<Token>());
+        result.setErrorHandler(new DefaultErrorStrategy<>());
         return result;
     }
 

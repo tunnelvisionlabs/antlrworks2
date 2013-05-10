@@ -140,7 +140,7 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_actionScopeExpression, version=0, dependents=Dependents.PARENTS),
         })
         protected void runImpl(BaseDocument document) {
-            results = new ArrayList<CompletionItem>();
+            results = new ArrayList<>();
             possibleDeclaration = true;
             possibleReference = true;
             possibleKeyword = true;
@@ -161,7 +161,7 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
             Map<RuleContext<Token>, CaretReachedException> parseTrees = null;
             CaretToken caretToken = null;
 
-            final Collection<Description> rules = new ArrayList<Description>();
+            final Collection<Description> rules = new ArrayList<>();
 
             GrammarReferenceAnchors anchors = findNearestAnchors(taskManager, snapshot);
             int grammarType = anchors.getGrammarType();
@@ -190,13 +190,13 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
                     LOGGER.log(Level.FINE, "Code completion from anchor region: {0}.", region);
                 }
 
-                TaggerTokenSource<Token> taggerTokenSource = new TaggerTokenSource<Token>(tagger, new SnapshotPositionRegion(snapshot, region));
+                TaggerTokenSource<Token> taggerTokenSource = new TaggerTokenSource<>(tagger, new SnapshotPositionRegion(snapshot, region));
                 TokenSource<Token> tokenSource = new CodeCompletionTokenSource(getCaretOffset(), taggerTokenSource);
                 CommonTokenStream tokens = new CommonTokenStream(tokenSource);
 
                 CodeCompletionGrammarParser parser = ParserFactory.DEFAULT.getParser(tokens);
                 parser.setBuildParseTree(true);
-                parser.setErrorHandler(new CodeCompletionErrorStrategy<Token>());
+                parser.setErrorHandler(new CodeCompletionErrorStrategy<>());
                 ATN atn = parser.getATN();
                 parseTrees = forestParser.getParseTrees(parser);
 
@@ -243,9 +243,9 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
                         }
 
                         Map<ATNConfig, List<Transition>> transitions = entry.getValue().getTransitions();
-                        IdentityHashMap<PredictionContext, PredictionContext> visited = new IdentityHashMap<PredictionContext, PredictionContext>();
-                        Deque<PredictionContext> workList = new ArrayDeque<PredictionContext>();
-                        Deque<Integer> stateWorkList = new ArrayDeque<Integer>();
+                        IdentityHashMap<PredictionContext, PredictionContext> visited = new IdentityHashMap<>();
+                        Deque<PredictionContext> workList = new ArrayDeque<>();
+                        Deque<Integer> stateWorkList = new ArrayDeque<>();
                         for (Map.Entry<ATNConfig, List<Transition>> transitionEntry : transitions.entrySet()) {
                             boolean currentActionConfig = false;
                             visited.clear();
@@ -323,7 +323,7 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
                 }
 
                 if (parseTrees != null) {
-                    Map<String, CompletionItem> intermediateResults = new HashMap<String, CompletionItem>();
+                    Map<String, CompletionItem> intermediateResults = new HashMap<>();
 
                     // Keyword analysis
                     analyzeKeywords(parseTrees, intermediateResults);

@@ -158,7 +158,7 @@ public class GrammarIndentTask extends AbstractIndentTask {
         CodeCompletionGrammarParser parser = ParserFactory.DEFAULT.getParser(tokens);
 
         parser.setBuildParseTree(true);
-        parser.setErrorHandler(new CodeCompletionErrorStrategy<Token>());
+        parser.setErrorHandler(new CodeCompletionErrorStrategy<>());
 
         GrammarForestParser forestParser;
         if (anchors.getPrevious() != null) {

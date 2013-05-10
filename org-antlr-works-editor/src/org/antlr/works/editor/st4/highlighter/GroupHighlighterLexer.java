@@ -36,11 +36,11 @@ public class GroupHighlighterLexer extends AbstractGroupHighlighterLexer {
     public static final char DEFAULT_OPEN_DELIMITER = '<';
     public static final char DEFAULT_CLOSE_DELIMITER = '>';
 
-    private static final Map<Integer, ATN> delimiterToATN = new HashMap<Integer, ATN>();
+    private static final Map<Integer, ATN> delimiterToATN = new HashMap<>();
     private static final int OPEN_DELIMITER_PLACEHOLDER = '\uFFF0';
     private static final int CLOSE_DELIMITER_PLACEHOLDER = '\uFFF1';
 
-    private final Map<ATN, GroupHighlighterATNSimulator> atnToSimulator = new IdentityHashMap<ATN, GroupHighlighterATNSimulator>();
+    private final Map<ATN, GroupHighlighterATNSimulator> atnToSimulator = new IdentityHashMap<>();
 
     public GroupHighlighterLexer(CharStream input) {
         this(input, DEFAULT_OPEN_DELIMITER, DEFAULT_CLOSE_DELIMITER);

@@ -60,7 +60,7 @@ public class CategorySupport implements ActionListener, DocumentListener, Previe
 
     @SuppressWarnings("rawtypes")
     private static final Map<Class<? extends Enum>, ComboItem[]> COMBO_BOX_ITEMS =
-        new HashMap<Class<? extends Enum>, ComboItem[]>();
+        new HashMap<>();
 
     private final String mimeType;
     private final String previewText;
@@ -71,7 +71,7 @@ public class CategorySupport implements ActionListener, DocumentListener, Previe
 
     private final Preferences preferences;
 
-    private final List<JComponent> components = new LinkedList<JComponent>();
+    private final List<JComponent> components = new LinkedList<>();
     private JEditorPane previewPane;
 
     protected CategorySupport(String mimeType, Preferences preferences, String id, JPanel panel, String previewText, PreviewFormatter formatter) {

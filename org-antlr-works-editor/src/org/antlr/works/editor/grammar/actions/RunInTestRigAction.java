@@ -207,7 +207,7 @@ public final class RunInTestRigAction implements ActionListener {
             return Collections.emptyList();
         }
 
-        Set<String> set = new HashSet<String>();
+        Set<String> set = new HashSet<>();
         for (RuleModel rule : fileModel.getRules()) {
             if (rule.getRuleKind() != RuleKind.PARSER) {
                 continue;
@@ -216,7 +216,7 @@ public final class RunInTestRigAction implements ActionListener {
             set.add(rule.getName());
         }
 
-        List<String> result = new ArrayList<String>(set);
+        List<String> result = new ArrayList<>(set);
         Collections.sort(result);
         return result;
     }
@@ -227,7 +227,7 @@ public final class RunInTestRigAction implements ActionListener {
             return Collections.emptyList();
         }
 
-        List<FileObject> result = new ArrayList<FileObject>();
+        List<FileObject> result = new ArrayList<>();
         for (TokenVocabDeclarationModel tokenVocabDeclarationModel : fileModel.getTokenVocabDeclaration()) {
             for (TokenVocabModel tokenVocabModel : tokenVocabDeclarationModel.resolve()) {
                 if (!(tokenVocabModel instanceof FileVocabModelImpl)) {
@@ -268,7 +268,7 @@ public final class RunInTestRigAction implements ActionListener {
                     getClass().getSimpleName() + "-" + System.currentTimeMillis());
                 tmpdir.mkdir();
 
-                List<FileObject> compiled = new ArrayList<FileObject>();
+                List<FileObject> compiled = new ArrayList<>();
                 compiled.add(grammarFile);
                 compiled.addAll(dependencies);
                 CodeGenerator codeGenerator = new CodeGenerator("Java", compiled.toArray(new FileObject[compiled.size()]));
@@ -298,7 +298,7 @@ public final class RunInTestRigAction implements ActionListener {
                         Iterable<? extends JavaFileObject> compilationUnits =
                             fileManager.getJavaFileObjectsFromFiles(Arrays.asList(files));
 
-                        List<String> compileOptions = new ArrayList<String>();
+                        List<String> compileOptions = new ArrayList<>();
                         compileOptions.add("-g");
                         compileOptions.add("-d");
                         compileOptions.add(tmpdir.getAbsolutePath());
@@ -324,7 +324,7 @@ public final class RunInTestRigAction implements ActionListener {
                         Class<?> testRig = loader.loadClass(TestRig.class.getName());
                         Method mainMethod = testRig.getMethod("main", String[].class);
 
-                        List<String> testRigArguments = new ArrayList<String>();
+                        List<String> testRigArguments = new ArrayList<>();
                         testRigArguments.add(baseGrammarName);
                         testRigArguments.add(startRule);
                         if (showTokens) {

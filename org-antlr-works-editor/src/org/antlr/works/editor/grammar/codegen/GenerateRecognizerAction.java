@@ -98,12 +98,12 @@ public final class GenerateRecognizerAction implements ActionListener {
             generator.forceATN = CodeGeneratorWizardOptions.Advanced.isForceATN(wizard);
             generator.atn = CodeGeneratorWizardOptions.Advanced.isGenerateATNDiagrams(wizard);
             generator.treatWarningsAsErrors = CodeGeneratorWizardOptions.Advanced.isTreatWarningsAsErrors(wizard);
-            generator.options = new HashMap<String, String>();
+            generator.options = new HashMap<>();
             if (CodeGeneratorWizardOptions.Features.isAbstractClasses(wizard)) {
                 generator.options.put("abstract", "true");
             }
 
-            generator.arguments = new ArrayList<String>();
+            generator.arguments = new ArrayList<>();
             if (CodeGeneratorWizardOptions.Features.isUsePackageName(wizard)) {
                 String packageName = CodeGeneratorWizardOptions.Features.getPackageName(wizard);
                 if (packageName != null && !packageName.isEmpty()) {

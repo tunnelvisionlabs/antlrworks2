@@ -96,7 +96,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
 
     @Override
     protected void updateHighlights(OffsetsBag targetContainer, DocumentSnapshot sourceSnapshot, DocumentSnapshot currentSnapshot, SemanticAnalyzerListener listener) {
-        List<Tuple2<OffsetRegion, AttributeSet>> intermediateContainer = new ArrayList<Tuple2<OffsetRegion, AttributeSet>>();
+        List<Tuple2<OffsetRegion, AttributeSet>> intermediateContainer = new ArrayList<>();
 
         addHighlights(intermediateContainer, sourceSnapshot, currentSnapshot, listener.getTemplateDeclarations(), templateDeclarationAttributes);
         addHighlights(intermediateContainer, sourceSnapshot, currentSnapshot, listener.getTemplateUses(), templateUseAttributes);
@@ -129,19 +129,19 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
     }
 
     public static class SemanticAnalyzerListener extends TemplateParserBaseListener {
-        private final Deque<Integer> memberContext = new ArrayDeque<Integer>();
-        private final Deque<Set<String>> parameters = new ArrayDeque<Set<String>>();
+        private final Deque<Integer> memberContext = new ArrayDeque<>();
+        private final Deque<Set<String>> parameters = new ArrayDeque<>();
 
-        private final List<Token> templateDeclarations = new ArrayList<Token>();
-        private final List<Token> templateUses = new ArrayList<Token>();
-        private final List<Token> regionDeclarations = new ArrayList<Token>();
-        private final List<Token> regionUses = new ArrayList<Token>();
-        private final List<Token> dictionaryDeclarations = new ArrayList<Token>();
-        private final List<Token> dictionaryUses = new ArrayList<Token>();
-        private final List<Token> parameterDeclarations = new ArrayList<Token>();
-        private final List<Token> parameterUses = new ArrayList<Token>();
-        private final List<Token> attributeUses = new ArrayList<Token>();
-        private final List<Token> options = new ArrayList<Token>();
+        private final List<Token> templateDeclarations = new ArrayList<>();
+        private final List<Token> templateUses = new ArrayList<>();
+        private final List<Token> regionDeclarations = new ArrayList<>();
+        private final List<Token> regionUses = new ArrayList<>();
+        private final List<Token> dictionaryDeclarations = new ArrayList<>();
+        private final List<Token> dictionaryUses = new ArrayList<>();
+        private final List<Token> parameterDeclarations = new ArrayList<>();
+        private final List<Token> parameterUses = new ArrayList<>();
+        private final List<Token> attributeUses = new ArrayList<>();
+        private final List<Token> options = new ArrayList<>();
 
         public List<Token> getTemplateDeclarations() {
             return templateDeclarations;

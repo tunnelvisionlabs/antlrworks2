@@ -38,7 +38,7 @@ public class FileVocabModelImpl extends AbstractTokenVocabModel {
 
     @Override
     public Collection<? extends TokenData> getTokens() {
-        Map<String, TokenData> data = new HashMap<String, TokenData>();
+        Map<String, TokenData> data = new HashMap<>();
 
         // imports
         for (ImportDeclarationModelImpl importDecl : getFile().getImportDeclarations()) {

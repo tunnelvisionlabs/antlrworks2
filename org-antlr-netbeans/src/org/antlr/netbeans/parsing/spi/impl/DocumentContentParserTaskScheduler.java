@@ -32,7 +32,7 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service=ParserTaskScheduler.class)
 public class DocumentContentParserTaskScheduler extends ParserTaskScheduler {
-    private final Map<Document, Set<JTextComponent>> documents = new WeakHashMap<Document, Set<JTextComponent>>();
+    private final Map<Document, Set<JTextComponent>> documents = new WeakHashMap<>();
     private final EditorRegistryListener editorRegistryListener = new EditorRegistryListener();
     private final DocumentListener documentListener = new DocumentListenerImpl();
 
@@ -60,7 +60,7 @@ public class DocumentContentParserTaskScheduler extends ParserTaskScheduler {
                 synchronized (documents) {
                     components = documents.get(document);
                     if (components == null) {
-                        components = new WeakSet<JTextComponent>();
+                        components = new WeakSet<>();
                         documents.put(document, components);
                         document.addDocumentListener(documentListener);
                         VersionedDocument versionedDocument = VersionedDocumentUtilities.getVersionedDocument(document);

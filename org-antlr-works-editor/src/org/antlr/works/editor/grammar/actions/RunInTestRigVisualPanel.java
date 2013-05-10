@@ -96,7 +96,7 @@ public final class RunInTestRigVisualPanel extends javax.swing.JPanel {
     }
 
     public void setAvailableRules(List<String> rules, String selectedRule) {
-        cmbStartRule.setModel(new DefaultComboBoxModel(rules.toArray()));
+        cmbStartRule.setModel(new DefaultComboBoxModel<>(rules.toArray(new String[rules.size()])));
         if (selectedRule != null) {
             cmbStartRule.setSelectedItem(selectedRule);
         }

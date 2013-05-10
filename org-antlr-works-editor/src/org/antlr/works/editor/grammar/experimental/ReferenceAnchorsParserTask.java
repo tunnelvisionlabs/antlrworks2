@@ -80,7 +80,7 @@ public final class ReferenceAnchorsParserTask implements ParserTask {
 
         boolean legacyMode = GrammarEditorKit.isLegacyMode(snapshot);
         if (legacyMode) {
-            ParserData<List<Anchor>> emptyResult = new BaseParserData<List<Anchor>>(context, GrammarParserDataDefinitions.REFERENCE_ANCHOR_POINTS, snapshot, null);
+            ParserData<List<Anchor>> emptyResult = new BaseParserData<>(context, GrammarParserDataDefinitions.REFERENCE_ANCHOR_POINTS, snapshot, null);
             results.addResult(emptyResult);
             return;
         }
@@ -92,7 +92,7 @@ public final class ReferenceAnchorsParserTask implements ParserTask {
             if (parseTreeResult == null || anchorPointsResult == null || fileModelResult == null) {
                 Future<ParserData<Tagger<TokenTag<Token>>>> futureTokensData = taskManager.getData(snapshot, GrammarParserDataDefinitions.LEXER_TOKENS);
                 Tagger<TokenTag<Token>> tagger = futureTokensData.get().getData();
-                TaggerTokenSource<Token> tokenSource = new TaggerTokenSource<Token>(tagger, snapshot);
+                TaggerTokenSource<Token> tokenSource = new TaggerTokenSource<>(tagger, snapshot);
         //        DocumentSnapshotCharStream input = new DocumentSnapshotCharStream(snapshot);
         //        input.setSourceName((String)document.getDocument().getProperty(Document.TitleProperty));
         //        GrammarLexer lexer = new GrammarLexer(input);
@@ -103,7 +103,7 @@ public final class ReferenceAnchorsParserTask implements ParserTask {
                     parser.getInterpreter().setPredictionMode(PredictionMode.SLL);
                     parser.removeErrorListeners();
                     parser.setBuildParseTree(true);
-                    parser.setErrorHandler(new BailErrorStrategy<Token>());
+                    parser.setErrorHandler(new BailErrorStrategy<>());
                     parseResult = parser.grammarSpec();
                 } catch (ParseCancellationException ex) {
                     if (ex.getCause() instanceof RecognitionException) {
@@ -112,19 +112,19 @@ public final class ReferenceAnchorsParserTask implements ParserTask {
                         parser.getInterpreter().setPredictionMode(PredictionMode.LL);
                         parser.addErrorListener(DescriptiveErrorListener.INSTANCE);
                         parser.setInputStream(tokenStream);
-                        parser.setErrorHandler(new DefaultErrorStrategy<Token>());
+                        parser.setErrorHandler(new DefaultErrorStrategy<>());
                         parseResult = parser.grammarSpec();
                     } else {
                         throw ex;
                     }
                 }
 
-                parseTreeResult = new BaseParserData<GrammarSpecContext>(context, GrammarParserDataDefinitions.REFERENCE_PARSE_TREE, snapshot, parseResult);
+                parseTreeResult = new BaseParserData<>(context, GrammarParserDataDefinitions.REFERENCE_PARSE_TREE, snapshot, parseResult);
 
                 if (anchorPointsResult == null && snapshot.getVersionedDocument().getDocument() != null) {
                     GrammarParserAnchorListener listener = new GrammarParserAnchorListener(snapshot);
                     ParseTreeWalker.DEFAULT.walk(listener, parseResult);
-                    anchorPointsResult = new BaseParserData<List<Anchor>>(context, GrammarParserDataDefinitions.REFERENCE_ANCHOR_POINTS, snapshot, listener.getAnchors());
+                    anchorPointsResult = new BaseParserData<>(context, GrammarParserDataDefinitions.REFERENCE_ANCHOR_POINTS, snapshot, listener.getAnchors());
                 }
 
                 if (fileModelResult == null) {
@@ -138,7 +138,7 @@ public final class ReferenceAnchorsParserTask implements ParserTask {
                         }
                     }
 
-                    fileModelResult = new BaseParserData<FileModel>(context, GrammarParserDataDefinitions.FILE_MODEL, snapshot, fileModel);
+                    fileModelResult = new BaseParserData<>(context, GrammarParserDataDefinitions.FILE_MODEL, snapshot, fileModel);
                 }
             }
 

@@ -117,7 +117,7 @@ public class DocumentationScrollPane extends JScrollPane {
     private HTMLDocView view;
     
     // doc browser history
-    private List<CompletionDocumentation> history = new ArrayList<CompletionDocumentation>(5);
+    private List<CompletionDocumentation> history = new ArrayList<>(5);
     private int currentHistoryIndex = -1;
     protected CompletionDocumentation currentDocumentation = null;
     

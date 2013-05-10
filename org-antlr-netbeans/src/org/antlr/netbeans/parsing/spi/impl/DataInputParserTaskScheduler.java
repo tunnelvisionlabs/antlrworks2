@@ -31,7 +31,7 @@ import org.openide.util.lookup.ServiceProvider;
 public class DataInputParserTaskScheduler extends ParserTaskScheduler {
     private final ParserDataListener<Object> listener = new Listener();
     private final Map<ParserDataDefinition<?>, List<ParserTaskProvider>> dependentTasks =
-        new HashMap<ParserDataDefinition<?>, List<ParserTaskProvider>>();
+        new HashMap<>();
 
     @Override
     protected void initializeImpl() {
@@ -56,7 +56,7 @@ public class DataInputParserTaskScheduler extends ParserTaskScheduler {
             synchronized (dependentTasks) {
                 tasks = dependentTasks.get(event.getDefinition());
                 if (tasks == null) {
-                    tasks = new ArrayList<ParserTaskProvider>();
+                    tasks = new ArrayList<>();
                     String mimeType = event.getData().getSnapshot().getVersionedDocument().getMimeType();
                     Collection<? extends ParserTaskProvider> providers = MimeLookup.getLookup(mimeType).lookupAll(ParserTaskProvider.class);
                     for (ParserTaskProvider provider : providers) {

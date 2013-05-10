@@ -93,7 +93,7 @@ public final class ImplicitTokenDefinitionHintParserTask implements ParserTask {
             return;
         }
 
-        Set<String> declaredTokens = new HashSet<String>();
+        Set<String> declaredTokens = new HashSet<>();
         declaredTokens.add("EOF");
         FileModel fileModel = GrammarParserDataDefinitions.tryGetData(taskManager, snapshot, GrammarParserDataDefinitions.FILE_MODEL, EnumSet.of(ParserDataOptions.NO_UPDATE, ParserDataOptions.SYNCHRONOUS));
         if (fileModel == null) {
@@ -111,7 +111,7 @@ public final class ImplicitTokenDefinitionHintParserTask implements ParserTask {
         Listener listener = new Listener(grammarAnnotatedParseTree, declaredTokens);
         ParseTreeWalker.DEFAULT.walk(listener, grammarAnnotatedParseTree.getParseTree());
 
-        List<ErrorDescription> hints = new ArrayList<ErrorDescription>();
+        List<ErrorDescription> hints = new ArrayList<>();
         for (Interval interval : listener.getRewriteRanges()) {
             try {
                 hints.add(ErrorDescriptionFactory.createErrorDescription(Severity.WARNING, "Implicit token definition in parser rule", document, document.createPosition(interval.a), document.createPosition(interval.b + 1)));

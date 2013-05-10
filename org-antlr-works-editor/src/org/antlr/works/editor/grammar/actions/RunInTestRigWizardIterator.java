@@ -27,7 +27,7 @@ public final class RunInTestRigWizardIterator implements WizardDescriptor.Iterat
 
     private List<WizardDescriptor.Panel<WizardDescriptor>> getPanels() {
         if (panels == null) {
-            panels = new ArrayList<WizardDescriptor.Panel<WizardDescriptor>>();
+            panels = new ArrayList<>();
             panels.add(new RunInTestRigWizardPanel());
             String[] steps = new String[panels.size()];
             for (int i = 0; i < panels.size(); i++) {

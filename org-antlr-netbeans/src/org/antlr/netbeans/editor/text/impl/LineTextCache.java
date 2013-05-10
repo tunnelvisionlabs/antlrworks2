@@ -27,17 +27,17 @@ public class LineTextCache {
     private final int _length;
     private final int _lineCount;
 
-    private final ArrayList<ArrayList<String>> _lineData = new ArrayList<ArrayList<String>>();
+    private final ArrayList<ArrayList<String>> _lineData = new ArrayList<>();
     private final IntegerList _blockOffsets = new IntegerList();
     private final IntegerList _blockLineOffsets = new IntegerList();
-    private final ArrayList<IntegerList> _lineOffsets = new ArrayList<IntegerList>();
+    private final ArrayList<IntegerList> _lineOffsets = new ArrayList<>();
 
     public LineTextCache(@NonNull String data) {
         Parameters.notNull("data", data);
 
         _length = data.length();
 
-        ArrayList<String> currentBlock = new ArrayList<String>();
+        ArrayList<String> currentBlock = new ArrayList<>();
         IntegerList currentOffsets = new IntegerList();
         @SuppressWarnings("LocalVariableHidesMemberVariable")
         int lineCount = 0;
@@ -56,7 +56,7 @@ public class LineTextCache {
                     _lineOffsets.add(currentOffsets);
                     _blockOffsets.add(blockStart);
                     _blockLineOffsets.add(blockLineStart);
-                    currentBlock = new ArrayList<String>();
+                    currentBlock = new ArrayList<>();
                     currentOffsets = new IntegerList();
                     blockStart = lineStart;
                     blockLineStart = lineCount;
@@ -163,7 +163,7 @@ public class LineTextCache {
 
             if (!previousLineEnded && (currentChange == null || lineEndsBeforeChange(oldBlock, oldLine, currentChange))) {
                 if (modifiedBlock == null) {
-                    modifiedBlock = new ArrayList<String>();
+                    modifiedBlock = new ArrayList<>();
                 }
 
                 int index = modifiedBlock.size() - 1;
@@ -214,7 +214,7 @@ public class LineTextCache {
                         }
 
                         if (oldBlockLine > 0) {
-                            next._lineData.add(new ArrayList<String>(remainingLines));
+                            next._lineData.add(new ArrayList<>(remainingLines));
                         } else {
                             next._lineData.add(_lineData.get(oldBlock));
                         }
@@ -255,7 +255,7 @@ public class LineTextCache {
                 }
 
                 if (modifiedBlock == null) {
-                    modifiedBlock = new ArrayList<String>();
+                    modifiedBlock = new ArrayList<>();
                 }
 
                 modifiedBlock.add(_lineData.get(oldBlock).get(oldBlockLine));
@@ -270,7 +270,7 @@ public class LineTextCache {
                 int oldPosition = getPosition(oldBlock, oldLine, oldColumn);
                 if (oldPosition < currentChange.getOldOffset()) {
                     if (modifiedBlock == null) {
-                        modifiedBlock = new ArrayList<String>();
+                        modifiedBlock = new ArrayList<>();
                     }
 
                     int index = modifiedBlock.size() - 1;
@@ -299,7 +299,7 @@ public class LineTextCache {
                 for (int j = 0; j <= newText.length(); j++) {
                     if (j == newText.length() || newText.charAt(j) == '\n') {
                         if (modifiedBlock == null) {
-                            modifiedBlock = new ArrayList<String>();
+                            modifiedBlock = new ArrayList<>();
                         }
 
                         int index = modifiedBlock.size() - 1;

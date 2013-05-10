@@ -189,10 +189,10 @@ public final class FiltersManager {
             toolbar.setFocusable(false);
             // create toggle buttons
             int filterCount = filtersDesc.getFilterCount();
-            toggles = new ArrayList<JToggleButton>(filterCount);
+            toggles = new ArrayList<>(filterCount);
             JToggleButton toggleButton = null;
 
-            Map<String, Boolean> fStates = new HashMap<String, Boolean>(filterCount * 2);
+            Map<String, Boolean> fStates = new HashMap<>(filterCount * 2);
 
             for (int i = 0; i < filterCount; i++) {
                 toggleButton = createToggle(fStates, i);

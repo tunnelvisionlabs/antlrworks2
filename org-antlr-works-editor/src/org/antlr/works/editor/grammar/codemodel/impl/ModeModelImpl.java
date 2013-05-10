@@ -22,7 +22,7 @@ import org.antlr.works.editor.grammar.codemodel.RuleModel;
  * @author Sam Harwell
  */
 public class ModeModelImpl extends AbstractCodeElementModel implements ModeModel {
-    private final FreezableArrayList<RuleModelImpl> rules = new FreezableArrayList<RuleModelImpl>();
+    private final FreezableArrayList<RuleModelImpl> rules = new FreezableArrayList<>();
 
     private final OffsetRegion seek;
     private final OffsetRegion span;

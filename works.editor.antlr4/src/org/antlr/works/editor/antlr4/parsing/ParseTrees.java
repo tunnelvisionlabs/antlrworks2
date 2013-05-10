@@ -336,7 +336,7 @@ public final class ParseTrees {
             return Collections.emptyList();
         }
 
-        List<ParseTree<T>> ancestors = new ArrayList<ParseTree<T>>();
+        List<ParseTree<T>> ancestors = new ArrayList<>();
         t = t.getParent();
         while ( t!=null ) {
             ancestors.add(0, t); // insert at start

@@ -40,9 +40,9 @@ public abstract class AbstractForestParser<TParser extends CodeCompletionParser>
 
     @Override
     public Map<RuleContext<Token>, CaretReachedException> getParseTrees(TParser parser) {
-        List<MultipleDecisionData> potentialAlternatives = new ArrayList<MultipleDecisionData>();
+        List<MultipleDecisionData> potentialAlternatives = new ArrayList<>();
         IntegerList currentPath = new IntegerList();
-        Map<RuleContext<Token>, CaretReachedException> results = new IdentityHashMap<RuleContext<Token>, CaretReachedException>();
+        Map<RuleContext<Token>, CaretReachedException> results = new IdentityHashMap<>();
         // make sure the token stream is initialized before getting the index
         parser.getInputStream().LA(1);
         int initialToken = parser.getInputStream().index();
