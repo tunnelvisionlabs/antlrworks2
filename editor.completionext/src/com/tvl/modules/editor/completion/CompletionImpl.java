@@ -199,11 +199,13 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
     }
 
     static LazyListModel.Filter<Object> filter = new LazyListModel.Filter<Object>() {
+        @Override
         public boolean accept(Object obj) {
             if (obj instanceof LazyCompletionItem)
                 return ((LazyCompletionItem)obj).accept();
             return true;
         }
+        @Override
         public void scheduleUpdate(Runnable run) {
             SwingUtilities.invokeLater( run );
         }
@@ -286,8 +288,10 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
     private static CompletionImplProfile profile;
     
     private final LookupListener shortcutsTracker = new LookupListener() {
+        @Override
         public void resultChanged(LookupEvent ev) {
             Utilities.runInEventDispatchThread(new Runnable(){
+                @Override
                 public void run(){
                     installKeybindings();
                 }
@@ -300,6 +304,7 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
     private CompletionImpl() {
         EditorRegistry.addPropertyChangeListener(this);
         completionAutoPopupTimer = new Timer(0, new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 Result localCompletionResult;
                 synchronized (CompletionImpl.this) {
@@ -317,6 +322,7 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
         completionAutoPopupTimer.setRepeats(false);
         
         docAutoPopupTimer = new Timer(0, new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 SelectedCompletionItem selectedItem = layout.getSelectedCompletionItem();
                 CompletionItem currentSelectedItem = selectedItem != null ? selectedItem.getItem() : null;
@@ -326,6 +332,7 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
         });
         docAutoPopupTimer.setRepeats(false);
         pleaseWaitTimer = new Timer(PLEASE_WAIT_TIMEOUT, new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 String waitText = PLEASE_WAIT;
                 boolean politeWaitText = false;
@@ -373,7 +380,8 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
     int getSortType() {
         return alphaSort ? CompletionResultSet.TEXT_SORT_TYPE : CompletionResultSet.PRIORITY_SORT_TYPE;
     }
-    
+
+    @Override
     public void insertUpdate(javax.swing.event.DocumentEvent e) {
         // Ignore insertions done outside of the AWT (various content generation)
         if (!SwingUtilities.isEventDispatchThread()) {
@@ -415,6 +423,7 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
         }
     }
     
+    @Override
     public void removeUpdate(javax.swing.event.DocumentEvent e) {
         // Ignore insertions done outside of the AWT (various content generation)
         if (!SwingUtilities.isEventDispatchThread()) {
@@ -422,9 +431,11 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
         }
     }
     
+    @Override
     public void changedUpdate(javax.swing.event.DocumentEvent e) {
     }
     
+    @Override
     public synchronized void caretUpdate(javax.swing.event.CaretEvent e) {
         assert (SwingUtilities.isEventDispatchThread());
 
@@ -448,21 +459,26 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
         }
     }
 
+    @Override
     public void keyPressed(KeyEvent e) {
         dispatchKeyEvent(e);
     }
 
+    @Override
     public void keyReleased(KeyEvent e) {
         dispatchKeyEvent(e);
     }
 
+    @Override
     public void keyTyped(KeyEvent e) {
         dispatchKeyEvent(e);
     }
 
+    @Override
     public void focusGained(FocusEvent e) {
     }
 
+    @Override
     public void focusLost(FocusEvent e) {
         hideAll();
     }
@@ -472,6 +488,7 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
         hideAll();
     }
     
+    @Override
     public void stateChanged(ChangeEvent e) {
         // From JViewport
         boolean hide = true;
@@ -499,6 +516,7 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
     /**
      * Called from AWT when selection in the completion list pane changes.
      */
+    @Override
     public void valueChanged(javax.swing.event.ListSelectionEvent e) {
         assert (SwingUtilities.isEventDispatchThread());
 
@@ -511,6 +529,7 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
     /**
      * Expected to be called from the AWT only.
      */
+    @Override
     public void propertyChange(PropertyChangeEvent e) {
         assert (SwingUtilities.isEventDispatchThread()); // expected in AWT only
 
@@ -1118,6 +1137,7 @@ outer:      for (CompletionResultSetImpl resultSet : localCompletionResult.getRe
         final int displayAnchorOffset = anchorOffset;
         final boolean displayAdditionalItems = hasAdditionalItems;
         Runnable requestShowRunnable = new Runnable() {
+            @Override
             public void run() {
                 synchronized(CompletionImpl.this) {
                     if (result != completionResult)
@@ -1240,6 +1260,7 @@ outer:      for (CompletionResultSetImpl resultSet : localCompletionResult.getRe
     void requestShowDocumentationPane(Result result) {
         final CompletionResultSetImpl resultSet = findFirstValidResult(result.getResultSets());
         runInAWT(new Runnable() {
+            @Override
             public void run() {
                 synchronized (CompletionImpl.this) {
                     if (resultSet != null) {
@@ -1365,6 +1386,7 @@ outer:      for (CompletionResultSetImpl resultSet : localCompletionResult.getRe
     void requestShowToolTipPane(Result result) {
         final CompletionResultSetImpl resultSet = findFirstValidResult(result.getResultSets());
         runInAWT(new Runnable() {
+            @Override
             public void run() {
                 if (resultSet != null) {
                     layout.showToolTip(
@@ -1682,6 +1704,7 @@ outer:      for (CompletionResultSetImpl resultSet : localCompletionResult.getRe
             this.queryType = queryType;
         }
 
+        @Override
         public void actionPerformed(ActionEvent e) {
             autoModEndOffset = -1;
             showCompletion(true, false, false, queryType);
@@ -1689,12 +1712,14 @@ outer:      for (CompletionResultSetImpl resultSet : localCompletionResult.getRe
     }
 
     private final class DocShowAction extends AbstractAction {
+        @Override
         public void actionPerformed(ActionEvent e) {
             showDocumentation();
         }
     }
 
     private final class ToolTipShowAction extends AbstractAction {
+        @Override
         public void actionPerformed(ActionEvent e) {
             showToolTip();
         }
@@ -1729,6 +1754,7 @@ outer:      for (CompletionResultSetImpl resultSet : localCompletionResult.getRe
             this.type = type;
         }
 
+        @Override
         public void run() {
             switch (opCode) {
                 case SHOW_COMPLETION:

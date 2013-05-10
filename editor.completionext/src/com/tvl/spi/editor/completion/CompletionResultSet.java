@@ -294,6 +294,7 @@ public final class CompletionResultSet {
     
     private static final class SpiAccessor extends CompletionSpiPackageAccessor {
         
+        @Override
         public CompletionResultSet createCompletionResultSet(CompletionResultSetImpl impl) {
             return new CompletionResultSet(impl);
         }

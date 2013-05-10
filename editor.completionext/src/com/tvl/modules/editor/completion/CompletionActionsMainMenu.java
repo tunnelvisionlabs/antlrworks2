@@ -61,6 +61,7 @@ public abstract class CompletionActionsMainMenu extends MainMenuAction implement
     public CompletionActionsMainMenu() {
         super();
         delegate = new AbstractAction() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 // Does nothing;
             }
@@ -69,22 +70,27 @@ public abstract class CompletionActionsMainMenu extends MainMenuAction implement
         setMenu();
     }
     
+    @Override
     public synchronized void removePropertyChangeListener(PropertyChangeListener listener) {
         delegate.removePropertyChangeListener(listener);
     }
 
+    @Override
     public void putValue(String key, Object newValue) {
         delegate.putValue(key, newValue);
     }
 
+    @Override
     public Object getValue(String key) {
         return delegate.getValue(key);
     }
 
+    @Override
     public synchronized void addPropertyChangeListener(PropertyChangeListener listener) {
         delegate.addPropertyChangeListener(listener);
     }
 
+    @Override
     public void setEnabled(boolean newValue) {
         delegate.setEnabled(newValue);
     }
@@ -135,16 +141,17 @@ public abstract class CompletionActionsMainMenu extends MainMenuAction implement
     
     public static final class CompletionShow extends CompletionActionsMainMenu {
 
-
+        @Override
         protected String getMenuItemText() {
             return Bundle.completion_show_main_menu_item();
         }
 
-        
+        @Override
         protected String getActionName() {
             return ExtKit.completionShowAction;
         }
 
+        @Override
         public void actionPerformed(ActionEvent e) {
             Completion.get().showCompletion();
         }
@@ -156,14 +163,17 @@ public abstract class CompletionActionsMainMenu extends MainMenuAction implement
     
     public static final class DocumentationShow extends CompletionActionsMainMenu {
 
+        @Override
         protected String getMenuItemText() {
             return Bundle.documentation_show_main_menu_item();
         }
         
+        @Override
         protected String getActionName() {
             return ExtKit.documentationShowAction;
         }
 
+        @Override
         public void actionPerformed(ActionEvent e) {
             Completion.get().showDocumentation();
         }
@@ -172,14 +182,17 @@ public abstract class CompletionActionsMainMenu extends MainMenuAction implement
     
     public static final class ToolTipShow extends CompletionActionsMainMenu {
 
+        @Override
         protected String getMenuItemText() {
             return Bundle.tooltip_show_main_menu_item();
         }
         
+        @Override
         protected String getActionName() {
             return ExtKit.completionTooltipShowAction;
         }
 
+        @Override
         public void actionPerformed(ActionEvent e) {
             Completion.get().showToolTip();
         }

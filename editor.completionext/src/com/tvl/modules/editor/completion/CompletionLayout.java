@@ -435,6 +435,7 @@ public final class CompletionLayout {
             return isVisible() ? completionScrollPane.getSelectedIndex() : -1;
         }
 
+        @Override
         public void processKeyEvent(KeyEvent evt) {
             if (isVisible()) {
                 Object actionMapKey = completionScrollPane.getInputMap().get(
@@ -482,7 +483,8 @@ public final class CompletionLayout {
                 getLayout().updateLayout(this);
             } // otherwise leave present doc displayed
         }
-        
+
+        @Override
         public void processKeyEvent(KeyEvent evt) {
             if (isVisible()) {
                 Object actionMapKey = getDocumentationScrollPane().getInputMap().get(
@@ -504,6 +506,7 @@ public final class CompletionLayout {
             }
         }
 
+        @Override
         protected int getAnchorHorizontalShift() {
             return COMPLETION_ANCHOR_HORIZONTAL_SHIFT;
         }
@@ -528,6 +531,7 @@ public final class CompletionLayout {
             }
 	}
 
+        @Override
         public void processKeyEvent(KeyEvent evt) {
             if (isVisible()) {
 		if (KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0).equals(

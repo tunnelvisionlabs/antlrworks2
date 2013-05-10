@@ -52,6 +52,7 @@ import org.openide.modules.ModuleInstall;
  */
 public class CompletionModule extends ModuleInstall {
 
+    @Override
     public void restored() {
         CompletionImpl.get();
     }

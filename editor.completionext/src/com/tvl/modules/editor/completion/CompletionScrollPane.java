@@ -259,6 +259,7 @@ public class CompletionScrollPane extends JScrollPane {
             this.action = action;
         }
 
+        @Override
         public void actionPerformed(ActionEvent actionEvent) {
             switch (action) {
 		case ACTION_ESCAPE:

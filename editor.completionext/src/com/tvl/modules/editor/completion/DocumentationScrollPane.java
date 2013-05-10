@@ -465,7 +465,8 @@ public class DocumentationScrollPane extends JScrollPane {
     }
 
     private class HyperlinkAction implements HyperlinkListener {
-        
+
+        @Override
         public void hyperlinkUpdate(HyperlinkEvent e) {
             if (e != null && HyperlinkEvent.EventType.ACTIVATED.equals(e.getEventType())) {
                 final String desc = e.getDescription();
@@ -496,7 +497,8 @@ public class DocumentationScrollPane extends JScrollPane {
         private DocPaneAction(int action) {
             this.action = action;
         }
-        
+
+        @Override
         public void actionPerformed(java.awt.event.ActionEvent actionEvent) {
             switch (action) {
 		case ACTION_JAVADOC_ESCAPE:

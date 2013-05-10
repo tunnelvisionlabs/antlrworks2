@@ -139,6 +139,7 @@ public final class AsyncCompletionTask implements CompletionTask, Runnable {
      * Called by completion infrastructure in AWT thread to populate
      * the given result set with data.
      */
+    @Override
     public void query(CompletionResultSet resultSet) {
         assert (resultSet != null);
         assert (SwingUtilities.isEventDispatchThread());
@@ -161,6 +162,7 @@ public final class AsyncCompletionTask implements CompletionTask, Runnable {
      * <br>
      * The results should be fired into the newly provided completion listener.
      */
+    @Override
     public void refresh(CompletionResultSet resultSet) {
         assert (SwingUtilities.isEventDispatchThread());
         assert !cancelled : "refresh() called on canceled task"; // NOI18N
@@ -176,6 +178,7 @@ public final class AsyncCompletionTask implements CompletionTask, Runnable {
     /**
      * Called by completion infrastructure to cancel the running task.
      */
+    @Override
     public void cancel() {
         cancelled = true;
         synchronized (this) {
@@ -236,6 +239,7 @@ public final class AsyncCompletionTask implements CompletionTask, Runnable {
      * This method will be run() from the RequestProcessor during
      * performing of the query.
      */
+    @Override
     public void run() {
         // First check whether there was not request yet to stop the query: (queryResultSet == null)
         CompletionResultSet resultSet = queryResultSet;
@@ -253,6 +257,7 @@ public final class AsyncCompletionTask implements CompletionTask, Runnable {
             if (refreshResultSet != null) {
                 // Post refresh computation into AWT thread
                 SwingUtilities.invokeLater(new Runnable() {
+                    @Override
                     public void run() {
                         refreshImpl();
                     }
@@ -265,6 +270,7 @@ public final class AsyncCompletionTask implements CompletionTask, Runnable {
         return cancelled;
     }
 
+    @Override
     public String toString() {
         return "AsyncCompletionTask: query=" + query; // NOI18N
     }
