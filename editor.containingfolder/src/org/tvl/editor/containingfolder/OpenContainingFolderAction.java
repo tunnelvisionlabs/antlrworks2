@@ -8,12 +8,6 @@
  */
 package org.tvl.editor.containingfolder;
 
-import com.sun.jna.Native;
-import com.sun.jna.NativeLong;
-import com.sun.jna.Platform;
-import com.sun.jna.Pointer;
-import com.sun.jna.WString;
-import com.sun.jna.win32.StdCallLibrary;
 import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.io.File;
@@ -33,6 +27,7 @@ import org.openide.util.ContextAwareAction;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
 import org.openide.util.RequestProcessor;
+import org.openide.util.Utilities;
 
 /**
  *
@@ -97,17 +92,16 @@ public class OpenContainingFolderAction extends AbstractAction implements Contex
             @Override
             public void run() {
                 try {
-                    if (Platform.isWindows()) {
+                    if (Utilities.isWindows()) {
+                        String systemRoot = System.getenv("SystemRoot");
+                        File explorer = new File(systemRoot, "explorer.exe");
                         String args = null;
                         if (file != null) {
                             args = "/select,\"" + file.getAbsolutePath() + "\"";
                         }
 
-                        String explorer = System.getenv("SystemRoot") + "\\explorer.exe";
-                        NativeLong result = Shell32.INSTANCE.ShellExecuteW(Pointer.NULL, null, new WString(explorer), new WString(args), null, Shell32.SW_SHOWNORMAL);
-                        if (result.longValue() > 32) {
-                            return;
-                        }
+                        Runtime.getRuntime().exec(String.format("%s %s", explorer.getAbsolutePath(), args));
+                        return;
                     }
 
                     Desktop desktop = Desktop.getDesktop();
@@ -133,13 +127,5 @@ public class OpenContainingFolderAction extends AbstractAction implements Contex
 
         DataObject dataObject = lookup.lookup(DataObject.class);
         return dataObject != null ? dataObject.getPrimaryFile() : null;
-    }
-
-    private interface Shell32 extends StdCallLibrary {
-        Shell32 INSTANCE = (Shell32)Native.loadLibrary("shell32", Shell32.class);
-
-        public static final int SW_SHOWNORMAL = 1;
-
-        NativeLong ShellExecuteW(Pointer hwnd, WString operation, WString file, WString parameters, WString directory, int showCmd);
     }
 }
