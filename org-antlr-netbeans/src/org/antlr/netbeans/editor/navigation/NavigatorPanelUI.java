@@ -216,15 +216,19 @@ public abstract class NavigatorPanelUI extends javax.swing.JPanel implements Exp
 
     @Override
     public void propertyChange(PropertyChangeEvent event) {
-        if (ExplorerManager.PROP_SELECTED_NODES.equals(event.getPropertyName())) {
+        switch (event.getPropertyName()) {
+        case ExplorerManager.PROP_SELECTED_NODES:
             for (Node node : (Node[])event.getOldValue()) {
                 selectedNodes.remove(node);
             }
             for (Node node : (Node[])event.getNewValue()) {
                 selectedNodes.add(node);
             }
-        } else if (CollapsiblePanel.EXPANDED_PROPERTY.equals(event.getPropertyName())) {
+            break;
+
+        case CollapsiblePanel.EXPANDED_PROPERTY:
             NbPreferences.forModule(getClass()).putBoolean("filtersCollapsiblePanel.expanded", filtersPanel.isExpanded());
+            break;
         }
     }
 

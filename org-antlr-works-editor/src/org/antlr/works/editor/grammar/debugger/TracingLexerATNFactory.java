@@ -90,30 +90,50 @@ public class TracingLexerATNFactory extends LexerATNFactory {
         }
 
         String command = ID.getText();
-        if ("skip".equals(command)) {
+        switch (command) {
+        case "skip":
             _lexerActions.add(SkipAction.INSTANCE);
-        } else if ("more".equals(command)) {
+            break;
+
+        case "more":
             _lexerActions.add(MoreAction.INSTANCE);
-        } else if ("popMode".equals(command)) {
+            break;
+
+        case "popMode":
             _lexerActions.add(PopModeAction.INSTANCE);
-        } else if ("mode".equals(command)) {
-            String modeName = arg != null ? arg.getText() : null;
-            int mode = getConstantValue(modeName);
-            _lexerActions.add(new ModeAction(mode));
-        } else if ("pushMode".equals(command)) {
-            String modeName =arg != null ? arg.getText() : null;
-            int mode = getConstantValue(modeName);
-            _lexerActions.add(new PushModeAction(mode));
-        } else if ("type".equals(command)) {
+            break;
+
+        case "mode":
+            {
+                String modeName = arg != null ? arg.getText() : null;
+                int mode = getConstantValue(modeName);
+                _lexerActions.add(new ModeAction(mode));
+                break;
+            }
+
+        case "pushMode":
+            {
+                String modeName =arg != null ? arg.getText() : null;
+                int mode = getConstantValue(modeName);
+                _lexerActions.add(new PushModeAction(mode));
+                break;
+            }
+
+        case "type":
             String typeName = arg != null ? arg.getText() : null;
             int type = getConstantValue(typeName);
             _lexerActions.add(new TypeAction(type));
-        } else if ("channel".equals(command)) {
+            break;
+
+        case "channel":
             String channelName = arg != null ? arg.getText() : null;
             int channel = getConstantValue(channelName);
             _lexerActions.add(new ChannelAction(channel));
-        } else {
+            break;
+
+        default:
             LOGGER.log(Level.WARNING, "The lexer command ''{0}'' is not yet supported by the interpreter.", command);
+            break;
         }
     }
 
