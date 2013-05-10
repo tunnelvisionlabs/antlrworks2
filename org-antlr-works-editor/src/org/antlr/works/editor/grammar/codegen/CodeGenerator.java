@@ -132,13 +132,11 @@ public class CodeGenerator {
                         InputOutput inputOutput = IOProvider.getDefault().getIO(String.format("ANTLR Codegen (%s)", target), false);
                         inputOutput.select();
                         PrintStream originalOut = System.out;
-                        OutputWriter outputWriter = inputOutput.getOut();
-                        try {
+                        try (OutputWriter outputWriter = inputOutput.getOut()) {
                             System.setOut(new PrintStream(new OutputWriterStream(outputWriter)));
                             try {
                                 PrintStream originalErr = System.err;
-                                OutputWriter errorWriter = inputOutput.getErr();
-                                try {
+                                try (OutputWriter errorWriter = inputOutput.getErr()) {
                                     System.setErr(new PrintStream(new OutputWriterStream(errorWriter)));
                                     try {
                                         outputWriter.format("Arguments: %s%n", args);
@@ -147,14 +145,10 @@ public class CodeGenerator {
                                     } finally {
                                         System.setErr(originalErr);
                                     }
-                                } finally {
-                                    errorWriter.close();
                                 }
                             } finally {
                                 System.setOut(originalOut);
                             }
-                        } finally {
-                            outputWriter.close();
                         }
                     } finally {
                         Thread.currentThread().setContextClassLoader(contextClassLoader);
@@ -170,11 +164,9 @@ public class CodeGenerator {
         File tempFile = File.createTempFile("antlr4-complete", ".jar");
         tempFile.deleteOnExit();
         FileObject tempFileObject = FileUtil.toFileObject(tempFile);
-        OutputStream outputStream = tempFileObject.getOutputStream();
-        try {
+        try (OutputStream outputStream = tempFileObject.getOutputStream()) {
             ClassLoader resourceLoader = CodeGenerator.class.getClassLoader();
-            InputStream inputStream = resourceLoader.getResourceAsStream(ANTLR4_COMPLETE_JAR);
-            try {
+            try (InputStream inputStream = resourceLoader.getResourceAsStream(ANTLR4_COMPLETE_JAR)) {
                 byte[] buffer = new byte[1 << 16];
                 while (true) {
                     int read = inputStream.read(buffer);
@@ -184,11 +176,7 @@ public class CodeGenerator {
 
                     outputStream.write(buffer, 0, read);
                 }
-            } finally {
-                inputStream.close();
             }
-        } finally {
-            outputStream.close();
         }
 
         return tempFile;

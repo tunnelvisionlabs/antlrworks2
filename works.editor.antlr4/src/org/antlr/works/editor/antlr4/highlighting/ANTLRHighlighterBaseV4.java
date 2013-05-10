@@ -185,8 +185,7 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
                     private void scan() {
 
                         synchronized (lock) {
-                            TokenSourceWithStateV4<Token, TState> lexer = createLexer(input, startState);
-                            try {
+                            try (TokenSourceWithStateV4<Token, TState> lexer = createLexer(input, startState)) {
                                 while (true)
                                 {
                                     // TODO: perform this under a read lock
@@ -307,8 +306,6 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
                                 if (!_complete) {
                                     startState = lexer.getCurrentState();
                                 }
-                            } finally {
-                                lexer.close();
                             }
                         }
                     }
@@ -381,8 +378,7 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
                 return null;
             }
 
-            TokenSourceWithStateV4<Token, TState> lexer = createLexer(input, startState);
-            try {
+            try (TokenSourceWithStateV4<Token, TState> lexer = createLexer(input, startState)) {
                 Token previousToken = null;
     //            int previousTokenLine = 0;
                 boolean previousTokenEndsLine = false;
@@ -528,8 +524,6 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
                         break;
                     }
                 }
-            } finally {
-                lexer.close();
             }
         }
 

@@ -277,93 +277,85 @@ public final class RunInTestRigAction implements ActionListener {
 
                 InputOutput inputOutput = IOProvider.getDefault().getIO("ANTLR TestRig (Java)", false);
                 inputOutput.select();
-                OutputWriter outputWriter = inputOutput.getOut();
-                try {
-                    OutputWriter errorWriter = inputOutput.getErr();
+                try (OutputWriter outputWriter = inputOutput.getOut(); OutputWriter errorWriter = inputOutput.getErr()) {
+                    outputWriter.println("Compiling grammar files...");
+
+                    File[] files = tmpdir.listFiles(new FilenameFilter() {
+                        @Override
+                        public boolean accept(File dir, String name) {
+                            return name.endsWith(".java");
+                        }
+                    });
+
+                    JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+                    StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, null, null);
+
+                    Iterable<? extends JavaFileObject> compilationUnits =
+                        fileManager.getJavaFileObjectsFromFiles(Arrays.asList(files));
+
+                    List<String> compileOptions = new ArrayList<>();
+                    compileOptions.add("-g");
+                    compileOptions.add("-d");
+                    compileOptions.add(tmpdir.getAbsolutePath());
+                    compileOptions.add("-cp");
+                    compileOptions.add(CodeGenerator.getReferenceLibrary().getAbsolutePath());
+                    compileOptions.add("-Xlint");
+                    compileOptions.add("-Xlint:-serial");
+
+                    JavaCompiler.CompilationTask task =
+                        compiler.getTask(errorWriter, fileManager, null, compileOptions, null,
+                        compilationUnits);
+
+                    task.call();
+
                     try {
-                        outputWriter.println("Compiling grammar files...");
+                        fileManager.close();
+                    } catch (IOException ioe) {
+                        Exceptions.printStackTrace(ioe);
+                        return;
+                    }
 
-                        File[] files = tmpdir.listFiles(new FilenameFilter() {
-                            @Override
-                            public boolean accept(File dir, String name) {
-                                return name.endsWith(".java");
-                            }
-                        });
+                    final ClassLoader loader = new URLClassLoader(new URL[]{Utilities.toURI(tmpdir).toURL()}, CodeGenerator.getReferenceClassLoader());
+                    Class<?> testRig = loader.loadClass(TestRig.class.getName());
+                    Method mainMethod = testRig.getMethod("main", String[].class);
 
-                        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-                        StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, null, null);
+                    List<String> testRigArguments = new ArrayList<>();
+                    testRigArguments.add(baseGrammarName);
+                    testRigArguments.add(startRule);
+                    if (showTokens) {
+                        testRigArguments.add("-tokens");
+                    }
 
-                        Iterable<? extends JavaFileObject> compilationUnits =
-                            fileManager.getJavaFileObjectsFromFiles(Arrays.asList(files));
+                    if (showTree) {
+                        testRigArguments.add("-tree");
+                    }
 
-                        List<String> compileOptions = new ArrayList<>();
-                        compileOptions.add("-g");
-                        compileOptions.add("-d");
-                        compileOptions.add(tmpdir.getAbsolutePath());
-                        compileOptions.add("-cp");
-                        compileOptions.add(CodeGenerator.getReferenceLibrary().getAbsolutePath());
-                        compileOptions.add("-Xlint");
-                        compileOptions.add("-Xlint:-serial");
+                    if (showTreeInGUI) {
+                        testRigArguments.add("-gui");
+                    }
 
-                        JavaCompiler.CompilationTask task =
-                            compiler.getTask(errorWriter, fileManager, null, compileOptions, null,
-                            compilationUnits);
+                    testRigArguments.add(inputFile.getAbsolutePath());
+                    outputWriter.println("Arguments: " + testRigArguments);
 
-                        task.call();
-
+                    ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
+                    Thread.currentThread().setContextClassLoader(loader);
+                    try {
+                        PrintStream originalOut = System.out;
+                        System.setOut(new PrintStream(new OutputWriterStream(outputWriter)));
                         try {
-                            fileManager.close();
-                        } catch (IOException ioe) {
-                            Exceptions.printStackTrace(ioe);
-                            return;
-                        }
-
-                        final ClassLoader loader = new URLClassLoader(new URL[]{Utilities.toURI(tmpdir).toURL()}, CodeGenerator.getReferenceClassLoader());
-                        Class<?> testRig = loader.loadClass(TestRig.class.getName());
-                        Method mainMethod = testRig.getMethod("main", String[].class);
-
-                        List<String> testRigArguments = new ArrayList<>();
-                        testRigArguments.add(baseGrammarName);
-                        testRigArguments.add(startRule);
-                        if (showTokens) {
-                            testRigArguments.add("-tokens");
-                        }
-
-                        if (showTree) {
-                            testRigArguments.add("-tree");
-                        }
-
-                        if (showTreeInGUI) {
-                            testRigArguments.add("-gui");
-                        }
-
-                        testRigArguments.add(inputFile.getAbsolutePath());
-                        outputWriter.println("Arguments: " + testRigArguments);
-
-                        ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
-                        Thread.currentThread().setContextClassLoader(loader);
-                        try {
-                            PrintStream originalOut = System.out;
-                            System.setOut(new PrintStream(new OutputWriterStream(outputWriter)));
+                            PrintStream originalErr = System.err;
+                            System.setErr(new PrintStream(new OutputWriterStream(errorWriter)));
                             try {
-                                PrintStream originalErr = System.err;
-                                System.setErr(new PrintStream(new OutputWriterStream(errorWriter)));
-                                try {
-                                    mainMethod.invoke(null, (Object)testRigArguments.toArray(new String[testRigArguments.size()]));
-                                } finally {
-                                    System.setErr(originalErr);
-                                }
+                                mainMethod.invoke(null, (Object)testRigArguments.toArray(new String[testRigArguments.size()]));
                             } finally {
-                                System.setOut(originalOut);
+                                System.setErr(originalErr);
                             }
                         } finally {
-                            Thread.currentThread().setContextClassLoader(contextClassLoader);
+                            System.setOut(originalOut);
                         }
                     } finally {
-                        errorWriter.close();
+                        Thread.currentThread().setContextClassLoader(contextClassLoader);
                     }
-                } finally {
-                    outputWriter.close();
                 }
             } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | MalformedURLException ex) {
                 Exceptions.printStackTrace(ex);
