@@ -72,11 +72,7 @@ public class GrammarParserDataDefinitions {
             if (parserData != null) {
                 return parserData.getData();
             }
-        } catch (InterruptedException ex) {
-            if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.log(Level.FINE, String.format("An exception occurred while parsing '%s' data.", definition.getName()), ex);
-            }
-        } catch (ExecutionException ex) {
+        } catch (InterruptedException | ExecutionException ex) {
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.log(Level.FINE, String.format("An exception occurred while parsing '%s' data.", definition.getName()), ex);
             }

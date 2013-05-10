@@ -365,9 +365,7 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
                 taskManager.getData(snapshot, GrammarParserDataDefinitions.DYNAMIC_ANCHOR_POINTS, EnumSet.of(ParserDataOptions.SYNCHRONOUS));
             try {
                 anchors = result.get().getData();
-            } catch (InterruptedException ex) {
-                anchors = null;
-            } catch (ExecutionException ex) {
+            } catch (InterruptedException | ExecutionException ex) {
                 Exceptions.printStackTrace(ex);
                 anchors = null;
             }
@@ -409,9 +407,7 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
             Tagger<TokenTag<Token>> tagger = null;
             try {
                 tagger = futureTokensData.get().getData();
-            } catch (InterruptedException ex) {
-                Exceptions.printStackTrace(ex);
-            } catch (ExecutionException ex) {
+            } catch (InterruptedException | ExecutionException ex) {
                 Exceptions.printStackTrace(ex);
             }
 
@@ -618,10 +614,7 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
             Future<ParserData<FileModel>> futureFileModelData = taskManager.getData(snapshot, GrammarParserDataDefinitions.FILE_MODEL, EnumSet.of(ParserDataOptions.ALLOW_STALE, ParserDataOptions.SYNCHRONOUS));
             try {
                 return futureFileModelData.get().getData();
-            } catch (InterruptedException ex) {
-                Exceptions.printStackTrace(ex);
-                return null;
-            } catch (ExecutionException ex) {
+            } catch (InterruptedException | ExecutionException ex) {
                 Exceptions.printStackTrace(ex);
                 return null;
             }

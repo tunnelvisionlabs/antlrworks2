@@ -142,10 +142,8 @@ public class GrammarIndentTask extends AbstractIndentTask {
         Tagger<TokenTag<Token>> tagger = null;
         try {
             tagger = futureTokensData != null ? futureTokensData.get().getData() : null;
-        } catch (InterruptedException ex) {
+        } catch (InterruptedException | ExecutionException ex) {
             // Warning because a timeout keeps the UI responsive but still indicates a broken auto-indent feature
-            LOGGER.log(Level.WARNING, "An exception occurred while getting the token tagger.", ex);
-        } catch (ExecutionException ex) {
             LOGGER.log(Level.WARNING, "An exception occurred while getting the token tagger.", ex);
         }
 
@@ -409,10 +407,8 @@ public class GrammarIndentTask extends AbstractIndentTask {
             getTaskManager().getData(getSnapshot(), GrammarParserDataDefinitions.DYNAMIC_ANCHOR_POINTS, EnumSet.of(ParserDataOptions.SYNCHRONOUS));
         try {
             anchors = result != null ? result.get().getData() : null;
-        } catch (InterruptedException ex) {
+        } catch (InterruptedException | ExecutionException ex) {
             // Warning because a timeout keeps the UI responsive but still indicates a broken auto-indent feature
-            LOGGER.log(Level.WARNING, "An exception occurred while getting the dynamic anchor points.", ex);
-        } catch (ExecutionException ex) {
             LOGGER.log(Level.WARNING, "An exception occurred while getting the dynamic anchor points.", ex);
         }
 

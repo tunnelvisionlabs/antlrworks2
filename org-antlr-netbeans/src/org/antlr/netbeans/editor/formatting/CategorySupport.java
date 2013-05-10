@@ -221,10 +221,7 @@ public class CategorySupport implements ActionListener, DocumentListener, Previe
             try {
                 CategorySupport categorySupport = new CategorySupport(mimeType, preferences, id, panelClass.newInstance(), previewText, formatter);
                 return categorySupport;
-            } catch (InstantiationException ex) {
-                LOGGER.log(Level.WARNING, "An exception occurred attempting to customize preferences.", ex);
-                return null;
-            } catch (IllegalAccessException ex) {
+            } catch (InstantiationException | IllegalAccessException ex) {
                 LOGGER.log(Level.WARNING, "An exception occurred attempting to customize preferences.", ex);
                 return null;
             }

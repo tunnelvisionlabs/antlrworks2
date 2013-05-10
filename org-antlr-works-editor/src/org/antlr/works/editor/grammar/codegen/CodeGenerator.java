@@ -159,19 +159,7 @@ public class CodeGenerator {
                     } finally {
                         Thread.currentThread().setContextClassLoader(contextClassLoader);
                     }
-                } catch (ClassNotFoundException ex) {
-                    Exceptions.printStackTrace(ex);
-                } catch (NoSuchMethodException ex) {
-                    Exceptions.printStackTrace(ex);
-                } catch (SecurityException ex) {
-                    Exceptions.printStackTrace(ex);
-                } catch (InstantiationException ex) {
-                    Exceptions.printStackTrace(ex);
-                } catch (IllegalAccessException ex) {
-                    Exceptions.printStackTrace(ex);
-                } catch (IllegalArgumentException ex) {
-                    Exceptions.printStackTrace(ex);
-                } catch (InvocationTargetException ex) {
+                } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
                     Exceptions.printStackTrace(ex);
                 }
             }

@@ -286,10 +286,7 @@ public class CompiledModelParserV4 extends CompiledModelParser {
                 ParserData<FileModel> data;
                 try {
                     data = futureData.get();
-                } catch (InterruptedException ex) {
-                    LOGGER.log(Level.WARNING, "Failed to load source for token vocabulary.");
-                    return Collections.emptyMap();
-                } catch (ExecutionException ex) {
+                } catch (InterruptedException | ExecutionException ex) {
                     LOGGER.log(Level.WARNING, "Failed to load source for token vocabulary.");
                     return Collections.emptyMap();
                 }

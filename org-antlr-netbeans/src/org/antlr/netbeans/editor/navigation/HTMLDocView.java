@@ -66,10 +66,8 @@ class HTMLDocView extends JEditorPane {
                     } else {
                         scrollRectToVisible(new Rectangle(0,0,0,0));
                     }
-                }catch(IOException ioe){
+                } catch (IOException | BadLocationException ioe) {
                     LOGGER.log(Level.WARNING, "An exception occurred while setting HTML content.", ioe);
-                }catch(BadLocationException ble){
-                    LOGGER.log(Level.WARNING, "An exception occurred while setting HTML content.", ble);
                 }
             }
         });

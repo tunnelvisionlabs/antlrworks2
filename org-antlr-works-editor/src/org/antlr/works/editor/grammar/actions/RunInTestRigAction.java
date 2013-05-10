@@ -188,9 +188,7 @@ public final class RunInTestRigAction implements ActionListener {
         ParserData<FileModel> data;
         try {
             data = futureData.get();
-        } catch (InterruptedException ex) {
-            return null;
-        } catch (ExecutionException ex) {
+        } catch (InterruptedException | ExecutionException ex) {
             return null;
         }
 
@@ -367,19 +365,7 @@ public final class RunInTestRigAction implements ActionListener {
                 } finally {
                     outputWriter.close();
                 }
-            } catch (ClassNotFoundException ex) {
-                Exceptions.printStackTrace(ex);
-            } catch (NoSuchMethodException ex) {
-                Exceptions.printStackTrace(ex);
-            } catch (SecurityException ex) {
-                Exceptions.printStackTrace(ex);
-            } catch (IllegalAccessException ex) {
-                Exceptions.printStackTrace(ex);
-            } catch (IllegalArgumentException ex) {
-                Exceptions.printStackTrace(ex);
-            } catch (InvocationTargetException ex) {
-                Exceptions.printStackTrace(ex);
-            } catch (MalformedURLException ex) {
+            } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | MalformedURLException ex) {
                 Exceptions.printStackTrace(ex);
             }
         }

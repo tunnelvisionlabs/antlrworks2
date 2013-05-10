@@ -59,9 +59,7 @@ public abstract class AbstractNavigatorUpdateWithContextParserTask<TPanel extend
             ParserData<? extends TContext> parserContextData;
             try {
                 parserContextData = futureContextData != null ? futureContextData.get() : null;
-            } catch (InterruptedException ex) {
-                parserContextData = null;
-            } catch (ExecutionException ex) {
+            } catch (InterruptedException | ExecutionException ex) {
                 parserContextData = null;
             }
 

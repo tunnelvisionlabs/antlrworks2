@@ -312,10 +312,7 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
             public T call() throws Exception {
                 try {
                     return callable.call();
-                } catch (Exception ex) {
-                    LOGGER.log(Level.WARNING, Bundle.taskFailedException(), ex);
-                    throw ex;
-                } catch (Error ex) {
+                } catch (Exception | Error ex) {
                     LOGGER.log(Level.WARNING, Bundle.taskFailedException(), ex);
                     throw ex;
                 }
@@ -608,10 +605,7 @@ public class ParserTaskManagerImpl implements ParserTaskManager {
         public final Result call() throws Exception {
             try {
                 return callImpl();
-            } catch (Exception ex) {
-                LOGGER.log(Level.WARNING, Bundle.taskFailedException(), ex);
-                throw ex;
-            } catch (Error ex) {
+            } catch (Exception | Error ex) {
                 LOGGER.log(Level.WARNING, Bundle.taskFailedException(), ex);
                 throw ex;
             }

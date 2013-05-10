@@ -211,9 +211,7 @@ public final class IncrementRuleVersionAction extends AbstractAction implements 
             } else {
                 updateVersionNumber(currentVersion.getItem2(), maximumVersion + 1);
             }
-        } catch (InterruptedException ex) {
-            Exceptions.printStackTrace(ex);
-        } catch (ExecutionException ex) {
+        } catch (InterruptedException | ExecutionException ex) {
             Exceptions.printStackTrace(ex);
         }
     }

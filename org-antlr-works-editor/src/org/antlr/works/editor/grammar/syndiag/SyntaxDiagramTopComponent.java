@@ -155,9 +155,7 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
                 this.jScrollPane1.setViewportView(diagram);
                 this.jScrollPane1.validate();
                 this.diagram.getRule().updatePositions();
-            } catch (NullPointerException ex) {
-                clearDiagram();
-            } catch (IllegalArgumentException ex) {
+            } catch (NullPointerException | IllegalArgumentException ex) {
                 clearDiagram();
             }
         }

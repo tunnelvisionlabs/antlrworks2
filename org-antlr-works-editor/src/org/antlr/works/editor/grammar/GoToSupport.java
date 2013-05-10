@@ -173,10 +173,7 @@ public class GoToSupport {
                 Tagger<TokenTag<Token>> tagger;
                 try {
                     tagger = futureTokensData.get().getData();
-                } catch (InterruptedException ex) {
-                    Exceptions.printStackTrace(ex);
-                    return null;
-                } catch (ExecutionException ex) {
+                } catch (InterruptedException | ExecutionException ex) {
                     Exceptions.printStackTrace(ex);
                     return null;
                 }
