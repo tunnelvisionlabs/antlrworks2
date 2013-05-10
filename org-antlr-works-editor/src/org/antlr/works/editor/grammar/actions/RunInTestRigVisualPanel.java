@@ -150,7 +150,7 @@ public final class RunInTestRigVisualPanel extends javax.swing.JPanel {
         javax.swing.JLabel lblInputFile = new javax.swing.JLabel();
         txtInputFile = new javax.swing.JTextField();
         btnBrowseInput = new javax.swing.JButton();
-        cmbStartRule = new javax.swing.JComboBox();
+        cmbStartRule = new javax.swing.JComboBox<String>();
         javax.swing.JLabel lblStartRule = new javax.swing.JLabel();
         javax.swing.JPanel pnlOptions = new javax.swing.JPanel();
         chkShowTokens = new javax.swing.JCheckBox();
@@ -281,7 +281,7 @@ public final class RunInTestRigVisualPanel extends javax.swing.JPanel {
     private javax.swing.JCheckBox chkShowTokens;
     private javax.swing.JCheckBox chkShowTree;
     private javax.swing.JCheckBox chkShowTreeInGUI;
-    private javax.swing.JComboBox cmbStartRule;
+    private javax.swing.JComboBox<String> cmbStartRule;
     private javax.swing.JTextField txtInputFile;
     // End of variables declaration//GEN-END:variables
 }

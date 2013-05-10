@@ -198,7 +198,7 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
         return singleton;
     }
 
-    static LazyListModel.Filter filter = new LazyListModel.Filter() {
+    static LazyListModel.Filter<Object> filter = new LazyListModel.Filter<Object>() {
         public boolean accept(Object obj) {
             if (obj instanceof LazyCompletionItem)
                 return ((LazyCompletionItem)obj).accept();

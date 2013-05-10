@@ -74,7 +74,7 @@ import org.openide.util.Utilities;
     "ACSN_CompletionView_SelectedItem=Selected code completion item {0}",
     "ACSN_CompletionView_NoSelectedItem=No selection",
 })
-public class CompletionJList extends JList {
+public class CompletionJList extends JList<Object> {
     private static final Object COMPLETION_CONTROLLER_PROPERTY = CompletionJList.class.getName() + ".controller";
     private static final Object COMPLETION_DATA_PROPERTY = CompletionJList.class.getName() + ".data";
 
@@ -106,11 +106,11 @@ public class CompletionJList extends JList {
 
         renderComponent = new RenderComponent();
         setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        setCellRenderer(new ListCellRenderer() {
-            private ListCellRenderer defaultRenderer = new DefaultListCellRenderer();
+        setCellRenderer(new ListCellRenderer<Object>() {
+            private final ListCellRenderer<Object> defaultRenderer = new DefaultListCellRenderer();
 
             @Override
-            public Component getListCellRendererComponent(JList list, Object value, int index, boolean isBestMatch, boolean cellHasFocus) {
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isBestMatch, boolean cellHasFocus) {
                 if( value instanceof CompletionItem ) {
                     CompletionItem item = (CompletionItem)value;
                     renderComponent.setItem(item);
@@ -181,7 +181,7 @@ public class CompletionJList extends JList {
         editorComponent.get().putClientProperty(COMPLETION_DATA_PROPERTY, data);
         if (data != null) {
             int itemCount = data.size();
-            ListCellRenderer renderer = getCellRenderer();
+            ListCellRenderer<? super Object> renderer = getCellRenderer();
             int width = 0;
             int maxWidth = getParent().getParent().getMaximumSize().width;
             boolean stop = false;
@@ -205,7 +205,7 @@ public class CompletionJList extends JList {
                     break;
             }
             setFixedCellWidth(width);
-            ListModel lm = LazyListModel.create( new Model(data), CompletionImpl.filter, 1.0d, Bundle.completion_please_wait() ); //NOI18N
+            ListModel<Object> lm = LazyListModel.<Object>create( new Model(data), CompletionImpl.filter, 1.0d, Bundle.completion_please_wait() ); //NOI18N
             setModel(lm);
             
             if (itemCount > 0) {
@@ -365,7 +365,7 @@ public class CompletionJList extends JList {
         }
     }
 
-    private static final class Model extends AbstractListModel {
+    private static final class Model extends AbstractListModel<Object> {
 
         WeakReference<List<?>> _data;
 
