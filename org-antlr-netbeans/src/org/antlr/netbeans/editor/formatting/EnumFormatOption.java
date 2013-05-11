@@ -15,6 +15,7 @@ import org.openide.util.Parameters;
 /**
  *
  * @author Sam Harwell
+ * @param <E>
  */
 public class EnumFormatOption<E extends Enum<E>> extends AbstractFormatOption {
 

@@ -96,6 +96,7 @@ public final class CompletionResultSet {
      * for the given mime-type then only the first one
      * (according to the xml-layer registration order)
      * will be taken into account.
+     * @param title
      */
     @Deprecated
     public void setTitle(String title) {
@@ -106,6 +107,7 @@ public final class CompletionResultSet {
      * Set the document offset to which the returned completion items
      * or documentation or tooltip should be anchored.
      *
+     * @param anchorOffset
      * @see #getAnchorOffset()
      */
     public void setAnchorOffset(int anchorOffset) {
@@ -200,6 +202,7 @@ public final class CompletionResultSet {
      * Calling this method is relevant only for tasks
      * created by {@link CompletionProvider#createTask(int, javax.swing.text.JTextComponent)}
      * with {@link CompletionProvider#COMPLETION_QUERY_TYPE}.
+     * @param value
      */
     public void setHasAdditionalItems(boolean value) {
         impl.setHasAdditionalItems(value);
@@ -228,6 +231,7 @@ public final class CompletionResultSet {
      * created by {@link CompletionProvider#createTask(int, javax.swing.text.JTextComponent)}
      * with {@link CompletionProvider#DOCUMENTATION_QUERY_TYPE}
      * or for {@link CompletionItem#createDocumentationTask()}.
+     * @param documentation
      */
     public void setDocumentation(CompletionDocumentation documentation) {
         impl.setDocumentation(documentation);
@@ -240,6 +244,7 @@ public final class CompletionResultSet {
      * created by {@link CompletionProvider#createTask(int, javax.swing.text.JTextComponent)}
      * with {@link CompletionProvider#TOOLTIP_QUERY_TYPE}
      * or for {@link CompletionItem#createToolTipTask()}.
+     * @param toolTip
      */
     public void setToolTip(JToolTip toolTip) {
         impl.setToolTip(toolTip);
@@ -267,6 +272,7 @@ public final class CompletionResultSet {
      * Get the sort type currently used by the code completion.
      * <br>
      * It's one of the {@link #PRIORITY_SORT_TYPE} or {@link #TEXT_SORT_TYPE}.
+     * @return
      */
     public int getSortType() {
         return impl.getSortType();

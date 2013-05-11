@@ -13,6 +13,7 @@ import org.antlr.netbeans.editor.text.SnapshotPositionRegion;
 /**
  *
  * @author Sam Harwell
+ * @param <T>
  */
 public interface TaggedPositionRegion<T extends Tag> {
 

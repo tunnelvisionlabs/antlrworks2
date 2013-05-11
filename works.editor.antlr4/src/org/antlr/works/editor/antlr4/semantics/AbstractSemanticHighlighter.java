@@ -54,6 +54,7 @@ import org.openide.util.WeakSet;
 /**
  *
  * @author Sam Harwell
+ * @param <SemanticData>
  */
 public abstract class AbstractSemanticHighlighter<SemanticData> extends AbstractHighlightsContainer {
     // -J-Dorg.antlr.works.editor.antlr4.semantics.AbstractSemanticHighlighter.level=FINE

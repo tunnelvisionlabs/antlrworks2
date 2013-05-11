@@ -58,6 +58,7 @@ public interface CompletionDocumentation {
 
     /**
      * Returns a HTML text dispaleyd in the documentation popup.
+     * @return
      */
     public String getText();
 
@@ -65,18 +66,22 @@ public interface CompletionDocumentation {
      * Returns a URL of the item's external representation that can be displayed
      * in an external browser or <code>null</code> if the item has no external
      * representation. 
+     * @return
      */
     public URL getURL();
     
     /**
      * Returns a documentation item representing an object linked from the item's 
      * HTML text.
+     * @param link
+     * @return
      */
     public CompletionDocumentation resolveLink(String link);
     
     /**
      * Returns an action that opens the item's source representation in the editor
      * or <code>null</code> if the item has no source representation. 
+     * @return
      */    
     public Action getGotoSourceAction();
 }

@@ -36,6 +36,7 @@ import org.openide.util.Parameters;
 /**
  *
  * @author Sam Harwell
+ * @param <PanelUI>
  */
 public abstract class AbstractNavigatorPanel<PanelUI extends JComponent> implements NavigatorPanel {
     private final Lookup.Template<DataObject> TEMPLATE = new Lookup.Template<>(DataObject.class);

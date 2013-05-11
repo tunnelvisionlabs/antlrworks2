@@ -138,6 +138,7 @@ public final class AsyncCompletionTask implements CompletionTask, Runnable {
     /**
      * Called by completion infrastructure in AWT thread to populate
      * the given result set with data.
+     * @param resultSet
      */
     @Override
     public void query(CompletionResultSet resultSet) {
@@ -161,6 +162,7 @@ public final class AsyncCompletionTask implements CompletionTask, Runnable {
      * gets modified).
      * <br>
      * The results should be fired into the newly provided completion listener.
+     * @param resultSet
      */
     @Override
     public void refresh(CompletionResultSet resultSet) {

@@ -18,6 +18,7 @@ import org.antlr.runtime.tree.CommonTree;
 /**
  *
  * @author Sam Harwell
+ * @param <SemanticData>
  */
 public abstract class AbstractAntlrFoldScanner<SemanticData> extends AbstractFoldScanner<SemanticData> {
 

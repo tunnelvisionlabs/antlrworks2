@@ -62,6 +62,7 @@ public final class Completion {
 
     /**
      * Get the singleton instance of this class.
+     * @return
      */
     public static Completion get() {
         return singleton;

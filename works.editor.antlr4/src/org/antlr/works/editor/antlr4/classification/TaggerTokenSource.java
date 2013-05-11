@@ -30,6 +30,7 @@ import org.openide.util.Parameters;
 /**
  *
  * @author Sam Harwell
+ * @param <Symbol>
  */
 public class TaggerTokenSource<Symbol extends Token> implements TokenSource<Symbol> {
     private final DocumentSnapshot snapshot;

@@ -44,6 +44,8 @@ public final class FiltersManager {
     /** Returns true when given filter is selected, false otherwise.
      * Note that this method is thread safe, can be called from any thread
      * (and usually will, as clients will call this from loadContent naturally)
+     * @param filterName
+     * @return
      */
     public boolean isSelected(String filterName) {
         return comp.isSelected(filterName);
@@ -51,12 +53,17 @@ public final class FiltersManager {
 
     /** Sets boolean value of filter with given name. True means filter is
      * selected (enabled), false otherwise. Note, must be called from AWT thread.
+     * @param filterName
+     * @param value
      */
     public void setSelected(String filterName, boolean value) {
         comp.setFilterSelected(filterName, value);
     }
 
-    /** @return component instance visually representing filters */
+    /**
+     * @param sortButtons
+     * @return component instance visually representing filters
+     */
     public JComponent getComponent(JToggleButton[] sortButtons) {
         comp.addSortButtons(sortButtons);
         return comp;
@@ -67,7 +74,9 @@ public final class FiltersManager {
         return comp.getDescription();
     }
 
-    /** Assigns listener for listening to filter changes */
+    /** Assigns listener for listening to filter changes
+     * @param l
+     */
     public void hookChangeListener(FilterChangeListener l) {
         comp.hookFilterChangeListener(l);
     }
@@ -78,6 +87,7 @@ public final class FiltersManager {
 
         /** Called whenever some changes in state of filters contained in
          * filters panel is triggered
+         * @param e
          */
         public void filterStateChanged(ChangeEvent e);
     } // end of FilterChangeListener

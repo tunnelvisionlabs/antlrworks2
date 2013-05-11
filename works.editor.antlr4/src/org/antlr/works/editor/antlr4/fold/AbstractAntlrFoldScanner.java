@@ -21,6 +21,7 @@ import org.netbeans.api.annotations.common.NonNull;
 /**
  *
  * @author Sam Harwell
+ * @param <SemanticData>
  */
 public abstract class AbstractAntlrFoldScanner<SemanticData> extends AbstractFoldScanner<SemanticData> {
 

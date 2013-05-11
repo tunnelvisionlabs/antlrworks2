@@ -103,6 +103,8 @@ public final class CompletionUtilities {
      *  next to the icon. It may be null which means no left text will be displayed.
      * @param rightHtmlText html text aligned on the right edge of the item's
      *  rendering area. It may be null which means no right text will be displayed.
+     * @param g
+     * @param defaultFont
      * @return &gt;=0 preferred rendering width of the item.
      */
     public static int getPreferredWidth(String leftHtmlText, String rightHtmlText,

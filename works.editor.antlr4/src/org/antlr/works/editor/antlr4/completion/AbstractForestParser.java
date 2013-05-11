@@ -33,6 +33,7 @@ import org.antlr.v4.runtime.misc.IntervalSet;
 /**
  *
  * @author Sam Harwell
+ * @param <TParser>
  */
 public abstract class AbstractForestParser<TParser extends CodeCompletionParser> implements ForestParser<TParser> {
     // -J-Dorg.antlr.works.editor.antlr4.completion.AbstractForestParser.level=FINE

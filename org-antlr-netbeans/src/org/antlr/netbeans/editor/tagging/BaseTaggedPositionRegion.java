@@ -14,6 +14,7 @@ import org.netbeans.api.annotations.common.NonNull;
 /**
  *
  * @author Sam Harwell
+ * @param <T>
  */
 public class BaseTaggedPositionRegion<T extends Tag> implements TaggedPositionRegion<T> {
     private final SnapshotPositionRegion region;

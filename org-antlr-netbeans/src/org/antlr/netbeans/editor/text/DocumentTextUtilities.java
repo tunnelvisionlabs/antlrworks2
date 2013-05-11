@@ -25,8 +25,7 @@ public final class DocumentTextUtilities {
     /** Get the identifier around the given position or null if there's no identifier
     * around the given position. The identifier must be
     * accepted by SyntaxSupport.isIdnetifier() otherwise null is returned.
-    * @param doc document to work on
-    * @param offset position in document - usually the caret.getDot()
+    * @param position position in document - usually the caret.getDot()
     * @return the block (starting and ending position) enclosing the identifier
     *   or null if no identifier was found
     */
@@ -83,6 +82,8 @@ public final class DocumentTextUtilities {
     }
 
     /** Get the word at given position.
+     * @param position
+     * @return
     */
     public static @CheckForNull String getWord(@NonNull SnapshotPosition position) {
         SnapshotPosition wordEnd = getWordEnd(position);

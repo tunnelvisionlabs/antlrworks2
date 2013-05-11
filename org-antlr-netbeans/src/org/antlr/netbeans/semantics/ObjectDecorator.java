@@ -19,6 +19,7 @@ import org.openide.util.Parameters;
 /**
  *
  * @author Sam Harwell
+ * @param <T>
  */
 public class ObjectDecorator<T> {
     private final Map<T, Map<ObjectProperty<?>, Object>> properties;

@@ -15,6 +15,7 @@ import org.antlr.v4.runtime.Token;
 /**
  *
  * @author Sam Harwell
+ * @param <TParser>
  */
 public interface ForestParser<TParser> {
 

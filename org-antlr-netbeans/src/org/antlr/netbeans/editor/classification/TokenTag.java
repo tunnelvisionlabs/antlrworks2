@@ -15,6 +15,7 @@ import org.openide.util.Parameters;
 /**
  *
  * @author Sam Harwell
+ * @param <Token>
  */
 public class TokenTag<Token> implements Tag {
     private final Token token;

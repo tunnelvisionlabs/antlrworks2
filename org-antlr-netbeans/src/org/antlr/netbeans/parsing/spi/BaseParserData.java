@@ -16,6 +16,7 @@ import org.openide.util.Parameters;
 /**
  *
  * @author Sam Harwell
+ * @param <T>
  */
 public class BaseParserData<T> implements ParserData<T> {
     @NonNull

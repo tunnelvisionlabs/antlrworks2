@@ -187,6 +187,7 @@ public class BaseCompletionController implements CompletionController {
     /**
      *
      * @param items
+     * @param declarationItems
      * @param prefix
      * @param index
      *
@@ -202,6 +203,7 @@ public class BaseCompletionController implements CompletionController {
     /**
      *
      * @param items
+     * @param declarationItems
      * @param prefix
      * @param index
      *

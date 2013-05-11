@@ -56,6 +56,7 @@ public interface LazyCompletionItem extends CompletionItem {
      * Gets invoked when a completion item is going to be displayed in the popup.
      * Returning <code>true</code> means that the item was successfuly initialized
      * and it should be displayed in the result list.
+     * @return
      */
     boolean accept ();
 }

@@ -15,6 +15,7 @@ import org.netbeans.api.annotations.common.NonNull;
 /**
  *
  * @author Sam Harwell
+ * @param <T>
  */
 public interface ParserData<T> {
 

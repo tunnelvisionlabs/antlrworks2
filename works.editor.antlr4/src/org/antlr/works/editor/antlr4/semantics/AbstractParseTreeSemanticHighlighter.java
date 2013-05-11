@@ -27,6 +27,8 @@ import org.netbeans.spi.editor.highlighting.support.OffsetsBag;
 /**
  *
  * @author Sam Harwell
+ * @param <Listener>
+ * @param <Data>
  */
 public abstract class AbstractParseTreeSemanticHighlighter<Listener extends ParseTreeListener<Token>, Data> extends AbstractSemanticHighlighter<Data> {
     // -J-Dorg.antlr.works.editor.antlr4.semantics.AbstractParseTreeSemanticHighlighter.level=FINE

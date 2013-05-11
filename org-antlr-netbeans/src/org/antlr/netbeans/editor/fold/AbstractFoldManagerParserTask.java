@@ -26,6 +26,7 @@ import org.openide.util.Parameters;
 /**
  *
  * @author Sam Harwell
+ * @param <SemanticData>
  */
 public abstract class AbstractFoldManagerParserTask<SemanticData> implements ParserTask {
 

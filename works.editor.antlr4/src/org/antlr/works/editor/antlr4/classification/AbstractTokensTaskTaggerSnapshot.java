@@ -38,6 +38,7 @@ import org.openide.util.Parameters;
 /**
  *
  * @author Sam Harwell
+ * @param <TState>
  */
 public abstract class AbstractTokensTaskTaggerSnapshot<TState extends LineStateInfo<TState>> extends AbstractTagger<TokenTag<Token>> {
     // -J-Dorg.antlr.works.editor.antlr4.classification.AbstractTokensTaskTaggerSnapshot.level=FINE

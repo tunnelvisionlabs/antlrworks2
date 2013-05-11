@@ -97,6 +97,7 @@ public interface CompletionItem {
      * @param g graphics that can be used for determining the preferred width
      *  e.g. getting of the font metrics.
      * @param defaultFont default font used for rendering.
+     * @return
      */
     int getPreferredWidth(Graphics g, Font defaultFont);
 
@@ -118,12 +119,14 @@ public interface CompletionItem {
     /**
      * Returns a task used to obtain a documentation associated with the item if there
      * is any.
+     * @return
      */
     CompletionTask createDocumentationTask();
 
     /**
      * Returns a task used to obtain a tooltip hint associated with the item if there
      * is any.
+     * @return
      */
     CompletionTask createToolTipTask();
     
@@ -150,11 +153,13 @@ public interface CompletionItem {
     /**
      * Returns the item's priority. A lower value means a lower index of the item
      * in the completion result list.
+     * @return
      */
     int getSortPriority();
 
     /**
      * Returns a text used to sort items alphabetically.
+     * @return
      */
     CharSequence getSortText();
 

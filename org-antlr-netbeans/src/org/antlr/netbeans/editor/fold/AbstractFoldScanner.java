@@ -32,6 +32,7 @@ import org.netbeans.spi.editor.fold.FoldOperation;
 /**
  *
  * @author Sam Harwell
+ * @param <SemanticData>
  */
 public abstract class AbstractFoldScanner<SemanticData> {
     // -J-Dorg.antlr.netbeans.editor.fold.AbstractFoldScanner.level=FINE

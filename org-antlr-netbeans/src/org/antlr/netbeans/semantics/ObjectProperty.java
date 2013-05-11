@@ -15,6 +15,7 @@ import org.openide.util.Parameters;
 /**
  *
  * @author Sam Harwell
+ * @param <T>
  */
 public class ObjectProperty<T> {
 

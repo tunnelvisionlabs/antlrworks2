@@ -38,6 +38,7 @@ import org.openide.util.Parameters;
 /**
  *
  * @author Sam Harwell
+ * @param <TState>
  */
 public abstract class ANTLRHighlighterBase<TState extends LineStateInfo<TState>> extends AbstractHighlightsContainer {
     private static final boolean FULL_CHECKS = false;

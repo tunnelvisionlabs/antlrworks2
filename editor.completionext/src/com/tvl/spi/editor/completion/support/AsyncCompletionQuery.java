@@ -76,6 +76,7 @@ public abstract class AsyncCompletionQuery {
      * position and decide whether the completion should be hidden
      * if the typed character is inappropriate e.g. ";" for java completion.
      *
+     * @param component
      * @since 1.3
      */
     protected void preQueryUpdate(JTextComponent component) {        

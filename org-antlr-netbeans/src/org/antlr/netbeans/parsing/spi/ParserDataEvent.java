@@ -14,6 +14,7 @@ import org.netbeans.api.annotations.common.NonNull;
 /**
  *
  * @author Sam Harwell
+ * @param <T>
  */
 public class ParserDataEvent<T> extends EventObject {
     private final ParserDataDefinition<T> definition;

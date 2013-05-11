@@ -19,6 +19,8 @@ import org.antlr.v4.runtime.TokenStream;
 /**
  *
  * @author Sam Harwell
+ * @param <Symbol>
+ * @param <T>
  */
 public abstract class AbstractParserCache<Symbol extends Token, T extends Parser<Symbol>> {
 

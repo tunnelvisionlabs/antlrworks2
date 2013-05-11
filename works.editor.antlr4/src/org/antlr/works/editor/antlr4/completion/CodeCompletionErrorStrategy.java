@@ -26,6 +26,7 @@ import org.antlr.v4.runtime.misc.IntervalSet;
 /**
  *
  * @author Sam Harwell
+ * @param <Symbol>
  */
 public class CodeCompletionErrorStrategy<Symbol extends Token> extends DefaultErrorStrategy<Symbol> {
 
@@ -52,7 +53,10 @@ public class CodeCompletionErrorStrategy<Symbol extends Token> extends DefaultEr
         super.sync(recognizer);
     }
 
-    /** Consume tokens until one matches the given token set */
+    /** Consume tokens until one matches the given token set
+     * @param recognizer
+     * @param set
+     */
     @Override
     public void consumeUntil(Parser<? extends Symbol> recognizer, IntervalSet set) {
         //System.out.println("consumeUntil("+set.toString(getTokenNames())+")");

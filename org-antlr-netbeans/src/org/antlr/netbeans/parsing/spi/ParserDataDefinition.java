@@ -18,6 +18,7 @@ import org.openide.util.Parameters;
 /**
  *
  * @author Sam Harwell
+ * @param <T>
  */
 public class ParserDataDefinition<T> {
     @NonNull
@@ -50,7 +51,9 @@ public class ParserDataDefinition<T> {
         return dataType;
     }
 
-    /** True if the data is specific to a {@link JTextComponent} instead of just a {@link Document}. */
+    /** True if the data is specific to a {@link JTextComponent} instead of just a {@link Document}.
+     * @return
+     */
     public boolean isComponentSpecific() {
         return componentSpecific;
     }
@@ -58,6 +61,7 @@ public class ParserDataDefinition<T> {
     /** True if the data is unique for a given {@link Document} or {@link JTextComponent}
      *  and may be cached. Some data, such as the context where the caret is, may change
      *  even when the content of the document has not changed.
+     * @return
      */
     public boolean isCacheable() {
         return cacheable;

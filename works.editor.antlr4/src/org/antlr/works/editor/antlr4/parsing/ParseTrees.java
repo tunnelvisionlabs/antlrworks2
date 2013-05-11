@@ -329,6 +329,9 @@ public final class ParseTrees {
 
     /** Return a list of all ancestors of this node.  The first node of
      *  list is the root and the last is the parent of this node.
+     * @param <T>
+     * @param t
+     * @return
      */
     @NonNull
     public static <T> List<? extends ParseTree<T>> getAncestors(@NonNull ParseTree<T> t) {
@@ -546,7 +549,7 @@ public final class ParseTrees {
      * Gets whether or not {@code token} is the first non-whitespace symbol on a
      * line.
      *
-     * @param tree The token to test.
+     * @param token The token to test.
      * @return {@code true} if the only characters appearing before
      * {@code token} on the same line are whitespace characters according to
      * {@link Character#isWhitespace}.

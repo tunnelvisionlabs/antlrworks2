@@ -14,6 +14,7 @@ import org.netbeans.lib.editor.util.ListenerList;
 /**
  *
  * @author Sam Harwell
+ * @param <T>
  */
 public abstract class AbstractTagger<T extends Tag> implements Tagger<T> {
     private final ListenerList<SnapshotPositionRegionEventListener> listeners =

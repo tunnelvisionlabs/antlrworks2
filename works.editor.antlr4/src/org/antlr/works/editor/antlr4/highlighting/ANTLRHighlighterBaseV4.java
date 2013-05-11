@@ -43,6 +43,7 @@ import org.openide.util.Parameters;
 /**
  *
  * @author Sam Harwell
+ * @param <TState>
  */
 public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState>> extends AbstractHighlightsContainer {
     // -J-Dorg.antlr.works.editor.antlr4.highlighting.ANTLRHighlighterBaseV4.level=FINE

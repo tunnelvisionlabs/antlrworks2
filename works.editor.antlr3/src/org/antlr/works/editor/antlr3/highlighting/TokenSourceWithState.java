@@ -14,6 +14,7 @@ import org.antlr.runtime.TokenSource;
 /**
  *
  * @author Sam Harwell
+ * @param <T>
  */
 public interface TokenSourceWithState<T> extends TokenSource {
     public CharStream getCharStream();

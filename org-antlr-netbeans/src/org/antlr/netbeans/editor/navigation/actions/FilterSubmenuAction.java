@@ -26,7 +26,9 @@ public class FilterSubmenuAction extends AbstractAction implements Presenter.Pop
 
     private final FiltersManager filters;
 
-    /** Creates a new instance of FilterSubmenuAction */
+    /** Creates a new instance of FilterSubmenuAction
+     * @param filters
+     */
     public FilterSubmenuAction(FiltersManager filters) {
         this.filters = filters;
     }
