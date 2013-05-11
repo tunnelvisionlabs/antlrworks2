@@ -10,15 +10,17 @@ package org.antlr.works.editor.grammar.codemodel.impl;
 
 import java.util.AbstractList;
 import java.util.List;
+import org.netbeans.api.annotations.common.NonNull;
 
 /**
  *
  * @author Sam Harwell
  */
 public class ProxyCollection<E> extends AbstractList<E> {
-    private final List<? extends E>[] collections;
+    @NonNull
+    private final List<? extends List<? extends E>> collections;
 
-    public ProxyCollection(List<? extends E> ...collections) {
+    public ProxyCollection(@NonNull List<? extends List<? extends E>> collections) {
         this.collections = collections;
     }
 

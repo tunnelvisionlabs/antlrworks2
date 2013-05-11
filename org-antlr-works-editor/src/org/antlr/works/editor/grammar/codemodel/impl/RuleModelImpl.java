@@ -8,6 +8,7 @@
  */
 package org.antlr.works.editor.grammar.codemodel.impl;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import org.antlr.netbeans.editor.text.OffsetRegion;
@@ -29,8 +30,8 @@ public abstract class RuleModelImpl extends AbstractCodeElementModel implements 
     private final FreezableArrayList<ParameterModelImpl> returnValues = new FreezableArrayList<>();
     private final FreezableArrayList<ParameterModelImpl> locals = new FreezableArrayList<>();
     private final FreezableArrayList<LabelModelImpl> labels = new FreezableArrayList<>();
-    @SuppressWarnings("unchecked")
-    private final ProxyCollection<AbstractCodeElementModel> members = new ProxyCollection<AbstractCodeElementModel>(parameters, returnValues, locals, labels);
+    @NonNull
+    private final ProxyCollection<AbstractCodeElementModel> members = new ProxyCollection<AbstractCodeElementModel>(Arrays.asList(parameters, returnValues, locals, labels));
 
     private final OffsetRegion seek;
     private final OffsetRegion span;

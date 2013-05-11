@@ -8,6 +8,7 @@
  */
 package org.antlr.works.editor.grammar.codemodel.impl;
 
+import java.util.Arrays;
 import java.util.Collection;
 import org.antlr.works.editor.grammar.codemodel.FileModel;
 import org.antlr.works.editor.grammar.codemodel.ModeModel;
@@ -32,8 +33,8 @@ public class FileModelImpl extends AbstractCodeElementModel implements FileModel
     private final FreezableArrayList<ModeModelImpl> modes = new FreezableArrayList<>();
     @NonNull
     private final FreezableArrayList<RuleModelImpl> rules = new FreezableArrayList<>();
-    @SuppressWarnings("unchecked")
-    private final ProxyCollection<AbstractCodeElementModel> codeElements = new ProxyCollection<>(importDeclarations, tokenVocabDeclarations, rules);
+    @NonNull
+    private final ProxyCollection<AbstractCodeElementModel> codeElements = new ProxyCollection<>(Arrays.asList(importDeclarations, tokenVocabDeclarations, rules));
 
     public FileModelImpl(@NonNull FileObject fileObject, @NullAllowed Project project, @NonNull String packagePath) {
         super(fileObject.getNameExt(), project, packagePath);
