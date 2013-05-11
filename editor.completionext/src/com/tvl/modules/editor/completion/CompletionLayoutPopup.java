@@ -171,7 +171,7 @@ abstract class CompletionLayoutPopup {
      * Sets maximum size for appropriate JComponent, depending on
      * wheteher additional items are present
      */
-    private final void setMaxSize(JComponent comp, Dimension maxSize) {
+    private void setMaxSize(JComponent comp, Dimension maxSize) {
         if (comp instanceof JPanel) {
             comp.getComponent(0).setMaximumSize(maxSize); // JScrollPane
         } else {

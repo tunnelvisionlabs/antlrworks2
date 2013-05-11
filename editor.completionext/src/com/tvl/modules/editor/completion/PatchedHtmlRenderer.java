@@ -1015,7 +1015,7 @@ public final class PatchedHtmlRenderer {
      * fonts in the entire IDE are displayed 12px below where they should be.
      * Embarrassing and awful.
      */
-    private static final Font deriveFont(Font f, int style) {
+    private static Font deriveFont(Font f, int style) {
         //      return f.deriveFont(style);
         // see #49973 for details.
         Font result = Utilities.isMac() ? new Font(f.getName(), style, f.getSize()) : f.deriveFont(style);
@@ -1028,7 +1028,7 @@ public final class PatchedHtmlRenderer {
      * with the resulting character, and the position of that character
      * in the array will be returned as the new position to render from,
      * causing the renderer to skip the intervening characters */
-    private static final int substEntity(char[] ch, int pos) {
+    private static int substEntity(char[] ch, int pos) {
         //There are no 1 character entities, abort
         if (pos >= (ch.length - 2)) {
             return -1;
@@ -1074,7 +1074,7 @@ public final class PatchedHtmlRenderer {
      * and replaces the trailing ; with the referenced character, returning
      * the position of it so the renderer can continue from there.
      */
-    private static final int substNumericEntity(char[] ch, int pos) {
+    private static int substNumericEntity(char[] ch, int pos) {
         for (int i = pos; i < ch.length; i++) {
             if (ch[i] == ';') {
                 try {
