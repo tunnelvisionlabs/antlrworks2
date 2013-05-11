@@ -202,28 +202,25 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
                                     else
                                         startLineCurrent = NbDocument.findLineNumber(document, token.getStartIndex());
 
-                //                    if (previousToken == null || previousTokenLine < startLineCurrent - 1)
-                //                    {
-                                        // endLinePrevious is the line number the previous token ended on
-                                        int endLinePrevious;
-                                        if (previousToken != null)
-                                            endLinePrevious = NbDocument.findLineNumber(document, previousToken.getStopIndex());
-                                        else
-                                            endLinePrevious = NbDocument.findLineNumber(document, span.getStart()) - 1;
+                                    // endLinePrevious is the line number the previous token ended on
+                                    int endLinePrevious;
+                                    if (previousToken != null)
+                                        endLinePrevious = NbDocument.findLineNumber(document, previousToken.getStopIndex());
+                                    else
+                                        endLinePrevious = NbDocument.findLineNumber(document, span.getStart()) - 1;
 
-                                        if (updateOffsets && (startLineCurrent > endLinePrevious + 1 || (startLineCurrent == endLinePrevious + 1 && !previousTokenEndsLine)))
+                                    if (updateOffsets && (startLineCurrent > endLinePrevious + 1 || (startLineCurrent == endLinePrevious + 1 && !previousTokenEndsLine)))
+                                    {
+                                        int firstMultilineLine = endLinePrevious;
+                                        if (previousToken == null || previousTokenEndsLine)
+                                            firstMultilineLine++;
+
+                                        for (int i = firstMultilineLine; i < startLineCurrent; i++)
                                         {
-                                            int firstMultilineLine = endLinePrevious;
-                                            if (previousToken == null || previousTokenEndsLine)
-                                                firstMultilineLine++;
-
-                                            for (int i = firstMultilineLine; i < startLineCurrent; i++)
-                                            {
-                                                if (inBounds)
-                                                    setLineState(i, lineStates.get(i).createMultiLineState());
-                                            }
+                                            if (inBounds)
+                                                setLineState(i, lineStates.get(i).createMultiLineState());
                                         }
-                //                    }
+                                    }
 
                                     if (token.getType() == Token.EOF) {
                                         _complete = true;
@@ -405,35 +402,32 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
                         else
                             startLineCurrent = NbDocument.findLineNumber(document, token.getStartIndex());
 
-    //                    if (previousToken == null || previousTokenLine < startLineCurrent - 1)
-    //                    {
-                            // endLinePrevious is the line number the previous token ended on
-                            int endLinePrevious;
-                            if (previousToken != null)
-                                endLinePrevious = NbDocument.findLineNumber(document, previousToken.getStopIndex());
-                            else
-                                endLinePrevious = NbDocument.findLineNumber(document, span.getStart()) - 1;
+                        // endLinePrevious is the line number the previous token ended on
+                        int endLinePrevious;
+                        if (previousToken != null)
+                            endLinePrevious = NbDocument.findLineNumber(document, previousToken.getStopIndex());
+                        else
+                            endLinePrevious = NbDocument.findLineNumber(document, span.getStart()) - 1;
 
-                            if (startLineCurrent > endLinePrevious + 1 || (startLineCurrent == endLinePrevious + 1 && !previousTokenEndsLine))
+                        if (startLineCurrent > endLinePrevious + 1 || (startLineCurrent == endLinePrevious + 1 && !previousTokenEndsLine))
+                        {
+                            int firstMultilineLine = endLinePrevious;
+                            if (previousToken == null || previousTokenEndsLine)
+                                firstMultilineLine++;
+
+                            for (int i = firstMultilineLine; i < startLineCurrent; i++)
                             {
-                                int firstMultilineLine = endLinePrevious;
-                                if (previousToken == null || previousTokenEndsLine)
-                                    firstMultilineLine++;
+                                if (!lineStates.get(i).getIsMultiLineToken() || lineStateChanged)
+                                    extendMultiLineSpanToLine = i + 1;
 
-                                for (int i = firstMultilineLine; i < startLineCurrent; i++)
-                                {
-                                    if (!lineStates.get(i).getIsMultiLineToken() || lineStateChanged)
-                                        extendMultiLineSpanToLine = i + 1;
-
-                                    if (inBounds || propagate) {
-                                        if (setLineState(i, lineStates.get(i).createMultiLineState())) {
-                                            firstUpdatedLine = Math.min(firstUpdatedLine, i);
-                                            lastUpdatedLine = Math.max(lastUpdatedLine, i + 1);
-                                        }
+                                if (inBounds || propagate) {
+                                    if (setLineState(i, lineStates.get(i).createMultiLineState())) {
+                                        firstUpdatedLine = Math.min(firstUpdatedLine, i);
+                                        lastUpdatedLine = Math.max(lastUpdatedLine, i + 1);
                                     }
                                 }
                             }
-    //                    }
+                        }
                     }
 
                     if (token.getType() == Token.EOF)

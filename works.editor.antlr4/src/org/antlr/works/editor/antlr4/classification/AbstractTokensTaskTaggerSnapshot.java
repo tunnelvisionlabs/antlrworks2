@@ -240,31 +240,28 @@ public abstract class AbstractTokensTaskTaggerSnapshot<TState extends LineStateI
                     else
                         startLineCurrent = snapshot.findLineNumber(token.getStartIndex());
 
-//                    if (previousToken == null || previousToken.getLine() < startLineCurrent - 1)
-//                    {
-                        // endLinePrevious is the line number the previous token ended on
-                        int endLinePrevious;
-                        if (previousToken != null)
-                            endLinePrevious = snapshot.findLineNumber(previousToken.getStopIndex() + 1);
-                        else
-                            endLinePrevious = snapshot.findLineNumber(span.getStart()) - 1;
+                    // endLinePrevious is the line number the previous token ended on
+                    int endLinePrevious;
+                    if (previousToken != null)
+                        endLinePrevious = snapshot.findLineNumber(previousToken.getStopIndex() + 1);
+                    else
+                        endLinePrevious = snapshot.findLineNumber(span.getStart()) - 1;
 
-                        if (startLineCurrent > endLinePrevious + 1 || (startLineCurrent == endLinePrevious + 1 && !previousTokenEndsLine))
+                    if (startLineCurrent > endLinePrevious + 1 || (startLineCurrent == endLinePrevious + 1 && !previousTokenEndsLine))
+                    {
+                        int firstMultilineLine = endLinePrevious;
+                        if (previousToken == null || previousTokenEndsLine)
+                            firstMultilineLine++;
+
+                        for (int i = firstMultilineLine; i < startLineCurrent; i++)
                         {
-                            int firstMultilineLine = endLinePrevious;
-                            if (previousToken == null || previousTokenEndsLine)
-                                firstMultilineLine++;
+                            if (!lineStates.get(i).getIsMultiLineToken() || lineStateChanged)
+                                extendMultiLineSpanToLine = i + 1;
 
-                            for (int i = firstMultilineLine; i < startLineCurrent; i++)
-                            {
-                                if (!lineStates.get(i).getIsMultiLineToken() || lineStateChanged)
-                                    extendMultiLineSpanToLine = i + 1;
-
-                                if (inBounds)
-                                    setLineState(i, lineStates.get(i).createMultiLineState());
-                            }
+                            if (inBounds)
+                                setLineState(i, lineStates.get(i).createMultiLineState());
                         }
-//                    }
+                    }
                 }
 
                 if (token.getType() == Token.EOF)
