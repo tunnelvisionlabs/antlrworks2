@@ -44,7 +44,7 @@ public class SelectedNodesParserTaskScheduler extends ParserTaskScheduler {
     private class RefreshImpl implements Callable<Void> {
 
         @Override
-        public Void call() throws Exception {
+        public Void call() {
             final Node[] nodes = TopComponent.getRegistry().getActivatedNodes();
             if (nodes.length == 1) {
                 final DataObject dataObject = nodes[0].getLookup().lookup(DataObject.class);
