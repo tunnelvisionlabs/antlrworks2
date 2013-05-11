@@ -102,7 +102,7 @@ public class GrammarFoldScannerV3 extends AbstractAntlrFoldScanner<CompiledModel
                     break;
 
                 default:
-                    continue;
+                    break;
                 }
             }
         }

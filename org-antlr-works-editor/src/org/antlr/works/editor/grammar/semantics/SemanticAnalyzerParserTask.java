@@ -183,7 +183,6 @@ public final class SemanticAnalyzerParserTask implements ParserTask {
 
                         if (data == null) {
                             LOGGER.log(Level.WARNING, "Failed to load source for token vocabulary.");
-                            continue;
                         }
                     }
                 }
