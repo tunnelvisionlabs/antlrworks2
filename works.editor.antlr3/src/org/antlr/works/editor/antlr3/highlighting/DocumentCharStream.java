@@ -152,7 +152,7 @@ public class DocumentCharStream implements CharStream {
         }
 
         markDepth++;
-        CharStreamState state = null;
+        CharStreamState state;
         if (markDepth >= markers.size()) {
             state = new CharStreamState();
             markers.add(state);

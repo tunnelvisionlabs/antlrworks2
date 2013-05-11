@@ -200,12 +200,11 @@ public final class FiltersManager {
             // create toggle buttons
             int filterCount = filtersDesc.getFilterCount();
             toggles = new ArrayList<>(filterCount);
-            JToggleButton toggleButton = null;
 
             Map<String, Boolean> fStates = new HashMap<>(filterCount * 2);
 
             for (int i = 0; i < filterCount; i++) {
-                toggleButton = createToggle(fStates, i);
+                JToggleButton toggleButton = createToggle(fStates, i);
                 toggles.add(toggleButton);
             }
 

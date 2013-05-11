@@ -39,7 +39,6 @@ public final class DocumentTextUtilities {
 
         BaseDocument baseDocument = (BaseDocument)document;
 
-        int[] ret = null;
         SnapshotPosition idStart = getWordStart(position);
         if (idStart != null) {
             SnapshotPosition idEnd = getWordEnd(idStart);

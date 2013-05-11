@@ -135,7 +135,7 @@ public class ANTLRErrorProvidingParser extends ANTLRParser {
         @Override
         public String getText()
         {
-            String badText = null;
+            String badText;
             if (start instanceof Token) {
                 int i = start.getTokenIndex();
                 int j = stop.getTokenIndex();

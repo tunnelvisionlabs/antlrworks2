@@ -357,7 +357,7 @@ public final class PatchedHtmlRenderer {
         int origX = x;
         boolean done = false; //flag if rendering completed, either by finishing the string or running out of space
         boolean inTag = false; //flag if the current position is inside a tag, and the tag should be processed rather than rendering
-        boolean inClosingTag = false; //flag if the current position is inside a closing tag
+        boolean inClosingTag; //flag if the current position is inside a closing tag
         boolean strikethrough = false; //flag if a strikethrough line should be painted
         boolean underline = false; //flag if an underline should be painted
         boolean bold = false; //flag if text is currently bold
@@ -761,7 +761,7 @@ public final class PatchedHtmlRenderer {
 
                 //Flag that the current line is longer than the available width,
                 //and should be wrapped without finding a word boundary
-                boolean brutalWrap = false;
+                boolean brutalWrap;
 
                 //Work out the per-character avg width of the string, for estimating
                 //when we'll be out of space and should start the ... in truncate
