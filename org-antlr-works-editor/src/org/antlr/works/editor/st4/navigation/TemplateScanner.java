@@ -67,7 +67,7 @@ public class TemplateScanner {
 
         TemplateGroupRuleReturnScope parseResult = result.getResult();
 
-        if (result != null) {
+        if (parseResult != null) {
             for (TemplateGroupWrapper.TemplateInformation templateInfo : parseResult.getGroup().getTemplateInformation()) {
                 CompiledST template = templateInfo.getTemplate();
                 Interval sourceInterval = templateInfo.getGroupInterval();
