@@ -730,6 +730,7 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
         JTextComponent comp = getActiveComponent();
         boolean compEditable = (comp != null && comp.isEditable());
         Document doc = comp != null ? comp.getDocument() : null;
+        @SuppressWarnings("null") // doc is only non-null if comp is non-null
         boolean guardedPos = doc instanceof GuardedDocument && ((GuardedDocument)doc).isPosGuarded(comp.getSelectionEnd());
         Object obj = inputMap.get(ks);
         if (obj != null) {

@@ -100,6 +100,7 @@ public final class AsyncCompletionTask implements CompletionTask, Runnable {
      *  <br>
      *  It may be null to indicate that no component was provided.
      */
+    @SuppressWarnings("null")
     public AsyncCompletionTask(@NonNull AsyncCompletionQuery query, @NullAllowed JTextComponent component) {
         assert (query != null) : "Query must be non-null";
         this.query = query;

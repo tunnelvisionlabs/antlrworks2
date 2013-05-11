@@ -128,8 +128,9 @@ public abstract class AbstractIndentTask implements IndentTask {
 
         int regionEnd = Math.min(getSnapshot().length(), endPosition.getOffset() + 1);
         OffsetRegion region;
-        if (anchors.getEnclosing() != null) {
-            region = OffsetRegion.fromBounds(anchors.getEnclosing().getSpan().getStartPosition(getSnapshot()).getOffset(), regionEnd);
+        Anchor enclosing = anchors.getEnclosing();
+        if (enclosing != null) {
+            region = OffsetRegion.fromBounds(enclosing.getSpan().getStartPosition(getSnapshot()).getOffset(), regionEnd);
         } else if (previous != null) {
             // at least for now, include the previous span due to the way error handling places bounds on an anchor
             region = OffsetRegion.fromBounds(previous.getSpan().getStartPosition(getSnapshot()).getOffset(), regionEnd);

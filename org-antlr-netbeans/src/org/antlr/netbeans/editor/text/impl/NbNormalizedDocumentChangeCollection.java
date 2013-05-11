@@ -152,8 +152,8 @@ final class NbNormalizedDocumentChangeCollection extends AbstractList<DocumentCh
         NbDocumentChange previousChange = null;
         for (int i = 0; i <= existing.size(); i++) {
             NbDocumentChange change = (i < existing.size()) ? existing.get(i) : null;
-            int rawStart = (i < existing.size()) ? change.getOldOffset() : oldEndPosition;
-            int rawEnd = (i < existing.size()) ? change.getOldOffset() + change.getOldLength() : oldEndPosition;
+            int rawStart = change != null ? change.getOldOffset() : oldEndPosition;
+            int rawEnd = change != null ? change.getOldOffset() + change.getOldLength() : oldEndPosition;
             int start = rawStart - oldPosition;
             int end = rawEnd - oldPosition;
             if (start > fillPoint) {

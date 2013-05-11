@@ -50,6 +50,7 @@ public final class DocumentTextUtilities {
                 } else { // not identifier by syntax support
                     id = getWord(position); // try right at offset
                     if (baseDocument.getSyntaxSupport().isIdentifier(id)) {
+                        assert id != null;
                         return new SnapshotPositionRegion(position, id.length());
                     }
                 }
@@ -117,8 +118,7 @@ public final class DocumentTextUtilities {
             }
 
             region = ((SnapshotAdjustFinder)finder).adjustPositionRegion(region);
-            boolean voidSearch = region == null;
-            if (voidSearch) {
+            if (region == null) {
                 finder.reset();
                 return null;
             }

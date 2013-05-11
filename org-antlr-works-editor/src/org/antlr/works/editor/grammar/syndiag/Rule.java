@@ -84,6 +84,7 @@ public class Rule extends JPanel implements Element {
                     g.drawRect(0, 0, getWidth() - 1, getHeight() - 1);
                 } finally {
                     if (oldStroke != null) {
+                        assert g2 != null;
                         g2.setStroke(oldStroke);
                     }
                 }

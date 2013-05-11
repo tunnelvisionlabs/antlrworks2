@@ -58,7 +58,7 @@ public class NbVersionedDocument implements VersionedDocument {
         Parameters.notNull("document", document);
 
         this.document = document;
-        this.document.addDocumentListener(new Listener());
+        document.addDocumentListener(new Listener());
         this.fileObject = null;
     }
 
