@@ -25,6 +25,7 @@ import org.antlr.netbeans.parsing.spi.ParserData;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.editor.fold.Fold;
 import org.netbeans.api.editor.fold.FoldHierarchy;
+import org.netbeans.api.editor.fold.FoldTemplate;
 import org.netbeans.api.editor.fold.FoldType;
 import org.netbeans.spi.editor.fold.FoldHierarchyTransaction;
 import org.netbeans.spi.editor.fold.FoldOperation;
@@ -125,15 +126,13 @@ public abstract class AbstractFoldScanner<SemanticData> {
                         foldManager.currentFolds.addAll(foldsToKeep);
 
                         for (FoldInfo foldInfo : foldsToAdd) {
-                            FoldType foldType = new FoldType("code-block");
                             String description = foldInfo.blockHint;
                             boolean collapsed = false;
                             int startOffset = foldInfo.region.getStart().getOffset();
                             int endOffset = foldInfo.region.getEnd().getOffset();
-                            int startGuardedLength = 0;
-                            int endGuardedLength = 0;
+                            FoldType foldType = FoldType.create("code-block", "Code Block", FoldTemplate.DEFAULT);
                             try {
-                                Fold fold = operation.addToHierarchy(foldType, description, collapsed, startOffset, endOffset, startGuardedLength, endGuardedLength, foldInfo, transaction);
+                                Fold fold = operation.addToHierarchy(foldType, startOffset, endOffset, collapsed, null, description, foldInfo, transaction);
                                 foldManager.currentFolds.add(fold);
                             } catch (BadLocationException ex) {
                                 LOGGER.log(Level.WARNING, "An exception occurred while updating code folding.", ex);
