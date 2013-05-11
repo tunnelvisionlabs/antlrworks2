@@ -355,7 +355,7 @@ public class BaseCompletionController implements CompletionController {
             if (Character.isLetterOrDigit(ch)) {
                 pattern.append(ch);
             } else {
-                pattern.append('\\').append(ch);;
+                pattern.append('\\').append(ch);
             }
         }
 

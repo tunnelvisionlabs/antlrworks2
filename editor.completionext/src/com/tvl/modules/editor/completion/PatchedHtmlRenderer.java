@@ -766,7 +766,7 @@ public final class PatchedHtmlRenderer {
                 //Work out the per-character avg width of the string, for estimating
                 //when we'll be out of space and should start the ... in truncate
                 //mode
-                double chWidth = r.getWidth() / length;;
+                double chWidth = r.getWidth() / length;
 
                 if (style == STYLE_TRUNCATE) {
                     double newWidth = widthPainted + r.getWidth();
