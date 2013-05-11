@@ -79,7 +79,7 @@ public abstract class AbstractTokensTaskTaggerSnapshot<TState extends LineStateI
         Integer firstChangedLine = null;
         Integer lastChangedLine = null;
 
-        for (DocumentVersion version = reference.snapshot.getVersion(); version.getVersionNumber() < snapshot.getVersion().getVersionNumber(); version = version.getNext()) {
+        for (DocumentVersion version = reference.snapshot.getVersion(); version != null && version.getVersionNumber() < snapshot.getVersion().getVersionNumber(); version = version.getNext()) {
             DocumentSnapshot source = version.getSnapshot();
             DocumentSnapshot target = version.getNext().getSnapshot();
             NormalizedDocumentChangeCollection changes = version.getChanges();

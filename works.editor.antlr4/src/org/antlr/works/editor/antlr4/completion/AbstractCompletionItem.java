@@ -105,7 +105,7 @@ public abstract class AbstractCompletionItem implements CompletionItem {
         //}
         JTextComponent comp = controller.getComponent();
         boolean compEditable = (comp != null && comp.isEditable());
-        Document doc = comp.getDocument();
+        Document doc = comp != null ? comp.getDocument() : null;
         boolean guardedPos = doc instanceof GuardedDocument && ((GuardedDocument)doc).isPosGuarded(comp.getSelectionEnd());
 
         if (evt.getKeyCode() == KeyEvent.VK_TAB && doc.getProperty(CT_HANDLER_DOC_PROPERTY) == null) {

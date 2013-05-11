@@ -103,7 +103,9 @@ public class CodeModelCacheImpl implements CodeModelCache {
         assert fileModel.isFrozen();
         Project project = fileModel.getProject();
         CodeModelProjectCache projectCache = getProjectCache(project, true);
-        projectCache.updateFile(fileModel);
+        if (projectCache != null) {
+            projectCache.updateFile(fileModel);
+        }
     }
 
     public static synchronized CodeModelCacheImpl getInstance() {

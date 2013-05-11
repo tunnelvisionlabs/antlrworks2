@@ -66,9 +66,12 @@ public class MarkOccurrencesMarkProvider extends MarkProvider {
     }
 
     public static Collection<Mark> createMarks(final VersionedDocument document, final Collection<SnapshotPosition> bag, final Color color, final String tooltip) {
-        final List<Mark> result = new LinkedList<>();
-
         final Document doc = document.getDocument();
+        if (doc == null) {
+            return Collections.emptyList();
+        }
+
+        final List<Mark> result = new LinkedList<>();
         doc.render(new Runnable() {
             @Override
             public void run() {

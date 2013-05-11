@@ -32,9 +32,14 @@ public class TokenVocabDeclarationModelImpl extends AbstractCodeElementModel imp
 
     @Override
     public Collection<TokenVocabModel> resolve() {
+        FileModelImpl file = getFile();
+        if (file == null) {
+            return Collections.emptyList();
+        }
+
         List<TokenVocabModel> result = new ArrayList<>();
         // first try to find a grammar with this name
-        PackageModelImpl packageModel = getFile().getPackage();
+        PackageModelImpl packageModel = file.getPackage();
         for (FileModelImpl fileModel : packageModel.getFiles()) {
             String grammarName = fileModel.getName();
             int dot = grammarName.indexOf('.');

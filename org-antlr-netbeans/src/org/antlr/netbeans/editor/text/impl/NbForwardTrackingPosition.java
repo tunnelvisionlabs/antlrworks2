@@ -59,7 +59,7 @@ public class NbForwardTrackingPosition extends NbTrackingPosition {
         }
 
         boolean positive = getBias() == TrackingPosition.Bias.Forward;
-        for (DocumentVersion currentVersion = sourceVersion; currentVersion.getVersionNumber() < version.getVersionNumber(); currentVersion = currentVersion.getNext()) {
+        for (DocumentVersion currentVersion = sourceVersion; currentVersion != null && currentVersion.getVersionNumber() < version.getVersionNumber(); currentVersion = currentVersion.getNext()) {
             NormalizedDocumentChangeCollection changes = currentVersion.getChanges();
             DocumentChange relevantChange = null;
             for (DocumentChange change : changes) {
