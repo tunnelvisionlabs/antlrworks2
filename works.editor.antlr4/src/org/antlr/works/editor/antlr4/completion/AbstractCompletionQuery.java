@@ -19,6 +19,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -195,7 +196,7 @@ public abstract class AbstractCompletionQuery extends AsyncCompletionQuery {
                     resultSet.setAnchorOffset(applicableTo.getStartPosition(textBuffer.getCurrentSnapshot()).getOffset());
                 }
             }
-        } catch (Exception ex) {
+        } catch (InterruptedException | ExecutionException | RuntimeException | Error ex) {
             LOGGER.log(Level.WARNING, "An exception occurred while processing a completion query.", ex);
         } finally {
             resultSet.finish();

@@ -18,6 +18,7 @@ import org.antlr.netbeans.parsing.spi.ParseContext;
 import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CommonToken;
+import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.Token;
 import org.antlr.tool.ErrorManager;
 import org.openide.util.Parameters;
@@ -73,7 +74,7 @@ public class CompiledModelParserV3 extends CompiledModelParser {
                 lastResult = currentResult;
                 lastException = null;
                 return new CompiledModelV3(snapshot, currentResult);
-            } catch (Exception ex) {
+            } catch (RecognitionException | RuntimeException | Error ex) {
                 lastSnapshot = snapshot;
                 lastResult = null;
                 lastException = ex;

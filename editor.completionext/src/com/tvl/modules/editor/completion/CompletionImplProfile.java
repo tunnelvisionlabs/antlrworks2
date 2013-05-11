@@ -45,6 +45,7 @@ package com.tvl.modules.editor.completion;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.netbeans.modules.sampler.Sampler;
@@ -116,7 +117,7 @@ final class CompletionImplProfile {
             } else {
                 LOG.log(Level.WARNING, "No snapshot taken"); // NOI18N
             }
-        } catch (Exception ex) {
+        } catch (IOException | RuntimeException | Error ex) {
             Exceptions.printStackTrace(ex);
         }
     }

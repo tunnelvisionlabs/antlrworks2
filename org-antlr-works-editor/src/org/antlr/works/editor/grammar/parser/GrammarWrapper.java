@@ -17,6 +17,7 @@ import org.antlr.grammar.v3.ANTLRParser;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CommonToken;
+import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.Token;
 import org.antlr.tool.CompositeGrammar;
 import org.antlr.tool.ErrorManager;
@@ -98,7 +99,7 @@ public class GrammarWrapper extends Grammar {
                 g.setFileName(fullName); // work around a bug in Grammar.setName that results in a NPE
                 ANTLRParser.grammar__return result = parser.grammar_(g);
                 imported.add(new CompiledFileModelV3(parser, g, result, fileObject, tokens));
-            } catch (Exception ex) {
+            } catch (RecognitionException | RuntimeException | Error ex) {
                 Exceptions.printStackTrace(ex);
             }
 		}
