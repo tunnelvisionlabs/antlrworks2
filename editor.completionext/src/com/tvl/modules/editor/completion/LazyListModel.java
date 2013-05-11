@@ -89,6 +89,7 @@ implements ListModel<T>, Runnable, javax.swing.event.ListDataListener {
     /** dirty means that we should really update assumptions */
     private boolean markDirty;
     
+    @SuppressWarnings("LeakingThisInConstructor")
     private LazyListModel (ListModel<T> m, Filter<? super T> f, double expectedRadio, T defaultValue) {
         this.listModel = m;
         this.filter = f;

@@ -115,6 +115,7 @@ public final class CompletionLayout {
     
     private final List<CompletionLayoutPopup> visiblePopups;
     
+    @SuppressWarnings("LeakingThisInConstructor")
     CompletionLayout() {
         completionPopup = new CompletionPopup();
         completionPopup.setLayout(this);

@@ -81,6 +81,7 @@ public final class CompletionResultSet {
 
     private final CompletionResultSetImpl impl;
 
+    @SuppressWarnings("LeakingThisInConstructor")
     CompletionResultSet(CompletionResultSetImpl impl) {
         this.impl = impl;
         impl.setResultSet(this);

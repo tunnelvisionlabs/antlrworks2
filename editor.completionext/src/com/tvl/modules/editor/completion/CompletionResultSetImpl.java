@@ -110,6 +110,7 @@ public final class CompletionResultSetImpl {
     
     private int estimatedItemWidth;
     
+    @SuppressWarnings("LeakingThisInConstructor")
     CompletionResultSetImpl(CompletionImpl completionImpl,
     Object resultId, CompletionTask task, int queryType) {
         assert (completionImpl != null);

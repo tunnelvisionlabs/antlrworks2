@@ -58,6 +58,7 @@ public abstract class CompletionActionsMainMenu extends MainMenuAction implement
 
     private final AbstractAction delegate;
         
+    @SuppressWarnings("OverridableMethodCallInConstructor")
     public CompletionActionsMainMenu() {
         super();
         delegate = new AbstractAction() {

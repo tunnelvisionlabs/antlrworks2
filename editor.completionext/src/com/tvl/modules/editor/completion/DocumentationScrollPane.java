@@ -124,6 +124,7 @@ public class DocumentationScrollPane extends JScrollPane {
     private Dimension documentationPreferredSize;
 
     /** Creates a new instance of ScrollJavaDocPane */
+    @SuppressWarnings("OverridableMethodCallInConstructor")
     public DocumentationScrollPane(JTextComponent editorComponent) {
         super();
  

@@ -114,6 +114,7 @@ import org.openide.util.WeakListeners;
 @NbBundle.Messages({
     "completion-no-suggestions=No suggestions"
 })
+@SuppressWarnings("ClassWithMultipleLoggers")
 public class CompletionImpl extends MouseAdapter implements DocumentListener,
 CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChangeListener, ChangeListener {
     
@@ -304,6 +305,7 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
 
     private Point lastViewPosition; // Visible view in JViewport
     
+    @SuppressWarnings("LeakingThisInConstructor")
     private CompletionImpl() {
         EditorRegistry.addPropertyChangeListener(this);
         completionAutoPopupTimer = new Timer(0, new ActionListener() {
@@ -427,6 +429,7 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
     }
     
     @Override
+    @SuppressWarnings("UnnecessaryReturnStatement")
     public void removeUpdate(DocumentEvent e) {
         // Ignore insertions done outside of the AWT (various content generation)
         if (!SwingUtilities.isEventDispatchThread()) {
