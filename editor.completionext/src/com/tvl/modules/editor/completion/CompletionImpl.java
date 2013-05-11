@@ -1545,7 +1545,7 @@ outer:      for (CompletionResultSetImpl resultSet : localCompletionResult.getRe
     
     private static String getKeyStrokeAsText (KeyStroke keyStroke) {
         int modifiers = keyStroke.getModifiers ();
-        StringBuffer sb = new StringBuffer ();
+        StringBuilder sb = new StringBuilder ();
         sb.append('\'');
         if ((modifiers & InputEvent.CTRL_DOWN_MASK) > 0)
             sb.append ("Ctrl+"); //NOI18N
