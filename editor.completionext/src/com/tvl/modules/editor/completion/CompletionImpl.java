@@ -62,9 +62,12 @@ import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
 import javax.swing.plaf.TextUI;
@@ -382,7 +385,7 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
     }
 
     @Override
-    public void insertUpdate(javax.swing.event.DocumentEvent e) {
+    public void insertUpdate(DocumentEvent e) {
         // Ignore insertions done outside of the AWT (various content generation)
         if (!SwingUtilities.isEventDispatchThread()) {
             return;
@@ -424,7 +427,7 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
     }
     
     @Override
-    public void removeUpdate(javax.swing.event.DocumentEvent e) {
+    public void removeUpdate(DocumentEvent e) {
         // Ignore insertions done outside of the AWT (various content generation)
         if (!SwingUtilities.isEventDispatchThread()) {
             return;
@@ -432,11 +435,11 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
     }
     
     @Override
-    public void changedUpdate(javax.swing.event.DocumentEvent e) {
+    public void changedUpdate(DocumentEvent e) {
     }
     
     @Override
-    public synchronized void caretUpdate(javax.swing.event.CaretEvent e) {
+    public synchronized void caretUpdate(CaretEvent e) {
         assert (SwingUtilities.isEventDispatchThread());
 
         if (ensureActiveProviders()) {
@@ -514,7 +517,7 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
      * Called from AWT when selection in the completion list pane changes.
      */
     @Override
-    public void valueChanged(javax.swing.event.ListSelectionEvent e) {
+    public void valueChanged(ListSelectionEvent e) {
         assert (SwingUtilities.isEventDispatchThread());
 
         documentationCancel();

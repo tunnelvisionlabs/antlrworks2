@@ -499,7 +499,7 @@ public class DocumentationScrollPane extends JScrollPane {
         }
 
         @Override
-        public void actionPerformed(java.awt.event.ActionEvent actionEvent) {
+        public void actionPerformed(ActionEvent actionEvent) {
             switch (action) {
 		case ACTION_JAVADOC_ESCAPE:
 		    CompletionImpl.get().hideDocumentation(false);

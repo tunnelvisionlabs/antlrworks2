@@ -69,7 +69,7 @@ implements ListModel<T>, Runnable, javax.swing.event.ListDataListener {
     /** the value to return when nothing else can be returned */
     private final T defaultValue;
     /** simple event listener list */
-    private final javax.swing.event.EventListenerList list = new javax.swing.event.EventListenerList ();
+    private final EventListenerList list = new EventListenerList ();
 
     /** the size of the original list we now know it has */
     private int originalSize;
