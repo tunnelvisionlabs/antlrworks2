@@ -209,9 +209,9 @@ abstract class CompletionLayoutPopup {
 	    return new Rectangle();
 	}
         if (anchorOffsetBounds == null){ 
-            int anchorOffset = getAnchorOffset();
+            int localAnchorOffset = getAnchorOffset();
             try {
-                anchorOffsetBounds = editorComponent.modelToView(anchorOffset);
+                anchorOffsetBounds = editorComponent.modelToView(localAnchorOffset);
                 if (anchorOffsetBounds != null){
                     anchorOffsetBounds.x -= getAnchorHorizontalShift();
                 } else {
@@ -245,24 +245,24 @@ abstract class CompletionLayoutPopup {
     private Rectangle findPopupBounds(Rectangle occupiedBounds, boolean aboveOccupiedBounds) {
         Rectangle screen = Utilities.getUsableScreenBounds();
         Dimension prefSize = getPreferredSize();
-        Rectangle popupBounds = new Rectangle();
+        Rectangle localPopupBounds = new Rectangle();
         
-        popupBounds.x = Math.min(occupiedBounds.x,
+        localPopupBounds.x = Math.min(occupiedBounds.x,
                 (screen.x + screen.width) - prefSize.width);
-        popupBounds.x = Math.max(popupBounds.x, screen.x);
-        popupBounds.width = Math.min(prefSize.width, screen.width);
+        localPopupBounds.x = Math.max(localPopupBounds.x, screen.x);
+        localPopupBounds.width = Math.min(prefSize.width, screen.width);
         
         if (aboveOccupiedBounds) {
-            popupBounds.height = Math.min(prefSize.height,
+            localPopupBounds.height = Math.min(prefSize.height,
                     occupiedBounds.y - screen.y - CompletionLayout.POPUP_VERTICAL_GAP);
-            popupBounds.y = occupiedBounds.y - CompletionLayout.POPUP_VERTICAL_GAP - popupBounds.height;
+            localPopupBounds.y = occupiedBounds.y - CompletionLayout.POPUP_VERTICAL_GAP - localPopupBounds.height;
         } else { // below caret
-            popupBounds.y = occupiedBounds.y
+            localPopupBounds.y = occupiedBounds.y
                     + occupiedBounds.height + CompletionLayout.POPUP_VERTICAL_GAP;
-            popupBounds.height = Math.min(prefSize.height,
-                    (screen.y + screen.height) - popupBounds.y);
+            localPopupBounds.height = Math.min(prefSize.height,
+                    (screen.y + screen.height) - localPopupBounds.y);
         }
-        return popupBounds;
+        return localPopupBounds;
     }
     
     /**

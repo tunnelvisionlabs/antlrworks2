@@ -344,7 +344,7 @@ public final class PatchedHtmlRenderer {
         }
 
         //Thread safety - avoid allocating memory for the common case
-        Deque<Color> colorStack = SwingUtilities.isEventDispatchThread() ? PatchedHtmlRenderer.colorStack : new ArrayDeque<Color>();
+        Deque<Color> localColorStack = SwingUtilities.isEventDispatchThread() ? PatchedHtmlRenderer.colorStack : new ArrayDeque<Color>();
 
         g.setColor(defaultColor);
         g.setFont(f);
@@ -395,7 +395,7 @@ public final class PatchedHtmlRenderer {
             (paint ..., give up or skip to the next line)
          */
         //Clear any junk left behind from a previous rendering loop
-        colorStack.clear();
+        localColorStack.clear();
 
         //Enter the painting loop
         while (!done) {
@@ -542,10 +542,10 @@ public final class PatchedHtmlRenderer {
                     case 'F': //NOI18N
                     case 'f': //NOI18N
 
-                        if (colorStack.isEmpty()) {
+                        if (localColorStack.isEmpty()) {
                             g.setColor(defaultColor);
                         } else {
-                            g.setColor(colorStack.pop());
+                            g.setColor(localColorStack.pop());
                         }
 
                         break;
@@ -638,7 +638,7 @@ public final class PatchedHtmlRenderer {
                     case 'F': //NOI18N
 
                         Color c = findColor(chars, pos, tagEnd);
-                        colorStack.push(g.getColor());
+                        localColorStack.push(g.getColor());
 
                         if (background != null) {
                             //c = org.openide.awt.HtmlLabelUI.ensureContrastingColor(c, background);
