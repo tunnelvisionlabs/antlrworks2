@@ -37,7 +37,7 @@ import org.openide.loaders.DataObjectNotFoundException;
  * @param <TPanel>
  * @param <TData>
  */
-public abstract class AbstractNavigatorUpdateParserTask<TPanel extends AbstractNavigatorPanel, TData> implements ParserTask {
+public abstract class AbstractNavigatorUpdateParserTask<TPanel extends AbstractNavigatorPanel<?>, TData> implements ParserTask {
     // -J-Dorg.antlr.netbeans.editor.navigation.AbstractNavigatorUpdateParserTask.level=FINE
     private static final Logger LOGGER = Logger.getLogger(AbstractNavigatorUpdateParserTask.class.getName());
 

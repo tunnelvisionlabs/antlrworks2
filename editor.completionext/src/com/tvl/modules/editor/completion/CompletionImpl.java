@@ -342,8 +342,8 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
                 }
                 List<CompletionResultSetImpl> resultSets;
                 if (localCompletionResult != null && (resultSets = localCompletionResult.getResultSets()) != null) {
-                    for (Iterator it = resultSets.iterator(); it.hasNext();) {
-                        CompletionResultSetImpl resultSet = (CompletionResultSetImpl)it.next();
+                    for (Iterator<CompletionResultSetImpl> it = resultSets.iterator(); it.hasNext();) {
+                        CompletionResultSetImpl resultSet = it.next();
                         if (resultSet != null && resultSet.getWaitText() != null) {
                             waitText = resultSet.getWaitText();
                             politeWaitText = true;

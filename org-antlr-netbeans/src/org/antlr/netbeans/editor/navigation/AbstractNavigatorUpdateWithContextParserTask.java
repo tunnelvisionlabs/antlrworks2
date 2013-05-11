@@ -29,7 +29,7 @@ import org.openide.util.Lookup;
  * @param <TData>
  * @param <TContext>
  */
-public abstract class AbstractNavigatorUpdateWithContextParserTask<TPanel extends AbstractNavigatorPanel, TData, TContext> extends AbstractNavigatorUpdateParserTask<TPanel, TData> {
+public abstract class AbstractNavigatorUpdateWithContextParserTask<TPanel extends AbstractNavigatorPanel<?>, TData, TContext> extends AbstractNavigatorUpdateParserTask<TPanel, TData> {
     private static WeakReference<ParserTaskManager> parserTaskManager =
         new WeakReference<>(null);
 

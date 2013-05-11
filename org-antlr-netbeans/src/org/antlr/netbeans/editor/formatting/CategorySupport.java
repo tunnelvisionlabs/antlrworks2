@@ -58,9 +58,7 @@ public class CategorySupport implements ActionListener, DocumentListener, Previe
     private static final int STORE = 1;
     private static final int ADD_LISTENERS = 2;
 
-    @SuppressWarnings("rawtypes")
-    private static final Map<Class<? extends Enum>, ComboItem[]> COMBO_BOX_ITEMS =
-        new HashMap<>();
+    private static final Map<Class<?>, ComboItem[]> COMBO_BOX_ITEMS = new HashMap<>();
 
     private final String mimeType;
     private final String previewText;
