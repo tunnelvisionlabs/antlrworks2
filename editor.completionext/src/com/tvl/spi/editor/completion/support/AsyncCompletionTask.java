@@ -44,14 +44,14 @@
 
 package com.tvl.spi.editor.completion.support;
 
+import com.tvl.spi.editor.completion.CompletionResultSet;
+import com.tvl.spi.editor.completion.CompletionTask;
 import javax.swing.SwingUtilities;
 import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
 import org.netbeans.api.annotations.common.CheckForNull;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;
-import com.tvl.spi.editor.completion.CompletionResultSet;
-import com.tvl.spi.editor.completion.CompletionTask;
 import org.openide.util.RequestProcessor;
 
 /**

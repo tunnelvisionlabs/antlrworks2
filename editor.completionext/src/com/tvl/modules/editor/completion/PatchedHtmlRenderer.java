@@ -62,6 +62,7 @@ import java.util.StringTokenizer;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import org.openide.ErrorManager;
+import org.openide.awt.HtmlRenderer.Renderer;
 import org.openide.util.Utilities;
 
 /**

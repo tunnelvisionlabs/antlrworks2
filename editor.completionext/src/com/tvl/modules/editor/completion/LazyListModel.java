@@ -45,8 +45,11 @@
 package com.tvl.modules.editor.completion;
 
 import java.util.BitSet;
-import javax.swing.*;
-import javax.swing.event.*;
+import javax.swing.ListModel;
+import javax.swing.SwingUtilities;
+import javax.swing.event.EventListenerList;
+import javax.swing.event.ListDataEvent;
+import javax.swing.event.ListDataListener;
 
 /** Model that can compute its values lazily and moreover handle some
  * kind of filtering.

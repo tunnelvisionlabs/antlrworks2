@@ -44,12 +44,10 @@
 
 package com.tvl.spi.editor.completion;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import javax.swing.JToolTip;
 import com.tvl.modules.editor.completion.CompletionResultSetImpl;
 import com.tvl.modules.editor.completion.CompletionSpiPackageAccessor;
+import java.util.Collection;
+import javax.swing.JToolTip;
 
 /**
  * Listener interface for passing the query results.

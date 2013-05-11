@@ -30,6 +30,7 @@
  */
 package com.tvl.modules.editor.completion;
 
+import com.tvl.api.editor.completion.Completion;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.AbstractAction;
@@ -38,7 +39,6 @@ import javax.swing.ActionMap;
 import javax.swing.JEditorPane;
 import javax.swing.JMenuItem;
 import javax.swing.text.JTextComponent;
-import com.tvl.api.editor.completion.Completion;
 import org.netbeans.editor.Utilities;
 import org.netbeans.editor.ext.ExtKit;
 import org.netbeans.modules.editor.MainMenuAction;

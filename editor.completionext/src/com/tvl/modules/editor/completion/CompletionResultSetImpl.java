@@ -44,17 +44,17 @@
 
 package com.tvl.modules.editor.completion;
 
+import com.tvl.spi.editor.completion.CompletionDocumentation;
+import com.tvl.spi.editor.completion.CompletionItem;
+import com.tvl.spi.editor.completion.CompletionProvider;
+import com.tvl.spi.editor.completion.CompletionResultSet;
+import com.tvl.spi.editor.completion.CompletionTask;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import javax.swing.JToolTip;
-import com.tvl.spi.editor.completion.CompletionDocumentation;
-import com.tvl.spi.editor.completion.CompletionItem;
-import com.tvl.spi.editor.completion.CompletionProvider;
-import com.tvl.spi.editor.completion.CompletionResultSet;
-import com.tvl.spi.editor.completion.CompletionTask;
 
 /**
  *

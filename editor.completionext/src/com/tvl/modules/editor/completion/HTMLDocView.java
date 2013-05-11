@@ -54,7 +54,6 @@ import java.awt.event.MouseMotionListener;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
-
 import javax.swing.JEditorPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;

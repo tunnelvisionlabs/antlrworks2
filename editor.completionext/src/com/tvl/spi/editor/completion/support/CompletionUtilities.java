@@ -44,6 +44,7 @@
 
 package com.tvl.spi.editor.completion.support;
 
+import com.tvl.modules.editor.completion.PatchedHtmlRenderer;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -51,7 +52,6 @@ import java.awt.Graphics;
 import javax.swing.ImageIcon;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;
-import com.tvl.modules.editor.completion.PatchedHtmlRenderer;
 
 /**
  * Various code completion utilities including completion item
