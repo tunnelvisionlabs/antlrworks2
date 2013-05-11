@@ -209,7 +209,8 @@ public class HTMLDocView extends JEditorPane {
         Coloring c = Coloring.fromAttributeSet(fcs.getFontColors(FontColorNames.DEFAULT_COLORING));
         java.awt.Font f = c.getFont();
         css.addRule(new StringBuilder("body { font-size: ").append(f.getSize()) // NOI18N
-                .append("; font-family: ").append(getFont().getFamily()).append("; color: " + getForegroundColor() + ";}").toString()); // NOI18N
+                .append("; font-family: ").append(getFont().getFamily()) // NOI18N
+                .append("; color: ").append(getForegroundColor()).append(";}").toString()); // NOI18N
                 // do not use monospaced font, just adjust fontsize
         css.addStyleSheet(htmlKit.getStyleSheet());
         htmlKit.setStyleSheet(css);

@@ -1628,8 +1628,7 @@ outer:      for (CompletionResultSetImpl resultSet : localCompletionResult.getRe
             CompletionResultSetImpl result = resultSets.get(i);
             if (!result.isFinished()) {
                 if (LOG.isLoggable(Level.FINE)) {
-                    LOG.fine("CompletionTask: " + result.getTask() // NOI18N
-                            + " not finished yet\n"); // NOI18N
+                    LOG.log(Level.FINE, "CompletionTask: {0} not finished yet\n", result.getTask()); // NOI18N
                 }
                 return false;
             }
