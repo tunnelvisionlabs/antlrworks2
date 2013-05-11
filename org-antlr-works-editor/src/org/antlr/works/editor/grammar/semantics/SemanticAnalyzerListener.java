@@ -568,11 +568,9 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
                 tokenDecorator.putProperty(token, GrammarTreeProperties.PROP_MISSING_DEF, true);
             }
 
-            if (decl != null) {
-                tokenDecorator.putProperty(token, GrammarTreeProperties.PROP_TARGET, decl);
-                if (decl != token && tokenDecorator.getProperty(decl, GrammarTreeProperties.PROP_MISSING_DEF)) {
-                    tokenDecorator.putProperty(token, GrammarTreeProperties.PROP_MISSING_DEF, true);
-                }
+            tokenDecorator.putProperty(token, GrammarTreeProperties.PROP_TARGET, decl);
+            if (decl != token && tokenDecorator.getProperty(decl, GrammarTreeProperties.PROP_MISSING_DEF)) {
+                tokenDecorator.putProperty(token, GrammarTreeProperties.PROP_MISSING_DEF, true);
             }
         }
 
@@ -601,9 +599,7 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
                 tokenDecorator.putProperty(token, GrammarTreeProperties.PROP_IMPLICIT_DEF, true);
             }
 
-            if (decl != null) {
-                tokenDecorator.putProperty(token, GrammarTreeProperties.PROP_TARGET, decl);
-            }
+            tokenDecorator.putProperty(token, GrammarTreeProperties.PROP_TARGET, decl);
         }
 
         for (Token token : unresolvedModeReferences) {

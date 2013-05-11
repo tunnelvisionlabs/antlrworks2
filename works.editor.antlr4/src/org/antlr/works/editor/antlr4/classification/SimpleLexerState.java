@@ -111,7 +111,7 @@ public class SimpleLexerState implements LineStateInfo<SimpleLexerState> {
 
         int hash = 7;
         hash = 59 * hash + this.mode;
-        hash = 59 * hash + (this.modeStack != null ? this.modeStack.hashCode() : 0);
+        hash = 59 * hash + this.modeStack.hashCode();
         return hash;
     }
 

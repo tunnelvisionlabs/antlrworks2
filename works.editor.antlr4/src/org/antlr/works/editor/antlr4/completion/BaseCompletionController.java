@@ -71,10 +71,6 @@ public class BaseCompletionController implements CompletionController {
             }
 
             AsyncCompletionQuery query = ((AsyncCompletionTask)task).getQuery();
-            if (query == null) {
-                continue;
-            }
-
             queries.add(query);
         }
     }

@@ -418,10 +418,6 @@ public final class ParseTrees {
         }
         
         Interval sourceInterval = tree.getSourceInterval();
-        if (sourceInterval == null) {
-            throw new IllegalArgumentException();
-        }
-        
         return sourceInterval.b < sourceInterval.a;
     }
 
@@ -441,9 +437,6 @@ public final class ParseTrees {
 
         Interval sourceIntervalA = a.getSourceInterval();
         Interval sourceIntervalB = b.getSourceInterval();
-        if (sourceIntervalA == null || sourceIntervalB == null) {
-            throw new NotImplementedException();
-        }
 
         //if (sourceIntervalA.a == sourceIntervalB.a) {
         //    if (isAncestorOf(a, b)) {
@@ -469,10 +462,6 @@ public final class ParseTrees {
     public static boolean startsBeforeStartOf(@NonNull ParseTree<? extends Token> a, @NonNull ParseTree<? extends Token> b) {
         Interval sourceIntervalA = a.getSourceInterval();
         Interval sourceIntervalB = b.getSourceInterval();
-        if (sourceIntervalA == null || sourceIntervalB == null) {
-            throw new NotImplementedException();
-        }
-
         return sourceIntervalA.a < sourceIntervalB.a;
     }
 
@@ -486,10 +475,6 @@ public final class ParseTrees {
     public static boolean endsAfterEndOf(@NonNull ParseTree<? extends Token> a, @NonNull ParseTree<? extends Token> b) {
         Interval sourceIntervalA = a.getSourceInterval();
         Interval sourceIntervalB = b.getSourceInterval();
-        if (sourceIntervalA == null || sourceIntervalB == null) {
-            throw new NotImplementedException();
-        }
-
         return sourceIntervalA.b > sourceIntervalB.b;
     }
 
@@ -503,10 +488,6 @@ public final class ParseTrees {
     public static boolean endsBeforeEndOf(@NonNull ParseTree<? extends Token> a, @NonNull ParseTree<? extends Token> b) {
         Interval sourceIntervalA = a.getSourceInterval();
         Interval sourceIntervalB = b.getSourceInterval();
-        if (sourceIntervalA == null || sourceIntervalB == null) {
-            throw new NotImplementedException();
-        }
-
         return sourceIntervalA.b < sourceIntervalB.b;
     }
 

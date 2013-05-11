@@ -69,9 +69,7 @@ public class GrammarParserDataDefinitions {
                 return null;
             }
 
-            if (parserData != null) {
-                return parserData.getData();
-            }
+            return parserData.getData();
         } catch (InterruptedException | ExecutionException ex) {
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.log(Level.FINE, String.format("An exception occurred while parsing '%s' data.", definition.getName()), ex);

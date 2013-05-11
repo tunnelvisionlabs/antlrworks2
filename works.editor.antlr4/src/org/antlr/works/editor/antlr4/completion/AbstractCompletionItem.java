@@ -80,15 +80,7 @@ public abstract class AbstractCompletionItem implements CompletionItem {
         }
 
         VersionedDocument textBuffer = VersionedDocumentUtilities.getVersionedDocument(document);
-        if (textBuffer == null) {
-            return;
-        }
-
         DocumentSnapshot snapshot = textBuffer.getCurrentSnapshot();
-        if (snapshot == null) {
-            return;
-        }
-
         SnapshotPositionRegion replacementSpan = applicableTo.getRegion(snapshot);
         substituteText(component, replacementSpan.getStart().getOffset(), replacementSpan.getLength(), getInsertPrefix().toString());
         BaseCompletionController.addRecentCompletion(getInsertPrefix().toString());

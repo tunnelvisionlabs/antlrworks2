@@ -925,78 +925,77 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
                 return;
             }
         }
-        if (localCompletionResult != null) {
-            CharSequence commonText = null;
-            int anchorOffset = -1;
+
+        CharSequence commonText = null;
+        int anchorOffset = -1;
 outer:      for (CompletionResultSetImpl resultSet : localCompletionResult.getResultSets()) {
-                List<? extends CompletionItem> resultItems = resultSet.getItems();
-                if (resultItems.size() > 0) {
-                    if (anchorOffset >= -1) {
-                        if (anchorOffset > -1 && anchorOffset != resultSet.getAnchorOffset())
-                            anchorOffset = -2;
-                        else
-                            anchorOffset = resultSet.getAnchorOffset();
-                    }
-                    for (CompletionItem item : resultItems) {
-                        CharSequence text = item.getInsertPrefix();
-                        if (text == null) {
-                            commonText = null;
-                            break outer;
-                        }
-                        if (commonText == null) {
-                            commonText = text;
-                        } else {
-                            // Get the largest common part
-                            if (text.length() < commonText.length())
-                                commonText = commonText.subSequence(0, text.length());
-                            for (int commonInd = 0; commonInd < commonText.length(); commonInd++) {
-                                if (text.charAt(commonInd) != commonText.charAt(commonInd)) {
-                                    if (commonInd == 0) {
-                                        commonText = null;
-                                        break outer; // no common text
-                                    }
-                                    commonText = commonText.subSequence(0, commonInd);
-                                    break;
-                                }
-                            }
-                        }
-                    }
+            List<? extends CompletionItem> resultItems = resultSet.getItems();
+            if (resultItems.size() > 0) {
+                if (anchorOffset >= -1) {
+                    if (anchorOffset > -1 && anchorOffset != resultSet.getAnchorOffset())
+                        anchorOffset = -2;
+                    else
+                        anchorOffset = resultSet.getAnchorOffset();
                 }
-            }
-            if (commonText != null && anchorOffset >= 0) {
-                int caretOffset = c.getSelectionStart();
-                if (caretOffset - anchorOffset < commonText.length()) {
-
-                    final int finalAnchorOffset = anchorOffset;
-                    final int finalCaretOffset = caretOffset;
-                    final CharSequence finalCommonText = commonText;
-                    final Document doc = getActiveDocument();
-
-                    Runnable operation = new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                doc.remove(finalAnchorOffset, finalCaretOffset - finalAnchorOffset);
-                                doc.insertString(finalAnchorOffset, finalCommonText.toString(), null);
-                            } catch (BadLocationException e) {
-                            }
-                        }
-                    };
-
-                    // Insert the missing end part of the prefix
-                    if (doc instanceof BaseDocument) {
-                        ((BaseDocument)doc).runAtomic(operation);
+                for (CompletionItem item : resultItems) {
+                    CharSequence text = item.getInsertPrefix();
+                    if (text == null) {
+                        commonText = null;
+                        break outer;
+                    }
+                    if (commonText == null) {
+                        commonText = text;
                     } else {
-                        operation.run();
+                        // Get the largest common part
+                        if (text.length() < commonText.length())
+                            commonText = commonText.subSequence(0, text.length());
+                        for (int commonInd = 0; commonInd < commonText.length(); commonInd++) {
+                            if (text.charAt(commonInd) != commonText.charAt(commonInd)) {
+                                if (commonInd == 0) {
+                                    commonText = null;
+                                    break outer; // no common text
+                                }
+                                commonText = commonText.subSequence(0, commonInd);
+                                break;
+                            }
+                        }
                     }
-
-                    return;
                 }
             }
-            SelectedCompletionItem item = layout.getSelectedCompletionItem();
-            if (item != null)
-                localCompletionResult.getController().defaultAction(item.getItem(), item.isSelected());
         }
+        if (commonText != null && anchorOffset >= 0) {
+            int caretOffset = c.getSelectionStart();
+            if (caretOffset - anchorOffset < commonText.length()) {
+
+                final int finalAnchorOffset = anchorOffset;
+                final int finalCaretOffset = caretOffset;
+                final CharSequence finalCommonText = commonText;
+                final Document doc = getActiveDocument();
+
+                Runnable operation = new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            doc.remove(finalAnchorOffset, finalCaretOffset - finalAnchorOffset);
+                            doc.insertString(finalAnchorOffset, finalCommonText.toString(), null);
+                        } catch (BadLocationException e) {
+                        }
+                    }
+                };
+
+                // Insert the missing end part of the prefix
+                if (doc instanceof BaseDocument) {
+                    ((BaseDocument)doc).runAtomic(operation);
+                } else {
+                    operation.run();
+                }
+
+                return;
+            }
+        }
+        SelectedCompletionItem item = layout.getSelectedCompletionItem();
+        if (item != null)
+            localCompletionResult.getController().defaultAction(item.getItem(), item.isSelected());
     }
     
     /**
@@ -1150,10 +1149,9 @@ outer:      for (CompletionResultSetImpl resultSet : localCompletionResult.getRe
 
                 CompletionController.Selection selection = result.getController().getSelection(sortedResultItems, sortedDeclarationItems);
                 // the CompletionController should be returning a valid selection
-                assert selection != null
-                    && (sortedResultItems.isEmpty()
+                assert (sortedResultItems.isEmpty()
                         || selection.getIndex() >= 0 && selection.getIndex() < sortedResultItems.size());
-                if (selection == null || selection.getIndex() < 0 || selection.getIndex() > sortedResultItems.size()) {
+                if (selection.getIndex() < 0 || selection.getIndex() > sortedResultItems.size()) {
                     selection = CompletionController.Selection.DEFAULT;
                 }
 

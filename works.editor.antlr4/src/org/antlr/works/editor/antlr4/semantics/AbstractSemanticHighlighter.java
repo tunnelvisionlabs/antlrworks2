@@ -208,7 +208,7 @@ public abstract class AbstractSemanticHighlighter<SemanticData> extends Abstract
             }
 
             final DocumentSnapshot snapshot = parserData.getSnapshot();
-            if (snapshot == null || !versionedDocument.equals(snapshot.getVersionedDocument())) {
+            if (!versionedDocument.equals(snapshot.getVersionedDocument())) {
                 return;
             }
 

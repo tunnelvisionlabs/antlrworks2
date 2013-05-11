@@ -58,7 +58,7 @@ public final class SnapshotPosition implements Comparable<SnapshotPosition> {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 89 * hash + (this.snapshot != null ? this.snapshot.hashCode() : 0);
+        hash = 89 * hash + this.snapshot.hashCode();
         hash = 89 * hash + this.offset;
         return hash;
     }

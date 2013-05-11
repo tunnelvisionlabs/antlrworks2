@@ -234,8 +234,8 @@ public final class SnapshotPositionRegion {
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 23 * hash + (this.snapshot != null ? this.snapshot.hashCode() : 0);
-        hash = 23 * hash + (this.region != null ? this.region.hashCode() : 0);
+        hash = 23 * hash + this.snapshot.hashCode();
+        hash = 23 * hash + this.region.hashCode();
         return hash;
     }
 

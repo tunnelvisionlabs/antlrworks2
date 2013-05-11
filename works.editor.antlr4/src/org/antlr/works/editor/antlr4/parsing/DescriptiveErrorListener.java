@@ -23,7 +23,7 @@ public class DescriptiveErrorListener extends BaseErrorListener<Token> {
     @Override
     public <T extends Token> void syntaxError(Recognizer<T, ?> recognizer, T offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e) {
         String sourceName = recognizer.getInputStream().getSourceName();
-        sourceName = sourceName != null && !sourceName.isEmpty() ? sourceName+": " : "";
+        sourceName = !sourceName.isEmpty() ? sourceName+": " : "";
         System.err.println(sourceName+"line "+line+":"+charPositionInLine+" "+msg);
     }
 

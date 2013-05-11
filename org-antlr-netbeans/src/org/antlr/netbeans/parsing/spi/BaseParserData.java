@@ -75,9 +75,9 @@ public class BaseParserData<T> implements ParserData<T> {
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 67 * hash + (this.context != null ? this.context.hashCode() : 0);
-        hash = 67 * hash + (this.definition != null ? this.definition.hashCode() : 0);
-        hash = 67 * hash + (this.snapshot != null ? this.snapshot.hashCode() : 0);
+        hash = 67 * hash + this.context.hashCode();
+        hash = 67 * hash + this.definition.hashCode();
+        hash = 67 * hash + this.snapshot.hashCode();
         hash = 67 * hash + (this.data != null ? this.data.hashCode() : 0);
         return hash;
     }
