@@ -443,10 +443,7 @@ CaretListener, KeyListener, FocusListener, ListSelectionListener, PropertyChange
             // Check whether there is an active result being computed but not yet displayed
             // Caret update should be notified AFTER document modifications
             // thank to document listener priorities
-            Result localCompletionResult;
-            synchronized (this) {
-                localCompletionResult = completionResult;
-            }
+            Result localCompletionResult = completionResult;
             if (autoModEndOffset >= 0 && e.getDot() != autoModEndOffset
                     && (completionAutoPopupTimer.isRunning() || localCompletionResult != null)
                     && (!layout.isCompletionVisible() || pleaseWaitDisplayed)
