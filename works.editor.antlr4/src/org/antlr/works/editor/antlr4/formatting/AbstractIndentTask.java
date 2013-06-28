@@ -140,22 +140,22 @@ public abstract class AbstractIndentTask implements IndentTask {
 
         LOGGER.log(Level.FINE, "Reindent from anchor region: {0}.", region);
 
-        TaggerTokenSource<Token> taggerTokenSource = new TaggerTokenSource<>(tagger, new SnapshotPositionRegion(getSnapshot(), region));
-        TokenSource<Token> tokenSource = new CodeCompletionTokenSource(endPosition.getOffset(), taggerTokenSource);
+        TaggerTokenSource taggerTokenSource = new TaggerTokenSource(tagger, new SnapshotPositionRegion(getSnapshot(), region));
+        TokenSource tokenSource = new CodeCompletionTokenSource(endPosition.getOffset(), taggerTokenSource);
         CommonTokenStream tokens = new CommonTokenStream(tokenSource);
 
-        Map<RuleContext<Token>, CaretReachedException> parseTrees = getParseTrees(tokens, anchors);
+        Map<RuleContext, CaretReachedException> parseTrees = getParseTrees(tokens, anchors);
         if (parseTrees == null) {
             return false;
         }
 
-        NavigableMap<Integer, List<Map.Entry<RuleContext<Token>, CaretReachedException>>> indentLevels = new TreeMap<>();
-        for (Map.Entry<RuleContext<Token>, CaretReachedException> parseTree : parseTrees.entrySet()) {
+        NavigableMap<Integer, List<Map.Entry<RuleContext, CaretReachedException>>> indentLevels = new TreeMap<>();
+        for (Map.Entry<RuleContext, CaretReachedException> parseTree : parseTrees.entrySet()) {
             if (parseTree.getValue() == null) {
                 continue;
             }
 
-            ParseTree<Token> firstNodeOnLine = findFirstNodeAfterOffset(parseTree.getKey(), endPositionOnLine.getContainingLine().getStart().getOffset());
+            ParseTree firstNodeOnLine = findFirstNodeAfterOffset(parseTree.getKey(), endPositionOnLine.getContainingLine().getStart().getOffset());
             if (firstNodeOnLine == null) {
                 firstNodeOnLine = parseTree.getValue().getFinalContext();
             }
@@ -169,7 +169,7 @@ public abstract class AbstractIndentTask implements IndentTask {
                 continue;
             }
 
-            List<Map.Entry<RuleContext<Token>, CaretReachedException>> indentList =
+            List<Map.Entry<RuleContext, CaretReachedException>> indentList =
                 indentLevels.get(indentationLevel);
             if (indentList == null) {
                 indentList = new ArrayList<>();
@@ -233,8 +233,8 @@ public abstract class AbstractIndentTask implements IndentTask {
         return new ReferenceAnchors(previous, enclosing);
     }
 
-    protected <Symbol extends Token> TerminalNode<Symbol> findFirstNodeAfterOffset(ParseTree<Symbol> tree, int offset) {
-        TerminalNode<Symbol> lastNode = ParseTrees.getStopNode(tree);
+    protected TerminalNode findFirstNodeAfterOffset(ParseTree tree, int offset) {
+        TerminalNode lastNode = ParseTrees.getStopNode(tree);
         if (lastNode == null) {
             return null;
         }
@@ -246,11 +246,11 @@ public abstract class AbstractIndentTask implements IndentTask {
         }
 
         if (tree instanceof TerminalNode) {
-            return (TerminalNode<Symbol>)tree;
+            return (TerminalNode)tree;
         }
 
         for (int i = 0; i < tree.getChildCount(); i++) {
-            TerminalNode<Symbol> node = findFirstNodeAfterOffset(tree.getChild(i), offset);
+            TerminalNode node = findFirstNodeAfterOffset(tree.getChild(i), offset);
             if (node != null) {
                 return node;
             }
@@ -259,9 +259,9 @@ public abstract class AbstractIndentTask implements IndentTask {
         return null;
     }
 
-    protected boolean isMultilineElement(ParseTree<? extends Token> tree) throws BadLocationException {
-        TerminalNode<? extends Token> startNode = ParseTrees.getStartNode(tree);
-        TerminalNode<? extends Token> stopNode = ParseTrees.getStopNode(tree);
+    protected boolean isMultilineElement(ParseTree tree) throws BadLocationException {
+        TerminalNode startNode = ParseTrees.getStartNode(tree);
+        TerminalNode stopNode = ParseTrees.getStopNode(tree);
         if (startNode == null || stopNode == null) {
             // TODO: this can't handle epsilon trees (no TerminalNode descendants)
             return false;
@@ -284,11 +284,11 @@ public abstract class AbstractIndentTask implements IndentTask {
 
     protected abstract CodeStyle getCodeStyle();
 
-    protected abstract Map<RuleContext<Token>, CaretReachedException> getParseTrees(CommonTokenStream tokens, ReferenceAnchors anchors);
+    protected abstract Map<RuleContext, CaretReachedException> getParseTrees(CommonTokenStream tokens, ReferenceAnchors anchors);
 
     protected abstract List<? extends Anchor> getDynamicAnchorPoints();
 
-    protected abstract Set<AlignmentRequirement> getAlignmentRequirement(Map.Entry<RuleContext<Token>, CaretReachedException> parseTree, @NonNull ParseTree<? extends Token> targetElement, ParseTree<? extends Token> ancestor);
+    protected abstract Set<AlignmentRequirement> getAlignmentRequirement(Map.Entry<RuleContext, CaretReachedException> parseTree, @NonNull ParseTree targetElement, ParseTree ancestor);
 
     /**
      * Gets the target element and offset which controls the indentation of
@@ -322,10 +322,10 @@ public abstract class AbstractIndentTask implements IndentTask {
      * in virtual spaces. Return {@code null} to continue searching ancestors.
      */
     @CheckForNull
-    protected abstract Tuple2<? extends ParseTree<? extends Token>, Integer> getAlignmentElement(Map.Entry<RuleContext<Token>, CaretReachedException> parseTree, @NonNull ParseTree<? extends Token> targetElement, @NonNull ParseTree<? extends Token> container, @NullAllowed List<? extends ParseTree<? extends Token>> priorSiblings);
+    protected abstract Tuple2<? extends ParseTree, Integer> getAlignmentElement(Map.Entry<RuleContext, CaretReachedException> parseTree, @NonNull ParseTree targetElement, @NonNull ParseTree container, @NullAllowed List<? extends ParseTree> priorSiblings);
 
-    protected int getIndent(final Map.Entry<RuleContext<Token>, CaretReachedException> parseTree, final ParseTree<? extends Token> firstNodeOnLine, int lineStartOffset) throws BadLocationException {
-        for (ParseTree<? extends Token> ancestor = firstNodeOnLine; ancestor != null; ancestor = ancestor.getParent()) {
+    protected int getIndent(final Map.Entry<RuleContext, CaretReachedException> parseTree, final ParseTree firstNodeOnLine, int lineStartOffset) throws BadLocationException {
+        for (ParseTree ancestor = firstNodeOnLine; ancestor != null; ancestor = ancestor.getParent()) {
             Set<AlignmentRequirement> requirements = getAlignmentRequirement(parseTree, firstNodeOnLine, ancestor);
             if (requirements.contains(AlignmentRequirement.USE_ANCESTOR)) {
                 continue;
@@ -333,12 +333,12 @@ public abstract class AbstractIndentTask implements IndentTask {
                 return -1;
             }
 
-            List<ParseTree<? extends Token>> siblings = null;
+            List<ParseTree> siblings = null;
             if (requirements.contains(AlignmentRequirement.PRIOR_SIBLING)) {
                 int childCount = ancestor.getChildCount();
                 siblings = new ArrayList<>(childCount);
                 for (int i = 0; i < childCount; i++) {
-                    ParseTree<? extends Token> child = ancestor.getChild(i);
+                    ParseTree child = ancestor.getChild(i);
                     siblings.add(child);
                     if (ParseTrees.isAncestorOf(child, firstNodeOnLine)) {
                         break;
@@ -346,7 +346,7 @@ public abstract class AbstractIndentTask implements IndentTask {
                 }
             }
 
-            Tuple2<? extends ParseTree<? extends Token>, Integer> alignmentElement = getAlignmentElement(parseTree, firstNodeOnLine, ancestor, siblings);
+            Tuple2<? extends ParseTree, Integer> alignmentElement = getAlignmentElement(parseTree, firstNodeOnLine, ancestor, siblings);
             if (alignmentElement == null) {
                 continue;
             }

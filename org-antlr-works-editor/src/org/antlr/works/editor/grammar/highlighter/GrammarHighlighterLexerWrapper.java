@@ -19,7 +19,7 @@ import org.antlr.works.editor.antlr4.highlighting.TokenSourceWithStateV4;
  *
  * @author Sam Harwell
  */
-public class GrammarHighlighterLexerWrapper implements TokenSourceWithStateV4<Token, GrammarHighlighterLexerState> {
+public class GrammarHighlighterLexerWrapper implements TokenSourceWithStateV4<GrammarHighlighterLexerState> {
     private static final Map<GrammarHighlighterLexerState, GrammarHighlighterLexerState> sharedStates =
         new HashMap<>();
 
@@ -111,12 +111,12 @@ public class GrammarHighlighterLexerWrapper implements TokenSourceWithStateV4<To
     }
 
     @Override
-    public TokenFactory<? extends Token> getTokenFactory() {
+    public TokenFactory getTokenFactory() {
         return grammarLexer.getTokenFactory();
     }
 
     @Override
-    public void setTokenFactory(TokenFactory<?> tokenFactory) {
+    public void setTokenFactory(TokenFactory tokenFactory) {
         grammarLexer.setTokenFactory(tokenFactory);
     }
 }

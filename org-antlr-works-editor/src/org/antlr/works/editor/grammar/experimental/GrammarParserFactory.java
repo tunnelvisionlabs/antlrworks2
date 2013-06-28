@@ -9,7 +9,6 @@
 package org.antlr.works.editor.grammar.experimental;
 
 import org.antlr.v4.runtime.DefaultErrorStrategy;
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.atn.PredictionMode;
 import org.antlr.works.editor.antlr4.parsing.DescriptiveErrorListener;
@@ -23,19 +22,19 @@ public class GrammarParserFactory {
     public static final GrammarParserFactory DEFAULT = new GrammarParserFactory();
 
     @NonNull
-    protected GrammarParser createParser(@NonNull TokenStream<? extends Token> input) {
+    protected GrammarParser createParser(@NonNull TokenStream input) {
         GrammarParser parser = new GrammarParser(input);
         return parser;
     }
 
     @NonNull
-    public GrammarParser getParser(@NonNull TokenStream<? extends Token> input) {
+    public GrammarParser getParser(@NonNull TokenStream input) {
         GrammarParser result = createParser(input);
         result.getInterpreter().setPredictionMode(PredictionMode.LL);
         result.removeErrorListeners();
         result.addErrorListener(DescriptiveErrorListener.INSTANCE);
         result.setBuildParseTree(false);
-        result.setErrorHandler(new DefaultErrorStrategy<>());
+        result.setErrorHandler(new DefaultErrorStrategy());
         return result;
     }
 }

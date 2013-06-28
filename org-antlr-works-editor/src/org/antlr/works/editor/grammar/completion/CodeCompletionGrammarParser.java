@@ -8,7 +8,6 @@
  */
 package org.antlr.works.editor.grammar.completion;
 
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenStream;
 import org.antlr.works.editor.antlr4.completion.CodeCompletionParser;
 import org.antlr.works.editor.grammar.experimental.GrammarParser;
@@ -19,7 +18,7 @@ import org.antlr.works.editor.grammar.experimental.GrammarParser;
  */
 public class CodeCompletionGrammarParser extends GrammarParser implements CodeCompletionParser {
 
-    public CodeCompletionGrammarParser(TokenStream<? extends Token> input) {
+    public CodeCompletionGrammarParser(TokenStream input) {
         super(input);
         _interp = new CompletionParserATNSimulator(this, _ATN);
     }

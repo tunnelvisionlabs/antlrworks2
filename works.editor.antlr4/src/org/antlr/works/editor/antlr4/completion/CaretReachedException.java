@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.RuleContext;
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.atn.ATNConfig;
 import org.antlr.v4.runtime.atn.Transition;
 
@@ -21,18 +20,18 @@ import org.antlr.v4.runtime.atn.Transition;
  * @author Sam Harwell
  */
 public class CaretReachedException extends RuntimeException {
-    private final RuleContext<Token> finalContext;
+    private final RuleContext finalContext;
     private final CaretToken caretToken;
     private final Map<ATNConfig, List<Transition>> transitions;
 
-    public CaretReachedException(RuleContext<Token> finalContext, CaretToken caretToken, Map<ATNConfig, List<Transition>> transitions, RecognitionException cause) {
+    public CaretReachedException(RuleContext finalContext, CaretToken caretToken, Map<ATNConfig, List<Transition>> transitions, RecognitionException cause) {
         super(cause);
         this.finalContext = finalContext;
         this.caretToken = caretToken;
         this.transitions = transitions;
     }
 
-    public RuleContext<Token> getFinalContext() {
+    public RuleContext getFinalContext() {
         return finalContext;
     }
 

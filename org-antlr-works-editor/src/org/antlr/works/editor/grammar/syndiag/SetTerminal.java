@@ -21,7 +21,6 @@ import org.antlr.netbeans.editor.text.SnapshotPositionRegion;
 import org.antlr.v4.runtime.Dependents;
 import org.antlr.v4.runtime.RuleDependencies;
 import org.antlr.v4.runtime.RuleDependency;
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.misc.IntervalSet;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -41,7 +40,7 @@ public class SetTerminal extends Terminal {
         this(getAttributedLabel(elements, inverted), sourceSpan, inverted);
     }
 
-    public SetTerminal(TerminalNode<Token> element, SnapshotPositionRegion sourceSpan) {
+    public SetTerminal(TerminalNode element, SnapshotPositionRegion sourceSpan) {
         this(getAttributedLabel(Collections.singletonList(element), false), sourceSpan, false);
     }
 
@@ -56,7 +55,7 @@ public class SetTerminal extends Terminal {
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_range, version=0, dependents=Dependents.SELF),
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_setElement, version=2, dependents=Dependents.SELF),
     })
-    private static AttributedString getAttributedLabel(List<? extends ParseTree<Token>> elements, boolean inverted) {
+    private static AttributedString getAttributedLabel(List<? extends ParseTree> elements, boolean inverted) {
         IntervalSet foregroundSpans = new IntervalSet();
         IntervalSet literalSpans = new IntervalSet();
         IntervalSet lexerRuleSpans = new IntervalSet();
@@ -74,7 +73,7 @@ public class SetTerminal extends Terminal {
                 foregroundSpans.add(builder.length() - 1);
             }
 
-            ParseTree<Token> element = elements.get(i);
+            ParseTree element = elements.get(i);
             if (element instanceof GrammarParser.SetElementContext) {
                 GrammarParser.SetElementContext context = (GrammarParser.SetElementContext)element;
                 if (context.TOKEN_REF() != null) {
@@ -97,7 +96,7 @@ public class SetTerminal extends Terminal {
                     }
                 } else if (context.range() != null) {
                     GrammarParser.RangeContext rangeContext = context.range();
-                    List<? extends TerminalNode<Token>> strings = rangeContext.STRING_LITERAL();
+                    List<? extends TerminalNode> strings = rangeContext.STRING_LITERAL();
                     if (strings.size() == 2) {
                         builder.append(strings.get(0).getText());
                         literalSpans.add(builder.length() - strings.get(0).getText().length(), builder.length() - 1);
@@ -113,8 +112,8 @@ public class SetTerminal extends Terminal {
                 } else {
                     builder.append("???");
                 }
-            } else if (element instanceof TerminalNode<?>) {
-                TerminalNode<Token> node = (TerminalNode<Token>)element;
+            } else if (element instanceof TerminalNode) {
+                TerminalNode node = (TerminalNode)element;
                 String text = node.getText();
                 if (text.length() >= 2 && text.charAt(0) == '[' && text.charAt(text.length() - 1) == ']') {
                     builder.append(text);

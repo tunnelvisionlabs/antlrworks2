@@ -143,7 +143,7 @@ public class GrammarHighlighter extends ANTLRHighlighterBaseV4<GrammarHighlighte
     }
 
     @Override
-    protected TokenSourceWithStateV4<Token, GrammarHighlighterLexerState> createLexer(CharStream input, GrammarHighlighterLexerState startState) {
+    protected TokenSourceWithStateV4<GrammarHighlighterLexerState> createLexer(CharStream input, GrammarHighlighterLexerState startState) {
         if (lexerWrapper == null) {
             lexerWrapper = new GrammarHighlighterLexerWrapper(input, startState);
         } else {

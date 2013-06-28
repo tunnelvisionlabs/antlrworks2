@@ -79,7 +79,7 @@ public final class ReferenceAnchorsParserTask implements ParserTask {
             if (parseTreeResult == null || anchorPointsResult == null || fileModelResult == null) {
                 Future<ParserData<Tagger<TokenTag<Token>>>> futureTokensData = taskManager.getData(snapshot, TemplateParserDataDefinitions.LEXER_TOKENS);
                 Tagger<TokenTag<Token>> tagger = futureTokensData.get().getData();
-                TaggerTokenSource<Token> tokenSource = new TaggerTokenSource<>(tagger, snapshot);
+                TaggerTokenSource tokenSource = new TaggerTokenSource(tagger, snapshot);
         //        DocumentSnapshotCharStream input = new DocumentSnapshotCharStream(snapshot);
         //        input.setSourceName((String)document.getDocument().getProperty(Document.TitleProperty));
         //        GrammarLexer lexer = new GrammarLexer(input);
@@ -90,7 +90,7 @@ public final class ReferenceAnchorsParserTask implements ParserTask {
                     parser.getInterpreter().setPredictionMode(PredictionMode.SLL);
                     parser.removeErrorListeners();
                     parser.setBuildParseTree(true);
-                    parser.setErrorHandler(new BailErrorStrategy<>());
+                    parser.setErrorHandler(new BailErrorStrategy());
                     parseResult = parser.groupFile();
                 } catch (ParseCancellationException ex) {
                     if (ex.getCause() instanceof RecognitionException) {
@@ -99,7 +99,7 @@ public final class ReferenceAnchorsParserTask implements ParserTask {
                         parser.getInterpreter().setPredictionMode(PredictionMode.LL);
                         parser.addErrorListener(DescriptiveErrorListener.INSTANCE);
                         parser.setInputStream(tokenStream);
-                        parser.setErrorHandler(new DefaultErrorStrategy<>());
+                        parser.setErrorHandler(new DefaultErrorStrategy());
                         parseResult = parser.groupFile();
                     } else {
                         throw ex;
@@ -130,7 +130,7 @@ public final class ReferenceAnchorsParserTask implements ParserTask {
     }
 
     private static class InterruptableTokenStream extends CommonTokenStream {
-        public InterruptableTokenStream(TokenSource<Token> tokenSource) {
+        public InterruptableTokenStream(TokenSource tokenSource) {
             super(tokenSource);
         }
 

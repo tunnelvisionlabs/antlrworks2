@@ -92,7 +92,7 @@ public class TraceToken implements Token {
     }
 
     @Override
-    public TokenSource<?> getTokenSource() {
+    public TokenSource getTokenSource() {
         throw new UnsupportedOperationException("No token source is available.");
     }
 

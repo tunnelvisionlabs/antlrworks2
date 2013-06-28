@@ -40,10 +40,10 @@ public abstract class AbstractForestParser<TParser extends CodeCompletionParser>
     protected static final Logger LOGGER = Logger.getLogger(AbstractForestParser.class.getName());
 
     @Override
-    public Map<RuleContext<Token>, CaretReachedException> getParseTrees(TParser parser) {
+    public Map<RuleContext, CaretReachedException> getParseTrees(TParser parser) {
         List<MultipleDecisionData> potentialAlternatives = new ArrayList<>();
         IntegerList currentPath = new IntegerList();
-        Map<RuleContext<Token>, CaretReachedException> results = new IdentityHashMap<>();
+        Map<RuleContext, CaretReachedException> results = new IdentityHashMap<>();
         // make sure the token stream is initialized before getting the index
         parser.getInputStream().LA(1);
         int initialToken = parser.getInputStream().index();
@@ -58,8 +58,8 @@ public abstract class AbstractForestParser<TParser extends CodeCompletionParser>
         LOGGER.log(Level.FINE, "Forest parser constructed {0} parse trees.", results.size());
 
         if (LOGGER.isLoggable(Level.FINEST)) {
-            for (Map.Entry<RuleContext<Token>, CaretReachedException> entry : results.entrySet()) {
-                LOGGER.log(Level.FINEST, entry.getKey().toStringTree(parser instanceof Parser ? (Parser<?>)parser : null));
+            for (Map.Entry<RuleContext, CaretReachedException> entry : results.entrySet()) {
+                LOGGER.log(Level.FINEST, entry.getKey().toStringTree(parser instanceof Parser ? (Parser)parser : null));
             }
         }
 
@@ -80,8 +80,8 @@ public abstract class AbstractForestParser<TParser extends CodeCompletionParser>
         return false;
     }
 
-    protected void tryParse(TParser parser, List<MultipleDecisionData> potentialAlternatives, IntegerList currentPath, Map<RuleContext<Token>, CaretReachedException> results) {
-        RuleContext<Token> parseTree;
+    protected void tryParse(TParser parser, List<MultipleDecisionData> potentialAlternatives, IntegerList currentPath, Map<RuleContext, CaretReachedException> results) {
+        RuleContext parseTree;
         try {
             parser.getInterpreter().setFixedDecisions(potentialAlternatives, currentPath);
             parseTree = parseImpl(parser);
@@ -165,6 +165,6 @@ public abstract class AbstractForestParser<TParser extends CodeCompletionParser>
         }
     }
 
-    protected abstract RuleContext<Token> parseImpl(TParser parser);
+    protected abstract RuleContext parseImpl(TParser parser);
 
 }

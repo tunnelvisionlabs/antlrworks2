@@ -10,7 +10,6 @@ package org.antlr.works.editor.antlr4.completion;
 
 import java.util.Map;
 import org.antlr.v4.runtime.RuleContext;
-import org.antlr.v4.runtime.Token;
 
 /**
  *
@@ -19,6 +18,6 @@ import org.antlr.v4.runtime.Token;
  */
 public interface ForestParser<TParser> {
 
-    public Map<RuleContext<Token>, CaretReachedException> getParseTrees(TParser parser);
+    public Map<RuleContext, CaretReachedException> getParseTrees(TParser parser);
 
 }

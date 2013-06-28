@@ -192,7 +192,7 @@ public final class IncrementRuleVersionAction extends AbstractAction implements 
             }
 
             Map<ParserRuleSpecContext, String> rules = getRules(grammarSpecContext);
-            Map<ParserRuleSpecContext, Tuple3<RuleActionContext, TerminalNode<Token>, Integer>> versionedRules =
+            Map<ParserRuleSpecContext, Tuple3<RuleActionContext, TerminalNode, Integer>> versionedRules =
                 getVersionedRules(rules);
             int maximumVersion = getMaximumVersionNumber(versionedRules);
 
@@ -203,7 +203,7 @@ public final class IncrementRuleVersionAction extends AbstractAction implements 
 //                return;
             }
 
-            Tuple3<RuleActionContext, TerminalNode<Token>, Integer> currentVersion = versionedRules.get(currentRule);
+            Tuple3<RuleActionContext, TerminalNode, Integer> currentVersion = versionedRules.get(currentRule);
             if (currentVersion == null) {
                 addVersionNumber(currentRule, maximumVersion + 1);
             } else if (currentVersion.getItem2() == null) {
@@ -216,7 +216,7 @@ public final class IncrementRuleVersionAction extends AbstractAction implements 
         }
     }
 
-    private void updateVersionNumber(TerminalNode<Token> currentVersionToken, final int newVersion) {
+    private void updateVersionNumber(TerminalNode currentVersionToken, final int newVersion) {
         Interval sourceInterval = ParseTrees.getSourceInterval(currentVersionToken);
         OffsetRegion region = OffsetRegion.fromBounds(sourceInterval.a, sourceInterval.b + 1);
         TrackingPositionRegion trackingRegion = _snapshot.createTrackingRegion(region, TrackingPositionRegion.Bias.Forward);
@@ -270,7 +270,7 @@ public final class IncrementRuleVersionAction extends AbstractAction implements 
     }
 
     private void addVersionNumber(@NonNull ParserRuleSpecContext ruleContext, int version) {
-        TerminalNode<Token> colon = ruleContext.COLON();
+        TerminalNode colon = ruleContext.COLON();
         if (colon == null) {
             throw new UnsupportedOperationException("Incomplete rule");
         }
@@ -329,8 +329,8 @@ public final class IncrementRuleVersionAction extends AbstractAction implements 
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_parserRuleSpec, version=0, dependents=Dependents.SELF),
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleAction, version=0, dependents=Dependents.SELF),
     })
-    private Map<ParserRuleSpecContext, Tuple3<RuleActionContext, TerminalNode<Token>, Integer>> getVersionedRules(Map<ParserRuleSpecContext, String> rules) {
-        Map<ParserRuleSpecContext, Tuple3<RuleActionContext, TerminalNode<Token>, Integer>> result =
+    private Map<ParserRuleSpecContext, Tuple3<RuleActionContext, TerminalNode, Integer>> getVersionedRules(Map<ParserRuleSpecContext, String> rules) {
+        Map<ParserRuleSpecContext, Tuple3<RuleActionContext, TerminalNode, Integer>> result =
             new HashMap<>();
         for (Map.Entry<ParserRuleSpecContext, String> entry : rules.entrySet()) {
             RuleActionContext versionAction = VersionActionVisitor.INSTANCE.visit(entry.getKey());
@@ -338,15 +338,15 @@ public final class IncrementRuleVersionAction extends AbstractAction implements 
                 continue;
             }
 
-            TerminalNode<Token> word = null;
+            TerminalNode word = null;
             Integer version = null;
 
-            List<TerminalNode<Token>> words = findActionWords(versionAction.actionBlock());
+            List<TerminalNode> words = findActionWords(versionAction.actionBlock());
             if (words.size() != 1) {
                 LOGGER.log(Level.WARNING, "{0}", String.format("The '@version{}' block for rule '%s' should only contain a single non-negative integer.", entry.getValue()));
             }
 
-            for (TerminalNode<Token> node : words) {
+            for (TerminalNode node : words) {
                 version = parseVersion(node);
                 if (version != null) {
                     word = node;
@@ -364,7 +364,7 @@ public final class IncrementRuleVersionAction extends AbstractAction implements 
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_actionBlock, version=0, dependents={Dependents.PARENTS, Dependents.DESCENDANTS}),
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleAction, version=0, dependents=Dependents.SELF),
     })
-    private List<TerminalNode<Token>> findActionWords(ActionBlockContext ctx) {
+    private List<TerminalNode> findActionWords(ActionBlockContext ctx) {
         if (!(ctx.getParent() instanceof RuleActionContext)) {
             LOGGER.log(Level.WARNING, "Only expected to analyze 'actionBlock' nodes in a 'ruleAction' context.");
             return Collections.emptyList();
@@ -377,16 +377,16 @@ public final class IncrementRuleVersionAction extends AbstractAction implements 
         }
 
         boolean reportedProblem = false;
-        List<TerminalNode<Token>> result = new ArrayList<>();
+        List<TerminalNode> result = new ArrayList<>();
         for (int i = 0; i < ctx.getChildCount(); i++) {
             String problem = null;
-            ParseTree<Token> child = ctx.getChild(i);
+            ParseTree child = ctx.getChild(i);
             if (!(child instanceof TerminalNode)) {
                 problem = "The '@version{}' block for a rule should only contain a single non-negative integer.";
             }
 
             if (problem == null) {
-                int symbolType = ((TerminalNode<Token>)child).getSymbol().getType();
+                int symbolType = ((TerminalNode)child).getSymbol().getType();
 
                 if (i == 0) {
                     if (symbolType != GrammarParser.BEGIN_ACTION) {
@@ -414,7 +414,7 @@ public final class IncrementRuleVersionAction extends AbstractAction implements 
 
                     case GrammarParser.ACTION_WORD:
                         // this is the token we're interested in
-                        result.add((TerminalNode<Token>)child);
+                        result.add((TerminalNode)child);
                         continue;
 
                     default:
@@ -438,7 +438,7 @@ public final class IncrementRuleVersionAction extends AbstractAction implements 
     }
 
     @CheckForNull
-    private static Integer parseVersion(@NonNull TerminalNode<Token> node) {
+    private static Integer parseVersion(@NonNull TerminalNode node) {
         try {
             int result = Integer.parseInt(node.getText());
             if (result >= 0) {
@@ -455,9 +455,9 @@ public final class IncrementRuleVersionAction extends AbstractAction implements 
     @RuleDependencies({
         // doesn't use any of the rule context inputs
     })
-    private static int getMaximumVersionNumber(@NonNull Map<ParserRuleSpecContext, Tuple3<RuleActionContext, TerminalNode<Token>, Integer>> versionedRules) {
+    private static int getMaximumVersionNumber(@NonNull Map<ParserRuleSpecContext, Tuple3<RuleActionContext, TerminalNode, Integer>> versionedRules) {
         int maxVersion = 0;
-        for (Map.Entry<ParserRuleSpecContext, Tuple3<RuleActionContext, TerminalNode<Token>, Integer>> entry : versionedRules.entrySet()) {
+        for (Map.Entry<ParserRuleSpecContext, Tuple3<RuleActionContext, TerminalNode, Integer>> entry : versionedRules.entrySet()) {
             Integer ruleVersion = entry.getValue().getItem3();
             if (ruleVersion != null) {
                 maxVersion = Math.max(maxVersion, ruleVersion);
@@ -514,7 +514,7 @@ public final class IncrementRuleVersionAction extends AbstractAction implements 
         })
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_parserRuleSpec, version=0, dependents=Dependents.SELF)
         public Map<ParserRuleSpecContext, String> visitParserRuleSpec(ParserRuleSpecContext ctx) {
-            TerminalNode<Token> nameToken = ctx.RULE_REF();
+            TerminalNode nameToken = ctx.RULE_REF();
             String name = nameToken != null ? nameToken.getText() : "";
             return Collections.singletonMap(ctx, name);
         }

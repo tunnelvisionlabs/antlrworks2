@@ -80,7 +80,7 @@ public class TemplateHighlighter extends ANTLRHighlighterBaseV4<TemplateHighligh
     }
 
     @Override
-    protected TokenSourceWithStateV4<Token, TemplateHighlighterLexerState> createLexer(CharStream input, TemplateHighlighterLexerState startState) {
+    protected TokenSourceWithStateV4<TemplateHighlighterLexerState> createLexer(CharStream input, TemplateHighlighterLexerState startState) {
         if (lexer == null) {
             lexer = new TemplateHighlighterLexer(input, startState);
         } else {

@@ -54,7 +54,7 @@ import org.openide.util.Lookup;
  *
  * @author Sam Harwell
  */
-public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<SemanticHighlighter.SemanticAnalyzerListener, ParserRuleContext<Token>> {
+public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<SemanticHighlighter.SemanticAnalyzerListener, ParserRuleContext> {
 
     private final AttributeSet templateDeclarationAttributes;
     private final AttributeSet templateUseAttributes;
@@ -85,12 +85,12 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
     }
 
     @Override
-    protected SemanticAnalyzerListener createListener(ParserData<? extends ParserRuleContext<Token>> parserData) {
+    protected SemanticAnalyzerListener createListener(ParserData<? extends ParserRuleContext> parserData) {
         return new SemanticAnalyzerListener();
     }
 
     @Override
-    protected ParseTree<Token> getParseTree(ParserData<? extends ParserRuleContext<Token>> parserData) {
+    protected ParseTree getParseTree(ParserData<? extends ParserRuleContext> parserData) {
         return parserData.getData();
     }
 
@@ -283,7 +283,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
         @Override
         @RuleDependency(recognizer=TemplateParser.class, rule=TemplateParser.RULE_primary, version=1, dependents=Dependents.PARENTS)
         public void enterPrimary(PrimaryContext ctx) {
-            TerminalNode<Token> id = ctx.ID();
+            TerminalNode id = ctx.ID();
             if (id != null) {
                 Set<String> currentParameters = parameters.isEmpty() ? null : parameters.peek();
                 if (currentParameters != null && currentParameters.contains(id.getSymbol().getText())) {

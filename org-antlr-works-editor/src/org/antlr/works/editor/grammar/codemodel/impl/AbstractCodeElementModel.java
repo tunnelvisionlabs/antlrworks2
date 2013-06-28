@@ -15,7 +15,6 @@ import javax.swing.text.JTextComponent;
 import org.antlr.netbeans.editor.navigation.actions.OpenAction;
 import org.antlr.netbeans.editor.text.OffsetRegion;
 import org.antlr.netbeans.editor.text.SnapshotPositionRegion;
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.works.editor.antlr4.parsing.ParseTrees;
@@ -63,7 +62,7 @@ public abstract class AbstractCodeElementModel implements CodeElementModel {
     }
 
     @CheckForNull
-    protected static OffsetRegion getOffsetRegion(@NullAllowed ParseTree<? extends Token> node) {
+    protected static OffsetRegion getOffsetRegion(@NullAllowed ParseTree node) {
         if (node == null) {
             return null;
         }

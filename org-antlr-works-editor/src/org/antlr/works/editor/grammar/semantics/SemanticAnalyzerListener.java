@@ -135,7 +135,7 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
         // ensure parserRuleSpec is an ancestor of terminal
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_parserRuleSpec, version=3, dependents=Dependents.DESCENDANTS),
     })
-    public void visitTerminal(TerminalNode<? extends Token> node) {
+    public void visitTerminal(TerminalNode node) {
         NodeType nodeType = treeDecorator.getProperty(node.getParent(), GrammarTreeProperties.PROP_NODE_TYPE);
         if (nodeType == NodeType.UNDEFINED) {
             nodeType = null;
@@ -188,7 +188,7 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
         case GrammarParser.STRING_LITERAL:
             switch (ruleIndex) {
             case GrammarParser.RULE_terminal:
-                RuleNode<? extends Token> ruleNode = ParseTrees.findAncestor(node, GrammarParser.RULE_parserRuleSpec);
+                RuleNode ruleNode = ParseTrees.findAncestor(node, GrammarParser.RULE_parserRuleSpec);
                 if (ruleNode != null) {
                     nodeType = NodeType.TOKEN_REF;
                     unresolvedTokenReferences.add(symbol);
@@ -213,16 +213,16 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
     }
 
     @Override
-    public void visitErrorNode(ErrorNode<? extends Token> node) {
+    public void visitErrorNode(ErrorNode node) {
         visitTerminal(node);
     }
 
     @Override
-    public void enterEveryRule(ParserRuleContext<? extends Token> ctx) {
+    public void enterEveryRule(ParserRuleContext ctx) {
     }
 
     @Override
-    public void exitEveryRule(ParserRuleContext<? extends Token> ctx) {
+    public void exitEveryRule(ParserRuleContext ctx) {
     }
 
     @Override

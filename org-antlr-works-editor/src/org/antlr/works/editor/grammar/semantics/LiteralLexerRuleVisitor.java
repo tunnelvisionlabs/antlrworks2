@@ -11,7 +11,6 @@ package org.antlr.works.editor.grammar.semantics;
 import org.antlr.v4.runtime.Dependents;
 import org.antlr.v4.runtime.RuleDependencies;
 import org.antlr.v4.runtime.RuleDependency;
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.RuleNode;
 import org.antlr.works.editor.grammar.experimental.GrammarParser;
 import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.IdContext;
@@ -46,7 +45,7 @@ public class LiteralLexerRuleVisitor extends GrammarParserBaseVisitor<Boolean> {
     }
 
     @Override
-    protected boolean shouldVisitNextChild(RuleNode<? extends Token> node, Boolean currentResult) {
+    protected boolean shouldVisitNextChild(RuleNode node, Boolean currentResult) {
         // have to stop when we reach false
         return currentResult;
     }

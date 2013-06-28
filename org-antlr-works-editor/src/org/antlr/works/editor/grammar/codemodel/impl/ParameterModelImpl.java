@@ -9,7 +9,6 @@
 package org.antlr.works.editor.grammar.codemodel.impl;
 
 import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.works.editor.grammar.codemodel.ParameterModel;
 
@@ -19,7 +18,7 @@ import org.antlr.works.editor.grammar.codemodel.ParameterModel;
  */
 public class ParameterModelImpl extends AbstractAttributeModel implements ParameterModel {
 
-    public ParameterModelImpl(String name, String type, FileModelImpl file, TerminalNode<? extends Token> seek, ParserRuleContext<?> span) {
+    public ParameterModelImpl(String name, String type, FileModelImpl file, TerminalNode seek, ParserRuleContext span) {
         super(name, type, file, seek, span);
     }
 

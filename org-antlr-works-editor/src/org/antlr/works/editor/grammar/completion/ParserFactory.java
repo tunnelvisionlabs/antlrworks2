@@ -8,7 +8,6 @@
  */
 package org.antlr.works.editor.grammar.completion;
 
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenStream;
 import org.netbeans.api.annotations.common.NonNull;
 
@@ -20,14 +19,14 @@ public class ParserFactory {
     public static final ParserFactory DEFAULT = new ParserFactory();
 
     @NonNull
-    protected CodeCompletionGrammarParser createParser(@NonNull TokenStream<? extends Token> input) {
+    protected CodeCompletionGrammarParser createParser(@NonNull TokenStream input) {
         CodeCompletionGrammarParser parser = new CodeCompletionGrammarParser(input);
         parser.removeErrorListeners();
         return parser;
     }
 
     @NonNull
-    public CodeCompletionGrammarParser getParser(@NonNull TokenStream<? extends Token> input) {
+    public CodeCompletionGrammarParser getParser(@NonNull TokenStream input) {
         return createParser(input);
     }
 }

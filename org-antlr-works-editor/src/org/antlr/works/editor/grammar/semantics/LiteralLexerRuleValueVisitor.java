@@ -10,7 +10,6 @@ package org.antlr.works.editor.grammar.semantics;
 
 import org.antlr.v4.runtime.Dependents;
 import org.antlr.v4.runtime.RuleDependency;
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.RuleNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.works.editor.grammar.experimental.GrammarParser;
@@ -21,22 +20,22 @@ import org.antlr.works.editor.grammar.experimental.generated.GrammarParserBaseVi
  *
  * @author Sam Harwell
  */
-public class LiteralLexerRuleValueVisitor extends GrammarParserBaseVisitor<TerminalNode<Token>> {
+public class LiteralLexerRuleValueVisitor extends GrammarParserBaseVisitor<TerminalNode> {
     public static final LiteralLexerRuleValueVisitor INSTANCE = new LiteralLexerRuleValueVisitor();
 
     @Override
-    protected TerminalNode<Token> aggregateResult(TerminalNode<Token> aggregate, TerminalNode<Token> nextResult) {
+    protected TerminalNode aggregateResult(TerminalNode aggregate, TerminalNode nextResult) {
         return aggregate != null ? aggregate : nextResult;
     }
 
     @Override
-    protected boolean shouldVisitNextChild(RuleNode<? extends Token> node, TerminalNode<Token> currentResult) {
+    protected boolean shouldVisitNextChild(RuleNode node, TerminalNode currentResult) {
         return currentResult == null;
     }
 
     @Override
     @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_terminal, version=1, dependents=Dependents.PARENTS)
-    public TerminalNode<Token> visitTerminal(TerminalContext ctx) {
+    public TerminalNode visitTerminal(TerminalContext ctx) {
         return ctx.STRING_LITERAL();
     }
 

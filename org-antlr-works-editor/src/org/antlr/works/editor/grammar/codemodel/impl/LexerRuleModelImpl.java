@@ -11,7 +11,6 @@ package org.antlr.works.editor.grammar.codemodel.impl;
 import java.util.Collection;
 import java.util.Collections;
 import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.works.editor.grammar.codemodel.LexerRuleModel;
 import org.antlr.works.editor.grammar.codemodel.ModeModel;
@@ -28,7 +27,7 @@ public class LexerRuleModelImpl extends RuleModelImpl implements LexerRuleModel 
     private final boolean generateTokenType;
     private final String literal;
 
-    public LexerRuleModelImpl(String name, ModeModelImpl mode, boolean generateTokenType, String literal, FileModelImpl file, TerminalNode<? extends Token> seek, ParserRuleContext<?> span) {
+    public LexerRuleModelImpl(String name, ModeModelImpl mode, boolean generateTokenType, String literal, FileModelImpl file, TerminalNode seek, ParserRuleContext span) {
         super(name, file, seek, span);
         this.mode = mode;
         this.generateTokenType = generateTokenType;

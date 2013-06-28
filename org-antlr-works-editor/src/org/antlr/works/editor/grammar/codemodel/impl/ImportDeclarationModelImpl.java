@@ -12,7 +12,6 @@ import java.util.Collection;
 import java.util.Collections;
 import org.antlr.netbeans.editor.text.OffsetRegion;
 import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.works.editor.grammar.codemodel.CodeElementPositionRegion;
 import org.antlr.works.editor.grammar.codemodel.ImportDeclarationModel;
@@ -27,7 +26,7 @@ public class ImportDeclarationModelImpl extends AbstractCodeElementModel impleme
     private final OffsetRegion seek;
     private final OffsetRegion span;
 
-    public ImportDeclarationModelImpl(String name, String target, FileModelImpl file, TerminalNode<? extends Token> seek, ParserRuleContext<?> span) {
+    public ImportDeclarationModelImpl(String name, String target, FileModelImpl file, TerminalNode seek, ParserRuleContext span) {
         super(name, file);
         this.target = target;
         this.seek = getOffsetRegion(seek);

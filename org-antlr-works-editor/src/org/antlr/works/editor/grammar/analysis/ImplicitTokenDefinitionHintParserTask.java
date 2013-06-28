@@ -149,7 +149,7 @@ public final class ImplicitTokenDefinitionHintParserTask implements ParserTask {
         }
 
         @Override
-        public void visitTerminal(TerminalNode<? extends Token> node) {
+        public void visitTerminal(TerminalNode node) {
             Token token = node.getSymbol();
             if (_declaredTokens.contains(token.getText())) {
                 return;

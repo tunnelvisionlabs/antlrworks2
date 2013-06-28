@@ -17,7 +17,7 @@ import org.antlr.v4.runtime.Token;
  *
  * @author Sam Harwell
  */
-public class DescriptiveErrorListener extends BaseErrorListener<Token> {
+public class DescriptiveErrorListener extends BaseErrorListener {
     public static DescriptiveErrorListener INSTANCE = new DescriptiveErrorListener();
 
     @Override

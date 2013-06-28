@@ -9,7 +9,6 @@
 package org.antlr.works.editor.antlr4.completion;
 
 import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.atn.ATN;
 
@@ -21,9 +20,9 @@ public interface CodeCompletionParser {
 
     AbstractCompletionParserATNSimulator getInterpreter();
 
-    ParserRuleContext<Token> getContext();
+    ParserRuleContext getContext();
 
-    TokenStream<? extends Token> getInputStream();
+    TokenStream getInputStream();
 
     ATN getATN();
 

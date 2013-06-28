@@ -19,7 +19,7 @@ import org.antlr.works.editor.antlr4.highlighting.TokenSourceWithStateV4;
  *
  * @author Sam Harwell
  */
-public class TemplateHighlighterLexer implements TokenSourceWithStateV4<Token, TemplateHighlighterLexerState> {
+public class TemplateHighlighterLexer implements TokenSourceWithStateV4<TemplateHighlighterLexerState> {
     private static final Map<TemplateHighlighterLexerState, TemplateHighlighterLexerState> sharedStates =
         new HashMap<>();
 
@@ -104,12 +104,12 @@ public class TemplateHighlighterLexer implements TokenSourceWithStateV4<Token, T
     }
 
     @Override
-    public TokenFactory<? extends Token> getTokenFactory() {
+    public TokenFactory getTokenFactory() {
         return groupLexer.getTokenFactory();
     }
 
     @Override
-    public void setTokenFactory(TokenFactory<? extends Token> tokenFactory) {
+    public void setTokenFactory(TokenFactory tokenFactory) {
         groupLexer.setTokenFactory(tokenFactory);
     }
 }

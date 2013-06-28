@@ -43,10 +43,10 @@ import org.openide.util.Parameters;
  */
 public class ActionExpressionAnalyzer extends GrammarParserBaseListener {
     private final FileModel fileModel;
-    private final RuleContext<?> finalContext;
+    private final RuleContext finalContext;
     private final List<AttributeModel> members = new ArrayList<>();
 
-    public ActionExpressionAnalyzer(@NonNull FileModel fileModel, @NonNull RuleContext<?> finalContext) {
+    public ActionExpressionAnalyzer(@NonNull FileModel fileModel, @NonNull RuleContext finalContext) {
         Parameters.notNull("fileModel", fileModel);
         Parameters.notNull("finalContext", finalContext);
 
@@ -155,7 +155,7 @@ public class ActionExpressionAnalyzer extends GrammarParserBaseListener {
     }
 
     @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleSpec, version=3, dependents=Dependents.DESCENDANTS)
-    private static RuleSpecContext getEnclosingRuleContext(RuleContext<?> context) {
+    private static RuleSpecContext getEnclosingRuleContext(RuleContext context) {
         while (context != null) {
             if (context instanceof RuleSpecContext) {
                 return (RuleSpecContext)context;

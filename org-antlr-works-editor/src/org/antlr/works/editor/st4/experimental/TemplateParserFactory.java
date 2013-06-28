@@ -9,7 +9,6 @@
 package org.antlr.works.editor.st4.experimental;
 
 import org.antlr.v4.runtime.DefaultErrorStrategy;
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.atn.PredictionMode;
 import org.antlr.works.editor.antlr4.parsing.DescriptiveErrorListener;
@@ -24,19 +23,19 @@ public class TemplateParserFactory {
     public static final TemplateParserFactory DEFAULT = new TemplateParserFactory();
 
     @NonNull
-    protected TemplateParser createParser(@NonNull TokenStream<? extends Token> input) {
+    protected TemplateParser createParser(@NonNull TokenStream input) {
         TemplateParser parser = new TemplateParser(input);
         return parser;
     }
 
     @NonNull
-    public TemplateParser getParser(@NonNull TokenStream<? extends Token> input) {
+    public TemplateParser getParser(@NonNull TokenStream input) {
         TemplateParser result = createParser(input);
         result.getInterpreter().setPredictionMode(PredictionMode.LL);
         result.removeErrorListeners();
         result.addErrorListener(DescriptiveErrorListener.INSTANCE);
         result.setBuildParseTree(false);
-        result.setErrorHandler(new DefaultErrorStrategy<>());
+        result.setErrorHandler(new DefaultErrorStrategy());
         return result;
     }
 

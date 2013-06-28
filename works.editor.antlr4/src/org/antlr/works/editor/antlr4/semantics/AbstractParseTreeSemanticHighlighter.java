@@ -16,7 +16,6 @@ import javax.swing.text.StyledDocument;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.netbeans.parsing.spi.ParserData;
 import org.antlr.netbeans.parsing.spi.ParserDataDefinition;
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
@@ -30,7 +29,7 @@ import org.netbeans.spi.editor.highlighting.support.OffsetsBag;
  * @param <Listener>
  * @param <Data>
  */
-public abstract class AbstractParseTreeSemanticHighlighter<Listener extends ParseTreeListener<Token>, Data> extends AbstractSemanticHighlighter<Data> {
+public abstract class AbstractParseTreeSemanticHighlighter<Listener extends ParseTreeListener, Data> extends AbstractSemanticHighlighter<Data> {
     // -J-Dorg.antlr.works.editor.antlr4.semantics.AbstractParseTreeSemanticHighlighter.level=FINE
     private static final Logger LOGGER = Logger.getLogger(AbstractParseTreeSemanticHighlighter.class.getName());
 
@@ -40,7 +39,7 @@ public abstract class AbstractParseTreeSemanticHighlighter<Listener extends Pars
 
     protected abstract Listener createListener(@NonNull ParserData<? extends Data> parserData);
 
-    protected abstract ParseTree<? extends Token> getParseTree(@NonNull final ParserData<? extends Data> parserData);
+    protected abstract ParseTree getParseTree(@NonNull final ParserData<? extends Data> parserData);
 
     protected abstract void updateHighlights(OffsetsBag container, DocumentSnapshot sourceSnapshot, DocumentSnapshot currentSnapshot, Listener listener);
 

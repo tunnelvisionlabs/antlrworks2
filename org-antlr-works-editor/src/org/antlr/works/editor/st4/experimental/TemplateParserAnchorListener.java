@@ -20,7 +20,6 @@ import org.antlr.netbeans.editor.completion.Anchor;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.netbeans.editor.text.TrackingPositionRegion;
 import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.Token;
 import org.antlr.works.editor.st4.experimental.generated.TemplateParser;
 import org.antlr.works.editor.st4.experimental.generated.TemplateParserBaseListener;
 import org.netbeans.api.annotations.common.NonNull;
@@ -66,12 +65,12 @@ public class TemplateParserAnchorListener extends TemplateParserBaseListener {
     }
 
     @Override
-    public void enterEveryRule(ParserRuleContext<? extends Token> ctx) {
+    public void enterEveryRule(ParserRuleContext ctx) {
         checkCancellation();
     }
 
     @Override
-    public void exitEveryRule(ParserRuleContext<? extends Token> ctx) {
+    public void exitEveryRule(ParserRuleContext ctx) {
         checkCancellation();
     }
 
@@ -105,18 +104,18 @@ public class TemplateParserAnchorListener extends TemplateParserBaseListener {
 //        exitAnchor(ctx, GrammarParser.RULE_tokenSpec);
 //    }
 
-    private void enterAnchor(ParserRuleContext<Token> ctx) {
+    private void enterAnchor(ParserRuleContext ctx) {
         anchorPositions.push(ctx.getStart().getStartIndex());
     }
 
-    private void exitAnchor(ParserRuleContext<Token> ctx, int anchorId) {
+    private void exitAnchor(ParserRuleContext ctx, int anchorId) {
         int start = anchorPositions.pop();
         int stop = ctx.getStop() != null ? ctx.getStop().getStopIndex() + 1 : snapshot.length();
         TrackingPositionRegion.Bias trackingMode = ctx.getStop() != null ? TrackingPositionRegion.Bias.Exclusive : TrackingPositionRegion.Bias.Forward;
         anchors.add(createAnchor(ctx, start, stop, trackingMode, anchorId));
     }
 
-    private Anchor createAnchor(ParserRuleContext<Token> ctx, int start, int stop, TrackingPositionRegion.Bias trackingMode, int rule) {
+    private Anchor createAnchor(ParserRuleContext ctx, int start, int stop, TrackingPositionRegion.Bias trackingMode, int rule) {
         TrackingPositionRegion trackingSpan = snapshot.createTrackingRegion(start, stop - start, trackingMode);
 //        if (rule == TemplateParser.RULE_grammarType) {
 //            return new TemplateTypeAnchor((GrammarParser.grammarTypeContext)ctx, trackingSpan);

@@ -11,7 +11,6 @@ package org.antlr.works.editor.grammar.experimental;
 import org.antlr.v4.runtime.Dependents;
 import org.antlr.v4.runtime.RuleDependencies;
 import org.antlr.v4.runtime.RuleDependency;
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser;
@@ -25,7 +24,7 @@ import org.netbeans.api.annotations.common.NonNull;
  */
 public class GrammarParser extends AbstractGrammarParser {
 
-    public GrammarParser(TokenStream<? extends Token> input) {
+    public GrammarParser(TokenStream input) {
         super(input);
     }
 
@@ -39,7 +38,7 @@ public class GrammarParser extends AbstractGrammarParser {
             return qid.getText();
         }
 
-        TerminalNode<Token> node = ctx.INT();
+        TerminalNode node = ctx.INT();
         if (node != null) {
             return node.getSymbol().getText();
         }

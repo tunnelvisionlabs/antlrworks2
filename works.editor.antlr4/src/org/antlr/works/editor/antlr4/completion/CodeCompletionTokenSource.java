@@ -20,16 +20,16 @@ import org.antlr.v4.runtime.misc.Tuple2;
  *
  * @author Sam Harwell
  */
-public class CodeCompletionTokenSource implements TokenSource<Token> {
+public class CodeCompletionTokenSource implements TokenSource {
     private final int caretOffset;
-    private final TokenSource<Token> source;
-    private final Tuple2<? extends TokenSource<Token>, CharStream> tokenFactorySourcePair;
+    private final TokenSource source;
+    private final Tuple2<? extends TokenSource, CharStream> tokenFactorySourcePair;
 
-    private TokenFactory<? extends Token> tokenFactory = CommonTokenFactory.DEFAULT;
+    private TokenFactory tokenFactory = CommonTokenFactory.DEFAULT;
 
     private Token caretToken;
 
-    public CodeCompletionTokenSource(int caretOffset, TokenSource<Token> source) {
+    public CodeCompletionTokenSource(int caretOffset, TokenSource source) {
         this.caretOffset = caretOffset;
         this.source = source;
         this.tokenFactorySourcePair = Tuple.create(source, source.getInputStream());
@@ -87,12 +87,12 @@ public class CodeCompletionTokenSource implements TokenSource<Token> {
     }
 
     @Override
-    public TokenFactory<? extends Token> getTokenFactory() {
+    public TokenFactory getTokenFactory() {
         return tokenFactory;
     }
 
     @Override
-    public void setTokenFactory(TokenFactory<?> tokenFactory) {
+    public void setTokenFactory(TokenFactory tokenFactory) {
         source.setTokenFactory(tokenFactory);
         this.tokenFactory = tokenFactory != null ? tokenFactory : CommonTokenFactory.DEFAULT;
     }

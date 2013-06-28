@@ -186,7 +186,7 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
                     private void scan() {
 
                         synchronized (lock) {
-                            try (TokenSourceWithStateV4<Token, TState> lexer = createLexer(input, startState)) {
+                            try (TokenSourceWithStateV4<TState> lexer = createLexer(input, startState)) {
                                 while (true)
                                 {
                                     // TODO: perform this under a read lock
@@ -376,7 +376,7 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
                 return null;
             }
 
-            try (TokenSourceWithStateV4<Token, TState> lexer = createLexer(input, startState)) {
+            try (TokenSourceWithStateV4<TState> lexer = createLexer(input, startState)) {
                 Token previousToken = null;
     //            int previousTokenLine = 0;
                 boolean previousTokenEndsLine = false;
@@ -648,7 +648,7 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
         return startLineCurrent > endLinePrevious + 1;
     }
 
-    protected boolean isMultiLineToken(TokenSourceWithStateV4<Token, TState> lexer, Token token) {
+    protected boolean isMultiLineToken(TokenSourceWithStateV4<TState> lexer, Token token) {
         /*if (lexer != null && lexer.getLine() > token.getLine()) {
             return true;
         }*/
@@ -658,7 +658,7 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
         return startLine != stopLine;
     }
 
-    protected boolean tokenEndsAtEndOfLine(TokenSourceWithStateV4<Token, TState> lexer, Token token) {
+    protected boolean tokenEndsAtEndOfLine(TokenSourceWithStateV4<TState> lexer, Token token) {
         CharStream charStream = lexer.getInputStream();
         if (charStream != null) {
             int nextCharIndex = token.getStopIndex() + 1;
@@ -712,7 +712,7 @@ public abstract class ANTLRHighlighterBaseV4<TState extends LineStateInfo<TState
         return input;
     }
 
-    protected abstract TokenSourceWithStateV4<Token, TState> createLexer(CharStream input, TState startState);
+    protected abstract TokenSourceWithStateV4<TState> createLexer(CharStream input, TState startState);
 
     protected Collection<Highlight> getHighlightsForToken(Token token) {
         AttributeSet attributes = highlightToken(token);

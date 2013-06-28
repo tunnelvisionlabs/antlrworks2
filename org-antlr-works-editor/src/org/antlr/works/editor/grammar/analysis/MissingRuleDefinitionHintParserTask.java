@@ -126,7 +126,7 @@ public final class MissingRuleDefinitionHintParserTask implements ParserTask {
         }
 
         @Override
-        public void visitTerminal(TerminalNode<? extends Token> node) {
+        public void visitTerminal(TerminalNode node) {
             Token token = node.getSymbol();
             if (_grammarAnnotatedParseTree.getTokenDecorator().getProperty(token, GrammarTreeProperties.PROP_MISSING_DEF)) {
                 String text = token.getText();

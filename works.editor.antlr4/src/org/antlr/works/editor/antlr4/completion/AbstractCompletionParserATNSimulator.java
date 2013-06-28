@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Map;
 import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.atn.ATN;
 import org.antlr.v4.runtime.atn.ATNConfig;
@@ -42,7 +41,7 @@ import org.openide.util.Parameters;
  *
  * @author Sam Harwell
  */
-public abstract class AbstractCompletionParserATNSimulator extends ParserATNSimulator<Token> {
+public abstract class AbstractCompletionParserATNSimulator extends ParserATNSimulator {
 
     private Map<ATNConfig, List<Transition>> caretTransitions;
     private CaretToken caretToken;
@@ -52,14 +51,14 @@ public abstract class AbstractCompletionParserATNSimulator extends ParserATNSimu
     private int _firstDecisionIndex;
 
     // state variables used for the custom implementation
-    private TokenStream<? extends Token> _input;
+    private TokenStream _input;
     private int _startIndex;
-    private ParserRuleContext<Token> _outerContext;
+    private ParserRuleContext _outerContext;
 
     /** Avoid throwing an exception when the caret is found while computing the start state. */
     private boolean _computingStartState;
 
-    public AbstractCompletionParserATNSimulator(@NonNull Parser<Token> parser, ATN atn) {
+    public AbstractCompletionParserATNSimulator(@NonNull Parser parser, ATN atn) {
         super(parser, atn);
         Parameters.notNull("parser", parser);
         setPredictionMode(PredictionMode.SLL);
@@ -73,7 +72,7 @@ public abstract class AbstractCompletionParserATNSimulator extends ParserATNSimu
         return caretToken;
     }
 
-    public Parser<Token> getParser() {
+    public Parser getParser() {
         return parser;
     }
 
@@ -91,7 +90,7 @@ public abstract class AbstractCompletionParserATNSimulator extends ParserATNSimu
     }
 
     @Override
-    public int adaptivePredict(TokenStream<? extends Token> input, int decision, ParserRuleContext<Token> outerContext) {
+    public int adaptivePredict(TokenStream input, int decision, ParserRuleContext outerContext) {
         _input = input;
         _startIndex = input.index();
         _outerContext = outerContext;
@@ -110,7 +109,7 @@ public abstract class AbstractCompletionParserATNSimulator extends ParserATNSimu
     }
 
     @Override
-    public SimulatorState<Token> computeStartState(DFA dfa, ParserRuleContext<Token> globalContext, boolean useContext) {
+    public SimulatorState computeStartState(DFA dfa, ParserRuleContext globalContext, boolean useContext) {
         _computingStartState = true;
         try {
             return super.computeStartState(dfa, globalContext, useContext);

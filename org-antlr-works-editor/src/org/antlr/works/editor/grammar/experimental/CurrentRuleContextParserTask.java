@@ -35,7 +35,6 @@ import org.antlr.v4.runtime.DefaultErrorStrategy;
 import org.antlr.v4.runtime.Dependents;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.RuleDependency;
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenSource;
 import org.antlr.v4.runtime.atn.PredictionMode;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
@@ -106,7 +105,7 @@ public final class CurrentRuleContextParserTask implements ParserTask {
                             parser.getInterpreter().setPredictionMode(PredictionMode.SLL);
                             parser.removeErrorListeners();
                             parser.setBuildParseTree(true);
-                            parser.setErrorHandler(new BailErrorStrategy<>());
+                            parser.setErrorHandler(new BailErrorStrategy());
                             ruleContext = parser.ruleSpec();
                         } catch (ParseCancellationException ex) {
                             if (ex.getCause() instanceof RecognitionException) {
@@ -114,7 +113,7 @@ public final class CurrentRuleContextParserTask implements ParserTask {
                                 tokens.reset();
                                 parser.getInterpreter().setPredictionMode(PredictionMode.LL);
                                 parser.setInputStream(tokens);
-                                parser.setErrorHandler(new DefaultErrorStrategy<>());
+                                parser.setErrorHandler(new DefaultErrorStrategy());
                                 ruleContext = parser.ruleSpec();
                             } else {
                                 throw ex;
@@ -132,7 +131,7 @@ public final class CurrentRuleContextParserTask implements ParserTask {
 
     private class TaskTokenStream extends CommonTokenStream {
 
-        public TaskTokenStream(TokenSource<? extends Token> tokenSource) {
+        public TaskTokenStream(TokenSource tokenSource) {
             super(tokenSource);
         }
 

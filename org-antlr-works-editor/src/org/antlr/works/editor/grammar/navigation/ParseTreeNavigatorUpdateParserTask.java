@@ -19,7 +19,6 @@ import org.antlr.netbeans.parsing.spi.ParserTaskDefinition;
 import org.antlr.netbeans.parsing.spi.ParserTaskProvider;
 import org.antlr.netbeans.parsing.spi.SingletonParserTaskProvider;
 import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.Token;
 import org.antlr.works.editor.antlr4.navigation.ParseTreeNode;
 import org.antlr.works.editor.grammar.GrammarEditorKit;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
@@ -29,7 +28,7 @@ import org.netbeans.api.editor.mimelookup.MimeRegistration;
  *
  * @author Sam Harwell
  */
-public final class ParseTreeNavigatorUpdateParserTask extends AbstractNavigatorUpdateParserTask<GrammarParseTreeNavigatorPanel, ParserRuleContext<Token>> {
+public final class ParseTreeNavigatorUpdateParserTask extends AbstractNavigatorUpdateParserTask<GrammarParseTreeNavigatorPanel, ParserRuleContext> {
     private ParseTreeNavigatorUpdateParserTask() {
         super(GrammarParserDataDefinitions.REFERENCE_PARSE_TREE);
     }
@@ -45,7 +44,7 @@ public final class ParseTreeNavigatorUpdateParserTask extends AbstractNavigatorU
     }
 
     @Override
-    protected void refresh(ParseContext parseContext, DocumentSnapshot snapshot, GrammarParseTreeNavigatorPanel panel, ParserRuleContext<Token> data) {
+    protected void refresh(ParseContext parseContext, DocumentSnapshot snapshot, GrammarParseTreeNavigatorPanel panel, ParserRuleContext data) {
         panel.setCurrentFile(snapshot.getVersionedDocument().getFileObject());
         panel.setParseTree(new ParseTreeNode(data));
     }

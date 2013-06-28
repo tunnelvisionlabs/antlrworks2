@@ -13,7 +13,6 @@ import java.util.concurrent.Callable;
 import org.antlr.netbeans.editor.text.OffsetRegion;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleContext;
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.RuleNode;
@@ -45,9 +44,9 @@ public class ParseTreeNode extends AbstractNode implements OffsetProvider {
     public static final Image ERROR_IMAGE = ImageUtilities.loadImage(ERROR_IMAGE_PATH);
 
     @NonNull
-    private final ParseTree<? extends Token> _tree;
+    private final ParseTree _tree;
 
-    public ParseTreeNode(@NonNull ParseTree<? extends Token> tree) {
+    public ParseTreeNode(@NonNull ParseTree tree) {
         super(Children.LEAF);
         _tree = tree;
 
@@ -56,8 +55,8 @@ public class ParseTreeNode extends AbstractNode implements OffsetProvider {
         }
 
         if (tree instanceof RuleNode) {
-            RuleNode<?> ruleNode = (RuleNode<?>)tree;
-            RuleContext<?> ruleContext = ruleNode.getRuleContext();
+            RuleNode ruleNode = (RuleNode)tree;
+            RuleContext ruleContext = ruleNode.getRuleContext();
             if (ruleContext instanceof ParserRuleContext && ruleContext.getClass() != ParserRuleContext.class) {
                 String contextName = ruleContext.getClass().getSimpleName();
                 if (!"Context".equals(contextName) && contextName.endsWith("Context")) {
@@ -107,12 +106,12 @@ public class ParseTreeNode extends AbstractNode implements OffsetProvider {
 
     @Override
     public OffsetRegion getSpan() {
-        TerminalNode<? extends Token> startNode = ParseTrees.getStartNode(_tree);
+        TerminalNode startNode = ParseTrees.getStartNode(_tree);
         if (startNode == null) {
             return null;
         }
 
-        TerminalNode<? extends Token> stopNode = ParseTrees.getStopNode(_tree);
+        TerminalNode stopNode = ParseTrees.getStopNode(_tree);
         if (stopNode == null) {
             // rule matched epsilon
             return new OffsetRegion(startNode.getSymbol().getStartIndex(), 0);
@@ -136,7 +135,7 @@ public class ParseTreeNode extends AbstractNode implements OffsetProvider {
         return null;
     }
 
-    protected ParseTreeNode createChildNode(ParseTree<? extends Token> tree) {
+    protected ParseTreeNode createChildNode(ParseTree tree) {
         return new ParseTreeNode(tree);
     }
 

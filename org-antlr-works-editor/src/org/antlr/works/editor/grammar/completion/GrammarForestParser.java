@@ -12,7 +12,6 @@ import org.antlr.v4.runtime.Dependents;
 import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.RuleDependencies;
 import org.antlr.v4.runtime.RuleDependency;
-import org.antlr.v4.runtime.Token;
 import org.antlr.works.editor.antlr4.completion.AbstractForestParser;
 import org.antlr.works.editor.grammar.experimental.GrammarParser;
 
@@ -44,7 +43,7 @@ public class GrammarForestParser extends AbstractForestParser<CodeCompletionGram
     }
 
     @Override
-    protected RuleContext<Token> parseImpl(CodeCompletionGrammarParser parser) {
+    protected RuleContext parseImpl(CodeCompletionGrammarParser parser) {
         switch (_startRule) {
         case GrammarParser.RULE_rules:
             return parser.rules();

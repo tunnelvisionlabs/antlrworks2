@@ -30,7 +30,6 @@ import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.netbeans.parsing.spi.ParserTaskProvider;
 import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
 import org.antlr.netbeans.parsing.spi.SingletonParserTaskProvider;
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.misc.IntervalSet;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -203,8 +202,8 @@ public final class GroupSetElementsHintParserTask implements ParserTask {
 
             for (Interval interval : setlikeAlts.getIntervals()) {
                 if (interval.length() > 1) {
-                    TerminalNode<Token> firstNode = ParseTrees.getStartNode(alternatives.get(interval.a));
-                    TerminalNode<Token> lastNode = ParseTrees.getStopNode(alternatives.get(interval.b));
+                    TerminalNode firstNode = ParseTrees.getStartNode(alternatives.get(interval.a));
+                    TerminalNode lastNode = ParseTrees.getStopNode(alternatives.get(interval.b));
                     if (firstNode == null || lastNode == null) {
                         continue;
                     }
@@ -216,7 +215,7 @@ public final class GroupSetElementsHintParserTask implements ParserTask {
             }
         }
 
-        private boolean isIgnored(ParseTree<?> ctx) {
+        private boolean isIgnored(ParseTree ctx) {
             Interval interval = ctx.getSourceInterval();
             for (Interval ignored : _ignoreRanges.getIntervals()) {
                 if (!ignored.disjoint(interval)) {
@@ -227,7 +226,7 @@ public final class GroupSetElementsHintParserTask implements ParserTask {
             return false;
         }
 
-        private void ignore(ParseTree<?> ctx) {
+        private void ignore(ParseTree ctx) {
             Interval interval = ctx.getSourceInterval();
             _ignoreRanges.add(interval.a, interval.b);
         }

@@ -22,7 +22,7 @@ public class CaretToken extends CommonToken {
     public static final int CARET_TOKEN_TYPE = -2;
     private final Token originalToken;
 
-    public CaretToken(Tuple2<? extends TokenSource<?>, CharStream> source, int channel, int start, int stop) {
+    public CaretToken(Tuple2<? extends TokenSource, CharStream> source, int channel, int start, int stop) {
         super(source, CARET_TOKEN_TYPE, channel, start, stop);
         this.originalToken = null;
     }

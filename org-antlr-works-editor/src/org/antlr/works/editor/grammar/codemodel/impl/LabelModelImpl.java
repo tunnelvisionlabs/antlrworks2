@@ -9,7 +9,6 @@
 package org.antlr.works.editor.grammar.codemodel.impl;
 
 import java.util.Collection;
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.works.editor.grammar.codemodel.LabelKind;
 import org.antlr.works.editor.grammar.codemodel.LabelModel;
@@ -24,7 +23,7 @@ import org.openide.util.Parameters;
 public class LabelModelImpl extends AbstractAttributeModel implements LabelModel {
     private LabelKind labelKind = LabelKind.UNDEFINED;
 
-    public LabelModelImpl(String name, FileModelImpl file, Collection<? extends TerminalNode<Token>> definitions, Collection<? extends TerminalNode<Token>> uses) {
+    public LabelModelImpl(String name, FileModelImpl file, Collection<? extends TerminalNode> definitions, Collection<? extends TerminalNode> uses) {
         super(name, "Label", file, definitions, uses);
     }
 

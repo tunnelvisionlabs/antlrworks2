@@ -10,7 +10,6 @@ package org.antlr.works.editor.st4.experimental;
 
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.v4.runtime.CharStream;
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenSource;
 import org.antlr.works.editor.antlr4.classification.AbstractTokensTaskTaggerSnapshot;
 import org.antlr.works.editor.antlr4.classification.SimpleLexerState;
@@ -37,14 +36,14 @@ class TemplateTokensTaskTaggerSnapshot extends AbstractTokensTaskTaggerSnapshot<
     }
 
     @Override
-    protected TokenSourceWithStateV4<Token, SimpleLexerState> createLexer(CharStream input, SimpleLexerState startState) {
+    protected TokenSourceWithStateV4<SimpleLexerState> createLexer(CharStream input, SimpleLexerState startState) {
         TemplateLexerWrapper lexer = new TemplateLexerWrapper(input);
         startState.apply(lexer);
         return lexer;
     }
 
     @Override
-    protected TokenSource<Token> getEffectiveTokenSource(TokenSourceWithStateV4<Token, SimpleLexerState> lexer) {
+    protected TokenSource getEffectiveTokenSource(TokenSourceWithStateV4<SimpleLexerState> lexer) {
         return new TemplateLexerWrapper(lexer.getInputStream());
     }
 
@@ -53,7 +52,7 @@ class TemplateTokensTaskTaggerSnapshot extends AbstractTokensTaskTaggerSnapshot<
         return new TemplateTokensTaskTaggerSnapshot(this, targetSnapshot);
     }
 
-    private static class TemplateLexerWrapper extends TemplateLexer implements TokenSourceWithStateV4<Token, SimpleLexerState> {
+    private static class TemplateLexerWrapper extends TemplateLexer implements TokenSourceWithStateV4<SimpleLexerState> {
 
         public TemplateLexerWrapper(CharStream input) {
             super(input);

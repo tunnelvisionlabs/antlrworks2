@@ -286,7 +286,7 @@ public class MarkOccurrencesHighlighter extends AbstractSemanticHighlighter<Curr
         }
 
         @Override
-        public void visitTerminal(TerminalNode<? extends Token> node) {
+        public void visitTerminal(TerminalNode node) {
             if (referencedToken == null) {
                 return;
             }

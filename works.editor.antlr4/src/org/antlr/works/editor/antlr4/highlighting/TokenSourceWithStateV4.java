@@ -14,10 +14,9 @@ import org.antlr.v4.runtime.TokenSource;
 /**
  *
  * @author Sam Harwell
- * @param <Symbol>
  * @param <T>
  */
-public interface TokenSourceWithStateV4<Symbol, T> extends TokenSource<Symbol>, Closeable {
+public interface TokenSourceWithStateV4<T> extends TokenSource, Closeable {
 
     T getCurrentState();
 

@@ -36,17 +36,17 @@ public class LabelAnalyzer extends GrammarParserBaseListener {
 
     private final Map<String, Token> labels = new HashMap<>();
     private final Map<String, Token> unlabeledElements = new HashMap<>();
-    private final RuleContext<?> finalContext;
+    private final RuleContext finalContext;
 
     private Token enclosingRuleName;
     private boolean caretReached;
     private boolean inAction;
 
-    public LabelAnalyzer(RuleContext<?> finalContext) {
+    public LabelAnalyzer(RuleContext finalContext) {
         this.finalContext = finalContext;
     }
 
-    public final RuleContext<?> getFinalContext() {
+    public final RuleContext getFinalContext() {
         return finalContext;
     }
 
@@ -71,7 +71,7 @@ public class LabelAnalyzer extends GrammarParserBaseListener {
     }
 
     @Override
-    public void exitEveryRule(ParserRuleContext<? extends Token> ctx) {
+    public void exitEveryRule(ParserRuleContext ctx) {
         checkCaretReached(ctx);
     }
 
@@ -194,7 +194,7 @@ public class LabelAnalyzer extends GrammarParserBaseListener {
         inAction = false;
     }
 
-    private void checkCaretReached(RuleContext<?> ctx) {
+    private void checkCaretReached(RuleContext ctx) {
         if (ctx == getFinalContext()) {
             caretReached = true;
         }
@@ -204,8 +204,8 @@ public class LabelAnalyzer extends GrammarParserBaseListener {
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_labeledElement, version=3, dependents=Dependents.DESCENDANTS),
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_notSet, version=2, dependents=Dependents.DESCENDANTS),
     })
-    private static boolean isLabeledContext(ParserRuleContext<Token> ctx) {
-        for (RuleContext<?> current = ctx; current != null; current = current.parent) {
+    private static boolean isLabeledContext(ParserRuleContext ctx) {
+        for (RuleContext current = ctx; current != null; current = current.parent) {
             if (current instanceof GrammarParser.LabeledElementContext) {
                 return true;
             } else if (current instanceof GrammarParser.NotSetContext) {

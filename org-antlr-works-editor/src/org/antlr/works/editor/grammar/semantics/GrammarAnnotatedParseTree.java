@@ -19,7 +19,7 @@ import org.netbeans.api.annotations.common.NonNull;
  */
 public class GrammarAnnotatedParseTree extends AnnotatedParseTree {
 
-    public GrammarAnnotatedParseTree(@NonNull ParserRuleContext<Token> parseTree) {
+    public GrammarAnnotatedParseTree(@NonNull ParserRuleContext parseTree) {
         super(parseTree);
     }
 

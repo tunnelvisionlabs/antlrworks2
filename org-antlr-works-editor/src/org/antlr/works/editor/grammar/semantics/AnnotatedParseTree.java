@@ -30,16 +30,16 @@ public class AnnotatedParseTree {
     private final ObjectDecorator<Tree> treeDecorator = new ObjectDecorator<>();
     private final ObjectDecorator<Token> tokenDecorator = new ObjectDecorator<>();
 
-    private ParserRuleContext<Token> parseTree;
+    private ParserRuleContext parseTree;
 
-    public AnnotatedParseTree(@NonNull ParserRuleContext<Token> parseTree) {
+    public AnnotatedParseTree(@NonNull ParserRuleContext parseTree) {
         Parameters.notNull("parseTree", parseTree);
 
         this.parseTree = parseTree;
     }
 
     @NonNull
-    public ParserRuleContext<Token> getParseTree() {
+    public ParserRuleContext getParseTree() {
         return parseTree;
     }
 
@@ -51,11 +51,11 @@ public class AnnotatedParseTree {
         return tokenDecorator;
     }
 
-    public final void setParseTree(@NonNull ParserRuleContext<Token> parseTree) {
+    public final void setParseTree(@NonNull ParserRuleContext parseTree) {
         setParseTree(parseTree, true);
     }
 
-    public void setParseTree(@NonNull ParserRuleContext<Token> parseTree, boolean compactAnnotations) {
+    public void setParseTree(@NonNull ParserRuleContext parseTree, boolean compactAnnotations) {
         Parameters.notNull("parseTree", parseTree);
 
         if (this.parseTree != parseTree && compactAnnotations) {
@@ -77,12 +77,12 @@ public class AnnotatedParseTree {
         GrammarParserBaseListener listener = new GrammarParserBaseListener() {
 
             @Override
-            public void enterEveryRule(ParserRuleContext<? extends Token> ctx) {
+            public void enterEveryRule(ParserRuleContext ctx) {
                 trees.add(ctx);
             }
 
             @Override
-            public void visitTerminal(TerminalNode<? extends Token> node) {
+            public void visitTerminal(TerminalNode node) {
                 tokens.add(node.getSymbol());
             }
 

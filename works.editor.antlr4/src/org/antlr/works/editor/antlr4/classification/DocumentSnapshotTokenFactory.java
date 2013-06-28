@@ -18,20 +18,20 @@ import org.antlr.v4.runtime.misc.Tuple2;
  *
  * @author Sam Harwell
  */
-public class DocumentSnapshotTokenFactory implements TokenFactory<DocumentSnapshotToken> {
+public class DocumentSnapshotTokenFactory implements TokenFactory {
 
-    private final Tuple2<? extends TokenSource<? super DocumentSnapshotToken>, CharStream> effectiveSource;
+    private final Tuple2<? extends TokenSource, CharStream> effectiveSource;
 
-    public DocumentSnapshotTokenFactory(TokenSource<? super DocumentSnapshotToken> effectiveSource) {
+    public DocumentSnapshotTokenFactory(TokenSource effectiveSource) {
         this.effectiveSource = Tuple.create(effectiveSource, effectiveSource.getInputStream());
     }
 
-    public DocumentSnapshotTokenFactory(Tuple2<? extends TokenSource<? super DocumentSnapshotToken>, CharStream> effectiveSource) {
+    public DocumentSnapshotTokenFactory(Tuple2<? extends TokenSource, CharStream> effectiveSource) {
         this.effectiveSource = effectiveSource;
     }
 
     @Override
-    public DocumentSnapshotToken create(Tuple2<? extends TokenSource<? super DocumentSnapshotToken>, CharStream> source, int type, String text, int channel, int start, int stop, int line, int charPositionInLine) {
+    public DocumentSnapshotToken create(Tuple2<? extends TokenSource, CharStream> source, int type, String text, int channel, int start, int stop, int line, int charPositionInLine) {
         if (effectiveSource != null) {
             source = effectiveSource;
         }

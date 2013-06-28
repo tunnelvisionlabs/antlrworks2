@@ -13,7 +13,6 @@ import java.util.Collection;
 import java.util.List;
 import org.antlr.netbeans.editor.text.OffsetRegion;
 import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.works.editor.grammar.codemodel.CodeElementPositionRegion;
 import org.antlr.works.editor.grammar.codemodel.LabelModel;
@@ -36,7 +35,7 @@ public abstract class RuleModelImpl extends AbstractCodeElementModel implements 
     private final OffsetRegion seek;
     private final OffsetRegion span;
 
-    public RuleModelImpl(String name, FileModelImpl file, TerminalNode<? extends Token> seek, ParserRuleContext<?> span) {
+    public RuleModelImpl(String name, FileModelImpl file, TerminalNode seek, ParserRuleContext span) {
         super(name, file);
         this.seek = getOffsetRegion(seek);
         this.span = getOffsetRegion(span);

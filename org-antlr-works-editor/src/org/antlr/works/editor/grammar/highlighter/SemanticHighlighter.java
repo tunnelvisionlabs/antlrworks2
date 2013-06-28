@@ -60,7 +60,7 @@ import org.openide.util.Lookup;
  *
  * @author Sam Harwell
  */
-public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<SemanticHighlighter.SemanticAnalyzerListener, ParserRuleContext<Token>> {
+public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<SemanticHighlighter.SemanticAnalyzerListener, ParserRuleContext> {
 
     private final AttributeSet parameterDeclarationAttributes;
     private final AttributeSet returnValueDeclarationAttributes;
@@ -83,12 +83,12 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
     }
 
     @Override
-    protected SemanticAnalyzerListener createListener(ParserData<? extends ParserRuleContext<Token>> parserData) {
+    protected SemanticAnalyzerListener createListener(ParserData<? extends ParserRuleContext> parserData) {
         return new SemanticAnalyzerListener();
     }
 
     @Override
-    protected ParseTree<Token> getParseTree(ParserData<? extends ParserRuleContext<Token>> parserData) {
+    protected ParseTree getParseTree(ParserData<? extends ParserRuleContext> parserData) {
         return parserData.getData();
     }
 

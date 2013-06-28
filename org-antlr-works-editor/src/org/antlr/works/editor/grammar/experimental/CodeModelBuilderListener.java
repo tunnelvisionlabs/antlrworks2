@@ -22,7 +22,6 @@ import org.antlr.v4.runtime.Dependents;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleDependencies;
 import org.antlr.v4.runtime.RuleDependency;
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.tree.TerminalNode;
@@ -68,7 +67,7 @@ import org.openide.filesystems.FileUtil;
 public class CodeModelBuilderListener extends GrammarParserBaseListener {
     private final Project project;
     private final DocumentSnapshot snapshot;
-    private final TokenStream<? extends Token> tokens;
+    private final TokenStream tokens;
 
     // final result
     private FileModelImpl fileModel;
@@ -81,9 +80,9 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
     private final Deque<Collection<ParameterModelImpl>> returnValueContainerStack = new ArrayDeque<>();
     private final Deque<Collection<ParameterModelImpl>> localContainerStack = new ArrayDeque<>();
     private final Deque<Collection<LabelModelImpl>> labelContainerStack = new ArrayDeque<>();
-    private final Deque<Map<String, Collection<TerminalNode<Token>>>> labelUses = new ArrayDeque<>();
+    private final Deque<Map<String, Collection<TerminalNode>>> labelUses = new ArrayDeque<>();
 
-    public CodeModelBuilderListener(DocumentSnapshot snapshot, TokenStream<? extends Token> tokens) {
+    public CodeModelBuilderListener(DocumentSnapshot snapshot, TokenStream tokens) {
         FileObject fileObject = snapshot.getVersionedDocument().getFileObject();
         this.project = fileObject != null ? FileOwnerQuery.getOwner(fileObject) : null;
         this.snapshot = snapshot;
@@ -125,7 +124,7 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_parserRuleSpec, version=0, dependents=Dependents.PARENTS),
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerRule, version=0, dependents=Dependents.PARENTS),
     })
-    private void handleEnterRule(ParserRuleContext<Token> ctx, TerminalNode<Token> name) {
+    private void handleEnterRule(ParserRuleContext ctx, TerminalNode name) {
         String ruleName = name != null ? name.getText() : "?";
         RuleModelImpl ruleModel;
         if (ctx instanceof GrammarParser.ParserRuleSpecContext) {
@@ -134,7 +133,7 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
             boolean generateTokenType = !SuppressTokenTypeVisitor.INSTANCE.visit(ctx);
             String literal = null;
             if (generateTokenType && LiteralLexerRuleVisitor.INSTANCE.visit(ctx)) {
-                TerminalNode<Token> terminal = LiteralLexerRuleValueVisitor.INSTANCE.visit(ctx);
+                TerminalNode terminal = LiteralLexerRuleValueVisitor.INSTANCE.visit(ctx);
                 literal = terminal != null ? terminal.getSymbol().getText() : null;
             }
 
@@ -149,12 +148,12 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
         returnValueContainerStack.push(ruleModel.getReturnValues());
         localContainerStack.push(ruleModel.getLocals());
         labelContainerStack.push(ruleModel.getLabels());
-        labelUses.push(new HashMap<String, Collection<TerminalNode<Token>>>());
+        labelUses.push(new HashMap<String, Collection<TerminalNode>>());
     }
 
-    private void handleExitRule(ParserRuleContext<Token> ctx) {
+    private void handleExitRule(ParserRuleContext ctx) {
         Collection<LabelModelImpl> labels = labelContainerStack.peek();
-        for (Map.Entry<String, Collection<TerminalNode<Token>>> labelUsage : labelUses.peek().entrySet()) {
+        for (Map.Entry<String, Collection<TerminalNode>> labelUsage : labelUses.peek().entrySet()) {
             //labels.add(new LabelModelImpl(labelUsage.getKey(), labelUsage.getValue()));
             labels.add(new LabelModelImpl(labelUsage.getKey(), fileModel, labelUsage.getValue(), null));
         }
@@ -206,7 +205,7 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
     })
     public void enterTokensSpec(TokensSpecContext ctx) {
         for (IdContext id : ctx.id()) {
-            TerminalNode<Token> token = ParseTrees.getStartNode(id);
+            TerminalNode token = ParseTrees.getStartNode(id);
             if (token == null) {
                 continue;
             }
@@ -230,7 +229,7 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
     public void enterModeSpec(ModeSpecContext ctx) {
         String name = null;
         IdContext nameId = ctx.id();
-        TerminalNode<Token> nameToken = ParseTrees.getStartNode(nameId);
+        TerminalNode nameToken = ParseTrees.getStartNode(nameId);
 
         if (nameToken != null) {
             name = nameToken.getText();
@@ -288,11 +287,11 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
     public void enterLabeledElement(LabeledElementContext ctx) {
         IdContext label = ctx.label;
         if (label != null) {
-            TerminalNode<Token> nameToken = ParseTrees.getStartNode(label);
+            TerminalNode nameToken = ParseTrees.getStartNode(label);
             String name = nameToken.getText();
-            Collection<TerminalNode<Token>> uses = labelUses.peek().get(name);
+            Collection<TerminalNode> uses = labelUses.peek().get(name);
             if (uses == null) {
-                uses = new ArrayList<TerminalNode<Token>>();
+                uses = new ArrayList<TerminalNode>();
                 labelUses.peek().put(name, uses);
             }
 
@@ -338,7 +337,7 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
         fileModel.getImportDeclarations().add(importDeclarationModel);
     }
 
-    private SnapshotPositionRegion getSpan(ParserRuleContext<Token> context) {
+    private SnapshotPositionRegion getSpan(ParserRuleContext context) {
         if (context == null) {
             return null;
         }
@@ -362,13 +361,13 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
 
         for (ArgActionParameterContext context : contexts) {
             String type = getText(context.type);
-            TerminalNode<Token> name = ParseTrees.findTerminalNode(context, context.name);
+            TerminalNode name = ParseTrees.findTerminalNode(context, context.name);
             ParameterModelImpl parameter = new ParameterModelImpl(name != null ? name.getText() : "?", type, fileModel, name, context);
             models.add(parameter);
         }
     }
 
-    private String getText(ParserRuleContext<Token> context) {
+    private String getText(ParserRuleContext context) {
         if (context == null || context.start == null || context.stop == null) {
             return "";
         }
