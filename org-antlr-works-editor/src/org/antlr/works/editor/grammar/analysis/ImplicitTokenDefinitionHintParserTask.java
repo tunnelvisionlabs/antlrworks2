@@ -114,7 +114,7 @@ public final class ImplicitTokenDefinitionHintParserTask implements ParserTask {
         List<ErrorDescription> hints = new ArrayList<>();
         for (Interval interval : listener.getRewriteRanges()) {
             try {
-                hints.add(ErrorDescriptionFactory.createErrorDescription(Severity.WARNING, "Implicit token definition in parser rule", document, document.createPosition(interval.a), document.createPosition(interval.b + 1)));
+                hints.add(ErrorDescriptionFactory.createErrorDescription(Severity.VERIFIER, "Implicit token definition in parser rule", document, document.createPosition(interval.a), document.createPosition(interval.b + 1)));
             } catch (BadLocationException ex) {
                 Exceptions.printStackTrace(ex);
             }

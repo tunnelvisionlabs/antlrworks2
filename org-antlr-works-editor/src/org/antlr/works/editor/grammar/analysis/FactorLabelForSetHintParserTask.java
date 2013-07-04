@@ -106,7 +106,7 @@ public final class FactorLabelForSetHintParserTask implements ParserTask {
         List<ErrorDescription> hints = new ArrayList<>();
         for (Interval interval : listener.getRewriteRanges()) {
             try {
-                hints.add(ErrorDescriptionFactory.createErrorDescription(Severity.WARNING, "Factor label out of set", document, document.createPosition(interval.a), document.createPosition(interval.b + 1)));
+                hints.add(ErrorDescriptionFactory.createErrorDescription(Severity.VERIFIER, "Factor label out of set", document, document.createPosition(interval.a), document.createPosition(interval.b + 1)));
             } catch (BadLocationException ex) {
                 Exceptions.printStackTrace(ex);
             }
