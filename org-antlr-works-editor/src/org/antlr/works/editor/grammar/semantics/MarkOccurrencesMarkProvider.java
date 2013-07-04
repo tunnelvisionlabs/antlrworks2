@@ -116,12 +116,14 @@ public class MarkOccurrencesMarkProvider extends MarkProvider {
 
         @Override
         public Status getStatus() {
-            return Status.STATUS_OK;
+            // needs to be STATUS_WARNING or marks will be hidden by warnings in the error stripe
+            return Status.STATUS_WARNING;
         }
 
         @Override
         public int getPriority() {
-            return PRIORITY_DEFAULT;
+            // high priority
+            return 0;
         }
 
         @Override
