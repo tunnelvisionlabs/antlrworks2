@@ -63,4 +63,17 @@
             <file name="projectTab_tc.settings_hidden"/>
         </folder>
     </folder>
+    <folder name="Services">
+        <folder name="AutoupdateType">
+            <file name="standard-update-provider.instance">
+                <attr name="SystemFileSystem.localizingBundle" stringvalue="org.antlr.works.branding.Bundle"/>
+                <attr name="iconBase" stringvalue="org/netbeans/modules/updatecenters/resources/updateAction.gif"/>
+                <attr name="url_key" stringvalue="URL_LatestBuild"/>
+                <attr name="category" stringvalue="STANDARD"/>
+                <attr name="enabled" boolvalue="true"/>
+                <attr name="instanceOf" stringvalue="org.netbeans.spi.autoupdate.UpdateProvider"/>
+                <attr name="instanceCreate" methodvalue="org.netbeans.modules.autoupdate.updateprovider.AutoupdateCatalogFactory.createUpdateProvider"/>
+            </file>
+        </folder>
+    </folder>
 </filesystem>
