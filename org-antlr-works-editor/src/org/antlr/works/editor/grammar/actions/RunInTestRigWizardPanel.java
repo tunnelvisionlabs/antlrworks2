@@ -10,6 +10,7 @@ package org.antlr.works.editor.grammar.actions;
 
 import java.io.File;
 import java.nio.charset.Charset;
+import java.nio.charset.IllegalCharsetNameException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -203,6 +204,22 @@ public class RunInTestRigWizardPanel implements WizardDescriptor.Panel<WizardDes
 
         if (getStartRule() == null || getStartRule().isEmpty()) {
             return false;
+        }
+
+        if (isEncodingSpecified()) {
+            if (getEncoding() == null || getEncoding().isEmpty()) {
+                return false;
+            }
+
+            try {
+                if (!Charset.isSupported(getEncoding())) {
+                    return false;
+                }
+            } catch (IllegalCharsetNameException ex) {
+                return false;
+            } catch (IllegalArgumentException ex) {
+                return false;
+            }
         }
 
         return true;

@@ -77,6 +77,7 @@ public final class RunInTestRigVisualPanel extends javax.swing.JPanel {
 
         txtInputFile.getDocument().addDocumentListener(_documentListener);
         cmbStartRule.addActionListener(_actionListener);
+        txtEncoding.getDocument().addDocumentListener(_documentListener);
     }
 
     public String getInputFile() {
