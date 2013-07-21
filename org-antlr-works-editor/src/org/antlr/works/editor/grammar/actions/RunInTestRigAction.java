@@ -164,6 +164,8 @@ public final class RunInTestRigAction implements ActionListener {
             List<FileObject> dependencies = getDependencies(fileModel);
             TestRigTask task = new TestRigTask(baseGrammarName, fileObject, dependencies, inputFile);
             task.startRule = RunInTestRigWizardOptions.getStartRule(wizard);
+            task.encodingSpecified = RunInTestRigWizardOptions.isEncodingSpecified(wizard);
+            task.encoding = RunInTestRigWizardOptions.getEncoding(wizard);
             task.showTokens = RunInTestRigWizardOptions.isShowTokens(wizard);
             task.showTree = RunInTestRigWizardOptions.isShowTree(wizard);
             task.showTreeInGUI = RunInTestRigWizardOptions.isShowTreeInGUI(wizard);
@@ -243,6 +245,8 @@ public final class RunInTestRigAction implements ActionListener {
     private static class TestRigTask implements Runnable {
 
         public String startRule;
+        public boolean encodingSpecified;
+        public String encoding;
         public boolean showTokens;
         public boolean showTree;
         public boolean showTreeInGUI;
@@ -322,6 +326,12 @@ public final class RunInTestRigAction implements ActionListener {
                     List<String> testRigArguments = new ArrayList<>();
                     testRigArguments.add(baseGrammarName);
                     testRigArguments.add(startRule);
+
+                    if (encodingSpecified && encoding != null && !encoding.isEmpty()) {
+                        testRigArguments.add("-encoding");
+                        testRigArguments.add(encoding);
+                    }
+
                     if (showTokens) {
                         testRigArguments.add("-tokens");
                     }
