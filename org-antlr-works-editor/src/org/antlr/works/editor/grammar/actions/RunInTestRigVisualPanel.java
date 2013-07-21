@@ -11,6 +11,7 @@ package org.antlr.works.editor.grammar.actions;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Locale;
 import javax.swing.DefaultComboBoxModel;
@@ -178,7 +179,8 @@ public final class RunInTestRigVisualPanel extends javax.swing.JPanel {
         javax.swing.JLabel lblStartRule = new javax.swing.JLabel();
         chkEncoding = new javax.swing.JCheckBox();
         txtEncoding = new javax.swing.JTextField();
-        pnlOptions = new javax.swing.JPanel();
+        btnDefaultEncoding = new javax.swing.JButton();
+        javax.swing.JPanel pnlOptions = new javax.swing.JPanel();
         chkShowTokens = new javax.swing.JCheckBox();
         chkShowTree = new javax.swing.JCheckBox();
         chkShowTreeInGUI = new javax.swing.JCheckBox();
@@ -205,6 +207,17 @@ public final class RunInTestRigVisualPanel extends javax.swing.JPanel {
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, chkEncoding, org.jdesktop.beansbinding.ELProperty.create("${selected}"), txtEncoding, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
         bindingGroup.addBinding(binding);
 
+        org.openide.awt.Mnemonics.setLocalizedText(btnDefaultEncoding, org.openide.util.NbBundle.getMessage(RunInTestRigVisualPanel.class, "RunInTestRigVisualPanel.btnDefaultEncoding.text")); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, chkEncoding, org.jdesktop.beansbinding.ELProperty.create("${selected}"), btnDefaultEncoding, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
+        bindingGroup.addBinding(binding);
+
+        btnDefaultEncoding.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDefaultEncodingActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlInputLayout = new javax.swing.GroupLayout(pnlInput);
         pnlInput.setLayout(pnlInputLayout);
         pnlInputLayout.setHorizontalGroup(
@@ -221,7 +234,9 @@ public final class RunInTestRigVisualPanel extends javax.swing.JPanel {
                     .addComponent(txtEncoding)
                     .addComponent(txtInputFile))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnBrowseInput))
+                .addGroup(pnlInputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnBrowseInput, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnDefaultEncoding, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
         pnlInputLayout.setVerticalGroup(
             pnlInputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -237,7 +252,8 @@ public final class RunInTestRigVisualPanel extends javax.swing.JPanel {
                 .addGap(6, 6, 6)
                 .addGroup(pnlInputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(chkEncoding)
-                    .addComponent(txtEncoding, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtEncoding, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnDefaultEncoding))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -300,6 +316,10 @@ public final class RunInTestRigVisualPanel extends javax.swing.JPanel {
         browseForFile(txtInputFile);
     }//GEN-LAST:event_btnBrowseInputActionPerformed
 
+    private void btnDefaultEncodingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDefaultEncodingActionPerformed
+        setEncoding(Charset.defaultCharset().name());
+    }//GEN-LAST:event_btnDefaultEncodingActionPerformed
+
     private void browseForFile(JTextField field) {
         FileChooserBuilder builder = new FileChooserBuilder(RunInTestRigVisualPanel.class)
             .setTitle("Select input file");
@@ -319,12 +339,12 @@ public final class RunInTestRigVisualPanel extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBrowseInput;
+    private javax.swing.JButton btnDefaultEncoding;
     private javax.swing.JCheckBox chkEncoding;
     private javax.swing.JCheckBox chkShowTokens;
     private javax.swing.JCheckBox chkShowTree;
     private javax.swing.JCheckBox chkShowTreeInGUI;
     private javax.swing.JComboBox<String> cmbStartRule;
-    private javax.swing.JPanel pnlOptions;
     private javax.swing.JTextField txtEncoding;
     private javax.swing.JTextField txtInputFile;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
