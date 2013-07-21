@@ -8,6 +8,7 @@
  */
 package org.antlr.works.editor.grammar.actions;
 
+import java.nio.charset.Charset;
 import org.openide.WizardDescriptor;
 import org.openide.util.NbPreferences;
 
@@ -50,6 +51,14 @@ public abstract class RunInTestRigWizardOptions {
 
     public static String getStartRule(WizardDescriptor wiz) {
         return getProperty(wiz, RunInTestRigWizardPanel.START_RULE, "");
+    }
+
+    public static boolean isEncodingSpecified(WizardDescriptor wiz) {
+        return getBooleanProperty(wiz, RunInTestRigWizardPanel.ENCODING_SPECIFIED, false);
+    }
+
+    public static String getEncoding(WizardDescriptor wiz) {
+        return getProperty(wiz, RunInTestRigWizardPanel.ENCODING, Charset.defaultCharset().name());
     }
 
     public static boolean isShowTokens(WizardDescriptor wiz) {

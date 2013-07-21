@@ -9,6 +9,7 @@
 package org.antlr.works.editor.grammar.actions;
 
 import java.io.File;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -24,6 +25,8 @@ import org.openide.util.HelpCtx;
 public class RunInTestRigWizardPanel implements WizardDescriptor.Panel<WizardDescriptor> {
     public static final String INPUT_FILE = "inputFile";
     public static final String START_RULE = "startRule";
+    public static final String ENCODING_SPECIFIED = "encodingSpecified";
+    public static final String ENCODING = "encoding";
     public static final String SHOW_TOKENS = "showTokens";
     public static final String SHOW_TREE = "showTree";
     public static final String SHOW_TREE_GUI = "showTreeInGUI";
@@ -35,6 +38,8 @@ public class RunInTestRigWizardPanel implements WizardDescriptor.Panel<WizardDes
 
     private String _inputFile;
     private String _startRule;
+    private boolean _encodingSpecified;
+    private String _encoding;
     private boolean _showTokens;
     private boolean _showTree;
     private boolean _showTreeInGUI;
@@ -83,6 +88,38 @@ public class RunInTestRigWizardPanel implements WizardDescriptor.Panel<WizardDes
         }
 
         _startRule = ruleName;
+    }
+
+    public boolean isEncodingSpecified() {
+        if (component != null) {
+            return component.isEncodingSpecified();
+        }
+
+        return _encodingSpecified;
+    }
+
+    public void setEncodingSpecified(boolean value) {
+        if (component != null) {
+            component.setEncodingSpecified(value);
+        }
+        
+        _encodingSpecified = value;
+    }
+
+    public String getEncoding() {
+        if (component != null) {
+            return component.getEncoding();
+        }
+
+        return _encoding;
+    }
+
+    public void setEncoding(String value) {
+        if (component != null) {
+            component.setEncoding(value);
+        }
+
+        _encoding = value;
     }
 
     public boolean isShowTokens() {
@@ -191,6 +228,8 @@ public class RunInTestRigWizardPanel implements WizardDescriptor.Panel<WizardDes
 
         setInputFile(RunInTestRigWizardOptions.getProperty(wiz, INPUT_FILE, ""));
         setStartRule(RunInTestRigWizardOptions.getProperty(wiz, START_RULE, ""));
+        setEncodingSpecified(RunInTestRigWizardOptions.getBooleanProperty(wiz, ENCODING_SPECIFIED, false));
+        setEncoding(RunInTestRigWizardOptions.getProperty(wiz, ENCODING, Charset.defaultCharset().name()));
         setShowTokens(RunInTestRigWizardOptions.getBooleanProperty(wiz, SHOW_TOKENS, true));
         setShowTree(RunInTestRigWizardOptions.getBooleanProperty(wiz, SHOW_TREE, true));
         setShowTreeInGUI(RunInTestRigWizardOptions.getBooleanProperty(wiz, SHOW_TREE_GUI, true));
@@ -200,6 +239,8 @@ public class RunInTestRigWizardPanel implements WizardDescriptor.Panel<WizardDes
     public void storeSettings(WizardDescriptor wiz) {
         RunInTestRigWizardOptions.setProperty(wiz, INPUT_FILE, getInputFile());
         RunInTestRigWizardOptions.setProperty(wiz, START_RULE, getStartRule());
+        RunInTestRigWizardOptions.setBooleanProperty(wiz, ENCODING_SPECIFIED, isEncodingSpecified());
+        RunInTestRigWizardOptions.setProperty(wiz, ENCODING, getEncoding());
         RunInTestRigWizardOptions.setBooleanProperty(wiz, SHOW_TOKENS, isShowTokens());
         RunInTestRigWizardOptions.setBooleanProperty(wiz, SHOW_TREE, isShowTree());
         RunInTestRigWizardOptions.setBooleanProperty(wiz, SHOW_TREE_GUI, isShowTreeInGUI());
