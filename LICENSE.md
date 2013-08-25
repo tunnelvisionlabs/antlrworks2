@@ -25,8 +25,8 @@ GNU General Public License version 2 with Classpath Exception
 ("GPLv2 with Classpath Exception"), which is identified below.
 
 Third party technology that may be necessary for use with
-the Product is specified in THIRDPARTYLICENSE.txt. Such
-third party technology is licensed to you under the terms of
+the Product is specified in [THIRDPARTYLICENSE.md](THIRDPARTYLICENSE.md).
+Such third party technology is licensed to you under the terms of
 the third party technology license agreement specified and
 not under the GPLv2 with Classpath Exception. Please review
 the list of libraries and licenses provided for use.
