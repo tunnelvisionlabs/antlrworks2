@@ -8,7 +8,7 @@
 
     <target name="init-complete-artifact">
         <property name="artifact.name" value="antlr4-complete"/>
-        <property name="artifact.commit" value="9b85e9c636bd712ea3f8930a12bf5cc921c09f94"/>
+        <property name="artifact.commit" value="e34669e8352f7f5a282af015501c770119ed993d"/>
         <property name="grammar.resources.dir" value="src/org/antlr/works/editor/grammar/resources"/>
         <property name="modules.cache.dir" value="lib/cache"/>
         <property name="artifact.intermediatefile" value="${modules.cache.dir}/${artifact.name}-${artifact.commit}.jar"/>

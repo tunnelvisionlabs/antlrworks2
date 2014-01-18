@@ -8,7 +8,7 @@
 
     <target name="init-artifact">
         <property name="artifact.name" value="antlr4_runtime"/>
-        <property name="artifact.commit" value="bafb26c5c7f5db2134d8644a19156cc6ac5c0f65"/>
+        <property name="artifact.commit" value="a61a2576aca244f1677a665c39dcc39aa5012e54"/>
         <property name="modules.ext.dir" value="release/modules/ext"/>
         <property name="artifact.file" value="${modules.ext.dir}/${artifact.name}.jar"/>
     </target>
