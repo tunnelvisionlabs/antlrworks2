@@ -11,6 +11,7 @@ package org.antlr.works.editor.grammar.debugger;
 import org.antlr.v4.Tool;
 import org.antlr.v4.analysis.AnalysisPipeline;
 import org.antlr.v4.automata.ATNFactory;
+import org.antlr.v4.automata.LexerATNFactory;
 import org.antlr.v4.automata.ParserATNFactory;
 import org.antlr.v4.codegen.CodeGenPipeline;
 import org.antlr.v4.parse.ANTLRParser;
@@ -26,6 +27,10 @@ import org.antlr.v4.tool.ast.GrammarRootAST;
  */
 public class TracingTool extends Tool {
 
+    /**
+     * This method overrides {@link Tool#process} to return immediately after
+     * processing the lexer portion of the grammar.
+     */
     @Override
     public void process(Grammar g, boolean gencode) {
 		g.loadImportedGrammars();
@@ -40,7 +45,11 @@ public class TracingTool extends Tool {
 		{
 			lexerAST = transform.extractImplicitLexer(g); // alters g.ast
 			if ( lexerAST!=null ) {
-				lexerg = new TracingLexerGrammar(this, lexerAST);
+				if (grammarOptions != null) {
+					lexerAST.cmdLineOptions = grammarOptions;
+				}
+
+				lexerg = new LexerGrammar(this, lexerAST);
 				lexerg.fileName = g.fileName;
 				lexerg.originalGrammar = g;
 				g.implicitLexer = lexerg;
@@ -56,60 +65,4 @@ public class TracingTool extends Tool {
 //		System.out.println("strings="+g.stringLiteralToTypeMap);
 		processNonCombinedGrammar(g, gencode);
     }
-
-    @Override
-    public Grammar createGrammar(GrammarRootAST ast) {
-		final Grammar g;
-		if ( ast.grammarType==ANTLRParser.LEXER ) g = new TracingLexerGrammar(this, ast);
-		else g = new Grammar(this, ast);
-
-		// ensure each node has pointer to surrounding grammar
-		GrammarTransformPipeline.setGrammarPtr(g, ast);
-		return g;
-    }
-
-    @Override
-    public void processNonCombinedGrammar(Grammar g, boolean gencode) {
-		if ( g.ast!=null && internalOption_PrintGrammarTree ) System.out.println(g.ast.toStringTree());
-		//g.ast.inspect();
-
-		if ( g.ast.hasErrors ) return;
-
-		boolean ruleFail = checkForRuleIssues(g);
-		if ( ruleFail ) return;
-
-		int prevErrors = errMgr.getNumErrors();
-		// MAKE SURE GRAMMAR IS SEMANTICALLY CORRECT (FILL IN GRAMMAR OBJECT)
-		SemanticPipeline sem = new SemanticPipeline(g);
-		sem.process();
-
-		if ( errMgr.getNumErrors()>prevErrors ) return;
-
-		// BUILD ATN FROM AST
-		ATNFactory factory;
-		if ( g.isLexer() ) factory = new TracingLexerATNFactory((LexerGrammar)g);
-		else factory = new ParserATNFactory(g);
-		g.atn = factory.createATN();
-
-        if (factory instanceof TracingLexerATNFactory) {
-            ((TracingLexerGrammar)g)._actionsMap = ((TracingLexerATNFactory)factory)._actionsMap;
-        }
-
-		if ( generate_ATN_dot ) generateATNs(g);
-
-		// PERFORM GRAMMAR ANALYSIS ON ATN: BUILD DECISION DFAs
-		AnalysisPipeline anal = new AnalysisPipeline(g);
-		anal.process();
-
-		//if ( generate_DFA_dot ) generateDFAs(g);
-
-		if ( g.tool.getNumErrors()>prevErrors ) return;
-
-		// GENERATE CODE
-		if ( gencode ) {
-			CodeGenPipeline gen = new CodeGenPipeline(g);
-			gen.process();
-		}
-    }
-
 }

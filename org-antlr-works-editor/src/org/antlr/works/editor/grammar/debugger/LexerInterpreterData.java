@@ -10,19 +10,17 @@ package org.antlr.works.editor.grammar.debugger;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.v4.Tool;
-import org.antlr.v4.automata.ATNSerializer;
 import org.antlr.v4.misc.Utils;
+import org.antlr.v4.runtime.atn.ATNSerializer;
 import org.antlr.v4.tool.Grammar;
 import org.antlr.v4.tool.LexerGrammar;
 import org.antlr.v4.tool.ast.GrammarRootAST;
 import org.antlr.works.editor.grammar.debugger.LexerDebuggerControllerTopComponent.TokenDescriptor;
-import org.antlr.works.editor.grammar.debugger.TracingLexer.LexerAction;
 
 /**
  *
@@ -35,22 +33,21 @@ public class LexerInterpreterData {
     public List<TokenDescriptor> tokenNames;
     public List<String> ruleNames;
     public List<String> modeNames;
-    public Map<Integer, Collection<LexerAction>> actionsMap;
 
     public static LexerInterpreterData buildFromSnapshot(DocumentSnapshot snapshot) {
         Tool tool = new TracingTool();
 
         ANTLRStringStream stream = new ANTLRStringStream(snapshot.getText());
         stream.name = snapshot.getVersionedDocument().getFileObject().getNameExt();
-        GrammarRootAST ast = tool.load(stream.name, stream);
+        GrammarRootAST ast = tool.parse(stream.name, stream);
         Grammar grammar = tool.createGrammar(ast);
         tool.process(grammar, false);
 
-        TracingLexerGrammar lexerGrammar;
+        LexerGrammar lexerGrammar;
         if (grammar instanceof LexerGrammar) {
-            lexerGrammar = (TracingLexerGrammar)grammar;
+            lexerGrammar = (LexerGrammar)grammar;
         } else {
-            lexerGrammar = (TracingLexerGrammar)grammar.implicitLexer;
+            lexerGrammar = grammar.implicitLexer;
         }
 
         if (lexerGrammar == null) {
@@ -59,11 +56,10 @@ public class LexerInterpreterData {
 
         LexerInterpreterData data = new LexerInterpreterData();
         data.grammarFileName = lexerGrammar.fileName;
-        data.serializedAtn = ATNSerializer.getSerializedAsString(lexerGrammar, lexerGrammar.atn);
+        data.serializedAtn = ATNSerializer.getSerializedAsString(lexerGrammar.atn, Arrays.asList(lexerGrammar.getRuleNames()));
         data.tokenNames = new ArrayList<>(Arrays.asList(getTokenNames(lexerGrammar)));
         data.ruleNames = new ArrayList<>(lexerGrammar.rules.keySet());
         data.modeNames = new ArrayList<>(lexerGrammar.modes.keySet());
-        data.actionsMap = lexerGrammar._actionsMap;
         return data;
     }
 
