@@ -94,7 +94,7 @@ public class CompiledModelParserV4 extends CompiledModelParser {
                 tool.errMgr = new CustomErrorManager(tool);
                 tool.addListener(new ErrorListener(snapshot, tool, syntaxErrors));
                 tool.libDirectory = new File(snapshot.getVersionedDocument().getFileObject().getPath()).getParent();
-                GrammarRootAST root = tool.loadFromString(snapshot.getText().toString());
+                GrammarRootAST root = tool.parseGrammarFromString(snapshot.getText().toString());
 
                 Grammar grammar = null;
                 CommonToken[] tokens = null;
