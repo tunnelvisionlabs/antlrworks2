@@ -15,7 +15,7 @@ import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.atn.ATN;
-import org.antlr.v4.runtime.atn.ATNSimulator;
+import org.antlr.v4.runtime.atn.ATNDeserializer;
 import org.antlr.v4.runtime.atn.ATNState;
 import org.antlr.v4.runtime.atn.AtomTransition;
 import org.antlr.v4.runtime.atn.LexerATNSimulator;
@@ -185,7 +185,7 @@ public class GroupHighlighterLexer extends AbstractGroupHighlighterLexer {
             return atn;
         }
 
-        atn = ATNSimulator.deserialize(_serializedATN.toCharArray());
+        atn = new ATNDeserializer().deserialize(_serializedATN.toCharArray());
         for (ATNState state : atn.states) {
             if (state == null) {
                 continue;

@@ -25,7 +25,7 @@ import javax.swing.text.TextAction;
 import javax.xml.bind.DatatypeConverter;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.atn.ATN;
-import org.antlr.v4.runtime.atn.ATNSimulator;
+import org.antlr.v4.runtime.atn.ATNDeserializer;
 import org.antlr.works.editor.grammar.debugger.LexerDebuggerTokenHighlighterLayerFactory.LexerOpCode;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.netbeans.editor.BaseDocument;
@@ -195,7 +195,7 @@ public class LexerDebuggerEditorKit extends NbEditorKit {
         try {
             TracingCharStream charStream = new TracingCharStream(listener, document.getText(0, document.getLength()));
             TracingLexer lexer = new TracingLexer(interpreterData, listener, charStream);
-            ATN atn = ATNSimulator.deserialize(interpreterData.serializedAtn.toCharArray());
+            ATN atn = new ATNDeserializer().deserialize(interpreterData.serializedAtn.toCharArray());
             TracingLexerATNSimulator atnSimulator = new TracingLexerATNSimulator(listener, lexer, atn);
             lexer.setInterpreter(atnSimulator);
             CommonTokenStream commonTokenStream = new CommonTokenStream(lexer);
