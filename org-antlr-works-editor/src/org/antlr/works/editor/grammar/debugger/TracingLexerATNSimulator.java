@@ -40,9 +40,19 @@ public class TracingLexerATNSimulator extends LexerATNSimulator {
     }
 
     @Override
-    protected int matchATN(CharStream input) {
-        _listener.matchATN();
-        return super.matchATN(input);
+    protected DFAState getExistingTargetState(DFAState s, int t) {
+        DFAState target = super.getExistingTargetState(s, t);
+        if (target != null) {
+            _listener.transition(false);
+        }
+
+        return target;
+    }
+
+    @Override
+    protected DFAState computeTargetState(CharStream input, DFAState s, int t) {
+        _listener.transition(true);
+        return super.computeTargetState(input, s, t);
     }
 
     @Override
@@ -50,16 +60,4 @@ public class TracingLexerATNSimulator extends LexerATNSimulator {
         _listener.acceptState(dfaState.prediction);
         super.captureSimState(settings, input, dfaState);
     }
-
-    @Override
-    protected void getReachableConfigSet(CharStream input, ATNConfigSet closure, ATNConfigSet reach, int t) {
-        _listener.failOverToATN();
-        super.getReachableConfigSet(input, closure, reach, t);
-    }
-
-    @Override
-    protected int failOrAccept(SimState prevAccept, CharStream input, ATNConfigSet reach, int t) {
-        return super.failOrAccept(prevAccept, input, reach, t);
-    }
-
 }

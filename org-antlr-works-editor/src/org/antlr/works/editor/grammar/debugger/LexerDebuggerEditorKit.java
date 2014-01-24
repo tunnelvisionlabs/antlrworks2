@@ -16,6 +16,8 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.logging.Logger;
 import javax.swing.Action;
 import javax.swing.text.BadLocationException;
@@ -47,7 +49,10 @@ public class LexerDebuggerEditorKit extends NbEditorKit {
     public static final String PROP_TRACE = "Lexer Trace";
     public static final String PROP_INTERP_DATA = "Lexer Interpreter Data";
     public static final String PROP_TOKENS = "Trace Tokens";
+    public static final String PROP_ATN_CHARACTERS = "Trace ATN Transitions";
+    public static final String PROP_DFA_CHARACTERS = "Trace DFA Transitions";
     public static final String PROP_SELECTED_TOKENS = "Selected Trace Tokens";
+    public static final String PROP_SELECTED_CHARACTERS = "Selected Characters";
     public static final String PROP_CHANNELS = "Channels";
 
     public static final String PROP_TOKEN_NAMES = "Token Names";
@@ -158,74 +163,154 @@ public class LexerDebuggerEditorKit extends NbEditorKit {
     public TraceToken[] getTokens(Document document) {
         TraceToken[] tokens = (TraceToken[])document.getProperty(PROP_TOKENS);
         if (tokens == null) {
+            LexerTraceAnalyzer analyzer = new LexerTraceAnalyzer(document, true, false, false);
             byte[] traceData = (byte[])document.getProperty(PROP_TRACE);
             if (traceData != null) {
-                tokens = loadTokens(document, new ByteArrayInputStream(traceData));
+                loadTokens(document, new ByteArrayInputStream(traceData), analyzer);
             }
             else {
                 LexerInterpreterData interpreterData = (LexerInterpreterData)document.getProperty(PROP_INTERP_DATA);
                 if (interpreterData != null) {
-                    tokens = loadTokens(document, interpreterData);
+                    loadTokens(document, interpreterData, analyzer);
                 }
             }
 
+            tokens = analyzer.tokens.toArray(new TraceToken[analyzer.tokens.size()]);
             document.putProperty(PROP_TOKENS, tokens);
         }
 
         return tokens;
     }
 
-    private TraceToken[] loadTokens(final Document document, LexerInterpreterData interpreterData) {
-        final List<TraceToken> tokens = new ArrayList<>();
-
-        LexerTraceListener listener = new AbstractLexerTraceListener() {
-            int mode;
-
-            @Override
-            public void beginMatch(int mode, int index) {
-                this.mode = mode;
+    public TupleIntInt[] getAtnTransitions(Document document) {
+        TupleIntInt[] transitions = (TupleIntInt[])document.getProperty(PROP_ATN_CHARACTERS);
+        if (transitions == null) {
+            LexerTraceAnalyzer analyzer = new LexerTraceAnalyzer(document, false, true, false);
+            byte[] traceData = (byte[])document.getProperty(PROP_TRACE);
+            if (traceData != null) {
+                loadTokens(document, new ByteArrayInputStream(traceData), analyzer);
+            }
+            else {
+                LexerInterpreterData interpreterData = (LexerInterpreterData)document.getProperty(PROP_INTERP_DATA);
+                if (interpreterData != null) {
+                    loadTokens(document, interpreterData, analyzer);
+                }
             }
 
-            @Override
-            public void emit(int startIndex, int stopIndex, int type, int channel) {
-                tokens.add(new TraceToken(document, startIndex, stopIndex, tokens.size(), type, channel, mode));
+            transitions = getCharacterData(analyzer.atnCharacters);
+            document.putProperty(PROP_ATN_CHARACTERS, transitions);
+        }
+
+        return transitions;
+    }
+
+    public TupleIntInt[] getDfaTransitions(Document document) {
+        TupleIntInt[] transitions = (TupleIntInt[])document.getProperty(PROP_DFA_CHARACTERS);
+        if (transitions == null) {
+            LexerTraceAnalyzer analyzer = new LexerTraceAnalyzer(document, false, false, true);
+            byte[] traceData = (byte[])document.getProperty(PROP_TRACE);
+            if (traceData != null) {
+                loadTokens(document, new ByteArrayInputStream(traceData), analyzer);
+            }
+            else {
+                LexerInterpreterData interpreterData = (LexerInterpreterData)document.getProperty(PROP_INTERP_DATA);
+                if (interpreterData != null) {
+                    loadTokens(document, interpreterData, analyzer);
+                }
             }
 
-        };
+            transitions = getCharacterData(analyzer.dfaCharacters);
+            document.putProperty(PROP_DFA_CHARACTERS, transitions);
+        }
+
+        return transitions;
+    }
+
+    private TupleIntInt[] getCharacterData(Map<Integer, Integer> map) {
+        List<TupleIntInt> result = new ArrayList<>();
+        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+            result.add(new TupleIntInt(entry.getKey(), entry.getValue()));
+        }
+
+        return result.toArray(new TupleIntInt[result.size()]);
+    }
+
+    private void loadTokens(final Document document, LexerInterpreterData interpreterData, LexerTraceAnalyzer analyzer) {
         try {
-            TracingCharStream charStream = new TracingCharStream(listener, document.getText(0, document.getLength()));
-            TracingLexer lexer = new TracingLexer(interpreterData, listener, charStream);
+            TracingCharStream charStream = new TracingCharStream(analyzer, document.getText(0, document.getLength()));
+            TracingLexer lexer = new TracingLexer(interpreterData, analyzer, charStream);
             ATN atn = new ATNDeserializer().deserialize(interpreterData.serializedAtn.toCharArray());
-            TracingLexerATNSimulator atnSimulator = new TracingLexerATNSimulator(listener, lexer, atn);
+            TracingLexerATNSimulator atnSimulator = new TracingLexerATNSimulator(analyzer, lexer, atn);
             lexer.setInterpreter(atnSimulator);
             CommonTokenStream commonTokenStream = new CommonTokenStream(lexer);
             commonTokenStream.fill();
-            return tokens.toArray(new TraceToken[0]);
         } catch (BadLocationException ex) {
             Exceptions.printStackTrace(ex);
-            return new TraceToken[0];
         }
     }
 
-    private TraceToken[] loadTokens(final Document document, InputStream reader) {
-        final List<TraceToken> tokens = new ArrayList<>();
+    private void loadTokens(final Document document, InputStream reader, LexerTraceAnalyzer analyzer) {
+        loadTrace(document, reader, analyzer);
+    }
 
-        loadTrace(document, reader, new AbstractLexerTraceListener() {
-            int mode;
+    private static class LexerTraceAnalyzer extends AbstractLexerTraceListener {
+        public final List<TraceToken> tokens = new ArrayList<>();
+        public final Map<Integer, Integer> atnCharacters = new TreeMap<>();
+        public final Map<Integer, Integer> dfaCharacters = new TreeMap<>();
 
-            @Override
-            public void beginMatch(int mode, int index) {
-                this.mode = mode;
+        private final Document document;
+        private final boolean calculateTokens;
+        private final boolean calculateAtnCharacters;
+        private final boolean calculateDfaCharacters;
+
+        private int mode;
+        private int inputIndex;
+
+        public LexerTraceAnalyzer(Document document, boolean calculateTokens, boolean calculateAtnCharacters, boolean calculateDfaCharacters) {
+            this.document = document;
+            this.calculateTokens = calculateTokens;
+            this.calculateAtnCharacters = calculateAtnCharacters;
+            this.calculateDfaCharacters = calculateDfaCharacters;
+        }
+
+        @Override
+        public void beginMatch(int mode, int index) {
+            this.mode = mode;
+        }
+
+        @Override
+        public void seek(int index) {
+            inputIndex = index;
+        }
+
+        @Override
+        public void consume(int symbol, int nextIndex) {
+            inputIndex = nextIndex;
+        }
+
+        @Override
+        public void transition(boolean computed) {
+            if (computed && !calculateAtnCharacters) {
+                return;
+            } else if (!computed && !calculateDfaCharacters) {
+                return;
             }
 
-            @Override
-            public void emit(int startIndex, int stopIndex, int type, int channel) {
-                tokens.add(new TraceToken(document, startIndex, stopIndex, tokens.size(), type, channel, mode));
+            Map<Integer, Integer> map = computed ? atnCharacters : dfaCharacters;
+            Integer previous = map.put(inputIndex, 1);
+            if (previous != null) {
+                map.put(inputIndex, previous + 1);
+            }
+        }
+
+        @Override
+        public void emit(int startIndex, int stopIndex, int type, int channel) {
+            if (!calculateTokens) {
+                return;
             }
 
-        });
-
-        return tokens.toArray(new TraceToken[0]);
+            tokens.add(new TraceToken(document, startIndex, stopIndex, tokens.size(), type, channel, mode));
+        }
     }
 
     public void processTrace(Document document, LexerTraceListener listener) {
@@ -259,19 +344,10 @@ public class LexerDebuggerEditorKit extends NbEditorKit {
                     listener.endMatch();
                     break;
 
-                case MatchATN:
-                    assert opcode.getArgumentSize() == 0;
-                    listener.matchATN();
-                    break;
-
-                case MatchDFA:
-                    assert opcode.getArgumentSize() == 0;
-                    listener.matchDFA();
-                    break;
-
-                case FailOverToATN:
-                    assert opcode.getArgumentSize() == 0;
-                    listener.failOverToATN();
+                case Transition:
+                    assert opcode.getArgumentSize() == 1;
+                    boolean computed = reader.read() != 0;
+                    listener.transition(computed);
                     break;
 
                 case AcceptState:

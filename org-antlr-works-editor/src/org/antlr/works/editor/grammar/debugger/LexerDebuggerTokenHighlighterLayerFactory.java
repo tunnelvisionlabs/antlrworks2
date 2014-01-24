@@ -260,9 +260,6 @@ public class LexerDebuggerTokenHighlighterLayerFactory implements HighlightsLaye
                     break;
                 }
                 case EndMatch:
-                case MatchATN:
-                case MatchDFA:
-                case FailOverToATN:
                 case AcceptState:
                 case Predict:
                     reader.skip(opcode.getArgumentSize());
@@ -274,6 +271,7 @@ public class LexerDebuggerTokenHighlighterLayerFactory implements HighlightsLaye
                     reader.skip(opcode.getArgumentSize());
                     break;
 
+                case Transition:
                 case PushMode:
                 case PopMode:
                     reader.skip(opcode.getArgumentSize());
@@ -313,9 +311,7 @@ public class LexerDebuggerTokenHighlighterLayerFactory implements HighlightsLaye
     public enum LexerOpCode {
         BeginMatch(5),
         EndMatch(0),
-        MatchATN(0),
-        MatchDFA(0),
-        FailOverToATN(0),
+        Transition(1),
         AcceptState(4),
         Predict(4),
 

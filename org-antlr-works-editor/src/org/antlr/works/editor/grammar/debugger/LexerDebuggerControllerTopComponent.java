@@ -18,6 +18,8 @@ import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import javax.swing.AbstractListModel;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JLabel;
@@ -323,10 +325,6 @@ public final class LexerDebuggerControllerTopComponent extends TopComponent {
             public void valueChanged(ListSelectionEvent e) {
                 JList<?> list = (JList<?>)e.getSource();
                 JTextComponent editor = EditorRegistry.lastFocusedComponent();
-                final TraceToken[] tokens = getEditorTokens(editor);
-                if (tokens.length == 0) {
-                    return;
-                }
 
                 boolean showAtnTmp = false;
                 boolean showDfaTmp = false;
@@ -341,36 +339,18 @@ public final class LexerDebuggerControllerTopComponent extends TopComponent {
                 final boolean showAtn = showAtnTmp;
                 final boolean showDfa = showDfaTmp;
 
-                final List<TraceToken> selectedTokens = new ArrayList<>();
-                if (showAtn || showDfa) {
-                    LexerDebuggerEditorKit kit = (LexerDebuggerEditorKit)editor.getUI().getEditorKit(editor);
-                    kit.processTrace(editor.getDocument(), new AbstractLexerTraceListener() {
-                        int tokenIndex = 0;
-                        boolean atn = false;
-
-                        @Override
-                        public void matchATN() {
-                            atn = true;
-                        }
-
-                        @Override
-                        public void failOverToATN() {
-                            atn = true;
-                        }
-
-                        @Override
-                        public void emit(int startIndex, int stopIndex, int type, int channel) {
-                            if ((atn && showAtn) || (!atn && showDfa)) {
-                                selectedTokens.add(tokens[tokenIndex]);
-                            }
-
-                            tokenIndex++;
-                            atn = false;
-                        }
-                    });
+                TupleIntInt[] highlightedCharacters;
+                if (showAtn) {
+                    TupleIntInt[] atnCharacters = getEditorAtnCharacters(editor);
+                    highlightedCharacters = atnCharacters;
+                } else if (showDfa) {
+                    TupleIntInt[] dfaCharacters = getEditorDfaCharacters(editor);
+                    highlightedCharacters = dfaCharacters;
+                } else {
+                    highlightedCharacters = new TupleIntInt[0];
                 }
 
-                editor.getDocument().putProperty(LexerDebuggerEditorKit.PROP_SELECTED_TOKENS, selectedTokens);
+                editor.getDocument().putProperty(LexerDebuggerEditorKit.PROP_SELECTED_CHARACTERS, highlightedCharacters);
             }
         });
     }
@@ -791,6 +771,37 @@ public final class LexerDebuggerControllerTopComponent extends TopComponent {
         }
 
         return ((LexerDebuggerEditorKit)kit).getTokens(document);
+    }
+
+    private static TupleIntInt[] getEditorAtnCharacters(@NonNull JTextComponent component) {
+        return getEditorTransitions(component, true);
+    }
+
+    private static TupleIntInt[] getEditorDfaCharacters(@NonNull JTextComponent component) {
+        return getEditorTransitions(component, false);
+    }
+
+    private static TupleIntInt[] getEditorTransitions(@NonNull JTextComponent component, boolean atn) {
+        TextUI ui = component.getUI();
+        if (ui == null) {
+            return new TupleIntInt[0];
+        }
+
+        EditorKit kit = ui.getEditorKit(component);
+        if (!(kit instanceof LexerDebuggerEditorKit)) {
+            return new TupleIntInt[0];
+        }
+
+        Document document = component.getDocument();
+        if (document == null) {
+            return new TupleIntInt[0];
+        }
+
+        if (atn) {
+            return ((LexerDebuggerEditorKit)kit).getAtnTransitions(document);
+        } else {
+            return ((LexerDebuggerEditorKit)kit).getDfaTransitions(document);
+        }
     }
 
     private static class TraceTokenListCellRenderer extends DefaultListCellRenderer {

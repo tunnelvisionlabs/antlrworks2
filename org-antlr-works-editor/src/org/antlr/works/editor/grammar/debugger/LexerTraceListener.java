@@ -18,11 +18,7 @@ public interface LexerTraceListener {
 
     void endMatch();
 
-    void matchATN();
-
-    void matchDFA();
-
-    void failOverToATN();
+    void transition(boolean computed);
 
     void acceptState(int tokenType);
 

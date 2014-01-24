@@ -56,9 +56,9 @@ public class LexerDebuggerSelectedTokenHighlighterLayerFactory implements Highli
 
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
-                if (LexerDebuggerEditorKit.PROP_SELECTED_TOKENS.equals(evt.getPropertyName())) {
+                switch (evt.getPropertyName()) {
+                case LexerDebuggerEditorKit.PROP_SELECTED_TOKENS:
                     container.clear();
-
                     List<?> tokens = (List<?>)evt.getNewValue();
                     for (Object obj : tokens) {
                         if (obj instanceof TraceToken) {
@@ -66,6 +66,20 @@ public class LexerDebuggerSelectedTokenHighlighterLayerFactory implements Highli
                             container.addHighlight(token.getStartIndex(), token.getStopIndex() + 1, getSelectedTokenAttributes(token.getMode()));
                         }
                     }
+                    break;
+
+                case LexerDebuggerEditorKit.PROP_SELECTED_CHARACTERS:
+                    container.clear();
+                    TupleIntInt[] characters = (TupleIntInt[])evt.getNewValue();
+                    if (characters != null) {
+                        for (TupleIntInt character : characters) {
+                            container.addHighlight(character.getItem1(), character.getItem1() + 1, getSelectedTokenAttributes(character.getItem2() - 1));
+                        }
+                    }
+                    break;
+
+                default:
+                    break;
                 }
             }
         });

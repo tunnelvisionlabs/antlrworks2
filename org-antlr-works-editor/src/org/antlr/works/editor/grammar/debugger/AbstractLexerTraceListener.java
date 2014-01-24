@@ -23,15 +23,7 @@ public abstract class AbstractLexerTraceListener implements LexerTraceListener {
     }
 
     @Override
-    public void matchATN() {
-    }
-
-    @Override
-    public void matchDFA() {
-    }
-
-    @Override
-    public void failOverToATN() {
+    public void transition(boolean computed) {
     }
 
     @Override
