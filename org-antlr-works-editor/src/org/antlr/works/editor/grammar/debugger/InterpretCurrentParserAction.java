@@ -1,11 +1,12 @@
 /*
- *  Copyright (c) 2012 Sam Harwell, Tunnel Vision Laboratories LLC
+ *  Copyright (c) 2014 Sam Harwell, Tunnel Vision Laboratories LLC
  *  All rights reserved.
- * 
+ *
  *  The source code of this document is proprietary work, and is not licensed for
  *  distribution. For information about licensing, contact Sam Harwell at:
  *      sam@tunnelvisionlabs.com
  */
+
 package org.antlr.works.editor.grammar.debugger;
 
 import java.awt.event.ActionEvent;
@@ -34,18 +35,22 @@ import org.openide.loaders.DataObjectNotFoundException;
 import org.openide.util.Exceptions;
 import org.openide.util.NbBundle.Messages;
 
+/**
+ *
+ * @author Sam Harwell
+ */
 @ActionID(
     category = "Debug",
-    id = "org.antlr.works.editor.grammar.debugger.InterpretCurrentLexerAction")
+    id = "org.antlr.works.editor.grammar.debugger.InterpretCurrentParserAction")
 @ActionRegistration(
-    displayName = "#CTL_InterpretCurrentLexerAction")
-@ActionReference(path = "Menu/BuildProject", position = 248, separatorBefore = 223)
-@Messages("CTL_InterpretCurrentLexerAction=Interpret Lexer...")
-public final class InterpretCurrentLexerAction implements ActionListener {
+    displayName = "#CTL_InterpretCurrentParserAction")
+@ActionReference(path = "Menu/BuildProject", position = 249, separatorBefore = 223)
+@Messages("CTL_InterpretCurrentParserAction=Interpret Parser...")
+public class InterpretCurrentParserAction implements ActionListener {
 
     private final EditorCookie context;
 
-    public InterpretCurrentLexerAction(EditorCookie context) {
+    public InterpretCurrentParserAction(EditorCookie context) {
         this.context = context;
     }
 
@@ -69,13 +74,13 @@ public final class InterpretCurrentLexerAction implements ActionListener {
         }
 
         DocumentSnapshot snapshot = VersionedDocumentUtilities.getVersionedDocument(document).getCurrentSnapshot();
-        LexerInterpreterData lexerInterpreterData = LexerInterpreterData.buildFromSnapshot(snapshot);
-        if (lexerInterpreterData == null) {
-            displayError("An error occurred while constructing a lexer ATN from the grammar.");
+        ParserInterpreterData parserInterpreterData = ParserInterpreterData.buildFromSnapshot(snapshot);
+        if (parserInterpreterData == null) {
+            displayError("An error occurred while constructing a lexer or parser ATN from the grammar.");
             return;
         }
 
-        File inputFile = new FileChooserBuilder(InterpretCurrentLexerAction.class)
+        File inputFile = new FileChooserBuilder(InterpretCurrentParserAction.class)
             .setTitle("Select input file")
             .showOpenDialog();
 
@@ -90,13 +95,14 @@ public final class InterpretCurrentLexerAction implements ActionListener {
 
         try {
             FileSystem fileSystem = FileUtil.createMemoryFileSystem();
-            FileObject tempFileObject = FileUtil.copyFile(FileUtil.toFileObject(inputFile), fileSystem.getRoot(), inputFile.getName(), "linterp");
+            FileObject tempFileObject = FileUtil.copyFile(FileUtil.toFileObject(inputFile), fileSystem.getRoot(), inputFile.getName(), "pinterp");
             DataObject od = DataObject.find(tempFileObject);
 
             EditorCookie ec = od.getLookup().lookup(EditorCookie.class);
             Document opened = ec.openDocument();
             if (opened != null) {
-                opened.putProperty(LexerDebuggerEditorKit.PROP_LEXER_INTERP_DATA, lexerInterpreterData);
+                opened.putProperty(ParserDebuggerEditorKit.PROP_LEXER_INTERP_DATA, parserInterpreterData.lexerInterpreterData);
+                opened.putProperty(ParserDebuggerEditorKit.PROP_PARSER_INTERP_DATA, parserInterpreterData);
                 OpenCookie oc = od.getLookup().lookup(OpenCookie.class);
                 if (oc != null) {
                     doOpen(oc);
@@ -112,7 +118,7 @@ public final class InterpretCurrentLexerAction implements ActionListener {
     }
 
     private void displayError(String message) {
-        NotificationDisplayer.getDefault().notify("Interpret Current Lexer", NotificationIcons.ERROR, message, null);
+        NotificationDisplayer.getDefault().notify("Interpret Current Parser", NotificationIcons.ERROR, message, null);
     }
 
     private void doOpen(final OpenCookie oc) {

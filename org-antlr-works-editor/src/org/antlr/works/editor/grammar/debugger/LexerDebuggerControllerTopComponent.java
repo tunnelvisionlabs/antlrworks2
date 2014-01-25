@@ -18,8 +18,6 @@ import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 import javax.swing.AbstractListModel;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JLabel;
@@ -606,7 +604,7 @@ public final class LexerDebuggerControllerTopComponent extends TopComponent {
                 List<TokenDescriptor> tokenDescriptors = tokenDescriptorArray != null ? Arrays.asList(tokenDescriptorArray) : Collections.<TokenDescriptor>emptyList();
                 List<String> modeNames = modeNamesArray != null ? Arrays.asList(modeNamesArray) : Collections.<String>emptyList();
                 if (tokenDescriptors.isEmpty()) {
-                    LexerInterpreterData lexerInterpreterData = (LexerInterpreterData)document.getProperty(LexerDebuggerEditorKit.PROP_INTERP_DATA);
+                    LexerInterpreterData lexerInterpreterData = (LexerInterpreterData)document.getProperty(LexerDebuggerEditorKit.PROP_LEXER_INTERP_DATA);
                     if (lexerInterpreterData != null) {
                         tokenDescriptors = lexerInterpreterData.tokenNames;
                         modeNames = lexerInterpreterData.modeNames;

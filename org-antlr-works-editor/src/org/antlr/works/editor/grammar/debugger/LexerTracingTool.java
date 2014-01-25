@@ -9,23 +9,19 @@
 package org.antlr.works.editor.grammar.debugger;
 
 import org.antlr.v4.Tool;
-import org.antlr.v4.analysis.AnalysisPipeline;
-import org.antlr.v4.automata.ATNFactory;
-import org.antlr.v4.automata.LexerATNFactory;
-import org.antlr.v4.automata.ParserATNFactory;
-import org.antlr.v4.codegen.CodeGenPipeline;
 import org.antlr.v4.parse.ANTLRParser;
-import org.antlr.v4.semantics.SemanticPipeline;
 import org.antlr.v4.tool.Grammar;
 import org.antlr.v4.tool.GrammarTransformPipeline;
 import org.antlr.v4.tool.LexerGrammar;
 import org.antlr.v4.tool.ast.GrammarRootAST;
 
 /**
+ * This extension of {@link Tool} allows for processing only the lexer portion
+ * of even combined grammars.
  *
  * @author Sam Harwell
  */
-public class TracingTool extends Tool {
+public class LexerTracingTool extends Tool {
 
     /**
      * This method overrides {@link Tool#process} to return immediately after
