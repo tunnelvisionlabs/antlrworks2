@@ -49,7 +49,20 @@ public abstract class AbstractGrammarDebuggerEditorKit extends NbEditorKit {
     public static final String PROP_SELECTED_CHARACTERS = "Selected Characters";
     public static final String PROP_CHANNELS = "Channels";
 
+    /**
+     * The names of tokens in the associated grammar, stored as an array of
+     * strings {@link String}{@code []}.
+     */
     public static final String PROP_TOKEN_NAMES = "Token Names";
+    /**
+     * The names of rules in the associated grammar, stored as an array of
+     * strings {@link String}{@code []}.
+     */
+    public static final String PROP_RULE_NAMES = "Rule Names";
+    /**
+     * The names of modes in the associated grammar, stored as an array of
+     * strings {@link String}{@code []}.
+     */
     public static final String PROP_MODE_NAMES = "Mode Names";
 
     @Override
@@ -71,6 +84,12 @@ public abstract class AbstractGrammarDebuggerEditorKit extends NbEditorKit {
         int tokenNamesSize = readInteger(binary, tokenNamesOffset);
         String[] tokenNames = readStrings(binary, tokenNamesOffset + 4, tokenNamesSize);
         doc.putProperty(PROP_TOKEN_NAMES, tokenNames);
+
+        // read the rule names
+        int ruleNamesOffset = 4 + inputSize;
+        int ruleNamesSize = readInteger(binary, ruleNamesOffset);
+        String[] ruleNames = readStrings(binary, ruleNamesOffset + 4, ruleNamesSize);
+        doc.putProperty(PROP_RULE_NAMES, ruleNames);
 
         // read the mode names
         int modeNamesOffset = tokenNamesOffset + 4 + tokenNamesSize;

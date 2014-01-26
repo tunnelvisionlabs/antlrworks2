@@ -6,7 +6,7 @@
  *  distribution. For information about licensing, contact Sam Harwell at:
  *      sam@tunnelvisionlabs.com
  */
-package org.antlr.works.editor.st4.navigation;
+package org.antlr.works.editor.grammar.debugger;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -20,18 +20,15 @@ import org.antlr.netbeans.parsing.spi.ParserTaskProvider;
 import org.antlr.netbeans.parsing.spi.SingletonParserTaskProvider;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.works.editor.antlr4.navigation.ParseTreeNode;
-import org.antlr.works.editor.st4.StringTemplateEditorKit;
-import org.antlr.works.editor.st4.TemplateParserDataDefinitions;
-import org.antlr.works.editor.st4.experimental.generated.TemplateParser;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 
 /**
  *
  * @author Sam Harwell
  */
-public final class ParseTreeNavigatorUpdateParserTask extends AbstractNavigatorUpdateParserTask<TemplateParseTreeNavigatorPanel, ParserRuleContext> {
-    private ParseTreeNavigatorUpdateParserTask() {
-        super(TemplateParserDataDefinitions.REFERENCE_PARSE_TREE);
+public final class ParserDebuggerParseTreeNavigatorUpdateParserTask extends AbstractNavigatorUpdateParserTask<ParserDebuggerParseTreeNavigatorPanel, ParserRuleContext> {
+    private ParserDebuggerParseTreeNavigatorUpdateParserTask() {
+        super(ParserDebuggerParserDataDefinitions.REFERENCE_PARSE_TREE);
     }
 
     @Override
@@ -40,31 +37,31 @@ public final class ParseTreeNavigatorUpdateParserTask extends AbstractNavigatorU
     }
 
     @Override
-    protected TemplateParseTreeNavigatorPanel getActiveNavigatorPanel() {
-        return TemplateParseTreeNavigatorPanel.getInstance();
+    protected ParserDebuggerParseTreeNavigatorPanel getActiveNavigatorPanel() {
+        return ParserDebuggerParseTreeNavigatorPanel.getInstance();
     }
 
     @Override
-    protected void refresh(ParseContext parseContext, DocumentSnapshot snapshot, TemplateParseTreeNavigatorPanel panel, ParserRuleContext data) {
+    protected void refresh(ParseContext parseContext, DocumentSnapshot snapshot, ParserDebuggerParseTreeNavigatorPanel panel, ParserRuleContext data) {
+        ParserInterpreterData parserInterpreterData = (ParserInterpreterData)snapshot.getVersionedDocument().getDocument().getProperty(ParserDebuggerEditorKit.PROP_PARSER_INTERP_DATA);
         panel.setCurrentFile(snapshot.getVersionedDocument().getFileObject());
-        panel.setParseTree(new ParseTreeNode(data, Arrays.asList(TemplateParser.ruleNames)));
+        panel.setParseTree(new ParseTreeNode(data, parserInterpreterData.ruleNames));
     }
 
     private static final class Definition extends AbstractDefinition {
         private static final Collection<ParserDataDefinition<?>> INPUTS =
             Arrays.<ParserDataDefinition<?>>asList(
-                TemplateParserDataDefinitions.COMPILED_MODEL,
-                TemplateParserDataDefinitions.REFERENCE_PARSE_TREE,
-                TemplateParserDataDefinitions.PARSE_TREE_UI_VISIBLE);
+                ParserDebuggerParserDataDefinitions.REFERENCE_PARSE_TREE,
+                ParserDebuggerParserDataDefinitions.PARSE_TREE_UI_VISIBLE);
 
         public static final Definition INSTANCE = new Definition();
 
         public Definition() {
-            super("StringTemplate Parse Tree Navigator Update", INPUTS);
+            super("Parser Debugger Parse Tree Navigator Update", INPUTS);
         }
     }
 
-    @MimeRegistration(mimeType=StringTemplateEditorKit.TEMPLATE_MIME_TYPE, service=ParserTaskProvider.class)
+    @MimeRegistration(mimeType=ParserDebuggerEditorKit.PARSER_DEBUGGER_MIME_TYPE, service=ParserTaskProvider.class)
     public static final class Provider extends SingletonParserTaskProvider {
 
         @Override
@@ -74,7 +71,7 @@ public final class ParseTreeNavigatorUpdateParserTask extends AbstractNavigatorU
 
         @Override
         public ParserTask createTaskImpl() {
-            return new ParseTreeNavigatorUpdateParserTask();
+            return new ParserDebuggerParseTreeNavigatorUpdateParserTask();
         }
 
     }

@@ -26,6 +26,7 @@ public class AbstractInterpreterData {
     public String serializedAtn;
     public List<TokenDescriptor> tokenNames;
     public List<String> ruleNames;
+    public int startRuleIndex;
 
     public static TokenDescriptor[] getTokenNames(Grammar grammar) {
         int numTokens = grammar.getMaxTokenType();

@@ -22,6 +22,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.works.editor.antlr4.navigation.ParseTreeNode;
 import org.antlr.works.editor.grammar.GrammarEditorKit;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
+import org.antlr.works.editor.grammar.experimental.GrammarParser;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 
 /**
@@ -46,7 +47,7 @@ public final class ParseTreeNavigatorUpdateParserTask extends AbstractNavigatorU
     @Override
     protected void refresh(ParseContext parseContext, DocumentSnapshot snapshot, GrammarParseTreeNavigatorPanel panel, ParserRuleContext data) {
         panel.setCurrentFile(snapshot.getVersionedDocument().getFileObject());
-        panel.setParseTree(new ParseTreeNode(data));
+        panel.setParseTree(new ParseTreeNode(data, Arrays.asList(GrammarParser.ruleNames)));
     }
 
     private static final class Definition extends AbstractDefinition {

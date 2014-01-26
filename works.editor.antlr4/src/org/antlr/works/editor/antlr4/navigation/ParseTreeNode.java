@@ -9,8 +9,10 @@
 package org.antlr.works.editor.antlr4.navigation;
 
 import java.awt.Image;
+import java.util.List;
 import java.util.concurrent.Callable;
 import org.antlr.netbeans.editor.text.OffsetRegion;
+import org.antlr.v4.runtime.InterpreterRuleContext;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
@@ -19,6 +21,7 @@ import org.antlr.v4.runtime.tree.RuleNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.works.editor.antlr4.parsing.ParseTrees;
 import org.netbeans.api.annotations.common.NonNull;
+import org.netbeans.api.annotations.common.NullAllowed;
 import org.netbeans.api.annotations.common.StaticResource;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Children;
@@ -46,9 +49,18 @@ public class ParseTreeNode extends AbstractNode implements OffsetProvider {
     @NonNull
     private final ParseTree _tree;
 
+    @NullAllowed
+    private final List<String> _ruleNames;
+
+    @Deprecated
     public ParseTreeNode(@NonNull ParseTree tree) {
+        this(tree, null);
+    }
+
+    public ParseTreeNode(@NonNull ParseTree tree, @NullAllowed List<String> ruleNames) {
         super(Children.LEAF);
         _tree = tree;
+        _ruleNames = ruleNames;
 
         if (tree.getChildCount() > 0) {
             setChildren(Children.createLazy(new ChildrenOfParseTreeNodeCreator()));
@@ -57,7 +69,7 @@ public class ParseTreeNode extends AbstractNode implements OffsetProvider {
         if (tree instanceof RuleNode) {
             RuleNode ruleNode = (RuleNode)tree;
             RuleContext ruleContext = ruleNode.getRuleContext();
-            if (ruleContext instanceof ParserRuleContext && ruleContext.getClass() != ParserRuleContext.class) {
+            if (ruleContext instanceof ParserRuleContext && ruleContext.getClass() != ParserRuleContext.class && ruleContext.getClass() != InterpreterRuleContext.class) {
                 String contextName = ruleContext.getClass().getSimpleName();
                 if (!"Context".equals(contextName) && contextName.endsWith("Context")) {
                     contextName = contextName.substring(0, contextName.length() - "Context".length());
@@ -66,7 +78,15 @@ public class ParseTreeNode extends AbstractNode implements OffsetProvider {
                 contextName = Character.toLowerCase(contextName.charAt(0)) + contextName.substring(1);
                 setDisplayName(contextName);
             } else {
-                setDisplayName("Rule Node");
+                String displayName = null;
+                if (ruleNames != null && ruleContext.getRuleIndex() > 0 && ruleContext.getRuleIndex() < ruleNames.size()) {
+                    displayName = ruleNames.get(ruleContext.getRuleIndex());
+                }
+
+                if (displayName == null || displayName.isEmpty()) {
+                    displayName = "Rule Node";
+                }
+                setDisplayName(displayName);
             }
         } else if (tree instanceof ErrorNode) {
             setDisplayName("Error Node");
@@ -136,7 +156,7 @@ public class ParseTreeNode extends AbstractNode implements OffsetProvider {
     }
 
     protected ParseTreeNode createChildNode(ParseTree tree) {
-        return new ParseTreeNode(tree);
+        return new ParseTreeNode(tree, _ruleNames);
     }
 
     private final class ChildrenOfParseTreeNodeCreator implements Callable<Children> {
