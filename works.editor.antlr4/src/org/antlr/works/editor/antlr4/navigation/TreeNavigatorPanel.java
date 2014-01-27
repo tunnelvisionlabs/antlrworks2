@@ -97,6 +97,11 @@ public abstract class TreeNavigatorPanel extends AbstractNavigatorPanel<JCompone
 
     @Override
     public Lookup getLookup() {
+        JComponent component = getComponent();
+        if (component instanceof Lookup.Provider) {
+            return ((Lookup.Provider)component).getLookup();
+        }
+
         return null;
     }
 

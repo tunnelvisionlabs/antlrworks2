@@ -20,6 +20,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.RuleNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.works.editor.antlr4.parsing.ParseTrees;
+import org.netbeans.api.annotations.common.CheckForNull;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;
 import org.netbeans.api.annotations.common.StaticResource;
@@ -104,6 +105,16 @@ public class ParseTreeNode extends AbstractNode implements OffsetProvider {
                 setDisplayName("Terminal Node");
             }
         }
+    }
+
+    @NonNull
+    public ParseTree getTree() {
+        return _tree;
+    }
+
+    @CheckForNull
+    public List<String> getRuleNames() {
+        return _ruleNames;
     }
 
     @Override
