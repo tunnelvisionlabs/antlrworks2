@@ -178,10 +178,15 @@ public final class RunInTestRigAction implements ActionListener {
     }
 
     @CheckForNull
-    private static FileModel getFileModel(FileObject fileObject) {
-        ParserTaskManager parserTaskManager = Lookup.getDefault().lookup(ParserTaskManager.class);
+    public static FileModel getFileModel(FileObject fileObject) {
         VersionedDocument versionedDocument = VersionedDocumentUtilities.getVersionedDocument(fileObject);
         DocumentSnapshot snapshot = versionedDocument.getCurrentSnapshot();
+        return getFileModel(snapshot);
+    }
+
+    @CheckForNull
+    public static FileModel getFileModel(DocumentSnapshot snapshot) {
+        ParserTaskManager parserTaskManager = Lookup.getDefault().lookup(ParserTaskManager.class);
         Future<ParserData<FileModel>> futureData = parserTaskManager.getData(snapshot, GrammarParserDataDefinitions.FILE_MODEL);
         if (futureData == null) {
             return null;
@@ -202,7 +207,7 @@ public final class RunInTestRigAction implements ActionListener {
     }
 
     @NonNull
-    private static List<String> getAvailableRules(@NullAllowed FileModel fileModel) {
+    public static List<String> getAvailableRules(@NullAllowed FileModel fileModel) {
         if (fileModel == null) {
             return Collections.emptyList();
         }

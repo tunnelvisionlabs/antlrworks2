@@ -13,20 +13,24 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import javax.swing.SwingUtilities;
 import javax.swing.text.Document;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.netbeans.editor.text.VersionedDocumentUtilities;
 import org.antlr.netbeans.util.NotificationIcons;
 import org.antlr.works.editor.grammar.GrammarEditorKit;
+import org.antlr.works.editor.grammar.actions.RunInTestRigAction;
+import org.antlr.works.editor.grammar.codemodel.FileModel;
 import org.netbeans.modules.editor.NbEditorUtilities;
+import org.openide.DialogDisplayer;
+import org.openide.WizardDescriptor;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.awt.ActionRegistration;
 import org.openide.awt.NotificationDisplayer;
 import org.openide.cookies.EditorCookie;
 import org.openide.cookies.OpenCookie;
-import org.openide.filesystems.FileChooserBuilder;
 import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileSystem;
 import org.openide.filesystems.FileUtil;
@@ -73,23 +77,38 @@ public class InterpretCurrentParserAction implements ActionListener {
             return;
         }
 
+        WizardDescriptor wizard = new WizardDescriptor(new ParserDebuggerWizardIterator());
+        wizard.setTitle("{0} ({1})");
+        wizard.setTitle("Parser Interpreter");
+
         DocumentSnapshot snapshot = VersionedDocumentUtilities.getVersionedDocument(document).getCurrentSnapshot();
+        FileModel fileModel = RunInTestRigAction.getFileModel(snapshot);
+        List<String> availableRules = RunInTestRigAction.getAvailableRules(fileModel);
+        wizard.putProperty(ParserDebuggerWizardPanel.AVAILABLE_RULES, availableRules.toArray(new String[availableRules.size()]));
+        if (DialogDisplayer.getDefault().notify(wizard) != WizardDescriptor.FINISH_OPTION) {
+            return;
+        }
+
         ParserInterpreterData parserInterpreterData = ParserInterpreterData.buildFromSnapshot(snapshot);
         if (parserInterpreterData == null) {
             displayError("An error occurred while constructing a lexer or parser ATN from the grammar.");
             return;
         }
 
-        File inputFile = new FileChooserBuilder(InterpretCurrentParserAction.class)
-            .setTitle("Select input file")
-            .showOpenDialog();
-
-        if (inputFile == null || !inputFile.isFile()) {
+        File inputFile = new File(ParserDebuggerWizardOptions.getInputFile(wizard));
+        if (!inputFile.isFile()) {
             return;
         }
 
         if (inputFile.length() > 1024 * 1024) {
             displayError("This specified input file is too large. Please choose a file smaller than 1MB.");
+            return;
+        }
+
+        String startRule = ParserDebuggerWizardOptions.getStartRule(wizard);
+        parserInterpreterData.startRuleIndex = parserInterpreterData.ruleNames.indexOf(startRule);
+        if (parserInterpreterData.startRuleIndex < 0) {
+            displayError(String.format("Could not locate a rule named '%s'", startRule));
             return;
         }
 
