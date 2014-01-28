@@ -60,7 +60,7 @@ import org.openide.windows.TopComponent;
                                      preferredID = "LexerDebuggerControllerTopComponent")
 @Messages({
     "CTL_LexerDebuggerControllerAction=Lexer Debugger Controller",
-    "CTL_LexerDebuggerControllerTopComponent=Lexer Debugger Controller Window",
+    "CTL_LexerDebuggerControllerTopComponent=Lexer",
     "HINT_LexerDebuggerControllerTopComponent=This is a lexer debugger controller window"
 })
 public final class LexerDebuggerControllerTopComponent extends TopComponent {

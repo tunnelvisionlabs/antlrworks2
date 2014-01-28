@@ -78,7 +78,7 @@ import org.openide.windows.WindowManager;
                                      preferredID = "SyntaxDiagramTopComponent")
 @NbBundle.Messages({
     "CTL_SyntaxDiagramAction=Syntax Diagram",
-    "CTL_SyntaxDiagramTopComponent=Syntax Diagram",
+    "CTL_SyntaxDiagramTopComponent=Syntax",
     "HINT_SyntaxDiagramTopComponent=Grammar Rule Syntax Diagram"
 })
 public final class SyntaxDiagramTopComponent extends TopComponent {

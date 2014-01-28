@@ -57,7 +57,7 @@ import org.openide.windows.TopComponent;
 )
 @Messages({
     "CTL_ParserDebuggerControllerAction=Parser Debugger Controller",
-    "CTL_ParserDebuggerControllerTopComponent=Parser Debugger Controller Window",
+    "CTL_ParserDebuggerControllerTopComponent=Parser",
     "HINT_ParserDebuggerControllerTopComponent=This is a parser debugger controller window"
 })
 public final class ParserDebuggerControllerTopComponent extends TopComponent {
