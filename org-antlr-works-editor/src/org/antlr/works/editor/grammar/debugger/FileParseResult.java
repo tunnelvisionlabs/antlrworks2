@@ -37,6 +37,7 @@ public class FileParseResult {
     public final long[] decisionInvocations;
     public final long[] fullContextFallback;
     public final long[] nonSll;
+    public final long[] ambiguousResult;
     public final long[] parserTotalTransitions;
     public final long[] parserComputedTransitions;
     public final long[] parserFullContextTransitions;
@@ -79,6 +80,7 @@ public class FileParseResult {
                 decisionInvocations = ((StatisticsParserATNSimulator)interpreter).decisionInvocations;
                 fullContextFallback = ((StatisticsParserATNSimulator)interpreter).fullContextFallback;
                 nonSll = ((StatisticsParserATNSimulator)interpreter).nonSll;
+                ambiguousResult = ((StatisticsParserATNSimulator)interpreter).ambiguousResult;
                 parserTotalTransitions = ((StatisticsParserATNSimulator)interpreter).totalTransitions;
                 parserComputedTransitions = ((StatisticsParserATNSimulator)interpreter).computedTransitions;
                 parserFullContextTransitions = ((StatisticsParserATNSimulator)interpreter).fullContextTransitions;
@@ -86,6 +88,7 @@ public class FileParseResult {
                 decisionInvocations = new long[0];
                 fullContextFallback = new long[0];
                 nonSll = new long[0];
+                ambiguousResult = new long[0];
                 parserTotalTransitions = new long[0];
                 parserComputedTransitions = new long[0];
                 parserFullContextTransitions = new long[0];
@@ -104,6 +107,7 @@ public class FileParseResult {
             decisionInvocations = new long[0];
             fullContextFallback = new long[0];
             nonSll = new long[0];
+            ambiguousResult = new long[0];
             parserTotalTransitions = new long[0];
             parserComputedTransitions = new long[0];
             parserFullContextTransitions = new long[0];

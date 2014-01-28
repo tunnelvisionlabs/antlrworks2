@@ -28,6 +28,7 @@ public class StatisticsParserATNSimulator extends ParserATNSimulator {
     public final long[] decisionInvocations;
     public final long[] fullContextFallback;
     public final long[] nonSll;
+    public final long[] ambiguousResult;
     public final long[] totalTransitions;
     public final long[] computedTransitions;
     public final long[] fullContextTransitions;
@@ -39,6 +40,7 @@ public class StatisticsParserATNSimulator extends ParserATNSimulator {
         decisionInvocations = new long[atn.decisionToState.size()];
         fullContextFallback = new long[atn.decisionToState.size()];
         nonSll = new long[atn.decisionToState.size()];
+        ambiguousResult = new long[atn.decisionToState.size()];
         totalTransitions = new long[atn.decisionToState.size()];
         computedTransitions = new long[atn.decisionToState.size()];
         fullContextTransitions = new long[atn.decisionToState.size()];
@@ -49,6 +51,7 @@ public class StatisticsParserATNSimulator extends ParserATNSimulator {
         decisionInvocations = new long[atn.decisionToState.size()];
         fullContextFallback = new long[atn.decisionToState.size()];
         nonSll = new long[atn.decisionToState.size()];
+        ambiguousResult = new long[atn.decisionToState.size()];
         totalTransitions = new long[atn.decisionToState.size()];
         computedTransitions = new long[atn.decisionToState.size()];
         fullContextTransitions = new long[atn.decisionToState.size()];

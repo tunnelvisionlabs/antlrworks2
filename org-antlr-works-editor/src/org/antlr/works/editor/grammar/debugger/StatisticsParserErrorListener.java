@@ -31,8 +31,12 @@ public class StatisticsParserErrorListener extends DiagnosticErrorListener {
         int sllPrediction = sllPredictions.nextSetBit(0);
         BitSet llPredictions = getConflictingAlts(ambigAlts, configs);
         int llPrediction = llPredictions.cardinality() == 0 ? ATN.INVALID_ALT_NUMBER : llPredictions.nextSetBit(0);
-        if (sllPrediction != llPrediction && recognizer.getInterpreter() instanceof StatisticsParserATNSimulator) {
-            ((StatisticsParserATNSimulator)recognizer.getInterpreter()).nonSll[dfa.decision]++;
+        if (recognizer.getInterpreter() instanceof StatisticsParserATNSimulator) {
+            if (sllPrediction != llPrediction) {
+                ((StatisticsParserATNSimulator)recognizer.getInterpreter()).nonSll[dfa.decision]++;
+            }
+
+            ((StatisticsParserATNSimulator)recognizer.getInterpreter()).ambiguousResult[dfa.decision]++;
         }
     }
 

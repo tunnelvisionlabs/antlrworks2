@@ -650,7 +650,7 @@ public final class ParserDebuggerControllerTopComponent extends TopComponent {
                         String ruleName = parserInterpreterData.ruleNames.get(ruleIndex);
                         long count = fileParseResult.decisionInvocations[i];
                         long conflicts = fileParseResult.fullContextFallback[i];
-                        long ambiguities = -1;
+                        long ambiguities = fileParseResult.ambiguousResult[i];
                         long contextSensitivities = fileParseResult.nonSll[i];
                         conflictStatistics.add(new ConflictStatistic(i, ruleName, count, conflicts, ambiguities, contextSensitivities));
                     }
