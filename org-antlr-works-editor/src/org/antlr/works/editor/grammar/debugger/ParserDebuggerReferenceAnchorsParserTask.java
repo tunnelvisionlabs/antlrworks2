@@ -139,7 +139,8 @@ public final class ParserDebuggerReferenceAnchorsParserTask implements ParserTas
         private static final Collection<ParserDataDefinition<?>> INPUTS =
             Collections.<ParserDataDefinition<?>>emptyList();
         private static final Collection<ParserDataDefinition<?>> OUTPUTS =
-            Collections.<ParserDataDefinition<?>>singletonList(
+            Arrays.<ParserDataDefinition<?>>asList(
+                ParserDebuggerParserDataDefinitions.FILE_PARSE_RESULT,
                 ParserDebuggerParserDataDefinitions.REFERENCE_PARSE_TREE);
 
         public static final Definition INSTANCE = new Definition();
