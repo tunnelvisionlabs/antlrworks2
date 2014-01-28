@@ -80,7 +80,7 @@ public class ParseTreeNode extends AbstractNode implements OffsetProvider {
                 setDisplayName(contextName);
             } else {
                 String displayName = null;
-                if (ruleNames != null && ruleContext.getRuleIndex() > 0 && ruleContext.getRuleIndex() < ruleNames.size()) {
+                if (ruleNames != null && ruleContext.getRuleIndex() >= 0 && ruleContext.getRuleIndex() < ruleNames.size()) {
                     displayName = ruleNames.get(ruleContext.getRuleIndex());
                 }
 
