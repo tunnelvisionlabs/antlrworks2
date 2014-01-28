@@ -2,12 +2,12 @@
 <!-- You may freely edit this file. See harness/README in the NetBeans platform -->
 <!-- for some information on what you could do (e.g. targets to override). -->
 <!-- If you delete this file and reopen the project it will be recreated. -->
-<project name="org.antlr.v4" default="netbeans" basedir=".">
-    <description>Builds, tests, and runs the project org.antlr.v4.</description>
+<project name="org.antlr.v4.runtime" default="netbeans" basedir=".">
+    <description>Builds, tests, and runs the project org.antlr.v4.annotations.</description>
     <import file="nbproject/build-impl.xml"/>
 
     <target name="init-artifact">
-        <property name="artifact.name" value="antlr4"/>
+        <property name="artifact.name" value="antlr4_annotations"/>
         <property name="artifact.commit" value="231e7b8fbf14909259f02291b3c13e000fd66aa2"/>
         <property name="modules.ext.dir" value="release/modules/ext"/>
         <property name="artifact.file" value="${modules.ext.dir}/${artifact.name}.jar"/>
