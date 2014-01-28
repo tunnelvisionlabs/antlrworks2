@@ -411,9 +411,11 @@ public final class LexerDebuggerControllerTopComponent extends TopComponent {
             }
         });
         jScrollPane1.setViewportView(tblTokenTypes);
-        tblTokenTypes.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(LexerDebuggerControllerTopComponent.class, "LexerDebuggerControllerTopComponent.tblTokenTypes.columnModel.title0")); // NOI18N
-        tblTokenTypes.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(LexerDebuggerControllerTopComponent.class, "LexerDebuggerControllerTopComponent.tblTokenTypes.columnModel.title1")); // NOI18N
-        tblTokenTypes.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(LexerDebuggerControllerTopComponent.class, "LexerDebuggerControllerTopComponent.tblTokenTypes.columnModel.title2")); // NOI18N
+        if (tblTokenTypes.getColumnModel().getColumnCount() > 0) {
+            tblTokenTypes.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(LexerDebuggerControllerTopComponent.class, "LexerDebuggerControllerTopComponent.tblTokenTypes.columnModel.title0")); // NOI18N
+            tblTokenTypes.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(LexerDebuggerControllerTopComponent.class, "LexerDebuggerControllerTopComponent.tblTokenTypes.columnModel.title1")); // NOI18N
+            tblTokenTypes.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(LexerDebuggerControllerTopComponent.class, "LexerDebuggerControllerTopComponent.tblTokenTypes.columnModel.title2")); // NOI18N
+        }
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
