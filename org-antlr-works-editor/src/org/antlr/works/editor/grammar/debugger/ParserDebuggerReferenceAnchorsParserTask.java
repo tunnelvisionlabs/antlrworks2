@@ -101,6 +101,7 @@ public final class ParserDebuggerReferenceAnchorsParserTask implements ParserTas
 
                 long startTime = System.nanoTime();
                 parser.setInterpreter(new StatisticsParserATNSimulator(parser, atn));
+                parser.getInterpreter().optimize_ll1 = false;
                 parser.getInterpreter().reportAmbiguities = true;
                 parser.getInterpreter().setPredictionMode(PredictionMode.LL_EXACT_AMBIG_DETECTION);
                 parser.removeErrorListeners();
