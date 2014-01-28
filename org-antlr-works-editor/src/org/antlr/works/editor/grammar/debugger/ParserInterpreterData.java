@@ -6,11 +6,13 @@
  *  distribution. For information about licensing, contact Sam Harwell at:
  *      sam@tunnelvisionlabs.com
  */
-
 package org.antlr.works.editor.grammar.debugger;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import org.antlr.netbeans.editor.parsing.SyntaxError;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.v4.Tool;
@@ -18,6 +20,9 @@ import org.antlr.v4.runtime.atn.ATNSerializer;
 import org.antlr.v4.tool.Grammar;
 import org.antlr.v4.tool.LexerGrammar;
 import org.antlr.v4.tool.ast.GrammarRootAST;
+import org.antlr.works.editor.grammar.parser.CompiledModelParserV4.CustomErrorManager;
+import org.antlr.works.editor.grammar.parser.CompiledModelParserV4.CustomTool;
+import org.antlr.works.editor.grammar.parser.CompiledModelParserV4.ErrorListener;
 
 /**
  *
@@ -33,7 +38,11 @@ public class ParserInterpreterData extends AbstractInterpreterData {
             return null;
         }
 
-        Tool tool = new Tool();
+        List<SyntaxError> syntaxErrors = new ArrayList<>();
+        Tool tool = new CustomTool(snapshot);
+        tool.errMgr = new CustomErrorManager(tool);
+        tool.addListener(new ErrorListener(snapshot, tool, syntaxErrors));
+        tool.libDirectory = new File(snapshot.getVersionedDocument().getFileObject().getPath()).getParent();
 
         ANTLRStringStream stream = new ANTLRStringStream(snapshot.getText());
         stream.name = snapshot.getVersionedDocument().getFileObject().getNameExt();
@@ -45,20 +54,10 @@ public class ParserInterpreterData extends AbstractInterpreterData {
 
         tool.process(grammar, false);
 
-        LexerGrammar lexerGrammar = grammar.implicitLexer;
-        if (lexerGrammar == null) {
-            return null;
-        }
-
         ParserInterpreterData data = new ParserInterpreterData();
 
         // start by filling in the lexer data
-        data.lexerInterpreterData = new LexerInterpreterData();
-        data.lexerInterpreterData.grammarFileName = lexerGrammar.fileName;
-        data.lexerInterpreterData.serializedAtn = ATNSerializer.getSerializedAsString(lexerGrammar.atn, Arrays.asList(lexerGrammar.getRuleNames()));
-        data.lexerInterpreterData.tokenNames = new ArrayList<>(Arrays.asList(getTokenNames(lexerGrammar)));
-        data.lexerInterpreterData.ruleNames = new ArrayList<>(lexerGrammar.rules.keySet());
-        data.lexerInterpreterData.modeNames = new ArrayList<>(lexerGrammar.modes.keySet());
+        data.lexerInterpreterData = lexerInterpreterData;
 
         // then fill in the parser data
         data.grammarFileName = grammar.fileName;

@@ -90,7 +90,7 @@ public class CompiledModelParserV4 extends CompiledModelParser {
 
             try {
                 final List<SyntaxError> syntaxErrors = new ArrayList<>();
-                final Tool tool = new CustomTool(context, snapshot);
+                final Tool tool = new CustomTool(snapshot);
                 tool.errMgr = new CustomErrorManager(tool);
                 tool.addListener(new ErrorListener(snapshot, tool, syntaxErrors));
                 tool.libDirectory = new File(snapshot.getVersionedDocument().getFileObject().getPath()).getParent();
@@ -129,12 +129,10 @@ public class CompiledModelParserV4 extends CompiledModelParser {
         return Lookup.getDefault().lookup(ParserTaskManager.class);
     }
 
-    private static class CustomTool extends Tool {
-        private final ParseContext context;
+    public static class CustomTool extends Tool {
         private final DocumentSnapshot snapshot;
 
-        public CustomTool(ParseContext context, DocumentSnapshot snapshot) {
-            this.context = context;
+        public CustomTool(DocumentSnapshot snapshot) {
             this.snapshot = snapshot;
         }
 
@@ -152,7 +150,7 @@ public class CompiledModelParserV4 extends CompiledModelParser {
 
     }
 
-    private static class CustomErrorManager extends ErrorManager {
+    public static class CustomErrorManager extends ErrorManager {
 
         public CustomErrorManager(Tool tool) {
             super(tool);
@@ -310,7 +308,7 @@ public class CompiledModelParserV4 extends CompiledModelParser {
         }
     }
 
-    private static class ErrorListener implements ANTLRToolListener {
+    public static class ErrorListener implements ANTLRToolListener {
         private final DocumentSnapshot snapshot;
         private final Tool tool;
         private final List<SyntaxError> syntaxErrors;
