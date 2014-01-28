@@ -9,14 +9,11 @@
 package org.antlr.works.editor.grammar.debugger;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.antlr.netbeans.editor.classification.TokenTag;
-import org.antlr.netbeans.editor.completion.Anchor;
-import org.antlr.netbeans.editor.navigation.Description;
 import org.antlr.netbeans.editor.tagging.Tagger;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.netbeans.parsing.spi.ParserData;
@@ -26,11 +23,6 @@ import org.antlr.netbeans.parsing.spi.ParserTaskManager;
 import org.antlr.netbeans.parsing.spi.ParserTaskScheduler;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
-import org.antlr.works.editor.grammar.codemodel.FileModel;
-import org.antlr.works.editor.grammar.experimental.CurrentRuleContextData;
-import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.GrammarSpecContext;
-import org.antlr.works.editor.grammar.parser.CompiledModel;
-import org.antlr.works.editor.grammar.semantics.GrammarAnnotatedParseTree;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 
 /**
@@ -40,19 +32,9 @@ import org.netbeans.api.editor.mimelookup.MimeRegistration;
 public class ParserDebuggerParserDataDefinitions {
     private static final Logger LOGGER = Logger.getLogger(ParserDebuggerParserDataDefinitions.class.getName());
 
-//    public static final ParserDataDefinition<CompiledModel> COMPILED_MODEL = new CompiledModelDataDefinition();
-
-//    public static final ParserDataDefinition<List<Anchor>> REFERENCE_ANCHOR_POINTS = new ReferenceAnchorPointsDataDefinition();
+    public static final ParserDataDefinition<FileParseResult> FILE_PARSE_RESULT = new FileParseResultDataDefinition();
     public static final ParserDataDefinition<ParserRuleContext> REFERENCE_PARSE_TREE = new ReferenceParseTreeDataDefinition();
-//    public static final ParserDataDefinition<GrammarAnnotatedParseTree> ANNOTATED_PARSE_TREE = new AnnotatedParseTreeDataDefinition();
-
-//    public static final ParserDataDefinition<List<Anchor>> DYNAMIC_ANCHOR_POINTS = new DynamicAnchorPointsDataDefinition();
     public static final ParserDataDefinition<Tagger<TokenTag<Token>>> LEXER_TOKENS = new LexerTokensDataDefinition();
-//    public static final ParserDataDefinition<CurrentRuleContextData> CURRENT_RULE_CONTEXT = new CurrentRuleContextDataDefinition();
-//    public static final ParserDataDefinition<FileModel> FILE_MODEL = new FileModelDataDefinition();
-
-//    public static final ParserDataDefinition<Description> NAVIGATOR_ROOT = new NavigatorRootDataDefinition();
-//    public static final ParserDataDefinition<Boolean> NAVIGATOR_UI_VISIBLE = new NavigatorUIVisibleDataDefinition();
     public static final ParserDataDefinition<Boolean> PARSE_TREE_UI_VISIBLE = new ParseTreeUIVisibleDataDefinition();
 
     private ParserDebuggerParserDataDefinitions() {
@@ -80,64 +62,25 @@ public class ParserDebuggerParserDataDefinitions {
         return null;
     }
 
-//    @MimeRegistration(mimeType=ParserDebuggerEditorKit.PARSER_DEBUGGER_MIME_TYPE, service=ParserDataDefinition.class)
-//    public static ParserDataDefinition<CompiledModel> getCompiledModelDataDefinition() {
-//        return COMPILED_MODEL;
-//    }
-//
-//    @MimeRegistration(mimeType=ParserDebuggerEditorKit.PARSER_DEBUGGER_MIME_TYPE, service=ParserDataDefinition.class)
-//    public static ParserDataDefinition<List<Anchor>> getReferenceAnchorPointsDataDefinition() {
-//        return REFERENCE_ANCHOR_POINTS;
-//    }
-//
-//    @MimeRegistration(mimeType=ParserDebuggerEditorKit.PARSER_DEBUGGER_MIME_TYPE, service=ParserDataDefinition.class)
-//    public static ParserDataDefinition<GrammarSpecContext> getReferenceParseTreeDataDefinition() {
-//        return REFERENCE_PARSE_TREE;
-//    }
-//
-//    @MimeRegistration(mimeType=ParserDebuggerEditorKit.PARSER_DEBUGGER_MIME_TYPE, service=ParserDataDefinition.class)
-//    public static ParserDataDefinition<GrammarAnnotatedParseTree> getAnnotatedParseTreeDataDefinition() {
-//        return ANNOTATED_PARSE_TREE;
-//    }
-//
-//    @MimeRegistration(mimeType=ParserDebuggerEditorKit.PARSER_DEBUGGER_MIME_TYPE, service=ParserDataDefinition.class)
-//    public static ParserDataDefinition<List<Anchor>> getDynamicAnchorPointsDataDefinition() {
-//        return DYNAMIC_ANCHOR_POINTS;
-//    }
+    @MimeRegistration(mimeType=ParserDebuggerEditorKit.PARSER_DEBUGGER_MIME_TYPE, service=ParserDataDefinition.class)
+    public static ParserDataDefinition<FileParseResult> getFileParseResultDataDefinition() {
+        return FILE_PARSE_RESULT;
+    }
+
+    @MimeRegistration(mimeType=ParserDebuggerEditorKit.PARSER_DEBUGGER_MIME_TYPE, service=ParserDataDefinition.class)
+    public static ParserDataDefinition<ParserRuleContext> getReferenceParseTreeDataDefinition() {
+        return REFERENCE_PARSE_TREE;
+    }
 
     @MimeRegistration(mimeType=ParserDebuggerEditorKit.PARSER_DEBUGGER_MIME_TYPE, service=ParserDataDefinition.class)
     public static ParserDataDefinition<Tagger<TokenTag<Token>>> getLexerTokensDataDefinition() {
         return LEXER_TOKENS;
     }
 
-//    @MimeRegistration(mimeType=ParserDebuggerEditorKit.PARSER_DEBUGGER_MIME_TYPE, service=ParserDataDefinition.class)
-//    public static ParserDataDefinition<CurrentRuleContextData> getCurrentRuleContextDataDefinition() {
-//        return CURRENT_RULE_CONTEXT;
-//    }
-//
-//    @MimeRegistration(mimeType=ParserDebuggerEditorKit.PARSER_DEBUGGER_MIME_TYPE, service=ParserDataDefinition.class)
-//    public static ParserDataDefinition<FileModel> getFileModelDataDefinition() {
-//        return FILE_MODEL;
-//    }
-//
-//    @MimeRegistration(mimeType=ParserDebuggerEditorKit.PARSER_DEBUGGER_MIME_TYPE, service=ParserDataDefinition.class)
-//    public static ParserDataDefinition<Description> getNavigatorRootDataDefinition() {
-//        return NAVIGATOR_ROOT;
-//    }
+    private static final class FileParseResultDataDefinition extends ParserDataDefinition<FileParseResult> {
 
-    private static final class CompiledModelDataDefinition extends ParserDataDefinition<CompiledModel> {
-
-        public CompiledModelDataDefinition() {
-            super("Parser Debugger Compiled Model", CompiledModel.class, false, true, ParserTaskScheduler.CONTENT_SENSITIVE_TASK_SCHEDULER);
-        }
-
-    }
-
-    private static final class ReferenceAnchorPointsDataDefinition extends ParserDataDefinition<List<Anchor>> {
-
-        @SuppressWarnings("unchecked")
-        public ReferenceAnchorPointsDataDefinition() {
-            super("Parser Debugger Reference Anchor Points", (Class<List<Anchor>>)(Object)List.class, false, true, ParserTaskScheduler.CONTENT_SENSITIVE_TASK_SCHEDULER);
+        public FileParseResultDataDefinition() {
+            super("Parser Debugger File Parse Result", FileParseResult.class, false, true, ParserTaskScheduler.CONTENT_SENSITIVE_TASK_SCHEDULER);
         }
 
     }
@@ -150,60 +93,11 @@ public class ParserDebuggerParserDataDefinitions {
 
     }
 
-    private static final class AnnotatedParseTreeDataDefinition extends ParserDataDefinition<GrammarAnnotatedParseTree> {
-
-        public AnnotatedParseTreeDataDefinition() {
-            super("Parser Debugger Annotated Parse Tree", GrammarAnnotatedParseTree.class, false, true, ParserTaskScheduler.CONTENT_SENSITIVE_TASK_SCHEDULER);
-        }
-
-    }
-
-    private static final class DynamicAnchorPointsDataDefinition extends ParserDataDefinition<List<Anchor>> {
-
-        @SuppressWarnings("unchecked")
-        public DynamicAnchorPointsDataDefinition() {
-            super("Parser Debugger Dynamic Anchor Points", (Class<List<Anchor>>)(Object)List.class, false, true, ParserTaskScheduler.EDITOR_SENSITIVE_TASK_SCHEDULER);
-        }
-
-    }
-
     private static final class LexerTokensDataDefinition extends ParserDataDefinition<Tagger<TokenTag<Token>>> {
 
         @SuppressWarnings("unchecked")
         public LexerTokensDataDefinition() {
             super("Parser Debugger Lexer Tokens", (Class<Tagger<TokenTag<Token>>>)(Object)Tagger.class, false, true, ParserTaskScheduler.CONTENT_SENSITIVE_TASK_SCHEDULER);
-        }
-
-    }
-
-    private static final class CurrentRuleContextDataDefinition extends ParserDataDefinition<CurrentRuleContextData> {
-
-        public CurrentRuleContextDataDefinition() {
-            super("Parser Debugger Current Rule Context", CurrentRuleContextData.class, true, true, ParserTaskScheduler.CURSOR_SENSITIVE_TASK_SCHEDULER);
-        }
-
-    }
-
-    private static final class FileModelDataDefinition extends ParserDataDefinition<FileModel> {
-
-        public FileModelDataDefinition() {
-            super("Parser Debugger File Model", FileModel.class, false, true, ParserTaskScheduler.CONTENT_SENSITIVE_TASK_SCHEDULER);
-        }
-
-    }
-
-    private static final class NavigatorRootDataDefinition extends ParserDataDefinition<Description> {
-
-        public NavigatorRootDataDefinition() {
-            super("Parser Debugger Navigator Root", Description.class, false, true, ParserTaskScheduler.INPUT_SENSITIVE_TASK_SCHEDULER);
-        }
-
-    }
-
-    private static final class NavigatorUIVisibleDataDefinition extends ParserDataDefinition<Boolean> {
-
-        public NavigatorUIVisibleDataDefinition() {
-            super("Parser Debugger Navigator UI Visible", Boolean.class, false, false, ParserTaskScheduler.MANUAL_TASK_SCHEDULER);
         }
 
     }

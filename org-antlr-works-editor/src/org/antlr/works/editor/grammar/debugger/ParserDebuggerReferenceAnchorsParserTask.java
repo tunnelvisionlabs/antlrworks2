@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+import javax.swing.text.Document;
 import org.antlr.netbeans.editor.classification.TokenTag;
 import org.antlr.netbeans.editor.completion.Anchor;
 import org.antlr.netbeans.editor.tagging.Tagger;
@@ -79,14 +80,12 @@ public final class ParserDebuggerReferenceAnchorsParserTask implements ParserTas
 
         //ParserDebuggerEditorKit.LEX
         synchronized (lock) {
+            ParserData<FileParseResult> fileParseResultData = taskManager.getData(snapshot, ParserDebuggerParserDataDefinitions.FILE_PARSE_RESULT, EnumSet.of(ParserDataOptions.NO_UPDATE)).get();
             ParserData<ParserRuleContext> parseTreeResult = taskManager.getData(snapshot, ParserDebuggerParserDataDefinitions.REFERENCE_PARSE_TREE, EnumSet.of(ParserDataOptions.NO_UPDATE)).get();
-            if (parseTreeResult == null) {
+            if (fileParseResultData == null || parseTreeResult == null) {
                 Future<ParserData<Tagger<TokenTag<Token>>>> futureTokensData = taskManager.getData(snapshot, ParserDebuggerParserDataDefinitions.LEXER_TOKENS);
                 Tagger<TokenTag<Token>> tagger = futureTokensData.get().getData();
                 TaggerTokenSource tokenSource = new TaggerTokenSource(tagger, snapshot);
-        //        DocumentSnapshotCharStream input = new DocumentSnapshotCharStream(snapshot);
-        //        input.setSourceName((String)document.getDocument().getProperty(Document.TitleProperty));
-        //        GrammarLexer lexer = new GrammarLexer(input);
                 InterruptableTokenStream tokenStream = new InterruptableTokenStream(tokenSource);
                 ParserRuleContext parseResult;
 
@@ -99,29 +98,24 @@ public final class ParserDebuggerReferenceAnchorsParserTask implements ParserTas
                 List<String> ruleNames = parserInterpreterData.ruleNames;
                 ATN atn = new ATNDeserializer().deserialize(parserInterpreterData.serializedAtn.toCharArray());
                 ParserInterpreter parser = new ParserInterpreter(grammarFileName, tokenNames, ruleNames, atn, tokenStream);
-                try {
-                    parser.getInterpreter().setPredictionMode(PredictionMode.SLL);
-                    parser.removeErrorListeners();
-                    parser.setBuildParseTree(true);
-                    parser.setErrorHandler(new BailErrorStrategy());
-                    parseResult = parser.parse(parserInterpreterData.startRuleIndex);
-                } catch (ParseCancellationException ex) {
-                    if (ex.getCause() instanceof RecognitionException) {
-                        // retry with default error handler
-                        tokenStream.reset();
-                        parser.getInterpreter().setPredictionMode(PredictionMode.LL);
-                        parser.addErrorListener(DescriptiveErrorListener.INSTANCE);
-                        parser.setInputStream(tokenStream);
-                        parser.setErrorHandler(new DefaultErrorStrategy());
-                        parseResult = parser.parse(parserInterpreterData.startRuleIndex);
-                    } else {
-                        throw ex;
-                    }
-                }
 
+                long startTime = System.nanoTime();
+                parser.setInterpreter(new StatisticsParserATNSimulator(parser, atn));
+                parser.getInterpreter().reportAmbiguities = true;
+                parser.getInterpreter().setPredictionMode(PredictionMode.LL_EXACT_AMBIG_DETECTION);
+                parser.removeErrorListeners();
+                parser.addErrorListener(DescriptiveErrorListener.INSTANCE);
+                parser.addErrorListener(new StatisticsParserErrorListener());
+                parser.setBuildParseTree(true);
+                parser.setErrorHandler(new DefaultErrorStrategy());
+                parseResult = parser.parse(parserInterpreterData.startRuleIndex);
+
+                FileParseResult fileParseResult = new FileParseResult((String)document.getDocument().getProperty(Document.TitleProperty), 0, parseResult, tokenStream.size(), startTime, null, parser);
+                fileParseResultData = new BaseParserData<>(context, ParserDebuggerParserDataDefinitions.FILE_PARSE_RESULT, snapshot, fileParseResult);
                 parseTreeResult = new BaseParserData<>(context, ParserDebuggerParserDataDefinitions.REFERENCE_PARSE_TREE, snapshot, parseResult);
             }
 
+            results.addResult(fileParseResultData);
             results.addResult(parseTreeResult);
         }
     }

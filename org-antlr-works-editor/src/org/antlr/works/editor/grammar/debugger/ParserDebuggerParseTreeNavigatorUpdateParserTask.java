@@ -19,7 +19,6 @@ import org.antlr.netbeans.parsing.spi.ParserTaskDefinition;
 import org.antlr.netbeans.parsing.spi.ParserTaskProvider;
 import org.antlr.netbeans.parsing.spi.SingletonParserTaskProvider;
 import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.works.editor.antlr4.navigation.ParseTreeNode;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 
 /**
@@ -45,7 +44,7 @@ public final class ParserDebuggerParseTreeNavigatorUpdateParserTask extends Abst
     protected void refresh(ParseContext parseContext, DocumentSnapshot snapshot, ParserDebuggerParseTreeNavigatorPanel panel, ParserRuleContext data) {
         ParserInterpreterData parserInterpreterData = (ParserInterpreterData)snapshot.getVersionedDocument().getDocument().getProperty(ParserDebuggerEditorKit.PROP_PARSER_INTERP_DATA);
         panel.setCurrentFile(snapshot.getVersionedDocument().getFileObject());
-        panel.setParseTree(new ParseTreeNode(data, parserInterpreterData.ruleNames));
+        panel.setParseTree(new ParserDebuggerParseTreeNode(data, parserInterpreterData.ruleNames));
     }
 
     private static final class Definition extends AbstractDefinition {
