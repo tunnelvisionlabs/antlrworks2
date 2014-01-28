@@ -13,7 +13,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumSet;
+import java.util.IdentityHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -40,9 +42,14 @@ import org.antlr.v4.runtime.ParserInterpreter;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenSource;
+import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.atn.ATN;
 import org.antlr.v4.runtime.atn.ATNDeserializer;
+import org.antlr.v4.runtime.atn.ATNState;
 import org.antlr.v4.runtime.atn.PredictionMode;
+import org.antlr.v4.runtime.atn.RuleTransition;
+import org.antlr.v4.runtime.atn.Transition;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.works.editor.antlr4.classification.TaggerTokenSource;
 import org.antlr.works.editor.antlr4.parsing.DescriptiveErrorListener;
 import org.antlr.works.editor.grammar.debugger.LexerDebuggerControllerTopComponent.TokenDescriptor;
@@ -90,7 +97,7 @@ public final class ParserDebuggerReferenceAnchorsParserTask implements ParserTas
                 }
                 List<String> ruleNames = parserInterpreterData.ruleNames;
                 ATN atn = new ATNDeserializer().deserialize(parserInterpreterData.serializedAtn.toCharArray());
-                ParserInterpreter parser = new ParserInterpreter(grammarFileName, tokenNames, ruleNames, atn, tokenStream);
+                TracingParserInterpreter parser = new TracingParserInterpreter(grammarFileName, tokenNames, ruleNames, atn, tokenStream);
 
                 long startTime = System.nanoTime();
                 parser.setInterpreter(new StatisticsParserATNSimulator(parser, atn));
@@ -104,13 +111,41 @@ public final class ParserDebuggerReferenceAnchorsParserTask implements ParserTas
                 parser.setErrorHandler(new DefaultErrorStrategy());
                 parseResult = parser.parse(parserInterpreterData.startRuleIndex);
 
-                FileParseResult fileParseResult = new FileParseResult((String)document.getDocument().getProperty(Document.TitleProperty), 0, parseResult, tokenStream.size(), startTime, null, parser);
+                String sourceName = (String)document.getDocument().getProperty(Document.TitleProperty);
+                FileParseResult fileParseResult = new FileParseResult(sourceName, 0, parseResult, tokenStream.size(), startTime, null, parser);
                 fileParseResultData = new BaseParserData<>(context, ParserDebuggerParserDataDefinitions.FILE_PARSE_RESULT, snapshot, fileParseResult);
                 parseTreeResult = new BaseParserData<>(context, ParserDebuggerParserDataDefinitions.REFERENCE_PARSE_TREE, snapshot, parseResult);
             }
 
             results.addResult(fileParseResultData);
             results.addResult(parseTreeResult);
+        }
+    }
+
+    public static class TracingParserInterpreter extends ParserInterpreter {
+        public final Map<ParseTree, Transition> associatedTransitions = new IdentityHashMap<>();
+
+        public TracingParserInterpreter(String grammarFileName, Collection<String> tokenNames, Collection<String> ruleNames, ATN atn, TokenStream input) {
+            super(grammarFileName, tokenNames, ruleNames, atn, input);
+        }
+
+        @Override
+        protected void visitState(ATNState p) {
+            super.visitState(p);
+
+            if (p.getNumberOfTransitions() > 1) {
+                return;
+            }
+
+            Transition transition = p.transition(0);
+            if (transition instanceof RuleTransition) {
+                // rule transition created a new context
+                associatedTransitions.put(_ctx, transition);
+            }
+            else if (!p.onlyHasEpsilonTransitions()) {
+                // match transition created a new terminal or error node
+                associatedTransitions.put(_ctx.getChild(_ctx.getChildCount() - 1), transition);
+            }
         }
     }
 

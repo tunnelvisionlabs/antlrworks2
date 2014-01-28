@@ -25,9 +25,9 @@ import org.netbeans.api.editor.mimelookup.MimeRegistration;
  *
  * @author Sam Harwell
  */
-public final class ParserDebuggerParseTreeNavigatorUpdateParserTask extends AbstractNavigatorUpdateParserTask<ParserDebuggerParseTreeNavigatorPanel, ParserRuleContext> {
+public final class ParserDebuggerParseTreeNavigatorUpdateParserTask extends AbstractNavigatorUpdateParserTask<ParserDebuggerParseTreeNavigatorPanel, FileParseResult> {
     private ParserDebuggerParseTreeNavigatorUpdateParserTask() {
-        super(ParserDebuggerParserDataDefinitions.REFERENCE_PARSE_TREE);
+        super(ParserDebuggerParserDataDefinitions.FILE_PARSE_RESULT);
     }
 
     @Override
@@ -41,16 +41,16 @@ public final class ParserDebuggerParseTreeNavigatorUpdateParserTask extends Abst
     }
 
     @Override
-    protected void refresh(ParseContext parseContext, DocumentSnapshot snapshot, ParserDebuggerParseTreeNavigatorPanel panel, ParserRuleContext data) {
+    protected void refresh(ParseContext parseContext, DocumentSnapshot snapshot, ParserDebuggerParseTreeNavigatorPanel panel, FileParseResult data) {
         ParserInterpreterData parserInterpreterData = (ParserInterpreterData)snapshot.getVersionedDocument().getDocument().getProperty(ParserDebuggerEditorKit.PROP_PARSER_INTERP_DATA);
         panel.setCurrentFile(snapshot.getVersionedDocument().getFileObject());
-        panel.setParseTree(new ParserDebuggerParseTreeNode(data, parserInterpreterData.ruleNames));
+        panel.setParseTree(new ParserDebuggerParseTreeNode(data.parseTree, data.associatedTransitions, parserInterpreterData.ruleNames));
     }
 
     private static final class Definition extends AbstractDefinition {
         private static final Collection<ParserDataDefinition<?>> INPUTS =
             Arrays.<ParserDataDefinition<?>>asList(
-                ParserDebuggerParserDataDefinitions.REFERENCE_PARSE_TREE,
+                ParserDebuggerParserDataDefinitions.FILE_PARSE_RESULT,
                 ParserDebuggerParserDataDefinitions.PARSE_TREE_UI_VISIBLE);
 
         public static final Definition INSTANCE = new Definition();

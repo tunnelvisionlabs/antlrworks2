@@ -10,18 +10,18 @@
 package org.antlr.works.editor.grammar.debugger;
 
 import java.awt.event.ActionEvent;
-import java.beans.PropertyChangeListener;
 import java.util.List;
+import java.util.Map;
 import javax.swing.Action;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.TextAction;
+import org.antlr.v4.runtime.atn.Transition;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.RuleNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.works.editor.antlr4.navigation.ParseTreeNode;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;
-import org.netbeans.api.editor.EditorActionRegistration;
 import org.netbeans.editor.BaseAction;
 import org.openide.util.NbBundle.Messages;
 
@@ -30,9 +30,11 @@ import org.openide.util.NbBundle.Messages;
  * @author Sam Harwell
  */
 public class ParserDebuggerParseTreeNode extends ParseTreeNode {
+    private final Map<ParseTree, Transition> associatedTransitions;
 
-    public ParserDebuggerParseTreeNode(@NonNull ParseTree tree, @NullAllowed List<String> ruleNames) {
+    public ParserDebuggerParseTreeNode(@NonNull ParseTree tree, Map<ParseTree, Transition> associatedTransitions, @NullAllowed List<String> ruleNames) {
         super(tree, ruleNames);
+        this.associatedTransitions = associatedTransitions;
     }
 
     @Override
@@ -60,7 +62,7 @@ public class ParserDebuggerParseTreeNode extends ParseTreeNode {
 
     @Override
     protected ParseTreeNode createChildNode(ParseTree tree) {
-        return new ParserDebuggerParseTreeNode(tree, getRuleNames());
+        return new ParserDebuggerParseTreeNode(tree, associatedTransitions, getRuleNames());
     }
 
     @Messages("goto-match-transition=Go to Match Transition")

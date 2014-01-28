@@ -9,13 +9,16 @@
 
 package org.antlr.works.editor.grammar.debugger;
 
+import java.util.Map;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.atn.LexerATNSimulator;
 import org.antlr.v4.runtime.atn.ParserATNSimulator;
+import org.antlr.v4.runtime.atn.Transition;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.misc.Nullable;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.works.editor.grammar.debugger.ParserDebuggerReferenceAnchorsParserTask.TracingParserInterpreter;
 
 /**
  *
@@ -25,6 +28,7 @@ public class FileParseResult {
     public final String sourceName;
     public final int checksum;
     public final ParseTree parseTree;
+    public final Map<ParseTree, Transition> associatedTransitions;
     public final int tokenCount;
     public final long startTime;
     public final long endTime;
@@ -75,6 +79,12 @@ public class FileParseResult {
         }
 
         if (parser != null) {
+            if (parser instanceof TracingParserInterpreter) {
+                associatedTransitions = ((TracingParserInterpreter)parser).associatedTransitions;
+            } else {
+                associatedTransitions = null;
+            }
+
             ParserATNSimulator interpreter = parser.getInterpreter();
             if (interpreter instanceof StatisticsParserATNSimulator) {
                 decisionInvocations = ((StatisticsParserATNSimulator)interpreter).decisionInvocations;
@@ -103,6 +113,7 @@ public class FileParseResult {
 
             parserDFASize = dfaSize;
         } else {
+            associatedTransitions = null;
             parserDFASize = 0;
             decisionInvocations = new long[0];
             fullContextFallback = new long[0];
