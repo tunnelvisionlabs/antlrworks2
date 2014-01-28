@@ -48,4 +48,6 @@ public interface RuleModel extends CodeElementModel {
     @NonNull
     Collection<? extends LabelModel> getLabels(String name);
 
+    public boolean hasExplicitEof();
+
 }

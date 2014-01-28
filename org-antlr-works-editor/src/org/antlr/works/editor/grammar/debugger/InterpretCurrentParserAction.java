@@ -84,6 +84,10 @@ public class InterpretCurrentParserAction implements ActionListener {
         DocumentSnapshot snapshot = VersionedDocumentUtilities.getVersionedDocument(document).getCurrentSnapshot();
         FileModel fileModel = RunInTestRigAction.getFileModel(snapshot);
         List<String> availableRules = RunInTestRigAction.getAvailableRules(fileModel);
+        if (fileModel != null) {
+            String initialStartRule = RunInTestRigAction.getFirstRule(fileModel, true);
+            wizard.putProperty(ParserDebuggerWizardPanel.START_RULE, initialStartRule);
+        }
         wizard.putProperty(ParserDebuggerWizardPanel.AVAILABLE_RULES, availableRules.toArray(new String[availableRules.size()]));
         if (DialogDisplayer.getDefault().notify(wizard) != WizardDescriptor.FINISH_OPTION) {
             return;

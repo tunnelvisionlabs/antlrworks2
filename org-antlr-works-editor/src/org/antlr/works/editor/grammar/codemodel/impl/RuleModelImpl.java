@@ -34,11 +34,22 @@ public abstract class RuleModelImpl extends AbstractCodeElementModel implements 
 
     private final OffsetRegion seek;
     private final OffsetRegion span;
+    private boolean explicitEof;
 
     public RuleModelImpl(String name, FileModelImpl file, TerminalNode seek, ParserRuleContext span) {
         super(name, file);
         this.seek = getOffsetRegion(seek);
         this.span = getOffsetRegion(span);
+    }
+
+    @Override
+    public boolean hasExplicitEof() {
+        return explicitEof;
+    }
+
+    public void setExplicitEof(boolean value) {
+        ensureModifiable();
+        this.explicitEof = value;
     }
 
     @NonNull

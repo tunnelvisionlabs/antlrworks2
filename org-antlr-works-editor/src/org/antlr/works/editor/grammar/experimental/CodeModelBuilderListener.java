@@ -337,6 +337,15 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
         fileModel.getImportDeclarations().add(importDeclarationModel);
     }
 
+    @Override
+    public void visitTerminal(TerminalNode node) {
+        if (node.getSymbol().getType() == GrammarLexer.TOKEN_REF) {
+            if (node.getSymbol().getText().equals("EOF")) {
+                ruleModelStack.peek().setExplicitEof(true);
+            }
+        }
+    }
+
     private SnapshotPositionRegion getSpan(ParserRuleContext context) {
         if (context == null) {
             return null;
