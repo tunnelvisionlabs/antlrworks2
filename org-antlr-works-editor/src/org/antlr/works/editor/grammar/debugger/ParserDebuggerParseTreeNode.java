@@ -43,14 +43,14 @@ public class ParserDebuggerParseTreeNode extends ParseTreeNode {
 
         if (getTree() instanceof TerminalNode) {
             Action[] actions = {
-                new GoToMatchTransitionAction()
+                //new GoToMatchTransitionAction()
             };
 
             actions = TextAction.augmentList(superActions, actions);
             return actions;
         } else if (getTree() instanceof RuleNode) {
             Action[] actions = {
-                new GoToRuleReferenceAction()
+                //new GoToRuleReferenceAction()
             };
 
             actions = TextAction.augmentList(superActions, actions);
