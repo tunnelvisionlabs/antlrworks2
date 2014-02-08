@@ -111,6 +111,13 @@ public final class ParserDebuggerReferenceAnchorsParserTask implements ParserTas
                 parser.setErrorHandler(new DefaultErrorStrategy());
                 parseResult = parser.parse(parserInterpreterData.startRuleIndex);
 
+                // this loop works around a bug in ANTLR 4.2
+                // https://github.com/antlr/antlr4/issues/461
+                // https://github.com/antlr/intellij-plugin-v4/issues/23
+                while (parseResult.getParent() != null) {
+                    parseResult = parseResult.getParent();
+                }
+
                 String sourceName = (String)document.getDocument().getProperty(Document.TitleProperty);
                 FileParseResult fileParseResult = new FileParseResult(sourceName, 0, parseResult, tokenStream.size(), startTime, null, parser);
                 fileParseResultData = new BaseParserData<>(context, ParserDebuggerParserDataDefinitions.FILE_PARSE_RESULT, snapshot, fileParseResult);
