@@ -12,6 +12,7 @@ package org.antlr.works.editor.grammar.debugger;
 import java.awt.event.ActionEvent;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import javax.swing.Action;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.TextAction;
@@ -23,6 +24,7 @@ import org.antlr.works.editor.antlr4.navigation.ParseTreeNode;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.annotations.common.NullAllowed;
 import org.netbeans.editor.BaseAction;
+import org.netbeans.lib.editor.util.StringEscapeUtils;
 import org.openide.util.NbBundle.Messages;
 
 /**
@@ -30,10 +32,12 @@ import org.openide.util.NbBundle.Messages;
  * @author Sam Harwell
  */
 public class ParserDebuggerParseTreeNode extends ParseTreeNode {
+    private final Set<ParseTree> errorNodes;
     private final Map<ParseTree, Transition> associatedTransitions;
 
-    public ParserDebuggerParseTreeNode(@NonNull ParseTree tree, Map<ParseTree, Transition> associatedTransitions, @NullAllowed List<String> ruleNames) {
+    public ParserDebuggerParseTreeNode(@NonNull ParseTree tree, @NullAllowed List<String> ruleNames, Set<ParseTree> errorNodes, Map<ParseTree, Transition> associatedTransitions) {
         super(tree, ruleNames);
+        this.errorNodes = errorNodes;
         this.associatedTransitions = associatedTransitions;
     }
 
@@ -61,8 +65,18 @@ public class ParserDebuggerParseTreeNode extends ParseTreeNode {
     }
 
     @Override
+    public String getHtmlDisplayName() {
+        if (errorNodes.contains(getTree())) {
+            String escaped = StringEscapeUtils.escapeHtml(getDisplayName());
+            return "<font color=\"#FF0000\">" + escaped + "</font>";
+        }
+
+        return super.getHtmlDisplayName();
+    }
+
+    @Override
     protected ParseTreeNode createChildNode(ParseTree tree) {
-        return new ParserDebuggerParseTreeNode(tree, associatedTransitions, getRuleNames());
+        return new ParserDebuggerParseTreeNode(tree, getRuleNames(), errorNodes, associatedTransitions);
     }
 
     @Messages("goto-match-transition=Go to Match Transition")

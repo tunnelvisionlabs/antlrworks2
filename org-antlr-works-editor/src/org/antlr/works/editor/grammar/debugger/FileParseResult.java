@@ -9,17 +9,24 @@
 
 package org.antlr.works.editor.grammar.debugger;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import org.antlr.netbeans.editor.parsing.SyntaxError;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.Parser;
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.atn.LexerATNSimulator;
 import org.antlr.v4.runtime.atn.ParserATNSimulator;
 import org.antlr.v4.runtime.atn.Transition;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.misc.Nullable;
+import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.ParseTreeListener;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.works.editor.grammar.debugger.ParserDebuggerReferenceAnchorsParserTask.TracingParserInterpreter;
 
 /**
@@ -132,5 +139,55 @@ public class FileParseResult {
 
     public List<? extends SyntaxError> getSyntaxErrors() {
         return syntaxErrors;
+    }
+
+    public Set<ParseTree> getErrorNodes() {
+        ErrorNodeAnalyzer analyzer = new ErrorNodeAnalyzer();
+        return analyzer.analyzeTree(parseTree, syntaxErrors);
+    }
+
+    private static class ErrorNodeAnalyzer {
+
+        public ErrorNodeAnalyzer() {
+        }
+
+        public Set<ParseTree> analyzeTree(ParseTree tree, List<? extends SyntaxError> syntaxErrors) {
+            // eventually check syntax errors in case skipped nodes from errors were omitted from the tree
+            Set<ParseTree> result = new HashSet<>();
+            ErrorNodeListener listener = new ErrorNodeListener(result);
+            ParseTreeWalker.DEFAULT.walk(listener, tree);
+            return result;
+        }
+
+        private static class ErrorNodeListener implements ParseTreeListener {
+            private final Set<ParseTree> result;
+
+            private ErrorNodeListener(Set<ParseTree> result) {
+                this.result = result;
+            }
+
+            @Override
+            public void visitTerminal(TerminalNode node) {
+            }
+
+            @Override
+            public void visitErrorNode(ErrorNode node) {
+                result.add(node);
+            }
+
+            @Override
+            public void enterEveryRule(ParserRuleContext ctx) {
+                if (ctx.exception != null) {
+                    result.add(ctx);
+                }
+            }
+
+            @Override
+            public void exitEveryRule(ParserRuleContext ctx) {
+                if (result.contains(ctx) && ctx.getParent() != null) {
+                    result.add(ctx.getParent());
+                }
+            }
+        }
     }
 }
