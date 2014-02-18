@@ -52,6 +52,7 @@ import org.antlr.v4.runtime.atn.Transition;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.works.editor.antlr4.classification.TaggerTokenSource;
 import org.antlr.works.editor.antlr4.parsing.DescriptiveErrorListener;
+import org.antlr.works.editor.antlr4.parsing.SyntaxErrorListener;
 import org.antlr.works.editor.grammar.debugger.LexerDebuggerControllerTopComponent.TokenDescriptor;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 
@@ -107,6 +108,8 @@ public final class ParserDebuggerReferenceAnchorsParserTask implements ParserTas
                 parser.removeErrorListeners();
                 parser.addErrorListener(DescriptiveErrorListener.INSTANCE);
                 parser.addErrorListener(new StatisticsParserErrorListener());
+                SyntaxErrorListener syntaxErrorListener = new SyntaxErrorListener(snapshot);
+                parser.addErrorListener(syntaxErrorListener);
                 parser.setBuildParseTree(true);
                 parser.setErrorHandler(new DefaultErrorStrategy());
                 parseResult = parser.parse(parserInterpreterData.startRuleIndex);
@@ -119,7 +122,7 @@ public final class ParserDebuggerReferenceAnchorsParserTask implements ParserTas
                 }
 
                 String sourceName = (String)document.getDocument().getProperty(Document.TitleProperty);
-                FileParseResult fileParseResult = new FileParseResult(sourceName, 0, parseResult, tokenStream.size(), startTime, null, parser);
+                FileParseResult fileParseResult = new FileParseResult(sourceName, 0, parseResult, syntaxErrorListener.getSyntaxErrors(), tokenStream.size(), startTime, null, parser);
                 fileParseResultData = new BaseParserData<>(context, ParserDebuggerParserDataDefinitions.FILE_PARSE_RESULT, snapshot, fileParseResult);
                 parseTreeResult = new BaseParserData<>(context, ParserDebuggerParserDataDefinitions.REFERENCE_PARSE_TREE, snapshot, parseResult);
             }

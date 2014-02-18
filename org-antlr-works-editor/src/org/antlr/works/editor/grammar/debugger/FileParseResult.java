@@ -9,7 +9,9 @@
 
 package org.antlr.works.editor.grammar.debugger;
 
+import java.util.List;
 import java.util.Map;
+import org.antlr.netbeans.editor.parsing.SyntaxError;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.atn.LexerATNSimulator;
@@ -46,10 +48,13 @@ public class FileParseResult {
     public final long[] parserComputedTransitions;
     public final long[] parserFullContextTransitions;
 
-    public FileParseResult(String sourceName, int checksum, @Nullable ParseTree parseTree, int tokenCount, long startTime, Lexer lexer, Parser parser) {
+    private final List<? extends SyntaxError> syntaxErrors;
+
+    public FileParseResult(String sourceName, int checksum, @Nullable ParseTree parseTree, List<? extends SyntaxError> syntaxErrors, int tokenCount, long startTime, Lexer lexer, Parser parser) {
         this.sourceName = sourceName;
         this.checksum = checksum;
         this.parseTree = parseTree;
+        this.syntaxErrors = syntaxErrors;
         this.tokenCount = tokenCount;
         this.startTime = startTime;
         this.endTime = System.nanoTime();
@@ -123,5 +128,9 @@ public class FileParseResult {
             parserComputedTransitions = new long[0];
             parserFullContextTransitions = new long[0];
         }
+    }
+
+    public List<? extends SyntaxError> getSyntaxErrors() {
+        return syntaxErrors;
     }
 }
