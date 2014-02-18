@@ -84,10 +84,20 @@ public class RuleScannerV4 extends RuleScanner {
             return;
         }
 
+        GrammarRootAST lexerParseResult = null;
+        if (result.getGrammar() != null && result.getGrammar().getImplicitLexer() != null) {
+            lexerParseResult = result.getGrammar().getImplicitLexer().ast;
+        }
+
         FileObject fileObject = result.getFileObject();
 
         Set<GrammarAST> topLevelRules = new HashSet<>(parseResult.getNodesWithType(ANTLRParser.RULE));
         Set<GrammarAST> modes = new HashSet<>(parseResult.getNodesWithType(ANTLRParser.MODE));
+        if (lexerParseResult != null) {
+            topLevelRules.addAll(lexerParseResult.getNodesWithType(ANTLRParser.RULE));
+            modes.addAll(lexerParseResult.getNodesWithType(ANTLRParser.MODE));
+        }
+
         Map<GrammarAST, Set<GrammarAST>> modeRules = new HashMap<>();
         for (GrammarAST mode : modes) {
             Set<GrammarAST> rules = new HashSet<>(mode.getNodesWithType(ANTLRParser.RULE));
@@ -108,8 +118,12 @@ public class RuleScannerV4 extends RuleScanner {
             processRules(snapshot, result, entry.getValue(), modeDescription.getChildren(), modeDescription.getChildren());
         }
 
-        GrammarAST tokensSpec = (GrammarAST)parseResult.getFirstDescendantWithType(ANTLRParser.TOKENS_SPEC);
-        if (tokensSpec != null) {
+        Set<GrammarAST> tokensSpecs = new HashSet<>(parseResult.getNodesWithType(ANTLRParser.TOKENS_SPEC));
+        if (lexerParseResult != null) {
+            tokensSpecs.addAll(lexerParseResult.getNodesWithType(ANTLRParser.TOKENS_SPEC));
+        }
+
+        for (GrammarAST tokensSpec : tokensSpecs) {
             for (Object childObject : tokensSpec.getChildren()) {
                 if (!(childObject instanceof CommonTree)) {
                     continue;
