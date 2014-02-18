@@ -54,6 +54,12 @@ public class FileParseResult {
     public final long[] parserTotalTransitions;
     public final long[] parserComputedTransitions;
     public final long[] parserFullContextTransitions;
+    public final long[] totalLookaheadSll;
+    public final long[] totalLookaheadLl;
+    public final long[] minLookaheadSll;
+    public final long[] maxLookaheadSll;
+    public final long[] minLookaheadLl;
+    public final long[] maxLookaheadLl;
 
     private final List<? extends SyntaxError> syntaxErrors;
 
@@ -106,6 +112,12 @@ public class FileParseResult {
                 parserTotalTransitions = ((StatisticsParserATNSimulator)interpreter).totalTransitions;
                 parserComputedTransitions = ((StatisticsParserATNSimulator)interpreter).computedTransitions;
                 parserFullContextTransitions = ((StatisticsParserATNSimulator)interpreter).fullContextTransitions;
+                totalLookaheadSll = ((StatisticsParserATNSimulator)interpreter).totalLookaheadSll;
+                totalLookaheadLl = ((StatisticsParserATNSimulator)interpreter).totalLookaheadLl;
+                minLookaheadSll = ((StatisticsParserATNSimulator)interpreter).minLookaheadSll;
+                maxLookaheadSll = ((StatisticsParserATNSimulator)interpreter).maxLookaheadSll;
+                minLookaheadLl = ((StatisticsParserATNSimulator)interpreter).minLookaheadLl;
+                maxLookaheadLl = ((StatisticsParserATNSimulator)interpreter).maxLookaheadLl;
             } else {
                 decisionInvocations = new long[0];
                 fullContextFallback = new long[0];
@@ -114,6 +126,12 @@ public class FileParseResult {
                 parserTotalTransitions = new long[0];
                 parserComputedTransitions = new long[0];
                 parserFullContextTransitions = new long[0];
+                totalLookaheadSll = new long[0];
+                totalLookaheadLl = new long[0];
+                minLookaheadSll = new long[0];
+                maxLookaheadSll = new long[0];
+                minLookaheadLl = new long[0];
+                maxLookaheadLl = new long[0];
             }
 
             int dfaSize = 0;
@@ -134,6 +152,12 @@ public class FileParseResult {
             parserTotalTransitions = new long[0];
             parserComputedTransitions = new long[0];
             parserFullContextTransitions = new long[0];
+            totalLookaheadSll = new long[0];
+            totalLookaheadLl = new long[0];
+            minLookaheadSll = new long[0];
+            maxLookaheadSll = new long[0];
+            minLookaheadLl = new long[0];
+            maxLookaheadLl = new long[0];
         }
     }
 

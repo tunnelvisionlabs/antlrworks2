@@ -563,17 +563,26 @@ public final class ParserDebuggerControllerTopComponent extends TopComponent {
                     for (int i = 0; i < fileParseResult.decisionInvocations.length; i++) {
                         int ruleIndex = atn.decisionToState.get(i).ruleIndex;
                         String ruleName = parserInterpreterData.ruleNames.get(ruleIndex);
-                        double averageLookahead;
-                        if (fileParseResult.parserTotalTransitions[i] > 0) {
-                            averageLookahead = fileParseResult.parserTotalTransitions[i] / (double)(fileParseResult.decisionInvocations[i] + fileParseResult.fullContextFallback[i]);
+                        double averageLookaheadSll;
+                        if (fileParseResult.decisionInvocations[i] > 0) {
+                            averageLookaheadSll = (double)fileParseResult.totalLookaheadSll[i] / (double)fileParseResult.decisionInvocations[i];
+                        } else {
+                            averageLookaheadSll = -1;
                         }
-                        else {
-                            averageLookahead = 0;
+
+                        double averageLookaheadLl;
+                        if (fileParseResult.fullContextFallback[i] > 0) {
+                            averageLookaheadLl = (double)fileParseResult.totalLookaheadLl[i] / (double)fileParseResult.fullContextFallback[i];
+                        } else {
+                            averageLookaheadLl = -1;
                         }
-                        int minLookahead = -1;
-                        int maxLookahead = -1;
+
+                        long minLookaheadSll = fileParseResult.minLookaheadSll[i];
+                        long maxLookaheadSll = fileParseResult.maxLookaheadSll[i];
+                        long minLookaheadLl = fileParseResult.minLookaheadLl[i];
+                        long maxLookaheadLl = fileParseResult.maxLookaheadLl[i];
                         long totalTransitions = fileParseResult.parserTotalTransitions[i];
-                        lookaheadStatistics.add(new LookaheadStatistic(i, ruleName, averageLookahead, minLookahead, maxLookahead, totalTransitions));
+                        lookaheadStatistics.add(new LookaheadStatistic(i, ruleName, averageLookaheadSll, averageLookaheadLl, minLookaheadSll, maxLookaheadSll, minLookaheadLl, maxLookaheadLl, totalTransitions));
                     }
                 }
 
@@ -586,7 +595,7 @@ public final class ParserDebuggerControllerTopComponent extends TopComponent {
 
                     @Override
                     public int getColumnCount() {
-                        return 6;
+                        return 9;
                     }
 
                     @Override
@@ -597,12 +606,18 @@ public final class ParserDebuggerControllerTopComponent extends TopComponent {
                         case 1:
                             return "Rule";
                         case 2:
-                            return "Avg k";
+                            return "Avg k (SLL)";
                         case 3:
-                            return "Min k";
+                            return "Avg k (LL)";
                         case 4:
-                            return "Max k";
+                            return "Min k (SLL)";
                         case 5:
+                            return "Max k (SLL)";
+                        case 6:
+                            return "Min k (LL)";
+                        case 7:
+                            return "Max k (LL)";
+                        case 8:
                             return "Cost";
                         default:
                             throw new IllegalArgumentException("column");
@@ -619,10 +634,16 @@ public final class ParserDebuggerControllerTopComponent extends TopComponent {
                         case 2:
                             return Double.class;
                         case 3:
-                            return Long.class;
+                            return Double.class;
                         case 4:
                             return Long.class;
                         case 5:
+                            return Long.class;
+                        case 6:
+                            return Long.class;
+                        case 7:
+                            return Long.class;
+                        case 8:
                             return Long.class;
                         default:
                             throw new IllegalArgumentException("columnIndex");
@@ -637,16 +658,38 @@ public final class ParserDebuggerControllerTopComponent extends TopComponent {
                         case 1:
                             return lookaheadStatistics.get(rowIndex).getRuleName();
                         case 2:
-                            return lookaheadStatistics.get(rowIndex).getAverageLookahead();
+                            return inRangeValue(lookaheadStatistics.get(rowIndex).getAverageLookaheadSll());
                         case 3:
-                            return lookaheadStatistics.get(rowIndex).getMinLookahead();
+                            return inRangeValue(lookaheadStatistics.get(rowIndex).getAverageLookaheadLl());
                         case 4:
-                            return lookaheadStatistics.get(rowIndex).getMaxLookahead();
+                            return inRangeValue(lookaheadStatistics.get(rowIndex).getMinLookaheadSll());
                         case 5:
+                            return inRangeValue(lookaheadStatistics.get(rowIndex).getMaxLookaheadSll());
+                        case 6:
+                            return inRangeValue(lookaheadStatistics.get(rowIndex).getMinLookaheadLl());
+                        case 7:
+                            return inRangeValue(lookaheadStatistics.get(rowIndex).getMaxLookaheadLl());
+                        case 8:
                             return lookaheadStatistics.get(rowIndex).getTotalTransitions();
                         default:
                             throw new IllegalArgumentException("columnIndex");
                         }
+                    }
+
+                    private Double inRangeValue(double value) {
+                        if (value < 0) {
+                            return null;
+                        }
+
+                        return value;
+                    }
+
+                    private Long inRangeValue(long value) {
+                        if (value == Long.MIN_VALUE || value == Long.MAX_VALUE) {
+                            return null;
+                        }
+
+                        return value;
                     }
                 });
 
@@ -861,17 +904,23 @@ public final class ParserDebuggerControllerTopComponent extends TopComponent {
     private static class LookaheadStatistic {
         private final int decision;
         private final String ruleName;
-        private final double averageLookahead;
-        private final long minLookahead;
-        private final long maxLookahead;
+        private final double averageLookaheadSll;
+        private final double averageLookaheadLl;
+        private final long minLookaheadSll;
+        private final long maxLookaheadSll;
+        private final long minLookaheadLl;
+        private final long maxLookaheadLl;
         private final long totalTransitions;
 
-        public LookaheadStatistic(int decision, String ruleName, double averageLookahead, long minLookahead, long maxLookahead, long totalTransitions) {
+        public LookaheadStatistic(int decision, String ruleName, double averageLookaheadSll, double averageLookaheadLl, long minLookaheadSll, long maxLookaheadSll, long minLookaheadLl, long maxLookaheadLl, long totalTransitions) {
             this.decision = decision;
             this.ruleName = ruleName;
-            this.averageLookahead = averageLookahead;
-            this.minLookahead = minLookahead;
-            this.maxLookahead = maxLookahead;
+            this.averageLookaheadSll = averageLookaheadSll;
+            this.averageLookaheadLl = averageLookaheadLl;
+            this.minLookaheadSll = minLookaheadSll;
+            this.maxLookaheadSll = maxLookaheadSll;
+            this.minLookaheadLl = minLookaheadLl;
+            this.maxLookaheadLl = maxLookaheadLl;
             this.totalTransitions = totalTransitions;
         }
 
@@ -883,16 +932,28 @@ public final class ParserDebuggerControllerTopComponent extends TopComponent {
             return ruleName;
         }
 
-        public double getAverageLookahead() {
-            return averageLookahead;
+        public double getAverageLookaheadSll() {
+            return averageLookaheadSll;
         }
 
-        public long getMinLookahead() {
-            return minLookahead;
+        public double getAverageLookaheadLl() {
+            return averageLookaheadLl;
         }
 
-        public long getMaxLookahead() {
-            return maxLookahead;
+        public long getMinLookaheadSll() {
+            return minLookaheadSll;
+        }
+
+        public long getMaxLookaheadSll() {
+            return maxLookaheadSll;
+        }
+
+        public long getMinLookaheadLl() {
+            return minLookaheadLl;
+        }
+
+        public long getMaxLookaheadLl() {
+            return maxLookaheadLl;
         }
 
         public long getTotalTransitions() {
