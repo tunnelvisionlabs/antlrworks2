@@ -734,6 +734,36 @@ public final class ParserDebuggerControllerTopComponent extends TopComponent {
                 });
 
                 final List<ParserStatistic> statistics = new ArrayList<>();
+
+                // number of tokens consumed
+                statistics.add(new ParserStatistic("Tokens", fileParseResult.tokenCount));
+
+                // number of rule contexts created
+                final long[] ruleCount = new long[1];
+                ParseTreeListener ruleCountListener = new ParseTreeListener() {
+                    @Override
+                    public void visitTerminal(TerminalNode node) {
+                    }
+
+                    @Override
+                    public void visitErrorNode(ErrorNode node) {
+                    }
+
+                    @Override
+                    public void enterEveryRule(ParserRuleContext ctx) {
+                        ruleCount[0]++;
+                    }
+
+                    @Override
+                    public void exitEveryRule(ParserRuleContext ctx) {
+                    }
+                };
+                ParseTreeWalker.DEFAULT.walk(ruleCountListener, parseTree);
+                statistics.add(new ParserStatistic("Rule Invocations", ruleCount[0]));
+
+                // number of syntax errors reported
+                statistics.add(new ParserStatistic("Syntax Errors", fileParseResult.getSyntaxErrors().size()));
+
                 tblStatistics.setModel(new AbstractTableModel() {
 
                     @Override
