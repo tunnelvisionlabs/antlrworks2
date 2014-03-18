@@ -1,7 +1,0 @@
-Manifest-Version: 1.0
-AutoUpdate-Show-In-Client: false
-OpenIDE-Module: org.antlr.works.branding/2
-OpenIDE-Module-Layer: org/antlr/works/branding/layer.xml
-OpenIDE-Module-Localizing-Bundle: org/antlr/works/branding/Bundle.properties
-OpenIDE-Module-Specification-Version: 2.0
-
