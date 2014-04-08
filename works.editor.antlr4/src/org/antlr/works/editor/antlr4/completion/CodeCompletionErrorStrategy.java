@@ -119,7 +119,7 @@ public class CodeCompletionErrorStrategy extends DefaultErrorStrategy {
 
             final boolean collectPredicates = false;
             final boolean hasMoreContext = true;
-            interp.closure(intermediate, closure, collectPredicates, hasMoreContext, PredictionContextCache.UNCACHED);
+            interp.closure(intermediate, closure, collectPredicates, hasMoreContext, PredictionContextCache.UNCACHED, false);
 
             if (!state.onlyHasEpsilonTransitions()) {
                 for (int i = 0; i < state.getNumberOfTransitions(); i++) {

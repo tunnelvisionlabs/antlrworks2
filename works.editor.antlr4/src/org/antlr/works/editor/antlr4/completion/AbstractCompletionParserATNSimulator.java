@@ -130,8 +130,8 @@ public abstract class AbstractCompletionParserATNSimulator extends ParserATNSimu
     }
 
     @Override
-    protected void closure(ATNConfigSet sourceConfigs, ATNConfigSet configs, boolean collectPredicates, boolean hasMoreContext, PredictionContextCache contextCache) {
-        super.closure(sourceConfigs, configs, collectPredicates, hasMoreContext, contextCache);
+    protected void closure(ATNConfigSet sourceConfigs, ATNConfigSet configs, boolean collectPredicates, boolean hasMoreContext, PredictionContextCache contextCache, boolean treatEofAsEpsilon) {
+        super.closure(sourceConfigs, configs, collectPredicates, hasMoreContext, contextCache, treatEofAsEpsilon);
     }
 
     protected abstract IntervalSet getWordlikeTokenTypes();
