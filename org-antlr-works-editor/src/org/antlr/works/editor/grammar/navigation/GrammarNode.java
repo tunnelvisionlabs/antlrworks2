@@ -18,11 +18,15 @@ import org.openide.util.ImageUtilities;
 public class GrammarNode extends NavigatorNode {
     public static Image PARSER_IMAGE;
     public static Image LEXER_IMAGE;
+    public static Image FRAGMENT_IMAGE;
+    public static Image TOKEN_IMAGE;
     public static Image MODE_IMAGE;
 
     static {
         PARSER_IMAGE = ImageUtilities.loadImage("org/antlr/works/editor/grammar/navigation/resources/parsericon.png");
         LEXER_IMAGE = ImageUtilities.loadImage("org/antlr/works/editor/grammar/navigation/resources/lexericon.png");
+        FRAGMENT_IMAGE = ImageUtilities.loadImage("org/antlr/works/editor/grammar/navigation/resources/fragmenticon.png");
+        TOKEN_IMAGE = ImageUtilities.loadImage("org/antlr/works/editor/grammar/navigation/resources/tokenicon.png");
         MODE_IMAGE = ImageUtilities.loadImage("org/antlr/works/editor/grammar/navigation/resources/modeicon.png");
     }
 
@@ -55,6 +59,12 @@ public class GrammarNode extends NavigatorNode {
 
             case LEXER_RULE:
                 return LEXER_IMAGE;
+
+            case FRAGMENT_RULE:
+                return FRAGMENT_IMAGE;
+
+            case TOKEN:
+                return TOKEN_IMAGE;
 
             case MODE:
                 return MODE_IMAGE;

@@ -20,6 +20,11 @@ import org.netbeans.api.annotations.common.CheckForNull;
 public interface LexerRuleModel extends RuleModel {
 
     /**
+     * Determines if the lexer rule is declared as a {@code fragment} rule.
+     */
+    boolean isFragment();
+
+    /**
      * Gets information about the token type created for this lexer rule. Some
      * lexer rules do not have an associated token type; for these rules this
      * method returns {@code null}.

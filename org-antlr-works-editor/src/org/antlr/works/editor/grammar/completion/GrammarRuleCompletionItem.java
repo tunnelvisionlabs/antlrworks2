@@ -21,6 +21,8 @@ import org.antlr.works.editor.grammar.navigation.GrammarNode.GrammarNodeDescript
 public class GrammarRuleCompletionItem extends GrammarCompletionItem {
     private static final ImageIcon PARSER_ICON;
     private static final ImageIcon LEXER_ICON;
+    private static final ImageIcon FRAGMENT_ICON;
+    private static final ImageIcon TOKEN_ICON;
     private static final ImageIcon MODE_ICON;
 
     private final Description rule;
@@ -30,6 +32,8 @@ public class GrammarRuleCompletionItem extends GrammarCompletionItem {
     static {
         PARSER_ICON = new ImageIcon(GrammarNode.PARSER_IMAGE);
         LEXER_ICON = new ImageIcon(GrammarNode.LEXER_IMAGE);
+        FRAGMENT_ICON = new ImageIcon(GrammarNode.FRAGMENT_IMAGE);
+        TOKEN_ICON = new ImageIcon(GrammarNode.TOKEN_IMAGE);
         MODE_ICON = new ImageIcon(GrammarNode.MODE_IMAGE);
     }
 
@@ -61,6 +65,12 @@ public class GrammarRuleCompletionItem extends GrammarCompletionItem {
 
             case LEXER_RULE:
                 return LEXER_ICON;
+
+            case FRAGMENT_RULE:
+                return FRAGMENT_ICON;
+
+            case TOKEN:
+                return TOKEN_ICON;
 
             case MODE:
                 return MODE_ICON;

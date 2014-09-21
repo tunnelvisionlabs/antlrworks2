@@ -15,6 +15,8 @@ package org.antlr.works.editor.grammar.navigation;
 public enum DeclarationKind {
     PARSER_RULE,
     LEXER_RULE,
+    FRAGMENT_RULE,
+    TOKEN,
     MODE,
 
     UNKNOWN,

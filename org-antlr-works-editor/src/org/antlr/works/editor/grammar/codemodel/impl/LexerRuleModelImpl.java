@@ -24,12 +24,14 @@ import org.antlr.works.editor.grammar.codemodel.TokenData;
  */
 public class LexerRuleModelImpl extends RuleModelImpl implements LexerRuleModel {
     private final ModeModelImpl mode;
+    private final boolean isFragment;
     private final boolean generateTokenType;
     private final String literal;
 
-    public LexerRuleModelImpl(String name, ModeModelImpl mode, boolean generateTokenType, String literal, FileModelImpl file, TerminalNode seek, ParserRuleContext span) {
+    public LexerRuleModelImpl(String name, ModeModelImpl mode, boolean isFragment, boolean generateTokenType, String literal, FileModelImpl file, TerminalNode seek, ParserRuleContext span) {
         super(name, file, seek, span);
         this.mode = mode;
+        this.isFragment = isFragment;
         this.generateTokenType = generateTokenType;
         this.literal = literal;
     }
@@ -42,6 +44,11 @@ public class LexerRuleModelImpl extends RuleModelImpl implements LexerRuleModel 
     @Override
     public ModeModel getMode() {
         return mode;
+    }
+
+    @Override
+    public boolean isFragment() {
+        return isFragment;
     }
 
     @Override

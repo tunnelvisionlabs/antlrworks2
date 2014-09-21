@@ -130,6 +130,8 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
         if (ctx instanceof GrammarParser.ParserRuleSpecContext) {
             ruleModel = new ParserRuleModelImpl(ruleName, fileModel, name, ctx);
         } else if (ctx instanceof GrammarParser.LexerRuleContext) {
+            LexerRuleContext lexerRuleContext = (LexerRuleContext)ctx;
+            boolean isFragment = lexerRuleContext.FRAGMENT() != null;
             boolean generateTokenType = !SuppressTokenTypeVisitor.INSTANCE.visit(ctx);
             String literal = null;
             if (generateTokenType && LiteralLexerRuleVisitor.INSTANCE.visit(ctx)) {
@@ -137,7 +139,7 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
                 literal = terminal != null ? terminal.getSymbol().getText() : null;
             }
 
-            ruleModel = new LexerRuleModelImpl(ruleName, modeModelStack.peek(), generateTokenType, literal, fileModel, name, ctx);
+            ruleModel = new LexerRuleModelImpl(ruleName, modeModelStack.peek(), isFragment, generateTokenType, literal, fileModel, name, ctx);
         } else {
             throw new UnsupportedOperationException();
         }

@@ -125,7 +125,7 @@ public class RuleScannerV3 extends RuleScanner {
                             continue;
                         }
 
-                        GrammarNode.GrammarNodeDescription ruleDescription = new GrammarNode.GrammarNodeDescription(DeclarationKind.LEXER_RULE, ruleName);
+                        GrammarNode.GrammarNodeDescription ruleDescription = new GrammarNode.GrammarNodeDescription(DeclarationKind.TOKEN, ruleName);
                         ruleDescription.setOffset(snapshot, fileObject, getElementOffset(tokenChild));
                         ruleDescription.setSpan(getSpan(snapshot, result, child));
                         ruleDescription.setInherited(snapshot == null); // for now, go on the fact that snapshots aren't available for imported files
@@ -141,7 +141,7 @@ public class RuleScannerV3 extends RuleScanner {
                             continue;
                         }
 
-                        GrammarNode.GrammarNodeDescription ruleDescription = new GrammarNode.GrammarNodeDescription(DeclarationKind.LEXER_RULE, ruleName);
+                        GrammarNode.GrammarNodeDescription ruleDescription = new GrammarNode.GrammarNodeDescription(DeclarationKind.TOKEN, ruleName);
                         ruleDescription.setOffset(snapshot, fileObject, getElementOffset(tokenChild));
                         ruleDescription.setSpan(getSpan(snapshot, result, child));
                         ruleDescription.setInherited(snapshot == null); // for now, go on the fact that snapshots aren't available for imported files

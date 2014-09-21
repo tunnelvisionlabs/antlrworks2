@@ -162,7 +162,11 @@ public class GrammarCompletionProvider extends AbstractCompletionProvider {
 
                 DeclarationKind declarationKind;
                 if (ruleModel instanceof LexerRuleModel) {
-                    declarationKind = DeclarationKind.LEXER_RULE;
+                    if (((LexerRuleModel)ruleModel).isFragment()) {
+                        declarationKind = DeclarationKind.FRAGMENT_RULE;
+                    } else {
+                        declarationKind = DeclarationKind.LEXER_RULE;
+                    }
                 } else {
                     declarationKind = DeclarationKind.PARSER_RULE;
                 }
@@ -195,7 +199,7 @@ public class GrammarCompletionProvider extends AbstractCompletionProvider {
                     continue;
                 }
 
-                GrammarNodeDescription description = new GrammarNodeDescription(DeclarationKind.LEXER_RULE, tokenData.getName());
+                GrammarNodeDescription description = new GrammarNodeDescription(DeclarationKind.TOKEN, tokenData.getName());
                 Collection<? extends RuleModel> resolved = tokenData.resolve();
                 for (RuleModel ruleModel : resolved) {
                     if (addSeekPositionToDescription(description, ruleModel)) {

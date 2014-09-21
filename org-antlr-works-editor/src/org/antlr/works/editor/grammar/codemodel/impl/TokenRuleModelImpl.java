@@ -19,7 +19,7 @@ import org.antlr.works.editor.grammar.codemodel.RuleKind;
 public class TokenRuleModelImpl extends LexerRuleModelImpl {
 
     public TokenRuleModelImpl(String name, String literal, FileModelImpl file, TerminalNode seek, ParserRuleContext span) {
-        super(name, null, true, literal, file, seek, span);
+        super(name, null, false, true, literal, file, seek, span);
     }
 
     @Override
