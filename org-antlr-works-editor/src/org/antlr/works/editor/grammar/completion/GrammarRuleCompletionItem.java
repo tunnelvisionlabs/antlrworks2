@@ -12,6 +12,7 @@ import javax.swing.ImageIcon;
 import org.antlr.netbeans.editor.navigation.Description;
 import org.antlr.v4.tool.Grammar;
 import org.antlr.works.editor.grammar.navigation.GrammarNode;
+import org.antlr.works.editor.grammar.navigation.GrammarNode.GrammarNodeDescription;
 
 /**
  *
@@ -20,6 +21,7 @@ import org.antlr.works.editor.grammar.navigation.GrammarNode;
 public class GrammarRuleCompletionItem extends GrammarCompletionItem {
     private static final ImageIcon PARSER_ICON;
     private static final ImageIcon LEXER_ICON;
+    private static final ImageIcon MODE_ICON;
 
     private final Description rule;
 
@@ -28,6 +30,7 @@ public class GrammarRuleCompletionItem extends GrammarCompletionItem {
     static {
         PARSER_ICON = new ImageIcon(GrammarNode.PARSER_IMAGE);
         LEXER_ICON = new ImageIcon(GrammarNode.LEXER_IMAGE);
+        MODE_ICON = new ImageIcon(GrammarNode.MODE_IMAGE);
     }
 
     public GrammarRuleCompletionItem(Description rule) {
@@ -51,6 +54,24 @@ public class GrammarRuleCompletionItem extends GrammarCompletionItem {
 
     @Override
     protected ImageIcon getIcon() {
+        if (rule instanceof GrammarNodeDescription) {
+            switch (((GrammarNodeDescription)rule).getDeclarationKind()) {
+            case PARSER_RULE:
+                return PARSER_ICON;
+
+            case LEXER_RULE:
+                return LEXER_ICON;
+
+            case MODE:
+                return MODE_ICON;
+
+            case UNKNOWN:
+            case UNDEFINED:
+            default:
+                break;
+            }
+        }
+
         String name = rule.getName();
         if (Grammar.isTokenName(name)) {
             return LEXER_ICON;

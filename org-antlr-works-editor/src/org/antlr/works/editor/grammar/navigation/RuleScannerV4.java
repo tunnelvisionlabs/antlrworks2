@@ -44,13 +44,13 @@ public class RuleScannerV4 extends RuleScanner {
                 return;
             }*/
 
-            GrammarNode.GrammarNodeDescription rootDescription = new GrammarNode.GrammarNodeDescription();
+            GrammarNode.GrammarNodeDescription rootDescription = new GrammarNode.GrammarNodeDescription(DeclarationKind.UNDEFINED);
             rootDescription.setFileObject(model.getSnapshot().getVersionedDocument().getFileObject());
 
-            GrammarNode.GrammarNodeDescription parserRulesRootDescription = new GrammarNode.GrammarNodeDescription("1" + Bundle.LBL_ParserRules());
+            GrammarNode.GrammarNodeDescription parserRulesRootDescription = new GrammarNode.GrammarNodeDescription(DeclarationKind.PARSER_RULE, "1" + Bundle.LBL_ParserRules());
             parserRulesRootDescription.setHtmlHeader(Bundle.LBL_ParserRules());
 
-            GrammarNode.GrammarNodeDescription lexerRulesRootDescription = new GrammarNode.GrammarNodeDescription("2" + Bundle.LBL_LexerRules());
+            GrammarNode.GrammarNodeDescription lexerRulesRootDescription = new GrammarNode.GrammarNodeDescription(DeclarationKind.LEXER_RULE, "2" + Bundle.LBL_LexerRules());
             lexerRulesRootDescription.setHtmlHeader(Bundle.LBL_LexerRules());
 
             for (CompiledFileModelV4 importedParseResult : model.getImportedGrammarResults()) {
@@ -108,7 +108,7 @@ public class RuleScannerV4 extends RuleScanner {
         processRules(snapshot, result, topLevelRules, parserRulesRootDescription.getChildren(), lexerRulesRootDescription.getChildren());
         for (Map.Entry<GrammarAST, Set<GrammarAST>> entry : modeRules.entrySet()) {
             String modeName = getModeName(entry.getKey());
-            GrammarNode.GrammarNodeDescription modeDescription = new GrammarNode.GrammarNodeDescription("_" + modeName);
+            GrammarNode.GrammarNodeDescription modeDescription = new GrammarNode.GrammarNodeDescription(DeclarationKind.MODE, "_" + modeName);
             modeDescription.setHtmlHeader("mode " + modeName);
             modeDescription.setOffset(snapshot, result.getFileObject(), getElementOffset(entry.getKey()));
             modeDescription.setSpan(getSpan(snapshot, result, entry.getKey()));
@@ -136,7 +136,7 @@ public class RuleScannerV4 extends RuleScanner {
                         continue;
                     }
 
-                    GrammarNode.GrammarNodeDescription ruleDescription = new GrammarNode.GrammarNodeDescription(ruleName);
+                    GrammarNode.GrammarNodeDescription ruleDescription = new GrammarNode.GrammarNodeDescription(DeclarationKind.LEXER_RULE, ruleName);
                     ruleDescription.setOffset(snapshot, fileObject, getElementOffset(child));
                     ruleDescription.setSpan(getSpan(snapshot, result, child));
                     ruleDescription.setInherited(snapshot == null); // for now, go on the fact that snapshots aren't available for imported files
@@ -152,7 +152,7 @@ public class RuleScannerV4 extends RuleScanner {
                         continue;
                     }
 
-                    GrammarNode.GrammarNodeDescription ruleDescription = new GrammarNode.GrammarNodeDescription(ruleName);
+                    GrammarNode.GrammarNodeDescription ruleDescription = new GrammarNode.GrammarNodeDescription(DeclarationKind.LEXER_RULE, ruleName);
                     ruleDescription.setOffset(snapshot, fileObject, getElementOffset(child));
                     ruleDescription.setSpan(getSpan(snapshot, result, child));
                     ruleDescription.setInherited(snapshot == null); // for now, go on the fact that snapshots aren't available for imported files
@@ -178,7 +178,14 @@ public class RuleScannerV4 extends RuleScanner {
                 continue;
             }
 
-            GrammarNode.GrammarNodeDescription ruleDescription = new GrammarNode.GrammarNodeDescription(ruleName);
+            DeclarationKind declarationKind;
+            if (Grammar.isTokenName(ruleName)) {
+                declarationKind = DeclarationKind.LEXER_RULE;
+            } else {
+                declarationKind = DeclarationKind.PARSER_RULE;
+            }
+
+            GrammarNode.GrammarNodeDescription ruleDescription = new GrammarNode.GrammarNodeDescription(declarationKind, ruleName);
             ruleDescription.setOffset(snapshot, result.getFileObject(), getElementOffset(child));
             ruleDescription.setSpan(getSpan(snapshot, result, child));
             ruleDescription.setInherited(snapshot == null); // for now, go on the fact that snapshots aren't available for imported files

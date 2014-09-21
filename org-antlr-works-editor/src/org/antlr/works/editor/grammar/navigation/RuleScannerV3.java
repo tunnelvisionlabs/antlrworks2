@@ -13,6 +13,7 @@ import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.runtime.CommonToken;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
+import org.antlr.tool.Grammar;
 import org.antlr.works.editor.grammar.parser.CompiledFileModelV3;
 import org.antlr.works.editor.grammar.parser.CompiledModel;
 import org.antlr.works.editor.grammar.parser.CompiledModelV3;
@@ -41,13 +42,13 @@ public class RuleScannerV3 extends RuleScanner {
                 return;
             }*/
 
-            GrammarNode.GrammarNodeDescription rootDescription = new GrammarNode.GrammarNodeDescription();
+            GrammarNode.GrammarNodeDescription rootDescription = new GrammarNode.GrammarNodeDescription(DeclarationKind.UNDEFINED);
             rootDescription.setFileObject(model.getSnapshot().getVersionedDocument().getFileObject());
 
-            GrammarNode.GrammarNodeDescription parserRulesRootDescription = new GrammarNode.GrammarNodeDescription("1" + Bundle.LBL_ParserRules());
+            GrammarNode.GrammarNodeDescription parserRulesRootDescription = new GrammarNode.GrammarNodeDescription(DeclarationKind.PARSER_RULE, "1" + Bundle.LBL_ParserRules());
             parserRulesRootDescription.setHtmlHeader(Bundle.LBL_ParserRules());
 
-            GrammarNode.GrammarNodeDescription lexerRulesRootDescription = new GrammarNode.GrammarNodeDescription("2" + Bundle.LBL_LexerRules());
+            GrammarNode.GrammarNodeDescription lexerRulesRootDescription = new GrammarNode.GrammarNodeDescription(DeclarationKind.LEXER_RULE, "2" + Bundle.LBL_LexerRules());
             lexerRulesRootDescription.setHtmlHeader(Bundle.LBL_LexerRules());
 
             for (CompiledFileModelV3 importedParseResult : model.getImportedGrammarResults()) {
@@ -98,7 +99,14 @@ public class RuleScannerV3 extends RuleScanner {
                     continue;
                 }
 
-                GrammarNode.GrammarNodeDescription ruleDescription = new GrammarNode.GrammarNodeDescription(ruleName);
+                DeclarationKind declarationKind;
+                if (org.antlr.v4.tool.Grammar.isTokenName(ruleName)) {
+                    declarationKind = DeclarationKind.LEXER_RULE;
+                } else {
+                    declarationKind = DeclarationKind.PARSER_RULE;
+                }
+
+                GrammarNode.GrammarNodeDescription ruleDescription = new GrammarNode.GrammarNodeDescription(declarationKind, ruleName);
                 ruleDescription.setOffset(snapshot, fileObject, getElementOffset(child));
                 ruleDescription.setSpan(getSpan(snapshot, result, child));
                 ruleDescription.setInherited(snapshot == null); // for now, go on the fact that snapshots aren't available for imported files
@@ -117,7 +125,7 @@ public class RuleScannerV3 extends RuleScanner {
                             continue;
                         }
 
-                        GrammarNode.GrammarNodeDescription ruleDescription = new GrammarNode.GrammarNodeDescription(ruleName);
+                        GrammarNode.GrammarNodeDescription ruleDescription = new GrammarNode.GrammarNodeDescription(DeclarationKind.LEXER_RULE, ruleName);
                         ruleDescription.setOffset(snapshot, fileObject, getElementOffset(tokenChild));
                         ruleDescription.setSpan(getSpan(snapshot, result, child));
                         ruleDescription.setInherited(snapshot == null); // for now, go on the fact that snapshots aren't available for imported files
@@ -133,7 +141,7 @@ public class RuleScannerV3 extends RuleScanner {
                             continue;
                         }
 
-                        GrammarNode.GrammarNodeDescription ruleDescription = new GrammarNode.GrammarNodeDescription(ruleName);
+                        GrammarNode.GrammarNodeDescription ruleDescription = new GrammarNode.GrammarNodeDescription(DeclarationKind.LEXER_RULE, ruleName);
                         ruleDescription.setOffset(snapshot, fileObject, getElementOffset(tokenChild));
                         ruleDescription.setSpan(getSpan(snapshot, result, child));
                         ruleDescription.setInherited(snapshot == null); // for now, go on the fact that snapshots aren't available for imported files

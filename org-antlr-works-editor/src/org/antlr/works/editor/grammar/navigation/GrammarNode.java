@@ -18,10 +18,12 @@ import org.openide.util.ImageUtilities;
 public class GrammarNode extends NavigatorNode {
     public static Image PARSER_IMAGE;
     public static Image LEXER_IMAGE;
+    public static Image MODE_IMAGE;
 
     static {
         PARSER_IMAGE = ImageUtilities.loadImage("org/antlr/works/editor/grammar/navigation/resources/parsericon.png");
         LEXER_IMAGE = ImageUtilities.loadImage("org/antlr/works/editor/grammar/navigation/resources/lexericon.png");
+        MODE_IMAGE = ImageUtilities.loadImage("org/antlr/works/editor/grammar/navigation/resources/modeicon.png");
     }
 
     public GrammarNode(NavigatorPanelUI ui, Description description) {
@@ -46,6 +48,24 @@ public class GrammarNode extends NavigatorNode {
 
     @Override
     public Image getIcon(int type) {
+        if (getDescription() instanceof GrammarNodeDescription) {
+            switch (((GrammarNodeDescription)getDescription()).getDeclarationKind()) {
+            case PARSER_RULE:
+                return PARSER_IMAGE;
+
+            case LEXER_RULE:
+                return LEXER_IMAGE;
+
+            case MODE:
+                return MODE_IMAGE;
+
+            case UNKNOWN:
+            case UNDEFINED:
+            default:
+                break;
+            }
+        }
+
         String name = getDescription().getName();
         if (!getDescription().getChildren().isEmpty()) {
             name = getDescription().getChildren().iterator().next().getName();
@@ -61,12 +81,19 @@ public class GrammarNode extends NavigatorNode {
     }
 
     public static class GrammarNodeDescription extends Description {
+        private final DeclarationKind declarationKind;
 
-        public GrammarNodeDescription() {
+        public GrammarNodeDescription(DeclarationKind declarationKind) {
+            this.declarationKind = declarationKind;
         }
 
-        public GrammarNodeDescription(String name) {
+        public GrammarNodeDescription(DeclarationKind declarationKind, String name) {
             super(name);
+            this.declarationKind = declarationKind;
+        }
+
+        public DeclarationKind getDeclarationKind() {
+            return declarationKind;
         }
 
         @Override

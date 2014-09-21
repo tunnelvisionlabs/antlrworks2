@@ -742,13 +742,24 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
                     LexerCommandContext commandContext = (LexerCommandContext)ctx.getParent().getParent();
                     LexerCommandNameContext lexerCommandNameContext = commandContext.lexerCommandName();
                     if (lexerCommandNameContext != null && lexerCommandNameContext.start != null) {
-                        if ("pushMode".equals(lexerCommandNameContext.start.getText()) || "mode".equals(lexerCommandNameContext.start.getText())) {
+                        switch (lexerCommandNameContext.start.getText()) {
+                        case "pushMode":
+                        case "mode":
                             unresolvedModeReferences.add(ctx.start);
                             tokenDecorator.putProperty(ctx.start, GrammarTreeProperties.PROP_NODE_TYPE, NodeType.MODE_REF);
-                        } else if ("type".equals(lexerCommandNameContext.start.getText())
-                            && Grammar.isTokenName(ctx.start.getText())) {
-                            unresolvedTokenReferences.add(ctx.start);
-                            tokenDecorator.putProperty(ctx.start, GrammarTreeProperties.PROP_NODE_TYPE, NodeType.TOKEN_REF);
+                            break;
+
+                        case "type":
+                            if (Grammar.isTokenName(ctx.start.getText())) {
+                                unresolvedTokenReferences.add(ctx.start);
+                                tokenDecorator.putProperty(ctx.start, GrammarTreeProperties.PROP_NODE_TYPE, NodeType.TOKEN_REF);
+                            }
+
+                            break;
+
+
+                        default:
+                            break;
                         }
                     }
                 }

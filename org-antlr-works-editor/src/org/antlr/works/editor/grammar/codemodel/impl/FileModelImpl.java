@@ -34,7 +34,7 @@ public class FileModelImpl extends AbstractCodeElementModel implements FileModel
     @NonNull
     private final FreezableArrayList<RuleModelImpl> rules = new FreezableArrayList<>();
     @NonNull
-    private final ProxyCollection<AbstractCodeElementModel> codeElements = new ProxyCollection<>(Arrays.asList(importDeclarations, tokenVocabDeclarations, rules));
+    private final ProxyCollection<AbstractCodeElementModel> codeElements = new ProxyCollection<>(Arrays.asList(importDeclarations, tokenVocabDeclarations, modes, rules));
 
     public FileModelImpl(@NonNull FileObject fileObject, @NullAllowed Project project, @NonNull String packagePath) {
         super(fileObject.getNameExt(), project, packagePath);
