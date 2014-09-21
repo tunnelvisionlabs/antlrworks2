@@ -35,7 +35,7 @@ public class SetTerminal extends Terminal {
     private final AttributedString attributedLabel;
     private final boolean inverted;
 
-    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_setElement, version=2, dependents=Dependents.SELF)
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_setElement, version=4, dependents=Dependents.SELF)
     public SetTerminal(List<GrammarParser.SetElementContext> elements, SnapshotPositionRegion sourceSpan, boolean inverted) {
         this(getAttributedLabel(elements, inverted), sourceSpan, inverted);
     }
@@ -53,7 +53,7 @@ public class SetTerminal extends Terminal {
 
     @RuleDependencies({
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_range, version=0, dependents=Dependents.SELF),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_setElement, version=2, dependents=Dependents.SELF),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_setElement, version=4, dependents=Dependents.SELF),
     })
     private static AttributedString getAttributedLabel(List<? extends ParseTree> elements, boolean inverted) {
         IntervalSet foregroundSpans = new IntervalSet();

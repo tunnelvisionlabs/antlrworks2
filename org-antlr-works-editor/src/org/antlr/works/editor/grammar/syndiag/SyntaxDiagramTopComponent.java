@@ -427,10 +427,10 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
         @RuleDependencies({
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_terminal, version=1, dependents=Dependents.PARENTS),
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleref, version=0, dependents=Dependents.PARENTS),
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_range, version=2, dependents=Dependents.PARENTS),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_range, version=4, dependents=Dependents.PARENTS),
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_notSet, version=1, dependents=Dependents.PARENTS),
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_blockSet, version=0, dependents=Dependents.PARENTS),
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_setElement, version=2, dependents=Dependents.PARENTS),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_setElement, version=4, dependents=Dependents.PARENTS),
         })
         public void enterEveryAtom(ParserRuleContext ctx) {
             if (outermostAtom != null) {

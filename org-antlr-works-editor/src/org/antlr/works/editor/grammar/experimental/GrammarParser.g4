@@ -639,11 +639,12 @@ blockSet
 	;
 
 setElement
-@version{2}
+@version{4}
 	:	(	TOKEN_REF
 		|	STRING_LITERAL
 		|	LEXER_CHAR_SET
 		)
+		elementOptions?
 	|	range
 	;
 

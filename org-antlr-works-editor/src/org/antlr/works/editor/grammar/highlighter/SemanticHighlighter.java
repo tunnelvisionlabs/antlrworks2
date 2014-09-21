@@ -216,7 +216,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
         @Override
         @RuleDependencies({
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_argActionParameter, version=3, dependents={Dependents.PARENTS, Dependents.ANCESTORS}),
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleSpec, version=3, dependents=Dependents.DESCENDANTS),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleSpec, version=4, dependents=Dependents.DESCENDANTS),
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleReturns, version=0, dependents=Dependents.DESCENDANTS),
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_localsSpec, version=0, dependents=Dependents.DESCENDANTS),
         })
