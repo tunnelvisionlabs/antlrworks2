@@ -95,12 +95,13 @@ BEGIN_ACTION
 // keywords used to specify ANTLR v4 grammars. Keywords may not be used as
 // labels for rules or in any other context where they would be ambiguous
 // with the keyword vs some other identifier
-// OPTIONS and TOKENS must also consume the opening brace that captures
+// OPTIONS, TOKENS, and CHANNELS must also consume the opening brace that captures
 // their option block, as this is the easiest way to parse it separate
 // to an ACTION block, despite it using the same {} delimiters.
 //
-OPTIONS      : 'options' WSNLCHAR* '{'  ;
-TOKENS       : 'tokens'  WSNLCHAR* '{'  ;
+OPTIONS      : 'options'  WSNLCHAR* '{'  ;
+TOKENS       : 'tokens'   WSNLCHAR* '{'  ;
+CHANNELS     : 'channels' WSNLCHAR* '{'  ;
 
 IMPORT       : 'import'               ;
 FRAGMENT     : 'fragment'             ;

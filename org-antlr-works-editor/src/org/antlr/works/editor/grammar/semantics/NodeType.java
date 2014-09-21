@@ -23,6 +23,9 @@ public enum NodeType {
     TOKEN_DECL(true),
     TOKEN_REF(false),
 
+    CHANNEL_DECL(true),
+    CHANNEL_REF(false),
+
     MODE_DECL(true),
     MODE_REF(false),
 

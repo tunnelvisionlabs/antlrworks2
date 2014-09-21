@@ -24,6 +24,7 @@ public class GrammarRuleCompletionItem extends GrammarCompletionItem {
     private static final ImageIcon FRAGMENT_ICON;
     private static final ImageIcon TOKEN_ICON;
     private static final ImageIcon MODE_ICON;
+    private static final ImageIcon CHANNEL_ICON;
 
     private final Description rule;
 
@@ -35,6 +36,7 @@ public class GrammarRuleCompletionItem extends GrammarCompletionItem {
         FRAGMENT_ICON = new ImageIcon(GrammarNode.FRAGMENT_IMAGE);
         TOKEN_ICON = new ImageIcon(GrammarNode.TOKEN_IMAGE);
         MODE_ICON = new ImageIcon(GrammarNode.MODE_IMAGE);
+        CHANNEL_ICON = new ImageIcon(GrammarNode.CHANNEL_IMAGE);
     }
 
     public GrammarRuleCompletionItem(Description rule) {
@@ -74,6 +76,9 @@ public class GrammarRuleCompletionItem extends GrammarCompletionItem {
 
             case MODE:
                 return MODE_ICON;
+
+            case CHANNEL:
+                return CHANNEL_ICON;
 
             case UNKNOWN:
             case UNDEFINED:

@@ -29,6 +29,7 @@ import org.antlr.works.editor.antlr4.completion.AbstractCompletionQuery;
 import org.antlr.works.editor.grammar.GoToSupport;
 import org.antlr.works.editor.grammar.GrammarEditorKit;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
+import org.antlr.works.editor.grammar.codemodel.ChannelModel;
 import org.antlr.works.editor.grammar.codemodel.CodeElementModel;
 import org.antlr.works.editor.grammar.codemodel.CodeElementPositionRegion;
 import org.antlr.works.editor.grammar.codemodel.FileModel;
@@ -177,6 +178,12 @@ public class GrammarCompletionProvider extends AbstractCompletionProvider {
             }
 
             if (!ignoreLexerOnlyRules) {
+                for (ChannelModel channelModel : fileModel.getChannels()) {
+                    GrammarNodeDescription description = new GrammarNodeDescription(DeclarationKind.CHANNEL, channelModel.getName());
+                    addSeekPositionToDescription(description, channelModel);
+                    rules.put(channelModel.getName(), description);
+                }
+
                 for (ModeModel modeModel : fileModel.getModes()) {
                     GrammarNodeDescription modeDescription = new GrammarNodeDescription(DeclarationKind.MODE, modeModel.getName());
                     addSeekPositionToDescription(modeDescription, modeModel);

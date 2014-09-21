@@ -24,6 +24,12 @@ public interface FileModel extends CodeElementModel {
     Collection<? extends TokenVocabDeclarationModel> getTokenVocabDeclaration();
 
     @NonNull
+    Collection<? extends ChannelModel> getChannels();
+
+    @NonNull
+    Collection<? extends ChannelModel> getChannels(String name);
+
+    @NonNull
     Collection<? extends ModeModel> getModes();
 
     @NonNull

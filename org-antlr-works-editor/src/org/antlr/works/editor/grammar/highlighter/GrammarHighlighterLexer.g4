@@ -50,6 +50,7 @@ IMPORT      : 'import';
 FRAGMENT    : 'fragment';
 TOKENS      : 'tokens' IGNORED '{' -> pushMode(NonActionBrace);
 OPTIONS     : 'options' IGNORED '{' -> pushMode(NonActionBrace);
+CHANNELS    : 'channels' IGNORED '{' -> pushMode(NonActionBrace);
 
 // v4 only
 MODE        : 'mode';

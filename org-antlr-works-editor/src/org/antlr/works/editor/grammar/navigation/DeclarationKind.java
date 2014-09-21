@@ -18,6 +18,7 @@ public enum DeclarationKind {
     FRAGMENT_RULE,
     TOKEN,
     MODE,
+    CHANNEL,
 
     UNKNOWN,
     UNDEFINED,

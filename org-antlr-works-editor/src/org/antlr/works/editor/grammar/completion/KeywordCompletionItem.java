@@ -37,6 +37,7 @@ public class KeywordCompletionItem extends GrammarCompletionItem {
                         GrammarLexer.IMPORT,
                         GrammarLexer.FRAGMENT,
                         GrammarLexer.TOKENS,
+                        GrammarLexer.CHANNELS,
                         GrammarLexer.OPTIONS);
 
     private static final Map<Integer, String> KEYWORDS =

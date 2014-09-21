@@ -95,6 +95,7 @@ grammarType
 // the set of rules that compose the grammar, and is invoked 0..n
 // times by the grammarPrequel rule.
 prequelConstruct
+@version{6}
 	:	// A list of options that affect analysis and/or code generation
 		optionsSpec
 
@@ -108,6 +109,9 @@ prequelConstruct
 		// tree parser adds further imaginary tokens to ones defined in a prior
 		// {tree} parser.
 		tokensSpec
+
+	|	// A list of custom channels used by the grammar
+		channelsSpec
 
 	|	// A declaration of language target implemented constructs. All such
 		// action sections start with '@' and are given to the language target's
@@ -169,6 +173,11 @@ delegateGrammar
 tokensSpec
 @version{1}
 	:	TOKENS (id (COMMA id)* COMMA?)? RBRACE
+	;
+
+channelsSpec
+@version{6}
+	:	CHANNELS (id (COMMA id)* COMMA?)? RBRACE
 	;
 
 actionBlock

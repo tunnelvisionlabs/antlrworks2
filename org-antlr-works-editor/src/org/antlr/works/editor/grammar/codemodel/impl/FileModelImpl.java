@@ -10,6 +10,7 @@ package org.antlr.works.editor.grammar.codemodel.impl;
 
 import java.util.Arrays;
 import java.util.Collection;
+import org.antlr.works.editor.grammar.codemodel.ChannelModel;
 import org.antlr.works.editor.grammar.codemodel.FileModel;
 import org.antlr.works.editor.grammar.codemodel.ModeModel;
 import org.antlr.works.editor.grammar.codemodel.RuleModel;
@@ -30,11 +31,13 @@ public class FileModelImpl extends AbstractCodeElementModel implements FileModel
     @NonNull
     private final FreezableArrayList<TokenVocabDeclarationModelImpl> tokenVocabDeclarations = new FreezableArrayList<>();
     @NonNull
+    private final FreezableArrayList<ChannelModelImpl> channels = new FreezableArrayList<>();
+    @NonNull
     private final FreezableArrayList<ModeModelImpl> modes = new FreezableArrayList<>();
     @NonNull
     private final FreezableArrayList<RuleModelImpl> rules = new FreezableArrayList<>();
     @NonNull
-    private final ProxyCollection<AbstractCodeElementModel> codeElements = new ProxyCollection<>(Arrays.asList(importDeclarations, tokenVocabDeclarations, modes, rules));
+    private final ProxyCollection<AbstractCodeElementModel> codeElements = new ProxyCollection<>(Arrays.asList(importDeclarations, tokenVocabDeclarations, channels, modes, rules));
 
     public FileModelImpl(@NonNull FileObject fileObject, @NullAllowed Project project, @NonNull String packagePath) {
         super(fileObject.getNameExt(), project, packagePath);
@@ -58,6 +61,18 @@ public class FileModelImpl extends AbstractCodeElementModel implements FileModel
     @Override
     public Collection<TokenVocabDeclarationModelImpl> getTokenVocabDeclaration() {
         return tokenVocabDeclarations;
+    }
+
+    @NonNull
+    @Override
+    public Collection<ChannelModelImpl> getChannels() {
+        return channels;
+    }
+
+    @NonNull
+    @Override
+    public Collection<? extends ChannelModel> getChannels(String name) {
+        return CodeModelCacheImpl.findElementsByName(getChannels(), name);
     }
 
     @NonNull
@@ -100,6 +115,7 @@ public class FileModelImpl extends AbstractCodeElementModel implements FileModel
     protected void freezeImpl() {
         importDeclarations.freeze();
         tokenVocabDeclarations.freeze();
+        channels.freeze();
         modes.freeze();
         rules.freeze();
         super.freezeImpl();

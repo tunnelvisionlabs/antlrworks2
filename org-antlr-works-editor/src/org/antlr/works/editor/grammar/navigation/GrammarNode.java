@@ -21,6 +21,7 @@ public class GrammarNode extends NavigatorNode {
     public static Image FRAGMENT_IMAGE;
     public static Image TOKEN_IMAGE;
     public static Image MODE_IMAGE;
+    public static Image CHANNEL_IMAGE;
 
     static {
         PARSER_IMAGE = ImageUtilities.loadImage("org/antlr/works/editor/grammar/navigation/resources/parsericon.png");
@@ -28,6 +29,7 @@ public class GrammarNode extends NavigatorNode {
         FRAGMENT_IMAGE = ImageUtilities.loadImage("org/antlr/works/editor/grammar/navigation/resources/fragmenticon.png");
         TOKEN_IMAGE = ImageUtilities.loadImage("org/antlr/works/editor/grammar/navigation/resources/tokenicon.png");
         MODE_IMAGE = ImageUtilities.loadImage("org/antlr/works/editor/grammar/navigation/resources/modeicon.png");
+        CHANNEL_IMAGE = ImageUtilities.loadImage("org/antlr/works/editor/grammar/navigation/resources/channelicon.png");
     }
 
     public GrammarNode(NavigatorPanelUI ui, Description description) {
@@ -68,6 +70,9 @@ public class GrammarNode extends NavigatorNode {
 
             case MODE:
                 return MODE_IMAGE;
+
+            case CHANNEL:
+                return CHANNEL_IMAGE;
 
             case UNKNOWN:
             case UNDEFINED:

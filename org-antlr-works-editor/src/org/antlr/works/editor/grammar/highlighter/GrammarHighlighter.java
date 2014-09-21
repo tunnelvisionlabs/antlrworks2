@@ -176,6 +176,7 @@ public class GrammarHighlighter extends ANTLRHighlighterBaseV4<GrammarHighlighte
         // v4 only keywords
         case GrammarHighlighterLexer.MODE:
         case GrammarHighlighterLexer.LOCALS:
+        case GrammarHighlighterLexer.CHANNELS:
             return !legacyMode ? keywordAttributes : getIdentifierAttributes(lexerWrapper.getLexer(), token.getText());
 
         // v3 only keywords

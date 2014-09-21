@@ -41,6 +41,7 @@ import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarPars
 import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.BlockContext;
 import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.BlockSetContext;
 import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.BlockSuffixContext;
+import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.ChannelsSpecContext;
 import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.DelegateGrammarContext;
 import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.DelegateGrammarsContext;
 import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.EbnfContext;
@@ -111,10 +112,12 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
 
     private final Map<String, Token> declaredRules = new HashMap<>();
     private final Map<String, Token> declaredTokens = new HashMap<>();
+    private final Map<String, Token> declaredChannels = new HashMap<>();
     private final Map<String, Token> declaredModes = new HashMap<>();
 
     private final List<Token> unresolvedRuleReferences = new ArrayList<>();
     private final List<Token> unresolvedTokenReferences = new ArrayList<>();
+    private final List<Token> unresolvedChannelReferences = new ArrayList<>();
     private final List<Token> unresolvedModeReferences = new ArrayList<>();
 
     public SemanticAnalyzerListener(@NonNull ObjectDecorator<Tree> treeDecorator, @NonNull ObjectDecorator<Token> tokenDecorator) {
@@ -613,6 +616,18 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
                 tokenDecorator.putProperty(token, GrammarTreeProperties.PROP_TARGET, decl);
             }
         }
+
+        for (Token token : unresolvedChannelReferences) {
+            String text = token.getText();
+            if (text == null || text.isEmpty()) {
+                continue;
+            }
+
+            Token decl = declaredChannels.get(text);
+            if (decl != null) {
+                tokenDecorator.putProperty(token, GrammarTreeProperties.PROP_TARGET, decl);
+            }
+        }
     }
 
     @Override
@@ -714,9 +729,10 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=3, dependents={Dependents.PARENTS, Dependents.DESCENDANTS}),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=6, dependents={Dependents.PARENTS, Dependents.DESCENDANTS}),
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_grammarSpec, version=0, dependents=Dependents.SELF),
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_tokensSpec, version=1, dependents=Dependents.SELF),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_channelsSpec, version=6, dependents=Dependents.SELF),
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_modeSpec, version=3, dependents=Dependents.SELF),
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommand, version=1, dependents=Dependents.SELF),
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerCommandName, version=1, dependents=Dependents.DESCENDANTS),
@@ -757,6 +773,10 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
 
                             break;
 
+                        case "channel":
+                            unresolvedChannelReferences.add(ctx.start);
+                            tokenDecorator.putProperty(ctx.start, GrammarTreeProperties.PROP_NODE_TYPE, NodeType.CHANNEL_REF);
+                            break;
 
                         default:
                             break;
@@ -769,8 +789,12 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
                 tokenDecorator.putProperty(ctx.start, GrammarTreeProperties.PROP_NODE_TYPE, NodeType.TOKEN_DECL);
                 declaredRules.put(ctx.start.getText(), ctx.start);
                 break;
-            }
 
+            case GrammarParser.RULE_channelsSpec:
+                tokenDecorator.putProperty(ctx.start, GrammarTreeProperties.PROP_NODE_TYPE, NodeType.CHANNEL_DECL);
+                declaredChannels.put(ctx.start.getText(), ctx.start);
+                break;
+            }
         }
     }
 
@@ -816,6 +840,14 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
 
     @Override
     public void exitTokensSpec(TokensSpecContext ctx) {
+    }
+
+    @Override
+    public void enterChannelsSpec(ChannelsSpecContext ctx) {
+    }
+
+    @Override
+    public void exitChannelsSpec(ChannelsSpecContext ctx) {
     }
 
     @Override

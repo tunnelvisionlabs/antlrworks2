@@ -432,7 +432,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
 
         @Override
         @RuleDependencies({
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_option, version=5, dependents=Dependents.ANCESTORS),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_option, version=6, dependents=Dependents.ANCESTORS),
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=1, dependents=Dependents.DESCENDANTS),
         })
         public void enterOption(OptionContext ctx) {

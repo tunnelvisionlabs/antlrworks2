@@ -26,6 +26,7 @@ import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.works.editor.antlr4.parsing.ParseTrees;
+import org.antlr.works.editor.grammar.codemodel.impl.ChannelModelImpl;
 import org.antlr.works.editor.grammar.codemodel.impl.FileModelImpl;
 import org.antlr.works.editor.grammar.codemodel.impl.ImportDeclarationModelImpl;
 import org.antlr.works.editor.grammar.codemodel.impl.LabelModelImpl;
@@ -38,6 +39,7 @@ import org.antlr.works.editor.grammar.codemodel.impl.TokenRuleModelImpl;
 import org.antlr.works.editor.grammar.codemodel.impl.TokenVocabDeclarationModelImpl;
 import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.ArgActionParameterContext;
 import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.ArgActionParametersContext;
+import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.ChannelsSpecContext;
 import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.DelegateGrammarContext;
 import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.GrammarSpecContext;
 import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.IdContext;
@@ -74,6 +76,7 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
 
     private final Deque<ModeModelImpl> modeModelStack = new ArrayDeque<>();
     private final Deque<RuleModelImpl> ruleModelStack = new ArrayDeque<>();
+    private final Deque<Collection<ChannelModelImpl>> channelContainerStack = new ArrayDeque<>();
     private final Deque<Collection<ModeModelImpl>> modeContainerStack = new ArrayDeque<>();
     private final Deque<Collection<RuleModelImpl>> ruleContainerStack = new ArrayDeque<>();
     private final Deque<Collection<ParameterModelImpl>> parameterContainerStack = new ArrayDeque<>();
@@ -108,6 +111,7 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
 
         FileObject fileObject = snapshot.getVersionedDocument().getFileObject();
         this.fileModel = new FileModelImpl(fileObject, project, packagePath);
+        this.channelContainerStack.push(this.fileModel.getChannels());
         this.modeContainerStack.push(this.fileModel.getModes());
         this.ruleContainerStack.push(this.fileModel.getRules());
     }
@@ -202,7 +206,7 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
 
     @Override
     @RuleDependencies({
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_tokensSpec, version=1, dependents=Dependents.PARENTS),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_tokensSpec, version=6, dependents=Dependents.PARENTS),
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=1, dependents=Dependents.DESCENDANTS),
     })
     public void enterTokensSpec(TokensSpecContext ctx) {
@@ -221,6 +225,29 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
     @Override
     public void exitTokensSpec(TokensSpecContext ctx) {
         super.exitTokensSpec(ctx);
+    }
+
+    @Override
+    @RuleDependencies({
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_channelsSpec, version=6, dependents=Dependents.PARENTS),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=1, dependents=Dependents.DESCENDANTS),
+    })
+    public void enterChannelsSpec(ChannelsSpecContext ctx) {
+        for (IdContext id : ctx.id()) {
+            TerminalNode token = ParseTrees.getStartNode(id);
+            if (token == null) {
+                continue;
+            }
+
+            String channelName = token.getText();
+            ChannelModelImpl ruleModel = new ChannelModelImpl(channelName, fileModel, token, ctx);
+            channelContainerStack.peek().add(ruleModel);
+        }
+    }
+
+    @Override
+    public void exitChannelsSpec(ChannelsSpecContext ctx) {
+        super.exitChannelsSpec(ctx);
     }
 
     @Override

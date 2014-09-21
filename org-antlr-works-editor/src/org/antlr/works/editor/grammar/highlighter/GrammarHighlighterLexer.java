@@ -83,6 +83,10 @@ public class GrammarHighlighterLexer extends AbstractGrammarHighlighterLexer {
             setInOptions(true);
             break;
 
+        case CHANNELS:
+            handleAcceptPositionForKeyword("channels");
+            break;
+
         case LABEL:
             handleAcceptPositionForIdentifier();
             if (isInOptions()) {

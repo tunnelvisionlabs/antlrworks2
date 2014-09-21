@@ -32,6 +32,7 @@
     <fontcolor name="lexerMode" default="identifier">
         <font style="bold" />
     </fontcolor>
+    <fontcolor name="channel" default="identifier" />
     <!-- Teal -->
     <fontcolor name="validoption" foreColor="FF008080" />
     <!-- Dark Red -->

@@ -32,6 +32,7 @@ public class CompletionParserATNSimulator extends AbstractCompletionParserATNSim
             // keywords
             add(GrammarLexer.OPTIONS);
             add(GrammarLexer.TOKENS);
+            add(GrammarLexer.CHANNELS);
             add(GrammarLexer.IMPORT);
             add(GrammarLexer.FRAGMENT);
             add(GrammarLexer.LEXER);
