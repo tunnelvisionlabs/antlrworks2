@@ -485,7 +485,6 @@ lexerAltList
 lexerAlt
 @version{3}
 	:	lexerElements? lexerCommands?
-	|	// empty alt
 	;
 
 lexerElements
