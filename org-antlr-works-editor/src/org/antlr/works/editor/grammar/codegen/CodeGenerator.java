@@ -48,6 +48,7 @@ public class CodeGenerator {
     public static final RequestProcessor REFERENCE_RP = new RequestProcessor("ANTLR Reference Tool");
 
     public final String target;
+    public final String targetArgument;
     public final FileObject[] grammarFiles;
 
     public FileObject outputDirectory;
@@ -62,12 +63,20 @@ public class CodeGenerator {
     public List<String> arguments;
 
     public CodeGenerator(String target, FileObject... grammarFiles) {
-        if (!target.contains("Java")) {
-            throw new UnsupportedOperationException();
-        }
-
         this.target = target;
         this.grammarFiles = grammarFiles;
+
+        if (target.equals("Python 2")) {
+            this.targetArgument = "Python2";
+        } else if (target.equals("Python 3")) {
+            this.targetArgument = "Python3";
+        } else {
+            if (!target.contains("Java")) {
+                throw new UnsupportedOperationException();
+            }
+
+            this.targetArgument = null;
+        }
     }
 
     public static ClassLoader getReferenceClassLoader() {
@@ -225,6 +234,10 @@ public class CodeGenerator {
 
         if (forceATN) {
             args.add("-Xforce-atn");
+        }
+
+        if (targetArgument != null) {
+            args.add("-Dlanguage=" + targetArgument);
         }
 
         if (options != null) {

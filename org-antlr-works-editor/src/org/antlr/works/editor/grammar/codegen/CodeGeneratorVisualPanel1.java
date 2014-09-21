@@ -123,7 +123,7 @@ public final class CodeGeneratorVisualPanel1 extends JPanel {
 
         txtOutputDirectory.setMinimumSize(new java.awt.Dimension(80, 20));
 
-        cmbTargetLanguage.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Java", "Java (sharwell/optimized)" }));
+        cmbTargetLanguage.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Java", "Java (sharwell/optimized)", "Python 2", "Python 3" }));
         cmbTargetLanguage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cmbTargetLanguageActionPerformed(evt);
