@@ -11,7 +11,6 @@ package org.antlr.works.editor.grammar.debugger;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.atn.ATN;
-import org.antlr.v4.runtime.atn.ATNConfigSet;
 import org.antlr.v4.runtime.atn.LexerATNSimulator;
 import org.antlr.v4.runtime.dfa.DFAState;
 
@@ -57,7 +56,7 @@ public class TracingLexerATNSimulator extends LexerATNSimulator {
 
     @Override
     protected void captureSimState(SimState settings, CharStream input, DFAState dfaState) {
-        _listener.acceptState(dfaState.prediction);
+        _listener.acceptState(dfaState.getPrediction());
         super.captureSimState(settings, input, dfaState);
     }
 }
