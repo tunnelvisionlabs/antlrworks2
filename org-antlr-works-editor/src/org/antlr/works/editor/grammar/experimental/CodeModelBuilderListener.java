@@ -291,7 +291,7 @@ public class CodeModelBuilderListener extends GrammarParserBaseListener {
             String name = nameToken.getText();
             Collection<TerminalNode> uses = labelUses.peek().get(name);
             if (uses == null) {
-                uses = new ArrayList<TerminalNode>();
+                uses = new ArrayList<>();
                 labelUses.peek().put(name, uses);
             }
 
