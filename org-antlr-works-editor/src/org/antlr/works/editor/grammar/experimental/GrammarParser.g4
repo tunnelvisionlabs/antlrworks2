@@ -540,8 +540,11 @@ altList
 // An individual alt with an optional rewrite clause for the
 // elements of the alt.
 alternative
-	:	elements
-	|			// empty alt
+@version{5}
+	:	elementOptions?
+		(	elements
+		|			// empty alt
+		)
 	;
 
 elements
@@ -549,6 +552,7 @@ elements
 	;
 
 element
+@version{5}
 	:	labeledElement
 		(	ebnfSuffix
 		|
@@ -558,7 +562,7 @@ element
 		|
 		)
 	|	ebnf
-	|	actionBlock QUESTION? // SEMPRED is actionBlock followed by QUESTION
+	|	actionBlock QUESTION? elementOptions? // SEMPRED is actionBlock followed by QUESTION
 	;
 
 labeledElement
@@ -669,7 +673,8 @@ block
 // directive to become the root node or ignore the tree produced
 //
 ruleref
-	:	RULE_REF argActionBlock?
+@version{5}
+	:	RULE_REF argActionBlock? elementOptions?
 	;
 
 // ---------------

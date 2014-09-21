@@ -381,7 +381,7 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
          */
 
         @Override
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_alternative, version=1, dependents=Dependents.PARENTS)
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_alternative, version=5, dependents=Dependents.PARENTS)
         public void enterAlternative(AlternativeContext ctx) {
             enterAlternative();
         }
@@ -393,7 +393,7 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
         }
 
         @Override
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_alternative, version=1, dependents=Dependents.PARENTS)
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_alternative, version=5, dependents=Dependents.PARENTS)
         public void exitAlternative(AlternativeContext ctx) {
             exitAlternative();
         }
@@ -419,14 +419,14 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
         }
 
         @Override
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_atom, version=0, dependents=Dependents.PARENTS)
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_atom, version=5, dependents=Dependents.PARENTS)
         public void enterAtom(AtomContext ctx) {
             enterEveryAtom(ctx);
         }
 
         @RuleDependencies({
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_terminal, version=1, dependents=Dependents.PARENTS),
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleref, version=0, dependents=Dependents.PARENTS),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleref, version=5, dependents=Dependents.PARENTS),
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_range, version=4, dependents=Dependents.PARENTS),
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_notSet, version=1, dependents=Dependents.PARENTS),
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_blockSet, version=0, dependents=Dependents.PARENTS),
@@ -511,7 +511,7 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
         }
 
         @Override
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_atom, version=0, dependents=Dependents.PARENTS)
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_atom, version=5, dependents=Dependents.PARENTS)
         public void exitAtom(AtomContext ctx) {
             if (outermostAtom == ctx) {
                 outermostAtom = null;
@@ -523,7 +523,7 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
          */
 
         @Override
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ebnfSuffix, version=3, dependents=Dependents.ANCESTORS)
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ebnfSuffix, version=5, dependents=Dependents.ANCESTORS)
         public void enterEbnfSuffix(EbnfSuffixContext ctx) {
             Block block;
 

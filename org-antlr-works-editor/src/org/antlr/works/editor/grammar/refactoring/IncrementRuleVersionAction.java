@@ -361,7 +361,7 @@ public final class IncrementRuleVersionAction extends AbstractAction implements 
     }
 
     @RuleDependencies({
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_actionBlock, version=0, dependents={Dependents.PARENTS, Dependents.DESCENDANTS}),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_actionBlock, version=5, dependents={Dependents.PARENTS, Dependents.DESCENDANTS}),
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleAction, version=0, dependents=Dependents.SELF),
     })
     private List<TerminalNode> findActionWords(ActionBlockContext ctx) {

@@ -127,13 +127,13 @@ public class SemanticAnalyzerListener implements GrammarParserListener {
     @Override
     @RuleDependencies({
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_parserRuleSpec, version=0, dependents=Dependents.SELF),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleref, version=0, dependents=Dependents.SELF),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleref, version=5, dependents=Dependents.SELF),
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerRule, version=3, dependents=Dependents.ANCESTORS),
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_terminal, version=3, dependents=Dependents.ANCESTORS),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_terminal, version=5, dependents=Dependents.ANCESTORS),
         // ensure lexerRule is an ancestor of lexerRule and terminal
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerRule, version=4, dependents=Dependents.DESCENDANTS),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerRule, version=5, dependents=Dependents.DESCENDANTS),
         // ensure parserRuleSpec is an ancestor of terminal
-        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_parserRuleSpec, version=4, dependents=Dependents.DESCENDANTS),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_parserRuleSpec, version=5, dependents=Dependents.DESCENDANTS),
     })
     public void visitTerminal(TerminalNode node) {
         NodeType nodeType = treeDecorator.getProperty(node.getParent(), GrammarTreeProperties.PROP_NODE_TYPE);

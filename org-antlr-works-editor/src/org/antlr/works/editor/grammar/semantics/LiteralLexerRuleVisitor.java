@@ -30,7 +30,7 @@ import org.antlr.works.editor.grammar.experimental.generated.GrammarParserBaseVi
  * literal, and optionally lexer action(s) which do not include {@code more},
  * {@code skip}, or {@code type}.
  */
-@RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerRule, version=4, dependents=Dependents.DESCENDANTS)
+@RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerRule, version=5, dependents=Dependents.DESCENDANTS)
 public class LiteralLexerRuleVisitor extends GrammarParserBaseVisitor<Boolean> {
     public static final LiteralLexerRuleVisitor INSTANCE = new LiteralLexerRuleVisitor();
 

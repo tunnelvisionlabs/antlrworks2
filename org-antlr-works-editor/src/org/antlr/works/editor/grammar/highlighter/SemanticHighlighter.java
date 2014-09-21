@@ -34,10 +34,14 @@ import org.antlr.works.editor.grammar.GrammarEditorKit;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
 import org.antlr.works.editor.grammar.experimental.GrammarParser;
 import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.ArgActionParameterContext;
+import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.AtomContext;
 import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.BlockContext;
+import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.ElementContext;
 import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.ElementOptionContext;
+import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.ElementOptionsContext;
 import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.GrammarTypeContext;
 import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.IdContext;
+import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.LexerAtomContext;
 import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.LexerCommandContext;
 import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.LexerCommandExprContext;
 import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.LexerCommandNameContext;
@@ -152,11 +156,64 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
             add("filter");
             add("abstract");
         }};
-        private static final Set<String> knownTokenOptions = new HashSet<String>() {{
+
+        /**
+         * These are known values for an {@link ElementOptionContext} appearing
+         * on a terminal reference within a parser rule in the grammar.
+         */
+        private static final Set<String> KnownTerminalOptions = new HashSet<String>() {{
+        }};
+
+        /**
+         * These are known values for an {@link ElementOptionContext} appearing
+         * on a {@link SetElementContext}.
+         */
+        private static final Set<String> KnownSetElementOptions = new HashSet<String>() {{
+        }};
+
+        /**
+         * These are known values for an {@link ElementOptionContext} appearing
+         * on an {@link AtomContext}.
+         */
+        private static final Set<String> KnownAtomOptions = new HashSet<String>() {{
+        }};
+
+        /**
+         * These are known values for an {@link ElementOptionContext} appearing
+         * on a {@link LexerAtomCOntext}.
+         */
+        private static final Set<String> KnownLexerAtomOptions = new HashSet<String>() {{
+        }};
+
+        /**
+         * These are known values for an {@link ElementOptionContext} appearing
+         * on an alternative.
+         */
+        private static final Set<String> KnownAlternativeOptions = new HashSet<String>() {{
             add("assoc");
         }};
-        private static final Set<String> knownSemPredOptions = new HashSet<String>() {{
+
+        /**
+         * These are known values for an {@link ElementOptionContext} appearing
+         * on an embedded action.
+         */
+        private static final Set<String> KnownEmbeddedActionOptions = new HashSet<String>() {{
+        }};
+
+        /**
+         * These are known values for an {@link ElementOptionContext} appearing
+         * on a semantic predicate.
+         */
+        private static final Set<String> KnownSemanticPredicateOptions = new HashSet<String>() {{
             add("fail");
+        }};
+
+        /**
+         * These are known values for an {@link ElementOptionContext} appearing
+         * on a rule reference (non-terminal in the parser).
+         */
+        private static final Set<String> KnownRuleReferenceOptions = new HashSet<String>() {{
+            add("p");
         }};
 
         private final Deque<Integer> memberContext = new ArrayDeque<>();
@@ -216,7 +273,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
         @Override
         @RuleDependencies({
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_argActionParameter, version=3, dependents={Dependents.PARENTS, Dependents.ANCESTORS}),
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleSpec, version=4, dependents=Dependents.DESCENDANTS),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleSpec, version=5, dependents=Dependents.DESCENDANTS),
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleReturns, version=0, dependents=Dependents.DESCENDANTS),
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_localsSpec, version=0, dependents=Dependents.DESCENDANTS),
         })
@@ -375,7 +432,7 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
 
         @Override
         @RuleDependencies({
-            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_option, version=3, dependents=Dependents.ANCESTORS),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_option, version=5, dependents=Dependents.ANCESTORS),
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=1, dependents=Dependents.DESCENDANTS),
         })
         public void enterOption(OptionContext ctx) {
@@ -410,17 +467,77 @@ public class SemanticHighlighter extends AbstractParseTreeSemanticHighlighter<Se
 
         @Override
         @RuleDependencies({
+            // The first two rules together form the dependency on constructs which an element option
+            // can be defined on.
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_elementOption, version=3, dependents=Dependents.PARENTS),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_elementOptions, version=5, dependents=Dependents.PARENTS),
+            // This is for the actual text of the option
             @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=1, dependents=Dependents.DESCENDANTS),
+            // These are for the specific contexts an element option applies to
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_terminal, version=0, dependents=Dependents.SELF),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_setElement, version=4, dependents=Dependents.SELF),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_atom, version=0, dependents=Dependents.SELF),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_lexerAtom, version=1, dependents=Dependents.SELF),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_alternative, version=5, dependents=Dependents.SELF),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleref, version=5, dependents=Dependents.SELF),
+            @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_element, version=5, dependents=Dependents.SELF),
         })
         public void enterElementOption(ElementOptionContext ctx) {
             IdContext id = ctx.id();
-            if (id != null) {
-                String option = id.start.getText();
-                boolean valid = knownTokenOptions.contains(option);
-                if (!valid) {
-                    invalidOptions.add(id.start);
-                }
+            if (id == null) {
+                return;
+            }
+
+            ElementOptionsContext elementOptions = (ElementOptionsContext)ctx.parent;
+            if (elementOptions == null || elementOptions.parent == null) {
+                // only mark as invalid if we are sure
+                // TODO: is this the desired behavior?
+                return;
+            }
+
+            Set<String> knownOptions;
+            switch (elementOptions.parent.getRuleIndex()) {
+            case GrammarParser.RULE_terminal:
+                knownOptions = KnownTerminalOptions;
+                break;
+
+            case GrammarParser.RULE_setElement:
+                knownOptions = KnownSetElementOptions;
+                break;
+
+            case GrammarParser.RULE_atom:
+                knownOptions = ((AtomContext)elementOptions.parent).DOT() != null ? KnownAtomOptions : null;
+                break;
+
+            case GrammarParser.RULE_lexerAtom:
+                knownOptions = ((LexerAtomContext)elementOptions.parent).DOT() != null ? KnownLexerAtomOptions : null;
+                break;
+
+            case GrammarParser.RULE_alternative:
+                knownOptions = KnownAlternativeOptions;
+                break;
+
+            case GrammarParser.RULE_ruleref:
+                knownOptions = KnownRuleReferenceOptions;
+                break;
+
+            case GrammarParser.RULE_element:
+                knownOptions = ((ElementContext)elementOptions.parent).QUESTION() != null ? KnownSemanticPredicateOptions : KnownEmbeddedActionOptions;
+                break;
+
+            default:
+                knownOptions = null;
+                break;
+            }
+
+            if (knownOptions == null) {
+                return;
+            }
+
+            String option = id.start.getText();
+            boolean valid = knownOptions.contains(option);
+            if (!valid) {
+                invalidOptions.add(id.start);
             }
         }
     }
