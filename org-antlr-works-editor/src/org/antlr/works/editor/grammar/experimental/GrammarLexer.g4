@@ -236,7 +236,7 @@ INT
 // may contain unicode escape sequences of the form \uxxxx, where x
 // is a valid hexadecimal number (as per Java basically).
 STRING_LITERAL
-	:  '\'' (ESC_SEQ | ~['\\])* '\''
+	:  '\'' (ESC_SEQ | ~['\\\r\n])* '\''?
 	;
 
 // A valid hex digit specification
