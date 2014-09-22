@@ -42,9 +42,11 @@ public class FileVocabModelImpl extends AbstractTokenVocabModel {
 
         // imports
         for (ImportDeclarationModelImpl importDecl : getFile().getImportDeclarations()) {
-            for (FileModelImpl fileModel : CodeModelCacheImpl.getInstance().resolvePackages(importDecl)) {
-                for (TokenData tokenData : fileModel.getVocabulary().getTokens()) {
-                    data.put(tokenData.getName(), tokenData);
+            for (PackageModelImpl packageModel : CodeModelCacheImpl.getInstance().resolvePackages(importDecl)) {
+                for (FileModelImpl fileModel : packageModel.getFiles()) {
+                    for (TokenData tokenData : fileModel.getVocabulary().getTokens()) {
+                        data.put(tokenData.getName(), tokenData);
+                    }
                 }
             }
         }

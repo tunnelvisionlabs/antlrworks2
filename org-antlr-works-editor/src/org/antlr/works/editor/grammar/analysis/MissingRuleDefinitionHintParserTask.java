@@ -35,9 +35,11 @@ import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.misc.IntervalSet;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNode;
+import org.antlr.v4.tool.Grammar;
 import org.antlr.works.editor.grammar.GrammarEditorKit;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
 import org.antlr.works.editor.grammar.experimental.generated.GrammarParserBaseListener;
+import org.antlr.works.editor.grammar.parser.CompiledFileModelV4;
 import org.antlr.works.editor.grammar.parser.CompiledModel;
 import org.antlr.works.editor.grammar.semantics.GrammarAnnotatedParseTree;
 import org.antlr.works.editor.grammar.semantics.GrammarTreeProperties;
@@ -85,11 +87,11 @@ public final class MissingRuleDefinitionHintParserTask implements ParserTask {
 
         CompiledModel model = getCachedData(taskManager, context, snapshot, GrammarParserDataDefinitions.COMPILED_MODEL);
         GrammarAnnotatedParseTree grammarAnnotatedParseTree = getCachedData(taskManager, context, snapshot, GrammarParserDataDefinitions.ANNOTATED_PARSE_TREE);
-        if (model == null || grammarAnnotatedParseTree == null) {
+        if (model == null || grammarAnnotatedParseTree == null || !(model.getResult() instanceof CompiledFileModelV4)) {
             return;
         }
 
-        Listener listener = new Listener(grammarAnnotatedParseTree);
+        Listener listener = new Listener((CompiledFileModelV4)model.getResult(), grammarAnnotatedParseTree);
         ParseTreeWalker.DEFAULT.walk(listener, grammarAnnotatedParseTree.getParseTree());
 
         List<ErrorDescription> hints = new ArrayList<>();
@@ -115,9 +117,13 @@ public final class MissingRuleDefinitionHintParserTask implements ParserTask {
         private final IntervalSet _rewriteRanges = new IntervalSet();
 
         @NonNull
+        private final CompiledFileModelV4 _compiledFileModel;
+
+        @NonNull
         private final GrammarAnnotatedParseTree _grammarAnnotatedParseTree;
 
-        public Listener(@NonNull GrammarAnnotatedParseTree grammarAnnotatedParseTree) {
+        public Listener(@NonNull CompiledFileModelV4 compiledFileModel, @NonNull GrammarAnnotatedParseTree grammarAnnotatedParseTree) {
+            this._compiledFileModel = compiledFileModel;
             this._grammarAnnotatedParseTree = grammarAnnotatedParseTree;
         }
 
@@ -131,6 +137,11 @@ public final class MissingRuleDefinitionHintParserTask implements ParserTask {
             if (_grammarAnnotatedParseTree.getTokenDecorator().getProperty(token, GrammarTreeProperties.PROP_MISSING_DEF)) {
                 String text = token.getText();
                 if ("EOF".equals(text)) {
+                    return;
+                }
+
+                Grammar grammar = _compiledFileModel.getGrammar();
+                if (grammar != null && grammar.rules.containsKey(text)) {
                     return;
                 }
 

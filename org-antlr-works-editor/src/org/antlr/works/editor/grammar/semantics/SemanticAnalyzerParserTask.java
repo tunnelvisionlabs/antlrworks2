@@ -11,6 +11,7 @@ package org.antlr.works.editor.grammar.semantics;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
@@ -37,6 +38,7 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.works.editor.grammar.GrammarEditorKit;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
 import org.antlr.works.editor.grammar.experimental.GrammarParser;
+import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.DelegateGrammarContext;
 import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.DelegateGrammarsContext;
 import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.GrammarSpecContext;
 import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.IdContext;
@@ -116,7 +118,7 @@ public final class SemanticAnalyzerParserTask implements ParserTask {
     private void updateImportedFiles(VersionedDocument document, GrammarSpecContext grammarSpec) {
         for (PrequelConstructContext prequelConstruct : grammarSpec.prequelConstruct()) {
             if (prequelConstruct.delegateGrammars() != null) {
-                handleImportedGrammars(prequelConstruct.delegateGrammars());
+                handleImportedGrammars(document, prequelConstruct.delegateGrammars());
             }
 
             if (prequelConstruct.optionsSpec() != null) {
@@ -190,9 +192,70 @@ public final class SemanticAnalyzerParserTask implements ParserTask {
         }
     }
 
-    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_delegateGrammars, version=0, dependents=Dependents.SELF)
-    private void handleImportedGrammars(DelegateGrammarsContext delegateGrammars) {
-        LOGGER.log(Level.WARNING, "Cannot load delegate grammars on demand (not yet implemented).");
+    @RuleDependencies({
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_delegateGrammars, version=0, dependents=Dependents.SELF),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_delegateGrammar, version=0, dependents=Dependents.SELF),
+        @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_id, version=1, dependents=Dependents.DESCENDANTS),
+    })
+    private void handleImportedGrammars(VersionedDocument document, DelegateGrammarsContext delegateGrammars) {
+        for (DelegateGrammarContext delegateGrammar : delegateGrammars.delegateGrammar()) {
+            List<? extends IdContext> idContexts = delegateGrammar.id();
+            if (idContexts.isEmpty()) {
+                continue;
+            }
+
+            IdContext grammarNameContext = idContexts.get(idContexts.size() - 1);
+            String grammarName = grammarNameContext.getText();
+            if (grammarName == null || grammarName.isEmpty()) {
+                continue;
+            }
+
+            FileObject fileObject = document.getFileObject();
+            if (fileObject == null) {
+                LOGGER.log(Level.WARNING, "Could not find source for imported grammar.");
+                continue;
+            }
+
+            // try to find the grammar in the same folder with this name
+            FileObject containingFolder = fileObject.getParent();
+            if (containingFolder == null) {
+                LOGGER.log(Level.WARNING, "Could not find source for imported grammar.");
+                continue;
+            }
+
+            FileObject sourceFileObject = containingFolder.getFileObject(grammarName, "g4");
+            if (sourceFileObject == null) {
+                sourceFileObject = containingFolder.getFileObject(grammarName, "g3");
+            }
+
+            if (sourceFileObject == null) {
+                sourceFileObject = containingFolder.getFileObject(grammarName, "g");
+            }
+
+            if (sourceFileObject == null) {
+                LOGGER.log(Level.WARNING, "Could not find source for imported grammar.");
+                continue;
+            }
+
+            VersionedDocument sourceDocument = VersionedDocumentUtilities.getVersionedDocument(sourceFileObject);
+            Future<? extends ParserData<?>> futureData = getTaskManager().getData(sourceDocument.getCurrentSnapshot(), GrammarParserDataDefinitions.FILE_MODEL);
+            if (futureData == null) {
+                LOGGER.log(Level.WARNING, "Could not find source for imported grammar.");
+                continue;
+            }
+
+            ParserData<?> data;
+            try {
+                data = futureData.get();
+            } catch (InterruptedException | ExecutionException ex) {
+                LOGGER.log(Level.WARNING, "Could not find source for imported grammar.");
+                continue;
+            }
+
+            if (data == null) {
+                LOGGER.log(Level.WARNING, "Could not find source for imported grammar.");
+            }
+        }
     }
 
     private static final class Definition extends ParserTaskDefinition {

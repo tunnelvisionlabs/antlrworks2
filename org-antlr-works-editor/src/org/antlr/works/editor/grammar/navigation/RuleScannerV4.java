@@ -8,7 +8,9 @@
  */
 package org.antlr.works.editor.grammar.navigation;
 
+import java.util.ArrayDeque;
 import java.util.Collection;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -53,7 +55,26 @@ public class RuleScannerV4 extends RuleScanner {
             GrammarNode.GrammarNodeDescription lexerRulesRootDescription = new GrammarNode.GrammarNodeDescription(DeclarationKind.LEXER_RULE, "2" + Bundle.LBL_LexerRules());
             lexerRulesRootDescription.setHtmlHeader(Bundle.LBL_LexerRules());
 
-            for (CompiledFileModelV4 importedParseResult : model.getImportedGrammarResults()) {
+            Deque<CompiledFileModelV4> importedWorkList = new ArrayDeque<>(model.getImportedGrammarResults());
+            Set<String> visitedImports = new HashSet<>();
+            Set<String> visitedRules = new HashSet<>();
+            while (!importedWorkList.isEmpty()) {
+                CompiledFileModelV4 importedParseResult = importedWorkList.pop();
+                Grammar grammar = importedParseResult.getGrammar();
+                if (grammar == null || grammar.fileName == null) {
+                    continue;
+                }
+
+                if (visitedImports.add(grammar.fileName) && !importedParseResult.getImportedGrammarResults().isEmpty()) {
+                    importedWorkList.push(importedParseResult);
+                    importedWorkList.addAll(importedParseResult.getImportedGrammarResults());
+                    continue;
+                }
+
+                if (!visitedRules.add(grammar.fileName)) {
+                    continue;
+                }
+
                 processParseResult(null, importedParseResult, parserRulesRootDescription, lexerRulesRootDescription);
             }
 
@@ -170,6 +191,10 @@ public class RuleScannerV4 extends RuleScanner {
     private void processRules(DocumentSnapshot snapshot, CompiledFileModelV4 result, Collection<? extends GrammarAST> rules, Collection<Description> parserRules, Collection<Description> lexerRules) {
         for (GrammarAST child : rules) {
             if (child.getChild(0) instanceof GrammarASTErrorNode) {
+                continue;
+            }
+
+            if (((GrammarAST)child.getChild(0)).g != result.getGrammar()) {
                 continue;
             }
 

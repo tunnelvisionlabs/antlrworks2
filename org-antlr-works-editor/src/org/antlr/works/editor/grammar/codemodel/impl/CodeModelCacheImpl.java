@@ -70,16 +70,16 @@ public class CodeModelCacheImpl implements CodeModelCache {
     }
 
     @NonNull
-    public Collection<? extends FileModelImpl> resolvePackages(ImportDeclarationModel importModel) {
-        throw new UnsupportedOperationException();
-        //Project project = importModel.getPackage().getProject();
-        //CodeModelProjectCache projectCache = getProjectCache(project, false);
-        //PackageModelImpl unique = projectCache.getUniquePackage(importModel.getPath());
-        //if (unique == null) {
-        //    return Collections.emptyList();
-        //}
-        //
-        //return Collections.singletonList(unique);
+    public Collection<? extends PackageModelImpl> resolvePackages(ImportDeclarationModel importModel) {
+        Project project = importModel.getPackage().getProject();
+        CodeModelProjectCache projectCache = getProjectCache(project, false);
+        assert projectCache != null;
+        PackageModelImpl unique = projectCache.getUniquePackage(importModel.getPath());
+        if (unique == null) {
+            return Collections.emptyList();
+        }
+
+        return Collections.singletonList(unique);
     }
 
     @CheckForNull

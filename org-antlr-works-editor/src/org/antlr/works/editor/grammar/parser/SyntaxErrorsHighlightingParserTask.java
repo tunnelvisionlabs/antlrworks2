@@ -77,6 +77,10 @@ public final class SyntaxErrorsHighlightingParserTask implements ParserTask {
                     continue;
                 }
 
+                if (!location.getSnapshot().getVersionedDocument().equals(snapshot.getVersionedDocument())) {
+                    continue;
+                }
+
                 TrackingPositionRegion trackingRegion = snapshot.createTrackingRegion(location.getRegion(), TrackingPositionRegion.Bias.Forward);
                 SnapshotPositionRegion region = trackingRegion.getRegion(latestSnapshot);
 

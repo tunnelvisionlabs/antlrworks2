@@ -53,6 +53,12 @@ public class GrammarFoldScannerV4 extends AbstractAntlrFoldScanner<CompiledModel
 
             List<GrammarAST> foldNodes = parseResult.getNodesWithType(foldTypes);
             for (GrammarAST child : foldNodes) {
+                // imported grammars merge trees from multiple files. only consider
+                // trees from the current file for folding.
+                if (child.g != parseResult.g) {
+                    continue;
+                }
+
                 String blockHint;
                 switch (child.getType()) {
                 case ANTLRParser.MODE:

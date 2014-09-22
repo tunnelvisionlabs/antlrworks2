@@ -346,7 +346,7 @@ public class CompiledModelParserV4 extends CompiledModelParser {
 
             ST messageTemplate = tool.errMgr.getMessageTemplate(antlrm);
             String outputMessage = messageTemplate.render();
-            syntaxErrors.add(new AntlrSyntaxErrorV3(snapshot, offendingToken, e, outputMessage, Severity.ERROR));
+            syntaxErrors.add(new AntlrSyntaxErrorV3(getSnapshot(offendingToken), offendingToken, e, outputMessage, Severity.ERROR));
         }
 
         @Override
@@ -366,7 +366,43 @@ public class CompiledModelParserV4 extends CompiledModelParser {
 
             ST messageTemplate = tool.errMgr.getMessageTemplate(antlrm);
             String outputMessage = messageTemplate.render();
-            syntaxErrors.add(new AntlrSyntaxErrorV3(snapshot, offendingToken, e, outputMessage, Severity.WARNING));
+            syntaxErrors.add(new AntlrSyntaxErrorV3(getSnapshot(offendingToken), offendingToken, e, outputMessage, Severity.WARNING));
+        }
+
+        private DocumentSnapshot getSnapshot(Token offendingToken) {
+            if (offendingToken == null) {
+                return snapshot;
+            }
+
+            FileObject fileObject = getImportedGrammarFileObject(offendingToken.getInputStream().getSourceName());
+            if (fileObject == null) {
+                return snapshot;
+            }
+
+            VersionedDocument versionedDocument = VersionedDocumentUtilities.getVersionedDocument(fileObject);
+            return versionedDocument.getCurrentSnapshot();
+        }
+
+        private FileObject getImportedGrammarFileObject(String sourceName) {
+            VersionedDocument versionedDocument = snapshot.getVersionedDocument();
+            FileObject rootFileObject = versionedDocument.getFileObject();
+            if (rootFileObject == null) {
+                return null;
+            }
+
+            File sourceFile = new File(sourceName);
+            File rootFile = new File(rootFileObject.getPath());
+            if (sourceFile.equals(rootFile)) {
+                return rootFileObject;
+            }
+
+            String fileName = sourceFile.getName();
+            FileObject importedFile = rootFileObject.getParent().getFileObject(fileName);
+            if (!importedFile.isData()) {
+                return null;
+            }
+
+            return importedFile;
         }
     }
 }

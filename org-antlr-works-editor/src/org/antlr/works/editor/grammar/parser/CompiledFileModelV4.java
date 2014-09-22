@@ -10,6 +10,7 @@ package org.antlr.works.editor.grammar.parser;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import org.antlr.netbeans.editor.parsing.SyntaxError;
 import org.antlr.runtime.CommonToken;
@@ -59,7 +60,7 @@ public class CompiledFileModelV4 extends CompiledFileModel {
                 FileObject importedFileObject = FileUtil.toFileObject(new File(fileName));
                 List<? extends Token> importedTokensList = importedTokenStream.getTokens();
                 CommonToken[] importedTokens = importedTokensList.toArray(new CommonToken[0]);
-                importedResults.add(new CompiledFileModelV4(imported, imported.ast, null, importedFileObject, importedTokens));
+                importedResults.add(new CompiledFileModelV4(imported, imported.ast, Collections.<SyntaxError>emptyList(), importedFileObject, importedTokens));
             }
         }
     }
