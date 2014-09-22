@@ -41,6 +41,7 @@ import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.antlr.works.editor.antlr4.classification.DocumentSnapshotCharStream;
 import org.antlr.works.editor.grammar.GrammarEditorKit;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
+import org.antlr.works.editor.grammar.codemodel.FileModel;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 
 /**
@@ -75,6 +76,11 @@ public final class CurrentRuleContextParserTask implements ParserTask {
 
                 GrammarParser.RuleSpecContext ruleContext = null;
                 int grammarType = -1;
+
+                Future<ParserData<FileModel>> fileModelResult =
+                    taskManager.getData(snapshot, GrammarParserDataDefinitions.FILE_MODEL, EnumSet.of(ParserDataOptions.ALLOW_STALE, ParserDataOptions.SYNCHRONOUS));
+                ParserData<FileModel> fileModelData = fileModelResult.get();
+                FileModel fileModel = fileModelData.getData();
 
                 if (anchors != null) {
                     Anchor enclosing = null;
@@ -122,7 +128,7 @@ public final class CurrentRuleContextParserTask implements ParserTask {
                     }
                 }
 
-                data = new CurrentRuleContextData(snapshot, grammarType, ruleContext);
+                data = new CurrentRuleContextData(snapshot, grammarType, fileModel, ruleContext);
             }
 
             results.addResult(new BaseParserData<>(context, GrammarParserDataDefinitions.CURRENT_RULE_CONTEXT, snapshot, data));

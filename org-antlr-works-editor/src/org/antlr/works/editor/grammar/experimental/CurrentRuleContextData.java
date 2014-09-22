@@ -13,6 +13,7 @@ import org.antlr.v4.runtime.Dependents;
 import org.antlr.v4.runtime.RuleDependencies;
 import org.antlr.v4.runtime.RuleDependency;
 import org.antlr.v4.runtime.Token;
+import org.antlr.works.editor.grammar.codemodel.FileModel;
 import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.LexerRuleContext;
 import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.ParserRuleSpecContext;
 import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.RuleSpecContext;
@@ -24,11 +25,13 @@ import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarPars
 public final class CurrentRuleContextData {
     private final DocumentSnapshot snapshot;
     private final int grammarType;
+    private final FileModel fileModel;
     private final RuleSpecContext context;
 
-    public CurrentRuleContextData(DocumentSnapshot snapshot, int grammarType, RuleSpecContext context) {
+    public CurrentRuleContextData(DocumentSnapshot snapshot, int grammarType, FileModel fileModel, RuleSpecContext context) {
         this.snapshot = snapshot;
         this.grammarType = grammarType;
+        this.fileModel = fileModel;
         this.context = context;
     }
 
@@ -38,6 +41,10 @@ public final class CurrentRuleContextData {
 
     public int getGrammarType() {
         return grammarType;
+    }
+
+    public FileModel getFileModel() {
+        return fileModel;
     }
 
     public RuleSpecContext getContext() {

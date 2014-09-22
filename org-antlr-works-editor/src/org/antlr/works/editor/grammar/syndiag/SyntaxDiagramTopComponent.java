@@ -34,6 +34,8 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.v4.tool.Grammar;
 import org.antlr.works.editor.grammar.GrammarParserDataDefinitions;
+import org.antlr.works.editor.grammar.codemodel.FileModel;
+import org.antlr.works.editor.grammar.codemodel.TokenData;
 import org.antlr.works.editor.grammar.experimental.CurrentRuleContextData;
 import org.antlr.works.editor.grammar.experimental.GrammarParser;
 import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.AltListContext;
@@ -148,7 +150,7 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
         this.context = new WeakReference<>(ruleSpecContext);
         if (ruleSpecContext != null) {
             try {
-                SyntaxBuilderListener listener = new SyntaxBuilderListener(context.getGrammarType(), context.getSnapshot());
+                SyntaxBuilderListener listener = new SyntaxBuilderListener(context.getGrammarType(), context.getSnapshot(), context.getFileModel());
                 new ParseTreeWalker().walk(listener, ruleSpecContext);
                 this.diagram = new Diagram(listener.getRule());
                 this.jScrollPane1.setViewportView(diagram);
@@ -271,15 +273,17 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
 
         private final int grammarType;
         private final DocumentSnapshot snapshot;
+        private final FileModel fileModel;
         private final Deque<JComponent> nodes = new ArrayDeque<>();
 
         private Rule RuleSpec;
         private ParserRuleContext outermostAtom;
 
-        public SyntaxBuilderListener(int grammarType, DocumentSnapshot snapshot) {
+        public SyntaxBuilderListener(int grammarType, DocumentSnapshot snapshot, FileModel fileModel) {
             Parameters.notNull("snapshot", snapshot);
             this.grammarType = grammarType;
             this.snapshot = snapshot;
+            this.fileModel = fileModel;
         }
 
         public Rule getRule() {
@@ -466,6 +470,25 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
                 if (nonTerminal) {
                     nodes.peek().add(new NonTerminal(text, sourceSpan));
                 } else {
+                    if (Grammar.isTokenName(text)) {
+                        String literal = null;
+                        for (TokenData tokenData : fileModel.getVocabulary().getTokens()) {
+                            if (tokenData.getLiteral() != null && text.equals(tokenData.getName())) {
+                                if (literal != null) {
+                                    // multiple matches
+                                    literal = null;
+                                    break;
+                                }
+
+                                literal = tokenData.getLiteral();
+                            }
+                        }
+
+                        if (literal != null) {
+                            text = literal;
+                        }
+                    }
+
                     nodes.peek().add(new Terminal(text, sourceSpan));
                 }
             } else if (range) {
