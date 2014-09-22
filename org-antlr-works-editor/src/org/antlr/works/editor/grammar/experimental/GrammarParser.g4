@@ -244,7 +244,8 @@ argActionParameters
 	;
 
 argActionParameter
-	:	type=argActionParameterType? ignored* name=ARG_ACTION_WORD
+@version{7}
+	:	type=argActionParameterType? ignored* name=ARG_ACTION_WORD (ignored* ARG_ACTION_EQUALS ignored* argActionParameterType?)?
 	;
 
 argActionParameterType
@@ -252,9 +253,10 @@ argActionParameterType
 	;
 
 argActionParameterTypePart
+@version{7}
 	:	ARG_ACTION_WORD
-	|	ARG_ACTION_LT argActionParameterType? ARG_ACTION_GT
-	|	ARG_ACTION_LPAREN argActionParameterType? ARG_ACTION_RPAREN
+	|	ARG_ACTION_LT ignored* (argActionParameterType (ignored* ARG_ACTION_COMMA (ignored* argActionParameterType)?)* ignored*)? ARG_ACTION_GT
+	|	ARG_ACTION_LPAREN ignored* (argActionParameterType (ignored* ARG_ACTION_COMMA (ignored* argActionParameterType)?)* ignored*)? ARG_ACTION_RPAREN
 	;
 
 ignored

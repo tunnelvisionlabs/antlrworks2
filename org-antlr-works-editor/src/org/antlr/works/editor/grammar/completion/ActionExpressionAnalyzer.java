@@ -154,7 +154,7 @@ public class ActionExpressionAnalyzer extends GrammarParserBaseListener {
         return null;
     }
 
-    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleSpec, version=5, dependents=Dependents.DESCENDANTS)
+    @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_ruleSpec, version=7, dependents=Dependents.DESCENDANTS)
     private static RuleSpecContext getEnclosingRuleContext(RuleContext context) {
         while (context != null) {
             if (context instanceof RuleSpecContext) {
