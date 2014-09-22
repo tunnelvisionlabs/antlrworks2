@@ -52,6 +52,7 @@ import org.antlr.v4.runtime.atn.PredictionContext;
 import org.antlr.v4.runtime.atn.Transition;
 import org.antlr.v4.runtime.atn.WildcardTransition;
 import org.antlr.v4.runtime.misc.IntervalSet;
+import org.antlr.v4.runtime.misc.Tuple2;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.tool.Grammar;
@@ -71,6 +72,7 @@ import org.antlr.works.editor.grammar.experimental.GrammarParserAnchorListener;
 import org.antlr.works.editor.grammar.experimental.GrammarReferenceAnchors;
 import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.ActionExpressionContext;
 import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.ActionScopeExpressionContext;
+import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.ArgActionParameterTypeContext;
 import org.netbeans.editor.BaseDocument;
 import org.openide.util.Exceptions;
 
@@ -577,6 +579,24 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
                     if (possibleInAction && !inExpression) {
                         for (Token implicit : labelAnalyzer.getUnlabeledElements()) {
                             CompletionItem item = new ActionReferenceCompletionItem(implicit.getText(), false);
+                            intermediateResults.put(item.getInsertPrefix().toString(), item);
+                        }
+
+                        for (Tuple2<Token, ArgActionParameterTypeContext> argument : labelAnalyzer.getArguments()) {
+                            String type = argument.getItem2() != null ? argument.getItem2().getText().trim() : "";
+                            CompletionItem item = new ActionReferenceCompletionItem(argument.getItem1().getText(), false, type);
+                            intermediateResults.put(item.getInsertPrefix().toString(), item);
+                        }
+
+                        for (Tuple2<Token, ArgActionParameterTypeContext> returnValue : labelAnalyzer.getReturnValues()) {
+                            String type = returnValue.getItem2() != null ? returnValue.getItem2().getText().trim() : "";
+                            CompletionItem item = new ActionReferenceCompletionItem(returnValue.getItem1().getText(), false, type);
+                            intermediateResults.put(item.getInsertPrefix().toString(), item);
+                        }
+
+                        for (Tuple2<Token, ArgActionParameterTypeContext> local : labelAnalyzer.getLocals()) {
+                            String type = local.getItem2() != null ? local.getItem2().getText().trim() : "";
+                            CompletionItem item = new ActionReferenceCompletionItem(local.getItem1().getText(), false, type);
                             intermediateResults.put(item.getInsertPrefix().toString(), item);
                         }
 

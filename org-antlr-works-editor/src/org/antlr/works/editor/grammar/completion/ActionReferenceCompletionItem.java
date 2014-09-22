@@ -20,6 +20,10 @@ public class ActionReferenceCompletionItem extends ElementReferenceCompletionIte
         super(label, explicit);
     }
 
+    public ActionReferenceCompletionItem(@NonNull String label, boolean explicit, String referenceKind) {
+        super(label, explicit, referenceKind);
+    }
+
     @Override
     protected String getPrefix() {
         return "$";

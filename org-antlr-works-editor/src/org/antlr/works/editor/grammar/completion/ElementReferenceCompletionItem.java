@@ -16,12 +16,18 @@ public abstract class ElementReferenceCompletionItem extends GrammarCompletionIt
 
     private final String label;
     private final boolean explicit;
+    private final String referenceKind;
 
     private String leftText;
 
     public ElementReferenceCompletionItem(String label, boolean explicit) {
+        this(label, explicit, null);
+    }
+
+    public ElementReferenceCompletionItem(String label, boolean explicit, String referenceKind) {
         this.label = label;
         this.explicit = explicit;
+        this.referenceKind = referenceKind;
     }
 
     @Override
@@ -66,7 +72,9 @@ public abstract class ElementReferenceCompletionItem extends GrammarCompletionIt
 
     @Override
     protected String getRightHtmlText() {
-        if (explicit) {
+        if (referenceKind != null) {
+            return referenceKind;
+        } else if (explicit) {
             return "Label";
         } else {
             return "Element";
