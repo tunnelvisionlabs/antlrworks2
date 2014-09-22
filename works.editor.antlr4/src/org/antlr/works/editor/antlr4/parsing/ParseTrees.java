@@ -250,6 +250,10 @@ public final class ParseTrees {
 
     @CheckForNull
     public static TerminalNode findTerminalNode(@NonNull ParseTree node, Token symbol) {
+        if (symbol == null) {
+            return null;
+        }
+
         if (node instanceof TerminalNode) {
             TerminalNode terminalNode = (TerminalNode)node;
             if (Utils.equals(terminalNode.getSymbol(), symbol)) {

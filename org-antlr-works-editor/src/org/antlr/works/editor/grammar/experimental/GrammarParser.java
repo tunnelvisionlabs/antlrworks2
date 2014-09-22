@@ -16,7 +16,7 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser;
 import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.OptionValueContext;
 import org.antlr.works.editor.grammar.experimental.generated.AbstractGrammarParser.QidContext;
-import org.netbeans.api.annotations.common.NonNull;
+import org.netbeans.api.annotations.common.NullAllowed;
 
 /**
  *
@@ -32,7 +32,11 @@ public class GrammarParser extends AbstractGrammarParser {
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_optionValue, version=0, dependents=Dependents.PARENTS),
         @RuleDependency(recognizer=GrammarParser.class, rule=GrammarParser.RULE_qid, version=1, dependents=Dependents.DESCENDANTS),
     })
-    public static String getOptionValue(@NonNull OptionValueContext ctx) {
+    public static String getOptionValue(@NullAllowed OptionValueContext ctx) {
+        if (ctx == null) {
+            return null;
+        }
+
         QidContext qid = ctx.qid();
         if (qid != null) {
             return qid.getText();
