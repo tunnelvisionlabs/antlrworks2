@@ -458,9 +458,10 @@ public final class SyntaxDiagramTopComponent extends TopComponent {
 
             if (wildcard || reference) {
                 String text = ctx.start.getText();
-                boolean nonTerminal = !Grammar.isTokenName(text);
-                if (!nonTerminal && Grammar.isTokenName(text) && RuleSpec != null && Grammar.isTokenName(RuleSpec.getRuleName()))
+                boolean nonTerminal = !(Grammar.isTokenName(text) || text.startsWith("'"));
+                if (!nonTerminal && Grammar.isTokenName(text) && RuleSpec != null && Grammar.isTokenName(RuleSpec.getRuleName())) {
                     nonTerminal = true;
+                }
 
                 if (nonTerminal) {
                     nodes.peek().add(new NonTerminal(text, sourceSpan));
