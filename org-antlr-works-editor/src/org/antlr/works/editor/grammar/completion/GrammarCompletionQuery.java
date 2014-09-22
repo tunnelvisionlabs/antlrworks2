@@ -576,25 +576,8 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
 
                     if (possibleInAction && !inExpression) {
                         for (Token implicit : labelAnalyzer.getUnlabeledElements()) {
-                            // only add implicit tokens here. all implicit rule references will be added separately
-                            if (Grammar.isTokenName(implicit.getText())) {
-                                CompletionItem item = new ActionReferenceCompletionItem(implicit.getText(), false);
-                                intermediateResults.put(item.getInsertPrefix().toString(), item);
-                            }
-                        }
-
-                        if (grammarType != GrammarParser.LEXER) {
-                            // Add rules from the grammar
-                            if (rules.isEmpty()) {
-                                rules.addAll(GrammarCompletionProvider.getRulesFromGrammar(taskManager, snapshot, true));
-                            }
-
-                            for (Description rule : rules) {
-                                if (!Grammar.isTokenName(rule.getName())) {
-                                    CompletionItem item = new ActionReferenceCompletionItem(rule.getName(), false);
-                                    intermediateResults.put(item.getInsertPrefix().toString(), item);
-                                }
-                            }
+                            CompletionItem item = new ActionReferenceCompletionItem(implicit.getText(), false);
+                            intermediateResults.put(item.getInsertPrefix().toString(), item);
                         }
 
                         addRootActionExpressions(intermediateResults, grammarType);
