@@ -569,11 +569,6 @@ public final class GrammarCompletionQuery extends AbstractCompletionQuery {
                 }
 
                 if (!inExpression && possibleInAction) {
-                    if (!definiteInAction && labelAnalyzer.getEnclosingRuleName() != null) {
-                        CompletionItem item = new EnclosingRuleCompletionItem(labelAnalyzer.getEnclosingRuleName().getText());
-                        intermediateResults.put(item.getInsertPrefix().toString(), item);
-                    }
-
                     for (Token label : labelAnalyzer.getLabels()) {
                         CompletionItem item = new RewriteReferenceCompletionItem(label.getText(), true);
                         intermediateResults.put(item.getInsertPrefix().toString(), item);
