@@ -2,5 +2,5 @@ Manifest-Version: 1.0
 OpenIDE-Module: org.antlr.netbeans/2
 OpenIDE-Module-Install: org/antlr/netbeans/Installer.class
 OpenIDE-Module-Localizing-Bundle: org/antlr/netbeans/Bundle.properties
-OpenIDE-Module-Specification-Version: 2.2.2
+OpenIDE-Module-Specification-Version: 2.4.1
 

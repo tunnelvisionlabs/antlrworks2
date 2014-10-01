@@ -3,5 +3,5 @@ OpenIDE-Module: org.antlr.works.editor/2
 OpenIDE-Module-Layer: org/antlr/works/editor/layer.xml
 OpenIDE-Module-Localizing-Bundle: org/antlr/works/editor/Bundle.properties
 OpenIDE-Module-Requires: org.openide.windows.WindowManager
-OpenIDE-Module-Specification-Version: 2.2.2
+OpenIDE-Module-Specification-Version: 2.4.1
 OpenIDE-Module-Needs: javax.script.ScriptEngine.freemarker

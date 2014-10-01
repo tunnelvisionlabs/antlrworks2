@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
 OpenIDE-Module: org.antlr.works.editor.antlr3/2
 OpenIDE-Module-Localizing-Bundle: org/antlr/works/editor/antlr3/Bundle.properties
-OpenIDE-Module-Specification-Version: 2.2.2
+OpenIDE-Module-Specification-Version: 2.4.1
 
