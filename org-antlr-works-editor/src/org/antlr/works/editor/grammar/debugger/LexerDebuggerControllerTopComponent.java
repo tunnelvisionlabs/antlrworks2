@@ -31,6 +31,9 @@ import javax.swing.text.EditorKit;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.StyledDocument;
 import org.antlr.v4.runtime.Lexer;
+import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.Vocabulary;
+import org.antlr.v4.runtime.VocabularyImpl;
 import org.netbeans.api.annotations.common.NonNull;
 import org.netbeans.api.editor.EditorRegistry;
 import org.netbeans.api.settings.ConvertAsProperties;
@@ -601,29 +604,46 @@ public final class LexerDebuggerControllerTopComponent extends TopComponent {
                 }
 
                 Document document = component.getDocument();
-                TokenDescriptor[] tokenDescriptorArray = (TokenDescriptor[])document.getProperty(LexerDebuggerEditorKit.PROP_TOKEN_NAMES);
+                Vocabulary vocabulary = (Vocabulary)document.getProperty(LexerDebuggerEditorKit.PROP_VOCABULARY);
                 String[] modeNamesArray = (String[])document.getProperty(LexerDebuggerEditorKit.PROP_MODE_NAMES);
-                List<TokenDescriptor> tokenDescriptors = tokenDescriptorArray != null ? Arrays.asList(tokenDescriptorArray) : Collections.<TokenDescriptor>emptyList();
                 List<String> modeNames = modeNamesArray != null ? Arrays.asList(modeNamesArray) : Collections.<String>emptyList();
-                if (tokenDescriptors.isEmpty()) {
+                if (vocabulary == null) {
                     LexerInterpreterData lexerInterpreterData = (LexerInterpreterData)document.getProperty(LexerDebuggerEditorKit.PROP_LEXER_INTERP_DATA);
                     if (lexerInterpreterData != null) {
-                        tokenDescriptors = lexerInterpreterData.tokenNames;
+                        vocabulary = lexerInterpreterData.vocabulary;
                         modeNames = lexerInterpreterData.modeNames;
                     }
                 }
 
-                final List<TokenDescriptor> finalTokenDescriptors = tokenDescriptors;
+                final Vocabulary finalVocabulary = vocabulary != null ? vocabulary : VocabularyImpl.EMPTY_VOCABULARY;
                 final List<String> finalModeNames = modeNames;
 
                 currentComponent = component;
 
                 tblTokenTypes.setModel(new AbstractTableModel() {
-                    private final List<TokenDescriptor> elements = finalTokenDescriptors;
+                    private final List<String> literalNames = new ArrayList<>();
+                    private final List<String> symbolicNames = new ArrayList<>();
+                    private final List<Integer> values = new ArrayList<>();
+
+                    {
+                        // TODO: Find a better way to communicate this value
+                        int maxTokenType = 1024;
+                        for (int i = 0; i <= maxTokenType; i++) {
+                            String literalName = finalVocabulary.getLiteralName(i);
+                            String symbolicName = finalVocabulary.getSymbolicName(i);
+                            if (literalName == null && symbolicName == null) {
+                                continue;
+                            }
+
+                            literalNames.add(literalName != null ? literalName : "");
+                            symbolicNames.add(symbolicName != null ? symbolicName : literalName);
+                            values.add(i);
+                        }
+                    }
 
                     @Override
                     public int getRowCount() {
-                        return elements.size();
+                        return literalNames.size();
                     }
 
                     @Override
@@ -664,11 +684,11 @@ public final class LexerDebuggerControllerTopComponent extends TopComponent {
                     public Object getValueAt(int rowIndex, int columnIndex) {
                         switch (columnIndex) {
                         case 0:
-                            return elements.get(rowIndex).name;
+                            return symbolicNames.get(rowIndex);
                         case 1:
-                            return elements.get(rowIndex).literal;
+                            return literalNames.get(rowIndex);
                         case 2:
-                            return elements.get(rowIndex).value;
+                            return values.get(rowIndex);
                         default:
                             throw new IllegalArgumentException();
                         }
@@ -690,15 +710,16 @@ public final class LexerDebuggerControllerTopComponent extends TopComponent {
 
                 });
 
-                String[] tokenNamesArray = new String[tokenDescriptors.size()];
-                for (int i = 0; i < tokenDescriptors.size(); i++) {
-                    tokenNamesArray[i] = tokenDescriptors.get(i).literal;
-                    if (tokenNamesArray[i] == null || tokenNamesArray[i].isEmpty()) {
-                        tokenNamesArray[i] = tokenDescriptors.get(i).name;
+                List<String> tokenNames = new ArrayList<>();
+                for (int i = Token.EOF; i < 1024; i++) {
+                    if (finalVocabulary.getLiteralName(i) == null && finalVocabulary.getSymbolicName(i) == null) {
+                        continue;
                     }
+
+                    tokenNames.add(finalVocabulary.getDisplayName(i));
                 }
 
-                lstTokens.setCellRenderer(new TraceTokenListCellRenderer(Arrays.asList(tokenNamesArray)));
+                lstTokens.setCellRenderer(new TraceTokenListCellRenderer(tokenNames));
 
                 lstChannels.setModel(new AbstractListModel<Object>() {
                     private final Object[] elements = { defaultChannelText, hiddenChannelText };
@@ -823,11 +844,5 @@ public final class LexerDebuggerControllerTopComponent extends TopComponent {
             return component;
         }
 
-    }
-
-    public static class TokenDescriptor {
-        public String name = "";
-        public String literal = "";
-        public int value;
     }
 }

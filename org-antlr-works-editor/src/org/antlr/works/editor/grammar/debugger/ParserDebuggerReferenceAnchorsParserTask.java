@@ -8,7 +8,6 @@
  */
 package org.antlr.works.editor.grammar.debugger;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -43,6 +42,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenSource;
 import org.antlr.v4.runtime.TokenStream;
+import org.antlr.v4.runtime.Vocabulary;
 import org.antlr.v4.runtime.atn.ATN;
 import org.antlr.v4.runtime.atn.ATNDeserializer;
 import org.antlr.v4.runtime.atn.ATNState;
@@ -53,7 +53,6 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.works.editor.antlr4.classification.TaggerTokenSource;
 import org.antlr.works.editor.antlr4.parsing.DescriptiveErrorListener;
 import org.antlr.works.editor.antlr4.parsing.SyntaxErrorListener;
-import org.antlr.works.editor.grammar.debugger.LexerDebuggerControllerTopComponent.TokenDescriptor;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 
 /**
@@ -92,13 +91,10 @@ public final class ParserDebuggerReferenceAnchorsParserTask implements ParserTas
 
                 ParserInterpreterData parserInterpreterData = (ParserInterpreterData)snapshot.getVersionedDocument().getDocument().getProperty(ParserDebuggerEditorKit.PROP_PARSER_INTERP_DATA);
                 String grammarFileName = parserInterpreterData.grammarFileName;
-                List<String> tokenNames = new ArrayList<>(parserInterpreterData.tokenNames.size());
-                for (TokenDescriptor tokenDescriptor : parserInterpreterData.tokenNames) {
-                    tokenNames.add(tokenDescriptor.name);
-                }
+                Vocabulary vocabulary = parserInterpreterData.vocabulary;
                 List<String> ruleNames = parserInterpreterData.ruleNames;
                 ATN atn = new ATNDeserializer().deserialize(parserInterpreterData.serializedAtn.toCharArray());
-                TracingParserInterpreter parser = new TracingParserInterpreter(grammarFileName, tokenNames, ruleNames, atn, tokenStream);
+                TracingParserInterpreter parser = new TracingParserInterpreter(grammarFileName, vocabulary, ruleNames, atn, tokenStream);
 
                 long startTime = System.nanoTime();
                 parser.setInterpreter(new StatisticsParserATNSimulator(parser, atn));
@@ -128,8 +124,8 @@ public final class ParserDebuggerReferenceAnchorsParserTask implements ParserTas
     public static class TracingParserInterpreter extends ParserInterpreter {
         public final Map<ParseTree, Transition> associatedTransitions = new IdentityHashMap<>();
 
-        public TracingParserInterpreter(String grammarFileName, Collection<String> tokenNames, Collection<String> ruleNames, ATN atn, TokenStream input) {
-            super(grammarFileName, tokenNames, ruleNames, atn, input);
+        public TracingParserInterpreter(String grammarFileName, Vocabulary vocabulary, Collection<String> ruleNames, ATN atn, TokenStream input) {
+            super(grammarFileName, vocabulary, ruleNames, atn, input);
         }
 
         @Override

@@ -40,24 +40,19 @@ public class KeywordCompletionItem extends GrammarCompletionItem {
                         GrammarLexer.CHANNELS,
                         GrammarLexer.OPTIONS);
 
-    private static final Map<Integer, String> KEYWORDS =
-        new HashMap<Integer, String>() {{
-            for (int i : KEYWORD_TYPES.toArray()) {
-                String keyword = GrammarLexer.tokenNames[i].toLowerCase();
-                if (keyword.charAt(0) == '\'') {
-                    keyword = keyword.substring(1, keyword.length() - 1);
-                }
+    private static final Map<Integer, String> KEYWORDS = new HashMap<>();
+    static {
+        for (int i : KEYWORD_TYPES.toArray()) {
+            KEYWORDS.put(i, GrammarLexer.VOCABULARY.getSymbolicName(i).toLowerCase());
+        }
+    }
 
-                put(i, keyword);
-            }
-        }};
-
-    public static final Map<Integer, KeywordCompletionItem> KEYWORD_ITEMS =
-        new HashMap<Integer, KeywordCompletionItem>() {{
-            for (Map.Entry<Integer, String> keyword : KEYWORDS.entrySet()) {
-                put(keyword.getKey(), new KeywordCompletionItem(keyword.getValue()));
-            }
-        }};
+    public static final Map<Integer, KeywordCompletionItem> KEYWORD_ITEMS = new HashMap<>();
+    static {
+        for (Map.Entry<Integer, String> keyword : KEYWORDS.entrySet()) {
+            KEYWORD_ITEMS.put(keyword.getKey(), new KeywordCompletionItem(keyword.getValue()));
+        }
+    }
 
     private final String keyword;
     private String leftText;

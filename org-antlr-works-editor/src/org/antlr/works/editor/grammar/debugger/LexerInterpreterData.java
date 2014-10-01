@@ -86,7 +86,7 @@ public class LexerInterpreterData extends AbstractInterpreterData {
         LexerInterpreterData data = new LexerInterpreterData();
         data.grammarFileName = lexerGrammar.fileName;
         data.serializedAtn = ATNSerializer.getSerializedAsString(lexerGrammar.atn, Arrays.asList(lexerGrammar.getRuleNames()));
-        data.tokenNames = new ArrayList<>(Arrays.asList(getTokenNames(lexerGrammar)));
+        data.vocabulary = lexerGrammar.getVocabulary();
         data.ruleNames = new ArrayList<>(lexerGrammar.rules.keySet());
         data.modeNames = new ArrayList<>(lexerGrammar.modes.keySet());
         return data;

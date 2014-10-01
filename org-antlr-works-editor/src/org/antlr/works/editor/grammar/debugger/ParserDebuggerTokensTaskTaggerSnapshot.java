@@ -8,19 +8,18 @@
  */
 package org.antlr.works.editor.grammar.debugger;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import org.antlr.netbeans.editor.text.DocumentSnapshot;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.LexerInterpreter;
 import org.antlr.v4.runtime.TokenSource;
+import org.antlr.v4.runtime.Vocabulary;
 import org.antlr.v4.runtime.atn.ATN;
 import org.antlr.v4.runtime.atn.ATNDeserializer;
 import org.antlr.works.editor.antlr4.classification.AbstractTokensTaskTaggerSnapshot;
 import org.antlr.works.editor.antlr4.classification.SimpleLexerState;
 import org.antlr.works.editor.antlr4.highlighting.TokenSourceWithStateV4;
-import org.antlr.works.editor.grammar.debugger.LexerDebuggerControllerTopComponent.TokenDescriptor;
 import org.netbeans.api.annotations.common.NonNull;
 
 /**
@@ -49,15 +48,11 @@ class ParserDebuggerTokensTaskTaggerSnapshot extends AbstractTokensTaskTaggerSna
     @Override
     protected TokenSourceWithStateV4<SimpleLexerState> createLexer(CharStream input, SimpleLexerState startState) {
         ATN atn = new ATNDeserializer().deserialize(lexerInterpreterData.serializedAtn.toCharArray());
-        List<String> tokenNames = new ArrayList<>();
-        for (TokenDescriptor tokenDescriptor : lexerInterpreterData.tokenNames) {
-            tokenNames.add(tokenDescriptor.name);
-        }
-
+        Vocabulary vocabulary = lexerInterpreterData.vocabulary;
         String grammarFileName = lexerInterpreterData.grammarFileName;
         List<String> ruleNames = lexerInterpreterData.ruleNames;
         List<String> modeNames = lexerInterpreterData.modeNames;
-        ParserDebuggerLexerWrapper lexer = new ParserDebuggerLexerWrapper(grammarFileName, tokenNames, ruleNames, modeNames, atn, input);
+        ParserDebuggerLexerWrapper lexer = new ParserDebuggerLexerWrapper(grammarFileName, vocabulary, ruleNames, modeNames, atn, input);
         startState.apply(lexer);
         return lexer;
     }
@@ -65,15 +60,11 @@ class ParserDebuggerTokensTaskTaggerSnapshot extends AbstractTokensTaskTaggerSna
     @Override
     protected TokenSource getEffectiveTokenSource(TokenSourceWithStateV4<SimpleLexerState> lexer) {
         ATN atn = new ATNDeserializer().deserialize(lexerInterpreterData.serializedAtn.toCharArray());
-        List<String> tokenNames = new ArrayList<>();
-        for (TokenDescriptor tokenDescriptor : lexerInterpreterData.tokenNames) {
-            tokenNames.add(tokenDescriptor.name);
-        }
-
+        Vocabulary vocabulary = lexerInterpreterData.vocabulary;
         String grammarFileName = lexerInterpreterData.grammarFileName;
         List<String> ruleNames = lexerInterpreterData.ruleNames;
         List<String> modeNames = lexerInterpreterData.modeNames;
-        return new ParserDebuggerLexerWrapper(grammarFileName, tokenNames, ruleNames, modeNames, atn, lexer.getInputStream());
+        return new ParserDebuggerLexerWrapper(grammarFileName, vocabulary, ruleNames, modeNames, atn, lexer.getInputStream());
     }
 
     @Override
@@ -83,8 +74,8 @@ class ParserDebuggerTokensTaskTaggerSnapshot extends AbstractTokensTaskTaggerSna
 
     private static class ParserDebuggerLexerWrapper extends LexerInterpreter implements TokenSourceWithStateV4<SimpleLexerState> {
 
-        public ParserDebuggerLexerWrapper(String grammarFileName, Collection<String> tokenNames, Collection<String> ruleNames, Collection<String> modeNames, ATN atn, CharStream input) {
-            super(grammarFileName, tokenNames, ruleNames, modeNames, atn, input);
+        public ParserDebuggerLexerWrapper(String grammarFileName, Vocabulary vocabulary, Collection<String> ruleNames, Collection<String> modeNames, ATN atn, CharStream input) {
+            super(grammarFileName, vocabulary, ruleNames, modeNames, atn, input);
         }
 
         @Override

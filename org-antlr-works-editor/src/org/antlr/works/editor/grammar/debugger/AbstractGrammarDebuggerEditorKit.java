@@ -23,6 +23,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.xml.bind.DatatypeConverter;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.VocabularyImpl;
 import org.antlr.v4.runtime.atn.ATN;
 import org.antlr.v4.runtime.atn.ATNDeserializer;
 import org.antlr.works.editor.grammar.debugger.LexerDebuggerTokenHighlighterLayerFactory.LexerOpCode;
@@ -50,10 +51,9 @@ public abstract class AbstractGrammarDebuggerEditorKit extends NbEditorKit {
     public static final String PROP_CHANNELS = "Channels";
 
     /**
-     * The names of tokens in the associated grammar, stored as an array of
-     * strings {@link String}{@code []}.
+     * The token vocabulary, stored as a {@link Vocabulary} instance.
      */
-    public static final String PROP_TOKEN_NAMES = "Token Names";
+    public static final String PROP_VOCABULARY = "Vocabulary";
     /**
      * The names of rules in the associated grammar, stored as an array of
      * strings {@link String}{@code []}.
@@ -80,19 +80,24 @@ public abstract class AbstractGrammarDebuggerEditorKit extends NbEditorKit {
         super.read(new InputStreamReader(inputStream, UTF_8), doc, pos);
 
         // read the token names
-        int tokenNamesOffset = 4 + inputSize;
-        int tokenNamesSize = readInteger(binary, tokenNamesOffset);
-        String[] tokenNames = readStrings(binary, tokenNamesOffset + 4, tokenNamesSize);
-        doc.putProperty(PROP_TOKEN_NAMES, tokenNames);
+        int literalNamesOffset = 4 + inputSize;
+        int literalNamesSize = readInteger(binary, literalNamesOffset);
+        String[] literalNames = readStrings(binary, literalNamesOffset + 4, literalNamesSize);
+
+        int symbolicNamesOffset = literalNamesOffset + 4 + literalNamesSize;
+        int symbolicNamesSize = readInteger(binary, symbolicNamesOffset);
+        String[] symbolicNames = readStrings(binary, symbolicNamesOffset + 4, symbolicNamesSize);
+
+        doc.putProperty(PROP_VOCABULARY, new VocabularyImpl(literalNames, symbolicNames));
 
         // read the rule names
-        int ruleNamesOffset = 4 + inputSize;
+        int ruleNamesOffset = symbolicNamesOffset + 4 + symbolicNamesSize;
         int ruleNamesSize = readInteger(binary, ruleNamesOffset);
         String[] ruleNames = readStrings(binary, ruleNamesOffset + 4, ruleNamesSize);
         doc.putProperty(PROP_RULE_NAMES, ruleNames);
 
         // read the mode names
-        int modeNamesOffset = tokenNamesOffset + 4 + tokenNamesSize;
+        int modeNamesOffset = ruleNamesOffset + 4 + ruleNamesSize;
         int modeNamesSize = readInteger(binary, modeNamesOffset);
         String[] modeNames = readStrings(binary, modeNamesOffset + 4, modeNamesSize);
         doc.putProperty(PROP_MODE_NAMES, modeNames);

@@ -62,7 +62,7 @@ public class ParserInterpreterData extends AbstractInterpreterData {
         // then fill in the parser data
         data.grammarFileName = grammar.fileName;
         data.serializedAtn = ATNSerializer.getSerializedAsString(grammar.atn, Arrays.asList(grammar.getRuleNames()));
-        data.tokenNames = new ArrayList<>(Arrays.asList(getTokenNames(grammar)));
+        data.vocabulary = grammar.getVocabulary();
         data.ruleNames = new ArrayList<>(grammar.rules.keySet());
 
         return data;
