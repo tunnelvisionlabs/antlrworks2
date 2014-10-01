@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
 OpenIDE-Module: org.antlr.v4.runtime/4
 OpenIDE-Module-Localizing-Bundle: org/antlr/v4/runtime/Bundle.properties
-OpenIDE-Module-Specification-Version: 4.2.2
+OpenIDE-Module-Specification-Version: 4.4.1
 
