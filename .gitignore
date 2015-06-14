@@ -5,6 +5,7 @@
 
 # ignore download cache
 */lib/cache/
+/lib/
 
 # ignore build directories
 build/

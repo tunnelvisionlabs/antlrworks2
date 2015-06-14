@@ -5,4 +5,71 @@
 <project name="ANTLRWorks2" basedir=".">
     <description>Builds the module suite ANTLRWorks2.</description>
     <import file="nbproject/build-impl.xml"/>
+
+    <target name="init-ant-contrib">
+        <property name="ant-contrib.groupId" value="ant-contrib"/>
+        <property name="ant-contrib.artifactId" value="ant-contrib"/>
+        <property name="ant-contrib.version" value="1.0b3"/>
+        <property name="ant-contrib.file" value="lib/${ant-contrib.artifactId}.jar"/>
+    </target>
+
+    <target name="clean" depends="suite.clean,init-ant-contrib">
+        <delete includeemptydirs="true" failonerror="false" file="${ant-contrib.file}"/>
+    </target>
+
+    <target name="download-ant-contrib" depends="init-ant-contrib">
+        <property name="suite.cache.dir" value="lib/cache"/>
+        <property name="ant-contrib.intermediatefile" value="${suite.cache.dir}/${ant-contrib.artifactId}-${ant-contrib.version}.jar"/>
+
+        <mkdir dir="${suite.cache.dir}"/>
+        <get src="https://repo1.maven.org/maven2/${ant-contrib.groupId}/${ant-contrib.artifactId}/${ant-contrib.version}/${ant-contrib.artifactId}-${ant-contrib.version}.jar"
+             dest="${ant-contrib.intermediatefile}"
+             skipexisting="true"/>
+        <copy file="${ant-contrib.intermediatefile}" tofile="${ant-contrib.file}"/>
+    </target>
+
+    <target name="nbms" depends="init-keystore,suite.nbms">
+    </target>
+
+    <target name="init-keystore" depends="-init">
+        <!-- Create/update keystore -->
+        <delete file="${keystore.location}${keystore.name}"/>
+        <mkdir dir="${keystore.location}"/>
+        <genkey alias="${keystore.alias}" storepass="${keystore.password}"
+            dname="${keystore.dname}"
+            keystore="${keystore.location}${keystore.name}"/>
+
+        <!-- Update keystore info in projects -->
+        <antcall target="update-keystore-info"/>
+    </target>
+
+    <target name="update-keystore-info" depends="download-ant-contrib">
+        <taskdef resource="net/sf/antcontrib/antlib.xml">
+            <classpath>
+                <pathelement location="${ant-contrib.file}"/>
+            </classpath>
+        </taskdef>
+
+        <for list="${modules}" delimiter=":" param="cur" trim="true">
+            <sequential>
+                <!-- Place the keystore information in the properties file -->
+                <mkdir dir="@{cur}/nbproject/"/>
+                <propertyfile file="@{cur}/nbproject/project.properties">
+                    <entry key="keystore" value="../${keystore.location}${keystore.name}"/>
+                    <entry key="nbm_alias" value="${keystore.alias}"/>
+                </propertyfile>
+                <replaceregexp file="@{cur}/nbproject/project.properties" match="^#.*\n" replace=""/>
+
+                <!-- Place the password in the private properties file -->
+                <mkdir dir="@{cur}/nbproject/private/"/>
+                <propertyfile file="@{cur}/nbproject/private/platform-private.properties">
+                    <entry key="storepass" value="${keystore.password}"/>
+                </propertyfile>
+            </sequential>
+        </for>
+
+        <propertyfile file="nbproject/private/platform-private.properties">
+            <entry key="storepass" value="${keystore.password}"/>
+        </propertyfile>
+    </target>
 </project>
