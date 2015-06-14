@@ -88,9 +88,16 @@
         <element name="args" optional="true"/>
         <sequential>
             <local name="package"/>
+            <local name="paths.antlr4.local"/>
             <pathconvert property="package" dirsep=".">
                 <path location="${src.dir}/@{srcpath}"/>
                 <map from="${src.dir}/" to=""/>
+            </pathconvert>
+            <path id="sources.antlr4.@{srcpath}">
+                <fileset dir="${src.dir}/@{srcpath}" includes="*.g4"/>
+            </path>
+            <pathconvert property="paths.antlr4.local" refid="sources.antlr4.@{srcpath}" pathsep=" ">
+                <map from="${src.dir}/@{srcpath}/" to=""/>
             </pathconvert>
             <java classname="org.antlr.v4.Tool" fork="true" failonerror="true" dir="${src.dir}/@{srcpath}">
                 <arg value="-o"/>
@@ -98,7 +105,7 @@
                 <arg value="-package"/>
                 <arg value="${package}.generated"/>
                 <args/>
-                <arg value="*.g4"/>
+                <arg line="${paths.antlr4.local}"/>
                 <classpath>
                     <path refid="cp.antlr4"/>
                     <pathelement location="${java.class.path}"/>
