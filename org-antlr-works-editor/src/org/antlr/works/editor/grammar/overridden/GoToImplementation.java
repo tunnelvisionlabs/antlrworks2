@@ -14,7 +14,7 @@ import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
 import org.antlr.works.editor.grammar.GrammarEditorKit;
 import org.netbeans.api.editor.EditorActionRegistration;
-import org.netbeans.api.progress.ProgressUtils;
+import org.netbeans.api.progress.BaseProgressUtils;
 import org.netbeans.editor.BaseAction;
 import org.openide.util.NbBundle;
 
@@ -47,7 +47,7 @@ public class GoToImplementation extends BaseAction {
         final int caretPos = c.getCaretPosition();
         final AtomicBoolean cancel = new AtomicBoolean();
 
-        ProgressUtils.runOffEventDispatchThread(new Runnable() {
+        BaseProgressUtils.runOffEventDispatchThread(new Runnable() {
             @Override
             public void run() {
                 goToImplementation(c, doc, caretPos, cancel);
