@@ -7,21 +7,12 @@
             <suite-component/>
             <module-dependencies>
                 <dependency>
-                    <code-name-base>org.abego.treelayout.core</code-name-base>
-                    <build-prerequisite/>
-                    <compile-dependency/>
-                    <run-dependency>
-                        <release-version>1</release-version>
-                        <specification-version>1.0.1</specification-version>
-                    </run-dependency>
-                </dependency>
-                <dependency>
                     <code-name-base>org.antlr.v4.annotations</code-name-base>
                     <build-prerequisite/>
                     <compile-dependency/>
                     <run-dependency>
                         <release-version>4</release-version>
-                        <specification-version>4.4.1</specification-version>
+                        <specification-version>4.5.3</specification-version>
                     </run-dependency>
                 </dependency>
                 <dependency>
@@ -35,17 +26,13 @@
                 </dependency>
             </module-dependencies>
             <public-packages>
-                <package>org.abego.treelayout</package>
-                <package>org.abego.treelayout.internal.util</package>
-                <package>org.abego.treelayout.internal.util.java.lang</package>
-                <package>org.abego.treelayout.internal.util.java.util</package>
-                <package>org.abego.treelayout.util</package>
                 <package>org.antlr.v4.runtime</package>
                 <package>org.antlr.v4.runtime.atn</package>
                 <package>org.antlr.v4.runtime.dfa</package>
                 <package>org.antlr.v4.runtime.misc</package>
                 <package>org.antlr.v4.runtime.tree</package>
-                <package>org.antlr.v4.runtime.tree.gui</package>
+                <package>org.antlr.v4.runtime.tree.pattern</package>
+                <package>org.antlr.v4.runtime.tree.xpath</package>
             </public-packages>
             <class-path-extension>
                 <runtime-relative-path>ext/antlr4_runtime.jar</runtime-relative-path>

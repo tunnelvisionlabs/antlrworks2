@@ -48,7 +48,7 @@
                     <compile-dependency/>
                     <run-dependency>
                         <release-version>4</release-version>
-                        <specification-version>4.4.1</specification-version>
+                        <specification-version>4.5.3</specification-version>
                     </run-dependency>
                 </dependency>
                 <dependency>
@@ -57,7 +57,7 @@
                     <compile-dependency/>
                     <run-dependency>
                         <release-version>4</release-version>
-                        <specification-version>4.4.1</specification-version>
+                        <specification-version>4.5.3</specification-version>
                     </run-dependency>
                 </dependency>
                 <dependency>
@@ -66,7 +66,7 @@
                     <compile-dependency/>
                     <run-dependency>
                         <release-version>4</release-version>
-                        <specification-version>4.4.1</specification-version>
+                        <specification-version>4.5.3</specification-version>
                     </run-dependency>
                 </dependency>
                 <dependency>
