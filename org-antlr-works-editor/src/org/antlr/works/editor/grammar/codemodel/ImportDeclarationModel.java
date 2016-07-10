@@ -8,7 +8,7 @@
  */
 package org.antlr.works.editor.grammar.codemodel;
 
-import org.netbeans.api.annotations.common.NonNull;
+import org.netbeans.api.annotations.common.CheckForNull;
 
 /**
  *
@@ -16,7 +16,7 @@ import org.netbeans.api.annotations.common.NonNull;
  */
 public interface ImportDeclarationModel extends CodeElementModel {
 
-    @NonNull
+    @CheckForNull
     String getPath();
 
 }
