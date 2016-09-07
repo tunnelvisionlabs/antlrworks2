@@ -15,6 +15,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.works.editor.grammar.codemodel.CodeElementPositionRegion;
 import org.antlr.works.editor.grammar.codemodel.ImportDeclarationModel;
+import org.netbeans.api.annotations.common.CheckForNull;
 import org.openide.filesystems.FileObject;
 
 /**
@@ -39,6 +40,7 @@ public class ImportDeclarationModelImpl extends AbstractCodeElementModel impleme
         return Collections.emptyList();
     }
 
+    @CheckForNull
     @Override
     public String getPath() {
         FileModelImpl fileModelImpl = getFile();
@@ -46,13 +48,13 @@ public class ImportDeclarationModelImpl extends AbstractCodeElementModel impleme
             FileObject fileObject = fileModelImpl.getFileObject();
             if (fileObject != null) {
                 FileObject importedFile = fileObject.getParent().getFileObject(getName() + ".g4");
-                if (importedFile.isData()) {
+                if (importedFile != null && importedFile.isData()) {
                     return importedFile.getPath();
                 }
             }
         }
 
-        throw new UnsupportedOperationException("Not supported yet.");
+        return null;
     }
 
     @Override

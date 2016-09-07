@@ -74,7 +74,12 @@ public class CodeModelCacheImpl implements CodeModelCache {
         Project project = importModel.getPackage().getProject();
         CodeModelProjectCache projectCache = getProjectCache(project, false);
         assert projectCache != null;
-        PackageModelImpl unique = projectCache.getUniquePackage(importModel.getPath());
+        String path = importModel.getPath();
+        if (path == null) {
+            return Collections.emptyList();
+        }
+
+        PackageModelImpl unique = projectCache.getUniquePackage(path);
         if (unique == null) {
             return Collections.emptyList();
         }
