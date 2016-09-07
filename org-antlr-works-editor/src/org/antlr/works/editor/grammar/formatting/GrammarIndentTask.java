@@ -81,7 +81,6 @@ import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.netbeans.modules.editor.indent.spi.Context;
 import org.netbeans.modules.editor.indent.spi.IndentTask;
 import org.netbeans.modules.editor.indent.spi.IndentTask.Factory;
-import org.openide.util.NotImplementedException;
 
 /**
  *
@@ -792,12 +791,30 @@ public class GrammarIndentTask extends AbstractIndentTask {
 
         @Override
         public Tuple2<? extends ParseTree, Integer> visitDelegateGrammar(DelegateGrammarContext ctx) {
-            throw new NotImplementedException();
+            // for now, just assume this rule will always be on a line by itself.
+            // https://github.com/tunnelvisionlabs/antlrworks2/issues/54
+            return null;
         }
 
         @Override
         public Tuple2<? extends ParseTree, Integer> visitDelegateGrammars(DelegateGrammarsContext ctx) {
-            throw new NotImplementedException();
+            if (ctx.getChildCount() == 0 || targetElement == ctx.getChild(0)) {
+                return null;
+            }
+
+            // align to the previous element
+            for (int i = priorSiblings.size() - 2; i >= 1; i--) {
+                ParseTree sibling = priorSiblings.get(i);
+                if (i == 0) {
+                    // indent relative to the `import` keyword
+                    return Tuple.create(sibling, getCodeStyle().getIndentSize());
+                } else if (ParseTrees.elementStartsLine(sibling)) {
+                    // indent relative to an imported grammar name which is on its own line
+                    return Tuple.create(sibling, 0);
+                }
+            }
+
+            return Tuple.create(ctx, getCodeStyle().getIndentSize());
         }
 
         @Override
