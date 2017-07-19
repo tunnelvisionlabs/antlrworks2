@@ -731,11 +731,10 @@ public class GrammarIndentTask extends AbstractIndentTask {
                 return Tuple.create(ctx, 0);
             }
 
-            // align to the previous element
-            for (int i = priorSiblings.size() - 2; i >= 0; i--) {
+            // align to the previous element; stop at the first id rule, index 0 is the TOKENS terminal itself
+            for (int i = priorSiblings.size() - 2; i >= 1; i--) {
                 ParseTree sibling = priorSiblings.get(i);
-                // stop at the first id rule, index 0 is the TOKENS terminal itself
-                if (i == 1 || ParseTrees.elementStartsLine(sibling)) {
+                if (ParseTrees.elementStartsLine(sibling)) {
                     return Tuple.create(sibling, 0);
                 }
             }
@@ -754,11 +753,10 @@ public class GrammarIndentTask extends AbstractIndentTask {
                 return Tuple.create(ctx, 0);
             }
 
-            // align to the previous element
-            for (int i = priorSiblings.size() - 2; i >= 0; i--) {
+            // align to the previous element; stop at the first id rule, index 0 is the CHANNELS terminal itself
+            for (int i = priorSiblings.size() - 2; i >= 1; i--) {
                 ParseTree sibling = priorSiblings.get(i);
-                // stop at the first id rule, index 0 is the CHANNELS terminal itself
-                if (i == 1 || ParseTrees.elementStartsLine(sibling)) {
+                if (ParseTrees.elementStartsLine(sibling)) {
                     return Tuple.create(sibling, 0);
                 }
             }
