@@ -33,7 +33,7 @@ public class SyntaxErrorConvertor implements ErrorsCache.Convertor<SyntaxError> 
 
     @Override
     public int getLineNumber(SyntaxError t) {
-        return t.getLocation().getStart().getContainingLine().getLineNumber();
+        return t.getLocation().getStart().getContainingLine().getLineNumber() + 1;
     }
 
     @Override
