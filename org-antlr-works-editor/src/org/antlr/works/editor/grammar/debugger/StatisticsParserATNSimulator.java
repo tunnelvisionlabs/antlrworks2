@@ -28,6 +28,8 @@ import org.antlr.v4.runtime.misc.Tuple2;
 public class StatisticsParserATNSimulator extends ParserATNSimulator {
 
     public final long[] decisionInvocations;
+    public final long[] decisionCost;
+    public final long[] decisionLlCost;
     public final long[] fullContextFallback;
     public final long[] nonSll;
     public final long[] ambiguousResult;
@@ -47,6 +49,8 @@ public class StatisticsParserATNSimulator extends ParserATNSimulator {
     public StatisticsParserATNSimulator(ATN atn) {
         super(atn);
         decisionInvocations = new long[atn.decisionToState.size()];
+        decisionCost = new long[atn.decisionToState.size()];
+        decisionLlCost = new long[atn.decisionToState.size()];
         fullContextFallback = new long[atn.decisionToState.size()];
         nonSll = new long[atn.decisionToState.size()];
         ambiguousResult = new long[atn.decisionToState.size()];
@@ -70,6 +74,8 @@ public class StatisticsParserATNSimulator extends ParserATNSimulator {
     public StatisticsParserATNSimulator(Parser parser, ATN atn) {
         super(parser, atn);
         decisionInvocations = new long[atn.decisionToState.size()];
+        decisionCost = new long[atn.decisionToState.size()];
+        decisionLlCost = new long[atn.decisionToState.size()];
         fullContextFallback = new long[atn.decisionToState.size()];
         nonSll = new long[atn.decisionToState.size()];
         ambiguousResult = new long[atn.decisionToState.size()];
@@ -99,6 +105,20 @@ public class StatisticsParserATNSimulator extends ParserATNSimulator {
             return super.adaptivePredict(input, decision, outerContext);
         } finally {
             this.decision = -1;
+        }
+    }
+
+    @Override
+    protected SimulatorState computeStartState(DFA dfa, ParserRuleContext globalContext, boolean useContext) {
+        long startTime = System.nanoTime();
+        try {
+            return super.computeStartState(dfa, globalContext, useContext);
+        } finally {
+            long totalTime = System.nanoTime() - startTime;
+            decisionCost[dfa.decision] += totalTime;
+            if (useContext) {
+                decisionLlCost[dfa.decision] += totalTime;
+            }
         }
     }
 
@@ -185,7 +205,17 @@ public class StatisticsParserATNSimulator extends ParserATNSimulator {
     @Override
     protected Tuple2<DFAState, ParserRuleContext> computeTargetState(DFA dfa, DFAState s, ParserRuleContext remainingGlobalContext, int t, boolean useContext, PredictionContextCache contextCache) {
         computedTransitions[decision]++;
-        return super.computeTargetState(dfa, s, remainingGlobalContext, t, useContext, contextCache);
+
+        long startTime = System.nanoTime();
+        try {
+            return super.computeTargetState(dfa, s, remainingGlobalContext, t, useContext, contextCache);
+        } finally {
+            long totalTime = System.nanoTime() - startTime;
+            decisionCost[dfa.decision] += totalTime;
+            if (useContext) {
+                decisionLlCost[dfa.decision] += totalTime;
+            }
+        }
     }
 
     @Override

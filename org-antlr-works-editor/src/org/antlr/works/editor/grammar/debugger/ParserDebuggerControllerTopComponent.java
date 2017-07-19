@@ -582,7 +582,9 @@ public final class ParserDebuggerControllerTopComponent extends TopComponent {
                         long minLookaheadLl = fileParseResult.minLookaheadLl[i];
                         long maxLookaheadLl = fileParseResult.maxLookaheadLl[i];
                         long totalTransitions = fileParseResult.parserTotalTransitions[i];
-                        lookaheadStatistics.add(new LookaheadStatistic(i, ruleName, averageLookaheadSll, averageLookaheadLl, minLookaheadSll, maxLookaheadSll, minLookaheadLl, maxLookaheadLl, totalTransitions));
+                        long decisionCost = fileParseResult.decisionCost[i];
+                        long decisionLlCost = fileParseResult.decisionLlCost[i];
+                        lookaheadStatistics.add(new LookaheadStatistic(i, ruleName, averageLookaheadSll, averageLookaheadLl, minLookaheadSll, maxLookaheadSll, minLookaheadLl, maxLookaheadLl, totalTransitions, decisionCost, decisionLlCost));
                     }
                 }
 
@@ -595,7 +597,7 @@ public final class ParserDebuggerControllerTopComponent extends TopComponent {
 
                     @Override
                     public int getColumnCount() {
-                        return 9;
+                        return 10;
                     }
 
                     @Override
@@ -618,7 +620,9 @@ public final class ParserDebuggerControllerTopComponent extends TopComponent {
                         case 7:
                             return "Max k (LL)";
                         case 8:
-                            return "Cost";
+                            return "Cost (Total)";
+                        case 9:
+                            return "Cost (LL)";
                         default:
                             throw new IllegalArgumentException("column");
                         }
@@ -645,6 +649,8 @@ public final class ParserDebuggerControllerTopComponent extends TopComponent {
                             return Long.class;
                         case 8:
                             return Long.class;
+                        case 9:
+                            return Long.class;
                         default:
                             throw new IllegalArgumentException("columnIndex");
                         }
@@ -670,7 +676,9 @@ public final class ParserDebuggerControllerTopComponent extends TopComponent {
                         case 7:
                             return inRangeValue(lookaheadStatistics.get(rowIndex).getMaxLookaheadLl());
                         case 8:
-                            return lookaheadStatistics.get(rowIndex).getTotalTransitions();
+                            return lookaheadStatistics.get(rowIndex).getDecisionCost() / 1000000;
+                        case 9:
+                            return lookaheadStatistics.get(rowIndex).getDecisionLlCost() / 1000000;
                         default:
                             throw new IllegalArgumentException("columnIndex");
                         }
@@ -911,8 +919,10 @@ public final class ParserDebuggerControllerTopComponent extends TopComponent {
         private final long minLookaheadLl;
         private final long maxLookaheadLl;
         private final long totalTransitions;
+        private final long decisionCost;
+        private final long decisionLlCost;
 
-        public LookaheadStatistic(int decision, String ruleName, double averageLookaheadSll, double averageLookaheadLl, long minLookaheadSll, long maxLookaheadSll, long minLookaheadLl, long maxLookaheadLl, long totalTransitions) {
+        public LookaheadStatistic(int decision, String ruleName, double averageLookaheadSll, double averageLookaheadLl, long minLookaheadSll, long maxLookaheadSll, long minLookaheadLl, long maxLookaheadLl, long totalTransitions, long decisionCost, long decisionLlCost) {
             this.decision = decision;
             this.ruleName = ruleName;
             this.averageLookaheadSll = averageLookaheadSll;
@@ -922,6 +932,8 @@ public final class ParserDebuggerControllerTopComponent extends TopComponent {
             this.minLookaheadLl = minLookaheadLl;
             this.maxLookaheadLl = maxLookaheadLl;
             this.totalTransitions = totalTransitions;
+            this.decisionCost = decisionCost;
+            this.decisionLlCost = decisionLlCost;
         }
 
         public int getDecision() {
@@ -958,6 +970,14 @@ public final class ParserDebuggerControllerTopComponent extends TopComponent {
 
         public long getTotalTransitions() {
             return totalTransitions;
+        }
+
+        public long getDecisionCost() {
+            return decisionCost;
+        }
+
+        public long getDecisionLlCost() {
+            return decisionLlCost;
         }
 
     }

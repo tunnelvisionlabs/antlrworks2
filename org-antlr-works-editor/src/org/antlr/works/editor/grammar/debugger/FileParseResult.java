@@ -48,6 +48,8 @@ public class FileParseResult {
 
     public final int parserDFASize;
     public final long[] decisionInvocations;
+    public final long[] decisionCost;
+    public final long[] decisionLlCost;
     public final long[] fullContextFallback;
     public final long[] nonSll;
     public final long[] ambiguousResult;
@@ -106,6 +108,8 @@ public class FileParseResult {
             ParserATNSimulator interpreter = parser.getInterpreter();
             if (interpreter instanceof StatisticsParserATNSimulator) {
                 decisionInvocations = ((StatisticsParserATNSimulator)interpreter).decisionInvocations;
+                decisionCost = ((StatisticsParserATNSimulator)interpreter).decisionCost;
+                decisionLlCost = ((StatisticsParserATNSimulator)interpreter).decisionLlCost;
                 fullContextFallback = ((StatisticsParserATNSimulator)interpreter).fullContextFallback;
                 nonSll = ((StatisticsParserATNSimulator)interpreter).nonSll;
                 ambiguousResult = ((StatisticsParserATNSimulator)interpreter).ambiguousResult;
@@ -120,6 +124,8 @@ public class FileParseResult {
                 maxLookaheadLl = ((StatisticsParserATNSimulator)interpreter).maxLookaheadLl;
             } else {
                 decisionInvocations = new long[0];
+                decisionCost = new long[0];
+                decisionLlCost = new long[0];
                 fullContextFallback = new long[0];
                 nonSll = new long[0];
                 ambiguousResult = new long[0];
@@ -146,6 +152,8 @@ public class FileParseResult {
             associatedTransitions = null;
             parserDFASize = 0;
             decisionInvocations = new long[0];
+            decisionCost = new long[0];
+            decisionLlCost = new long[0];
             fullContextFallback = new long[0];
             nonSll = new long[0];
             ambiguousResult = new long[0];
