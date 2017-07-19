@@ -16,9 +16,10 @@ import javax.swing.text.Caret;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.Position;
 import org.netbeans.api.editor.EditorActionRegistration;
+import org.netbeans.api.editor.document.LineDocument;
+import org.netbeans.api.editor.document.LineDocumentUtils;
 import org.netbeans.editor.BaseAction;
 import org.netbeans.editor.BaseDocument;
-import org.netbeans.editor.Utilities;
 import org.netbeans.modules.editor.indent.api.Indent;
 import org.openide.util.NbBundle;
 
@@ -59,7 +60,7 @@ public class InsertLineBelowAction extends BaseAction {
                     Caret caret = target.getCaret();
 
                     // insert new line, caret moves to the new line
-                    int eolDot = Utilities.getRowEnd(target, caret.getDot());
+                    int eolDot = LineDocumentUtils.getLineEnd(LineDocumentUtils.asRequired(doc, LineDocument.class), caret.getDot());
                     doc.insertString(eolDot, "\n", null); //NOI18N
 
                     // reindent the new line
