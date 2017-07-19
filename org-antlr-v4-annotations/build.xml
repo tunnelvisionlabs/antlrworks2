@@ -8,7 +8,7 @@
 
     <target name="init-artifact">
         <property name="artifact.name" value="antlr4_annotations"/>
-        <property name="artifact.commit" value="4.5.3"/>
+        <property name="artifact.commit" value="4.6.0.3"/>
         <property name="modules.ext.dir" value="release/modules/ext"/>
         <property name="artifact.file" value="${modules.ext.dir}/${artifact.name}.jar"/>
     </target>
